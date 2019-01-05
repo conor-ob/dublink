@@ -2,4 +2,7 @@
     <string name="app_name">Dublin Mapper</string>
     <string name="jcdecaux_base_url">https://api.jcdecaux.com/vls/v1/</string>
     <string name="jcdecaux_contract">Dublin</string>
+    <string name="action_search">Search</string>
+    <string name="search_query_hint">Search</string>
+    <string name="clear_search">Clear Search</string>
 </resources>

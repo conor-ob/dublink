@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'androidx.navigation.safeargs'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('keys.properties').newDataInputStream())
@@ -66,6 +66,12 @@ dependencies {
 //    implementation group: 'android.arch.lifecycle', name: 'livedata-core', version: '1.1.1'
 
     implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
+
+    // Google services
+//    implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
+    implementation "com.google.android.gms:play-services-maps:15.0.1"
+//    implementation "com.google.firebase:firebase-core:$firebaseVersion"
+//    implementation "com.google.maps.android:android-maps-utils:$mapsUtilsVersion"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     implementation "com.google.dagger:dagger-android:${versions.dagger}"
