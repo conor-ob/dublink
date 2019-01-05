@@ -10,16 +10,26 @@ import ie.dublinmapper.service.jcdecaux.StationJson
 import javax.inject.Singleton
 
 @Module
-class DublinBikesRepositoryModule {
+class DublinBikesRepositoryModule(
+    private val jcdecauxApiKey: String,
+    private val jcdecauxContract: String
+) {
 
     @Provides
     @Singleton
     fun dublinBikesDockRepository(
         api: JcdecauxApi
     ): Repository<DublinBikesDock> {
-        val fetcher = DublinBikesDockFetcher(api)
+        val fetcher = DublinBikesDockFetcher(api, jcdecauxApiKey, jcdecauxContract)
         val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
             .fetcher(fetcher)
+            .parser { json -> json.map { DublinBikesDock(
+                it.number.toString(),
+                it.address!!,
+                it.bikeStands!!,
+                it.availableBikeStands!!,
+                it.availableBikes!!
+            ) } }
             .open()
         return DublinBikeDockRepository(store)
     }

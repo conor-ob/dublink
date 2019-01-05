@@ -25,8 +25,8 @@ buildscript {
             'crashlytics'                : '2.9.8@aar', // https://www.fabric.io/kits/android/crashlytics/update
             'converter_gson'             : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
             'converter_simplexml'        : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-simplexml
-            'dagger'                     : '2.20',      // https://mvnrepository.com/artifact/com.google.dagger/dagger
-            'dagger_compiler'            : '2.20',      // https://mvnrepository.com/artifact/com.google.dagger/dagger-compiler
+            'dagger'                     : '2.16',      // https://mvnrepository.com/artifact/com.google.dagger/dagger //TODO change versions back
+            'dagger_compiler'            : '2.16',      // https://mvnrepository.com/artifact/com.google.dagger/dagger-compiler
             'fabric'                     : '1.26.1',    // TODO
             'gradle'                     : '3.2.1',     // https://mvnrepository.com/artifact/com.android.tools.build/gradle?repo=google
             'gson'                       : '2.8.5',     // https://mvnrepository.com/artifact/com.google.code.gson/gson

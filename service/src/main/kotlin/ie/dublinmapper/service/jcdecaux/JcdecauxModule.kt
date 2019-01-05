@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Module
 class JcdecauxModule(
-//    private val baseUrl: String
+    private val baseUrl: String
 ) {
 
     @Provides
@@ -22,7 +22,7 @@ class JcdecauxModule(
         callAdapterFactory: CallAdapter.Factory
     ): JcdecauxApi {
         return Retrofit.Builder()
-            .baseUrl("https://api.jcdecaux.com/vls/v1/")
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)

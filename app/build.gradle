@@ -3,6 +3,11 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('keys.properties').newDataInputStream())
+def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
+def jcdecauxApiKey = properties.getProperty('api.jcdecaux.API_KEY')
+
 android {
     compileSdkVersion buildConfig.compileSdk
     defaultConfig {
@@ -12,6 +17,8 @@ android {
         versionCode 100000
         versionName "1.0.0-SNAPSHOT"
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
+                                 jcdecauxApiKey: "$jcdecauxApiKey" ]
     }
     buildTypes {
         release {
@@ -46,8 +53,18 @@ dependencies {
     implementation project(':repository')
     implementation project(':service')
 
-    implementation "android.arch.lifecycle:extensions:1.1.0"
-    implementation "android.arch.lifecycle:viewmodel:1.1.0"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
+
+//    implementation "androidx.lifecycle:lifecycle-livedata:2.0.0"
+
+//    implementation "android.arch.lifecycle:extensions:1.1.1"
+//    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+//    compile group: 'android.arch.lifecycle', name: 'livedata', version: '1.1.1'
+//    implementation group: 'android.arch.lifecycle', name: 'livedata-core', version: '1.1.1'
+
+    implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
 
     implementation "com.google.dagger:dagger:${versions.dagger}"
     implementation "com.google.dagger:dagger-android:${versions.dagger}"

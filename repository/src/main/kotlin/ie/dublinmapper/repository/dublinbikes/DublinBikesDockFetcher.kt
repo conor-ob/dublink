@@ -6,11 +6,13 @@ import ie.dublinmapper.service.jcdecaux.StationJson
 import io.reactivex.Single
 
 class DublinBikesDockFetcher(
-    private val api: JcdecauxApi
+    private val api: JcdecauxApi,
+    private val jcdecauxApiKey: String,
+    private val jcdecauxContract: String
 ) : Fetcher<List<StationJson>, String> {
 
     override fun fetch(key: String): Single<List<StationJson>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return api.getAllDocks(jcdecauxContract, jcdecauxApiKey)
     }
 
 }

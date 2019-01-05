@@ -1,5 +1,6 @@
 package ie.dublinmapper.di
 
+import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -24,6 +25,15 @@ import javax.inject.Singleton
 interface ApplicationComponent : AndroidInjector<DublinMapperApplication> {
 
     @Component.Builder
-    abstract class Builder : AndroidInjector.Builder<DublinMapperApplication>()
+    abstract class Builder : AndroidInjector.Builder<DublinMapperApplication>() {
+
+        @BindsInstance
+        abstract fun application(application: DublinMapperApplication): Builder
+
+        abstract fun jcdecauxModule(jcdecauxModule: JcdecauxModule): Builder
+
+        abstract fun dublinBikesRepositoryModule(dublinBikesRepositoryModule: DublinBikesRepositoryModule): Builder
+
+    }
 
 }

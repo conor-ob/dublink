@@ -1,10 +1,10 @@
 package ie.dublinmapper.di
 
-import dagger.Module
-import android.arch.lifecycle.ViewModel
-import dagger.multibindings.IntoMap
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
-import android.arch.lifecycle.ViewModelProvider
+import dagger.Module
+import dagger.multibindings.IntoMap
 import ie.dublinmapper.view.ViewModelFactory
 import ie.dublinmapper.view.ViewModelKey
 import ie.dublinmapper.view.nearby.NearbyViewModel
