@@ -1,23 +1,35 @@
 package ie.dublinmapper.di
 
 import android.content.Context
+import android.content.res.Resources
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import ie.dublinmapper.DublinMapperApplication
+import ie.dublinmapper.R
+import ie.dublinmapper.util.MetadataUtils
+import javax.inject.Named
 
 @Module
 class ApplicationModule {
 
-//    @Provides
-//    @Singleton
-//    fun context(): Context {
-//        return context
-//    }
+    @Provides
+    fun provideContext(application: DublinMapperApplication): Context = application.applicationContext
 
     @Provides
-    @Singleton
-    fun dummy(): String {
-        return "Hello World"
+    fun provideResources(context: Context): Resources = context.resources
+
+    @Provides
+    @Named("jcdecaux_base_url")
+    fun jcdecauxBaseUrl(resources: Resources): String = resources.getString(R.string.jcdecaux_base_url)
+
+    @Provides
+    @Named("jcdecaux_contract")
+    fun jcdecauxContract(resources: Resources): String = resources.getString(R.string.jcdecaux_contract)
+
+    @Provides
+    @Named("api.jcdecaux.API_KEY")
+    fun jcdecauxApiKey(context: Context): String {
+        return MetadataUtils.getMetadata(context, "api.jcdecaux.API_KEY")
     }
 
 }

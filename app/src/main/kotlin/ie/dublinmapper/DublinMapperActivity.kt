@@ -1,13 +1,13 @@
 package ie.dublinmapper
 
 import android.os.Bundle
-import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import dagger.android.support.DaggerAppCompatActivity
 import ie.dublinmapper.domain.dublinbikes.DublinBikesDock
 import ie.dublinmapper.view.nearby.NearbyViewModel
+import kotlinx.android.synthetic.main.activity_root.*
 import javax.inject.Inject
 
 class DublinMapperActivity : DaggerAppCompatActivity() {
@@ -24,7 +24,7 @@ class DublinMapperActivity : DaggerAppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.getNearbyServiceLocations().observe(this, Observer<List<DublinBikesDock>>{ users ->
-            Log.d("", users.toString())
+            text_view.text = users.toString()
         })
     }
 

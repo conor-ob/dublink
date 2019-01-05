@@ -10,13 +10,12 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class JcdecauxModule(
-    private val baseUrl: String
-) {
+class JcdecauxModule {
 
     @Provides
     @Singleton
     fun jcdecauxApi(
+        @Named("jcdecaux_base_url") baseUrl: String,
         okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory

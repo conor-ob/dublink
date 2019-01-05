@@ -7,18 +7,18 @@ import ie.dublinmapper.domain.dublinbikes.DublinBikesDock
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.jcdecaux.JcdecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class DublinBikesRepositoryModule(
-    private val jcdecauxApiKey: String,
-    private val jcdecauxContract: String
-) {
+class DublinBikesRepositoryModule {
 
     @Provides
     @Singleton
     fun dublinBikesDockRepository(
-        api: JcdecauxApi
+        api: JcdecauxApi,
+        @Named("jcdecaux_contract") jcdecauxContract: String,
+        @Named("api.jcdecaux.API_KEY") jcdecauxApiKey: String
     ): Repository<DublinBikesDock> {
         val fetcher = DublinBikesDockFetcher(api, jcdecauxApiKey, jcdecauxContract)
         val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
