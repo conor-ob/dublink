@@ -7,6 +7,7 @@ import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
 import ie.dublinmapper.service.di.ServiceModule
 import ie.dublinmapper.service.jcdecaux.JcdecauxModule
+import ie.dublinmapper.view.viewmodel.ViewModelModule
 import javax.inject.Singleton
 
 @Singleton
@@ -16,6 +17,7 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         ApplicationModule::class,
         ActivityModule::class,
+        FragmentModule::class,
         ViewModelModule::class,
         DublinBikesRepositoryModule::class,
         JcdecauxModule::class,

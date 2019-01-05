@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'androidx.navigation.safeargs'
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('keys.properties').newDataInputStream())
@@ -71,6 +72,10 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
+
+    // Navigation
+    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-alpha07"
+    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"

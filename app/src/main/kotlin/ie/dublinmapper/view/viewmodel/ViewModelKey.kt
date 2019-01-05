@@ -1,4 +1,4 @@
-package ie.dublinmapper.view
+package ie.dublinmapper.view.viewmodel
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey
