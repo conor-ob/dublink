@@ -11,4 +11,6 @@
     <string name="pref_key_last_location_zoom">last_location_zoom</string>
     <string name="rtpi_operator_luas">luas</string>
     <string name="rtpi_format">json</string>
+    <string name="irish_rail_api_base_url">http://api.irishrail.ie/realtime/realtime.asmx/</string>
+    <string name="irish_rail_api_dart_station_type">D</string>
 </resources>

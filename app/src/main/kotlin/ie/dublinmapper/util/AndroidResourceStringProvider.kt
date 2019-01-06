@@ -47,4 +47,12 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.rtpi_format)
     }
 
+    override fun irishRailBaseUrl(): String {
+        return resources.getString(R.string.irish_rail_api_base_url)
+    }
+
+    override fun irishRailApiDartStationType(): String {
+        return resources.getString(R.string.irish_rail_api_dart_station_type)
+    }
+
 }

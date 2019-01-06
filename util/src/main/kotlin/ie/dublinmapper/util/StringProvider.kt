@@ -14,4 +14,8 @@ interface StringProvider {
 
     fun rtpiFormat(): String
 
+    fun irishRailBaseUrl(): String
+
+    fun irishRailApiDartStationType(): String
+
 }
