@@ -6,9 +6,10 @@ import android.graphics.Canvas
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import ie.dublinmapper.R
-import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.domain.model.dart.DartStation
 import ie.dublinmapper.domain.model.dublinbikes.DublinBikesDock
+import ie.dublinmapper.domain.model.dublinbus.DublinBusStop
 import ie.dublinmapper.domain.model.luas.LuasStop
 
 object ImageUtils {
@@ -33,6 +34,7 @@ object ImageUtils {
         return when (serviceLocation) {
             is DartStation -> R.drawable.ic_map_marker_dart
             is DublinBikesDock -> R.drawable.ic_map_marker_dublin_bikes
+            is DublinBusStop -> R.drawable.ic_map_marker_dublin_bus
             is LuasStop -> R.drawable.ic_map_marker_luas
             else -> throw IllegalStateException()
         }

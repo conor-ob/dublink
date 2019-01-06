@@ -43,6 +43,10 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.rtpi_operator_luas)
     }
 
+    override fun rtpiOperatoreDublinBus(): String {
+        return resources.getString(R.string.rtpi_operator_dublin_bus)
+    }
+
     override fun rtpiFormat(): String {
         return resources.getString(R.string.rtpi_format)
     }

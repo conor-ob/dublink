@@ -18,4 +18,6 @@ interface StringProvider {
 
     fun irishRailApiDartStationType(): String
 
+    fun rtpiOperatoreDublinBus(): String
+
 }

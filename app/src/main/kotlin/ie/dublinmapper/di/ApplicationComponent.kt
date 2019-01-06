@@ -6,6 +6,7 @@ import dagger.android.support.AndroidSupportInjectionModule
 import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.repository.dart.DartRepositoryModule
 import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
+import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
 import ie.dublinmapper.repository.luas.LuasStopRepositoryModule
 import ie.dublinmapper.service.di.ServiceModule
 import ie.dublinmapper.service.irishrail.IrishRailModule
@@ -25,6 +26,7 @@ import javax.inject.Singleton
         ViewModelModule::class,
         DartRepositoryModule::class,
         DublinBikesRepositoryModule::class,
+        DublinBusRepositoryModule::class,
         LuasStopRepositoryModule::class,
         IrishRailModule::class,
         JcdecauxModule::class,
