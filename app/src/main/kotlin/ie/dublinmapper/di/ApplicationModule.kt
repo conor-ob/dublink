@@ -7,6 +7,7 @@ import dagger.Provides
 import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.util.AndroidResourceStringProvider
 import ie.dublinmapper.util.StringProvider
+import ie.dublinmapper.view.nearby.NearbyMapMarkerManager
 
 @Module
 class ApplicationModule {
@@ -21,5 +22,8 @@ class ApplicationModule {
     fun stringProvider(
         context: Context, resources: Resources
     ): StringProvider = AndroidResourceStringProvider(context, resources)
+
+    @Provides
+    fun mapMarkerManager(context: Context): NearbyMapMarkerManager = NearbyMapMarkerManager(context)
 
 }

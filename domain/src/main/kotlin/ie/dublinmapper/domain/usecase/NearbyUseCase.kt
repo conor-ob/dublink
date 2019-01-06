@@ -49,7 +49,7 @@ class NearbyUseCase @Inject constructor(
         for (serviceLocation in serviceLocations) {
             sorted[LocationUtils.haversineDistance(coordinate, serviceLocation.coordinate)] = serviceLocation
         }
-        return CollectionUtils.headMap(sorted, 30)
+        return CollectionUtils.headMap(sorted, 5)
     }
 
 }
