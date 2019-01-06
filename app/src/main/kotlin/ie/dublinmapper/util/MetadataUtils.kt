@@ -6,7 +6,6 @@ import java.lang.NullPointerException
 
 object MetadataUtils {
 
-    @JvmStatic
     fun getMetadata(context: Context, name: String): String {
         try {
             val appInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)

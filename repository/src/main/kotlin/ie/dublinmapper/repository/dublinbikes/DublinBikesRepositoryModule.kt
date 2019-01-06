@@ -9,7 +9,7 @@ import ie.dublinmapper.service.jcdecaux.JcdecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
-import javax.inject.Named
+import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
 @Module
@@ -19,10 +19,9 @@ class DublinBikesRepositoryModule {
     @Singleton
     fun dublinBikesDockRepository(
         api: JcdecauxApi,
-        @Named("jcdecaux_contract") jcdecauxContract: String,
-        @Named("api.jcdecaux.API_KEY") jcdecauxApiKey: String
+        stringProvider: StringProvider
     ): Repository<DublinBikesDock> {
-        val fetcher = DublinBikesDockFetcher(api, jcdecauxApiKey, jcdecauxContract)
+        val fetcher = DublinBikesDockFetcher(api, stringProvider.jcdecauxApiKey(), stringProvider.jcdecauxContract())
         val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
             .fetcher(fetcher)
             .parser { json -> json.map { DublinBikesDock(

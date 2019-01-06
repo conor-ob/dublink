@@ -9,7 +9,7 @@ import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
-import javax.inject.Named
+import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
 @Module
@@ -19,10 +19,9 @@ class LuasStopRepositoryModule {
     @Singleton
     fun luasStopRepository(
         api: RtpiApi,
-        @Named("api.rtpi.operator.luas") operator: String,
-        @Named("api.rtpi.format") format: String
+        stringProvider: StringProvider
     ): Repository<LuasStop> {
-        val fetcher = LuasStopFetcher(api, operator, format)
+        val fetcher = LuasStopFetcher(api, stringProvider.rtpiOperatoreLuas(), stringProvider.rtpiFormat())
         val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<LuasStop>>()
             .fetcher(fetcher)
             .parser { json -> json.map { LuasStop(

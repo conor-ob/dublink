@@ -2,6 +2,7 @@ package ie.dublinmapper.service.jcdecaux
 
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -15,13 +16,13 @@ class JcdecauxModule {
     @Provides
     @Singleton
     fun jcdecauxApi(
-        @Named("jcdecaux_base_url") baseUrl: String,
+        stringProvider: StringProvider,
         okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
     ): JcdecauxApi {
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(stringProvider.jcdecauxBaseUrl())
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)

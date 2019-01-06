@@ -2,6 +2,7 @@ package ie.dublinmapper.service.rtpi
 
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -15,13 +16,13 @@ class RtpiModule {
     @Provides
     @Singleton
     fun jcdecauxApi(
-        @Named("rtpi_base_url") baseUrl: String,
+        stringProvider: StringProvider,
         okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
     ): RtpiApi {
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(stringProvider.rtpibaseUrl())
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)
