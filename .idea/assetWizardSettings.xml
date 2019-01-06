@@ -30,8 +30,8 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_map_marker_dart_1" />
-                            <entry key="sourceFile" value="M:\Users\Conor\Desktop\New folder\dart123456.svg" />
+                            <entry key="outputName" value="ic_map_marker_dublinbus_xxx" />
+                            <entry key="sourceFile" value="C:\repo\bitbucket\dublin-mapper\resources\debug\dublinbus\ic_map_marker_dublinbus_xxx.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -1,8 +1,6 @@
 package ie.dublinmapper.view.nearby
 
 import android.content.Context
-import android.graphics.*
-import android.util.TypedValue
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
@@ -32,7 +30,7 @@ class NearbyMapMarkerManager(
         drawRailLines()
     }
 
-    fun drawServiceLocations(serviceLocations: List<ServiceLocation>) {
+    fun drawServiceLocations(serviceLocations: Collection<ServiceLocation>) {
         Timber.d("drawServiceLocations()")
         addNewMarkers(serviceLocations)
         removeOldMarkers(serviceLocations)
@@ -82,7 +80,7 @@ class NearbyMapMarkerManager(
                 entry.value.setIcon(iconFactory.getIcon(entry.key, currentZoom))
                 val anchor = iconFactory.getIconAnchor(entry.key, currentZoom)
                 entry.value.setAnchor(anchor.first, anchor.second)
-                entry.value.isVisible = true
+                entry.value.isVisible = iconFactory.getIconVisibility(entry.key, googleMap.cameraPosition.zoom)
             }
         }
         for (entry in mapTextMarkers) {
@@ -90,7 +88,7 @@ class NearbyMapMarkerManager(
                 entry.value.setIcon(iconFactory.getTextIcon(entry.key, currentZoom))
                 val anchor = iconFactory.getTextIconAnchor(entry.key, currentZoom)
                 entry.value.setAnchor(anchor.first, anchor.second)
-                entry.value.isVisible = true
+                entry.value.isVisible = iconFactory.getTextIconVisibility(entry.key, googleMap.cameraPosition.zoom)
             }
         }
     }
@@ -110,8 +108,8 @@ class NearbyMapMarkerManager(
     }
 
     override fun onCameraMove() {
-        Timber.d("onCameraMove()")
         val currentZoom = googleMap.cameraPosition.zoom
+        Timber.d("onCameraMove() zoom=$currentZoom")
 
         for (entry in mapMarkers) {
             val previous = iconFactory.getIconId(entry.key, previousZoom)
@@ -138,24 +136,88 @@ class NearbyMapMarkerManager(
             val icons = mutableMapOf<Operator, TreeMap<Float, IconOptions>>()
             val dartIcons = TreeMap<Float, IconOptions>()
             dartIcons[0.0f] = IconOptions(
-                id = 0, //TODO find a way to automate this - they must be uniquw
-                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_0),
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_1),
                 iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
-                textIconVisibility = true
+                iconVisibility = true,
+                textIconVisibility = true,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
             )
             dartIcons[16.6f] = IconOptions(
-                id = 1,
-                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_1),
-                iconAnchor = Pair(0.5f, 0.9f),
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_0),
+                iconAnchor = Pair(0.5f, 0.8f),
+                textIconAnchor = Pair(0.5f, -0.5f),
+                iconVisibility = true,
+                textIconVisibility = true,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+            )
+            val dublinBikesIcons = TreeMap<Float, IconOptions>()
+            dublinBikesIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes_x),
+                iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
-                textIconVisibility = true
+                iconVisibility = false,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+            )
+            dublinBikesIcons[16.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes_x),
+                iconAnchor = Pair(0.5f, 0.9f),
+                textIconAnchor = Pair(0.5f, 2.15f),
+                iconVisibility = true,
+                textIconVisibility = true,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.dublinBikesText(context, serviceLocation) }
+            )
+            val dublinBusIcons = TreeMap<Float, IconOptions>()
+            dublinBusIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_x),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+            )
+            dublinBusIcons[15.4f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_x1),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+            )
+            dublinBusIcons[17.97f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_xx),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = false,
+                textIconVisibility = true,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.dublinBusText(context, serviceLocation) }
+            )
+            val luasIcons = TreeMap<Float, IconOptions>()
+            luasIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_luas_1),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = true,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+            )
+            luasIcons[16.6f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_luas_0),
+                iconAnchor = Pair(0.5f, 0.7f),
+                textIconAnchor = Pair(0.5f, -0.4f),
+                iconVisibility = true,
+                textIconVisibility = true,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
             )
             icons[Operator.DART] = dartIcons
+            icons[Operator.DUBLIN_BIKES] = dublinBikesIcons
+            icons[Operator.DUBLIN_BUS] = dublinBusIcons
+            icons[Operator.LUAS] = luasIcons
             return@lazy icons
         }
 
-        fun getIconId(serviceLocation: ServiceLocation, zoom: Float): Int {
+        fun getIconId(serviceLocation: ServiceLocation, zoom: Float): UUID {
             return icons[serviceLocation.operator]!!.floorEntry(zoom).value.id
         }
 
@@ -167,15 +229,23 @@ class NearbyMapMarkerManager(
             return icons[serviceLocation.operator]!!.floorEntry(zoom).value.iconAnchor
         }
 
-        private val textIconCache = mutableMapOf<String, BitmapDescriptor>()
+        fun getIconVisibility(serviceLocation: ServiceLocation, zoom: Float): Boolean {
+            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.iconVisibility
+        }
+
+        //TODO this needs to handle zoom
+//        private val textIconCache = mutableMapOf<Pair<String, Float>, BitmapDescriptor>()
 
         fun getTextIcon(serviceLocation: ServiceLocation, zoom: Float): BitmapDescriptor {
-            var textIcon = textIconCache[serviceLocation.name]
-            if (textIcon == null) {
-                textIcon = newTextIcon(serviceLocation)
-                textIconCache[serviceLocation.name] = textIcon
-            }
-            return textIcon
+//            var textIcon = textIconCache[Pair(serviceLocation.mapIconText, zoom)]
+//            if (textIcon == null) {
+//                val renderer = getTextIconRenderer(serviceLocation, zoom)
+//                textIcon = renderer.invoke(context, serviceLocation)
+//                textIconCache[PairserviceLocation.mapIconText] = textIcon
+//            }
+//            return textIcon
+            val renderer = getTextIconRenderer(serviceLocation, zoom)
+            return renderer.invoke(context, serviceLocation)
         }
 
         fun getTextIconAnchor(serviceLocation: ServiceLocation, zoom: Float): Pair<Float, Float> {
@@ -186,6 +256,10 @@ class NearbyMapMarkerManager(
             return icons[serviceLocation.operator]!!.floorEntry(zoom).value.textIconVisibility
         }
 
+        private fun getTextIconRenderer(serviceLocation: ServiceLocation, zoom: Float): (Context, ServiceLocation) -> BitmapDescriptor {
+            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.textIconRenderer
+        }
+
         fun newMarkerOptions(serviceLocation: ServiceLocation): MarkerOptions {
             Timber.d("newMarkerOptions")
             val currentZoom = googleMap.cameraPosition.zoom
@@ -194,6 +268,7 @@ class NearbyMapMarkerManager(
                 .position(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
                 .anchor(anchor.first, anchor.second)
                 .icon(getIcon(serviceLocation, currentZoom))
+                .visible(getIconVisibility(serviceLocation, currentZoom))
         }
 
         fun newTextMarkerOptions(serviceLocation: ServiceLocation): MarkerOptions {
@@ -205,42 +280,19 @@ class NearbyMapMarkerManager(
                 .position(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
                 .anchor(iconAnchor.first, iconAnchor.second)
                 .icon(getTextIcon(serviceLocation, currentZoom))
-        }
-
-        private fun newTextIcon(serviceLocation: ServiceLocation): BitmapDescriptor {
-            Timber.d("newTextIcon for ServiceLocation[${serviceLocation.name}]")
-            val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
-            val stkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            stkPaint.textSize = px
-            stkPaint.textAlign = Paint.Align.LEFT
-            stkPaint.typeface = Typeface.create("sans-serif-condensed", Typeface.BOLD)
-            stkPaint.style = Paint.Style.STROKE
-            stkPaint.strokeWidth = 5f
-            stkPaint.color = Color.WHITE
-            val baseline = -stkPaint.ascent() // ascent() is negative
-            val width = (stkPaint.measureText(serviceLocation.name) + 0.5f).toInt()// round
-            val height = (baseline + stkPaint.descent() + 0.5f).toInt()
-            val image = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(image)
-            canvas.drawText(serviceLocation.name, 0f, baseline, stkPaint)
-
-            val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            fillPaint.textSize = px
-            fillPaint.color = ContextCompat.getColor(context, R.color.text_secondary)
-            fillPaint.textAlign = Paint.Align.LEFT
-            fillPaint.typeface = Typeface.create("sans-serif-condensed", Typeface.NORMAL)
-            canvas.drawText(serviceLocation.name, 0f, baseline, fillPaint)
-            return BitmapDescriptorFactory.fromBitmap(image)
+                .visible(getTextIconVisibility(serviceLocation, currentZoom))
         }
 
     }
 
     data class IconOptions(
-        val id: Int,
+        val id: UUID = UUID.randomUUID(),
         val icon: BitmapDescriptor,
         val iconAnchor: Pair<Float, Float>,
         val textIconAnchor: Pair<Float, Float>,
-        val textIconVisibility: Boolean
+        val iconVisibility: Boolean,
+        val textIconVisibility: Boolean,
+        val textIconRenderer: (Context, ServiceLocation) -> BitmapDescriptor
     )
 
     private fun drawRailLines() {

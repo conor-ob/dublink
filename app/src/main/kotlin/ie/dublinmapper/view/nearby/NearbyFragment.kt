@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import dagger.android.support.DaggerFragment
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.util.CollectionUtils
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_nearby.*
@@ -53,18 +54,18 @@ class NearbyFragment : DaggerFragment(), OnMapReadyCallback {
         })
     }
 
-    private fun onNearbyServiceLocationsReceived(serviceLocations: List<ServiceLocation>?) {
-        if (serviceLocations == null) {
+    private fun onNearbyServiceLocationsReceived(serviceLocations: Collection<ServiceLocation>?) {
+        if (CollectionUtils.isNullOrEmpty(serviceLocations)) {
             return
         }
 //        debugIconAnchor(serviceLocations)
-        mapMarkerManager.drawServiceLocations(serviceLocations)
+        mapMarkerManager.drawServiceLocations(serviceLocations!!)
     }
 
     //TODO check why this is forces onCameraIdle to be called indefinitely
-    private fun debugIconAnchor(serviceLocations: List<ServiceLocation>) {
+    private fun debugIconAnchor(serviceLocations: Collection<ServiceLocation>) {
         val zoom = googleMap?.cameraPosition?.zoom
-        val stop = serviceLocations[0].coordinate
+        val stop = serviceLocations.iterator().next().coordinate
         googleMap?.animateCamera(
             CameraUpdateFactory.newCameraPosition(
                 CameraPosition.fromLatLngZoom(LatLng(stop.latitude, stop.longitude), zoom!!)
