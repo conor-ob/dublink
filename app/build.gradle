@@ -70,7 +70,9 @@ dependencies {
 
     // Google services
 //    implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
-    implementation "com.google.android.gms:play-services-maps:15.0.1"
+    implementation "com.google.android.gms:play-services-maps:16.0.0"
+    implementation "com.google.maps.android:android-maps-utils:0.5"
+//    implementation "com.google.maps.android:android-maps-utils:15.0.1"
 //    implementation "com.google.firebase:firebase-core:$firebaseVersion"
 //    implementation "com.google.maps.android:android-maps-utils:$mapsUtilsVersion"
 

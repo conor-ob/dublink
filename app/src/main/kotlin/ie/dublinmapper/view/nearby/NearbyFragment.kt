@@ -2,7 +2,6 @@ package ie.dublinmapper.view.nearby
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +16,7 @@ import com.google.android.gms.maps.model.*
 import dagger.android.support.DaggerFragment
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.ServiceLocation
-import ie.dublinmapper.util.AnimationUtils
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.ImageUtils
-import ie.dublinmapper.util.viewModelProvider
+import ie.dublinmapper.util.*
 import kotlinx.android.synthetic.main.fragment_nearby.*
 import javax.inject.Inject
 
@@ -102,6 +98,8 @@ class NearbyFragment : DaggerFragment(), OnMapReadyCallback {
                 nearbyViewModel.onCameraMoved(Coordinate(latitude, longitude))
             }
         }
+
+        RailLineDrawer.drawRailLines(googleMap, requireContext())
     }
 
     override fun onPause() {
