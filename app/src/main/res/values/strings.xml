@@ -2,10 +2,13 @@
     <string name="app_name">Dublin Mapper</string>
     <string name="jcdecaux_base_url">https://api.jcdecaux.com/vls/v1/</string>
     <string name="jcdecaux_contract">Dublin</string>
+    <string name="rtpi_base_url">https://rtpiapp.rtpi.openskydata.com/RTPIPublicService_V2/service.svc/</string>
     <string name="action_search">Search</string>
     <string name="search_query_hint">Search</string>
     <string name="clear_search">Clear Search</string>
     <string name="pref_key_last_location_latitude">last_location_latitude</string>
     <string name="pref_key_last_location_longitude">last_location_longitude</string>
     <string name="pref_key_last_location_zoom">last_location_zoom</string>
+    <string name="rtpi_operator_luas">luas</string>
+    <string name="rtpi_format">json</string>
 </resources>

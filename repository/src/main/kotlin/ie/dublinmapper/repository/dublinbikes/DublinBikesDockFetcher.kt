@@ -12,7 +12,7 @@ class DublinBikesDockFetcher(
 ) : Fetcher<List<StationJson>, String> {
 
     override fun fetch(key: String): Single<List<StationJson>> {
-        return api.getAllDocks(jcdecauxContract, jcdecauxApiKey)
+        return api.stations(jcdecauxContract, jcdecauxApiKey)
     }
 
 }

@@ -32,4 +32,16 @@ class ApplicationModule {
         return MetadataUtils.getMetadata(context, "api.jcdecaux.API_KEY")
     }
 
+    @Provides
+    @Named("rtpi_base_url")
+    fun rtpibaseUrl(resources: Resources): String = resources.getString(R.string.rtpi_base_url)
+
+    @Provides
+    @Named("api.rtpi.operator.luas")
+    fun rtpiOperatoreLuas(resources: Resources): String = resources.getString(R.string.rtpi_operator_luas)
+
+    @Provides
+    @Named("api.rtpi.format")
+    fun rtpiFormat(resources: Resources): String = resources.getString(R.string.rtpi_format)
+
 }

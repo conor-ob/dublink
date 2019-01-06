@@ -8,6 +8,7 @@ import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
 import ie.dublinmapper.repository.luas.LuasStopRepositoryModule
 import ie.dublinmapper.service.di.ServiceModule
 import ie.dublinmapper.service.jcdecaux.JcdecauxModule
+import ie.dublinmapper.service.rtpi.RtpiModule
 import ie.dublinmapper.view.viewmodel.ViewModelModule
 import javax.inject.Singleton
 
@@ -23,6 +24,7 @@ import javax.inject.Singleton
         DublinBikesRepositoryModule::class,
         LuasStopRepositoryModule::class,
         JcdecauxModule::class,
+        RtpiModule::class,
         ServiceModule::class
     ]
 )
