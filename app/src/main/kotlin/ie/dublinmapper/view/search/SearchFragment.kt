@@ -62,7 +62,7 @@ class SearchFragment : DaggerFragment() {
         val window = requireActivity().window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_500)
+        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_400)
     }
 
     override fun onPause() {

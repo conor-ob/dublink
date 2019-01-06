@@ -42,9 +42,9 @@ class NearbyUseCase @Inject constructor(
     ): SortedMap<Double, ServiceLocation> {
         val serviceLocations = mutableListOf<ServiceLocation>()
         serviceLocations.addAll(dartStations)
-        serviceLocations.addAll(dublinBikesDocks)
-        serviceLocations.addAll(dublinBusStops)
-        serviceLocations.addAll(luasStops)
+//        serviceLocations.addAll(dublinBikesDocks)
+//        serviceLocations.addAll(dublinBusStops)
+//        serviceLocations.addAll(luasStops)
         val sorted = TreeMap<Double, ServiceLocation>()
         for (serviceLocation in serviceLocations) {
             sorted[LocationUtils.haversineDistance(coordinate, serviceLocation.coordinate)] = serviceLocation

@@ -25,7 +25,7 @@
                     android:inputType="text"
                     android:maxLines="1"
                     android:textColor="@color/text_primary"
-                    android:textColorHint="@color/text_secondary"/>
+                    android:textColorHint="@color/text_light"/>
 
             <ImageView
                     android:id="@+id/clear_search"
