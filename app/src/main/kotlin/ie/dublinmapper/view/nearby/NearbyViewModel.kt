@@ -1,32 +1,27 @@
 package ie.dublinmapper.view.nearby
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ie.dublinmapper.domain.dublinbikes.DublinBikesDock
+import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.domain.usecase.NearbyUseCase
+import ie.dublinmapper.util.Coordinate
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class NearbyViewModel @Inject constructor(
     private val nearbyUseCase: NearbyUseCase
-//    private val schedulers:
 ) : ViewModel() {
 
-    private lateinit var nearbyServiceLocations: MutableLiveData<List<DublinBikesDock>>
+    val nearbyServiceLocations = MutableLiveData<List<ServiceLocation>>()
 
-    fun getNearbyServiceLocations(): LiveData<List<DublinBikesDock>> {
-        if (!::nearbyServiceLocations.isInitialized) {
-            nearbyServiceLocations = MutableLiveData()
-            nearbyUseCase.getNearbyServiceLocations()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { nearbyServiceLocations.value = it }
-                .doOnError {  }
-                .subscribe()
-        }
-        return nearbyServiceLocations
+    fun onCameraMoved(coordinate: Coordinate) {
+        nearbyUseCase.getNearbyServiceLocations(coordinate)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext { nearbyServiceLocations.value = it.values.toList() }
+            .doOnError {  }
+            .subscribe()
     }
 
 }

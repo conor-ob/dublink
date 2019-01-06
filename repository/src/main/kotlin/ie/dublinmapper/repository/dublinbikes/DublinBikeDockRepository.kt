@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.dublinbikes
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.dublinbikes.DublinBikesDock
+import ie.dublinmapper.domain.model.dublinbikes.DublinBikesDock
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
 import java.lang.UnsupportedOperationException

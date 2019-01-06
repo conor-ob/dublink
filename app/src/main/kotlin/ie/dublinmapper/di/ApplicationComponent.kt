@@ -5,6 +5,7 @@ import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
+import ie.dublinmapper.repository.luas.LuasStopRepositoryModule
 import ie.dublinmapper.service.di.ServiceModule
 import ie.dublinmapper.service.jcdecaux.JcdecauxModule
 import ie.dublinmapper.view.viewmodel.ViewModelModule
@@ -20,6 +21,7 @@ import javax.inject.Singleton
         FragmentModule::class,
         ViewModelModule::class,
         DublinBikesRepositoryModule::class,
+        LuasStopRepositoryModule::class,
         JcdecauxModule::class,
         ServiceModule::class
     ]

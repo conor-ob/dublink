@@ -1,0 +1,10 @@
+[
+  {
+    "featureType": "transit.station",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  }
+]

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/dublin-mapper.iml" filepath="$PROJECT_DIR$/dublin-mapper.iml" />
       <module fileurl="file://$PROJECT_DIR$/repository/repository.iml" filepath="$PROJECT_DIR$/repository/repository.iml" />
       <module fileurl="file://$PROJECT_DIR$/service/service.iml" filepath="$PROJECT_DIR$/service/service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/util/util.iml" filepath="$PROJECT_DIR$/util/util.iml" />
     </modules>
   </component>
 </project>

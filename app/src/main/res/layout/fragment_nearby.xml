@@ -23,4 +23,19 @@
 
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_fab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_search"
+            android:backgroundTint="@color/primary"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            app:borderWidth="0dp"
+            app:pressedTranslationZ="12dp"
+            app:layout_dodgeInsetEdges="bottom"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
