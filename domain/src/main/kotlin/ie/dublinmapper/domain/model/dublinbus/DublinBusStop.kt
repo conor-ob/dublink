@@ -8,5 +8,6 @@ data class DublinBusStop(
     override val id: String,
     override val name: String,
     override val coordinate: Coordinate,
-    override val operator: Operator
+    override val operator: Operator,
+    override val mapIconText: String = id
 ) : ServiceLocation

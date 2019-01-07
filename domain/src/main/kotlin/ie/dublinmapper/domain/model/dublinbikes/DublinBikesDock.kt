@@ -9,7 +9,5 @@ data class DublinBikesDock(
     override val name: String,
     override val coordinate: Coordinate,
     override val operator: Operator,
-    val docks: Int,
-    val bikes: Int,
-    val availableDocks: Int
+    override val mapIconText: String
 ) : ServiceLocation

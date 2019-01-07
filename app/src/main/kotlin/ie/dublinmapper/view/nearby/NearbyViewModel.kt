@@ -13,13 +13,13 @@ class NearbyViewModel @Inject constructor(
     private val nearbyUseCase: NearbyUseCase
 ) : ViewModel() {
 
-    val nearbyServiceLocations = MutableLiveData<List<ServiceLocation>>()
+    val nearbyServiceLocations = MutableLiveData<Collection<ServiceLocation>>()
 
     fun onCameraMoved(coordinate: Coordinate) {
         nearbyUseCase.getNearbyServiceLocations(coordinate)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { nearbyServiceLocations.value = it.values.toList() }
+            .doOnNext { nearbyServiceLocations.value = it }
             .doOnError {  }
             .subscribe()
     }

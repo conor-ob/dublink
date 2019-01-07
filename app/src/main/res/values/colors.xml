@@ -12,6 +12,7 @@
     <color name="dartGreen">#388E3C</color>
     <color name="dublinBikesTeal">#004D40</color>
     <color name="dublinBusYellow">#FFD740</color>
+    <color name="dublinBusBlue">#4286F5</color>
     <color name="luasPurple">#512DA8</color>
     <color name="luasBlue">#0277Bd</color>
     <color name="luasGreen">#689F38</color>
@@ -29,7 +30,7 @@
     <color name="grey_500">#9e9e9e</color>
     <color name="grey_600">#757575</color>
     <!--<color name="grey_700">#616161</color>-->
-    <!--<color name="grey_800">#424242</color>-->
+    <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
 
 </resources>

@@ -29,7 +29,7 @@ class DublinBusRepositoryModule {
                 it.displayId!!,
                 it.fullName!!,
                 Coordinate(it.latitude!!.toDouble(), it.longitude!!.toDouble()),
-                Operator.LUAS
+                Operator.DUBLIN_BUS
             ) } }
             .open()
         return DublinBusStopRepository(store)

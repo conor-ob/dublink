@@ -29,9 +29,7 @@ class DublinBikesRepositoryModule {
                 it.address!!,
                 Coordinate(it.position!!.lat!!, it.position!!.lng!!),
                 Operator.DUBLIN_BIKES,
-                it.bikeStands!!,
-                it.availableBikeStands!!,
-                it.availableBikes!!
+                it.availableBikes!!.toString()
             ) } }
             .open()
         return DublinBikeDockRepository(store)

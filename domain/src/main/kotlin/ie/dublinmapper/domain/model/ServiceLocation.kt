@@ -13,4 +13,6 @@ interface ServiceLocation {
 
     val operator: Operator
 
+    val mapIconText: String
+
 }
