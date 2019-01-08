@@ -54,7 +54,21 @@
     ]
   },
   {
-    "featureType": "transit",
+    "featureType": "transit.line",
+    "stylers": [
+      {
+        "color": "#008577"
+      },
+      {
+        "visibility": "on"
+      },
+      {
+        "weight": 0.5
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
     "stylers": [
       {
         "visibility": "off"

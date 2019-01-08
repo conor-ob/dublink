@@ -82,7 +82,7 @@ class NearbyFragment : DaggerFragment(), OnMapReadyCallback {
         mapMarkerManager.attachGoogleMap(googleMap)
         googleMap.setOnCameraMoveListener(mapMarkerManager)
 
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_no_transit_station))
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.google_map_style))
 
         restoreCameraPosition(googleMap)
 

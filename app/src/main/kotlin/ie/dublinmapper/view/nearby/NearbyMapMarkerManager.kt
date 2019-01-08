@@ -27,7 +27,7 @@ class NearbyMapMarkerManager(
     fun attachGoogleMap(googleMap: GoogleMap) {
         this.googleMap = googleMap
         this.previousZoom = googleMap.cameraPosition.zoom
-        drawRailLines()
+//        drawRailLines()
     }
 
     fun drawServiceLocations(serviceLocations: Collection<ServiceLocation>) {
