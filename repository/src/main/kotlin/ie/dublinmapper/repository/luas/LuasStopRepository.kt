@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.luas
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.model.luas.LuasStop
+import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
 

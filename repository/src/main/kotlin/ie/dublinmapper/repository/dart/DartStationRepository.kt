@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.dart
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.model.dart.DartStation
+import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
 

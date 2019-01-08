@@ -132,8 +132,8 @@ class NearbyMapMarkerManager(
 
     inner class IconFactory {
 
-        private val icons: Map<Operator, TreeMap<Float, IconOptions>> by lazy {
-            val icons = mutableMapOf<Operator, TreeMap<Float, IconOptions>>()
+        private val icons: Map<EnumSet<Operator>, TreeMap<Float, IconOptions>> by lazy {
+            val icons = mutableMapOf<EnumSet<Operator>, TreeMap<Float, IconOptions>>()
             val dartIcons = TreeMap<Float, IconOptions>()
             dartIcons[0.0f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_1),
@@ -210,27 +210,27 @@ class NearbyMapMarkerManager(
                 textIconVisibility = true,
                 textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
             )
-            icons[Operator.DART] = dartIcons
-            icons[Operator.DUBLIN_BIKES] = dublinBikesIcons
-            icons[Operator.DUBLIN_BUS] = dublinBusIcons
-            icons[Operator.LUAS] = luasIcons
+            icons[Operator.dart()] = dartIcons
+            icons[Operator.dublinBikes()] = dublinBikesIcons
+            icons[Operator.dublinBus()] = dublinBusIcons
+            icons[Operator.luas()] = luasIcons
             return@lazy icons
         }
 
         fun getIconId(serviceLocation: ServiceLocation, zoom: Float): UUID {
-            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.id
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.id
         }
 
         fun getIcon(serviceLocation: ServiceLocation, zoom: Float): BitmapDescriptor {
-            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.icon
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.icon
         }
 
         fun getIconAnchor(serviceLocation: ServiceLocation, zoom: Float): Pair<Float, Float> {
-            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.iconAnchor
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.iconAnchor
         }
 
         fun getIconVisibility(serviceLocation: ServiceLocation, zoom: Float): Boolean {
-            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.iconVisibility
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.iconVisibility
         }
 
         //TODO this needs to handle zoom
@@ -249,15 +249,15 @@ class NearbyMapMarkerManager(
         }
 
         fun getTextIconAnchor(serviceLocation: ServiceLocation, zoom: Float): Pair<Float, Float> {
-            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.textIconAnchor
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconAnchor
         }
 
         fun getTextIconVisibility(serviceLocation: ServiceLocation, zoom: Float): Boolean {
-            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.textIconVisibility
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconVisibility
         }
 
         private fun getTextIconRenderer(serviceLocation: ServiceLocation, zoom: Float): (Context, ServiceLocation) -> BitmapDescriptor {
-            return icons[serviceLocation.operator]!!.floorEntry(zoom).value.textIconRenderer
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconRenderer
         }
 
         fun newMarkerOptions(serviceLocation: ServiceLocation): MarkerOptions {
