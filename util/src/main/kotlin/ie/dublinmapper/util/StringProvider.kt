@@ -4,9 +4,9 @@ interface StringProvider {
 
     fun jcdecauxBaseUrl(): String
 
-    fun jcdecauxContract(): String
+    fun jcDecauxContract(): String
 
-    fun jcdecauxApiKey(): String
+    fun jcDecauxApiKey(): String
 
     fun rtpibaseUrl(): String
 
@@ -18,6 +18,10 @@ interface StringProvider {
 
     fun irishRailApiDartStationType(): String
 
+    fun dublinBusBaseUrl(): String
+
     fun rtpiOperatoreDublinBus(): String
+
+    fun rtpiOperatoreGoAhead(): String
 
 }

@@ -5,14 +5,14 @@ import ie.dublinmapper.service.jcdecaux.JcDecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
 import io.reactivex.Single
 
-class DublinBikesDockFetcher(
+class DublinBikesRealTimeDataFetcher(
     private val api: JcDecauxApi,
-    private val jcdecauxApiKey: String,
-    private val jcdecauxContract: String
-) : Fetcher<List<StationJson>, String> {
+    private val jcDecauxApiKey: String,
+    private val jcDecauxContract: String
+) : Fetcher<StationJson, String> {
 
-    override fun fetch(key: String): Single<List<StationJson>> {
-        return api.stations(jcdecauxContract, jcdecauxApiKey)
+    override fun fetch(key: String): Single<StationJson> {
+        return api.station(key, jcDecauxContract, jcDecauxApiKey)
     }
 
 }

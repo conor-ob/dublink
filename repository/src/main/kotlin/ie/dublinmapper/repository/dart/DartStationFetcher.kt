@@ -11,7 +11,7 @@ class DartStationFetcher(
 ) : Fetcher<List<IrishRailStationXml>, String> {
 
     override fun fetch(key: String): Single<List<IrishRailStationXml>> {
-        return api.getAllStationsWithStationType(stationType).map { it.stations }
+        return api.getAllStationsXmlWithStationType(stationType).map { it.stations }
     }
 
 }

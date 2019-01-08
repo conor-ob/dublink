@@ -16,15 +16,24 @@ class DublinBusStopRepository(
     }
 
     override fun getById(id: String): Observable<DublinBusStop> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return getAll().map { stops -> findMatching(id, stops) }
     }
 
-    override fun getAllById(id: String): Observable<List<DublinBusStop>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun findMatching(id: String, stops: List<DublinBusStop>): DublinBusStop {
+        for (stop in stops) {
+            if (id == stop.id) {
+                return stop
+            }
+        }
+        throw IllegalStateException()
     }
 
     override fun refresh(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return store.get(key).toObservable().map { true }
+    }
+
+    override fun getAllById(id: String): Observable<List<DublinBusStop>> {
+        throw UnsupportedOperationException()
     }
 
 }

@@ -15,12 +15,12 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.jcdecaux_base_url)
     }
 
-    override fun jcdecauxContract(): String {
+    override fun jcDecauxContract(): String {
         return resources.getString(R.string.jcdecaux_contract)
     }
 
     // copied from MetadataUtils
-    override fun jcdecauxApiKey(): String {
+    override fun jcDecauxApiKey(): String {
         try {
             val appInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
             return if (appInfo.metaData == null) {
@@ -47,6 +47,10 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.rtpi_operator_dublin_bus)
     }
 
+    override fun rtpiOperatoreGoAhead(): String {
+        return resources.getString(R.string.rtpi_operator_go_ahead)
+    }
+
     override fun rtpiFormat(): String {
         return resources.getString(R.string.rtpi_format)
     }
@@ -57,6 +61,10 @@ class AndroidResourceStringProvider(
 
     override fun irishRailApiDartStationType(): String {
         return resources.getString(R.string.irish_rail_api_dart_station_type)
+    }
+
+    override fun dublinBusBaseUrl(): String {
+        return resources.getString(R.string.dublin_bus_api_base_url)
     }
 
 }

@@ -3,9 +3,11 @@ package ie.dublinmapper.repository.dart
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.domain.model.dart.DartRealTimeData
 import ie.dublinmapper.domain.model.dart.DartStation
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.irishrail.IrishRailApi
+import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.service.irishrail.IrishRailStationXml
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
@@ -34,6 +36,22 @@ class DartRepositoryModule {
             } }
             .open()
         return DartStationRepository(store)
+    }
+
+    @Provides
+    @Singleton
+    fun dartRealTimeDataRepository(
+        api: IrishRailApi
+    ): Repository<DartRealTimeData> {
+        val fetcher = DartRealTimeDataFetcher(api)
+        val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationDataXml>, List<DartRealTimeData>>()
+            .fetcher(fetcher)
+            .parser { json -> json.map {
+                DartRealTimeData()
+                TODO()
+            } }
+            .open()
+        return DartRealTimeDataRepository(store)
     }
 
 }

@@ -16,12 +16,21 @@ class DublinBikeDockRepository(
         return store.get(key).toObservable()
     }
 
-    override fun refresh(): Observable<Boolean> {
-        return store.fetch(key).toObservable().map { true }
+    override fun getById(id: String): Observable<DublinBikesDock> {
+        return getAll().map { docks -> findMatching(id, docks) }
     }
 
-    override fun getById(id: String): Observable<DublinBikesDock> {
-        throw UnsupportedOperationException()
+    private fun findMatching(id: String, docks: List<DublinBikesDock>): DublinBikesDock {
+        for (dock in docks) {
+            if (id == dock.id) {
+                return dock
+            }
+        }
+        throw IllegalStateException()
+    }
+
+    override fun refresh(): Observable<Boolean> {
+        return store.fetch(key).toObservable().map { true }
     }
 
     override fun getAllById(id: String): Observable<List<DublinBikesDock>> {

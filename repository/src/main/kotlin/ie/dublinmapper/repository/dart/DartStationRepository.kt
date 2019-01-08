@@ -16,15 +16,24 @@ class DartStationRepository(
     }
 
     override fun getById(id: String): Observable<DartStation> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return getAll().map { stations -> findMatching(id, stations) }
     }
 
-    override fun getAllById(id: String): Observable<List<DartStation>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun findMatching(id: String, stations: List<DartStation>): DartStation {
+        for (station in stations) {
+            if (id == station.id) {
+                return station
+            }
+        }
+        throw IllegalStateException()
     }
 
     override fun refresh(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return store.fetch(key).toObservable().map { true }
+    }
+
+    override fun getAllById(id: String): Observable<List<DartStation>> {
+        throw UnsupportedOperationException()
     }
 
 }
