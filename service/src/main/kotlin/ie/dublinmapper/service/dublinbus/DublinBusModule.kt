@@ -1,4 +1,4 @@
-package ie.dublinmapper.service.jcdecaux
+package ie.dublinmapper.service.dublinbus
 
 import dagger.Module
 import dagger.Provides
@@ -11,23 +11,23 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class JcdecauxModule {
+class DublinBusModule {
 
     @Provides
     @Singleton
-    fun jcdecauxApi(
+    fun dublinBusApi(
         stringProvider: StringProvider,
         okHttpClient: OkHttpClient,
-        @Named("json") converterFactory: Converter.Factory,
+        @Named("xml") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
-    ): JcDecauxApi {
+    ): DublinBusApi {
         return Retrofit.Builder()
-            .baseUrl(stringProvider.jcdecauxBaseUrl())
+            .baseUrl(stringProvider.dublinBusBaseUrl())
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)
             .build()
-            .create(JcDecauxApi::class.java)
+            .create(DublinBusApi::class.java)
     }
 
 }

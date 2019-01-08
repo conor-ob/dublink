@@ -10,6 +10,8 @@ dependencies {
 //    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
 //    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+
+    testImplementation "junit:junit:${testVersions.junit}"
 }
 
 sourceSets {

@@ -7,7 +7,28 @@ import retrofit2.http.Query
 interface RtpiApi {
 
     @GET("busstopinformation")
-    fun busStopInformation(@Query("operator") operator: String,
-                 @Query("format") format: String) : Single<RtpiBusStopInformationResponseJson>
+    fun busStopInformation(
+        @Query("operator") operator: String,
+        @Query("format") format: String
+    ): Single<RtpiBusStopInformationResponseJson>
+
+    @GET("routelistinformation/withvariants")
+    fun routelistInformationWithVariants(
+        @Query("format") format: String
+    ): Single<RtpiRouteListInformationWithVariantsResponseJson>
+
+    @GET("routeinformation")
+    fun routeInformation(
+        @Query("routeid") routeId: String,
+        @Query("operator") operator: String,
+        @Query("format") format: String
+    ): Single<RtpiRouteInformationResponseJson>
+
+    @GET("realtimebusinformation")
+    fun realTimeBusInformation(
+        @Query("stopid") id: String,
+        @Query("operator") operator: String,
+        @Query("format") format: String
+    ): Single<RtpiRealTimeBusInformationResponseJson>
 
 }

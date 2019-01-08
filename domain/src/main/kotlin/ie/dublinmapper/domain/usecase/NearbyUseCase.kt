@@ -1,11 +1,8 @@
 package ie.dublinmapper.domain.usecase
 
-import ie.dublinmapper.domain.model.ServiceLocation
-import ie.dublinmapper.domain.model.dart.DartStation
-import ie.dublinmapper.domain.model.dublinbikes.DublinBikesDock
-import ie.dublinmapper.domain.model.dublinbus.DublinBusStop
-import ie.dublinmapper.domain.model.luas.LuasStop
+import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.util.CollectionUtils
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.LocationUtils
 import ie.dublinmapper.util.Operator
@@ -50,16 +47,16 @@ class NearbyUseCase @Inject constructor(
             sorted[LocationUtils.haversineDistance(coordinate, serviceLocation.coordinate)] = serviceLocation
         }
         val result = mutableListOf<ServiceLocation>()
-        result.addAll(findFirstN(3, Operator.DART, sorted))
-        result.addAll(findFirstN(7, Operator.DUBLIN_BIKES, sorted))
-        result.addAll(findFirstN(12, Operator.DUBLIN_BUS, sorted))
-        result.addAll(findFirstN(5, Operator.LUAS, sorted))
+        result.addAll(findFirstN(3, Operator.rail(), sorted))
+        result.addAll(findFirstN(7, Operator.bike(), sorted))
+        result.addAll(findFirstN(12, Operator.bus(), sorted))
+        result.addAll(findFirstN(5, Operator.tram(), sorted))
         return result
     }
 
     private fun findFirstN(
         limit: Int,
-        operator: Operator,
+        operators: EnumSet<Operator>,
         serviceLocations: TreeMap<Double, ServiceLocation>
     ): Collection<ServiceLocation> {
         var count = 0
@@ -68,7 +65,7 @@ class NearbyUseCase @Inject constructor(
             if (count >= limit) {
                 break
             }
-            if (value.operator == operator) {
+            if (CollectionUtils.doIntersect(operators, value.operators)) {
                 result.add(value)
                 count++
             }

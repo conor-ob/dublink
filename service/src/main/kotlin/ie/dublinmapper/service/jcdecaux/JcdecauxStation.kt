@@ -16,3 +16,9 @@ data class StationJson(
     @SerializedName("available_bikes") var availableBikes: Int? = null,
     @SerializedName("last_update") var lastUpdate: Long? = null
 )
+
+data class StationPositionJson(
+    @SerializedName("lat") var lat: Double? = null,
+    @SerializedName("lng") var lng: Double? = null
+)
+

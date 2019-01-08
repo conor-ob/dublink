@@ -1,31 +1,13 @@
 package ie.dublinmapper.repository.dublinbikes
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.model.dublinbikes.DublinBikesDock
-import ie.dublinmapper.domain.repository.Repository
-import io.reactivex.Observable
-import java.lang.UnsupportedOperationException
+import ie.dublinmapper.domain.model.DublinBikesDock
+import ie.dublinmapper.repository.ServiceLocationRepository
 
 class DublinBikeDockRepository(
-    private val store: Store<List<DublinBikesDock>, String>
-) : Repository<DublinBikesDock> {
+    store: Store<List<DublinBikesDock>, String>
+) : ServiceLocationRepository<DublinBikesDock>(store) {
 
-    private val key = "dublin_bikes_docks"
-
-    override fun getAll(): Observable<List<DublinBikesDock>> {
-        return store.get(key).toObservable()
-    }
-
-    override fun refresh(): Observable<Boolean> {
-        return store.fetch(key).toObservable().map { true }
-    }
-
-    override fun getById(id: String): Observable<DublinBikesDock> {
-        throw UnsupportedOperationException()
-    }
-
-    override fun getAllById(id: String): Observable<List<DublinBikesDock>> {
-        throw UnsupportedOperationException()
-    }
+    override fun key() = "dublin_bikes_docks"
 
 }
