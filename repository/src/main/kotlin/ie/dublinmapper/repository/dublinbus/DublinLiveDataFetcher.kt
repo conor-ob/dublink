@@ -6,7 +6,7 @@ import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import io.reactivex.Single
 
-class DublinBusRealTimeDataFetcher(
+class DublinLiveDataFetcher(
     private val dublinBusApi: DublinBusApi,
     private val rtpiApi: RtpiApi,
     private val dublinBusOperator: String,

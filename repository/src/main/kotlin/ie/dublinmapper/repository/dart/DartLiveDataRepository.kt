@@ -1,23 +1,23 @@
 package ie.dublinmapper.repository.dart
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.model.DartLiveData
+import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
 
-class DartRealTimeDataRepository(
-    private val store: Store<List<DartLiveData>, String>
-) : Repository<DartLiveData> {
+class DartLiveDataRepository(
+    private val store: Store<List<LiveData.Dart>, String>
+) : Repository<LiveData.Dart> {
 
-    override fun getAllById(id: String): Observable<List<DartLiveData>> {
+    override fun getAllById(id: String): Observable<List<LiveData.Dart>> {
         return store.get(id).toObservable()
     }
 
-    override fun getById(id: String): Observable<DartLiveData> {
+    override fun getById(id: String): Observable<LiveData.Dart> {
         throw UnsupportedOperationException()
     }
 
-    override fun getAll(): Observable<List<DartLiveData>> {
+    override fun getAll(): Observable<List<LiveData.Dart>> {
         throw UnsupportedOperationException()
     }
 

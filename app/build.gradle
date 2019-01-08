@@ -82,6 +82,8 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
 
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
+
     // Navigation
     implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-alpha07"
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07"

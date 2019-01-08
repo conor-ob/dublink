@@ -5,7 +5,7 @@ import ie.dublinmapper.service.jcdecaux.JcDecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
 import io.reactivex.Single
 
-class DublinBikesRealTimeDataFetcher(
+class DublinBikesLiveDataFetcher(
     private val api: JcDecauxApi,
     private val jcDecauxApiKey: String,
     private val jcDecauxContract: String

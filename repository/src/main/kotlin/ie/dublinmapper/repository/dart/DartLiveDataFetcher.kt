@@ -5,7 +5,7 @@ import ie.dublinmapper.service.irishrail.IrishRailApi
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import io.reactivex.Single
 
-class DartRealTimeDataFetcher(
+class DartLiveDataFetcher(
     private val api: IrishRailApi
 ) : Fetcher<List<IrishRailStationDataXml>, String> {
 

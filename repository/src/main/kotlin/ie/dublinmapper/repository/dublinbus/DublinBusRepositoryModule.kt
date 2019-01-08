@@ -3,8 +3,9 @@ package ie.dublinmapper.repository.dublinbus
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.domain.model.DublinBusLiveData
 import ie.dublinmapper.domain.model.DublinBusStop
+import ie.dublinmapper.domain.model.DueTime
+import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.dublinbus.DublinBusApi
 import ie.dublinmapper.service.rtpi.RtpiApi
@@ -12,6 +13,7 @@ import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.StringProvider
+import org.threeten.bp.LocalTime
 import javax.inject.Singleton
 
 @Module
@@ -42,16 +44,16 @@ class DublinBusRepositoryModule {
         dublinBusApi: DublinBusApi,
         api: RtpiApi,
         stringProvider: StringProvider
-    ): Repository<DublinBusLiveData> {
-        val fetcher = DublinBusRealTimeDataFetcher(dublinBusApi, api, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat())
-        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<DublinBusLiveData>>()
+    ): Repository<LiveData.DublinBus> {
+        val fetcher = DublinLiveDataFetcher(dublinBusApi, api, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat())
+        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LiveData.DublinBus>>()
             .fetcher(fetcher)
             .parser { json -> json.map {
-                DublinBusLiveData()
+                LiveData.DublinBus(DueTime(0L, LocalTime.now()))
                 TODO()
             } }
             .open()
-        return DublinBusRealTimeDataRepository(store)
+        return DublinBusLiveDataRepository(store)
     }
 
 }
