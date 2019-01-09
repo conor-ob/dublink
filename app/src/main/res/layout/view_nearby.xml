@@ -5,6 +5,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="match_parent"-->
@@ -19,14 +24,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            <fragment
-                    android:id="@+id/google_map"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
+            <ie.dublinmapper.view.nearby.GoogleMapView
+                    android:id="@+id/google_map_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent" />
 
             <ImageView
                     android:id="@+id/crosshair"
+                    android:contentDescription="@string/content_description_crosshiar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_map_marker_crosshair"
@@ -36,6 +41,8 @@
         </RelativeLayout>
 
     <!--</LinearLayout>-->
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/search_fab"

@@ -13,7 +13,7 @@ import ie.dublinmapper.util.Operator
 import timber.log.Timber
 import java.util.*
 
-class NearbyMapMarkerManager(
+class GoogleMapController(
     private val context: Context
 ) : GoogleMap.OnCameraMoveListener {
 
@@ -102,9 +102,12 @@ class NearbyMapMarkerManager(
     }
 
     fun cleanUp() {
-//        Timber.d("cleanUp()")
-//        mapMarkers.values.forEach { it.remove() }
-//        mapMarkers.clear()
+        Timber.d("cleanUp()")
+        mapMarkers.values.forEach { it.remove() }
+        mapMarkers.clear()
+        mapTextMarkers.values.forEach { it.remove() }
+        mapTextMarkers.clear()
+        previousZoom = 0.0f
     }
 
     override fun onCameraMove() {
@@ -141,7 +144,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
             )
             dartIcons[16.6f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_0),
@@ -149,7 +152,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.5f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
             )
             val dublinBikesIcons = TreeMap<Float, IconOptions>()
             dublinBikesIcons[0.0f] = IconOptions(
@@ -158,7 +161,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = false,
                 textIconVisibility = false,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
             )
             dublinBikesIcons[16.0f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes_x),
@@ -166,7 +169,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, 2.15f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.dublinBikesText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.dublinBikesText(context, serviceLocation) }
             )
             val dublinBusIcons = TreeMap<Float, IconOptions>()
             dublinBusIcons[0.0f] = IconOptions(
@@ -175,7 +178,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = false,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
             )
             dublinBusIcons[15.4f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_x1),
@@ -183,7 +186,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = false,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
             )
             dublinBusIcons[17.97f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_xx),
@@ -191,7 +194,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = false,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.dublinBusText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.dublinBusText(context, serviceLocation) }
             )
             val luasIcons = TreeMap<Float, IconOptions>()
             luasIcons[0.0f] = IconOptions(
@@ -200,7 +203,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
             )
             luasIcons[16.6f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_luas_0),
@@ -208,7 +211,7 @@ class NearbyMapMarkerManager(
                 textIconAnchor = Pair(0.5f, -0.4f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> NearbyMapMarkerTextRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
             )
             icons[Operator.dart()] = dartIcons
             icons[Operator.dublinBikes()] = dublinBikesIcons

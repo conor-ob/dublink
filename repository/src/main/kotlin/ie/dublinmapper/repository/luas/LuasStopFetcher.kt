@@ -17,7 +17,7 @@ class LuasStopFetcher(
 
     private fun adapt(stops: List<RtpiBusStopInformationJson>): List<RtpiBusStopInformationJson> {
         return stops.map { stop ->
-            stop.copy(fullName = stop.fullName?.replace("LUAS", "")?.trim())
+            stop.copy(fullName = stop.fullName.replace("LUAS", "").trim())
         }
     }
 

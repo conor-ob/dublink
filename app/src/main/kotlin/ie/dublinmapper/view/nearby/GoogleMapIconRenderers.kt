@@ -10,7 +10,7 @@ import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.ServiceLocation
 import timber.log.Timber
 
-object NearbyMapMarkerTextRenderers {
+object GoogleMapIconRenderers {
 
     fun defaultText(context: Context, serviceLocation: ServiceLocation): BitmapDescriptor {
         Timber.d("defaultText for ServiceLocation[${serviceLocation.name}]")

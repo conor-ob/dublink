@@ -1,21 +1,34 @@
 package ie.dublinmapper
 
 import android.os.Bundle
-import androidx.navigation.NavHost
-import androidx.navigation.findNavController
-import dagger.android.support.DaggerAppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import com.bluelinelabs.conductor.Conductor
+import com.bluelinelabs.conductor.Router
+import com.bluelinelabs.conductor.RouterTransaction
+import ie.dublinmapper.view.nearby.NearbyController
+import kotlinx.android.synthetic.main.activity_root.*
 
-class DublinMapperActivity : DaggerAppCompatActivity(), NavHost {
+class DublinMapperActivity : AppCompatActivity() {
 
-    private val navigationController by lazy { findNavController(R.id.nav_host_fragment) }
+    private lateinit var router: Router
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
+        setupRouter(savedInstanceState)
     }
 
-    override fun getNavController() = navigationController
+    private fun setupRouter(savedInstanceState: Bundle?) {
+        router = Conductor.attachRouter(this, root, savedInstanceState)
+        if (!router.hasRootController()) {
+            router.setRoot(RouterTransaction.with(NearbyController(Bundle.EMPTY)))
+        }
+    }
 
-    override fun onSupportNavigateUp() = navigationController.navigateUp()
+    override fun onBackPressed() {
+        if (!router.handleBack()) {
+            super.onBackPressed()
+        }
+    }
 
 }
