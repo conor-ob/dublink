@@ -15,7 +15,7 @@ class DublinLiveDataFetcher(
 ) : Fetcher<List<RtpiRealTimeBusInformationJson>, String> {
 
     override fun fetch(key: String): Single<List<RtpiRealTimeBusInformationJson>> {
-        return rtpiApi.realTimeBusInformation(key, dublinBusOperator, format).map { it.realTimeBusInformation }
+        return rtpiApi.realTimeBusInformation(key, dublinBusOperator, format).map { it.results }
     }
 
 }

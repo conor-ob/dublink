@@ -26,9 +26,9 @@ class DublinBikesRepositoryModule {
             .fetcher(fetcher)
             .parser { json -> json.map { DublinBikesDock(
                 id = it.number.toString(),
-                name = it.address!!,
-                coordinate = Coordinate(it.position!!.lat!!, it.position!!.lng!!),
-                mapIconText = it.availableBikes!!.toString()
+                name = it.address,
+                coordinate = Coordinate(it.position.lat, it.position.lng),
+                mapIconText = it.availableBikes.toString()
             ) } }
             .open()
         return DublinBikeDockRepository(store)

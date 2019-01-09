@@ -17,49 +17,27 @@ enum class Operator(
 
     companion object {
 
-        fun commuter(): EnumSet<Operator> {
-            return EnumSet.of(COMMUTER)
-        }
+        fun commuter(): EnumSet<Operator> = EnumSet.of(COMMUTER)
 
-        fun dart(): EnumSet<Operator> {
-            return EnumSet.of(DART)
-        }
+        fun dart(): EnumSet<Operator> = EnumSet.of(DART)
 
-        fun dublinBikes(): EnumSet<Operator> {
-            return EnumSet.of(DUBLIN_BIKES)
-        }
+        fun dublinBikes(): EnumSet<Operator> = EnumSet.of(DUBLIN_BIKES)
 
-        fun dublinBus(): EnumSet<Operator> {
-            return EnumSet.of(DUBLIN_BUS)
-        }
+        fun dublinBus(): EnumSet<Operator> = EnumSet.of(DUBLIN_BUS)
 
-        fun goAhead(): EnumSet<Operator> {
-            return EnumSet.of(GO_AHEAD)
-        }
+        fun goAhead(): EnumSet<Operator> = EnumSet.of(GO_AHEAD)
 
-        fun interCity(): EnumSet<Operator> {
-            return EnumSet.of(INTERCITY)
-        }
+        fun interCity(): EnumSet<Operator> = EnumSet.of(INTERCITY)
 
-        fun luas(): EnumSet<Operator> {
-            return EnumSet.of(LUAS)
-        }
+        fun luas(): EnumSet<Operator> = EnumSet.of(LUAS)
 
-        fun bike(): EnumSet<Operator> {
-            return EnumSet.of(DUBLIN_BIKES)
-        }
+        fun bike(): EnumSet<Operator> = EnumSet.of(DUBLIN_BIKES)
 
-        fun bus(): EnumSet<Operator> {
-            return EnumSet.of(DUBLIN_BUS, GO_AHEAD)
-        }
+        fun bus(): EnumSet<Operator> = EnumSet.of(DUBLIN_BUS, GO_AHEAD)
 
-        fun rail(): EnumSet<Operator> {
-            return EnumSet.of(COMMUTER, DART, INTERCITY)
-        }
+        fun rail(): EnumSet<Operator> = EnumSet.of(COMMUTER, DART, INTERCITY)
 
-        fun tram(): EnumSet<Operator> {
-            return EnumSet.of(LUAS)
-        }
+        fun tram(): EnumSet<Operator> = EnumSet.of(LUAS)
 
     }
 

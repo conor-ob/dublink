@@ -15,7 +15,7 @@ class DublinBusStopFetcher(
 ) : Fetcher<List<RtpiBusStopInformationJson>, String> {
 
     override fun fetch(key: String): Single<List<RtpiBusStopInformationJson>> {
-        return rtpiApi.busStopInformation(dublinBusOperator, format).map { it.stops }
+        return rtpiApi.busStopInformation(dublinBusOperator, format).map { it.results }
     }
 
 }

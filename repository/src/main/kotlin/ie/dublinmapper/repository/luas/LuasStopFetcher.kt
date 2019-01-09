@@ -12,7 +12,7 @@ class LuasStopFetcher(
 ) : Fetcher<List<RtpiBusStopInformationJson>, String> {
 
     override fun fetch(key: String): Single<List<RtpiBusStopInformationJson>> {
-        return api.busStopInformation(operator, format).map { adapt(it.stops) }
+        return api.busStopInformation(operator, format).map { adapt(it.results) }
     }
 
     private fun adapt(stops: List<RtpiBusStopInformationJson>): List<RtpiBusStopInformationJson> {

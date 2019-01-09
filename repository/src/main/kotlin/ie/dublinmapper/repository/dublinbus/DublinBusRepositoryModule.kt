@@ -30,9 +30,9 @@ class DublinBusRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<DublinBusStop>>()
             .fetcher(fetcher)
             .parser { json -> json.map { DublinBusStop(
-                id = it.displayId!!,
-                name = it.fullName!!,
-                coordinate = Coordinate(it.latitude!!.toDouble(), it.longitude!!.toDouble())
+                id = it.stopId,
+                name = it.fullName,
+                coordinate = Coordinate(it.latitude.toDouble(), it.longitude.toDouble())
             ) } }
             .open()
         return DublinBusStopRepository(store)

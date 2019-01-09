@@ -6,7 +6,7 @@ import org.simpleframework.xml.Root
 
 @Root(name = "ArrayOfObjStationData")
 data class IrishRailStationDataResponseXml(
-    @field:ElementList(name = "objStationData", inline = true, required = false) var stationData: List<IrishRailStationDataXml>? = null
+    @field:ElementList(name = "objStationData", inline = true, required = false) var stationData: List<IrishRailStationDataXml> = mutableListOf()
 )
 
 @Root(name = "objStationData")

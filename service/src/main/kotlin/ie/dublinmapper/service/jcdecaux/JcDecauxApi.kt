@@ -9,14 +9,14 @@ interface JcDecauxApi {
 
     @GET("stations")
     fun stations(
-        @Query("contract") cityName: String,
+        @Query("contract") contract: String,
         @Query("apiKey") apiKey: String
     ): Single<List<StationJson>>
 
     @GET("stations/{station_number}")
     fun station(
-        @Path("station_number") dockId: String,
-        @Query("contract") cityName: String,
+        @Path("station_number") stationNumber: String,
+        @Query("contract") contract: String,
         @Query("apiKey") apiKey: String
     ): Single<StationJson>
 

@@ -28,9 +28,9 @@ class LuasStopRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<LuasStop>>()
             .fetcher(fetcher)
             .parser { json -> json.map { LuasStop(
-                id = it.displayId!!,
-                name = it.fullName!!,
-                coordinate = Coordinate(it.latitude!!.toDouble(), it.longitude!!.toDouble())
+                id = it.stopId,
+                name = it.fullName,
+                coordinate = Coordinate(it.latitude.toDouble(), it.longitude.toDouble())
             ) } }
             .open()
         return LuasStopRepository(store)
