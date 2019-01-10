@@ -7,4 +7,6 @@ interface NearbyView : MvpView {
 
     fun showServiceLocations(serviceLocations: Collection<ServiceLocation>)
 
+    fun showLoading()
+
 }

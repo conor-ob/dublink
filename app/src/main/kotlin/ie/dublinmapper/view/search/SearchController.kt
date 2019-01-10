@@ -1,5 +1,7 @@
 package ie.dublinmapper.view.search
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -12,20 +14,21 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
+import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
-import ie.dublinmapper.util.hideKeyboard
-import ie.dublinmapper.util.showKeyboard
+import ie.dublinmapper.util.*
 
 class SearchController(
     args: Bundle
 ) : MvpBaseController<SearchView, SearchPresenter>(args), SearchView {
 
-    override fun layoutId() = R.layout.view_search
+    private lateinit var searchQueryView: EditText
+
+    override val layoutId = R.layout.view_search
 
     override fun createPresenter(): SearchPresenter {
-        return requireApplicationComponent().searchPresenter()
+        return getApplicationComponent().searchPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
@@ -34,31 +37,81 @@ class SearchController(
         return view
     }
 
+    //TODO add test for keyboard showing
     override fun onAttach(view: View) {
         super.onAttach(view)
+        searchQueryView.requestFocus()
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onEndPushChangeHandler() {
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.primary_dark), getColour(R.color.grey_400))
+        colorAnimation.duration = 500L
+        colorAnimation.start()
+
         val window = requireActivity().window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_400)
+        colorAnimation.addUpdateListener { animator ->
+            val color = animator.animatedValue as Int
+
+            // change status, navigation, and action bar color
+            window.statusBarColor = color
+//            window.navigationBarColor = color
+//            supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
+        }
+
+
+//        searchQueryView.requestFocus()
+//        val window = requireActivity().window
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.grey_400)
+        super.onEndPushChangeHandler()
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onStartPopChangeHandler() {
+        super.onStartPopChangeHandler()
+        hideKeyboard(searchQueryView)
+
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.grey_400), getColour(R.color.primary_dark))
+        colorAnimation.duration = 600L
+        colorAnimation.start()
+
+        val window = requireActivity().window
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        colorAnimation.addUpdateListener { animator ->
+            val color = animator.animatedValue as Int
+
+            // change status, navigation, and action bar color
+            window.statusBarColor = color
+//            window.navigationBarColor = color
+//            supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
+        }
+
+
+//        searchQueryView.clearFocus()
+//        val window = requireActivity().window
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.primary_dark)
     }
 
     override fun onDetach(view: View) {
-        val window = requireActivity().window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.primary_dark)
         super.onDetach(view)
     }
 
     private fun setupLayout(view: View) {
         val toolbar: Toolbar = view.findViewById(R.id.toolbar)
         toolbar.setNavigationOnClickListener { router.handleBack() }
-        val searchQueryView: EditText = view.findViewById(R.id.search_query)
+        searchQueryView = view.findViewById(R.id.search_query)
         searchQueryView.setOnFocusChangeListener { query, hasFocus ->
             if (hasFocus) {
-                requireContext().showKeyboard(query)
+                showKeyboard(query)
             } else {
-                requireContext().hideKeyboard(query)
+                hideKeyboard(query)
             }
         }
         val clearSearch: ImageView = view.findViewById(R.id.clear_search)
@@ -75,11 +128,10 @@ class SearchController(
         })
         searchQueryView.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
-                EditorInfo.IME_ACTION_SEARCH -> requireContext().hideKeyboard(searchQueryView)
+                EditorInfo.IME_ACTION_SEARCH -> hideKeyboard(searchQueryView)
             }
             true
         }
-        searchQueryView.requestFocus() //TODO shouldn't need to do this manually
         clearSearch.setOnClickListener { searchQueryView.setText("") }
     }
 

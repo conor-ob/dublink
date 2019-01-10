@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bluelinelabs.conductor.RouterTransaction
-import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -19,8 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
-import ie.dublinmapper.util.CollectionUtils
-import ie.dublinmapper.util.Coordinate
+import ie.dublinmapper.util.*
 import ie.dublinmapper.view.search.SearchController
 import timber.log.Timber
 
@@ -31,18 +29,21 @@ class NearbyController(
     private lateinit var googleMapView: GoogleMapView
     private lateinit var googleMap: GoogleMap
     private lateinit var swipeRefresh: SwipeRefreshLayout
+    private lateinit var searchFab: FloatingActionButton
+    private lateinit var rootView: View
 
     //TODO @Inject
     private lateinit var googleMapController: GoogleMapController
 
-    override fun layoutId() = R.layout.view_nearby
+    override val layoutId = R.layout.view_nearby
 
     override fun createPresenter(): NearbyPresenter {
-        return requireApplicationComponent().nearbyPresenter()
+        return getApplicationComponent().nearbyPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = super.onCreateView(inflater, container)
+        rootView = view.findViewById(R.id.view_root)
         setupSwipeRefresh(view)
         setupGoogleMap(view)
         setupSearchFab(view)
@@ -50,12 +51,14 @@ class NearbyController(
     }
 
     private fun setupSearchFab(view: View) {
-        val searchFab: FloatingActionButton = view.findViewById(R.id.search_fab)
+        searchFab = view.findViewById(R.id.search_fab)
         searchFab.setOnClickListener {
+            val searchController = SearchController(Bundle.EMPTY)
+//            val changeHandler = SimpleSwapChangeHandler()
             router.pushController(RouterTransaction
-                .with(SearchController(Bundle.EMPTY))
-                .pushChangeHandler(FadeChangeHandler(500L))
-                .popChangeHandler(FadeChangeHandler(500L))
+                .with(searchController)
+                .pushChangeHandler(SearchControllerChangeHandler(searchFab, rootView, searchController))
+                .popChangeHandler(SearchControllerChangeHandler(searchFab, rootView, searchController))
             )
         }
     }
@@ -65,11 +68,14 @@ class NearbyController(
         googleMapController = GoogleMapController(context)
     }
 
+    override fun showLoading() {
+        swipeRefresh.isRefreshing = true
+    }
+
     private fun setupSwipeRefresh(view: View) {
         swipeRefresh = view.findViewById(R.id.swipe_refresh)
         swipeRefresh.isEnabled = false
         swipeRefresh.setColorSchemeResources(R.color.dartGreen, R.color.dublinBikesTeal, R.color.dublinBusBlue, R.color.luasPurple)
-        swipeRefresh.isRefreshing = true
     }
 
     private fun setupGoogleMap(view: View) {

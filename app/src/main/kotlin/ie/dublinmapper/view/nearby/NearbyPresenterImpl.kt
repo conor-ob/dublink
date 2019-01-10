@@ -15,6 +15,7 @@ class NearbyPresenterImpl @Inject constructor(
 ) : MvpBasePresenter<NearbyView>(), NearbyPresenter {
 
     private var subscriptions: CompositeDisposable? = null
+    private var isFirstLaunch = true
 
     override fun onViewAttached() {
 
@@ -31,7 +32,11 @@ class NearbyPresenterImpl @Inject constructor(
             .debounce(100L, TimeUnit.MILLISECONDS)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
-            .doOnNext { ifViewAttached { view -> view.showServiceLocations(it) } }
+            .doOnSubscribe { ifViewAttached { view -> if (isFirstLaunch) view.showLoading() } }
+            .doOnNext {
+                isFirstLaunch = false
+                ifViewAttached { view -> view.showServiceLocations(it) }
+            }
             .doOnError { Timber.e(it) }
             .subscribe()
         )
