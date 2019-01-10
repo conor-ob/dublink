@@ -2,13 +2,9 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.util.CollectionUtils
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.LocationUtils
-import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.*
 import io.reactivex.Observable
 import io.reactivex.functions.Function4
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
@@ -16,15 +12,16 @@ class NearbyUseCase @Inject constructor(
     private val dartStationRepository: Repository<DartStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
-    private val luasStopRepository: Repository<LuasStop>
+    private val luasStopRepository: Repository<LuasStop>,
+    private val thread: Thread
 ) {
 
     fun getNearbyServiceLocations(coordinate: Coordinate): Observable<Collection<ServiceLocation>> {
         return Observable.combineLatest(
-            dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(Schedulers.io()),
-            dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(Schedulers.io()),
-            dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(Schedulers.io()),
-            luasStopRepository.getAll().startWith(emptyList<LuasStop>()).subscribeOn(Schedulers.io()),
+            dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(thread.io),
+            dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(thread.io),
+            dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(thread.io),
+            luasStopRepository.getAll().startWith(emptyList<LuasStop>()).subscribeOn(thread.io),
             Function4 { dartStations, dublinBikesDocks, dublinBusStops, luasStops ->
                 filter(coordinate, dartStations, dublinBikesDocks, dublinBusStops, luasStops) }
         )

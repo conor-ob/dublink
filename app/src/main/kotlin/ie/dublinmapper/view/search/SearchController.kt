@@ -17,7 +17,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
+import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.util.*
+import io.reactivex.Observable
+import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class SearchController(
     args: Bundle
@@ -41,6 +45,7 @@ class SearchController(
     override fun onAttach(view: View) {
         super.onAttach(view)
         searchQueryView.requestFocus()
+        presenter.onViewAttached()
     }
 
     @SuppressLint("RestrictedApi")
@@ -100,6 +105,7 @@ class SearchController(
     }
 
     override fun onDetach(view: View) {
+        presenter.onViewDetached()
         super.onDetach(view)
     }
 
@@ -115,17 +121,28 @@ class SearchController(
             }
         }
         val clearSearch: ImageView = view.findViewById(R.id.clear_search)
-        searchQueryView.addTextChangedListener(object : TextWatcher {
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                clearSearch.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
-            }
+        val subscription = Observable.create<String> { subscriber ->
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            searchQueryView.addTextChangedListener(object : TextWatcher {
 
-            override fun afterTextChanged(s: Editable?) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    clearSearch.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
+                    subscriber.onNext(s.toString())
+                }
 
-        })
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+                override fun afterTextChanged(s: Editable?) { }
+
+            })
+        }
+            .debounce(400L, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .filter { it.length > 1 }
+            .doOnNext { presenter.onQueryTextSubmit(it) }
+            .subscribe()
+
         searchQueryView.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> hideKeyboard(searchQueryView)
@@ -133,6 +150,12 @@ class SearchController(
             true
         }
         clearSearch.setOnClickListener { searchQueryView.setText("") }
+    }
+
+    override fun showSearchResults(searchResults: List<ServiceLocation>) {
+        for (result in searchResults) {
+            Timber.d(result.toString())
+        }
     }
 
 }
