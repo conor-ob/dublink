@@ -16,7 +16,7 @@ class NearbyUseCase @Inject constructor(
     private val thread: Thread
 ) {
 
-    fun getNearbyServiceLocations(coordinate: Coordinate): Observable<Collection<ServiceLocation>> {
+    fun getNearbyServiceLocations(coordinate: Coordinate): Observable<List<ServiceLocation>> {
         return Observable.combineLatest(
             dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(thread.io),
             dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(thread.io),
@@ -33,7 +33,7 @@ class NearbyUseCase @Inject constructor(
         dublinBikesDocks: List<DublinBikesDock>,
         dublinBusStops: List<DublinBusStop>,
         luasStops: List<LuasStop>
-    ): Collection<ServiceLocation> {
+    ): List<ServiceLocation> {
         val serviceLocations = mutableListOf<ServiceLocation>()
         serviceLocations.addAll(dartStations)
         serviceLocations.addAll(dublinBikesDocks)
@@ -55,7 +55,7 @@ class NearbyUseCase @Inject constructor(
         limit: Int,
         operators: EnumSet<Operator>,
         serviceLocations: TreeMap<Double, ServiceLocation>
-    ): Collection<ServiceLocation> {
+    ): List<ServiceLocation> {
         var count = 0
         val result = mutableListOf<ServiceLocation>()
         for ((_, value) in serviceLocations) {

@@ -1,8 +1,8 @@
 package ie.dublinmapper.view.livedata
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
-import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
+import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.Thread
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -25,13 +25,12 @@ class LiveDataPresenterImpl @Inject constructor(
         subscriptions = null
     }
 
-    override fun onServiceLocationFocused(serviceLocation: ServiceLocation) {
-        subscriptions().add(useCase.getLiveData(serviceLocation)
+    override fun onFocusedOnServiceLocation(serviceLocation: ServiceLocationUi) {
+        subscriptions().add(useCase.getLiveData(serviceLocation.serviceLocation)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
-            .doOnNext {
-                ifViewAttached { view -> view.showLiveData(it) }
-            }
+            .map { LiveDataMapper(serviceLocation).map(it) }
+            .doOnNext { ifViewAttached { view -> view.showLiveData(it) } }
             .doOnError { Timber.e(it) }
             .subscribe()
         )

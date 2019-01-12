@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.*
 import timber.log.Timber
 import java.util.*
@@ -19,14 +20,20 @@ class GoogleMapController(
     private lateinit var googleMap: GoogleMap
     private var previousZoom = 0.0f
 
-    private val mapMarkers = Collections.synchronizedMap(mutableMapOf<ServiceLocation, Marker>())
-    private val mapTextMarkers = Collections.synchronizedMap(mutableMapOf<ServiceLocation, Marker>())
+    private val mapMarkers = Collections.synchronizedMap(mutableMapOf<ServiceLocationUi, Marker>())
+    private val mapTextMarkers = Collections.synchronizedMap(mutableMapOf<ServiceLocationUi, Marker>())
 
-    fun getServiceLocation(coordinate: Coordinate): ServiceLocation? {
+    fun getServiceLocation(coordinate: Coordinate): ServiceLocationUi? {
+        val nearest = TreeMap<Double, ServiceLocationUi>()
         for (serviceLocation in mapMarkers.keys) {
-            if (LocationUtils.haversineDistance(serviceLocation.coordinate, coordinate) < 10.0) {
-                return serviceLocation
-            }
+            nearest[LocationUtils.haversineDistance(serviceLocation.serviceLocation.coordinate, coordinate)] = serviceLocation
+        }
+        if (nearest.isEmpty()) {
+            return null
+        }
+        val closest = nearest.iterator().next()
+        if (closest.key < 25.0) {
+            return closest.value
         }
         return null
     }
@@ -37,14 +44,14 @@ class GoogleMapController(
 //        drawRailLines()
     }
 
-    fun drawServiceLocations(serviceLocations: Collection<ServiceLocation>) {
+    fun drawServiceLocations(serviceLocations: Collection<ServiceLocationUi>) {
         Timber.d("drawServiceLocations()")
         addNewMarkers(serviceLocations)
         removeOldMarkers(serviceLocations)
         redrawMarkers()
     }
 
-    private fun addNewMarkers(serviceLocations: Collection<ServiceLocation>) {
+    private fun addNewMarkers(serviceLocations: Collection<ServiceLocationUi>) {
         for (serviceLocation in serviceLocations) {
             if (mapMarkers[serviceLocation] == null) {
                 val marker = newMarker(serviceLocation)
@@ -61,7 +68,7 @@ class GoogleMapController(
         }
     }
 
-    private fun removeOldMarkers(serviceLocations: Collection<ServiceLocation>) {
+    private fun removeOldMarkers(serviceLocations: Collection<ServiceLocationUi>) {
         val iterator = mapMarkers.entries.iterator()
         while (iterator.hasNext()) {
             val entry = iterator.next()
@@ -100,11 +107,11 @@ class GoogleMapController(
         }
     }
 
-    private fun newMarker(serviceLocation: ServiceLocation): Marker {
+    private fun newMarker(serviceLocation: ServiceLocationUi): Marker {
         return googleMap.addMarker(iconFactory.newMarkerOptions(serviceLocation))
     }
 
-    private fun newTextMarker(serviceLocation: ServiceLocation): Marker {
+    private fun newTextMarker(serviceLocation: ServiceLocationUi): Marker {
         return googleMap.addMarker(iconFactory.newTextMarkerOptions(serviceLocation))
     }
 
@@ -151,7 +158,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             dartIcons[16.6f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_0),
@@ -159,7 +171,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.5f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             val dublinBikesIcons = TreeMap<Float, IconOptions>()
             dublinBikesIcons[0.0f] = IconOptions(
@@ -168,7 +185,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = false,
                 textIconVisibility = false,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             dublinBikesIcons[16.0f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes_x),
@@ -176,7 +198,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, 2.15f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.dublinBikesText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.dublinBikesText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             val dublinBusIcons = TreeMap<Float, IconOptions>()
             dublinBusIcons[0.0f] = IconOptions(
@@ -185,7 +212,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = false,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             dublinBusIcons[15.4f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_x1),
@@ -193,7 +225,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = false,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             dublinBusIcons[17.97f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_xx),
@@ -201,7 +238,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = false,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.dublinBusText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.dublinBusText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             val luasIcons = TreeMap<Float, IconOptions>()
             luasIcons[0.0f] = IconOptions(
@@ -210,7 +252,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             luasIcons[16.6f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_luas_0),
@@ -218,7 +265,12 @@ class GoogleMapController(
                 textIconAnchor = Pair(0.5f, -0.4f),
                 iconVisibility = true,
                 textIconVisibility = true,
-                textIconRenderer = { context: Context, serviceLocation: ServiceLocation -> GoogleMapIconRenderers.defaultText(context, serviceLocation) }
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
             )
             icons[Operator.dart()] = dartIcons
             icons[Operator.dublinBikes()] = dublinBikesIcons
@@ -227,26 +279,26 @@ class GoogleMapController(
             return@lazy icons
         }
 
-        fun getIconId(serviceLocation: ServiceLocation, zoom: Float): UUID {
-            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.id
+        fun getIconId(serviceLocation: ServiceLocationUi, zoom: Float): UUID {
+            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.id
         }
 
-        fun getIcon(serviceLocation: ServiceLocation, zoom: Float): BitmapDescriptor {
-            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.icon
+        fun getIcon(serviceLocation: ServiceLocationUi, zoom: Float): BitmapDescriptor {
+            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.icon
         }
 
-        fun getIconAnchor(serviceLocation: ServiceLocation, zoom: Float): Pair<Float, Float> {
-            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.iconAnchor
+        fun getIconAnchor(serviceLocation: ServiceLocationUi, zoom: Float): Pair<Float, Float> {
+            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.iconAnchor
         }
 
-        fun getIconVisibility(serviceLocation: ServiceLocation, zoom: Float): Boolean {
-            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.iconVisibility
+        fun getIconVisibility(serviceLocation: ServiceLocationUi, zoom: Float): Boolean {
+            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.iconVisibility
         }
 
         //TODO this needs to handle zoom
 //        private val textIconCache = mutableMapOf<Pair<String, Float>, BitmapDescriptor>()
 
-        fun getTextIcon(serviceLocation: ServiceLocation, zoom: Float): BitmapDescriptor {
+        fun getTextIcon(serviceLocation: ServiceLocationUi, zoom: Float): BitmapDescriptor {
 //            var textIcon = textIconCache[Pair(serviceLocation.mapIconText, zoom)]
 //            if (textIcon == null) {
 //                val renderer = getTextIconRenderer(serviceLocation, zoom)
@@ -258,36 +310,39 @@ class GoogleMapController(
             return renderer.invoke(context, serviceLocation)
         }
 
-        fun getTextIconAnchor(serviceLocation: ServiceLocation, zoom: Float): Pair<Float, Float> {
-            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconAnchor
+        fun getTextIconAnchor(serviceLocation: ServiceLocationUi, zoom: Float): Pair<Float, Float> {
+            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.textIconAnchor
         }
 
-        fun getTextIconVisibility(serviceLocation: ServiceLocation, zoom: Float): Boolean {
-            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconVisibility
+        fun getTextIconVisibility(serviceLocation: ServiceLocationUi, zoom: Float): Boolean {
+            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.textIconVisibility
         }
 
-        private fun getTextIconRenderer(serviceLocation: ServiceLocation, zoom: Float): (Context, ServiceLocation) -> BitmapDescriptor {
-            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconRenderer
+        private fun getTextIconRenderer(
+            serviceLocation: ServiceLocationUi,
+            zoom: Float
+        ): (Context, ServiceLocationUi) -> BitmapDescriptor {
+            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.textIconRenderer
         }
 
-        fun newMarkerOptions(serviceLocation: ServiceLocation): MarkerOptions {
+        fun newMarkerOptions(serviceLocation: ServiceLocationUi): MarkerOptions {
             Timber.d("newMarkerOptions")
             val currentZoom = googleMap.cameraPosition.zoom
             val anchor = getIconAnchor(serviceLocation, currentZoom)
             return MarkerOptions()
-                .position(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
+                .position(LatLng(serviceLocation.serviceLocation.coordinate.latitude, serviceLocation.serviceLocation.coordinate.longitude))
                 .anchor(anchor.first, anchor.second)
                 .icon(getIcon(serviceLocation, currentZoom))
                 .visible(getIconVisibility(serviceLocation, currentZoom))
         }
 
-        fun newTextMarkerOptions(serviceLocation: ServiceLocation): MarkerOptions {
-            Timber.d("newTextMarkerOptions for ServiceLocation[${serviceLocation.name}]")
+        fun newTextMarkerOptions(serviceLocation: ServiceLocationUi): MarkerOptions {
+            Timber.d("newTextMarkerOptions for ServiceLocation[${serviceLocation.serviceLocation.name}]")
 
             val currentZoom = googleMap.cameraPosition.zoom
             val iconAnchor = getTextIconAnchor(serviceLocation, currentZoom)
             return MarkerOptions()
-                .position(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
+                .position(LatLng(serviceLocation.serviceLocation.coordinate.latitude, serviceLocation.serviceLocation.coordinate.longitude))
                 .anchor(iconAnchor.first, iconAnchor.second)
                 .icon(getTextIcon(serviceLocation, currentZoom))
                 .visible(getTextIconVisibility(serviceLocation, currentZoom))
@@ -302,7 +357,7 @@ class GoogleMapController(
         val textIconAnchor: Pair<Float, Float>,
         val iconVisibility: Boolean,
         val textIconVisibility: Boolean,
-        val textIconRenderer: (Context, ServiceLocation) -> BitmapDescriptor
+        val textIconRenderer: (Context, ServiceLocationUi) -> BitmapDescriptor
     )
 
     private fun drawRailLines() {

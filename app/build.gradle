@@ -30,7 +30,7 @@ android {
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            debuggable true
+            debuggable false
             applicationIdSuffix = ".debug"
 //            ext.enableCrashlytics = false
         }

@@ -8,12 +8,13 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.model.ServiceLocationUi
 import timber.log.Timber
 
 object GoogleMapIconRenderers {
 
-    fun defaultText(context: Context, serviceLocation: ServiceLocation): BitmapDescriptor {
-        Timber.d("defaultText for ServiceLocation[${serviceLocation.name}]")
+    fun defaultText(context: Context, serviceLocation: ServiceLocationUi): BitmapDescriptor {
+        Timber.d("defaultText for ServiceLocation[${serviceLocation.serviceLocation.name}]")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
         val stkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         stkPaint.textSize = px
@@ -38,8 +39,8 @@ object GoogleMapIconRenderers {
         return BitmapDescriptorFactory.fromBitmap(image)
     }
 
-    fun dublinBikesText(context: Context, serviceLocation: ServiceLocation): BitmapDescriptor {
-        Timber.d("defaultText for ServiceLocation[${serviceLocation.name}]")
+    fun dublinBikesText(context: Context, serviceLocation: ServiceLocationUi): BitmapDescriptor {
+        Timber.d("defaultText for ServiceLocation[${serviceLocation.serviceLocation.name}]")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, context.resources.displayMetrics)
         val stkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         stkPaint.textSize = px
@@ -55,8 +56,8 @@ object GoogleMapIconRenderers {
         return BitmapDescriptorFactory.fromBitmap(image)
     }
 
-    fun dublinBusText(context: Context, serviceLocation: ServiceLocation): BitmapDescriptor {
-        Timber.d("defaultText for ServiceLocation[${serviceLocation.name}]")
+    fun dublinBusText(context: Context, serviceLocation: ServiceLocationUi): BitmapDescriptor {
+        Timber.d("defaultText for ServiceLocation[${serviceLocation.serviceLocation.name}]")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
         val stkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         stkPaint.textSize = px

@@ -4,6 +4,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import ie.dublinmapper.domain.usecase.NearbyUseCase
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Thread
+import ie.dublinmapper.view.livedata.NearbyMapper
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -32,6 +33,7 @@ class NearbyPresenterImpl @Inject constructor(
             .debounce(100L, TimeUnit.MILLISECONDS)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
+            .map { NearbyMapper.map(it) }
             .doOnSubscribe { ifViewAttached { view -> if (isFirstLaunch) view.showLoading() } }
             .doOnNext {
                 isFirstLaunch = false

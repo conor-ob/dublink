@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
+import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.*
 import ie.dublinmapper.view.livedata.LiveDataController
 import ie.dublinmapper.view.search.SearchController
@@ -140,14 +141,18 @@ class NearbyController(
                 presenter.onCameraMoved(Coordinate(latitude, longitude))
                 val serviceLocation = googleMapController.getServiceLocation(Coordinate(latitude, longitude))
                 if (serviceLocation != null) {
-                    Timber.d("onMarkerClicked $serviceLocation")
                     liveDataController.focusOnServiceLocation(serviceLocation)
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
+                        .target(LatLng(serviceLocation.serviceLocation.coordinate.latitude, serviceLocation.serviceLocation.coordinate.longitude))
+                        .zoom(googleMap.cameraPosition.zoom)
+                        .build()))
+
                 }
             }
         }
     }
 
-    override fun showServiceLocations(serviceLocations: Collection<ServiceLocation>) {
+    override fun showServiceLocations(serviceLocations: Collection<ServiceLocationUi>) {
         if (CollectionUtils.isNullOrEmpty(serviceLocations)) {
             return
         }
@@ -160,11 +165,11 @@ class NearbyController(
         googleMapController.drawServiceLocations(serviceLocations)
     }
 
-    private fun containsAllTypes(serviceLocations: Collection<ServiceLocation>): Boolean {
-        val test1 = serviceLocations.find { it is DartStation }
-        val test2 = serviceLocations.find { it is DublinBikesDock }
-        val test3 = serviceLocations.find { it is DublinBusStop }
-        val test4 = serviceLocations.find { it is LuasStop }
+    private fun containsAllTypes(serviceLocations: Collection<ServiceLocationUi>): Boolean {
+        val test1 = serviceLocations.find { it.serviceLocation is DartStation }
+        val test2 = serviceLocations.find { it.serviceLocation is DublinBikesDock }
+        val test3 = serviceLocations.find { it.serviceLocation is DublinBusStop }
+        val test4 = serviceLocations.find { it.serviceLocation is LuasStop }
         return test1 != null && test2 != null && test3 != null && test4 != null
     }
 

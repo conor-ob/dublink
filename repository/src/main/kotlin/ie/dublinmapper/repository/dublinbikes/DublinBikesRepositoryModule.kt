@@ -28,7 +28,7 @@ class DublinBikesRepositoryModule {
                 id = it.number.toString(),
                 name = it.address,
                 coordinate = Coordinate(it.position.lat, it.position.lng),
-                mapIconText = it.availableBikes.toString()
+                availableBikes = it.availableBikes
             ) } }
             .open()
         return DublinBikeDockRepository(store)

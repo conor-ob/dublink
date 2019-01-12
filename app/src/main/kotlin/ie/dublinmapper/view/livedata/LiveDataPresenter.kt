@@ -1,7 +1,7 @@
 package ie.dublinmapper.view.livedata
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter
-import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.model.ServiceLocationUi
 
 interface LiveDataPresenter : MvpPresenter<LiveDataView> {
 
@@ -9,6 +9,6 @@ interface LiveDataPresenter : MvpPresenter<LiveDataView> {
 
     fun onViewDetached()
 
-    fun onServiceLocationFocused(serviceLocation: ServiceLocation)
+    fun onFocusedOnServiceLocation(serviceLocation: ServiceLocationUi)
 
 }
