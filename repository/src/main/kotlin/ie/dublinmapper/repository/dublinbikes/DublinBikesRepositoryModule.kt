@@ -43,10 +43,7 @@ class DublinBikesRepositoryModule {
         val fetcher = DublinBikesLiveDataFetcher(api, stringProvider.jcDecauxApiKey(), stringProvider.jcDecauxContract())
         val store = StoreBuilder.parsedWithKey<String, StationJson, LiveData.DublinBikes>()
             .fetcher(fetcher)
-            .parser { _ ->
-                LiveData.DublinBikes("dummy")
-                TODO()
-            }
+            .parser { liveData -> DublinBikesLiveDataMapper.map(liveData) }
             .open()
         return DublinBikesLiveDataRepository(store)
     }

@@ -8,6 +8,7 @@ dependencies {
 //    implementation "com.google.code.gson:gson:${versions.gson}"
 //    implementation "com.google.dagger:dagger:${versions.dagger}"
 //    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
 //    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"

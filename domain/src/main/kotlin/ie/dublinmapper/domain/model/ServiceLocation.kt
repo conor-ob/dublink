@@ -4,23 +4,23 @@ import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
 import java.util.*
 
-interface ServiceLocation {
+sealed class ServiceLocation(
 
-    val id: String
+    open val id: String,
 
-    val name: String
+    open val name: String,
 
-    val coordinate: Coordinate
+    open val coordinate: Coordinate,
 
-    val operators: EnumSet<Operator>
+    open val operators: EnumSet<Operator>,
 
-    val routes: Map<Operator, Set<String>>
+    open val routes: Map<Operator, Set<String>>,
 
-    val mapIconText: String
+    open val mapIconText: String
 
     //TODO convert to ServiceLocationMapMarker and inject icon map?
 
-}
+    )
 
 data class DartStation(
     override val id: String,
@@ -29,7 +29,7 @@ data class DartStation(
     override val operators: EnumSet<Operator> = Operator.dart(),
     override val routes: Map<Operator, Set<String>> = emptyMap(),
     override val mapIconText: String = name
-) : ServiceLocation
+) : ServiceLocation(id, name, coordinate, operators, routes, mapIconText)
 
 data class DublinBikesDock(
     override val id: String,
@@ -38,7 +38,7 @@ data class DublinBikesDock(
     override val operators: EnumSet<Operator> = Operator.dublinBikes(),
     override val routes: Map<Operator, Set<String>> = emptyMap(),
     override val mapIconText: String
-) : ServiceLocation
+) : ServiceLocation(id, name, coordinate, operators, routes, mapIconText)
 
 data class DublinBusStop(
     override val id: String,
@@ -47,7 +47,7 @@ data class DublinBusStop(
     override val operators: EnumSet<Operator> = Operator.dublinBus(),
     override val routes: Map<Operator, Set<String>> = emptyMap(),
     override val mapIconText: String = id
-) : ServiceLocation
+) : ServiceLocation(id, name, coordinate, operators, routes, mapIconText)
 
 data class LuasStop(
     override val id: String,
@@ -56,4 +56,4 @@ data class LuasStop(
     override val operators: EnumSet<Operator> = Operator.luas(),
     override val routes: Map<Operator, Set<String>> = emptyMap(),
     override val mapIconText: String = name
-) : ServiceLocation
+) : ServiceLocation(id, name, coordinate, operators, routes, mapIconText)

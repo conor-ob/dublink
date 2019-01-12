@@ -32,7 +32,6 @@
 
             <ImageView
                     android:id="@+id/crosshair"
-                    android:contentDescription="@string/content_description_crosshiar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_map_marker_crosshair"
@@ -59,5 +58,11 @@
             app:borderWidth="0dp"
             app:pressedTranslationZ="12dp"
             app:layout_dodgeInsetEdges="bottom"/>
+
+    <FrameLayout
+            android:id="@+id/live_data_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

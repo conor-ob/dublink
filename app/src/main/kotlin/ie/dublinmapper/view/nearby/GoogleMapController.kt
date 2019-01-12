@@ -7,9 +7,7 @@ import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.ServiceLocation
-import ie.dublinmapper.util.AnimationUtils
-import ie.dublinmapper.util.ImageUtils
-import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.*
 import timber.log.Timber
 import java.util.*
 
@@ -23,6 +21,15 @@ class GoogleMapController(
 
     private val mapMarkers = Collections.synchronizedMap(mutableMapOf<ServiceLocation, Marker>())
     private val mapTextMarkers = Collections.synchronizedMap(mutableMapOf<ServiceLocation, Marker>())
+
+    fun getServiceLocation(coordinate: Coordinate): ServiceLocation? {
+        for (serviceLocation in mapMarkers.keys) {
+            if (LocationUtils.haversineDistance(serviceLocation.coordinate, coordinate) < 10.0) {
+                return serviceLocation
+            }
+        }
+        return null
+    }
 
     fun attachGoogleMap(googleMap: GoogleMap) {
         this.googleMap = googleMap

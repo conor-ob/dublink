@@ -17,7 +17,7 @@ android {
         targetSdkVersion buildConfig.targetSdk
         versionCode 100000
         versionName "1.0.0-SNAPSHOT"
-//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
                                  jcdecauxApiKey: "$jcdecauxApiKey" ]
     }
@@ -94,9 +94,9 @@ dependencies {
     implementation "com.google.android.material:material:${versions.material}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    testImplementation "junit:junit:${testVersions.junit}"
+    androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
+    androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
 
     implementation "com.jakewharton.timber:timber:${versions.timber}"
 

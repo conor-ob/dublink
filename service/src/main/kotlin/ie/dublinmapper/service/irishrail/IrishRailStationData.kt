@@ -25,7 +25,7 @@ data class IrishRailStationDataXml(
     @field:Element(name = "Lastlocation", required = false) var lastLocation: String? = null,
     @field:Element(name = "Duein") var dueIn: String? = null,
     @field:Element(name = "Late", required = false) var late: String? = null,
-    @field:Element(name = "Exparrival", required = false) var expectedArrivalTime: String? = null,
+    @field:Element(name = "Exparrival", required = false) var expArrival: String? = null,
     @field:Element(name = "Expdepart", required = false) var expectedDepartureTime: String? = null,
     @field:Element(name = "Scharrival", required = false) var scheduledArrivalTime: String? = null,
     @field:Element(name = "Schdepart", required = false) var scheduledDepartureTime: String? = null,

@@ -14,11 +14,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.util.*
+import ie.dublinmapper.view.livedata.LiveDataController
 import ie.dublinmapper.view.search.SearchController
 import timber.log.Timber
 
@@ -31,6 +33,8 @@ class NearbyController(
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var searchFab: FloatingActionButton
     private lateinit var rootView: View
+
+    private lateinit var liveDataController: LiveDataController
 
     //TODO @Inject
     private lateinit var googleMapController: GoogleMapController
@@ -47,7 +51,23 @@ class NearbyController(
         setupSwipeRefresh(view)
         setupGoogleMap(view)
         setupSearchFab(view)
+        setupLiveDataView(view)
         return view
+    }
+
+    private fun setupLiveDataView(view: View) {
+        val liveDataView: ViewGroup = view.findViewById(R.id.live_data_view)
+        val bottomSheetBehavior = BottomSheetBehavior.from(liveDataView)
+        bottomSheetBehavior.apply {
+            isHideable = true
+            peekHeight = 450
+            state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        val liveDataRouter = getChildRouter(liveDataView)
+        if (!liveDataRouter.hasRootController()) {
+            liveDataController = LiveDataController(Bundle.EMPTY)
+            liveDataRouter.setRoot(RouterTransaction.with(liveDataController))
+        }
     }
 
     private fun setupSearchFab(view: View) {
@@ -118,6 +138,11 @@ class NearbyController(
             Timber.d("onCameraIdle")
             googleMap.cameraPosition.target?.apply {
                 presenter.onCameraMoved(Coordinate(latitude, longitude))
+                val serviceLocation = googleMapController.getServiceLocation(Coordinate(latitude, longitude))
+                if (serviceLocation != null) {
+                    Timber.d("onMarkerClicked $serviceLocation")
+                    liveDataController.focusOnServiceLocation(serviceLocation)
+                }
             }
         }
     }

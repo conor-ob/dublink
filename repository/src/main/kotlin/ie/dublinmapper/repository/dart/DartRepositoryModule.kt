@@ -29,7 +29,7 @@ class DartRepositoryModule {
             .fetcher(fetcher)
             .parser { json -> json.map {
                 DartStation(
-                    id = it.id!!,
+                    id = it.code!!,
                     name = it.name!!,
                     coordinate = Coordinate(it.latitude!!.toDouble(), it.longitude!!.toDouble())
                 )
@@ -46,10 +46,7 @@ class DartRepositoryModule {
         val fetcher = DartLiveDataFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationDataXml>, List<LiveData.Dart>>()
             .fetcher(fetcher)
-            .parser { json -> json.map {
-                LiveData.Dart(DueTime(0L, LocalTime.now()))
-                TODO()
-            } }
+            .parser { liveData -> DartLiveDataMapper.map(liveData) }
             .open()
         return DartLiveDataRepository(store)
     }

@@ -49,6 +49,7 @@ buildscript {
                     'core'        : '1.1.0', // https://mvnrepository.com/artifact/androidx.test/core
                     'junit'       : '1.1.0', // https://mvnrepository.com/artifact/androidx.test.ext/junit
                     'room_testing': '2.0.0', // https://mvnrepository.com/artifact/androidx.room/room-testing
+                    'rules'       : '1.1.1', // https://mvnrepository.com/artifact/androidx.test/rules
                     'runner'      : '1.1.1'  // https://mvnrepository.com/artifact/androidx.test/runner?repo=google
             ],
             //'espresso_core' : '3.0.2', // https://mvnrepository.com/artifact/com.android.support.test.espresso/espresso-core

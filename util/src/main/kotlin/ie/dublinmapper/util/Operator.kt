@@ -41,4 +41,8 @@ enum class Operator(
 
     }
 
+    override fun toString(): String {
+        return fullName
+    }
+
 }
