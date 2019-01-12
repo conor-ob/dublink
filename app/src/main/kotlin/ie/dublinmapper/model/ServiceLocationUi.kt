@@ -30,7 +30,7 @@ sealed class ServiceLocationUi(
     ) : ServiceLocationUi(
         dublinBusStop,
         dublinBusStop.id,
-        R.color.dublinBusYellow
+        R.color.commuterBlue
     )
 
     class Luas(

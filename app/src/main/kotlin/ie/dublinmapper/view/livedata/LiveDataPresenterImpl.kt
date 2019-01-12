@@ -29,7 +29,13 @@ class LiveDataPresenterImpl @Inject constructor(
         subscriptions().add(useCase.getLiveData(serviceLocation.serviceLocation)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
-            .map { LiveDataMapper(serviceLocation).map(it) }
+            .map { LiveDataMapper.map(it) }
+            .doOnSubscribe {
+                ifViewAttached { view ->
+                    view.showServiceLocationColour(serviceLocation.colourId)
+                    view.showServiceLocation(serviceLocation)
+                }
+            }
             .doOnNext { ifViewAttached { view -> view.showLiveData(it) } }
             .doOnError { Timber.e(it) }
             .subscribe()

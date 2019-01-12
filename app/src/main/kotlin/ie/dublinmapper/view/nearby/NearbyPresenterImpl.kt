@@ -30,7 +30,7 @@ class NearbyPresenterImpl @Inject constructor(
 
     override fun onCameraMoved(coordinate: Coordinate) {
         subscriptions().add(useCase.getNearbyServiceLocations(coordinate)
-            .debounce(100L, TimeUnit.MILLISECONDS)
+//            .debounce(250L, TimeUnit.MILLISECONDS)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
             .map { NearbyMapper.map(it) }
