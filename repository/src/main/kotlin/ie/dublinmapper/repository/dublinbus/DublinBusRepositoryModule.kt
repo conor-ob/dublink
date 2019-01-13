@@ -10,8 +10,8 @@ import ie.dublinmapper.service.dublinbus.DublinBusApi
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
-import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.StringProvider
+import ie.dublinmapper.util.Thread
 import javax.inject.Singleton
 
 @Module
@@ -22,16 +22,13 @@ class DublinBusRepositoryModule {
     fun dublinBusStopRepository(
         dublinBusApi: DublinBusApi,
         rtpiApi: RtpiApi,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        thread: Thread
     ): Repository<DublinBusStop> {
-        val fetcher = DublinBusStopFetcher(dublinBusApi, rtpiApi, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat())
-        val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<DublinBusStop>>()
+        val fetcher = DublinBusStopFetcher(dublinBusApi, rtpiApi, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat(), thread)
+        val store = StoreBuilder.parsedWithKey<String, List<AggregatedStop>, List<DublinBusStop>>()
             .fetcher(fetcher)
-            .parser { json -> json.map { DublinBusStop(
-                id = it.stopId,
-                name = it.fullName,
-                coordinate = Coordinate(it.latitude.toDouble(), it.longitude.toDouble())
-            ) } }
+            .parser { stops -> DublinBusStopMapper.map(stops) }
             .open()
         return DublinBusStopRepository(store)
     }

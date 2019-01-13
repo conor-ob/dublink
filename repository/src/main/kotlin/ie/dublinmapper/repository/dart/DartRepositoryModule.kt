@@ -4,15 +4,12 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.model.DartStation
-import ie.dublinmapper.domain.model.DueTime
 import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.irishrail.IrishRailApi
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.service.irishrail.IrishRailStationXml
-import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.StringProvider
-import org.threeten.bp.LocalTime
 import javax.inject.Singleton
 
 @Module
@@ -27,13 +24,7 @@ class DartRepositoryModule {
         val fetcher = DartStationFetcher(api, stringProvider.irishRailApiDartStationType())
         val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationXml>, List<DartStation>>()
             .fetcher(fetcher)
-            .parser { json -> json.map {
-                DartStation(
-                    id = it.code!!,
-                    name = it.name!!,
-                    coordinate = Coordinate(it.latitude!!.toDouble(), it.longitude!!.toDouble())
-                )
-            } }
+            .parser { stations -> DartStationMapper.map(stations) }
             .open()
         return DartStationRepository(store)
     }

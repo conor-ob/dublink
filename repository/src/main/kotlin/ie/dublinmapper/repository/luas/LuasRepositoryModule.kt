@@ -9,7 +9,6 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
-import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
@@ -25,11 +24,7 @@ class LuasRepositoryModule {
         val fetcher = LuasStopFetcher(api, stringProvider.rtpiOperatoreLuas(), stringProvider.rtpiFormat())
         val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<LuasStop>>()
             .fetcher(fetcher)
-            .parser { json -> json.map { LuasStop(
-                id = it.stopId,
-                name = it.fullName,
-                coordinate = Coordinate(it.latitude.toDouble(), it.longitude.toDouble())
-            ) } }
+            .parser { stops -> LuasStopMapper.map(stops) }
             .open()
         return LuasStopRepository(store)
     }

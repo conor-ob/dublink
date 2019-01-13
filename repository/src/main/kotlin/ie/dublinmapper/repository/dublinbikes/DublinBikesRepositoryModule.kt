@@ -8,7 +8,6 @@ import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.jcdecaux.JcDecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
-import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
@@ -24,12 +23,7 @@ class DublinBikesRepositoryModule {
         val fetcher = DublinBikesDockFetcher(api, stringProvider.jcDecauxApiKey(), stringProvider.jcDecauxContract())
         val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
             .fetcher(fetcher)
-            .parser { json -> json.map { DublinBikesDock(
-                id = it.number.toString(),
-                name = it.address,
-                coordinate = Coordinate(it.position.lat, it.position.lng),
-                availableBikes = it.availableBikes
-            ) } }
+            .parser { docks -> DublinBikesDockMapper.map(docks) }
             .open()
         return DublinBikeDockRepository(store)
     }

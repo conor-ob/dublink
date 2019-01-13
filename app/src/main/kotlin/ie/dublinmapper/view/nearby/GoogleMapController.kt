@@ -273,8 +273,12 @@ class GoogleMapController(
                 }
             )
             icons[Operator.dart()] = dartIcons
+            icons[EnumSet.of(Operator.COMMUTER, Operator.DART)] = dartIcons
+            icons[EnumSet.of(Operator.COMMUTER, Operator.DART, Operator.INTERCITY)] = dartIcons
             icons[Operator.dublinBikes()] = dublinBikesIcons
             icons[Operator.dublinBus()] = dublinBusIcons
+            icons[Operator.goAhead()] = dublinBusIcons
+            icons[Operator.bus()] = dublinBusIcons
             icons[Operator.luas()] = luasIcons
             return@lazy icons
         }
