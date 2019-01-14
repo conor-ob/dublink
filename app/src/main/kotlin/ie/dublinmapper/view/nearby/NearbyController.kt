@@ -61,7 +61,7 @@ class NearbyController(
         val bottomSheetBehavior = BottomSheetBehavior.from(liveDataView)
         bottomSheetBehavior.apply {
             isHideable = true
-            peekHeight = 450
+            peekHeight = 600
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
         val liveDataRouter = getChildRouter(liveDataView)
@@ -142,11 +142,12 @@ class NearbyController(
                 val serviceLocation = googleMapController.getServiceLocation(Coordinate(latitude, longitude))
                 if (serviceLocation != null) {
                     liveDataController.focusOnServiceLocation(serviceLocation)
-                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
-                        .target(LatLng(serviceLocation.serviceLocation.coordinate.latitude, serviceLocation.serviceLocation.coordinate.longitude))
-                        .zoom(googleMap.cameraPosition.zoom)
-                        .build()))
-
+                    if (LocationUtils.haversineDistance(Coordinate(latitude, longitude), serviceLocation.coordinate) > 10.0) {
+                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
+                            .target(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
+                            .zoom(googleMap.cameraPosition.zoom)
+                            .build()))
+                    }
                 }
             }
         }

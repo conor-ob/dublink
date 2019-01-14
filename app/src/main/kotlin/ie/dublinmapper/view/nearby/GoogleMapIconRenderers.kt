@@ -14,7 +14,7 @@ import timber.log.Timber
 object GoogleMapIconRenderers {
 
     fun defaultText(context: Context, serviceLocation: ServiceLocationUi): BitmapDescriptor {
-        Timber.d("defaultText for ServiceLocation[${serviceLocation.serviceLocation.name}]")
+        Timber.d("defaultText for ServiceLocation[${serviceLocation.name}]")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
         val stkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         stkPaint.textSize = px
@@ -40,7 +40,7 @@ object GoogleMapIconRenderers {
     }
 
     fun dublinBikesText(context: Context, serviceLocation: ServiceLocationUi): BitmapDescriptor {
-        Timber.d("defaultText for ServiceLocation[${serviceLocation.serviceLocation.name}]")
+        Timber.d("defaultText for ServiceLocation[${serviceLocation.name}]")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, context.resources.displayMetrics)
         val stkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         stkPaint.textSize = px
@@ -57,7 +57,7 @@ object GoogleMapIconRenderers {
     }
 
     fun dublinBusText(context: Context, serviceLocation: ServiceLocationUi): BitmapDescriptor {
-        Timber.d("defaultText for ServiceLocation[${serviceLocation.serviceLocation.name}]")
+        Timber.d("defaultText for ServiceLocation[${serviceLocation.name}]")
         val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14f, context.resources.displayMetrics)
         val stkPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         stkPaint.textSize = px

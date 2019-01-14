@@ -7,6 +7,7 @@ import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.TimeUtils
 import org.threeten.bp.temporal.ChronoUnit
+import java.util.*
 
 object LuasLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LiveData.Luas> {
 
@@ -20,11 +21,11 @@ object LuasLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LiveData.Luas
         )
     }
 
-    private fun mapDueTime(expectedArrivalDateTimestamp: String): DueTime {
+    private fun mapDueTime(expectedArrivalDateTimestamp: String): List<DueTime> {
         val currentInstant = TimeUtils.now()
         val expectedInstant = TimeUtils.toInstant(expectedArrivalDateTimestamp)
         val minutes = TimeUtils.timeBetween(ChronoUnit.MINUTES, currentInstant, expectedInstant)
-        return DueTime(minutes, TimeUtils.toTime(expectedInstant))
+        return Collections.singletonList(DueTime(minutes, TimeUtils.toTime(expectedInstant)))
     }
 
 }

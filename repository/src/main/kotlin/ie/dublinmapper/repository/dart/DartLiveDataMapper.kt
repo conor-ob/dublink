@@ -7,6 +7,7 @@ import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.TimeUtils
 import org.threeten.bp.temporal.ChronoUnit
+import java.util.*
 
 object DartLiveDataMapper : Mapper<IrishRailStationDataXml, LiveData.Dart> {
 
@@ -19,16 +20,17 @@ object DartLiveDataMapper : Mapper<IrishRailStationDataXml, LiveData.Dart> {
         )
     }
 
-    private fun mapDueTime(expectedArrivalTimestamp: String, dueInMinutes: String): DueTime {
+    private fun mapDueTime(expectedArrivalTimestamp: String, dueInMinutes: String): List<DueTime> {
         val currentInstant = TimeUtils.now()
         if (expectedArrivalTimestamp == "00:00") {
             val expectedInstant = currentInstant.plus(dueInMinutes.toLong(), ChronoUnit.MINUTES)
             val minutes = TimeUtils.timeBetween(ChronoUnit.MINUTES, currentInstant, expectedInstant)
-            return DueTime(minutes, TimeUtils.toTime(expectedInstant))
+            return Collections.singletonList(DueTime(minutes, TimeUtils.toTime(expectedInstant)))
         }
+        // bug where expectedArrivalTimestamp == "00:11" the next day
         val expectedInstant = TimeUtils.timestampToInstant(expectedArrivalTimestamp)
         val minutes = TimeUtils.timeBetween(ChronoUnit.MINUTES, currentInstant, expectedInstant)
-        return DueTime(minutes, TimeUtils.toTime(expectedInstant))
+        return Collections.singletonList(DueTime(minutes, TimeUtils.toTime(expectedInstant)))
     }
 
     private fun mapOperator(trainType: String, trainCode: String): Operator {

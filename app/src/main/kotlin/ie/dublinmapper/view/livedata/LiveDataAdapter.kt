@@ -24,6 +24,11 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                     .inflate(R.layout.view_nearby_list_item_dart, parent, false)
                 LiveDataViewHolder.Dart(view)
             }
+            10 -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_nearby_list_item_dart_condensed, parent, false)
+                LiveDataViewHolder.DartCondensed(view)
+            }
             2 -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.view_nearby_list_item_dublin_bikes, parent, false)
@@ -34,10 +39,20 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                     .inflate(R.layout.view_nearby_list_item_dublin_bus, parent, false)
                 LiveDataViewHolder.DublinBus(view)
             }
+            30 -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_nearby_list_item_dublin_bus_condensed, parent, false)
+                LiveDataViewHolder.DublinBusCondensed(view)
+            }
             4 -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.view_nearby_list_item_luas, parent, false)
                 LiveDataViewHolder.Luas(view)
+            }
+            40 -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_nearby_list_item_luas_condensed, parent, false)
+                LiveDataViewHolder.LuasCondensed(view)
             }
 //            0 -> {
 //                val view = LayoutInflater.from(parent.context)
@@ -55,11 +70,30 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (liveData[position]) {
-            is LiveDataUi.Dart -> 1
+        val data = liveData[position]
+        return when (data) {
+            is LiveDataUi.Dart -> {
+                return if (data.liveData.dueTime.size == 1) {
+                    1
+                } else {
+                    10
+                }
+            }
             is LiveDataUi.DublinBikes -> 2
-            is LiveDataUi.DublinBus -> 3
-            is LiveDataUi.Luas -> 4
+            is LiveDataUi.DublinBus -> {
+                return if (data.liveData.dueTime.size == 1) {
+                    3
+                } else {
+                    30
+                }
+            }
+            is LiveDataUi.Luas -> {
+                return if (data.liveData.dueTime.size == 1) {
+                    4
+                } else {
+                    40
+                }
+            }
         }
     }
 
@@ -80,7 +114,7 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
 
             override fun bind(liveData: LiveDataUi) {
                 val dartLiveData = liveData as LiveDataUi.Dart
-                trainType.text = dartLiveData.liveData.operator.name
+                trainType.text = dartLiveData.liveData.operator.shortName
                 when (dartLiveData.liveData.operator) {
                     Operator.DART -> trainType.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.dartGreen))
                     Operator.COMMUTER -> trainType.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.commuterBlue))
@@ -94,7 +128,38 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                         dartLiveData.liveData.direction,
                         dartLiveData.liveData.destination
                     ), " ${StringUtils.MIDDLE_DOT} ")
-                due.text = dartLiveData.liveData.dueTime.toString()
+                due.text = dartLiveData.liveData.dueTime[0].minutes.toString()
+            }
+
+        }
+
+        class DartCondensed(view: View) : LiveDataViewHolder(view) {
+
+            private var trainType: TextView = view.findViewById(R.id.train_type)
+            private var directionAndDestination: TextView = view.findViewById(R.id.direction_destination)
+            private var due: TextView = view.findViewById(R.id.due)
+            private var dueLater: TextView = view.findViewById(R.id.due_later)
+
+            override fun bind(liveData: LiveDataUi) {
+                val dartLiveData = liveData as LiveDataUi.Dart
+                trainType.text = dartLiveData.liveData.operator.shortName
+                when (dartLiveData.liveData.operator) {
+                    Operator.DART -> trainType.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.dartGreen))
+                    Operator.COMMUTER -> trainType.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.commuterBlue))
+                    Operator.INTERCITY -> trainType.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(itemView.context, R.color.intercityGrey))
+                    else -> {
+
+                    }
+                }
+                directionAndDestination.text = StringUtils.join(
+                    Arrays.asList(
+                        dartLiveData.liveData.direction,
+                        dartLiveData.liveData.destination
+                    ), " ${StringUtils.MIDDLE_DOT} ")
+                due.text = dartLiveData.liveData.dueTime[0].minutes.toString()
+                dueLater.text = "and in ${StringUtils.join(
+                    dartLiveData.liveData.dueTime.subList(1, dartLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ","
+                )} mins"
             }
 
         }
@@ -122,7 +187,26 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                 val dublinBusLiveData = liveData as LiveDataUi.DublinBus
                 routeId.text = dublinBusLiveData.liveData.route
                 destination.text = dublinBusLiveData.liveData.destination
-                due.text = dublinBusLiveData.liveData.dueTime.toString()
+                due.text = dublinBusLiveData.liveData.dueTime[0].minutes.toString()
+            }
+
+        }
+
+        class DublinBusCondensed(view: View) : LiveDataViewHolder(view) {
+
+            private var routeId: TextView = view.findViewById(R.id.route_id)
+            private var destination: TextView = view.findViewById(R.id.destination)
+            private var due: TextView = view.findViewById(R.id.due)
+            private var dueLater: TextView = view.findViewById(R.id.due_later)
+
+            override fun bind(liveData: LiveDataUi) {
+                val dublinBusLiveData = liveData as LiveDataUi.DublinBus
+                routeId.text = dublinBusLiveData.liveData.route
+                destination.text = dublinBusLiveData.liveData.destination
+                due.text = dublinBusLiveData.liveData.dueTime[0].minutes.toString()
+                dueLater.text = "and in ${StringUtils.join(
+                    dublinBusLiveData.liveData.dueTime.subList(1, dublinBusLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ","
+                )} mins"
             }
 
         }
@@ -141,7 +225,30 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                         luasLiveData.liveData.route,
                         luasLiveData.liveData.destination
                     ), " ${StringUtils.MIDDLE_DOT} ")
-                due.text = luasLiveData.liveData.dueTime.toString()
+                due.text = luasLiveData.liveData.dueTime[0].minutes.toString()
+            }
+
+        }
+
+        class LuasCondensed(view: View) : LiveDataViewHolder(view) {
+
+            private var operator: TextView = view.findViewById(R.id.operator)
+            private var directionAndDestination: TextView = view.findViewById(R.id.direction_destination)
+            private var due: TextView = view.findViewById(R.id.due)
+            private var dueLater: TextView = view.findViewById(R.id.due_later)
+
+            override fun bind(liveData: LiveDataUi) {
+                val luasLiveData = liveData as LiveDataUi.Luas
+                operator.text = luasLiveData.liveData.operator.name
+                directionAndDestination.text = StringUtils.join(
+                    Arrays.asList(
+                        luasLiveData.liveData.route,
+                        luasLiveData.liveData.destination
+                    ), " ${StringUtils.MIDDLE_DOT} ")
+                due.text = luasLiveData.liveData.dueTime[0].minutes.toString()
+                dueLater.text = "and in ${StringUtils.join(
+                    luasLiveData.liveData.dueTime.subList(1, luasLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ","
+                )} mins"
             }
 
         }

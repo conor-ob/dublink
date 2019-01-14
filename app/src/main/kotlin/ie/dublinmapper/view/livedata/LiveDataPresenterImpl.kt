@@ -26,7 +26,7 @@ class LiveDataPresenterImpl @Inject constructor(
     }
 
     override fun onFocusedOnServiceLocation(serviceLocation: ServiceLocationUi) {
-        subscriptions().add(useCase.getLiveData(serviceLocation.serviceLocation)
+        subscriptions().add(useCase.getCondensedLiveData(serviceLocation.serviceLocation)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
             .map { LiveDataMapper.map(it) }

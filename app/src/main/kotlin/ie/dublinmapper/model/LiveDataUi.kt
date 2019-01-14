@@ -6,18 +6,34 @@ sealed class LiveDataUi {
 
     class Dart(
         val liveData: LiveData.Dart
-    ) : LiveDataUi()
+    ) : LiveDataUi() {
+        override fun toString(): String {
+            return liveData.toString()
+        }
+    }
 
     class DublinBikes(
         val liveData: LiveData.DublinBikes
-    ) : LiveDataUi()
+    ) : LiveDataUi() {
+        override fun toString(): String {
+            return liveData.toString()
+        }
+    }
 
     class DublinBus(
         val liveData: LiveData.DublinBus
-    ) : LiveDataUi()
+    ) : LiveDataUi() {
+        override fun toString(): String {
+            return liveData.toString()
+        }
+    }
 
     class Luas(
         val liveData: LiveData.Luas
-    ) : LiveDataUi()
+    ) : LiveDataUi() {
+        override fun toString(): String {
+            return liveData.toString()
+        }
+    }
 
 }

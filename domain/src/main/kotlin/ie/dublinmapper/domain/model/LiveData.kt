@@ -2,15 +2,20 @@ package ie.dublinmapper.domain.model
 
 import ie.dublinmapper.util.Operator
 import org.threeten.bp.LocalTime
+import java.util.*
 
-sealed class LiveData {
+sealed class LiveData(
+    open val customHash: Int = 0
+) {
 
     data class Dart(
-        val dueTime: DueTime,
+        val dueTime: List<DueTime>,
         val operator: Operator,
         val destination: String,
         val direction: String
-    ) : LiveData()
+    ) : LiveData(
+        Objects.hash(operator, destination, direction)
+    )
 
     data class DublinBikes(
         val bikes: Int,
@@ -19,18 +24,22 @@ sealed class LiveData {
     ) : LiveData()
 
     data class DublinBus(
-        val dueTime: DueTime,
+        val dueTime: List<DueTime>,
         val operator: Operator,
         val route: String,
         val destination: String
-    ) : LiveData()
+    ) : LiveData(
+        Objects.hash(operator, route, destination)
+    )
 
     data class Luas(
-        val dueTime: DueTime,
+        val dueTime: List<DueTime>,
         val operator: Operator,
         val route: String,
         val destination: String
-    ) : LiveData()
+    ) : LiveData(
+        Objects.hash(operator, route, destination)
+    )
 
 }
 

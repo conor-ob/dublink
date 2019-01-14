@@ -60,7 +60,7 @@ class LiveDataController(
     }
 
     override fun showServiceLocation(serviceLocation: ServiceLocationUi) {
-        serviceLocationName.text = serviceLocation.serviceLocation.name
+        serviceLocationName.text = serviceLocation.name
         serviceLocationInfo.text = serviceLocation.mapIconText
     }
 

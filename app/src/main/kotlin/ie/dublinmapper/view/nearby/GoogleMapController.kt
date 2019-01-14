@@ -26,7 +26,7 @@ class GoogleMapController(
     fun getServiceLocation(coordinate: Coordinate): ServiceLocationUi? {
         val nearest = TreeMap<Double, ServiceLocationUi>()
         for (serviceLocation in mapMarkers.keys) {
-            nearest[LocationUtils.haversineDistance(serviceLocation.serviceLocation.coordinate, coordinate)] = serviceLocation
+            nearest[LocationUtils.haversineDistance(serviceLocation.coordinate, coordinate)] = serviceLocation
         }
         if (nearest.isEmpty()) {
             return null
@@ -284,19 +284,19 @@ class GoogleMapController(
         }
 
         fun getIconId(serviceLocation: ServiceLocationUi, zoom: Float): UUID {
-            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.id
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.id
         }
 
         fun getIcon(serviceLocation: ServiceLocationUi, zoom: Float): BitmapDescriptor {
-            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.icon
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.icon
         }
 
         fun getIconAnchor(serviceLocation: ServiceLocationUi, zoom: Float): Pair<Float, Float> {
-            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.iconAnchor
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.iconAnchor
         }
 
         fun getIconVisibility(serviceLocation: ServiceLocationUi, zoom: Float): Boolean {
-            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.iconVisibility
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.iconVisibility
         }
 
         //TODO this needs to handle zoom
@@ -315,18 +315,18 @@ class GoogleMapController(
         }
 
         fun getTextIconAnchor(serviceLocation: ServiceLocationUi, zoom: Float): Pair<Float, Float> {
-            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.textIconAnchor
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconAnchor
         }
 
         fun getTextIconVisibility(serviceLocation: ServiceLocationUi, zoom: Float): Boolean {
-            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.textIconVisibility
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconVisibility
         }
 
         private fun getTextIconRenderer(
             serviceLocation: ServiceLocationUi,
             zoom: Float
         ): (Context, ServiceLocationUi) -> BitmapDescriptor {
-            return icons[serviceLocation.serviceLocation.operators]!!.floorEntry(zoom).value.textIconRenderer
+            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.textIconRenderer
         }
 
         fun newMarkerOptions(serviceLocation: ServiceLocationUi): MarkerOptions {
@@ -334,19 +334,19 @@ class GoogleMapController(
             val currentZoom = googleMap.cameraPosition.zoom
             val anchor = getIconAnchor(serviceLocation, currentZoom)
             return MarkerOptions()
-                .position(LatLng(serviceLocation.serviceLocation.coordinate.latitude, serviceLocation.serviceLocation.coordinate.longitude))
+                .position(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
                 .anchor(anchor.first, anchor.second)
                 .icon(getIcon(serviceLocation, currentZoom))
                 .visible(getIconVisibility(serviceLocation, currentZoom))
         }
 
         fun newTextMarkerOptions(serviceLocation: ServiceLocationUi): MarkerOptions {
-            Timber.d("newTextMarkerOptions for ServiceLocation[${serviceLocation.serviceLocation.name}]")
+            Timber.d("newTextMarkerOptions for ServiceLocation[${serviceLocation.name}]")
 
             val currentZoom = googleMap.cameraPosition.zoom
             val iconAnchor = getTextIconAnchor(serviceLocation, currentZoom)
             return MarkerOptions()
-                .position(LatLng(serviceLocation.serviceLocation.coordinate.latitude, serviceLocation.serviceLocation.coordinate.longitude))
+                .position(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
                 .anchor(iconAnchor.first, iconAnchor.second)
                 .icon(getTextIcon(serviceLocation, currentZoom))
                 .visible(getTextIconVisibility(serviceLocation, currentZoom))
