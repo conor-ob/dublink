@@ -1,4 +1,4 @@
-package ie.dublinmapper.view.livedata
+package ie.dublinmapper.view.nearby
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Mapper

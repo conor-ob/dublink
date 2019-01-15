@@ -19,8 +19,8 @@
                 android:name="com.google.android.geo.API_KEY"
                 android:value="${googleMapsApiKey}"/>
         <meta-data
-                android:name="api.jcdecaux.API_KEY"
-                android:value="${jcdecauxApiKey}"/>
+                android:name="com.developer.jcdecaux.API_KEY"
+                android:value="${jcDecauxApiKey}"/>
         <activity android:name=".DublinMapperActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

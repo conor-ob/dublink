@@ -12,6 +12,7 @@ import ie.dublinmapper.service.jcdecaux.JcdecauxModule
 import ie.dublinmapper.service.rtpi.RtpiModule
 import ie.dublinmapper.view.livedata.LiveDataPresenterImpl
 import ie.dublinmapper.view.nearby.NearbyPresenterImpl
+import ie.dublinmapper.view.nearby.livedata.NearbyLiveDataPresenterImpl
 import ie.dublinmapper.view.search.SearchPresenterImpl
 import javax.inject.Singleton
 
@@ -33,6 +34,8 @@ import javax.inject.Singleton
 interface ApplicationComponent {
 
     fun nearbyPresenter(): NearbyPresenterImpl
+
+    fun nearbyLiveDataPresenter(): NearbyLiveDataPresenterImpl
 
     fun liveDataPresenter(): LiveDataPresenterImpl
 

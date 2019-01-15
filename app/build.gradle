@@ -7,7 +7,7 @@ apply plugin: 'kotlin-android-extensions'
 Properties properties = new Properties()
 properties.load(project.rootProject.file('keys.properties').newDataInputStream())
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
-def jcdecauxApiKey = properties.getProperty('api.jcdecaux.API_KEY')
+def jcDecauxApiKey = properties.getProperty('com.developer.jcdecaux.API_KEY')
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -19,7 +19,7 @@ android {
         versionName "1.0.0-SNAPSHOT"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
-                                 jcdecauxApiKey: "$jcdecauxApiKey" ]
+                                 jcDecauxApiKey: "$jcDecauxApiKey" ]
     }
     buildTypes {
         release {

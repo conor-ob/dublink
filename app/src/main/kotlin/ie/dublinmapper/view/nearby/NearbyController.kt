@@ -21,7 +21,7 @@ import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.*
-import ie.dublinmapper.view.livedata.LiveDataController
+import ie.dublinmapper.view.nearby.livedata.NearbyLiveDataController
 import ie.dublinmapper.view.search.SearchController
 import timber.log.Timber
 
@@ -35,7 +35,7 @@ class NearbyController(
     private lateinit var searchFab: FloatingActionButton
     private lateinit var rootView: View
 
-    private lateinit var liveDataController: LiveDataController
+    private lateinit var nearbyLiveDataController: NearbyLiveDataController
 
     //TODO @Inject
     private lateinit var googleMapController: GoogleMapController
@@ -66,8 +66,8 @@ class NearbyController(
         }
         val liveDataRouter = getChildRouter(liveDataView)
         if (!liveDataRouter.hasRootController()) {
-            liveDataController = LiveDataController(Bundle.EMPTY)
-            liveDataRouter.setRoot(RouterTransaction.with(liveDataController))
+            nearbyLiveDataController = NearbyLiveDataController(Bundle.EMPTY)
+            liveDataRouter.setRoot(RouterTransaction.with(nearbyLiveDataController))
         }
     }
 
@@ -78,8 +78,8 @@ class NearbyController(
 //            val changeHandler = SimpleSwapChangeHandler()
             router.pushController(RouterTransaction
                 .with(searchController)
-                .pushChangeHandler(SearchControllerChangeHandler(searchFab, rootView, searchController))
-                .popChangeHandler(SearchControllerChangeHandler(searchFab, rootView, searchController))
+                .pushChangeHandler(CircularRevealChangeHandler(searchFab, rootView))
+                .popChangeHandler(CircularRevealChangeHandler(searchFab, rootView))
             )
         }
     }
@@ -141,7 +141,7 @@ class NearbyController(
                 presenter.onCameraMoved(Coordinate(latitude, longitude))
                 val serviceLocation = googleMapController.getServiceLocation(Coordinate(latitude, longitude))
                 if (serviceLocation != null) {
-                    liveDataController.focusOnServiceLocation(serviceLocation)
+                    nearbyLiveDataController.focusOnServiceLocation(serviceLocation)
                     if (LocationUtils.haversineDistance(Coordinate(latitude, longitude), serviceLocation.coordinate) > 10.0) {
                         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(CameraPosition.Builder()
                             .target(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
