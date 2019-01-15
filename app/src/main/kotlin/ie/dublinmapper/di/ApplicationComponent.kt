@@ -8,7 +8,7 @@ import ie.dublinmapper.repository.luas.LuasRepositoryModule
 import ie.dublinmapper.service.di.ServiceModule
 import ie.dublinmapper.service.dublinbus.DublinBusModule
 import ie.dublinmapper.service.irishrail.IrishRailModule
-import ie.dublinmapper.service.jcdecaux.JcdecauxModule
+import ie.dublinmapper.service.jcdecaux.JcDecauxModule
 import ie.dublinmapper.service.rtpi.RtpiModule
 import ie.dublinmapper.view.livedata.LiveDataPresenterImpl
 import ie.dublinmapper.view.nearby.NearbyPresenterImpl
@@ -26,7 +26,7 @@ import javax.inject.Singleton
         DublinBusRepositoryModule::class,
         LuasRepositoryModule::class,
         IrishRailModule::class,
-        JcdecauxModule::class,
+        JcDecauxModule::class,
         RtpiModule::class,
         ServiceModule::class
     ]
