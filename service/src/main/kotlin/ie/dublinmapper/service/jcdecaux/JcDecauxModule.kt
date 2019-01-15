@@ -11,11 +11,11 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class JcdecauxModule {
+class JcDecauxModule {
 
     @Provides
     @Singleton
-    fun jcdecauxApi(
+    fun jcDecauxApi(
         stringProvider: StringProvider,
         okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
