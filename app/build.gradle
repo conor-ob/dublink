@@ -5,7 +5,11 @@ apply plugin: 'kotlin-android-extensions'
 //apply plugin: 'androidx.navigation.safeargs'
 
 Properties properties = new Properties()
-properties.load(project.rootProject.file('keys.properties').newDataInputStream())
+if (project.rootProject.file("release.properties").exists()) {
+    properties.load(project.rootProject.file('release.properties').newDataInputStream())
+} else {
+    properties.load(project.rootProject.file('debug.properties').newDataInputStream())
+}
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
 def jcDecauxApiKey = properties.getProperty('com.developer.jcdecaux.API_KEY')
 
