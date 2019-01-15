@@ -3,18 +3,30 @@ package ie.dublinmapper.service.rtpi
 import com.google.gson.annotations.SerializedName
 
 data class RtpiRealTimeBusInformationResponseJson(
-    @SerializedName("errorcode") var errorCode: String? = null,
-    @SerializedName("errormessage") var errorMessage: String? = null,
-    @SerializedName("numberofresults") var resultsCount: Int? = null,
-    @SerializedName("timestamp") var timestamp: String? = null,
-    @SerializedName("results") var realTimeBusInformation: List<RtpiRealTimeBusInformationJson> = mutableListOf()
+    @SerializedName("errorcode") val errorCode: String,
+    @SerializedName("errormessage") val errorMessage: String,
+//    @SerializedName("numberofresults") val numberOfResults: Int? = null,
+//    @SerializedName("timestamp") val timestamp: String? = null,
+    @SerializedName("results") val results: List<RtpiRealTimeBusInformationJson> = mutableListOf()
 )
 
 data class RtpiRealTimeBusInformationJson(
-    @SerializedName("route") var route: String? = null,
-    @SerializedName("operator") var operator: String? = null,
-    @SerializedName("destination") var destination: String? = null,
-    @SerializedName("direction") var direction: String? = null,
-    @SerializedName("duetime") var duetime: String? = null,
-    @SerializedName("arrivaldatetime") var expectedTime: String? = null
+    @SerializedName("arrivaldatetime") val arrivalDateTime: String,
+//    @SerializedName("duetime") val dueTime: String? = null,
+//    @SerializedName("departuredatetime") val departureDateTime: String? = null,
+//    @SerializedName("departureduetime") val departureDueTime: String? = null,
+//    @SerializedName("scheduledarrivaldatetime") val scheduledArrivalDateTime: String? = null,
+//    @SerializedName("scheduleddeparturedatetime") val scheduledDepartureDateTime: String? = null,
+    @SerializedName("destination") val destination: String,
+//    @SerializedName("destinationlocalized") val destinationLocalized: String? = null,
+    @SerializedName("origin") val origin: String,
+//    @SerializedName("originlocalized") val originLocalized: String? = null,
+    @SerializedName("direction") val direction: String,
+//    @SerializedName("operator") val operator: String? = null,
+//    @SerializedName("operatortype") val operatorType: String? = null,
+//    @SerializedName("additionalinformation") val additionalInformation: String? = null,
+//    @SerializedName("lowfloorstatus") val lowFloorStatus: String? = null,
+    @SerializedName("route") val route: String
+//    @SerializedName("sourcetimestamp") val sourceTimestamp: String? = null,
+//    @SerializedName("monitored") val monitored: String? = null
 )

@@ -4,11 +4,10 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.model.DublinBikesDock
-import ie.dublinmapper.domain.model.DublinBikesLiveData
+import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.jcdecaux.JcDecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
-import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
@@ -24,12 +23,7 @@ class DublinBikesRepositoryModule {
         val fetcher = DublinBikesDockFetcher(api, stringProvider.jcDecauxApiKey(), stringProvider.jcDecauxContract())
         val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
             .fetcher(fetcher)
-            .parser { json -> json.map { DublinBikesDock(
-                id = it.number.toString(),
-                name = it.address!!,
-                coordinate = Coordinate(it.position!!.lat!!, it.position!!.lng!!),
-                mapIconText = it.availableBikes!!.toString()
-            ) } }
+            .parser { docks -> DublinBikesDockMapper.map(docks) }
             .open()
         return DublinBikeDockRepository(store)
     }
@@ -39,16 +33,13 @@ class DublinBikesRepositoryModule {
     fun dublinBikesRealTimeDataRepository(
         api: JcDecauxApi,
         stringProvider: StringProvider
-    ): Repository<DublinBikesLiveData> {
-        val fetcher = DublinBikesRealTimeDataFetcher(api, stringProvider.jcDecauxApiKey(), stringProvider.jcDecauxContract())
-        val store = StoreBuilder.parsedWithKey<String, StationJson, DublinBikesLiveData>()
+    ): Repository<LiveData.DublinBikes> {
+        val fetcher = DublinBikesLiveDataFetcher(api, stringProvider.jcDecauxApiKey(), stringProvider.jcDecauxContract())
+        val store = StoreBuilder.parsedWithKey<String, StationJson, LiveData.DublinBikes>()
             .fetcher(fetcher)
-            .parser { _ ->
-                DublinBikesLiveData()
-                TODO()
-            }
+            .parser { liveData -> DublinBikesLiveDataMapper.map(liveData) }
             .open()
-        return DublinBikesRealTimeDataRepository(store)
+        return DublinBikesLiveDataRepository(store)
     }
 
 }

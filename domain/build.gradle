@@ -5,6 +5,7 @@ dependencies {
     implementation project(':util')
     implementation "com.google.dagger:dagger:${versions.dagger}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
 //    implementation project(':service')
 //    implementation "com.google.code.gson:gson:${versions.gson}"
 //    implementation "com.google.dagger:dagger:${versions.dagger}"

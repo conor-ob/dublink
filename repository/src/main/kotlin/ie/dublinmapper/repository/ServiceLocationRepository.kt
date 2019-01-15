@@ -16,7 +16,7 @@ abstract class ServiceLocationRepository<T : ServiceLocation>(
     }
 
     override fun getById(id: String): Observable<T> {
-        return getAll().map { stations -> stations.find { it.id == id } }
+        return getAll().map { serviceLocations -> serviceLocations.find { it.id == id } }
     }
 
     override fun refresh(): Observable<Boolean> {

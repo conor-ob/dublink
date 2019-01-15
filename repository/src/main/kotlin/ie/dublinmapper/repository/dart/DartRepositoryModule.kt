@@ -3,13 +3,12 @@ package ie.dublinmapper.repository.dart
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.domain.model.DartStation
+import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.irishrail.IrishRailApi
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.service.irishrail.IrishRailStationXml
-import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
@@ -25,13 +24,7 @@ class DartRepositoryModule {
         val fetcher = DartStationFetcher(api, stringProvider.irishRailApiDartStationType())
         val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationXml>, List<DartStation>>()
             .fetcher(fetcher)
-            .parser { json -> json.map {
-                DartStation(
-                    id = it.id!!,
-                    name = it.name!!,
-                    coordinate = Coordinate(it.latitude!!.toDouble(), it.longitude!!.toDouble())
-                )
-            } }
+            .parser { stations -> DartStationMapper.map(stations) }
             .open()
         return DartStationRepository(store)
     }
@@ -40,16 +33,13 @@ class DartRepositoryModule {
     @Singleton
     fun dartRealTimeDataRepository(
         api: IrishRailApi
-    ): Repository<DartLiveData> {
-        val fetcher = DartRealTimeDataFetcher(api)
-        val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationDataXml>, List<DartLiveData>>()
+    ): Repository<LiveData.Dart> {
+        val fetcher = DartLiveDataFetcher(api)
+        val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationDataXml>, List<LiveData.Dart>>()
             .fetcher(fetcher)
-            .parser { json -> json.map {
-                DartLiveData()
-                TODO()
-            } }
+            .parser { liveData -> DartLiveDataMapper.map(liveData) }
             .open()
-        return DartRealTimeDataRepository(store)
+        return DartLiveDataRepository(store)
     }
 
 }

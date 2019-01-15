@@ -21,6 +21,7 @@ buildscript {
             'android_reactive_location2' : '2.1',       // https://mvnrepository.com/artifact/pl.charmas.android/android-reactive-location2
             'adapter_rxjava2'            : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava2
             'material'                   : '1.0.0',     // https://mvnrepository.com/artifact/com.google.android.material/material
+            'conductor'                  : '3.0.0-rc1', // https://mvnrepository.com/artifact/com.bluelinelabs/conductor
             'mvp_conductor'              : '3.1.0',     // https://mvnrepository.com/artifact/com.hannesdorfmann.mosby3/mvp-conductor
             'crashlytics'                : '2.9.8@aar', // https://www.fabric.io/kits/android/crashlytics/update
             'converter_gson'             : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
@@ -48,6 +49,7 @@ buildscript {
                     'core'        : '1.1.0', // https://mvnrepository.com/artifact/androidx.test/core
                     'junit'       : '1.1.0', // https://mvnrepository.com/artifact/androidx.test.ext/junit
                     'room_testing': '2.0.0', // https://mvnrepository.com/artifact/androidx.room/room-testing
+                    'rules'       : '1.1.1', // https://mvnrepository.com/artifact/androidx.test/rules
                     'runner'      : '1.1.1'  // https://mvnrepository.com/artifact/androidx.test/runner?repo=google
             ],
             //'espresso_core' : '3.0.2', // https://mvnrepository.com/artifact/com.android.support.test.espresso/espresso-core
@@ -62,7 +64,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:${versions.gradle}"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
-        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha07"
+//        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha07"
     }
 
 }

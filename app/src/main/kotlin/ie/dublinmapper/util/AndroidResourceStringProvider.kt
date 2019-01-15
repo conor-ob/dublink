@@ -26,7 +26,7 @@ class AndroidResourceStringProvider(
             return if (appInfo.metaData == null) {
                 throw IllegalArgumentException("meta-data cannot be null")
             } else {
-                appInfo.metaData.getString("api.jcdecaux.API_KEY")!!
+                appInfo.metaData.getString("com.developer.jcdecaux.API_KEY")!!
             }
         } catch (e: PackageManager.NameNotFoundException) {
             throw IllegalArgumentException("meta-data name not found")
