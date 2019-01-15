@@ -26,7 +26,7 @@ interface RtpiApi {
 
     @GET("realtimebusinformation")
     fun realTimeBusInformation(
-        @Query("stopid") id: String,
+        @Query("stopid") stopId: String,
         @Query("operator") operator: String,
         @Query("format") format: String
     ): Single<RtpiRealTimeBusInformationResponseJson>

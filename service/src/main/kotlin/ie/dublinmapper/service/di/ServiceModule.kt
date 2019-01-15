@@ -20,7 +20,7 @@ class ServiceModule {
     fun okHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             //.addInterceptor(downloadInterceptor)
-            //.addNetworkInterceptor(NetworkLoggingInterceptor())
+            .addNetworkInterceptor(NetworkLoggingInterceptor())
             .retryOnConnectionFailure(true)
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
