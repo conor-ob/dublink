@@ -1,4 +1,4 @@
-package ie.dublinmapper.util
+package ie.dublinmapper
 
 import android.app.Application
 import androidx.test.core.app.ApplicationProvider
@@ -16,6 +16,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = ApplicationProvider.getApplicationContext<Application>()
-        assertEquals("com.test.android.myapplication", appContext.packageName)
+        assertEquals("ie.dublinmapper", appContext.packageName)
     }
 }
