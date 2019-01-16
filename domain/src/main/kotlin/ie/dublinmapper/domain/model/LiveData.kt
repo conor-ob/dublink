@@ -8,6 +8,12 @@ sealed class LiveData(
     open val customHash: Int = 0
 ) {
 
+    data class DartHeader(
+        val dartStation: DartStation
+    ) : LiveData(
+        Objects.hash(dartStation)
+    )
+
     data class Dart(
         val dueTime: List<DueTime>,
         val operator: Operator,

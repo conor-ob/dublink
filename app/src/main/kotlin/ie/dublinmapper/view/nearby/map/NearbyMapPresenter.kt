@@ -1,9 +1,9 @@
-package ie.dublinmapper.view.nearby
+package ie.dublinmapper.view.nearby.map
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 import ie.dublinmapper.util.Coordinate
 
-interface NearbyPresenter : MvpPresenter<NearbyView> {
+interface NearbyMapPresenter : MvpPresenter<NearbyMapView> {
 
     fun onViewAttached()
 

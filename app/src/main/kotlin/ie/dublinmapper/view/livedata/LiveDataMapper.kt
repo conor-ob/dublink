@@ -8,6 +8,7 @@ object LiveDataMapper : Mapper<LiveData, LiveDataUi> {
 
     override fun map(from: LiveData): LiveDataUi {
         return when (from) {
+            is LiveData.DartHeader -> LiveDataUi.DartHeader(from)
             is LiveData.Dart -> LiveDataUi.Dart(from)
             is LiveData.DublinBikes -> LiveDataUi.DublinBikes(from)
             is LiveData.DublinBus -> LiveDataUi.DublinBus(from)

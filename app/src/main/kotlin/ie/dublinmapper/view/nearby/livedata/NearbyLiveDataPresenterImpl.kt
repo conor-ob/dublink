@@ -2,6 +2,7 @@ package ie.dublinmapper.view.nearby.livedata
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
+import ie.dublinmapper.model.LiveDataUi
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.Thread
 import ie.dublinmapper.view.livedata.LiveDataMapper
@@ -14,6 +15,7 @@ class NearbyLiveDataPresenterImpl @Inject constructor(
     private val thread: Thread
 ) : MvpBasePresenter<NearbyLiveDataView>(), NearbyLiveDataPresenter {
 
+    private var viewModel: NearbyLiveDataViewModel = NearbyLiveDataViewModel()
     private var subscriptions: CompositeDisposable? = null
 
     override fun onViewAttached() {
@@ -26,21 +28,30 @@ class NearbyLiveDataPresenterImpl @Inject constructor(
         subscriptions = null
     }
 
-    override fun onFocusedOnServiceLocation(serviceLocation: ServiceLocationUi) {
-        subscriptions().add(useCase.getCondensedLiveData(serviceLocation.serviceLocation)
-            .subscribeOn(thread.io)
-            .observeOn(thread.ui)
-            .map { LiveDataMapper.map(it) }
-            .doOnSubscribe {
-                ifViewAttached { view ->
-                    view.showServiceLocationColour(serviceLocation.colourId)
-                    view.showServiceLocation(serviceLocation)
+    override fun onLiveDataRequested(serviceLocation: ServiceLocationUi?) {
+        viewModel = viewModel.copy(serviceLocation = serviceLocation)
+        if (serviceLocation != null) {
+            subscriptions().add(useCase.getCondensedLiveData(serviceLocation.serviceLocation)
+                .subscribeOn(thread.io)
+                .observeOn(thread.ui)
+                .map { LiveDataMapper.map(it) }
+                .doOnSubscribe {
+//                    renderView()
                 }
-            }
-            .doOnNext { ifViewAttached { view -> view.showLiveData(it) } }
-            .doOnError { Timber.e(it) }
-            .subscribe()
-        )
+                .doOnNext {
+                    viewModel = viewModel.copy(liveData = it, isLoading = false)
+                    renderView()
+                }
+                .doOnError { Timber.e(it) }
+                .subscribe()
+            )
+        } else {
+            viewModel = viewModel.copy(liveData = emptyList())
+        }
+    }
+
+    private fun renderView() {
+        ifViewAttached { view -> view.render(viewModel) }
     }
 
     private fun subscriptions(): CompositeDisposable {
@@ -51,3 +62,9 @@ class NearbyLiveDataPresenterImpl @Inject constructor(
     }
 
 }
+
+data class NearbyLiveDataViewModel(
+    val serviceLocation: ServiceLocationUi? = null,
+    val liveData: List<LiveDataUi> = emptyList(),
+    val isLoading: Boolean = true
+)

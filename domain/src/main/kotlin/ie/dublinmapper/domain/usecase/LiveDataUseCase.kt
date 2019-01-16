@@ -2,6 +2,7 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.util.CollectionUtils
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
@@ -16,7 +17,11 @@ class LiveDataUseCase @Inject constructor(
     fun getLiveData(serviceLocation: ServiceLocation): Observable<List<LiveData>> {
         return when (serviceLocation) {
             is DartStation -> dartLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is DublinBikesDock -> dublinBikesLiveDataRepository.getById(serviceLocation.id).map { Collections.singletonList(it) as List<LiveData> }
+            is DublinBikesDock -> dublinBikesLiveDataRepository.getById(serviceLocation.id).map {
+                Collections.singletonList(
+                    it
+                ) as List<LiveData>
+            }
             is DublinBusStop -> dublinBusLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is LuasStop -> luasLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
         }
@@ -59,7 +64,7 @@ class LiveDataUseCase @Inject constructor(
                 condensedLiveData[data.customHash] = cachedLiveData
             }
         }
-        return condensedLiveData.values.toList()
+        return CollectionUtils.headList(condensedLiveData.values.toList(), 3)
     }
 
 }

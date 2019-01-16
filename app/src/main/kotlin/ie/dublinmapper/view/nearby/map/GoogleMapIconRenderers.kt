@@ -1,4 +1,4 @@
-package ie.dublinmapper.view.nearby
+package ie.dublinmapper.view.nearby.map
 
 import android.content.Context
 import android.graphics.*
