@@ -16,6 +16,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = ApplicationProvider.getApplicationContext<Application>()
-        assertEquals("ie.dublinmapper", appContext.packageName)
+        assertEquals("ie.dublinmapper.mock.debug", appContext.packageName)
     }
 }
