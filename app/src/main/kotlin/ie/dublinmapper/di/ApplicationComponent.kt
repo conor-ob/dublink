@@ -10,9 +10,12 @@ import ie.dublinmapper.service.dublinbus.DublinBusModule
 import ie.dublinmapper.service.irishrail.IrishRailModule
 import ie.dublinmapper.service.jcdecaux.JcDecauxModule
 import ie.dublinmapper.service.rtpi.RtpiModule
+import ie.dublinmapper.view.favourite.FavouritesPresenter
+import ie.dublinmapper.view.favourite.FavouritesPresenterImpl
 import ie.dublinmapper.view.livedata.LiveDataPresenterImpl
 import ie.dublinmapper.view.nearby.NearbyPresenterImpl
 import ie.dublinmapper.view.nearby.livedata.NearbyLiveDataPresenterImpl
+import ie.dublinmapper.view.nearby.map.NearbyMapPresenterImpl
 import ie.dublinmapper.view.search.SearchPresenterImpl
 import javax.inject.Singleton
 
@@ -35,7 +38,11 @@ interface ApplicationComponent {
 
     fun nearbyPresenter(): NearbyPresenterImpl
 
+    fun nearbyMapPresenter(): NearbyMapPresenterImpl
+
     fun nearbyLiveDataPresenter(): NearbyLiveDataPresenterImpl
+
+    fun favouritesPresenter(): FavouritesPresenterImpl
 
     fun liveDataPresenter(): LiveDataPresenterImpl
 

@@ -16,7 +16,7 @@ class NearbyUseCase @Inject constructor(
     private val thread: Thread
 ) {
 
-    fun getNearbyServiceLocations(coordinate: Coordinate): Observable<List<ServiceLocation>> {
+    fun getNearbyServiceLocations(coordinate: Coordinate): Observable<Response> {
         return Observable.combineLatest(
             dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(thread.io),
             dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(thread.io),
@@ -33,7 +33,7 @@ class NearbyUseCase @Inject constructor(
         dublinBikesDocks: List<DublinBikesDock>,
         dublinBusStops: List<DublinBusStop>,
         luasStops: List<LuasStop>
-    ): List<ServiceLocation> {
+    ): Response {
         val serviceLocations = mutableListOf<ServiceLocation>()
         serviceLocations.addAll(dartStations)
         serviceLocations.addAll(dublinBikesDocks)
@@ -48,7 +48,9 @@ class NearbyUseCase @Inject constructor(
         result.addAll(findFirstN(7, Operator.bike(), sorted))
         result.addAll(findFirstN(12, Operator.bus(), sorted))
         result.addAll(findFirstN(5, Operator.tram(), sorted))
-        return result
+        val isComplete = dartStations.isNotEmpty() && dublinBikesDocks.isNotEmpty() &&
+                dublinBusStops.isNotEmpty() && luasStops.isNotEmpty()
+        return Response(result, isComplete)
     }
 
     private fun findFirstN(
@@ -71,3 +73,8 @@ class NearbyUseCase @Inject constructor(
     }
 
 }
+
+data class Response(
+    val serviceLocations: List<ServiceLocation>,
+    val isComplete: Boolean
+)

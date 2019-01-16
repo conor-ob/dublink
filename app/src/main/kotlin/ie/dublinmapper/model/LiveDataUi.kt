@@ -4,6 +4,10 @@ import ie.dublinmapper.domain.model.LiveData
 
 sealed class LiveDataUi {
 
+    class DartHeader(
+        val liveData: LiveData.DartHeader
+    ) : LiveDataUi()
+
     class Dart(
         val liveData: LiveData.Dart
     ) : LiveDataUi() {

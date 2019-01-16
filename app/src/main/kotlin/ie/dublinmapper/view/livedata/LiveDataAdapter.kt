@@ -11,6 +11,8 @@ import ie.dublinmapper.R
 import ie.dublinmapper.model.LiveDataUi
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.StringUtils
+import kotlinx.android.synthetic.main.view_nearby_list_item_dart_header.view.*
+import kotlinx.android.synthetic.main.view_nearby_live_data.view.*
 import java.util.*
 
 class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>() {
@@ -19,6 +21,11 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LiveDataViewHolder {
         return when (viewType) {
+            99 -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_nearby_list_item_dart_header, parent, false)
+                LiveDataViewHolder.DartHeader(view)
+            }
             1 -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.view_nearby_list_item_dart, parent, false)
@@ -72,6 +79,7 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
     override fun getItemViewType(position: Int): Int {
         val data = liveData[position]
         return when (data) {
+            is LiveDataUi.DartHeader -> 99
             is LiveDataUi.Dart -> {
                 return if (data.liveData.dueTime.size == 1) {
                     1
@@ -106,7 +114,18 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
 
         abstract fun bind(liveData: LiveDataUi)
 
-        class Dart(view: View) : LiveDataViewHolder(view) {
+        class DartHeader(private val view: View) : LiveDataViewHolder(view) {
+
+            override fun bind(liveData: LiveDataUi) {
+                val dartHeader = liveData as LiveDataUi.DartHeader
+                val dartStation = dartHeader.liveData.dartStation
+                view.service_location_name.text = dartStation.name
+                view.service_location_walk_time.text = "7 min"
+            }
+
+        }
+
+        class Dart(private val view: View) : LiveDataViewHolder(view) {
 
             private var trainType: TextView = view.findViewById(R.id.train_type)
             private var directionAndDestination: TextView = view.findViewById(R.id.direction_destination)
@@ -128,12 +147,16 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                         dartLiveData.liveData.direction,
                         dartLiveData.liveData.destination
                     ), " ${StringUtils.MIDDLE_DOT} ")
-                due.text = dartLiveData.liveData.dueTime[0].minutes.toString()
+                if (dartLiveData.liveData.dueTime[0].minutes == 0L) {
+                    due.text = view.resources.getString(R.string.live_data_due)
+                } else {
+                    due.text = view.resources.getString(R.string.live_data_due_time, dartLiveData.liveData.dueTime[0].minutes)
+                }
             }
 
         }
 
-        class DartCondensed(view: View) : LiveDataViewHolder(view) {
+        class DartCondensed(private val view: View) : LiveDataViewHolder(view) {
 
             private var trainType: TextView = view.findViewById(R.id.train_type)
             private var directionAndDestination: TextView = view.findViewById(R.id.direction_destination)
@@ -156,10 +179,14 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                         dartLiveData.liveData.direction,
                         dartLiveData.liveData.destination
                     ), " ${StringUtils.MIDDLE_DOT} ")
-                due.text = dartLiveData.liveData.dueTime[0].minutes.toString()
-                dueLater.text = "and in ${StringUtils.join(
-                    dartLiveData.liveData.dueTime.subList(1, dartLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ","
-                )} mins"
+                if (dartLiveData.liveData.dueTime[0].minutes == 0L) {
+                    due.text = view.resources.getString(R.string.live_data_due)
+                } else {
+                    due.text = view.resources.getString(R.string.live_data_due_time, dartLiveData.liveData.dueTime[0].minutes)
+                }
+                dueLater.text = view.resources.getString(R.string.live_data_due_times, StringUtils.join(
+                    dartLiveData.liveData.dueTime.subList(1, dartLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ", "
+                ))
             }
 
         }
@@ -177,7 +204,7 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
 
         }
 
-        class DublinBus(view: View) : LiveDataViewHolder(view) {
+        class DublinBus(private val view: View) : LiveDataViewHolder(view) {
 
             private var routeId: TextView = view.findViewById(R.id.route_id)
             private var destination: TextView = view.findViewById(R.id.destination)
@@ -187,12 +214,16 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                 val dublinBusLiveData = liveData as LiveDataUi.DublinBus
                 routeId.text = dublinBusLiveData.liveData.route
                 destination.text = dublinBusLiveData.liveData.destination
-                due.text = dublinBusLiveData.liveData.dueTime[0].minutes.toString()
+                if (dublinBusLiveData.liveData.dueTime[0].minutes == 0L) {
+                    due.text = view.resources.getString(R.string.live_data_due)
+                } else {
+                    due.text = view.resources.getString(R.string.live_data_due_time, dublinBusLiveData.liveData.dueTime[0].minutes)
+                }
             }
 
         }
 
-        class DublinBusCondensed(view: View) : LiveDataViewHolder(view) {
+        class DublinBusCondensed(private val view: View) : LiveDataViewHolder(view) {
 
             private var routeId: TextView = view.findViewById(R.id.route_id)
             private var destination: TextView = view.findViewById(R.id.destination)
@@ -203,15 +234,19 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                 val dublinBusLiveData = liveData as LiveDataUi.DublinBus
                 routeId.text = dublinBusLiveData.liveData.route
                 destination.text = dublinBusLiveData.liveData.destination
-                due.text = dublinBusLiveData.liveData.dueTime[0].minutes.toString()
-                dueLater.text = "and in ${StringUtils.join(
-                    dublinBusLiveData.liveData.dueTime.subList(1, dublinBusLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ","
-                )} mins"
+                if (dublinBusLiveData.liveData.dueTime[0].minutes == 0L) {
+                    due.text = view.resources.getString(R.string.live_data_due)
+                } else {
+                    due.text = view.resources.getString(R.string.live_data_due_time, dublinBusLiveData.liveData.dueTime[0].minutes)
+                }
+                dueLater.text = view.resources.getString(R.string.live_data_due_times, StringUtils.join(
+                    dublinBusLiveData.liveData.dueTime.subList(1, dublinBusLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ", "
+                ))
             }
 
         }
 
-        class Luas(view: View) : LiveDataViewHolder(view) {
+        class Luas(private val view: View) : LiveDataViewHolder(view) {
 
             private var operator: TextView = view.findViewById(R.id.operator)
             private var directionAndDestination: TextView = view.findViewById(R.id.direction_destination)
@@ -225,12 +260,16 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                         luasLiveData.liveData.route,
                         luasLiveData.liveData.destination
                     ), " ${StringUtils.MIDDLE_DOT} ")
-                due.text = luasLiveData.liveData.dueTime[0].minutes.toString()
+                if (luasLiveData.liveData.dueTime[0].minutes == 0L) {
+                    due.text = view.resources.getString(R.string.live_data_due)
+                } else {
+                    due.text = view.resources.getString(R.string.live_data_due_time, luasLiveData.liveData.dueTime[0].minutes)
+                }
             }
 
         }
 
-        class LuasCondensed(view: View) : LiveDataViewHolder(view) {
+        class LuasCondensed(private val view: View) : LiveDataViewHolder(view) {
 
             private var operator: TextView = view.findViewById(R.id.operator)
             private var directionAndDestination: TextView = view.findViewById(R.id.direction_destination)
@@ -245,10 +284,14 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                         luasLiveData.liveData.route,
                         luasLiveData.liveData.destination
                     ), " ${StringUtils.MIDDLE_DOT} ")
-                due.text = luasLiveData.liveData.dueTime[0].minutes.toString()
-                dueLater.text = "and in ${StringUtils.join(
-                    luasLiveData.liveData.dueTime.subList(1, luasLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ","
-                )} mins"
+                if (luasLiveData.liveData.dueTime[0].minutes == 0L) {
+                    due.text = view.resources.getString(R.string.live_data_due)
+                } else {
+                    due.text = view.resources.getString(R.string.live_data_due_time, luasLiveData.liveData.dueTime[0].minutes)
+                }
+                dueLater.text = view.resources.getString(R.string.live_data_due_times, StringUtils.join(
+                    luasLiveData.liveData.dueTime.subList(1, luasLiveData.liveData.dueTime.size).map { it.minutes.toString() }, ", "
+                ))
             }
 
         }

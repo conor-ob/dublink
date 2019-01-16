@@ -1,4 +1,4 @@
-package ie.dublinmapper.view.nearby
+package ie.dublinmapper.view.nearby.map
 
 import android.content.Context
 import androidx.core.content.ContextCompat
@@ -6,7 +6,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.PolyUtil
 import ie.dublinmapper.R
-import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.*
 import timber.log.Timber
@@ -180,7 +179,7 @@ class GoogleMapController(
             )
             val dublinBikesIcons = TreeMap<Float, IconOptions>()
             dublinBikesIcons[0.0f] = IconOptions(
-                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes_x),
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes),
                 iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = false,
@@ -193,7 +192,7 @@ class GoogleMapController(
                 }
             )
             dublinBikesIcons[16.0f] = IconOptions(
-                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes_x),
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes),
                 iconAnchor = Pair(0.5f, 0.9f),
                 textIconAnchor = Pair(0.5f, 2.15f),
                 iconVisibility = true,
