@@ -15,7 +15,7 @@ class RtpiModule {
 
     @Provides
     @Singleton
-    fun jcdecauxApi(
+    fun rtpiApi(
         stringProvider: StringProvider,
         okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,

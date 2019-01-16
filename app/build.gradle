@@ -5,12 +5,17 @@ apply plugin: 'kotlin-android-extensions'
 //apply plugin: 'androidx.navigation.safeargs'
 
 Properties properties = new Properties()
-properties.load(project.rootProject.file('keys.properties').newDataInputStream())
+if (project.rootProject.file("release.properties").exists()) {
+    properties.load(project.rootProject.file('release.properties').newDataInputStream())
+} else {
+    properties.load(project.rootProject.file('debug.properties').newDataInputStream())
+}
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
 def jcDecauxApiKey = properties.getProperty('com.developer.jcdecaux.API_KEY')
 
 android {
     compileSdkVersion buildConfig.compileSdk
+
     defaultConfig {
         applicationId "ie.dublinmapper"
         minSdkVersion buildConfig.minSdk
@@ -21,6 +26,7 @@ android {
         manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
                                  jcDecauxApiKey: "$jcDecauxApiKey" ]
     }
+
     buildTypes {
         release {
             debuggable false
@@ -36,6 +42,17 @@ android {
         }
     }
 
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            dimension "default"
+        }
+        mock {
+            dimension "default"
+            applicationIdSuffix = ".mock"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -44,6 +61,7 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
+        mock.java.srcDirs += 'src/mock/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 
