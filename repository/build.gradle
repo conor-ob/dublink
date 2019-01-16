@@ -11,6 +11,11 @@ dependencies {
     implementation "com.nytimes.android:store3:${versions.store3}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+
+    testImplementation project(path: ':util', configuration: 'testOutput')
+    testImplementation "junit:junit:${testVersions.junit}"
+    testImplementation "com.google.truth:truth:${testVersions.truth}"
+    testImplementation "org.threeten:threetenbp:${testVersions.threetenbp}"
 }
 
 sourceSets {

@@ -4,13 +4,11 @@ import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoUnit
-import java.lang.IllegalStateException
 import java.util.*
 
 object TimeUtils {
 
-    private val zoneId: ZoneId by lazy { ZoneId.of(TimeZone.getDefault().id) }
-    private val zoneOffset: ZoneOffset by lazy { ZoneOffset.systemDefault().rules.getOffset(Instant.now()) }
+    var currentDateTimeProvider: CurrentDateTimeProvider = DefaultCurrentDateTimeProvider()
     private val parsers: List<DateTimeFormatter> by lazy {
         listOf(
             DateTimeFormatter.ISO_DATE_TIME,
@@ -30,19 +28,17 @@ object TimeUtils {
     private val timestampParser: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
     fun now(): Instant {
-        val instant = Instant.now()
-        val zonedDateTime = instant.atZone(zoneId)
-        return zonedDateTime.toInstant()
+        return currentDateTimeProvider.getCurrentInstant()
     }
 
     fun toTime(instant: Instant): LocalTime {
-        return LocalTime.from(instant.atZone(zoneId))
+        return LocalTime.from(instant.atZone(currentDateTimeProvider.zoneId))
     }
 
     fun toInstant(timestamp: String): Instant {
         for (parser in parsers) {
             try {
-                return LocalDateTime.parse(timestamp, parser).toInstant(zoneOffset)
+                return LocalDateTime.parse(timestamp, parser).toInstant(currentDateTimeProvider.zoneOffset)
             } catch (e: DateTimeParseException) {
 //                logger.debug("parser [$parser] failed to parse timestamp [$timestamp]")
             }
@@ -52,17 +48,47 @@ object TimeUtils {
 
     fun timestampToInstant(timestamp: String, formatter: DateTimeFormatter = timestampParser): Instant {
         val localTime = LocalTime.parse(timestamp, formatter)
-        val localDate = LocalDate.now(zoneId)
+        val localDate = currentDateTimeProvider.getCurrentDate()
         val localDateTime = LocalDateTime.of(localDate, localTime)
-        return localDateTime.toInstant(zoneOffset)
+        return localDateTime.toInstant(currentDateTimeProvider.zoneOffset)
     }
 
     fun toInstant(dateTime: LocalDateTime): Instant {
-        return dateTime.atZone(zoneId).toInstant()
+        return dateTime.atZone(currentDateTimeProvider.zoneId).toInstant()
     }
 
     fun timeBetween(unit: ChronoUnit, earlierInstant: Instant, laterInstant: Instant): Long {
         return unit.between(earlierInstant, laterInstant)
+    }
+
+}
+
+interface CurrentDateTimeProvider {
+
+    val zoneId: ZoneId
+
+    val zoneOffset: ZoneOffset
+
+    fun getCurrentInstant(): Instant
+
+    fun getCurrentDate(): LocalDate
+
+}
+
+class DefaultCurrentDateTimeProvider : CurrentDateTimeProvider {
+
+    override val zoneId: ZoneId by lazy { ZoneId.of(TimeZone.getDefault().id) }
+
+    override val zoneOffset: ZoneOffset by lazy { ZoneOffset.systemDefault().rules.getOffset(Instant.now()) }
+
+    override fun getCurrentInstant(): Instant {
+        val instant = Instant.now()
+        val zonedDateTime = instant.atZone(zoneId)
+        return zonedDateTime.toInstant()
+    }
+
+    override fun getCurrentDate(): LocalDate {
+        return LocalDate.now(zoneId)
     }
 
 }
