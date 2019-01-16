@@ -1,11 +1,7 @@
 package ie.dublinmapper
 
-import com.google.android.gms.maps.model.BitmapDescriptor
-import ie.dublinmapper.util.ImageUtils
+import org.junit.Assert
 import org.junit.Test
-
-import org.junit.Assert.*
-import java.util.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -15,12 +11,8 @@ import java.util.*
 class ExampleUnitTest {
 
     @Test
-    fun testMapMarker() {
-        val map = TreeMap<Float, Float>()
-        map[16f] = 16f
-        map[32f] = 32f
-
-        print(map.floorEntry(0f))
+    fun testAddition() {
+        Assert.assertEquals(4, 2 + 2)
     }
 
 }

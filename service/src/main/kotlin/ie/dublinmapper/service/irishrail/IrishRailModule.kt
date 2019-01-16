@@ -15,7 +15,7 @@ class IrishRailModule {
 
     @Provides
     @Singleton
-    fun jcdecauxApi(
+    fun irishRailApi(
         stringProvider: StringProvider,
         okHttpClient: OkHttpClient,
         @Named("xml") converterFactory: Converter.Factory,
