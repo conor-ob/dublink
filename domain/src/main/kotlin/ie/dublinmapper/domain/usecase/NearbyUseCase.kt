@@ -39,6 +39,8 @@ class NearbyUseCase @Inject constructor(
         serviceLocations.addAll(dublinBikesDocks)
         serviceLocations.addAll(dublinBusStops)
         serviceLocations.addAll(luasStops)
+//        val sorted = serviceLocations.associateTo(TreeMap()) { serviceLocation ->
+//            LocationUtils.haversineDistance(coordinate, serviceLocation.coordinate) to serviceLocation }
         val sorted = TreeMap<Double, ServiceLocation>()
         for (serviceLocation in serviceLocations) {
             sorted[LocationUtils.haversineDistance(coordinate, serviceLocation.coordinate)] = serviceLocation
@@ -64,7 +66,7 @@ class NearbyUseCase @Inject constructor(
             if (count >= limit) {
                 break
             }
-            if (CollectionUtils.doIntersect(operators, value.operators)) {
+            if (operators.intersectWith(value.operators)) {
                 result.add(value)
                 count++
             }

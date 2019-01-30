@@ -1,7 +1,7 @@
 package ie.dublinmapper
 
 //import ie.dublinmapper.di.DaggerMockApplicationComponent
-//import ie.dublinmapper.di.MockApplicationComponent
+//import ie.dublinmapper.di.FlavouredApplicationComponent
 //import ie.dublinmapper.util.Coordinate
 //import ie.dublinmapper.view.nearby.MockNearbyView
 //import org.junit.Before
@@ -9,7 +9,7 @@ package ie.dublinmapper
 //
 //class NearbyIntegrationTest {
 //
-//    private lateinit var applicationComponent: MockApplicationComponent
+//    private lateinit var applicationComponent: FlavouredApplicationComponent
 //
 //    @Before
 //    fun setup () {

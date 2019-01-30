@@ -8,7 +8,6 @@ import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.dublinbus.DublinBusApi
 import ie.dublinmapper.service.rtpi.RtpiApi
-import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.StringProvider
 import ie.dublinmapper.util.Thread
@@ -40,7 +39,7 @@ class DublinBusRepositoryModule {
         api: RtpiApi,
         stringProvider: StringProvider
     ): Repository<LiveData.DublinBus> {
-        val fetcher = DublinLiveDataFetcher(dublinBusApi, api, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat())
+        val fetcher = DublinBusLiveDataFetcher(dublinBusApi, api, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat())
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LiveData.DublinBus>>()
             .fetcher(fetcher)
             .parser { liveData -> DublinBusLiveDataMapper.map(liveData) }

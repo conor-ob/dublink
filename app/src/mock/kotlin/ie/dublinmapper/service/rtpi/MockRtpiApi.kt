@@ -2,17 +2,17 @@ package ie.dublinmapper.service.rtpi
 
 import ie.dublinmapper.util.MockJsonUtils
 import io.reactivex.Single
+import java.lang.IllegalStateException
 
 class MockRtpiApi : RtpiApi {
 
     override fun busStopInformation(operator: String, format: String): Single<RtpiBusStopInformationResponseJson> {
-        return Single.just(RtpiBusStopInformationResponseJson("", "", listOf(RtpiBusStopInformationJson(
-            "123",
-            "Bus Stop",
-            "53.89",
-            "-6.84",
-            listOf(RtpiBusStopOperatorInformationJson("gad", listOf("17A")))
-        ))))
+        return when (operator) {
+            "bac" -> singleResponse("rtpi_dublin_bus_bus_stop_information", RtpiBusStopInformationResponseJson::class.java)
+            "gad" -> singleResponse("rtpi_go_ahead_dublin_bus_stop_information", RtpiBusStopInformationResponseJson::class.java)
+            "luas" -> singleResponse("rtpi_luas_bus_stop_information", RtpiBusStopInformationResponseJson::class.java)
+            else -> throw IllegalStateException("Unknown operator: $operator")
+        }
     }
 
     override fun routelistInformationWithVariants(format: String): Single<RtpiRouteListInformationWithVariantsResponseJson> {
