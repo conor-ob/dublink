@@ -24,4 +24,6 @@ interface StringProvider {
 
     fun rtpiOperatoreGoAhead(): String
 
+    fun swordsExpressBaseUrl(): String
+
 }

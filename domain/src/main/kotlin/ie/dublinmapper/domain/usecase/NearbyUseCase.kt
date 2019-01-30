@@ -4,7 +4,7 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.*
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
+import io.reactivex.functions.Function5
 import java.util.*
 import javax.inject.Inject
 
@@ -13,6 +13,7 @@ class NearbyUseCase @Inject constructor(
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
+    private val swordsExpressRepository: Repository<SwordsExpressStop>,
     private val thread: Thread
 ) {
 
@@ -22,8 +23,9 @@ class NearbyUseCase @Inject constructor(
             dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(thread.io),
             dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(thread.io),
             luasStopRepository.getAll().startWith(emptyList<LuasStop>()).subscribeOn(thread.io),
-            Function4 { dartStations, dublinBikesDocks, dublinBusStops, luasStops ->
-                filter(coordinate, dartStations, dublinBikesDocks, dublinBusStops, luasStops) }
+            swordsExpressRepository.getAll().startWith(emptyList<SwordsExpressStop>()).subscribeOn(thread.io),
+            Function5 { dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
+                filter(coordinate, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops) }
         )
     }
 
@@ -32,13 +34,15 @@ class NearbyUseCase @Inject constructor(
         dartStations: List<DartStation>,
         dublinBikesDocks: List<DublinBikesDock>,
         dublinBusStops: List<DublinBusStop>,
-        luasStops: List<LuasStop>
+        luasStops: List<LuasStop>,
+        swordsExpressStops: List<SwordsExpressStop>
     ): Response {
         val serviceLocations = mutableListOf<ServiceLocation>()
         serviceLocations.addAll(dartStations)
         serviceLocations.addAll(dublinBikesDocks)
         serviceLocations.addAll(dublinBusStops)
         serviceLocations.addAll(luasStops)
+        serviceLocations.addAll(swordsExpressStops)
 //        val sorted = serviceLocations.associateTo(TreeMap()) { serviceLocation ->
 //            LocationUtils.haversineDistance(coordinate, serviceLocation.coordinate) to serviceLocation }
         val sorted = TreeMap<Double, ServiceLocation>()

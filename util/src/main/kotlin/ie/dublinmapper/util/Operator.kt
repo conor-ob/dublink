@@ -13,7 +13,8 @@ enum class Operator(
     DUBLIN_BUS("Dublin Bus", "BAC"),
     GO_AHEAD("Go Ahead", "GAD"),
     INTERCITY("InterCity", "ICTY"),
-    LUAS("Luas", "LUAS");
+    LUAS("Luas", "LUAS"),
+    SWORDS_EXPRESS("Swords Express", "SE");
 
     companion object {
 
@@ -31,9 +32,11 @@ enum class Operator(
 
         fun luas(): EnumSet<Operator> = EnumSet.of(LUAS)
 
+        fun swordsExpress(): EnumSet<Operator> = EnumSet.of(SWORDS_EXPRESS)
+
         fun bike(): EnumSet<Operator> = EnumSet.of(DUBLIN_BIKES)
 
-        fun bus(): EnumSet<Operator> = EnumSet.of(DUBLIN_BUS, GO_AHEAD)
+        fun bus(): EnumSet<Operator> = EnumSet.of(DUBLIN_BUS, GO_AHEAD, SWORDS_EXPRESS)
 
         fun rail(): EnumSet<Operator> = EnumSet.of(COMMUTER, DART, INTERCITY)
 
