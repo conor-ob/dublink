@@ -40,3 +40,11 @@ data class LuasStop(
     override val coordinate: Coordinate,
     override val operators: EnumSet<Operator> = Operator.luas()
 ) : ServiceLocation(id, name, coordinate, operators)
+
+data class SwordsExpressStop(
+    override val id: String,
+    override val name: String,
+    override val coordinate: Coordinate,
+    override val operators: EnumSet<Operator> = Operator.swordsExpress(),
+    val direction: String
+) : ServiceLocation(id,name, coordinate, operators)
