@@ -9,13 +9,12 @@ import ie.dublinmapper.service.dublinbus.MockDublinBusModule
 import ie.dublinmapper.service.irishrail.MockIrishRailModule
 import ie.dublinmapper.service.jcdecaux.MockJcDecauxModule
 import ie.dublinmapper.service.rtpi.MockRtpiModule
-import ie.dublinmapper.view.nearby.NearbyPresenterImpl
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
-        MockApplicationModule::class,
+        ApplicationModule::class,
         DartRepositoryModule::class,
         DublinBikesRepositoryModule::class,
         DublinBusRepositoryModule::class,
@@ -26,8 +25,4 @@ import javax.inject.Singleton
         MockRtpiModule::class
     ]
 )
-interface MockApplicationComponent {
-
-    fun nearbyPresenter(): NearbyPresenterImpl
-
-}
+interface BuildVariantApplicationComponent : ApplicationComponent

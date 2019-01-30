@@ -60,6 +60,7 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        prod.java.srcDirs += 'src/prod/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         mock.java.srcDirs += 'src/mock/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
@@ -111,6 +112,8 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+
+    testImplementation project(path: ':service', configuration: 'testOutput')
 
     testImplementation "junit:junit:${testVersions.junit}"
     androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"

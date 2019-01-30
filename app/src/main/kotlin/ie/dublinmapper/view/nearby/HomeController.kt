@@ -2,6 +2,7 @@ package ie.dublinmapper.view.nearby
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -125,6 +126,9 @@ class HomeController(args: Bundle) : MvpBaseController<NearbyView, NearbyPresent
     }
 
     fun focusOnServiceLocation(serviceLocation: ServiceLocationUi?) {
+        if (serviceLocation != null) {
+            view?.toolbar?.backgroundTintList = ColorStateList.valueOf(serviceLocation.colourId)
+        }
         (nearbyLiveDataController as NearbyLiveDataController).getLiveData(serviceLocation)
     }
 

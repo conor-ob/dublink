@@ -64,7 +64,7 @@ class LiveDataUseCase @Inject constructor(
                 condensedLiveData[data.customHash] = cachedLiveData
             }
         }
-        return CollectionUtils.headList(condensedLiveData.values.toList(), 3)
+        return condensedLiveData.values.toList().take(3)
     }
 
 }
