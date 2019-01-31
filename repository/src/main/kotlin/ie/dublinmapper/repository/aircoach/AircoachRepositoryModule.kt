@@ -10,8 +10,6 @@ import ie.dublinmapper.service.aircoach.AircoachApi
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
 import ie.dublinmapper.service.github.GithubApi
-import ie.dublinmapper.util.Operator
-import java.util.*
 import javax.inject.Singleton
 
 @Module
@@ -38,10 +36,10 @@ class AircoachRepositoryModule {
         val fetcher = AircoachLiveDataFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, ServiceResponseJson, List<AircoachLiveData>>()
             .fetcher(fetcher)
-            .parser { liveData -> Collections.singletonList(AircoachLiveData(dueTime = emptyList(),
-                operator = Operator.SWORDS_EXPRESS,
-                destination = "",
-                direction = "")) }
+            .parser { liveData ->
+                val result = AircoachLiveDataMapper.map(liveData.services)
+                return@parser result
+            }
             .open()
         return AircoachLiveDataRepository(store)
     }

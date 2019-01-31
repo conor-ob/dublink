@@ -8,11 +8,13 @@ import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.getApplicationComponent
-import ie.dublinmapper.view.livedata.LiveDataAdapter
+import ie.dublinmapper.util.requireContext
 import ie.dublinmapper.view.nearby.HomeController
 import timber.log.Timber
 
@@ -23,7 +25,7 @@ class NearbyLiveDataController(
     private lateinit var background: ViewGroup
     private lateinit var serviceLocationName: TextView
     private lateinit var serviceLocationInfo: TextView
-    private lateinit var liveDataAdapter: LiveDataAdapter
+    private lateinit var liveDataAdapter: GroupAdapter<ViewHolder>
     private lateinit var recyclerView: RecyclerView
     private lateinit var container: View
 
@@ -43,13 +45,12 @@ class NearbyLiveDataController(
         background = view.findViewById(R.id.background_live_data)
 //        serviceLocationName = view.findViewById(R.id.service_location_name)
 //        serviceLocationInfo = view.findViewById(R.id.service_location_info)
-        liveDataAdapter = LiveDataAdapter()
+        liveDataAdapter = GroupAdapter()
         recyclerView = view.findViewById(R.id.recycler_view)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(false)
-            adapter = liveDataAdapter
-        }
+        recyclerView.adapter = liveDataAdapter
+        recyclerView.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = layoutManager
     }
 
     override fun render(viewModel: NearbyLiveDataViewModel) {
@@ -58,7 +59,11 @@ class NearbyLiveDataController(
 //            serviceLocationInfo.text = viewModel.serviceLocation.mapIconText
 //        }
         viewModel.liveData.forEach { Timber.d(it.toString()) }
-        liveDataAdapter.showLiveData(viewModel.liveData)
+        liveDataAdapter.clear()
+//        viewModel.serviceLocation?.let {
+//            liveDataAdapter.add(it.toItem())
+//        }
+        liveDataAdapter.addAll(viewModel.liveData.map { it.toItem() })
         val viewTreeObserver = background.viewTreeObserver
         if (viewTreeObserver.isAlive) {
             viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -74,6 +79,10 @@ class NearbyLiveDataController(
     }
 
     fun getLiveData(serviceLocation: ServiceLocationUi?) {
+//        liveDataAdapter.clear()
+//        serviceLocation?.let {
+//            liveDataAdapter.add(it.toItem())
+//        }
         presenter.onLiveDataRequested(serviceLocation)
     }
 

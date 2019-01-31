@@ -11,7 +11,6 @@ import ie.dublinmapper.R
 import ie.dublinmapper.model.*
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.StringUtils
-import kotlinx.android.synthetic.main.view_nearby_list_item_dart_header.view.*
 import java.util.*
 
 class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>() {
@@ -20,11 +19,6 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LiveDataViewHolder {
         return when (viewType) {
-            99 -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_dart_header, parent, false)
-                LiveDataViewHolder.DartHeader(view)
-            }
             1 -> {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.view_nearby_list_item_dart, parent, false)
@@ -78,7 +72,7 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
     override fun getItemViewType(position: Int): Int {
         val data = liveData[position]
         return when (data) {
-            is DartLiveDataHeaderUi -> 99
+            is AircoachLiveDataUi -> 22
             is DartLiveDataUi -> {
                 return if (data.liveData.dueTime.size == 1) {
                     1
@@ -101,6 +95,7 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
                     40
                 }
             }
+            else -> 1111
         }
     }
 
@@ -112,17 +107,6 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
     sealed class LiveDataViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         abstract fun bind(liveData: LiveDataUi)
-
-        class DartHeader(private val view: View) : LiveDataViewHolder(view) {
-
-            override fun bind(liveData: LiveDataUi) {
-                val dartHeader = liveData as DartLiveDataHeaderUi
-                val dartStation = dartHeader.liveData.dartStation
-                view.service_location_name.text = dartStation.name
-                view.service_location_walk_time.text = "7 min"
-            }
-
-        }
 
         class Dart(private val view: View) : LiveDataViewHolder(view) {
 

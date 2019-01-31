@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,25 +17,26 @@
             app:layout_constraintEnd_toEndOf="@id/root"/>
 
     <TextView
-            android:id="@+id/train_type"
+            android:id="@+id/route_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:gravity="center"
-            android:minWidth="40dp"
+            android:minWidth="24dp"
             android:background="@drawable/text_view_rounded_corner"
-            android:backgroundTint="@color/dartGreen"
+            android:backgroundTint="#1E9AD0"
             android:backgroundTintMode="src_in"
             android:fontFamily="@font/google_sans_bold"
-            android:textColor="@color/white"
+            android:textColor="#F07434"
             android:textSize="12sp"
+            tools:text="702X"
             android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:layout_constraintStart_toStartOf="@id/root"/>
 
     <TextView
-            android:id="@+id/direction_destination"
+            android:id="@+id/destination"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/text_secondary"
@@ -44,7 +45,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="8dp"
             app:layout_constraintTop_toTopOf="@id/divider"
-            app:layout_constraintStart_toEndOf="@id/train_type"
+            app:layout_constraintStart_toEndOf="@id/route_id"
             app:layout_constraintEnd_toStartOf="@id/due"/>
 
     <TextView
@@ -52,9 +53,23 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/text_secondary"
-            android:textSize="16sp"
             android:fontFamily="@font/google_sans_bold"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            tools:text="5 min"
             app:layout_constraintEnd_toEndOf="@id/root"
-            app:layout_constraintBottom_toBottomOf="@id/root"/>
+            app:layout_constraintBottom_toTopOf="@id/due_later"
+            app:layout_constraintVertical_chainStyle="spread_inside"/>
+
+    <TextView
+            android:id="@+id/due_later"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:fontFamily="@font/google_sans_regular"
+            android:textSize="12sp"
+            tools:text="and in 7, 9, 12 min"
+            app:layout_constraintEnd_toEndOf="@id/root"
+            app:layout_constraintTop_toBottomOf="@id/due"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

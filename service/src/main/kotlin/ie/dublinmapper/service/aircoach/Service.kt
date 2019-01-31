@@ -3,8 +3,7 @@ package ie.dublinmapper.service.aircoach
 import com.google.gson.annotations.SerializedName
 
 data class ServiceResponseJson(
-    @SerializedName("name") val name: String
-//    @SerializedName("services") val services: List<ServiceJson> = mutableListOf()
+    @SerializedName("services") val services: List<ServiceJson> = mutableListOf()
 )
 
 data class ServiceJson(
@@ -20,10 +19,37 @@ data class ServiceJson(
     @SerializedName("journeyId") val journeyId: String,
     @SerializedName("linkName") val linkName: String,
     @SerializedName("stopType") val stopType: Int,
-    @SerializedName("live") val live: String,
+    @SerializedName("stops") val stops: List<String>,
+    @SerializedName("places") val places: List<String>,
+    @SerializedName("live") val live: LiveJson,
     @SerializedName("dups") val dups: String,
-    @SerializedName("eta") val eta: String,
+    @SerializedName("eta") val eta: EtaJson,
     @SerializedName("delayed") val delayed: Boolean
+)
+
+data class EtaJson(
+    @SerializedName("etaArrive") val etaArrive: TimestampJson,
+    @SerializedName("etaDepart") val etaDepart: TimestampJson,
+    @SerializedName("etaLayover") val etaLayover: Int,
+    @SerializedName("arrive") val arrive: TimestampJson,
+    @SerializedName("depart") val depart: TimestampJson,
+    @SerializedName("atStop") val atStop: Boolean,
+    @SerializedName("late") val late: Boolean,
+    @SerializedName("status") val status: String,
+    @SerializedName("timestamp") val timestamp: String
+)
+
+data class LiveJson(
+    @SerializedName("vehicleId") val vehicleId: String,
+    @SerializedName("vehicle") val vehicle: String,
+    @SerializedName("lat") val lat: Double,
+    @SerializedName("lon") val lon: Double,
+    @SerializedName("bearing") val bearing: Int,
+    @SerializedName("status") val status: String,
+    @SerializedName("timestamp") val timestamp: TimestampJson,
+    @SerializedName("timeZone") val timeZone: String,
+    @SerializedName("geoLocation") val geoLocation: String,
+    @SerializedName("gpsProvider") val gpsProvider: String
 )
 
 data class TimeJson(

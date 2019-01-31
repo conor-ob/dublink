@@ -7,6 +7,7 @@ import java.util.*
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
+    private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
     private val dartLiveDataRepository: Repository<DartLiveData>,
     private val dublinBikesLiveDataRepository: Repository<DublinBikesLiveData>,
     private val dublinBusLiveDataRepository: Repository<DublinBusLiveData>,
@@ -15,7 +16,7 @@ class LiveDataUseCase @Inject constructor(
 
     fun getLiveData(serviceLocation: ServiceLocation): Observable<List<LiveData>> {
         return when (serviceLocation) {
-            is AircoachStop -> throw UnsupportedOperationException()
+            is AircoachStop -> aircoachLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is DartStation -> dartLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is DublinBikesDock -> dublinBikesLiveDataRepository.getById(serviceLocation.id).map { Collections.singletonList(it) as List<LiveData> }
             is DublinBusStop -> dublinBusLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
@@ -39,6 +40,12 @@ class LiveDataUseCase @Inject constructor(
                 condensedLiveData[data.customHash] = data
             } else {
                 when (cachedLiveData) {
+                    is AircoachLiveData -> {
+                        val aircoachLiveData = data as AircoachLiveData
+                        val dueTimes = cachedLiveData.dueTime.toMutableList()
+                        dueTimes.add(aircoachLiveData.dueTime[0])
+                        cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
+                    }
                     is DartLiveData -> {
                         val dartLiveData = data as DartLiveData
                         val dueTimes = cachedLiveData.dueTime.toMutableList()

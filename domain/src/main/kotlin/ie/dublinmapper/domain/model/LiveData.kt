@@ -8,19 +8,13 @@ sealed class LiveData(
     open val customHash: Int = 0
 )
 
-data class DartLiveDataHeader(
-    val dartStation: DartStation
-) : LiveData(
-    Objects.hash(dartStation)
-)
-
 data class AircoachLiveData(
     val dueTime: List<DueTime>,
     val operator: Operator,
-    val destination: String,
-    val direction: String
+    val route: String,
+    val destination: String
 ) : LiveData(
-    Objects.hash(operator, destination, direction)
+    Objects.hash(operator, route, destination)
 )
 
 data class DartLiveData(
@@ -54,6 +48,10 @@ data class LuasLiveData(
     val destination: String
 ) : LiveData(
     Objects.hash(operator, route, destination)
+)
+
+data class SwordsExpressLiveData(
+    val placeHolder: Any
 )
 
 data class DueTime(

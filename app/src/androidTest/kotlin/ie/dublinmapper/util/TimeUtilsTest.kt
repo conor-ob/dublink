@@ -30,7 +30,7 @@ class TimeUtilsTest {
         val expectedArrivalTimestamp = "20:21"
         val currentDateTime = LocalDateTime.of(2019, Month.JANUARY, 11, 20, 5, 32)
         val currentInstant = TimeUtils.toInstant(currentDateTime)
-        val expectedInstant = TimeUtils.toInstant(expectedArrivalTimestamp)
+        val expectedInstant = TimeUtils.timestampToInstant(expectedArrivalTimestamp, Formatter.hourMinute)
         val minutes = TimeUtils.timeBetween(ChronoUnit.MINUTES, currentInstant, expectedInstant)
         val expectedTime = LocalTime.from(expectedInstant)
         Assert.assertEquals(16L, minutes)

@@ -63,8 +63,8 @@ class HomeController(args: Bundle) : MvpBaseController<NearbyView, NearbyPresent
     private fun setupLiveDataView(view: View) {
         bottomSheetBehavior = BottomSheetBehavior.from(view.container_bottom_sheet)
         bottomSheetBehavior.apply {
-            isHideable = true
-            peekHeight = 650
+            isHideable = false
+            peekHeight = 50
             state = BottomSheetBehavior.STATE_COLLAPSED
             setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
 
@@ -126,9 +126,6 @@ class HomeController(args: Bundle) : MvpBaseController<NearbyView, NearbyPresent
     }
 
     fun focusOnServiceLocation(serviceLocation: ServiceLocationUi?) {
-        if (serviceLocation != null) {
-            view?.toolbar?.backgroundTintList = ColorStateList.valueOf(serviceLocation.colourId)
-        }
         (nearbyLiveDataController as NearbyLiveDataController).getLiveData(serviceLocation)
     }
 

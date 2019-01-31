@@ -37,7 +37,7 @@ class DartRepositoryModule {
         val fetcher = DartLiveDataFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationDataXml>, List<DartLiveData>>()
             .fetcher(fetcher)
-            .parser { liveData -> DartLiveDataMapper.map(liveData) }
+            .parser { liveData -> DartLiveDataMapper.map(liveData).sortedBy { it.dueTime[0].minutes } } //TODO do the sorting somewhere else
             .open()
         return DartLiveDataRepository(store)
     }

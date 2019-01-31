@@ -17,25 +17,25 @@
             app:layout_constraintEnd_toEndOf="@id/root"/>
 
     <TextView
-            android:id="@+id/train_type"
+            android:id="@+id/route_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:gravity="center"
-            android:minWidth="40dp"
+            android:minWidth="24dp"
             android:background="@drawable/text_view_rounded_corner"
-            android:backgroundTint="@color/dartGreen"
+            android:backgroundTint="#1E9AD0"
             android:backgroundTintMode="src_in"
             android:fontFamily="@font/google_sans_bold"
-            android:textColor="@color/white"
+            android:textColor="#F07434"
             android:textSize="12sp"
             android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@id/divider"
             app:layout_constraintStart_toStartOf="@id/root"/>
 
     <TextView
-            android:id="@+id/direction_destination"
+            android:id="@+id/destination"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/text_secondary"
@@ -44,7 +44,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginStart="8dp"
             app:layout_constraintTop_toTopOf="@id/divider"
-            app:layout_constraintStart_toEndOf="@id/train_type"
+            app:layout_constraintStart_toEndOf="@id/route_id"
             app:layout_constraintEnd_toStartOf="@id/due"/>
 
     <TextView
