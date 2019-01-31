@@ -39,7 +39,7 @@ class NearbyLiveDataPresenterImpl @Inject constructor(
 //                    renderView()
                 }
                 .doOnNext {
-                    viewModel = viewModel.copy(liveData = it, isLoading = false)
+                    viewModel = viewModel.copy(liveData = it.take(3), isLoading = false)
                     renderView()
                 }
                 .doOnError { Timber.e(it) }

@@ -57,7 +57,7 @@ class NearbyPresenterImpl @Inject constructor(
             viewModel = viewModel.copy(closestServiceLocation = null)
         } else if (viewModel.closestServiceLocation != closestServiceLocation) {
             viewModel = viewModel.copy(closestServiceLocation = closestServiceLocation)
-            subscriptions().add(liveDataUseCase.getCondensedLiveData(closestServiceLocation.serviceLocation)
+            subscriptions().add(liveDataUseCase.getLiveData(closestServiceLocation.serviceLocation)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
             .map { LiveDataMapper.map(it) }

@@ -2,30 +2,27 @@ package ie.dublinmapper.util
 
 import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
 object TimeUtils {
 
     var currentDateTimeProvider: CurrentDateTimeProvider = DefaultCurrentDateTimeProvider()
-    private val parsers: List<DateTimeFormatter> by lazy {
-        listOf(
-            DateTimeFormatter.ISO_DATE_TIME,
-            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"),
-            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV"),
-            DateTimeFormatter.ofPattern("HH:mm")
-        )
-    }
-    private val formatters: List<DateTimeFormatter> by lazy {
-        listOf(
-            DateTimeFormatter.ofPattern("dd MMM yyyy"),
-            DateTimeFormatter.ofPattern("dd MMM"),
-            DateTimeFormatter.ofPattern("d MMM, HH:mm")
-        )
-    }
-
-    private val timestampParser: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+//    private val parsers: List<DateTimeFormatter> by lazy {
+//        listOf(
+//            DateTimeFormatter.ISO_DATE_TIME,
+//            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"),
+//            DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV"),
+//            DateTimeFormatter.ofPattern("HH:mm")
+//        )
+//    }
+//    private val formatters: List<DateTimeFormatter> by lazy {
+//        listOf(
+//            DateTimeFormatter.ofPattern("dd MMM yyyy"),
+//            DateTimeFormatter.ofPattern("dd MMM"),
+//            DateTimeFormatter.ofPattern("d MMM, HH:mm")
+//        )
+//    }
 
     fun now(): Instant {
         return currentDateTimeProvider.getCurrentInstant()
@@ -35,18 +32,11 @@ object TimeUtils {
         return LocalTime.from(instant.atZone(currentDateTimeProvider.zoneId))
     }
 
-    fun toInstant(timestamp: String): Instant {
-        for (parser in parsers) {
-            try {
-                return LocalDateTime.parse(timestamp, parser).toInstant(currentDateTimeProvider.zoneOffset)
-            } catch (e: DateTimeParseException) {
-//                logger.debug("parser [$parser] failed to parse timestamp [$timestamp]")
-            }
-        }
-        throw IllegalStateException("Unable to parse timestamp [$timestamp]")
+    fun dateTimeStampToInstant(timestamp: String, formatter: DateTimeFormatter): Instant {
+        return LocalDateTime.parse(timestamp, formatter).toInstant(currentDateTimeProvider.zoneOffset)
     }
 
-    fun timestampToInstant(timestamp: String, formatter: DateTimeFormatter = timestampParser): Instant {
+    fun timestampToInstant(timestamp: String, formatter: DateTimeFormatter): Instant {
         val localTime = LocalTime.parse(timestamp, formatter)
         val localDate = currentDateTimeProvider.getCurrentDate()
         val localDateTime = LocalDateTime.of(localDate, localTime)
@@ -90,5 +80,18 @@ class DefaultCurrentDateTimeProvider : CurrentDateTimeProvider {
     override fun getCurrentDate(): LocalDate {
         return LocalDate.now(zoneId)
     }
+
+}
+
+object Formatter {
+
+    val isoDateTime: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
+    val dateTime: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+    val dateTimeAlt: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    val zonedDateTime: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV")
+//    val dayMonthYear: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    val hourMinute: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+//    val dayMonth: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM")
+//    val dayMonthTime: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM, HH:mm")
 
 }

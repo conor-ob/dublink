@@ -9,8 +9,7 @@ object LiveDataMapper : Mapper<LiveData, LiveDataUi> {
 
     override fun map(from: LiveData): LiveDataUi {
         return when (from) {
-            is AircoachLiveData -> throw UnsupportedOperationException()
-            is DartLiveDataHeader -> DartLiveDataHeaderUi(from)
+            is AircoachLiveData -> AircoachLiveDataUi(from)
             is DartLiveData -> DartLiveDataUi(from)
             is DublinBikesLiveData -> DublinBikesLiveDataUi(from)
             is DublinBusLiveData -> DublinBusLiveDataUi(from)

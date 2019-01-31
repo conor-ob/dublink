@@ -1,9 +1,13 @@
 package ie.dublinmapper.model
 
+import com.xwray.groupie.kotlinandroidextensions.Item
+import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
+import ie.dublinmapper.model.aircoach.AircoachStopItem
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
+import kotlinx.android.synthetic.main.view_nearby_list_item_dart_header.*
 import java.util.*
 
 sealed class ServiceLocationUi(
@@ -15,6 +19,8 @@ sealed class ServiceLocationUi(
     val coordinate: Coordinate = serviceLocation.coordinate,
     val operators: EnumSet<Operator> = serviceLocation.operators
 ) {
+
+    abstract fun toItem(): Item
 
 //    override fun equals(other: Any?): Boolean {
 //        if (other == null) {
@@ -38,7 +44,9 @@ data class AircoachStopUi(
     aircoachStop,
     aircoachStop.name,
     R.color.dublinBusBlue
-)
+) {
+    override fun toItem() = AircoachStopItem(aircoachStop)
+}
 
 data class DartStationUi(
     val dartStation: DartStation
@@ -46,7 +54,9 @@ data class DartStationUi(
     dartStation,
     dartStation.name,
     R.color.dartGreen
-)
+) {
+    override fun toItem() = DartStationItem(dartStation)
+}
 
 data class DublinBikesDockUi(
     val dublinBikesDock: DublinBikesDock
@@ -54,7 +64,9 @@ data class DublinBikesDockUi(
     dublinBikesDock,
     dublinBikesDock.availableBikes.toString(),
     R.color.dublinBikesTeal
-)
+) {
+    override fun toItem() = DublinBikesDockItem(dublinBikesDock)
+}
 
 
 data class DublinBusStopUi(
@@ -63,7 +75,9 @@ data class DublinBusStopUi(
     dublinBusStop,
     dublinBusStop.id,
     R.color.commuterBlue
-)
+) {
+    override fun toItem() = DublinBusStopItem(dublinBusStop)
+}
 
 data class LuasStopUi(
     val luasStop: LuasStop
@@ -71,7 +85,9 @@ data class LuasStopUi(
     luasStop,
     luasStop.name,
     R.color.luasPurple
-)
+) {
+    override fun toItem() = LuasStopItem(luasStop)
+}
 
 data class SwordsExpressStopUi(
     val swordsExpressStop: SwordsExpressStop
@@ -79,4 +95,74 @@ data class SwordsExpressStopUi(
     swordsExpressStop,
     swordsExpressStop.name,
     R.color.luasGreen
-)
+) {
+    override fun toItem() = SwordsExpressStopItem(swordsExpressStop)
+}
+
+class DartStationItem(
+    private val dartStation: DartStation
+) : Item() {
+
+    override fun getLayout() = R.layout.view_nearby_list_item_dart_header
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        viewHolder.service_location_name.text = dartStation.name
+    }
+
+}
+
+class DublinBikesDockItem(
+    private val dublinBikesDock: DublinBikesDock
+) : Item() {
+
+    override fun getLayout(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+class DublinBusStopItem(
+    private val dublinBusStop: DublinBusStop
+) : Item() {
+
+    override fun getLayout(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+class LuasStopItem(
+    private val luasStop: LuasStop
+) : Item() {
+
+    override fun getLayout(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
+class SwordsExpressStopItem(
+    private val swordsExpressStop: SwordsExpressStop
+) : Item() {
+
+    override fun getLayout(): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}

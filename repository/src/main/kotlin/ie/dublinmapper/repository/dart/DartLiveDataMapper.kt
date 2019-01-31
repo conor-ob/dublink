@@ -4,6 +4,7 @@ import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.domain.model.DueTime
 import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
+import ie.dublinmapper.util.Formatter
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.TimeUtils
 import org.threeten.bp.temporal.ChronoUnit
@@ -28,7 +29,7 @@ object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
             return Collections.singletonList(DueTime(minutes, TimeUtils.toTime(expectedInstant)))
         }
         // bug where expectedArrivalTimestamp == "00:11" the next day
-        val expectedInstant = TimeUtils.timestampToInstant(expectedArrivalTimestamp)
+        val expectedInstant = TimeUtils.timestampToInstant(expectedArrivalTimestamp, Formatter.hourMinute)
         val minutes = TimeUtils.timeBetween(ChronoUnit.MINUTES, currentInstant, expectedInstant)
         return Collections.singletonList(DueTime(minutes, TimeUtils.toTime(expectedInstant)))
     }
