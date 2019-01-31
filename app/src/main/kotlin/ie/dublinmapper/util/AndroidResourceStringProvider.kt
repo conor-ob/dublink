@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import ie.dublinmapper.R
-import java.lang.NullPointerException
 
 class AndroidResourceStringProvider(
     private val context: Context,
@@ -69,6 +68,14 @@ class AndroidResourceStringProvider(
 
     override fun swordsExpressBaseUrl(): String {
         return resources.getString(R.string.swords_express_api_base_url)
+    }
+
+    override fun githubBaseUrl(): String {
+        return resources.getString(R.string.github_base_url)
+    }
+
+    override fun aircoachBaseUrl(): String {
+        return resources.getString(R.string.aircoach_base_url)
     }
 
 }

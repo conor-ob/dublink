@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.model.SwordsExpressStop
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.service.swordsexpress.SwordsExpressApi
+import ie.dublinmapper.service.github.GithubApi
 import ie.dublinmapper.service.swordsexpress.SwordsExpressStopJson
 import javax.inject.Singleton
 
@@ -15,7 +15,7 @@ class SwordsExpressRepositoryModule {
     @Provides
     @Singleton
     fun swordsExpressStopRepository(
-        api: SwordsExpressApi
+        api: GithubApi
     ): Repository<SwordsExpressStop> {
         val fetcher = SwordsExpressStopFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, List<SwordsExpressStopJson>, List<SwordsExpressStop>>()

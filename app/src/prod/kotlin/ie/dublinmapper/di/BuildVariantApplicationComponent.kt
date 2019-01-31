@@ -1,13 +1,16 @@
 package ie.dublinmapper.di
 
 import dagger.Component
+import ie.dublinmapper.repository.aircoach.AircoachRepositoryModule
 import ie.dublinmapper.repository.dart.DartRepositoryModule
 import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
 import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
 import ie.dublinmapper.repository.swordsexpress.SwordsExpressRepositoryModule
+import ie.dublinmapper.service.aircoach.AircoachModule
 import ie.dublinmapper.service.di.ServiceModule
 import ie.dublinmapper.service.dublinbus.DublinBusModule
+import ie.dublinmapper.service.github.GithubModule
 import ie.dublinmapper.service.irishrail.IrishRailModule
 import ie.dublinmapper.service.jcdecaux.JcDecauxModule
 import ie.dublinmapper.service.rtpi.RtpiModule
@@ -18,12 +21,15 @@ import javax.inject.Singleton
 @Component(
     modules = [
         ApplicationModule::class,
+        AircoachRepositoryModule::class,
         DartRepositoryModule::class,
         DublinBikesRepositoryModule::class,
         DublinBusRepositoryModule::class,
         LuasRepositoryModule::class,
         SwordsExpressRepositoryModule::class,
+        AircoachModule::class,
         DublinBusModule::class,
+        GithubModule::class,
         IrishRailModule::class,
         JcDecauxModule::class,
         RtpiModule::class,

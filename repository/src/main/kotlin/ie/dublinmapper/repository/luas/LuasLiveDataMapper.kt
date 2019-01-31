@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.luas
 
 import ie.dublinmapper.domain.model.DueTime
-import ie.dublinmapper.domain.model.LiveData
+import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.Operator
@@ -9,10 +9,10 @@ import ie.dublinmapper.util.TimeUtils
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
-object LuasLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LiveData.Luas> {
+object LuasLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LuasLiveData> {
 
-    override fun map(from: RtpiRealTimeBusInformationJson): LiveData.Luas {
-        return LiveData.Luas(
+    override fun map(from: RtpiRealTimeBusInformationJson): LuasLiveData {
+        return LuasLiveData(
             mapDueTime(from.arrivalDateTime),
             Operator.LUAS,
             from.route,
