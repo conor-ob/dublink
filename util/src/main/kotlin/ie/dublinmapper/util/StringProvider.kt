@@ -26,4 +26,8 @@ interface StringProvider {
 
     fun swordsExpressBaseUrl(): String
 
+    fun aircoachBaseUrl(): String
+
+    fun githubBaseUrl(): String
+
 }

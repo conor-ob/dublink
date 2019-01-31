@@ -1,18 +1,20 @@
 package ie.dublinmapper.view.livedata
 
-import ie.dublinmapper.domain.model.LiveData
+import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Mapper
-import ie.dublinmapper.model.LiveDataUi
+import ie.dublinmapper.model.*
+import java.lang.UnsupportedOperationException
 
 object LiveDataMapper : Mapper<LiveData, LiveDataUi> {
 
     override fun map(from: LiveData): LiveDataUi {
         return when (from) {
-            is LiveData.DartHeader -> LiveDataUi.DartHeader(from)
-            is LiveData.Dart -> LiveDataUi.Dart(from)
-            is LiveData.DublinBikes -> LiveDataUi.DublinBikes(from)
-            is LiveData.DublinBus -> LiveDataUi.DublinBus(from)
-            is LiveData.Luas -> LiveDataUi.Luas(from)
+            is AircoachLiveData -> throw UnsupportedOperationException()
+            is DartLiveDataHeader -> DartLiveDataHeaderUi(from)
+            is DartLiveData -> DartLiveDataUi(from)
+            is DublinBikesLiveData -> DublinBikesLiveDataUi(from)
+            is DublinBusLiveData -> DublinBusLiveDataUi(from)
+            is LuasLiveData -> LuasLiveDataUi(from)
         }
     }
 

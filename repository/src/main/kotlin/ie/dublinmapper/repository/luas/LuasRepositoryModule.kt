@@ -3,7 +3,7 @@ package ie.dublinmapper.repository.luas
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.domain.model.LiveData
+import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.rtpi.RtpiApi
@@ -34,9 +34,9 @@ class LuasRepositoryModule {
     fun luasRealTimeDataRepository(
         api: RtpiApi,
         stringProvider: StringProvider
-    ): Repository<LiveData.Luas> {
+    ): Repository<LuasLiveData> {
         val fetcher = LuasLiveDataFetcher(api, stringProvider.rtpiOperatoreLuas(), stringProvider.rtpiFormat())
-        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LiveData.Luas>>()
+        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LuasLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> LuasLiveDataMapper.map(liveData) }
             .open()

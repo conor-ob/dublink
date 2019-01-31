@@ -7,6 +7,7 @@ enum class Operator(
     val shortName: String
 ) {
 
+    AIRCOACH("Aircoach", "AC"),
     COMMUTER("Commuter", "COMM"),
     DART("DART", "DART"),
     DUBLIN_BIKES("Dublin Bikes", "BIKE"),
@@ -17,6 +18,8 @@ enum class Operator(
     SWORDS_EXPRESS("Swords Express", "SE");
 
     companion object {
+
+        fun aircoach(): EnumSet<Operator> = EnumSet.of(AIRCOACH)
 
         fun commuter(): EnumSet<Operator> = EnumSet.of(COMMUTER)
 
@@ -36,7 +39,7 @@ enum class Operator(
 
         fun bike(): EnumSet<Operator> = EnumSet.of(DUBLIN_BIKES)
 
-        fun bus(): EnumSet<Operator> = EnumSet.of(DUBLIN_BUS, GO_AHEAD, SWORDS_EXPRESS)
+        fun bus(): EnumSet<Operator> = EnumSet.of(AIRCOACH, DUBLIN_BUS, GO_AHEAD, SWORDS_EXPRESS)
 
         fun rail(): EnumSet<Operator> = EnumSet.of(COMMUTER, DART, INTERCITY)
 

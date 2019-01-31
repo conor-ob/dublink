@@ -11,6 +11,13 @@ sealed class ServiceLocation(
     open val operators: EnumSet<Operator>
 )
 
+data class AircoachStop(
+    override val id: String,
+    override val name: String,
+    override val coordinate: Coordinate,
+    override val operators: EnumSet<Operator>
+) : ServiceLocation(id, name, coordinate, operators)
+
 data class DartStation(
     override val id: String,
     override val name: String,

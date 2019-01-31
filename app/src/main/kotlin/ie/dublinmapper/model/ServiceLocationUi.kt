@@ -16,50 +16,67 @@ sealed class ServiceLocationUi(
     val operators: EnumSet<Operator> = serviceLocation.operators
 ) {
 
-    override fun equals(other: Any?): Boolean {
-        if (other == null) {
-            return false
-        }
-        if (other is ServiceLocationUi) {
-            return serviceLocation == other.serviceLocation
-        }
-        return false
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hashCode(serviceLocation)
-    }
-
-    class Dart(
-        dartStation: DartStation
-    ) : ServiceLocationUi(
-        dartStation,
-        dartStation.name,
-        R.color.dartGreen
-    )
-
-    class DublinBikes(
-        dublinBikesDock: DublinBikesDock
-    ) : ServiceLocationUi(
-        dublinBikesDock,
-        dublinBikesDock.availableBikes.toString(),
-        R.color.dublinBikesTeal
-    )
-
-    class DublinBus(
-        dublinBusStop: DublinBusStop
-    ) : ServiceLocationUi(
-        dublinBusStop,
-        dublinBusStop.id,
-        R.color.commuterBlue
-    )
-
-    class Luas(
-        luasStop: LuasStop
-    ) : ServiceLocationUi(
-        luasStop,
-        luasStop.name,
-        R.color.luasPurple
-    )
+//    override fun equals(other: Any?): Boolean {
+//        if (other == null) {
+//            return false
+//        }
+//        if (other is ServiceLocationUi) {
+//            return serviceLocation == other.serviceLocation
+//        }
+//        return false
+//    }
+//
+//    override fun hashCode(): Int {
+//        return Objects.hashCode(serviceLocation)
+//    }
 
 }
+
+data class AircoachStopUi(
+    val aircoachStop: AircoachStop
+) : ServiceLocationUi(
+    aircoachStop,
+    aircoachStop.name,
+    R.color.dublinBusBlue
+)
+
+data class DartStationUi(
+    val dartStation: DartStation
+) : ServiceLocationUi(
+    dartStation,
+    dartStation.name,
+    R.color.dartGreen
+)
+
+data class DublinBikesDockUi(
+    val dublinBikesDock: DublinBikesDock
+) : ServiceLocationUi(
+    dublinBikesDock,
+    dublinBikesDock.availableBikes.toString(),
+    R.color.dublinBikesTeal
+)
+
+
+data class DublinBusStopUi(
+    val dublinBusStop: DublinBusStop
+) : ServiceLocationUi(
+    dublinBusStop,
+    dublinBusStop.id,
+    R.color.commuterBlue
+)
+
+data class LuasStopUi(
+    val luasStop: LuasStop
+) : ServiceLocationUi(
+    luasStop,
+    luasStop.name,
+    R.color.luasPurple
+)
+
+data class SwordsExpressStopUi(
+    val swordsExpressStop: SwordsExpressStop
+) : ServiceLocationUi(
+    swordsExpressStop,
+    swordsExpressStop.name,
+    R.color.luasGreen
+)

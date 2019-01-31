@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.dart
 
+import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.domain.model.DueTime
-import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.util.Operator
@@ -9,10 +9,10 @@ import ie.dublinmapper.util.TimeUtils
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
-object DartLiveDataMapper : Mapper<IrishRailStationDataXml, LiveData.Dart> {
+object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
 
-    override fun map(from: IrishRailStationDataXml): LiveData.Dart {
-        return LiveData.Dart(
+    override fun map(from: IrishRailStationDataXml): DartLiveData {
+        return DartLiveData(
             mapDueTime(from.expArrival!!, from.dueIn!!),
             mapOperator(from.trainType!!, from.trainCode!!),
             from.destination!!,

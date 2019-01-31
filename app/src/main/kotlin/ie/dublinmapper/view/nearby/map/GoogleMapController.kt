@@ -150,6 +150,20 @@ class GoogleMapController(
 
         private val icons: Map<EnumSet<Operator>, TreeMap<Float, IconOptions>> by lazy {
             val icons = mutableMapOf<EnumSet<Operator>, TreeMap<Float, IconOptions>>()
+            val aircoachIcons = TreeMap<Float, IconOptions>()
+            aircoachIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_aircoach),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
+            )
             val dartIcons = TreeMap<Float, IconOptions>()
             dartIcons[0.0f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_1),
@@ -271,14 +285,31 @@ class GoogleMapController(
                     )
                 }
             )
+            val swordsExpressIcons = TreeMap<Float, IconOptions>()
+            swordsExpressIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_swords_express),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
+            )
+            icons[Operator.aircoach()] = aircoachIcons
             icons[Operator.dart()] = dartIcons
             icons[EnumSet.of(Operator.COMMUTER, Operator.DART)] = dartIcons
             icons[EnumSet.of(Operator.COMMUTER, Operator.DART, Operator.INTERCITY)] = dartIcons
             icons[Operator.dublinBikes()] = dublinBikesIcons
             icons[Operator.dublinBus()] = dublinBusIcons
             icons[Operator.goAhead()] = dublinBusIcons
+            icons[EnumSet.of(Operator.DUBLIN_BUS, Operator.GO_AHEAD)] = dublinBusIcons
             icons[Operator.bus()] = dublinBusIcons
             icons[Operator.luas()] = luasIcons
+            icons[Operator.swordsExpress()] = swordsExpressIcons
             return@lazy icons
         }
 
