@@ -31,9 +31,7 @@ import kotlinx.android.synthetic.main.view_search.view.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class SearchController(
-    args: Bundle
-) : MvpBaseController<SearchView, SearchPresenter>(args), SearchView {
+class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPresenter>(args), SearchView {
 
     private lateinit var searchQueryView: EditText
     private lateinit var adapter: GroupAdapter<ViewHolder>

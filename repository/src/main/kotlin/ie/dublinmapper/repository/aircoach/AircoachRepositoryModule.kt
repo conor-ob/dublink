@@ -6,8 +6,7 @@ import dagger.Provides
 import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.service.aircoach.AircoachApi
-import ie.dublinmapper.service.aircoach.AircoachScraper
+import ie.dublinmapper.service.aircoach.AircoachResource
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
 import javax.inject.Singleton
@@ -18,11 +17,10 @@ class AircoachRepositoryModule {
     @Provides
     @Singleton
     fun aircoachStopRepository(
-        api: AircoachScraper
+        resource: AircoachResource
     ): Repository<AircoachStop> {
-        val fetcher = AircoachStopFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, List<AircoachStopJson>, List<AircoachStop>>()
-            .fetcher(fetcher)
+            .fetcher { resource.getStops() }
             .parser { stops -> AircoachStopMapper.map(stops) }
             .open()
         return AircoachStopRepository(store)
@@ -30,16 +28,12 @@ class AircoachRepositoryModule {
 
     @Provides
     @Singleton
-    fun airocachLiveDataRepository(
-        api: AircoachApi
+    fun aircoachLiveDataRepository(
+        resource: AircoachResource
     ): Repository<AircoachLiveData> {
-        val fetcher = AircoachLiveDataFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, ServiceResponseJson, List<AircoachLiveData>>()
-            .fetcher(fetcher)
-            .parser { liveData ->
-                val result = AircoachLiveDataMapper.map(liveData.services)
-                return@parser result
-            }
+            .fetcher { stopId -> resource.getLiveData(stopId) }
+            .parser { liveData -> AircoachLiveDataMapper.map(liveData.services) }
             .open()
         return AircoachLiveDataRepository(store)
     }

@@ -2,6 +2,7 @@ package ie.dublinmapper.service.aircoach
 
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.service.github.GithubApi
 import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
@@ -12,6 +13,20 @@ import javax.inject.Singleton
 
 @Module
 class AircoachModule {
+
+    @Provides
+    @Singleton
+    fun aircoachResource(
+        aircoachScraper: AircoachScraper,
+        aircoachApi: AircoachApi,
+        fallback: GithubApi
+    ) : AircoachResource {
+        return AircoachWebResource(
+            aircoachScraper,
+            aircoachApi,
+            fallback
+        )
+    }
 
     @Provides
     @Singleton

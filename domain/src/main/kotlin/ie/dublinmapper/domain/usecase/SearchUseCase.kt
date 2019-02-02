@@ -4,51 +4,50 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.Thread
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
-import java.util.*
+import io.reactivex.functions.Function6
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
+    private val aircoachStopRepository: Repository<AircoachStop>,
     private val dartStationRepository: Repository<DartStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
+    private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
     private val thread: Thread
 ) {
     fun search(query: String): Observable<List<ServiceLocation>> {
         return Observable.combineLatest(
+            aircoachStopRepository.getAll().subscribeOn(thread.io),
             dartStationRepository.getAll().subscribeOn(thread.io),
             dublinBikesDockRepository.getAll().subscribeOn(thread.io),
             dublinBusStopRepository.getAll().subscribeOn(thread.io),
             luasStopRepository.getAll().subscribeOn(thread.io),
-            Function4 { dartStations, dublinBikesDocks, dublinBusStops, luasStops ->
-                search(query, dartStations, dublinBikesDocks, dublinBusStops, luasStops)
+            swordsExpressStopRepository.getAll().subscribeOn(thread.io),
+            Function6 { aircoachStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
+                search(query, aircoachStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops)
             }
         )
     }
 
     private fun search(
         query: String,
+        aircoachStops: List<AircoachStop>,
         dartStations: List<DartStation>,
         dublinBikesDocks: List<DublinBikesDock>,
         dublinBusStops: List<DublinBusStop>,
-        luasStops: List<LuasStop>
+        luasStops: List<LuasStop>,
+        swordsExpressStops: List<SwordsExpressStop>
     ) : List<ServiceLocation> {
-        val searchResults = mutableListOf<ServiceLocation>()
-        val dartStationMatches = search(query, dartStations)
-        val dublinBikesDockMatches = search(query, dublinBikesDocks)
-        val dublinBusStopMatches = search(query, dublinBusStops)
-        val luasStopMatches = search(query, luasStops)
-        val sortedMap = TreeMap<Int, List<ServiceLocation>>()
-        sortedMap[dartStationMatches.size] = dartStationMatches
-        sortedMap[dublinBikesDockMatches.size] = dublinBikesDockMatches
-        sortedMap[dublinBusStopMatches.size] = dublinBusStopMatches
-        sortedMap[luasStopMatches.size] = luasStopMatches
-        val iterator = sortedMap.entries.iterator()
-        while (iterator.hasNext()) {
-            searchResults.addAll(iterator.next().value)
-        }
-        return searchResults
+        val searchCollections = mutableListOf<Collection<ServiceLocation>>()
+        searchCollections.add(search(query, aircoachStops))
+        searchCollections.add(search(query, dartStations))
+        searchCollections.add(search(query, dublinBikesDocks))
+        searchCollections.add(search(query, dublinBusStops))
+        searchCollections.add(search(query, luasStops))
+        searchCollections.add(search(query, swordsExpressStops))
+        searchCollections.sortBy { it.size }
+        return searchCollections.flatten()
     }
 
     private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
@@ -58,6 +57,12 @@ class SearchUseCase @Inject constructor(
             if (serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
                     serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
                 searchResults.add(serviceLocation)
+            } else {
+                for (operator in serviceLocation.operators) {
+                    if (operator.fullName.toLowerCase().contains(adaptedQuery)) {
+                        searchResults.add(serviceLocation)
+                    }
+                }
             }
         }
         return searchResults

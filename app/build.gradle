@@ -122,6 +122,8 @@ dependencies {
     implementation "com.google.android.material:material:${versions.material}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
 
+    implementation "com.nytimes.android:store3:${versions.store3}"
+
     testImplementation project(path: ':service', configuration: 'testOutput')
 
     testImplementation "junit:junit:${testVersions.junit}"
