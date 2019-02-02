@@ -15,6 +15,14 @@ class AircoachModule {
 
     @Provides
     @Singleton
+    fun aircoachScraper(
+        stringProvider: StringProvider
+    ) : AircoachScraper {
+        return AircoachWebScraper(stringProvider.aircoachBaseUrl())
+    }
+
+    @Provides
+    @Singleton
     fun aircoachApi(
         stringProvider: StringProvider,
         okHttpClient: OkHttpClient,
