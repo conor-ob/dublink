@@ -7,9 +7,9 @@ import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.aircoach.AircoachApi
+import ie.dublinmapper.service.aircoach.AircoachScraper
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
-import ie.dublinmapper.service.github.GithubApi
 import javax.inject.Singleton
 
 @Module
@@ -18,7 +18,7 @@ class AircoachRepositoryModule {
     @Provides
     @Singleton
     fun aircoachStopRepository(
-        api: GithubApi
+        api: AircoachScraper
     ): Repository<AircoachStop> {
         val fetcher = AircoachStopFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, List<AircoachStopJson>, List<AircoachStop>>()
