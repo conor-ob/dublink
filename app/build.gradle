@@ -20,8 +20,8 @@ android {
         applicationId "ie.dublinmapper"
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 100000
-        versionName "1.0.0-SNAPSHOT"
+        versionCode buildConfig.version.code
+        versionName buildConfig.version.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
                                  jcDecauxApiKey: "$jcDecauxApiKey" ]
