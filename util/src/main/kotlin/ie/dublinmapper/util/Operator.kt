@@ -8,6 +8,7 @@ enum class Operator(
 ) {
 
     AIRCOACH("Aircoach", "AC"),
+    BUS_EIREANN("Bus Éireann", "BE"),
     COMMUTER("Commuter", "COMM"),
     DART("DART", "DART"),
     DUBLIN_BIKES("Dublin Bikes", "BIKE"),
@@ -20,6 +21,8 @@ enum class Operator(
     companion object {
 
         fun aircoach(): EnumSet<Operator> = EnumSet.of(AIRCOACH)
+
+        fun busEireann(): EnumSet<Operator> = EnumSet.of(BUS_EIREANN)
 
         fun commuter(): EnumSet<Operator> = EnumSet.of(COMMUTER)
 
@@ -39,7 +42,7 @@ enum class Operator(
 
         fun bike(): EnumSet<Operator> = EnumSet.of(DUBLIN_BIKES)
 
-        fun bus(): EnumSet<Operator> = EnumSet.of(AIRCOACH, DUBLIN_BUS, GO_AHEAD, SWORDS_EXPRESS)
+        fun bus(): EnumSet<Operator> = EnumSet.of(AIRCOACH, BUS_EIREANN, DUBLIN_BUS, GO_AHEAD, SWORDS_EXPRESS)
 
         fun rail(): EnumSet<Operator> = EnumSet.of(COMMUTER, DART, INTERCITY)
 

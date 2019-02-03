@@ -20,6 +20,8 @@ interface StringProvider {
 
     fun dublinBusBaseUrl(): String
 
+    fun rtpiOperatoreBusEireann(): String
+
     fun rtpiOperatoreDublinBus(): String
 
     fun rtpiOperatoreGoAhead(): String

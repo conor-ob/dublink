@@ -42,6 +42,10 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.rtpi_operator_luas)
     }
 
+    override fun rtpiOperatoreBusEireann(): String {
+        return resources.getString(R.string.rtpi_operator_bus_eireann)
+    }
+
     override fun rtpiOperatoreDublinBus(): String {
         return resources.getString(R.string.rtpi_operator_dublin_bus)
     }

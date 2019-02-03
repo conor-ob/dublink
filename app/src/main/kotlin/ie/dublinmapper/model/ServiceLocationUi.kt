@@ -5,6 +5,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.model.aircoach.AircoachStopItem
+import ie.dublinmapper.model.buseireann.BusEireannStopItem
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
 import kotlinx.android.synthetic.main.view_nearby_list_item_dart_header.*
@@ -46,6 +47,16 @@ data class AircoachStopUi(
     R.color.dublinBusBlue
 ) {
     override fun toItem() = AircoachStopItem(aircoachStop)
+}
+
+data class BusEireannStopUi(
+    val busEireannStop: BusEireannStop
+) : ServiceLocationUi(
+    busEireannStop,
+    busEireannStop.name,
+    R.color.dublinBusBlue
+) {
+    override fun toItem() = BusEireannStopItem(busEireannStop)
 }
 
 data class DartStationUi(
