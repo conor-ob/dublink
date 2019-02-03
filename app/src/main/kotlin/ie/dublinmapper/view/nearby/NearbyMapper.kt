@@ -9,6 +9,7 @@ object NearbyMapper : Mapper<ServiceLocation, ServiceLocationUi> {
     override fun map(from: ServiceLocation): ServiceLocationUi {
         return when (from) {
             is AircoachStop -> AircoachStopUi(from)
+            is BusEireannStop -> BusEireannStopUi(from)
             is DartStation -> DartStationUi(from)
             is DublinBikesDock -> DublinBikesDockUi(from)
             is DublinBusStop -> DublinBusStopUi(from)

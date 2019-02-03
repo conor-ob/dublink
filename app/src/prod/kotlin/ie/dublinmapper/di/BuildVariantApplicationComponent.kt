@@ -2,6 +2,7 @@ package ie.dublinmapper.di
 
 import dagger.Component
 import ie.dublinmapper.repository.aircoach.AircoachRepositoryModule
+import ie.dublinmapper.repository.buseireann.BusEireannRepositoryModule
 import ie.dublinmapper.repository.dart.DartRepositoryModule
 import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
 import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
@@ -22,6 +23,7 @@ import javax.inject.Singleton
     modules = [
         ApplicationModule::class,
         AircoachRepositoryModule::class,
+        BusEireannRepositoryModule::class,
         DartRepositoryModule::class,
         DublinBikesRepositoryModule::class,
         DublinBusRepositoryModule::class,

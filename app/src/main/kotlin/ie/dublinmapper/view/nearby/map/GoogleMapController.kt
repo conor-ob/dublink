@@ -164,6 +164,20 @@ class GoogleMapController(
                     )
                 }
             )
+            val busEireannIcons = TreeMap<Float, IconOptions>()
+            busEireannIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_bus_eireann),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
+            )
             val dartIcons = TreeMap<Float, IconOptions>()
             dartIcons[0.0f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dart_1),
@@ -300,6 +314,7 @@ class GoogleMapController(
                 }
             )
             icons[Operator.aircoach()] = aircoachIcons
+            icons[Operator.busEireann()] = busEireannIcons
             icons[Operator.dart()] = dartIcons
             icons[EnumSet.of(Operator.COMMUTER, Operator.DART)] = dartIcons
             icons[EnumSet.of(Operator.COMMUTER, Operator.DART, Operator.INTERCITY)] = dartIcons

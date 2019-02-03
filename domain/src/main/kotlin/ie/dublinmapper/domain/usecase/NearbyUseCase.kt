@@ -4,12 +4,13 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.*
 import io.reactivex.Observable
-import io.reactivex.functions.Function6
+import io.reactivex.functions.Function7
 import java.util.*
 import javax.inject.Inject
 
 class NearbyUseCase @Inject constructor(
     private val aircoachStopRepository: Repository<AircoachStop>,
+    private val busEireannStopRepository: Repository<BusEireannStop>,
     private val dartStationRepository: Repository<DartStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
@@ -21,19 +22,21 @@ class NearbyUseCase @Inject constructor(
     fun getNearbyServiceLocations(coordinate: Coordinate): Observable<Response> {
         return Observable.combineLatest(
             aircoachStopRepository.getAll().startWith(emptyList<AircoachStop>()).subscribeOn(thread.io),
+            busEireannStopRepository.getAll().startWith(emptyList<BusEireannStop>()).subscribeOn(thread.io),
             dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(thread.io),
             dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(thread.io),
             dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(thread.io),
             luasStopRepository.getAll().startWith(emptyList<LuasStop>()).subscribeOn(thread.io),
             swordsExpressStopRepository.getAll().startWith(emptyList<SwordsExpressStop>()).subscribeOn(thread.io),
-            Function6 { aircoachStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
-                filter(coordinate, aircoachStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops) }
+            Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
+                filter(coordinate, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops) }
         )
     }
 
     private fun filter(
         coordinate: Coordinate,
         aircoachStops: List<AircoachStop>,
+        busEireannStops: List<BusEireannStop>,
         dartStations: List<DartStation>,
         dublinBikesDocks: List<DublinBikesDock>,
         dublinBusStops: List<DublinBusStop>,
@@ -42,6 +45,7 @@ class NearbyUseCase @Inject constructor(
     ): Response {
         val serviceLocations = mutableListOf<ServiceLocation>()
         serviceLocations.addAll(aircoachStops)
+        serviceLocations.addAll(busEireannStops)
         serviceLocations.addAll(dartStations)
         serviceLocations.addAll(dublinBikesDocks)
         serviceLocations.addAll(dublinBusStops)

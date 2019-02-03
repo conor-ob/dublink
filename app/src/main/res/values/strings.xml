@@ -10,6 +10,7 @@
     <string name="rtpi_operator_luas">luas</string>
     <string name="rtpi_format">json</string>
     <string name="irish_rail_api_dart_station_type">D</string>
+    <string name="rtpi_operator_bus_eireann">be</string>
     <string name="rtpi_operator_dublin_bus">bac</string>
     <string name="rtpi_operator_go_ahead">gad</string>
     <string name="live_data_due">Due</string>

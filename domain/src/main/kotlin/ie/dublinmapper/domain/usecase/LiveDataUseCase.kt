@@ -17,11 +17,12 @@ class LiveDataUseCase @Inject constructor(
     fun getLiveData(serviceLocation: ServiceLocation): Observable<List<LiveData>> {
         return when (serviceLocation) {
             is AircoachStop -> aircoachLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
+            is BusEireannStop -> return Observable.just(emptyList())
             is DartStation -> dartLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is DublinBikesDock -> dublinBikesLiveDataRepository.getById(serviceLocation.id).map { Collections.singletonList(it) as List<LiveData> }
             is DublinBusStop -> dublinBusLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is LuasStop -> luasLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is SwordsExpressStop -> throw UnsupportedOperationException()
+            is SwordsExpressStop -> return Observable.just(emptyList())
         }
     }
 
