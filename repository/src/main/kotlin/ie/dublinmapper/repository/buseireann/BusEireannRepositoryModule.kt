@@ -21,7 +21,7 @@ class BusEireannRepositoryModule {
     ): Repository<BusEireannStop> {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<BusEireannStop>>()
             .fetcher { api.busStopInformation(
-                stringProvider.rtpiOperatoreBusEireann(), stringProvider.rtpiFormat()
+                stringProvider.rtpiOperatorBusEireann(), stringProvider.rtpiFormat()
             ).map { it.results } }
             .parser { stops -> BusEireannStopMapper.map(stops) }
             .open()

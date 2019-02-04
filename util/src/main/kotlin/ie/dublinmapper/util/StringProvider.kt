@@ -2,15 +2,15 @@ package ie.dublinmapper.util
 
 interface StringProvider {
 
-    fun jcdecauxBaseUrl(): String
+    fun jcDecauxBaseUrl(): String
 
     fun jcDecauxContract(): String
 
     fun jcDecauxApiKey(): String
 
-    fun rtpibaseUrl(): String
+    fun rtpiBaseUrl(): String
 
-    fun rtpiOperatoreLuas(): String
+    fun rtpiOperatorLuas(): String
 
     fun rtpiFormat(): String
 
@@ -20,11 +20,11 @@ interface StringProvider {
 
     fun dublinBusBaseUrl(): String
 
-    fun rtpiOperatoreBusEireann(): String
+    fun rtpiOperatorBusEireann(): String
 
-    fun rtpiOperatoreDublinBus(): String
+    fun rtpiOperatorDublinBus(): String
 
-    fun rtpiOperatoreGoAhead(): String
+    fun rtpiOperatorGoAhead(): String
 
     fun swordsExpressBaseUrl(): String
 

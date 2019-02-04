@@ -25,7 +25,7 @@ class DublinBikesRepositoryModule {
             .fetcher(fetcher)
             .parser { docks -> DublinBikesDockMapper.map(docks) }
             .open()
-        return DublinBikeDockRepository(store)
+        return DublinBikesDockRepository(store)
     }
 
     @Provides

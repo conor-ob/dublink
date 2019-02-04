@@ -10,7 +10,7 @@ class AndroidResourceStringProvider(
     private val resources: Resources
 ) : StringProvider {
 
-    override fun jcdecauxBaseUrl(): String {
+    override fun jcDecauxBaseUrl(): String {
         return resources.getString(R.string.jcdecaux_base_url)
     }
 
@@ -34,23 +34,23 @@ class AndroidResourceStringProvider(
         }
     }
 
-    override fun rtpibaseUrl(): String {
+    override fun rtpiBaseUrl(): String {
         return resources.getString(R.string.rtpi_base_url)
     }
 
-    override fun rtpiOperatoreLuas(): String {
+    override fun rtpiOperatorLuas(): String {
         return resources.getString(R.string.rtpi_operator_luas)
     }
 
-    override fun rtpiOperatoreBusEireann(): String {
+    override fun rtpiOperatorBusEireann(): String {
         return resources.getString(R.string.rtpi_operator_bus_eireann)
     }
 
-    override fun rtpiOperatoreDublinBus(): String {
+    override fun rtpiOperatorDublinBus(): String {
         return resources.getString(R.string.rtpi_operator_dublin_bus)
     }
 
-    override fun rtpiOperatoreGoAhead(): String {
+    override fun rtpiOperatorGoAhead(): String {
         return resources.getString(R.string.rtpi_operator_go_ahead)
     }
 

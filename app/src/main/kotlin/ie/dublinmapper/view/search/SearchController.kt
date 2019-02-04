@@ -19,14 +19,12 @@ import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
-import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.*
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.view_nearby_list_item_dart_header.*
 import kotlinx.android.synthetic.main.view_search.view.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -170,7 +168,9 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         clearSearch.setOnClickListener { searchQueryView.setText("") }
     }
 
-    override fun showSearchResults(searchResults: List<ServiceLocation>) {
+    override fun showSearchResults(searchResults: List<ServiceLocationUi>) {
+        adapter.clear()
+        adapter.addAll(searchResults.map { it.toItem() })
         for (result in searchResults) {
             Timber.d(result.toString())
         }

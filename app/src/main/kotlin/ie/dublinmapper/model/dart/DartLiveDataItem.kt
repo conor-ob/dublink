@@ -8,14 +8,14 @@ import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.StringUtils
-import kotlinx.android.synthetic.main.view_nearby_list_item_dart.*
+import kotlinx.android.synthetic.main.list_item_live_data_dart.*
 import java.util.*
 
 class DartLiveDataItem(
     private val liveData: DartLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.view_nearby_list_item_dart
+    override fun getLayout() = R.layout.list_item_live_data_dart
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.train_type.text = liveData.operator.shortName

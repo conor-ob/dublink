@@ -5,13 +5,13 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.DublinBusLiveData
 import ie.dublinmapper.util.StringUtils
-import kotlinx.android.synthetic.main.view_nearby_list_item_dublin_bus_condensed.*
+import kotlinx.android.synthetic.main.list_item_live_data_dublin_bus_condensed.*
 
 class DublinBusCondensedLiveDataItem(
     private val liveData: DublinBusLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.view_nearby_list_item_dublin_bus_condensed
+    override fun getLayout() = R.layout.list_item_live_data_dublin_bus_condensed
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.route_id.text = liveData.route
