@@ -21,7 +21,7 @@ class LuasRepositoryModule {
         api: RtpiApi,
         stringProvider: StringProvider
     ): Repository<LuasStop> {
-        val fetcher = LuasStopFetcher(api, stringProvider.rtpiOperatoreLuas(), stringProvider.rtpiFormat())
+        val fetcher = LuasStopFetcher(api, stringProvider.rtpiOperatorLuas(), stringProvider.rtpiFormat())
         val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<LuasStop>>()
             .fetcher(fetcher)
             .parser { stops -> LuasStopMapper.map(stops) }
@@ -35,7 +35,7 @@ class LuasRepositoryModule {
         api: RtpiApi,
         stringProvider: StringProvider
     ): Repository<LuasLiveData> {
-        val fetcher = LuasLiveDataFetcher(api, stringProvider.rtpiOperatoreLuas(), stringProvider.rtpiFormat())
+        val fetcher = LuasLiveDataFetcher(api, stringProvider.rtpiOperatorLuas(), stringProvider.rtpiFormat())
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LuasLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> LuasLiveDataMapper.map(liveData) }

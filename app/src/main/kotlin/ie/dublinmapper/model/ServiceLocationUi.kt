@@ -6,9 +6,14 @@ import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.model.aircoach.AircoachStopItem
 import ie.dublinmapper.model.buseireann.BusEireannStopItem
+import ie.dublinmapper.model.dart.DartStationItem
+import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
+import ie.dublinmapper.model.dublinbus.DublinBusStopItem
+import ie.dublinmapper.model.luas.LuasStopItem
+import ie.dublinmapper.model.swordsexpress.SwordsExpressStopItem
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
-import kotlinx.android.synthetic.main.view_nearby_list_item_dart_header.*
+import kotlinx.android.synthetic.main.list_item_service_location_dart.*
 import java.util.*
 
 sealed class ServiceLocationUi(
@@ -108,72 +113,4 @@ data class SwordsExpressStopUi(
     R.color.luasGreen
 ) {
     override fun toItem() = SwordsExpressStopItem(swordsExpressStop)
-}
-
-class DartStationItem(
-    private val dartStation: DartStation
-) : Item() {
-
-    override fun getLayout() = R.layout.view_nearby_list_item_dart_header
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.service_location_name.text = dartStation.name
-    }
-
-}
-
-class DublinBikesDockItem(
-    private val dublinBikesDock: DublinBikesDock
-) : Item() {
-
-    override fun getLayout(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-}
-
-class DublinBusStopItem(
-    private val dublinBusStop: DublinBusStop
-) : Item() {
-
-    override fun getLayout(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-}
-
-class LuasStopItem(
-    private val luasStop: LuasStop
-) : Item() {
-
-    override fun getLayout(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-}
-
-class SwordsExpressStopItem(
-    private val swordsExpressStop: SwordsExpressStop
-) : Item() {
-
-    override fun getLayout(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
 }

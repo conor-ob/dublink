@@ -4,7 +4,7 @@ import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.model.DublinBikesDock
 import ie.dublinmapper.repository.ServiceLocationRepository
 
-class DublinBikeDockRepository(
+class DublinBikesDockRepository(
     store: Store<List<DublinBikesDock>, String>
 ) : ServiceLocationRepository<DublinBikesDock>(store) {
 

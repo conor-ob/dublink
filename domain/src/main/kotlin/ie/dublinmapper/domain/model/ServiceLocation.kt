@@ -52,7 +52,8 @@ data class LuasStop(
     override val id: String,
     override val name: String,
     override val coordinate: Coordinate,
-    override val operators: EnumSet<Operator> = Operator.luas()
+    override val operators: EnumSet<Operator>,
+    val routes: Map<Operator, Set<String>>
 ) : ServiceLocation(id, name, coordinate, operators)
 
 data class SwordsExpressStop(

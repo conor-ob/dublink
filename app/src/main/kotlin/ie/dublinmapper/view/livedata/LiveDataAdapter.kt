@@ -21,37 +21,37 @@ class LiveDataAdapter : RecyclerView.Adapter<LiveDataAdapter.LiveDataViewHolder>
         return when (viewType) {
             1 -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_dart, parent, false)
+                    .inflate(R.layout.list_item_live_data_dart, parent, false)
                 LiveDataViewHolder.Dart(view)
             }
             10 -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_dart_condensed, parent, false)
+                    .inflate(R.layout.list_item_live_data_dart_condensed, parent, false)
                 LiveDataViewHolder.DartCondensed(view)
             }
             2 -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_dublin_bikes, parent, false)
+                    .inflate(R.layout.list_item_live_data_dublin_bikes, parent, false)
                 LiveDataViewHolder.DublinBikes(view)
             }
             3 -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_dublin_bus, parent, false)
+                    .inflate(R.layout.list_item_live_data_dublin_bus, parent, false)
                 LiveDataViewHolder.DublinBus(view)
             }
             30 -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_dublin_bus_condensed, parent, false)
+                    .inflate(R.layout.list_item_live_data_dublin_bus_condensed, parent, false)
                 LiveDataViewHolder.DublinBusCondensed(view)
             }
             4 -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_luas, parent, false)
+                    .inflate(R.layout.list_item_live_data_luas, parent, false)
                 LiveDataViewHolder.Luas(view)
             }
             40 -> {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_nearby_list_item_luas_condensed, parent, false)
+                    .inflate(R.layout.list_item_live_data_luas_condensed, parent, false)
                 LiveDataViewHolder.LuasCondensed(view)
             }
 //            0 -> {

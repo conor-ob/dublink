@@ -5,13 +5,13 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.util.StringUtils
-import kotlinx.android.synthetic.main.view_nearby_list_item_aircoach_condensed.*
+import kotlinx.android.synthetic.main.list_item_live_data_aircoach_condensed.*
 
 class AircoachCondensedLiveDataItem(
     private val liveData: AircoachLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.view_nearby_list_item_aircoach_condensed
+    override fun getLayout() = R.layout.list_item_live_data_aircoach_condensed
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.route_id.text = liveData.route

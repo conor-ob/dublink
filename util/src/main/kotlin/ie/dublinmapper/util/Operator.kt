@@ -1,5 +1,6 @@
 package ie.dublinmapper.util
 
+import java.text.ParseException
 import java.util.*
 
 enum class Operator(
@@ -47,6 +48,16 @@ enum class Operator(
         fun rail(): EnumSet<Operator> = EnumSet.of(COMMUTER, DART, INTERCITY)
 
         fun tram(): EnumSet<Operator> = EnumSet.of(LUAS)
+
+        fun parse(value: String): Operator {
+            for (operator in values()) {
+                if (operator.fullName.equals(value, ignoreCase = true)
+                    || operator.shortName.equals(value, ignoreCase = true)) {
+                    return operator
+                }
+            }
+            throw IllegalArgumentException("Unable to parse Operator from string value: $value")
+        }
 
     }
 

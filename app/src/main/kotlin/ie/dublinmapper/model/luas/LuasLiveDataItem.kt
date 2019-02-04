@@ -5,14 +5,14 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.util.StringUtils
-import kotlinx.android.synthetic.main.view_nearby_list_item_luas.*
+import kotlinx.android.synthetic.main.list_item_live_data_luas.*
 import java.util.*
 
 class LuasLiveDataItem(
     private val liveData: LuasLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.view_nearby_list_item_luas
+    override fun getLayout() = R.layout.list_item_live_data_luas
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.operator.text = liveData.operator.name

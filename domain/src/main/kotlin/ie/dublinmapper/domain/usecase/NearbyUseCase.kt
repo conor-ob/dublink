@@ -62,8 +62,9 @@ class NearbyUseCase @Inject constructor(
         result.addAll(findFirstN(7, Operator.bike(), sorted))
         result.addAll(findFirstN(15, Operator.bus(), sorted))
         result.addAll(findFirstN(5, Operator.tram(), sorted))
-        val isComplete = aircoachStops.isNotEmpty() && dartStations.isNotEmpty() && dublinBikesDocks.isNotEmpty() &&
-                dublinBusStops.isNotEmpty() && luasStops.isNotEmpty() && swordsExpressStops.isNotEmpty()
+        val isComplete = aircoachStops.isNotEmpty() && busEireannStops.isNotEmpty() && dartStations.isNotEmpty() &&
+                dublinBikesDocks.isNotEmpty() && dublinBusStops.isNotEmpty() && luasStops.isNotEmpty() &&
+                swordsExpressStops.isNotEmpty()
         return Response(result, isComplete)
     }
 
