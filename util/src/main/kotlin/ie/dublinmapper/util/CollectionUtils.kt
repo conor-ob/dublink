@@ -12,6 +12,19 @@ object CollectionUtils {
         return !isNullOrEmpty(collection)
     }
 
+    fun <T> headList(list: List<T>, limit: Int): List<T> {
+        var count = 0
+        val headList = mutableListOf<T>()
+        for (element in list) {
+            if (count >= limit) {
+                break
+            }
+            headList.add(element)
+            count++
+        }
+        return headList
+    }
+
     fun <K, V> headMap(map: SortedMap<K, V>, limit: Int): SortedMap<K, V> {
         var count = 0
         val headMap = TreeMap<K, V>()

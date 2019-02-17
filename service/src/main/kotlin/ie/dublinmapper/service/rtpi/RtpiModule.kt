@@ -22,7 +22,7 @@ class RtpiModule {
         callAdapterFactory: CallAdapter.Factory
     ): RtpiApi {
         return Retrofit.Builder()
-            .baseUrl(stringProvider.rtpibaseUrl())
+            .baseUrl(stringProvider.rtpiBaseUrl())
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)

@@ -4,14 +4,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import ie.dublinmapper.R
-import java.lang.NullPointerException
 
 class AndroidResourceStringProvider(
     private val context: Context,
     private val resources: Resources
 ) : StringProvider {
 
-    override fun jcdecauxBaseUrl(): String {
+    override fun jcDecauxBaseUrl(): String {
         return resources.getString(R.string.jcdecaux_base_url)
     }
 
@@ -35,19 +34,23 @@ class AndroidResourceStringProvider(
         }
     }
 
-    override fun rtpibaseUrl(): String {
+    override fun rtpiBaseUrl(): String {
         return resources.getString(R.string.rtpi_base_url)
     }
 
-    override fun rtpiOperatoreLuas(): String {
+    override fun rtpiOperatorLuas(): String {
         return resources.getString(R.string.rtpi_operator_luas)
     }
 
-    override fun rtpiOperatoreDublinBus(): String {
+    override fun rtpiOperatorBusEireann(): String {
+        return resources.getString(R.string.rtpi_operator_bus_eireann)
+    }
+
+    override fun rtpiOperatorDublinBus(): String {
         return resources.getString(R.string.rtpi_operator_dublin_bus)
     }
 
-    override fun rtpiOperatoreGoAhead(): String {
+    override fun rtpiOperatorGoAhead(): String {
         return resources.getString(R.string.rtpi_operator_go_ahead)
     }
 
@@ -65,6 +68,18 @@ class AndroidResourceStringProvider(
 
     override fun dublinBusBaseUrl(): String {
         return resources.getString(R.string.dublin_bus_api_base_url)
+    }
+
+    override fun swordsExpressBaseUrl(): String {
+        return resources.getString(R.string.swords_express_api_base_url)
+    }
+
+    override fun githubBaseUrl(): String {
+        return resources.getString(R.string.github_base_url)
+    }
+
+    override fun aircoachBaseUrl(): String {
+        return resources.getString(R.string.aircoach_base_url)
     }
 
 }

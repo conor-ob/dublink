@@ -29,7 +29,7 @@ class SearchPresenterImpl @Inject constructor(
         subscriptions().add(useCase.search(query)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
-            .doOnSubscribe {  }
+            .map { SearchMapper.map(it) }
             .doOnNext { ifViewAttached { view -> view.showSearchResults(it) } }
             .doOnError { Timber.e(it) }
             .subscribe()

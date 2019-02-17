@@ -20,8 +20,8 @@ android {
         applicationId "ie.dublinmapper"
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
-        versionCode 100000
-        versionName "1.0.0-SNAPSHOT"
+        versionCode buildConfig.version.code
+        versionName buildConfig.version.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
                                  jcDecauxApiKey: "$jcDecauxApiKey" ]
@@ -60,9 +60,16 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        prod.java.srcDirs += 'src/prod/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         mock.java.srcDirs += 'src/mock/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
+    // Enables view caching in viewholders.
+    // See: https://github.com/Kotlin/KEEP/blob/master/proposals/android-extensions-entity-caching.md
+    androidExtensions {
+        experimental = true
     }
 
 }
@@ -99,6 +106,9 @@ dependencies {
 
     implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
 
+    implementation "com.xwray:groupie:${versions.groupie}"
+    implementation "com.xwray:groupie-kotlin-android-extensions:${versions.groupie}"
+
     // Navigation
 //    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-alpha07"
 //    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07"
@@ -111,6 +121,10 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+
+    implementation "com.nytimes.android:store3:${versions.store3}"
+
+    testImplementation project(path: ':service', configuration: 'testOutput')
 
     testImplementation "junit:junit:${testVersions.junit}"
     androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"

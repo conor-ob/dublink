@@ -4,7 +4,7 @@ import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import ie.dublinmapper.di.ApplicationComponent
 import ie.dublinmapper.di.ApplicationModule
-import ie.dublinmapper.di.DaggerApplicationComponent
+import ie.dublinmapper.di.DaggerBuildVariantApplicationComponent
 import timber.log.Timber
 
 class DublinMapperApplication : Application() {
@@ -20,7 +20,7 @@ class DublinMapperApplication : Application() {
     }
 
     private fun setupDagger() {
-        applicationComponent = DaggerApplicationComponent.builder()
+        applicationComponent = DaggerBuildVariantApplicationComponent.builder()
             .applicationModule(ApplicationModule(this))
             .build()
     }

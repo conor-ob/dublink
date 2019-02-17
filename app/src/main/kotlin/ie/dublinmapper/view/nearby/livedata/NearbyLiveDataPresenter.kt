@@ -9,6 +9,6 @@ interface NearbyLiveDataPresenter : MvpPresenter<NearbyLiveDataView> {
 
     fun onViewDetached()
 
-    fun onFocusedOnServiceLocation(serviceLocation: ServiceLocationUi)
+    fun onLiveDataRequested(serviceLocation: ServiceLocationUi?)
 
 }

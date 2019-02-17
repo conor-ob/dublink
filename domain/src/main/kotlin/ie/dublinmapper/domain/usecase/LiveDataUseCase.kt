@@ -7,18 +7,22 @@ import java.util.*
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
-    private val dartLiveDataRepository: Repository<LiveData.Dart>,
-    private val dublinBikesLiveDataRepository: Repository<LiveData.DublinBikes>,
-    private val dublinBusLiveDataRepository: Repository<LiveData.DublinBus>,
-    private val luasLiveDataRepository: Repository<LiveData.Luas>
+    private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
+    private val dartLiveDataRepository: Repository<DartLiveData>,
+    private val dublinBikesLiveDataRepository: Repository<DublinBikesLiveData>,
+    private val dublinBusLiveDataRepository: Repository<DublinBusLiveData>,
+    private val luasLiveDataRepository: Repository<LuasLiveData>
 ) {
 
     fun getLiveData(serviceLocation: ServiceLocation): Observable<List<LiveData>> {
         return when (serviceLocation) {
+            is AircoachStop -> aircoachLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
+            is BusEireannStop -> return Observable.just(emptyList())
             is DartStation -> dartLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is DublinBikesDock -> dublinBikesLiveDataRepository.getById(serviceLocation.id).map { Collections.singletonList(it) as List<LiveData> }
             is DublinBusStop -> dublinBusLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is LuasStop -> luasLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
+            is SwordsExpressStop -> return Observable.just(emptyList())
         }
     }
 
@@ -37,20 +41,26 @@ class LiveDataUseCase @Inject constructor(
                 condensedLiveData[data.customHash] = data
             } else {
                 when (cachedLiveData) {
-                    is LiveData.Dart -> {
-                        val dartLiveData = data as LiveData.Dart
+                    is AircoachLiveData -> {
+                        val aircoachLiveData = data as AircoachLiveData
+                        val dueTimes = cachedLiveData.dueTime.toMutableList()
+                        dueTimes.add(aircoachLiveData.dueTime[0])
+                        cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
+                    }
+                    is DartLiveData -> {
+                        val dartLiveData = data as DartLiveData
                         val dueTimes = cachedLiveData.dueTime.toMutableList()
                         dueTimes.add(dartLiveData.dueTime[0])
                         cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
                     }
-                    is LiveData.DublinBus -> {
-                        val dublinBusLiveData = data as LiveData.DublinBus
+                    is DublinBusLiveData -> {
+                        val dublinBusLiveData = data as DublinBusLiveData
                         val dueTimes = cachedLiveData.dueTime.toMutableList()
                         dueTimes.add(dublinBusLiveData.dueTime[0])
                         cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
                     }
-                    is LiveData.Luas -> {
-                        val luasLiveData = data as LiveData.Luas
+                    is LuasLiveData -> {
+                        val luasLiveData = data as LuasLiveData
                         val dueTimes = cachedLiveData.dueTime.toMutableList()
                         dueTimes.add(luasLiveData.dueTime[0])
                         cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
@@ -59,7 +69,7 @@ class LiveDataUseCase @Inject constructor(
                 condensedLiveData[data.customHash] = cachedLiveData
             }
         }
-        return condensedLiveData.values.toList()
+        return condensedLiveData.values.toList().take(3)
     }
 
 }

@@ -22,7 +22,7 @@ class JcDecauxModule {
         callAdapterFactory: CallAdapter.Factory
     ): JcDecauxApi {
         return Retrofit.Builder()
-            .baseUrl(stringProvider.jcdecauxBaseUrl())
+            .baseUrl(stringProvider.jcDecauxBaseUrl())
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)
