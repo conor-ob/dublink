@@ -152,6 +152,19 @@ class GoogleMapController(
             val icons = mutableMapOf<EnumSet<Operator>, TreeMap<Float, IconOptions>>()
             val aircoachIcons = TreeMap<Float, IconOptions>()
             aircoachIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_aircoach_dot),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
+            )
+            aircoachIcons[15.4f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_aircoach),
                 iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
@@ -166,6 +179,19 @@ class GoogleMapController(
             )
             val busEireannIcons = TreeMap<Float, IconOptions>()
             busEireannIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_buseireann_dot),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
+            )
+            busEireannIcons[15.0f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_bus_eireann),
                 iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
@@ -207,10 +233,10 @@ class GoogleMapController(
             )
             val dublinBikesIcons = TreeMap<Float, IconOptions>()
             dublinBikesIcons[0.0f] = IconOptions(
-                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes),
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbikes_dot),
                 iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
-                iconVisibility = false,
+                iconVisibility = true,
                 textIconVisibility = false,
                 textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
                     GoogleMapIconRenderers.defaultText(
@@ -234,7 +260,8 @@ class GoogleMapController(
             )
             val dublinBusIcons = TreeMap<Float, IconOptions>()
             dublinBusIcons[0.0f] = IconOptions(
-                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_x),
+//                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_x),
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_dublinbus_dot),
                 iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
                 iconVisibility = true,
@@ -301,6 +328,19 @@ class GoogleMapController(
             )
             val swordsExpressIcons = TreeMap<Float, IconOptions>()
             swordsExpressIcons[0.0f] = IconOptions(
+                icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_swordsexpress_dot),
+                iconAnchor = Pair(0.5f, 0.5f),
+                textIconAnchor = Pair(0.5f, -0.7f),
+                iconVisibility = true,
+                textIconVisibility = false,
+                textIconRenderer = { context: Context, serviceLocation: ServiceLocationUi ->
+                    GoogleMapIconRenderers.defaultText(
+                        context,
+                        serviceLocation
+                    )
+                }
+            )
+            swordsExpressIcons[15.4f] = IconOptions(
                 icon = ImageUtils.drawableToBitmap(context, R.drawable.ic_map_marker_swords_express),
                 iconAnchor = Pair(0.5f, 0.5f),
                 textIconAnchor = Pair(0.5f, -0.7f),
