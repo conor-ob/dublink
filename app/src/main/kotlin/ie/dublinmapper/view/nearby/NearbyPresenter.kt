@@ -9,6 +9,10 @@ interface NearbyPresenter : MvpPresenter<NearbyView> {
 
     fun onViewDetached()
 
+    fun onViewDestroyed()
+
+    fun onMapReady()
+
     fun onCameraMoved(coordinate: Coordinate)
 
 }

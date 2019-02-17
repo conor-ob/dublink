@@ -6,42 +6,53 @@ import java.util.*
 
 sealed class LiveData(
     open val customHash: Int = 0
-) {
+)
 
-    data class Dart(
-        val dueTime: List<DueTime>,
-        val operator: Operator,
-        val destination: String,
-        val direction: String
-    ) : LiveData(
-        Objects.hash(operator, destination, direction)
-    )
+data class AircoachLiveData(
+    val dueTime: List<DueTime>,
+    val operator: Operator,
+    val route: String,
+    val destination: String
+) : LiveData(
+    Objects.hash(operator, route, destination)
+)
 
-    data class DublinBikes(
-        val bikes: Int,
-        val docks: Int,
-        val operator: Operator
-    ) : LiveData()
+data class DartLiveData(
+    val dueTime: List<DueTime>,
+    val operator: Operator,
+    val destination: String,
+    val direction: String
+) : LiveData(
+    Objects.hash(operator, destination, direction)
+)
 
-    data class DublinBus(
-        val dueTime: List<DueTime>,
-        val operator: Operator,
-        val route: String,
-        val destination: String
-    ) : LiveData(
-        Objects.hash(operator, route, destination)
-    )
+data class DublinBikesLiveData(
+    val bikes: Int,
+    val docks: Int,
+    val operator: Operator
+) : LiveData()
 
-    data class Luas(
-        val dueTime: List<DueTime>,
-        val operator: Operator,
-        val route: String,
-        val destination: String
-    ) : LiveData(
-        Objects.hash(operator, route, destination)
-    )
+data class DublinBusLiveData(
+    val dueTime: List<DueTime>,
+    val operator: Operator,
+    val route: String,
+    val destination: String
+) : LiveData(
+    Objects.hash(operator, route, destination)
+)
 
-}
+data class LuasLiveData(
+    val dueTime: List<DueTime>,
+    val operator: Operator,
+    val route: String,
+    val destination: String
+) : LiveData(
+    Objects.hash(operator, route, destination)
+)
+
+data class SwordsExpressLiveData(
+    val placeHolder: Any
+)
 
 data class DueTime(
     val minutes: Long,

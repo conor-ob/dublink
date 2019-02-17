@@ -1,14 +1,14 @@
 package ie.dublinmapper.repository.dublinbikes
 
-import ie.dublinmapper.domain.model.LiveData
+import ie.dublinmapper.domain.model.DublinBikesLiveData
 import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.jcdecaux.StationJson
 import ie.dublinmapper.util.Operator
 
-object DublinBikesLiveDataMapper : Mapper<StationJson, LiveData.DublinBikes> {
+object DublinBikesLiveDataMapper : Mapper<StationJson, DublinBikesLiveData> {
 
-    override fun map(from: StationJson): LiveData.DublinBikes {
-        return LiveData.DublinBikes(
+    override fun map(from: StationJson): DublinBikesLiveData {
+        return DublinBikesLiveData(
             from.availableBikes,
             from.availableBikeStands,
             Operator.DUBLIN_BIKES

@@ -10,8 +10,10 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:${versions.converter_gson}"
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.okhttp3:logging-interceptor:${versions.logging_interceptor}"
+    implementation "io.apisense:rhino-android:${versions.rhino}"
     implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
+    implementation "org.jsoup:jsoup:${versions.jsoup}"
 //    implementation "org.slf4j:slf4j-api:${versions.slf4j_api}"
 //    implementation "com.google.code.gson:gson:${versions.gson}"
     implementation("com.squareup.retrofit2:converter-simplexml:${versions.converter_simplexml}") {
@@ -25,4 +27,18 @@ dependencies {
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
     test.java.srcDirs += 'src/test/kotlin'
+}
+
+// https://softnoise.wordpress.com/2014/09/07/gradle-sub-project-test-dependencies-in-multi-project-builds/
+configurations {
+    testOutput.extendsFrom (testCompile)
+}
+
+task jarTest (type: Jar, dependsOn: testClasses) {
+    from sourceSets.test.output
+    classifier = 'test'
+}
+
+artifacts {
+    testOutput jarTest
 }

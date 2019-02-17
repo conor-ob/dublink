@@ -11,6 +11,20 @@ sealed class ServiceLocation(
     open val operators: EnumSet<Operator>
 )
 
+data class AircoachStop(
+    override val id: String,
+    override val name: String,
+    override val coordinate: Coordinate,
+    override val operators: EnumSet<Operator>
+) : ServiceLocation(id, name, coordinate, operators)
+
+data class BusEireannStop(
+    override val id: String,
+    override val name: String,
+    override val coordinate: Coordinate,
+    override val operators: EnumSet<Operator>
+) : ServiceLocation(id, name, coordinate, operators)
+
 data class DartStation(
     override val id: String,
     override val name: String,
@@ -38,5 +52,14 @@ data class LuasStop(
     override val id: String,
     override val name: String,
     override val coordinate: Coordinate,
-    override val operators: EnumSet<Operator> = Operator.luas()
+    override val operators: EnumSet<Operator>,
+    val routes: Map<Operator, Set<String>>
 ) : ServiceLocation(id, name, coordinate, operators)
+
+data class SwordsExpressStop(
+    override val id: String,
+    override val name: String,
+    override val coordinate: Coordinate,
+    override val operators: EnumSet<Operator> = Operator.swordsExpress(),
+    val direction: String
+) : ServiceLocation(id,name, coordinate, operators)

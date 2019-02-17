@@ -8,7 +8,7 @@ import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.util.AndroidResourceStringProvider
 import ie.dublinmapper.util.StringProvider
 import ie.dublinmapper.util.Thread
-import ie.dublinmapper.view.nearby.GoogleMapController
+import ie.dublinmapper.view.nearby.map.GoogleMapController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -30,7 +30,8 @@ class ApplicationModule(
     ): StringProvider = AndroidResourceStringProvider(context, resources)
 
     @Provides
-    fun mapMarkerManager(context: Context): GoogleMapController = GoogleMapController(context)
+    fun mapMarkerManager(context: Context): GoogleMapController =
+        GoogleMapController(context)
 
     @Provides
     fun schedulers(): Thread {

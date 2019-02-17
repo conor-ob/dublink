@@ -1,9 +1,19 @@
 package ie.dublinmapper.model
 
+import com.xwray.groupie.kotlinandroidextensions.Item
+import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
+import ie.dublinmapper.model.aircoach.AircoachStopItem
+import ie.dublinmapper.model.buseireann.BusEireannStopItem
+import ie.dublinmapper.model.dart.DartStationItem
+import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
+import ie.dublinmapper.model.dublinbus.DublinBusStopItem
+import ie.dublinmapper.model.luas.LuasStopItem
+import ie.dublinmapper.model.swordsexpress.SwordsExpressStopItem
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
+import kotlinx.android.synthetic.main.list_item_service_location_dart.*
 import java.util.*
 
 sealed class ServiceLocationUi(
@@ -16,50 +26,91 @@ sealed class ServiceLocationUi(
     val operators: EnumSet<Operator> = serviceLocation.operators
 ) {
 
-    override fun equals(other: Any?): Boolean {
-        if (other == null) {
-            return false
-        }
-        if (other is ServiceLocationUi) {
-            return serviceLocation == other.serviceLocation
-        }
-        return false
-    }
+    abstract fun toItem(): Item
 
-    override fun hashCode(): Int {
-        return Objects.hashCode(serviceLocation)
-    }
+//    override fun equals(other: Any?): Boolean {
+//        if (other == null) {
+//            return false
+//        }
+//        if (other is ServiceLocationUi) {
+//            return serviceLocation == other.serviceLocation
+//        }
+//        return false
+//    }
+//
+//    override fun hashCode(): Int {
+//        return Objects.hashCode(serviceLocation)
+//    }
 
-    class Dart(
-        dartStation: DartStation
-    ) : ServiceLocationUi(
-        dartStation,
-        dartStation.name,
-        R.color.dartGreen
-    )
+}
 
-    class DublinBikes(
-        dublinBikesDock: DublinBikesDock
-    ) : ServiceLocationUi(
-        dublinBikesDock,
-        dublinBikesDock.availableBikes.toString(),
-        R.color.dublinBikesTeal
-    )
+data class AircoachStopUi(
+    val aircoachStop: AircoachStop
+) : ServiceLocationUi(
+    aircoachStop,
+    aircoachStop.name,
+    R.color.dublinBusBlue
+) {
+    override fun toItem() = AircoachStopItem(aircoachStop)
+}
 
-    class DublinBus(
-        dublinBusStop: DublinBusStop
-    ) : ServiceLocationUi(
-        dublinBusStop,
-        dublinBusStop.id,
-        R.color.commuterBlue
-    )
+data class BusEireannStopUi(
+    val busEireannStop: BusEireannStop
+) : ServiceLocationUi(
+    busEireannStop,
+    busEireannStop.name,
+    R.color.dublinBusBlue
+) {
+    override fun toItem() = BusEireannStopItem(busEireannStop)
+}
 
-    class Luas(
-        luasStop: LuasStop
-    ) : ServiceLocationUi(
-        luasStop,
-        luasStop.name,
-        R.color.luasPurple
-    )
+data class DartStationUi(
+    val dartStation: DartStation
+) : ServiceLocationUi(
+    dartStation,
+    dartStation.name,
+    R.color.dartGreen
+) {
+    override fun toItem() = DartStationItem(dartStation)
+}
 
+data class DublinBikesDockUi(
+    val dublinBikesDock: DublinBikesDock
+) : ServiceLocationUi(
+    dublinBikesDock,
+    dublinBikesDock.availableBikes.toString(),
+    R.color.dublinBikesTeal
+) {
+    override fun toItem() = DublinBikesDockItem(dublinBikesDock)
+}
+
+
+data class DublinBusStopUi(
+    val dublinBusStop: DublinBusStop
+) : ServiceLocationUi(
+    dublinBusStop,
+    dublinBusStop.id,
+    R.color.commuterBlue
+) {
+    override fun toItem() = DublinBusStopItem(dublinBusStop)
+}
+
+data class LuasStopUi(
+    val luasStop: LuasStop
+) : ServiceLocationUi(
+    luasStop,
+    luasStop.name,
+    R.color.luasPurple
+) {
+    override fun toItem() = LuasStopItem(luasStop)
+}
+
+data class SwordsExpressStopUi(
+    val swordsExpressStop: SwordsExpressStop
+) : ServiceLocationUi(
+    swordsExpressStop,
+    swordsExpressStop.name,
+    R.color.luasGreen
+) {
+    override fun toItem() = SwordsExpressStopItem(swordsExpressStop)
 }

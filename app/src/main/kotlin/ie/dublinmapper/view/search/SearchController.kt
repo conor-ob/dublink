@@ -14,22 +14,25 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.MvpBaseController
 import ie.dublinmapper.R
-import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.*
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.view_search.view.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class SearchController(
-    args: Bundle
-) : MvpBaseController<SearchView, SearchPresenter>(args), SearchView {
+class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPresenter>(args), SearchView {
 
     private lateinit var searchQueryView: EditText
+    private lateinit var adapter: GroupAdapter<ViewHolder>
 
     override val layoutId = R.layout.view_search
 
@@ -55,7 +58,8 @@ class SearchController(
         if (changeType == ControllerChangeType.POP_EXIT) {
             hideKeyboard(searchQueryView)
 
-            val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.grey_400), getColour(R.color.primary_dark))
+            val colorAnimation =
+                ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.grey_400), getColour(R.color.primary_dark))
             colorAnimation.duration = 600L
             colorAnimation.start()
 
@@ -85,7 +89,8 @@ class SearchController(
         super.onChangeEnded(changeHandler, changeType)
         if (changeType == ControllerChangeType.PUSH_ENTER) {
             searchQueryView.requestFocus()
-            val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.primary_dark), getColour(R.color.grey_400))
+            val colorAnimation =
+                ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.primary_dark), getColour(R.color.grey_400))
             colorAnimation.duration = 500L
             colorAnimation.start()
 
@@ -127,6 +132,11 @@ class SearchController(
             }
         }
         val clearSearch: ImageView = view.findViewById(R.id.clear_search)
+        adapter = GroupAdapter()
+        view.search_results.adapter = adapter
+        view.search_results.setHasFixedSize(true)
+        val layoutManager = LinearLayoutManager(requireContext())
+        view.search_results.layoutManager = layoutManager
 
         val subscription = Observable.create<String> { subscriber ->
 
@@ -137,9 +147,9 @@ class SearchController(
                     subscriber.onNext(s.toString())
                 }
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-                override fun afterTextChanged(s: Editable?) { }
+                override fun afterTextChanged(s: Editable?) {}
 
             })
         }
@@ -158,7 +168,9 @@ class SearchController(
         clearSearch.setOnClickListener { searchQueryView.setText("") }
     }
 
-    override fun showSearchResults(searchResults: List<ServiceLocation>) {
+    override fun showSearchResults(searchResults: List<ServiceLocationUi>) {
+        adapter.clear()
+        adapter.addAll(searchResults.map { it.toItem() })
         for (result in searchResults) {
             Timber.d(result.toString())
         }

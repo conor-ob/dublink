@@ -4,7 +4,7 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.model.DublinBikesDock
-import ie.dublinmapper.domain.model.LiveData
+import ie.dublinmapper.domain.model.DublinBikesLiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.jcdecaux.JcDecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
@@ -25,7 +25,7 @@ class DublinBikesRepositoryModule {
             .fetcher(fetcher)
             .parser { docks -> DublinBikesDockMapper.map(docks) }
             .open()
-        return DublinBikeDockRepository(store)
+        return DublinBikesDockRepository(store)
     }
 
     @Provides
@@ -33,9 +33,9 @@ class DublinBikesRepositoryModule {
     fun dublinBikesRealTimeDataRepository(
         api: JcDecauxApi,
         stringProvider: StringProvider
-    ): Repository<LiveData.DublinBikes> {
+    ): Repository<DublinBikesLiveData> {
         val fetcher = DublinBikesLiveDataFetcher(api, stringProvider.jcDecauxApiKey(), stringProvider.jcDecauxContract())
-        val store = StoreBuilder.parsedWithKey<String, StationJson, LiveData.DublinBikes>()
+        val store = StoreBuilder.parsedWithKey<String, StationJson, DublinBikesLiveData>()
             .fetcher(fetcher)
             .parser { liveData -> DublinBikesLiveDataMapper.map(liveData) }
             .open()

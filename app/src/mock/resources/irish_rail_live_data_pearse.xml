@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfObjStationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://api.irishrail.ie/realtime/">
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>E923 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Greystones</Origin>
+        <Destination>Howth</Destination>
+        <Origintime>21:20</Origintime>
+        <Destinationtime>22:37</Destinationtime>
+        <Status>En Route</Status>
+        <Lastlocation>Departed Lansdowne Road</Lastlocation>
+        <Duein>4</Duein>
+        <Late>2</Late>
+        <Exparrival>22:09</Exparrival>
+        <Expdepart>22:10</Expdepart>
+        <Scharrival>22:07</Scharrival>
+        <Schdepart>22:08</Schdepart>
+        <Direction>Northbound</Direction>
+        <Traintype>DART</Traintype>
+        <Locationtype>S</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>E813 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Bray</Origin>
+        <Destination>Malahide</Destination>
+        <Origintime>22:00</Origintime>
+        <Destinationtime>23:07</Destinationtime>
+        <Status>En Route</Status>
+        <Lastlocation>Departed Shankill</Lastlocation>
+        <Duein>33</Duein>
+        <Late>1</Late>
+        <Exparrival>22:38</Exparrival>
+        <Expdepart>22:39</Expdepart>
+        <Scharrival>22:37</Scharrival>
+        <Schdepart>22:38</Schdepart>
+        <Direction>Northbound</Direction>
+        <Traintype>DART</Traintype>
+        <Locationtype>S</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>E924 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Greystones</Origin>
+        <Destination>Howth</Destination>
+        <Origintime>22:15</Origintime>
+        <Destinationtime>23:31</Destinationtime>
+        <Status>No Information</Status>
+        <Lastlocation />
+        <Duein>57</Duein>
+        <Late>0</Late>
+        <Exparrival>23:02</Exparrival>
+        <Expdepart>23:03</Expdepart>
+        <Scharrival>23:02</Scharrival>
+        <Schdepart>23:03</Schdepart>
+        <Direction>Northbound</Direction>
+        <Traintype>DART</Traintype>
+        <Locationtype>S</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>D824 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Dublin Pearse</Origin>
+        <Destination>Dundalk</Destination>
+        <Origintime>23:35</Origintime>
+        <Destinationtime>01:05</Destinationtime>
+        <Status>No Information</Status>
+        <Lastlocation />
+        <Duein>89</Duein>
+        <Late>0</Late>
+        <Exparrival>00:00</Exparrival>
+        <Expdepart>23:35</Expdepart>
+        <Scharrival>00:00</Scharrival>
+        <Schdepart>23:35</Schdepart>
+        <Direction>Northbound</Direction>
+        <Traintype>ARROW</Traintype>
+        <Locationtype>O</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>E113 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Malahide</Origin>
+        <Destination>Greystones</Destination>
+        <Origintime>21:35</Origintime>
+        <Destinationtime>22:54</Destinationtime>
+        <Status>En Route</Status>
+        <Lastlocation>Departed Tara Street</Lastlocation>
+        <Duein>2</Duein>
+        <Late>2</Late>
+        <Exparrival>22:07</Exparrival>
+        <Expdepart>22:08</Expdepart>
+        <Scharrival>22:05</Scharrival>
+        <Schdepart>22:06</Schdepart>
+        <Direction>Southbound</Direction>
+        <Traintype>DART</Traintype>
+        <Locationtype>S</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>E224 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Howth</Origin>
+        <Destination>Bray</Destination>
+        <Origintime>22:05</Origintime>
+        <Destinationtime>23:12</Destinationtime>
+        <Status>En Route</Status>
+        <Lastlocation>Departed Howth</Lastlocation>
+        <Duein>29</Duein>
+        <Late>1</Late>
+        <Exparrival>22:34</Exparrival>
+        <Expdepart>22:35</Expdepart>
+        <Scharrival>22:33</Scharrival>
+        <Schdepart>22:34</Schdepart>
+        <Direction>Southbound</Direction>
+        <Traintype>DART</Traintype>
+        <Locationtype>S</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>P613 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Drogheda</Origin>
+        <Destination>Dublin Pearse</Destination>
+        <Origintime>21:55</Origintime>
+        <Destinationtime>22:55</Destinationtime>
+        <Status>En Route</Status>
+        <Lastlocation>Departed Mosney</Lastlocation>
+        <Duein>50</Duein>
+        <Late>1</Late>
+        <Exparrival>22:56</Exparrival>
+        <Expdepart>00:00</Expdepart>
+        <Scharrival>22:55</Scharrival>
+        <Schdepart>00:00</Schdepart>
+        <Direction>Southbound</Direction>
+        <Traintype>ARROW</Traintype>
+        <Locationtype>D</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>E114 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Malahide</Origin>
+        <Destination>Greystones</Destination>
+        <Origintime>22:35</Origintime>
+        <Destinationtime>23:54</Destinationtime>
+        <Status>No Information</Status>
+        <Lastlocation />
+        <Duein>60</Duein>
+        <Late>0</Late>
+        <Exparrival>23:05</Exparrival>
+        <Expdepart>23:06</Expdepart>
+        <Scharrival>23:05</Scharrival>
+        <Schdepart>23:06</Schdepart>
+        <Direction>Southbound</Direction>
+        <Traintype>DART</Traintype>
+        <Locationtype>S</Locationtype>
+    </objStationData>
+    <objStationData>
+        <Servertime>2019-01-20T22:06:39.137</Servertime>
+        <Traincode>E225 </Traincode>
+        <Stationfullname>Dublin Pearse</Stationfullname>
+        <Stationcode>PERSE</Stationcode>
+        <Querytime>22:06:39</Querytime>
+        <Traindate>20 Jan 2019</Traindate>
+        <Origin>Howth</Origin>
+        <Destination>Bray</Destination>
+        <Origintime>23:05</Origintime>
+        <Destinationtime>00:12</Destinationtime>
+        <Status>No Information</Status>
+        <Lastlocation />
+        <Duein>88</Duein>
+        <Late>0</Late>
+        <Exparrival>23:33</Exparrival>
+        <Expdepart>23:34</Expdepart>
+        <Scharrival>23:33</Scharrival>
+        <Schdepart>23:34</Schdepart>
+        <Direction>Southbound</Direction>
+        <Traintype>DART</Traintype>
+        <Locationtype>S</Locationtype>
+    </objStationData>
+</ArrayOfObjStationData>

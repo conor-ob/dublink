@@ -3,8 +3,8 @@ package ie.dublinmapper.repository.dublinbus
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.domain.model.DublinBusLiveData
 import ie.dublinmapper.domain.model.DublinBusStop
-import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.dublinbus.DublinBusApi
 import ie.dublinmapper.service.rtpi.RtpiApi
@@ -25,8 +25,8 @@ class DublinBusRepositoryModule {
         stringProvider: StringProvider,
         thread: Thread
     ): Repository<DublinBusStop> {
-        val fetcher = DublinBusStopFetcher(dublinBusApi, rtpiApi, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat(), thread)
-        val store = StoreBuilder.parsedWithKey<String, List<AggregatedStop>, List<DublinBusStop>>()
+        val fetcher = DublinBusStopFetcher(dublinBusApi, rtpiApi, stringProvider.rtpiOperatorDublinBus(), stringProvider.rtpiOperatorGoAhead(), stringProvider.rtpiFormat(), thread)
+        val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<DublinBusStop>>()
             .fetcher(fetcher)
             .parser { stops -> DublinBusStopMapper.map(stops) }
             .open()
@@ -35,13 +35,13 @@ class DublinBusRepositoryModule {
 
     @Provides
     @Singleton
-    fun dublinBusRealTimeDataRepository(
+    fun dublinBusLiveDataRepository(
         dublinBusApi: DublinBusApi,
         api: RtpiApi,
         stringProvider: StringProvider
-    ): Repository<LiveData.DublinBus> {
-        val fetcher = DublinLiveDataFetcher(dublinBusApi, api, stringProvider.rtpiOperatoreDublinBus(), stringProvider.rtpiOperatoreGoAhead(), stringProvider.rtpiFormat())
-        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LiveData.DublinBus>>()
+    ): Repository<DublinBusLiveData> {
+        val fetcher = DublinBusLiveDataFetcher(dublinBusApi, api, stringProvider.rtpiOperatorDublinBus(), stringProvider.rtpiOperatorGoAhead(), stringProvider.rtpiFormat())
+        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<DublinBusLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> DublinBusLiveDataMapper.map(liveData) }
             .open()

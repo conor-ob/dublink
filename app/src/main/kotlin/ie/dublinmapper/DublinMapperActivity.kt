@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import ie.dublinmapper.view.nearby.NearbyController
+import ie.dublinmapper.view.nearby.HomeController
 import kotlinx.android.synthetic.main.activity_root.*
 
 class DublinMapperActivity : AppCompatActivity() {
@@ -19,9 +19,9 @@ class DublinMapperActivity : AppCompatActivity() {
     }
 
     private fun setupRouter(savedInstanceState: Bundle?) {
-        router = Conductor.attachRouter(this, root, savedInstanceState)
+        router = Conductor.attachRouter(this, activity_root, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(NearbyController(Bundle.EMPTY)))
+            router.setRoot(RouterTransaction.with(HomeController(Bundle.EMPTY)))
         }
     }
 

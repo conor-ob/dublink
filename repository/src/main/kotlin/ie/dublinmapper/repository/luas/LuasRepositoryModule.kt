@@ -3,7 +3,7 @@ package ie.dublinmapper.repository.luas
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.domain.model.LiveData
+import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.service.rtpi.RtpiApi
@@ -21,7 +21,7 @@ class LuasRepositoryModule {
         api: RtpiApi,
         stringProvider: StringProvider
     ): Repository<LuasStop> {
-        val fetcher = LuasStopFetcher(api, stringProvider.rtpiOperatoreLuas(), stringProvider.rtpiFormat())
+        val fetcher = LuasStopFetcher(api, stringProvider.rtpiOperatorLuas(), stringProvider.rtpiFormat())
         val store = StoreBuilder.parsedWithKey<String, List<RtpiBusStopInformationJson>, List<LuasStop>>()
             .fetcher(fetcher)
             .parser { stops -> LuasStopMapper.map(stops) }
@@ -34,9 +34,9 @@ class LuasRepositoryModule {
     fun luasRealTimeDataRepository(
         api: RtpiApi,
         stringProvider: StringProvider
-    ): Repository<LiveData.Luas> {
-        val fetcher = LuasLiveDataFetcher(api, stringProvider.rtpiOperatoreLuas(), stringProvider.rtpiFormat())
-        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LiveData.Luas>>()
+    ): Repository<LuasLiveData> {
+        val fetcher = LuasLiveDataFetcher(api, stringProvider.rtpiOperatorLuas(), stringProvider.rtpiFormat())
+        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LuasLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> LuasLiveDataMapper.map(liveData) }
             .open()
