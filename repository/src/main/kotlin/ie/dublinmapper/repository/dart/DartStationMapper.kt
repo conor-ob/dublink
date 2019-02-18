@@ -21,7 +21,12 @@ object DartStationMapper : Mapper<IrishRailStationXml, DartStation> {
 
     private fun mapOperators(stationCode: String): EnumSet<Operator> {
         return when (stationCode.toUpperCase()) {
-            "CNLLY" -> EnumSet.of(Operator.COMMUTER, Operator.DART, Operator.INTERCITY)
+            "BRAY",
+            "CNLLY",
+            "DLERY",
+            "GSTNS",
+            "MHIDE",
+            "PERSE" -> EnumSet.of(Operator.COMMUTER, Operator.DART, Operator.INTERCITY)
             "BROCK",
             "GCDK",
             "LDWNE" -> EnumSet.of(Operator.COMMUTER, Operator.DART)

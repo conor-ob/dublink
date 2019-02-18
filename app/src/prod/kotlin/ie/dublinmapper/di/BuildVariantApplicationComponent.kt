@@ -36,6 +36,7 @@ import javax.inject.Singleton
         JcDecauxModule::class,
         RtpiModule::class,
         SwordsExpressModule::class,
+        DatabaseModule::class,
         ServiceModule::class
     ]
 )

@@ -8,4 +8,8 @@ interface Mapper<in F, out T> {
         return from.map { map(it) }
     }
 
+    fun mapOneToMany(from: F): List<T> {
+        TODO()
+    }
+
 }

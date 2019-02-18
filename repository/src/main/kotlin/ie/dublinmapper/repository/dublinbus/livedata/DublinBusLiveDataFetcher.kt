@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dublinbus
+package ie.dublinmapper.repository.dublinbus.livedata
 
 import com.nytimes.android.external.store3.base.Fetcher
 import ie.dublinmapper.service.dublinbus.DublinBusApi

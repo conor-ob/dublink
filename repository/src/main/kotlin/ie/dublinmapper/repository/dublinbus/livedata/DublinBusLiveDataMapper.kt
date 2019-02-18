@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dublinbus
+package ie.dublinmapper.repository.dublinbus.livedata
 
 import ie.dublinmapper.domain.model.DublinBusLiveData
 import ie.dublinmapper.domain.model.DueTime
