@@ -5,7 +5,7 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="12dp">
+        android:padding="8dp">
 
     <View
             android:id="@+id/divider"
@@ -28,7 +28,7 @@
             android:backgroundTint="#1E9AD0"
             android:backgroundTintMode="src_in"
             android:fontFamily="@font/google_sans_bold"
-            android:textColor="#F07434"
+            android:textColor="@color/white"
             android:textSize="12sp"
             tools:text="702X"
             android:layout_marginTop="12dp"

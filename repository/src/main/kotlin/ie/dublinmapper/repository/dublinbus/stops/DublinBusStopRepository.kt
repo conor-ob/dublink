@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dublinbus
+package ie.dublinmapper.repository.dublinbus.stops
 
 import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.model.DublinBusStop
@@ -8,6 +8,6 @@ class DublinBusStopRepository(
     store: Store<List<DublinBusStop>, String>
 ) : ServiceLocationRepository<DublinBusStop>(store) {
 
-    override fun key() = "dublin_bus_stops"
+    override fun key() = "dublinbus_stops"
 
 }

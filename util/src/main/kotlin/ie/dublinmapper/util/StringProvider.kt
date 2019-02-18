@@ -32,4 +32,6 @@ interface StringProvider {
 
     fun githubBaseUrl(): String
 
+    fun databaseName(): String
+
 }
