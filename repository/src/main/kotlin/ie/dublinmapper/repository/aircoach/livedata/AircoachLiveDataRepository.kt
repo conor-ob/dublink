@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.aircoach
+package ie.dublinmapper.repository.aircoach.livedata
 
 import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.model.AircoachLiveData

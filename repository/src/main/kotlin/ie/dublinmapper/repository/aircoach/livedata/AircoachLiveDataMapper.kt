@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.aircoach
+package ie.dublinmapper.repository.aircoach.livedata
 
 import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.model.DueTime
