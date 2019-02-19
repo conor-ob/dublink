@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.aircoach.AircoachStopCacheResourceImpl
 import ie.dublinmapper.data.TxRunner
+import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
 import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.database.DatabaseTxRunner
@@ -27,6 +29,15 @@ class DatabaseModule {
     @Singleton
     fun txRunner(database: DublinMapperDatabase): TxRunner {
         return DatabaseTxRunner(database)
+    }
+
+    @Provides
+    @Singleton
+    fun aircoachDatabase(database: DublinMapperDatabase, txRunner: TxRunner): AircoachStopCacheResource {
+        val aircoachStopLocationDao = database.aircoachStopLocationDao()
+        val aircoachStopServiceDao = database.aircoachStopServiceDao()
+        val aircoachStopDao = database.aircoachStopDao()
+        return AircoachStopCacheResourceImpl(aircoachStopLocationDao, aircoachStopServiceDao, aircoachStopDao, txRunner)
     }
 
     @Provides
