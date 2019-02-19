@@ -6,13 +6,16 @@ import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.room.RoomPersister
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.persister.PersisterEntity
+import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.TimeUtils
 import io.reactivex.Maybe
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 abstract class AbstractPersister<Raw, Parsed, Key>(
     private val memoryPolicy: MemoryPolicy,
-    private val persisterDao: PersisterDao
+    private val persisterDao: PersisterDao,
+    private val internetManager: InternetManager
 ) : RoomPersister<Raw, Parsed, Key>, RecordProvider<Key> {
 
     private val lifespan: Long by lazy { memoryPolicy.expireAfterTimeUnit.toSeconds(memoryPolicy.expireAfterWrite) }
@@ -41,6 +44,9 @@ abstract class AbstractPersister<Raw, Parsed, Key>(
         }
         val elapsedSeconds = TimeUtils.now().epochSecond - persisterEntity.lastUpdated.epochSecond
         if (elapsedSeconds > lifespan) {
+            return RecordState.STALE
+        }
+        if (elapsedSeconds > TimeUnit.DAYS.toSeconds(1) && internetManager.isConnectedToWiFi()) {
             return RecordState.STALE
         }
         return RecordState.FRESH

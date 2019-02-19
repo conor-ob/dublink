@@ -19,6 +19,7 @@ import ie.dublinmapper.repository.aircoach.stops.AircoachStopRoomRepository
 import ie.dublinmapper.service.aircoach.AircoachResource
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
+import ie.dublinmapper.util.InternetManager
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -41,10 +42,11 @@ class AircoachRepositoryModule {
     fun aircoachStopRepository(
         resource: AircoachResource,
         cacheResource: AircoachStopCacheResource,
-        persisterDao: PersisterDao
+        persisterDao: PersisterDao,
+        internetManager: InternetManager
     ): Repository<AircoachStop> {
         val fetcher = Fetcher<List<AircoachStopJson>, String> { resource.getStops() }
-        val persister = AircoachStopPersister(cacheResource, longTermMemoryPolicy, persisterDao)
+        val persister = AircoachStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return AircoachStopRoomRepository(store)
     }
