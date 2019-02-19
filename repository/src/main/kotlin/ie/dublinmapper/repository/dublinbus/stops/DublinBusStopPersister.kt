@@ -6,13 +6,15 @@ import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.domain.model.DublinBusStop
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
+import ie.dublinmapper.util.InternetManager
 import io.reactivex.Maybe
 
 class DublinBusStopPersister(
     private val cacheResource: DublinBusStopCacheResource,
     memoryPolicy: MemoryPolicy,
-    persisterDao: PersisterDao
-) : AbstractPersister<List<RtpiBusStopInformationJson>, List<DublinBusStop>, String>(memoryPolicy, persisterDao) {
+    persisterDao: PersisterDao,
+    internetManager: InternetManager
+) : AbstractPersister<List<RtpiBusStopInformationJson>, List<DublinBusStop>, String>(memoryPolicy, persisterDao, internetManager) {
 
     override fun select(key: String): Maybe<List<DublinBusStop>> {
         return cacheResource.selectStops().map { DublinBusStopMapper.mapEntitiesToStops(it) }

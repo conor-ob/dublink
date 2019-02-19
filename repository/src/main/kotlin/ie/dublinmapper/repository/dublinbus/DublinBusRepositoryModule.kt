@@ -20,6 +20,7 @@ import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopRoomRepository
 import ie.dublinmapper.service.dublinbus.DublinBusApi
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
+import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
 import ie.dublinmapper.util.Thread
 import java.util.concurrent.TimeUnit
@@ -46,6 +47,7 @@ class DublinBusRepositoryModule {
         rtpiApi: RtpiApi,
         cacheResource: DublinBusStopCacheResource,
         persisterDao: PersisterDao,
+        internetManager: InternetManager,
         stringProvider: StringProvider,
         thread: Thread
     ): Repository<DublinBusStop> {
@@ -57,7 +59,7 @@ class DublinBusRepositoryModule {
             stringProvider.rtpiFormat(),
             thread
         )
-        val persister = DublinBusStopPersister(cacheResource, longTermMemoryPolicy, persisterDao)
+        val persister = DublinBusStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DublinBusStopRoomRepository(store)
     }
