@@ -40,7 +40,7 @@ abstract class AbstractPersister<Raw, Parsed, Key>(
 
     private fun getRecordStateFromTimestamp(persisterEntity: PersisterEntity?): RecordState {
         if (persisterEntity == null) {
-            return RecordState.MISSING
+            return RecordState.STALE
         }
         val elapsedSeconds = TimeUtils.now().epochSecond - persisterEntity.lastUpdated.epochSecond
         if (elapsedSeconds > lifespan) {
