@@ -3,9 +3,10 @@ package ie.dublinmapper.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ie.dublinmapper.data.*
+import ie.dublinmapper.data.Converters
 import ie.dublinmapper.data.aircoach.*
 import ie.dublinmapper.data.buseireann.*
+import ie.dublinmapper.data.dart.*
 import ie.dublinmapper.data.dublinbus.*
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.persister.PersisterEntity
@@ -19,6 +20,8 @@ import ie.dublinmapper.data.test.*
         AircoachStopServiceEntity::class,
         BusEireannStopLocationEntity::class,
         BusEireannStopServiceEntity::class,
+        DartStationLocationEntity::class,
+        DartStationServiceEntity::class,
         DublinBusStopLocationEntity::class,
         DublinBusStopServiceEntity::class,
         LocationEntity::class,
@@ -40,6 +43,12 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun busEireannStopLocationDao(): BusEireannStopLocationDao
 
     abstract fun busEireannStopServiceDao(): BusEireannStopServiceDao
+
+    abstract fun dartStationDao(): DartStationDao
+
+    abstract fun dartStationLocationDao(): DartStationLocationDao
+
+    abstract fun dartStationServiceDao(): DartStationServiceDao
 
     abstract fun dublinBusStopDao(): DublinBusStopDao
 

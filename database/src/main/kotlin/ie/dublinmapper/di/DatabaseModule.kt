@@ -6,9 +6,11 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.aircoach.AircoachStopCacheResourceImpl
 import ie.dublinmapper.buseireann.BusEireannStopCacheResourceImpl
+import ie.dublinmapper.dart.DartStationCacheResourceImpl
 import ie.dublinmapper.data.TxRunner
 import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
 import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
+import ie.dublinmapper.data.dart.DartStationCacheResource
 import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.database.DatabaseTxRunner
@@ -49,6 +51,15 @@ class DatabaseModule {
         val busEireannStopServiceDao = database.busEireannStopServiceDao()
         val busEireannStopDao = database.busEireannStopDao()
         return BusEireannStopCacheResourceImpl(busEireannStopLocationDao, busEireannStopServiceDao, busEireannStopDao, txRunner)
+    }
+
+    @Provides
+    @Singleton
+    fun dartStationCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DartStationCacheResource {
+        val dartStationLocationDao = database.dartStationLocationDao()
+        val dartStationServiceDao = database.dartStationServiceDao()
+        val dartStationDao = database.dartStationDao()
+        return DartStationCacheResourceImpl(dartStationLocationDao, dartStationServiceDao, dartStationDao, txRunner)
     }
 
     @Provides

@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dart
+package ie.dublinmapper.repository.dart.livedata
 
 import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.domain.model.DueTime
@@ -38,7 +38,10 @@ object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
         if (Operator.DART.shortName.equals(trainType, ignoreCase = true)) {
             return Operator.DART
         }
-        return mapOperatorFromTrainCode(trainCode, trainType)
+        return mapOperatorFromTrainCode(
+            trainCode,
+            trainType
+        )
     }
 
     private fun mapOperatorFromTrainCode(trainCode: String, trainType: String): Operator {
@@ -46,7 +49,10 @@ object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
             "E" -> Operator.DART
             "A" -> Operator.INTERCITY
             "D", "P" -> Operator.COMMUTER
-            else -> mapOperatorFromTrainType(trainType, trainCode)
+            else -> mapOperatorFromTrainType(
+                trainType,
+                trainCode
+            )
         }
     }
 

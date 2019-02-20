@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dart
+package ie.dublinmapper.repository.dart.stations
 
 import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.model.DartStation
