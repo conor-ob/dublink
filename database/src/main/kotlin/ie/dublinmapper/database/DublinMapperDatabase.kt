@@ -3,12 +3,13 @@ package ie.dublinmapper.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ie.dublinmapper.data.Converters
+import ie.dublinmapper.data.*
 import ie.dublinmapper.data.aircoach.*
 import ie.dublinmapper.data.buseireann.*
 import ie.dublinmapper.data.dublinbus.*
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.persister.PersisterEntity
+import ie.dublinmapper.data.test.*
 
 @Database(
     version = 1,
@@ -20,6 +21,8 @@ import ie.dublinmapper.data.persister.PersisterEntity
         BusEireannStopServiceEntity::class,
         DublinBusStopLocationEntity::class,
         DublinBusStopServiceEntity::class,
+        LocationEntity::class,
+        ServiceEntity::class,
         PersisterEntity::class
     ]
 )
@@ -43,6 +46,12 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun dublinBusStopLocationDao(): DublinBusStopLocationDao
 
     abstract fun dublinBusStopServiceDao(): DublinBusStopServiceDao
+
+    abstract fun locationDao(): LocationDao
+
+    abstract fun serviceDao(): ServiceDao
+
+    abstract fun serviceLocationDao(): ServiceLocationDao
 
     abstract fun persisterDao(): PersisterDao
 
