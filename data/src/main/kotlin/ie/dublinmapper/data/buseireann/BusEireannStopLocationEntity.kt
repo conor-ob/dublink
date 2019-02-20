@@ -1,11 +1,11 @@
-package ie.dublinmapper.data.dublinbus
+package ie.dublinmapper.data.buseireann
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "dublinbus_stops")
-data class DublinBusStopLocationEntity(
+@Entity(tableName = "buseireann_stops")
+data class BusEireannStopLocationEntity(
     @field:PrimaryKey @field:ColumnInfo(name = "id") val id: String,
     @field:ColumnInfo(name = "name") val name: String,
     @field:ColumnInfo(name = "latitude") val latitude: Double,

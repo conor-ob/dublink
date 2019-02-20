@@ -6,6 +6,6 @@ import androidx.room.Relation
 data class AircoachStopEntity(
     @field:Embedded val location: AircoachStopLocationEntity
 ) {
-    @field:Relation(parentColumn = "id", entityColumn = "id")
+    @field:Relation(parentColumn = "id", entityColumn = "stop_id")
     var services: List<AircoachStopServiceEntity> = emptyList()
 }
