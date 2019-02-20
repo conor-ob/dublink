@@ -5,8 +5,10 @@ import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.aircoach.AircoachStopCacheResourceImpl
+import ie.dublinmapper.buseireann.BusEireannStopCacheResourceImpl
 import ie.dublinmapper.data.TxRunner
 import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
+import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
 import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.database.DatabaseTxRunner
@@ -33,7 +35,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun aircoachDatabase(database: DublinMapperDatabase, txRunner: TxRunner): AircoachStopCacheResource {
+    fun aircoachStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): AircoachStopCacheResource {
         val aircoachStopLocationDao = database.aircoachStopLocationDao()
         val aircoachStopServiceDao = database.aircoachStopServiceDao()
         val aircoachStopDao = database.aircoachStopDao()
@@ -42,7 +44,16 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun dublinBusDatabase(database: DublinMapperDatabase, txRunner: TxRunner): DublinBusStopCacheResource {
+    fun busEireannStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): BusEireannStopCacheResource {
+        val busEireannStopLocationDao = database.busEireannStopLocationDao()
+        val busEireannStopServiceDao = database.busEireannStopServiceDao()
+        val busEireannStopDao = database.busEireannStopDao()
+        return BusEireannStopCacheResourceImpl(busEireannStopLocationDao, busEireannStopServiceDao, busEireannStopDao, txRunner)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBusStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBusStopCacheResource {
         val dublinBusStopLocationDao = database.dublinBusStopLocationDao()
         val dublinBusStopServiceDao = database.dublinBusStopServiceDao()
         val dublinBusStopDao = database.dublinBusStopDao()

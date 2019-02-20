@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ie.dublinmapper.data.Converters
 import ie.dublinmapper.data.aircoach.*
+import ie.dublinmapper.data.buseireann.*
 import ie.dublinmapper.data.dublinbus.*
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.persister.PersisterEntity
@@ -15,6 +16,8 @@ import ie.dublinmapper.data.persister.PersisterEntity
     entities = [
         AircoachStopLocationEntity::class,
         AircoachStopServiceEntity::class,
+        BusEireannStopLocationEntity::class,
+        BusEireannStopServiceEntity::class,
         DublinBusStopLocationEntity::class,
         DublinBusStopServiceEntity::class,
         PersisterEntity::class
@@ -28,6 +31,12 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun aircoachStopLocationDao(): AircoachStopLocationDao
 
     abstract fun aircoachStopServiceDao(): AircoachStopServiceDao
+
+    abstract fun busEireannStopDao(): BusEireannStopDao
+
+    abstract fun busEireannStopLocationDao(): BusEireannStopLocationDao
+
+    abstract fun busEireannStopServiceDao(): BusEireannStopServiceDao
 
     abstract fun dublinBusStopDao(): DublinBusStopDao
 
