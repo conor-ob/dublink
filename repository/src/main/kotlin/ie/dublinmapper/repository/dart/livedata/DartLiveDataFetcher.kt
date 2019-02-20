@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dart
+package ie.dublinmapper.repository.dart.livedata
 
 import com.nytimes.android.external.store3.base.Fetcher
 import ie.dublinmapper.service.irishrail.IrishRailApi
