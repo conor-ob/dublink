@@ -39,7 +39,9 @@ data class DublinBikesDock(
     override val name: String,
     override val coordinate: Coordinate,
     override val operators: EnumSet<Operator> = Operator.dublinBikes(),
-    val availableBikes: Int
+    val docks: Int,
+    val availableBikes: Int,
+    val availableDocks: Int
 ) : ServiceLocation(id, name, coordinate, operators)
 
 data class DublinBusStop(
