@@ -11,11 +11,13 @@ import ie.dublinmapper.data.TxRunner
 import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
 import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
 import ie.dublinmapper.data.dart.DartStationCacheResource
+import ie.dublinmapper.data.dublinbikes.DublinBikesDockCacheResource
 import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
 import ie.dublinmapper.data.luas.LuasStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
+import ie.dublinmapper.dublinbikes.DublinBikesDockCacheResourceImpl
 import ie.dublinmapper.dublinbus.DublinBusStopCacheResourceImpl
 import ie.dublinmapper.luas.LuasStopCacheResourceImpl
 import ie.dublinmapper.util.StringProvider
@@ -62,6 +64,15 @@ class DatabaseModule {
         val dartStationServiceDao = database.dartStationServiceDao()
         val dartStationDao = database.dartStationDao()
         return DartStationCacheResourceImpl(dartStationLocationDao, dartStationServiceDao, dartStationDao, txRunner)
+    }
+
+    @Provides
+    @Singleton
+    fun dublinBikesDockCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBikesDockCacheResource {
+        val dublinBikesDockLocationDao = database.dublinBikesDockLocationDao()
+        val dublinBikesDockServiceDao = database.dublinBikesDockServiceDao()
+        val dublinBikesDockDao = database.dublinBikesDockDao()
+        return DublinBikesDockCacheResourceImpl(dublinBikesDockLocationDao, dublinBikesDockServiceDao, dublinBikesDockDao, txRunner)
     }
 
     @Provides

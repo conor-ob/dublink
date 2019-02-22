@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dublinbikes
+package ie.dublinmapper.repository.dublinbikes.livedata
 
 import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.model.DublinBikesLiveData

@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.dublinbikes
+package ie.dublinmapper.repository.dublinbikes.livedata
 
 import ie.dublinmapper.domain.model.DublinBikesLiveData
 import ie.dublinmapper.domain.repository.Mapper

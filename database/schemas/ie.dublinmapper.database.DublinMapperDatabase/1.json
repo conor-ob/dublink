@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d95d8835af7b20b98d497f2a74f5be5a",
+    "identityHash": "47461860c38644ca11f369a009e3e813",
     "entities": [
       {
         "tableName": "aircoach_stops",
@@ -288,6 +288,115 @@
             "onUpdate": "NO ACTION",
             "columns": [
               "station_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "dublinbikes_docks",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "dublinbikes_dock_services",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dock_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `docks` INTEGER NOT NULL, `available_bikes` INTEGER NOT NULL, `available_docks` INTEGER NOT NULL, FOREIGN KEY(`dock_id`) REFERENCES `dublinbikes_docks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dockId",
+            "columnName": "dock_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operator",
+            "columnName": "operator",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "docks",
+            "columnName": "docks",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "availableBikes",
+            "columnName": "available_bikes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "availableDocks",
+            "columnName": "available_docks",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_dublinbikes_dock_services_dock_id",
+            "unique": false,
+            "columnNames": [
+              "dock_id"
+            ],
+            "createSql": "CREATE  INDEX `index_dublinbikes_dock_services_dock_id` ON `${TABLE_NAME}` (`dock_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "dublinbikes_docks",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "dock_id"
             ],
             "referencedColumns": [
               "id"
@@ -615,7 +724,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d95d8835af7b20b98d497f2a74f5be5a\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"47461860c38644ca11f369a009e3e813\")"
     ]
   }
 }
