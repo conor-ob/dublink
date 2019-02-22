@@ -13,7 +13,7 @@ import ie.dublinmapper.domain.model.DublinBikesLiveData
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockFetcher
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
-import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRoomRepository
+import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataFetcher
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataMapper
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataRepository
@@ -52,7 +52,7 @@ class DublinBikesRepositoryModule {
         )
         val persister = DublinBikesDockPersister(cacheResource, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return DublinBikesDockRoomRepository(store)
+        return DublinBikesDockRepository(store)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
 //            .fetcher(fetcher)
 //            .parser { docks -> DublinBikesDockMapper.map(docks) }

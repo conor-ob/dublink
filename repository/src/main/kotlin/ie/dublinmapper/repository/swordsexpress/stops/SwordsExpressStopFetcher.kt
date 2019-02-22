@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.swordsexpress
+package ie.dublinmapper.repository.swordsexpress.stops
 
 import com.nytimes.android.external.store3.base.Fetcher
 import ie.dublinmapper.service.github.GithubApi

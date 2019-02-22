@@ -15,11 +15,13 @@ import ie.dublinmapper.data.dublinbikes.DublinBikesDockCacheResource
 import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
 import ie.dublinmapper.data.luas.LuasStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.data.swordsexpress.SwordsExpressStopCacheResource
 import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
 import ie.dublinmapper.dublinbikes.DublinBikesDockCacheResourceImpl
 import ie.dublinmapper.dublinbus.DublinBusStopCacheResourceImpl
 import ie.dublinmapper.luas.LuasStopCacheResourceImpl
+import ie.dublinmapper.swordsexpress.SwordsExpressStopCacheResourceImpl
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
@@ -91,6 +93,15 @@ class DatabaseModule {
         val luasStopServiceDao = database.luasStopServiceDao()
         val luasStopDao = database.luasStopDao()
         return LuasStopCacheResourceImpl(luasStopLocationDao, luasStopServiceDao, luasStopDao, txRunner)
+    }
+
+    @Provides
+    @Singleton
+    fun swordsExpressStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): SwordsExpressStopCacheResource {
+        val swordsExpressStopLocationDao = database.swordsExpressStopLocationDao()
+        val swordsExpressStopServiceDao = database.swordsExpressStopServiceDao()
+        val swordsExpressStopDao = database.swordsExpressStopDao()
+        return SwordsExpressStopCacheResourceImpl(swordsExpressStopLocationDao, swordsExpressStopServiceDao, swordsExpressStopDao, txRunner)
     }
 
     @Provides
