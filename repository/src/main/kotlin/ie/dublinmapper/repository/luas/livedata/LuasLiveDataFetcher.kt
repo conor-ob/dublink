@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.luas
+package ie.dublinmapper.repository.luas.livedata
 
 import com.nytimes.android.external.store3.base.Fetcher
 import ie.dublinmapper.service.rtpi.RtpiApi

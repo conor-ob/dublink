@@ -8,6 +8,7 @@ import ie.dublinmapper.data.aircoach.*
 import ie.dublinmapper.data.buseireann.*
 import ie.dublinmapper.data.dart.*
 import ie.dublinmapper.data.dublinbus.*
+import ie.dublinmapper.data.luas.*
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.persister.PersisterEntity
 import ie.dublinmapper.data.test.*
@@ -24,6 +25,8 @@ import ie.dublinmapper.data.test.*
         DartStationServiceEntity::class,
         DublinBusStopLocationEntity::class,
         DublinBusStopServiceEntity::class,
+        LuasStopLocationEntity::class,
+        LuasStopServiceEntity::class,
         LocationEntity::class,
         ServiceEntity::class,
         PersisterEntity::class
@@ -55,6 +58,12 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun dublinBusStopLocationDao(): DublinBusStopLocationDao
 
     abstract fun dublinBusStopServiceDao(): DublinBusStopServiceDao
+
+    abstract fun luasStopDao(): LuasStopDao
+
+    abstract fun luasStopLocationDao(): LuasStopLocationDao
+
+    abstract fun luasStopServiceDao(): LuasStopServiceDao
 
     abstract fun locationDao(): LocationDao
 

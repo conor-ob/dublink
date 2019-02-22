@@ -12,10 +12,12 @@ import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
 import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
 import ie.dublinmapper.data.dart.DartStationCacheResource
 import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
+import ie.dublinmapper.data.luas.LuasStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
 import ie.dublinmapper.dublinbus.DublinBusStopCacheResourceImpl
+import ie.dublinmapper.luas.LuasStopCacheResourceImpl
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
@@ -69,6 +71,15 @@ class DatabaseModule {
         val dublinBusStopServiceDao = database.dublinBusStopServiceDao()
         val dublinBusStopDao = database.dublinBusStopDao()
         return DublinBusStopCacheResourceImpl(dublinBusStopLocationDao, dublinBusStopServiceDao, dublinBusStopDao, txRunner)
+    }
+
+    @Provides
+    @Singleton
+    fun luasStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): LuasStopCacheResource {
+        val luasStopLocationDao = database.luasStopLocationDao()
+        val luasStopServiceDao = database.luasStopServiceDao()
+        val luasStopDao = database.luasStopDao()
+        return LuasStopCacheResourceImpl(luasStopLocationDao, luasStopServiceDao, luasStopDao, txRunner)
     }
 
     @Provides
