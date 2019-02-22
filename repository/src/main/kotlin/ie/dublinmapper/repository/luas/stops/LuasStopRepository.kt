@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.luas
+package ie.dublinmapper.repository.luas.stops
 
 import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.model.LuasStop

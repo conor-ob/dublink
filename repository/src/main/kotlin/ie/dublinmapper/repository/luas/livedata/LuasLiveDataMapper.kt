@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.luas
+package ie.dublinmapper.repository.luas.livedata
 
 import ie.dublinmapper.domain.model.DueTime
 import ie.dublinmapper.domain.model.LuasLiveData
