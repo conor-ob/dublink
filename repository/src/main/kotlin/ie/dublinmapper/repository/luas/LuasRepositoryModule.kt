@@ -16,7 +16,7 @@ import ie.dublinmapper.repository.luas.livedata.LuasLiveDataMapper
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopFetcher
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
-import ie.dublinmapper.repository.luas.stops.LuasStopRoomRepository
+import ie.dublinmapper.repository.luas.stops.LuasStopRepository
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.InternetManager
@@ -54,7 +54,7 @@ class LuasRepositoryModule {
         )
         val persister = LuasStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return LuasStopRoomRepository(store)
+        return LuasStopRepository(store)
     }
 
     @Provides

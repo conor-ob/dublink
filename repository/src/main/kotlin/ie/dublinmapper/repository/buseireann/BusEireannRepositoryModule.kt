@@ -10,7 +10,7 @@ import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.domain.model.BusEireannStop
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.repository.buseireann.stops.BusEireannRoomRepository
+import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
@@ -48,7 +48,7 @@ class BusEireannRepositoryModule {
         }
         val persister = BusEireannStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return BusEireannRoomRepository(store)
+        return BusEireannStopRepository(store)
     }
 
 }

@@ -16,7 +16,7 @@ import ie.dublinmapper.repository.dart.livedata.DartLiveDataMapper
 import ie.dublinmapper.repository.dart.livedata.DartLiveDataRepository
 import ie.dublinmapper.repository.dart.stations.DartStationFetcher
 import ie.dublinmapper.repository.dart.stations.DartStationPersister
-import ie.dublinmapper.repository.dart.stations.DartStationRoomRepository
+import ie.dublinmapper.repository.dart.stations.DartStationRepository
 import ie.dublinmapper.service.irishrail.IrishRailApi
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.util.InternetManager
@@ -53,7 +53,7 @@ class DartRepositoryModule {
         )
         val persister = DartStationPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return DartStationRoomRepository(store)
+        return DartStationRepository(store)
     }
 
     @Provides

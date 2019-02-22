@@ -15,7 +15,7 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataMapper
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
-import ie.dublinmapper.repository.aircoach.stops.AircoachStopRoomRepository
+import ie.dublinmapper.repository.aircoach.stops.AircoachStopRepository
 import ie.dublinmapper.service.aircoach.AircoachResource
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
@@ -48,7 +48,7 @@ class AircoachRepositoryModule {
         val fetcher = Fetcher<List<AircoachStopJson>, String> { resource.getStops() }
         val persister = AircoachStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return AircoachStopRoomRepository(store)
+        return AircoachStopRepository(store)
     }
 
     @Provides

@@ -16,7 +16,7 @@ import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataMapper
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataRepository
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopFetcher
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopPersister
-import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopRoomRepository
+import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopRepository
 import ie.dublinmapper.service.dublinbus.DublinBusApi
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
@@ -61,7 +61,7 @@ class DublinBusRepositoryModule {
         )
         val persister = DublinBusStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return DublinBusStopRoomRepository(store)
+        return DublinBusStopRepository(store)
     }
 
     @Provides

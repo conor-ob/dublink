@@ -12,6 +12,7 @@ import ie.dublinmapper.data.dublinbus.*
 import ie.dublinmapper.data.luas.*
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.persister.PersisterEntity
+import ie.dublinmapper.data.swordsexpress.*
 import ie.dublinmapper.data.test.*
 
 @Database(
@@ -30,6 +31,8 @@ import ie.dublinmapper.data.test.*
         DublinBusStopServiceEntity::class,
         LuasStopLocationEntity::class,
         LuasStopServiceEntity::class,
+        SwordsExpressStopLocationEntity::class,
+        SwordsExpressStopServiceEntity::class,
         LocationEntity::class,
         ServiceEntity::class,
         PersisterEntity::class
@@ -73,6 +76,12 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun luasStopLocationDao(): LuasStopLocationDao
 
     abstract fun luasStopServiceDao(): LuasStopServiceDao
+
+    abstract fun swordsExpressStopDao(): SwordsExpressStopDao
+
+    abstract fun swordsExpressStopLocationDao(): SwordsExpressStopLocationDao
+
+    abstract fun swordsExpressStopServiceDao(): SwordsExpressStopServiceDao
 
     abstract fun locationDao(): LocationDao
 
