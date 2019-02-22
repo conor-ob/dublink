@@ -32,18 +32,18 @@ object DartStationMapper {
                 "GSTNS",
                 "MHIDE",
                 "PERSE" -> {
-                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.COMMUTER.shortName, route = Operator.COMMUTER.shortName))
-                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.DART.shortName, route = Operator.DART.shortName))
-                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.INTERCITY.shortName, route = Operator.INTERCITY.shortName))
+                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.COMMUTER.shortName))
+                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.DART.shortName))
+                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.INTERCITY.shortName))
                 }
                 "BROCK",
                 "GCDK",
                 "LDWNE" -> {
-                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.COMMUTER.shortName, route = Operator.COMMUTER.shortName))
-                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.DART.shortName, route = Operator.DART.shortName))
+                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.COMMUTER.shortName))
+                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.DART.shortName))
                 }
                 else -> {
-                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.DART.shortName, route = Operator.DART.shortName))
+                    serviceEntities.add(DartStationServiceEntity(stationId = json.code!!, operator = Operator.DART.shortName))
                 }
             }
         }

@@ -17,6 +17,5 @@ import androidx.room.*
 data class DartStationServiceEntity(
     @field:PrimaryKey(autoGenerate = true) @field:ColumnInfo(name = "id") val id: Int = 0,
     @field:ColumnInfo(name = "station_id") val stationId: String,
-    @field:ColumnInfo(name = "operator") val operator: String,
-    @field:ColumnInfo(name = "route") val route: String
+    @field:ColumnInfo(name = "operator") val operator: String
 )
