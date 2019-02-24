@@ -5,12 +5,11 @@ import android.content.res.Resources
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.util.AndroidResourceStringProvider
-import ie.dublinmapper.util.StringProvider
-import ie.dublinmapper.util.Thread
+import ie.dublinmapper.util.*
 import ie.dublinmapper.view.nearby.map.GoogleMapController
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Singleton
 
 @Module
 class ApplicationModule(
@@ -39,6 +38,12 @@ class ApplicationModule(
             io = Schedulers.io(),
             ui = AndroidSchedulers.mainThread()
         )
+    }
+
+    @Provides
+    @Singleton
+    fun internetManager(context: Context): InternetManager {
+        return InternetManagerImpl(context)
     }
 
 }

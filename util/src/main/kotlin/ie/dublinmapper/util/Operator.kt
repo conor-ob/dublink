@@ -1,6 +1,5 @@
 package ie.dublinmapper.util
 
-import java.text.ParseException
 import java.util.*
 
 enum class Operator(

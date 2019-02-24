@@ -17,6 +17,8 @@
     <string name="live_data_due_time">%d min</string>
     <string name="live_data_due_times">and in %s min</string>
 
+    <string name="database_name">dublinmapper.db</string>
+
     <string name="aircoach_base_url">https://tracker.aircoach.ie/</string>
     <string name="dublin_bus_api_base_url">http://rtpi.dublinbus.ie/</string>
     <string name="irish_rail_api_base_url">http://api.irishrail.ie/realtime/realtime.asmx/</string>
