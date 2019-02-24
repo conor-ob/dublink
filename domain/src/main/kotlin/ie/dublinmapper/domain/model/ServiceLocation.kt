@@ -15,14 +15,16 @@ data class AircoachStop(
     override val id: String,
     override val name: String,
     override val coordinate: Coordinate,
-    override val operators: EnumSet<Operator>
+    override val operators: EnumSet<Operator>,
+    val routes: Map<Operator, Set<String>>
 ) : ServiceLocation(id, name, coordinate, operators)
 
 data class BusEireannStop(
     override val id: String,
     override val name: String,
     override val coordinate: Coordinate,
-    override val operators: EnumSet<Operator>
+    override val operators: EnumSet<Operator>,
+    val routes: Map<Operator, Set<String>>
 ) : ServiceLocation(id, name, coordinate, operators)
 
 data class DartStation(
@@ -37,7 +39,9 @@ data class DublinBikesDock(
     override val name: String,
     override val coordinate: Coordinate,
     override val operators: EnumSet<Operator> = Operator.dublinBikes(),
-    val availableBikes: Int
+    val docks: Int,
+    val availableBikes: Int,
+    val availableDocks: Int
 ) : ServiceLocation(id, name, coordinate, operators)
 
 data class DublinBusStop(
