@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "dart_stations")
+@Entity(tableName = "dart_station_locations")
 data class DartStationLocationEntity(
     @field:PrimaryKey @field:ColumnInfo(name = "id") val id: String,
     @field:ColumnInfo(name = "name") val name: String,

@@ -8,10 +8,10 @@ import io.reactivex.Maybe
 @Dao
 interface SwordsExpressStopLocationDao : BaseDao<SwordsExpressStopLocationEntity> {
 
-    @Query("SELECT * FROM swordsexpress_stops")
+    @Query("SELECT * FROM swordsexpress_stop_locations")
     fun selectAll(): Maybe<List<SwordsExpressStopLocationEntity>>
 
-    @Query("DELETE FROM swordsexpress_stops")
+    @Query("DELETE FROM swordsexpress_stop_locations")
     fun deleteAll()
 
 }

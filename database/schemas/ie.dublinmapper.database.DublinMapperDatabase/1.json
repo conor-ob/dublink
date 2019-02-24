@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d80fa908551a1ff57636152a800a9dee",
+    "identityHash": "02745e174d4dfffc3929d9c097d59d72",
     "entities": [
       {
-        "tableName": "aircoach_stops",
+        "tableName": "aircoach_stop_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "aircoach_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `aircoach_stops`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `aircoach_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -89,7 +89,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "aircoach_stops",
+            "table": "aircoach_stop_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -102,7 +102,7 @@
         ]
       },
       {
-        "tableName": "buseireann_stops",
+        "tableName": "buseireann_stop_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -141,7 +141,7 @@
       },
       {
         "tableName": "buseireann_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `buseireann_stops`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `buseireann_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -186,7 +186,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "buseireann_stops",
+            "table": "buseireann_stop_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -199,7 +199,7 @@
         ]
       },
       {
-        "tableName": "dart_stations",
+        "tableName": "dart_station_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -238,7 +238,7 @@
       },
       {
         "tableName": "dart_station_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `station_id` TEXT NOT NULL, `operator` TEXT NOT NULL, FOREIGN KEY(`station_id`) REFERENCES `dart_stations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `station_id` TEXT NOT NULL, `operator` TEXT NOT NULL, FOREIGN KEY(`station_id`) REFERENCES `dart_station_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -277,7 +277,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "dart_stations",
+            "table": "dart_station_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -290,7 +290,7 @@
         ]
       },
       {
-        "tableName": "dublinbikes_docks",
+        "tableName": "dublinbikes_dock_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -329,7 +329,7 @@
       },
       {
         "tableName": "dublinbikes_dock_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dock_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `docks` INTEGER NOT NULL, `available_bikes` INTEGER NOT NULL, `available_docks` INTEGER NOT NULL, FOREIGN KEY(`dock_id`) REFERENCES `dublinbikes_docks`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dock_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `docks` INTEGER NOT NULL, `available_bikes` INTEGER NOT NULL, `available_docks` INTEGER NOT NULL, FOREIGN KEY(`dock_id`) REFERENCES `dublinbikes_dock_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -386,7 +386,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "dublinbikes_docks",
+            "table": "dublinbikes_dock_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -399,7 +399,7 @@
         ]
       },
       {
-        "tableName": "dublinbus_stops",
+        "tableName": "dublinbus_stop_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -438,7 +438,7 @@
       },
       {
         "tableName": "dublinbus_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `dublinbus_stops`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `dublinbus_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -483,7 +483,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "dublinbus_stops",
+            "table": "dublinbus_stop_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -496,7 +496,7 @@
         ]
       },
       {
-        "tableName": "luas_stops",
+        "tableName": "luas_stop_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -535,7 +535,7 @@
       },
       {
         "tableName": "luas_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `luas_stops`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `luas_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -580,7 +580,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "luas_stops",
+            "table": "luas_stop_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -593,7 +593,7 @@
         ]
       },
       {
-        "tableName": "swordsexpress_stops",
+        "tableName": "swordsexpress_stop_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -632,7 +632,7 @@
       },
       {
         "tableName": "swordsexpress_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `direction` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `swordsexpress_stops`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `direction` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `swordsexpress_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -677,7 +677,7 @@
         ],
         "foreignKeys": [
           {
-            "table": "swordsexpress_stops",
+            "table": "swordsexpress_stop_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -815,7 +815,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d80fa908551a1ff57636152a800a9dee\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"02745e174d4dfffc3929d9c097d59d72\")"
     ]
   }
 }
