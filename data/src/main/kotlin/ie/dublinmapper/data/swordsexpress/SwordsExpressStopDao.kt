@@ -9,7 +9,7 @@ import io.reactivex.Maybe
 interface SwordsExpressStopDao {
 
     @Transaction
-    @Query("SELECT * FROM swordsexpress_stops")
+    @Query("SELECT * FROM swordsexpress_stop_locations")
     fun selectAll(): Maybe<List<SwordsExpressStopEntity>>
 
 }

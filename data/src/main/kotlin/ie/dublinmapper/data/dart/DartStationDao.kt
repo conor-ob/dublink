@@ -9,7 +9,7 @@ import io.reactivex.Maybe
 interface DartStationDao {
 
     @Transaction
-    @Query("SELECT * FROM dart_stations")
+    @Query("SELECT * FROM dart_station_locations")
     fun selectAll(): Maybe<List<DartStationEntity>>
 
 }

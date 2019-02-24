@@ -9,7 +9,7 @@ import io.reactivex.Maybe
 interface DublinBikesDockDao {
 
     @Transaction
-    @Query("SELECT * FROM dublinbikes_docks")
+    @Query("SELECT * FROM dublinbikes_dock_locations")
     fun selectAll(): Maybe<List<DublinBikesDockEntity>>
 
 }
