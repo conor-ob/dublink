@@ -11,10 +11,10 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:${versions.retrofit}"
     implementation "com.squareup.okhttp3:logging-interceptor:${versions.logging_interceptor}"
     implementation "io.apisense:rhino-android:${versions.rhino}"
-    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
+    implementation "io.reactivex.rxjava2:rxjava:${versions.rx_java}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "org.jsoup:jsoup:${versions.jsoup}"
-//    implementation "org.slf4j:slf4j-api:${versions.slf4j_api}"
+    implementation "org.slf4j:slf4j-api:${versions.slf4j_api}"
 //    implementation "com.google.code.gson:gson:${versions.gson}"
     implementation("com.squareup.retrofit2:converter-simplexml:${versions.converter_simplexml}") {
         exclude group: 'stax', module: 'stax-api'

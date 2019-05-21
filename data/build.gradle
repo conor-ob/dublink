@@ -5,7 +5,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
     implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation "androidx.room:room-common:${versions.androidx.room_common}"
-    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
+    implementation "io.reactivex.rxjava2:rxjava:${versions.rx_java}"
 }
 
 sourceSets {
