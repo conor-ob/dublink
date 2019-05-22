@@ -1,7 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@color/accent">
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/view_favourites_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/grey_200">
 
-</FrameLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+                app:title="Favourites"
+                android:id="@+id/toolbar"
+                style="@style/Toolbar">
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_results"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/search_fab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_search"
+            android:backgroundTint="@color/primary"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            app:borderWidth="0dp"
+            app:pressedTranslationZ="12dp"
+            app:layout_dodgeInsetEdges="bottom"
+            app:layout_anchorGravity="end"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
