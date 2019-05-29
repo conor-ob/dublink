@@ -6,9 +6,9 @@ import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.DartStation
 import kotlinx.android.synthetic.main.list_item_service_location_dart.*
 
-class DartStationItem(private val dartStation: DartStation) : Item() {
+class DartStationItem(val dartStation: DartStation) : Item() {
 
-    override fun getLayout() = R.layout.list_item_service_location_dart
+    override fun getLayout() = R.layout.list_item_service_location_dart_prototype
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.service_location_name.text = dartStation.name

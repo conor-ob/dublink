@@ -33,8 +33,8 @@ class ApplicationModule(
         GoogleMapController(context)
 
     @Provides
-    fun schedulers(): Thread {
-        return Thread(
+    fun schedulers(): RxScheduler {
+        return RxScheduler(
             io = Schedulers.io(),
             ui = AndroidSchedulers.mainThread()
         )

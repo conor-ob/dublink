@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.MvpBaseController
+import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.getApplicationComponent

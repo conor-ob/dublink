@@ -4,7 +4,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.model.LiveDataUi
 import ie.dublinmapper.model.ServiceLocationUi
-import ie.dublinmapper.util.Thread
+import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.view.livedata.LiveDataMapper
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class NearbyLiveDataPresenterImpl @Inject constructor(
     private val useCase: LiveDataUseCase,
-    private val thread: Thread
+    private val scheduler: RxScheduler
 ) : MvpBasePresenter<NearbyLiveDataView>(), NearbyLiveDataPresenter {
 
     private var viewModel: NearbyLiveDataViewModel = NearbyLiveDataViewModel()
@@ -32,8 +32,8 @@ class NearbyLiveDataPresenterImpl @Inject constructor(
         viewModel = viewModel.copy(serviceLocation = serviceLocation)
         if (serviceLocation != null) {
             subscriptions().add(useCase.getCondensedLiveData(serviceLocation.serviceLocation)
-                .subscribeOn(thread.io)
-                .observeOn(thread.ui)
+                .subscribeOn(scheduler.io)
+                .observeOn(scheduler.ui)
                 .map { LiveDataMapper.map(it) }
                 .doOnSubscribe {
 //                    renderView()

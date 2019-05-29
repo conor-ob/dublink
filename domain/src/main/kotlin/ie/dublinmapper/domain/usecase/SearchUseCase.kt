@@ -2,7 +2,7 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.util.Thread
+import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.functions.Function7
 import javax.inject.Inject
@@ -15,18 +15,18 @@ class SearchUseCase @Inject constructor(
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
-    private val thread: Thread
+    private val scheduler: RxScheduler
 ) {
 
     fun search(query: String): Observable<List<ServiceLocation>> {
         return Observable.combineLatest(
-            aircoachStopRepository.getAll().subscribeOn(thread.io),
-            busEireannStopRepository.getAll().subscribeOn(thread.io),
-            dartStationRepository.getAll().subscribeOn(thread.io),
-            dublinBikesDockRepository.getAll().subscribeOn(thread.io),
-            dublinBusStopRepository.getAll().subscribeOn(thread.io),
-            luasStopRepository.getAll().subscribeOn(thread.io),
-            swordsExpressStopRepository.getAll().subscribeOn(thread.io),
+            aircoachStopRepository.getAll().subscribeOn(scheduler.io),
+            busEireannStopRepository.getAll().subscribeOn(scheduler.io),
+            dartStationRepository.getAll().subscribeOn(scheduler.io),
+            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
+            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
+            luasStopRepository.getAll().subscribeOn(scheduler.io),
+            swordsExpressStopRepository.getAll().subscribeOn(scheduler.io),
             Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
                 search(query, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops)
             }

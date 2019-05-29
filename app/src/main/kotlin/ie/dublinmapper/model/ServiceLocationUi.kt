@@ -1,7 +1,6 @@
 package ie.dublinmapper.model
 
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.model.aircoach.AircoachStopItem
@@ -13,7 +12,6 @@ import ie.dublinmapper.model.luas.LuasStopItem
 import ie.dublinmapper.model.swordsexpress.SwordsExpressStopItem
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
-import kotlinx.android.synthetic.main.list_item_service_location_dart.*
 import java.util.*
 
 sealed class ServiceLocationUi(
@@ -49,7 +47,7 @@ data class AircoachStopUi(
 ) : ServiceLocationUi(
     aircoachStop,
     aircoachStop.name,
-    R.color.dublinBusBlue
+    R.color.goAheadBlue
 ) {
     override fun toItem() = AircoachStopItem(aircoachStop)
 }
@@ -59,7 +57,7 @@ data class BusEireannStopUi(
 ) : ServiceLocationUi(
     busEireannStop,
     busEireannStop.name,
-    R.color.dublinBusBlue
+    R.color.goAheadBlue
 ) {
     override fun toItem() = BusEireannStopItem(busEireannStop)
 }

@@ -6,21 +6,29 @@
     <!--<color name="primary_dark">#004ba0</color>-->
     <color name="accent">#FFD740</color>
     <color name="white">#FFFFFF</color>
+    <color name="white_90">#e6ffffff</color>
+    <color name="indigo">#4768fd</color>
+    <color name="indigo_dark">#3c54fe</color>
 
+    <color name="status_bar">@color/white</color>
     <color name="text_primary">@color/grey_900</color>
     <color name="text_secondary">@color/grey_600</color>
+    <color name="text_color_tertiary">#dadce0</color>
     <color name="text_light">@color/grey_400</color>
 
+    <color name="aircoachOrange">#EF7B0A</color>
+    <color name="busEireannRed">#A51922</color>
     <color name="dartGreen">#388E3C</color>
     <color name="dublinBikesTeal">#004D40</color>
     <color name="dublinBusYellow">#FFD740</color>
-    <color name="dublinBusBlue">#4286F5</color>
+    <color name="goAheadBlue">#4286F5</color>
     <color name="luasPurple">#512DA8</color>
     <color name="luasBlue">#0277Bd</color>
     <color name="luasGreen">#689F38</color>
     <color name="luasRed">#e53935</color>
     <color name="commuterBlue">#1565C0</color>
     <color name="intercityGrey">#9E9E9E</color>
+    <color name="swordsExpressGreen">#00A850</color>
 
     <color name="search_status_bar">#bdbdbd</color>
 
