@@ -22,7 +22,7 @@ import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
-import ie.dublinmapper.util.Thread
+import ie.dublinmapper.util.RxScheduler
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -49,7 +49,7 @@ class DublinBusRepositoryModule {
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         stringProvider: StringProvider,
-        thread: Thread
+        scheduler: RxScheduler
     ): Repository<DublinBusStop> {
         val fetcher = DublinBusStopFetcher(
             dublinBusApi,
@@ -57,7 +57,7 @@ class DublinBusRepositoryModule {
             stringProvider.rtpiOperatorDublinBus(),
             stringProvider.rtpiOperatorGoAhead(),
             stringProvider.rtpiFormat(),
-            thread
+            scheduler
         )
         val persister = DublinBusStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)

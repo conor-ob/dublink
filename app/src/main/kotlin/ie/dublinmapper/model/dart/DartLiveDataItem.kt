@@ -1,6 +1,5 @@
 package ie.dublinmapper.model.dart
 
-import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
@@ -18,11 +17,11 @@ class DartLiveDataItem(
     override fun getLayout() = R.layout.list_item_live_data_dart
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.train_type.text = liveData.operator.shortName
+        viewHolder.train_type.text = liveData.operator.fullName
         when (liveData.operator) {
-            Operator.DART -> viewHolder.train_type.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.dartGreen))
-            Operator.COMMUTER -> viewHolder.train_type.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.commuterBlue))
-            Operator.INTERCITY -> viewHolder.train_type.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.intercityGrey))
+            Operator.DART -> viewHolder.train_type.setTextColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.dartGreen))
+            Operator.COMMUTER -> viewHolder.train_type.setTextColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.commuterBlue))
+            Operator.INTERCITY -> viewHolder.train_type.setTextColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.intercityGrey))
             else -> { }
         }
         viewHolder.direction_destination.text = StringUtils.join(

@@ -35,4 +35,26 @@
     <string name="luas_green_poly_line_0">ogwdIp_me@@c@pFc]PiCBeEHyAL}@PqA`A}C~EyItCqGbAyA|VyTvPeMxEyDrMsFlDiA~I{BlGgGLWP{@EcC[uAiAsH?a@bHgUhImQ`AyB?e@eAaDeAoCaAiBu@mBkAyDiAyC}@eC@WNSpLeExAa@|G}BnA_@b@@nCs@xE[~Di@XPFJPjAv@`D|@xBT^p@j@h@R`As@h@MhARd@KVY|@aGzCb@nPvC@`@u@hE[hBEh@Jf@~AdATG@D</string>
     <string name="luas_green_poly_line_1">qkqdIhgee@@M{Cc@}@`GWXe@JiASi@LaAr@i@Sq@k@WMeGCoBFaKhDePjFkCz@W^ATT~At@lB`AhBdAnCdA`D?d@aAxBiIlQcHfU?`@hArHBA</string>
     <string name="luas_green_poly_line_2">ux}cIjwnd@KJaCz@k@LoAj@kAn@w@l@mCjCqBzCo@zAeCvFo@jAi@r@oAx@yBh@w@`@w@t@k@`A[v@oL~a@GNAJqDjM}BhFWr@Qn@SvAOdAOnBEtMWzGy@lIcGtb@GPg@hEo@tD_AjEgAlEi@pCSpAOlBAxCLpBNpAl@zBbAzCl@xBZnBJjADrA?~AGrAUzBUzAKP@R_CnO_Gtc@iD~UeAfGW`AQjAgDpLyA|Fg@dCu@pCgC`Hq@nCMR?NoD|MoAvFi@vA[j@_@f@s@p@u@`@eALqESkB[g@SiAy@g@g@Q_@U?{A_BoAq@i@s@_@y@m@mBWsAo@wFScAs@}Aa@q@iAkAqA}@oAeB]q@G[I?mH_NsB}Ba@Um@C_@RMN[t@Y|A{AfKMh@]j@[Ly@Qk@i@eAo@kA_@cBI}CZy@Cy@R_@\\mAnDILCVwHh_@_@zAARy@tDmLpg@m@hD}@tFk@lFc@bG[lICFOnFqApRiBfP}AtJmCdKoDzHKFETmB`D{BhDuCfEoGvI{Q~WgHrJaCbCcDjCqGzDwD~AwHtBsIn@cDJ_XnBaQ|@mE`@}DTyDf@i]lGqKzBwN`Cq_@nHaHrAcCn@{Aj@gCzAy@n@qBxBk@`@]HCFoAn@iA\\g@z@UbAi@|AYXyBl@MVK`@DpF?|@I`@UXcAVa@Gi@LsD~@cEXgA@sBIyBq@UOaFeEuCkBGe@EB@D</string>
+
+    <string name="operator_aircoach_id">Aircoach</string>
+    <string name="operator_aircoach_code">AC</string>
+    <string name="operator_buseireann_id">Bus Éireann</string>
+    <string name="operator_buseireaann_code">BE</string>
+    <string name="operator_commuter_id">Commuter</string>
+    <string name="operator_commuter_code">COMM</string>
+    <string name="operator_dart_id">DART</string>
+    <string name="operator_dart_code">@string/operator_dart_id</string>
+    <string name="operator_dublinbikes_id">Dublin Bikes</string>
+    <string name="operator_dublinbikes_code">BIKE</string>
+    <string name="operator_dublinbus_id">Dublin Bus</string>
+    <string name="operator_dublinbus_code">BAC</string>
+    <string name="operator_goahead_id">Go Ahead</string>
+    <string name="operator_goahead_code">GAD</string>
+    <string name="operator_intercity_id">InterCity</string>
+    <string name="operator_intercity_code">ICTY</string>
+    <string name="operator_luas_id">Luas</string>
+    <string name="operator_luas_code">LUAS</string>
+    <string name="operator_swordsexpress_id">Swords Express</string>
+    <string name="operator_swordsexpress_code">SE</string>
+    <string name="title_favourites">Favourites</string>
 </resources>

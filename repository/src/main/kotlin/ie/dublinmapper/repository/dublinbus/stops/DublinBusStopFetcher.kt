@@ -4,8 +4,7 @@ import com.nytimes.android.external.store3.base.Fetcher
 import ie.dublinmapper.service.dublinbus.*
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.Thread
+import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
@@ -16,7 +15,7 @@ class DublinBusStopFetcher(
     private val dublinBusOperator: String,
     private val goAheadOperator: String,
     private val format: String,
-    private val thread: Thread
+    private val scheduler: RxScheduler
 ) : Fetcher<List<RtpiBusStopInformationJson>, String> {
 
     override fun fetch(key: String): Single<List<RtpiBusStopInformationJson>> {
@@ -28,9 +27,9 @@ class DublinBusStopFetcher(
         val requestBody = DublinBusDestinationRequestBodyXml(requestRoot)
         val request = DublinBusDestinationRequestXml(requestBody)
         return Observable.combineLatest(
-            dublinBusApi.getAllDestinations(request).subscribeOn(thread.io).map { it.stops }.toObservable(),
-            rtpiApi.busStopInformation(dublinBusOperator, format).subscribeOn(thread.io).map { it.results }.toObservable(),
-            rtpiApi.busStopInformation(goAheadOperator, format).subscribeOn(thread.io).map { it.results }.toObservable(),
+            dublinBusApi.getAllDestinations(request).subscribeOn(scheduler.io).map { it.stops }.toObservable(),
+            rtpiApi.busStopInformation(dublinBusOperator, format).subscribeOn(scheduler.io).map { it.results }.toObservable(),
+            rtpiApi.busStopInformation(goAheadOperator, format).subscribeOn(scheduler.io).map { it.results }.toObservable(),
             Function3 { defaultStops, dublinBusStops, goAheadDublinStops -> aggregate(defaultStops, dublinBusStops, goAheadDublinStops) }
         )
     }

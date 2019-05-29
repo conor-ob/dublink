@@ -20,7 +20,7 @@ import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.MvpBaseController
+import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.*

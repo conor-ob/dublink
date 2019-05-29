@@ -4,21 +4,38 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/view_favourites_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/grey_200">
+        android:layout_height="match_parent">
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-                app:title="Favourites"
-                android:id="@+id/toolbar"
-                style="@style/Toolbar">
+        <FrameLayout
+                android:id="@+id/appbar"
+                style="@style/Widget.AppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white_90">
 
-        </androidx.appcompat.widget.Toolbar>
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:minHeight="?actionBarSize"
+                    android:text="@string/title_favourites"
+                    android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle" />
+
+        </FrameLayout>
+
+        <!--<androidx.appcompat.widget.Toolbar-->
+                <!--app:title="Favourites"-->
+                <!--android:id="@+id/toolbar"-->
+                <!--style="@style/Toolbar">-->
+
+        <!--</androidx.appcompat.widget.Toolbar>-->
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/favouritesList"

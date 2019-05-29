@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import ie.dublinmapper.R
-import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.model.ServiceLocationUi
 import timber.log.Timber
 
@@ -72,7 +71,7 @@ object GoogleMapIconRenderers {
 
         val paint = Paint()
         paint.style = Paint.Style.FILL
-        paint.color = ContextCompat.getColor(context, R.color.dublinBusBlue)
+        paint.color = ContextCompat.getColor(context, R.color.goAheadBlue)
         paint.isAntiAlias = true
 
         val rectF = RectF(

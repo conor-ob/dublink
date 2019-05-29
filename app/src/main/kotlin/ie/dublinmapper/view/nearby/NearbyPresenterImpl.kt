@@ -7,7 +7,7 @@ import ie.dublinmapper.model.LiveDataUi
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.LocationUtils
-import ie.dublinmapper.util.Thread
+import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.view.livedata.LiveDataMapper
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class NearbyPresenterImpl @Inject constructor(
     private val nearbyUseCase: NearbyUseCase,
     private val liveDataUseCase: LiveDataUseCase,
-    private val thread: Thread
+    private val scheduler: RxScheduler
 ) : MvpBasePresenter<NearbyView>(), NearbyPresenter {
 
     private var viewModel = NearbyViewModel()
@@ -58,8 +58,8 @@ class NearbyPresenterImpl @Inject constructor(
         } else if (viewModel.closestServiceLocation != closestServiceLocation) {
             viewModel = viewModel.copy(closestServiceLocation = closestServiceLocation)
             subscriptions().add(liveDataUseCase.getLiveData(closestServiceLocation.serviceLocation)
-            .subscribeOn(thread.io)
-            .observeOn(thread.ui)
+            .subscribeOn(scheduler.io)
+            .observeOn(scheduler.ui)
             .map { LiveDataMapper.map(it) }
             .doOnNext {
                 viewModel = viewModel.copy(liveData = it)
@@ -71,8 +71,8 @@ class NearbyPresenterImpl @Inject constructor(
         }
         subscriptions().add(nearbyUseCase.getNearbyServiceLocations(coordinate)
             .debounce(100L, TimeUnit.MILLISECONDS)
-            .subscribeOn(thread.io)
-            .observeOn(thread.ui)
+            .subscribeOn(scheduler.io)
+            .observeOn(scheduler.ui)
             .doOnNext { response ->
                 viewModel = viewModel.copy(
                     serviceLocations = NearbyMapper.map(response.serviceLocations),
@@ -106,8 +106,8 @@ class NearbyPresenterImpl @Inject constructor(
 
     fun onFocusedOnServiceLocation(serviceLocation: ServiceLocationUi) {
 //        subscriptions().add(useCase.getCondensedLiveData(serviceLocation.serviceLocation)
-//            .subscribeOn(thread.io)
-//            .observeOn(thread.ui)
+//            .subscribeOn(scheduler.io)
+//            .observeOn(scheduler.ui)
 //            .map { LiveDataMapper.map(it) }
 //            .doOnSubscribe {
 //                ifViewAttached { view ->
