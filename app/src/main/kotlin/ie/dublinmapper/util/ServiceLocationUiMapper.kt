@@ -1,4 +1,4 @@
-package ie.dublinmapper.view.search
+package ie.dublinmapper.util
 
 import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.domain.model.BusEireannStop
@@ -18,7 +18,7 @@ import ie.dublinmapper.model.LuasStopUi
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.model.SwordsExpressStopUi
 
-object SearchMapper : Mapper<ServiceLocation, ServiceLocationUi> {
+object ServiceLocationUiMapper : Mapper<ServiceLocation, ServiceLocationUi> {
 
     override fun map(from: ServiceLocation): ServiceLocationUi {
         return when (from) {

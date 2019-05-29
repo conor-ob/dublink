@@ -17,6 +17,7 @@ class SearchUseCase @Inject constructor(
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
     private val thread: Thread
 ) {
+
     fun search(query: String): Observable<List<ServiceLocation>> {
         return Observable.combineLatest(
             aircoachStopRepository.getAll().subscribeOn(thread.io),

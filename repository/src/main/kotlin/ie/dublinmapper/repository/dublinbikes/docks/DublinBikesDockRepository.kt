@@ -6,9 +6,4 @@ import ie.dublinmapper.repository.ServiceLocationRepository
 
 class DublinBikesDockRepository(
     store: StoreRoom<List<DublinBikesDock>, String>
-) : ServiceLocationRepository<DublinBikesDock>(store) {
-
-    //TODO 2 min cache expiry
-    override fun key() = "dublinbikes_docks"
-
-}
+) : ServiceLocationRepository<DublinBikesDock>(key = "dublinbikes_docks", store = store) //TODO 2 min cache expiry

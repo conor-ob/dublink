@@ -18,6 +18,10 @@ enum class Operator(
     LUAS("Luas", "LUAS"),
     SWORDS_EXPRESS("Swords Express", "SE");
 
+    override fun toString(): String {
+        return fullName
+    }
+
     companion object {
 
         fun aircoach(): EnumSet<Operator> = EnumSet.of(AIRCOACH)
@@ -50,7 +54,8 @@ enum class Operator(
 
         fun parse(value: String): Operator {
             for (operator in values()) {
-                if (operator.fullName.equals(value, ignoreCase = true)
+                if (operator.name.equals(value, ignoreCase = true)
+                    || operator.fullName.equals(value, ignoreCase = true)
                     || operator.shortName.equals(value, ignoreCase = true)) {
                     return operator
                 }
@@ -58,10 +63,6 @@ enum class Operator(
             throw IllegalArgumentException("Unable to parse Operator from string value: $value")
         }
 
-    }
-
-    override fun toString(): String {
-        return fullName
     }
 
 }

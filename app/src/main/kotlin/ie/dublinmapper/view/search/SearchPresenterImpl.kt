@@ -2,6 +2,7 @@ package ie.dublinmapper.view.search
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import ie.dublinmapper.domain.usecase.SearchUseCase
+import ie.dublinmapper.util.ServiceLocationUiMapper
 import ie.dublinmapper.util.Thread
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -29,7 +30,7 @@ class SearchPresenterImpl @Inject constructor(
         subscriptions().add(useCase.search(query)
             .subscribeOn(thread.io)
             .observeOn(thread.ui)
-            .map { SearchMapper.map(it) }
+            .map { ServiceLocationUiMapper.map(it) }
             .doOnNext { ifViewAttached { view -> view.showSearchResults(it) } }
             .doOnError { Timber.e(it) }
             .subscribe()
