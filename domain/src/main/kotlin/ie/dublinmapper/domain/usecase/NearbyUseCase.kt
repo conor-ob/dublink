@@ -16,18 +16,18 @@ class NearbyUseCase @Inject constructor(
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
-    private val thread: Thread
+    private val scheduler: RxScheduler
 ) {
 
     fun getNearbyServiceLocations(coordinate: Coordinate): Observable<Response> {
         return Observable.combineLatest(
-            aircoachStopRepository.getAll().startWith(emptyList<AircoachStop>()).subscribeOn(thread.io),
-            busEireannStopRepository.getAll().startWith(emptyList<BusEireannStop>()).subscribeOn(thread.io),
-            dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(thread.io),
-            dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(thread.io),
-            dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(thread.io),
-            luasStopRepository.getAll().startWith(emptyList<LuasStop>()).subscribeOn(thread.io),
-            swordsExpressStopRepository.getAll().startWith(emptyList<SwordsExpressStop>()).subscribeOn(thread.io),
+            aircoachStopRepository.getAll().startWith(emptyList<AircoachStop>()).subscribeOn(scheduler.io),
+            busEireannStopRepository.getAll().startWith(emptyList<BusEireannStop>()).subscribeOn(scheduler.io),
+            dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(scheduler.io),
+            dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(scheduler.io),
+            dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(scheduler.io),
+            luasStopRepository.getAll().startWith(emptyList<LuasStop>()).subscribeOn(scheduler.io),
+            swordsExpressStopRepository.getAll().startWith(emptyList<SwordsExpressStop>()).subscribeOn(scheduler.io),
             Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
                 filter(coordinate, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops) }
         )

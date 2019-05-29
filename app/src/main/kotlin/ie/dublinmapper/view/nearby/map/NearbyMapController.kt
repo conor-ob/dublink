@@ -12,7 +12,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
-import ie.dublinmapper.MvpBaseController
+import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.util.CollectionUtils
@@ -50,7 +50,7 @@ class NearbyMapController(
         view.swipe_refresh.setColorSchemeResources(
             R.color.dartGreen,
             R.color.dublinBikesTeal,
-            R.color.dublinBusBlue,
+            R.color.goAheadBlue,
             R.color.luasPurple
         )
     }

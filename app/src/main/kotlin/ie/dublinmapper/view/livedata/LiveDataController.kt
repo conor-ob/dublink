@@ -1,7 +1,7 @@
 package ie.dublinmapper.view.livedata
 
 import android.os.Bundle
-import ie.dublinmapper.MvpBaseController
+import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.util.getApplicationComponent
 

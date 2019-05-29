@@ -1,4 +1,4 @@
-package ie.dublinmapper
+package ie.dublinmapper.view
 
 import android.os.Bundle
 import android.view.LayoutInflater

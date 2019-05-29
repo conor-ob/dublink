@@ -5,7 +5,7 @@ import ie.dublinmapper.domain.usecase.NearbyUseCase
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.LocationUtils
-import ie.dublinmapper.util.Thread
+import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.view.nearby.NearbyMapper
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class NearbyMapPresenterImpl @Inject constructor(
     private val nearbyUseCase: NearbyUseCase,
-    private val thread: Thread
+    private val scheduler: RxScheduler
 ) : MvpBasePresenter<NearbyMapView>(), NearbyMapPresenter {
 
     private var viewModel = NearbyMapViewModel()
@@ -47,8 +47,8 @@ class NearbyMapPresenterImpl @Inject constructor(
         viewModel = viewModel.copy(serviceLocation = findClosestServiceLocation(coordinate, viewModel.serviceLocations))
         subscriptions().add(nearbyUseCase.getNearbyServiceLocations(coordinate)
             .debounce(100L, TimeUnit.MILLISECONDS)
-            .subscribeOn(thread.io)
-            .observeOn(thread.ui)
+            .subscribeOn(scheduler.io)
+            .observeOn(scheduler.ui)
             .doOnNext { response ->
                 viewModel = viewModel.copy(
                     serviceLocations = NearbyMapper.map(response.serviceLocations),

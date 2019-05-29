@@ -6,14 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.MvpBaseController
+import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.model.ServiceLocationUi
+import ie.dublinmapper.model.dart.DartStationItem
 import ie.dublinmapper.util.CircularRevealChangeHandler
 import ie.dublinmapper.util.getApplicationComponent
 import ie.dublinmapper.util.requireContext
+import ie.dublinmapper.view.livedata.dart.DartLiveDataController
 import ie.dublinmapper.view.search.SearchController
 import kotlinx.android.synthetic.main.view_favourites.view.*
 
@@ -38,24 +42,38 @@ class FavouritesController(
 
     private fun setupFavouritesList(view: View) {
         adapter = GroupAdapter()
+        adapter.setOnItemClickListener { item, _ -> onItemClicked(item) }
         view.favouritesList.adapter = adapter
         view.favouritesList.setHasFixedSize(true)
         view.favouritesList.layoutManager = LinearLayoutManager(requireContext())
     }
 
+    private fun onItemClicked(item: Item<*>) {
+        if (item is DartStationItem) {
+            val dartLiveDataController = DartLiveDataController.Builder(
+                stationId = item.dartStation.id,
+                stationName = item.dartStation.name
+            ).build()
+            router.pushController(
+                RouterTransaction.with(dartLiveDataController)
+                    .pushChangeHandler(FadeChangeHandler())
+                    .popChangeHandler(FadeChangeHandler())
+            )
+        }
+    }
+
     override fun onAttach(view: View) {
         super.onAttach(view)
-        presenter.onViewAttached()
+        presenter.start()
     }
 
     override fun onDetach(view: View) {
-        presenter.onViewDetached()
+        presenter.stop()
         super.onDetach(view)
     }
 
     override fun showFavourites(favourites: List<ServiceLocationUi>) {
-        adapter.clear()
-        adapter.addAll(favourites.map { it.toItem() })
+        adapter.update(favourites.map { it.toItem() })
     }
 
     private fun setupSearchFab(view: View) {
