@@ -6,8 +6,4 @@ import ie.dublinmapper.repository.ServiceLocationRepository
 
 class BusEireannStopRepository(
     store: StoreRoom<List<BusEireannStop>, String>
-) : ServiceLocationRepository<BusEireannStop>(store) {
-
-    override fun key() = "buseireann_stops"
-
-}
+) : ServiceLocationRepository<BusEireannStop>(key = "buseireann_stops", store = store)

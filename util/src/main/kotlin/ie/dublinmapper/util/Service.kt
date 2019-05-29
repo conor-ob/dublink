@@ -13,4 +13,23 @@ enum class Service(
     LUAS("Luas", "LUAS"),
     SWORDS_EXPRESS("Swords Express", "SE");
 
+    override fun toString(): String {
+        return fullName
+    }
+
+    companion object {
+
+        fun parse(value: String): Service {
+            for (operator in values()) {
+                if (operator.name.equals(value, ignoreCase = true)
+                    || operator.fullName.equals(value, ignoreCase = true)
+                    || operator.shortName.equals(value, ignoreCase = true)) {
+                    return operator
+                }
+            }
+            throw IllegalArgumentException("Unable to parse Service from string value: $value")
+        }
+
+    }
+
 }

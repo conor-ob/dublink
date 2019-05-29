@@ -6,6 +6,7 @@ import ie.dublinmapper.repository.buseireann.BusEireannRepositoryModule
 import ie.dublinmapper.repository.dart.DartRepositoryModule
 import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
 import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
+import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
 import ie.dublinmapper.repository.swordsexpress.SwordsExpressRepositoryModule
 import ie.dublinmapper.service.aircoach.AircoachModule
@@ -29,6 +30,7 @@ import javax.inject.Singleton
         DublinBusRepositoryModule::class,
         LuasRepositoryModule::class,
         SwordsExpressRepositoryModule::class,
+        FavouriteRepositoryModule::class,
         AircoachModule::class,
         DublinBusModule::class,
         GithubModule::class,

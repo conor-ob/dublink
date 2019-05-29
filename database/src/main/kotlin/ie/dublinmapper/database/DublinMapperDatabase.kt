@@ -9,6 +9,7 @@ import ie.dublinmapper.data.buseireann.*
 import ie.dublinmapper.data.dart.*
 import ie.dublinmapper.data.dublinbikes.*
 import ie.dublinmapper.data.dublinbus.*
+import ie.dublinmapper.data.favourite.*
 import ie.dublinmapper.data.luas.*
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.persister.PersisterEntity
@@ -35,7 +36,9 @@ import ie.dublinmapper.data.test.*
         SwordsExpressStopServiceEntity::class,
         LocationEntity::class,
         ServiceEntity::class,
-        PersisterEntity::class
+        PersisterEntity::class,
+        FavouriteLocationEntity::class,
+        FavouriteServiceEntity::class
     ]
 )
 @TypeConverters(Converters::class)
@@ -90,5 +93,11 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun serviceLocationDao(): ServiceLocationDao
 
     abstract fun persisterDao(): PersisterDao
+
+    abstract fun favouriteDao(): FavouriteDao
+
+    abstract fun favouriteLocationDao(): FavouriteLocationDao
+
+    abstract fun favouriteServiceDao(): FavouriteServiceDao
 
 }
