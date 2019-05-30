@@ -6,29 +6,78 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        <FrameLayout
-                android:id="@+id/appbar"
-                style="@style/Widget.AppBar"
+        <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white_90">
+                style="@style/Widget.AppBar"
+                app:liftOnScroll="true">
 
-            <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:minHeight="?actionBarSize"
-                    android:text="@string/title_favourites"
-                    android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle" />
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
 
-        </FrameLayout>
+                <TextView
+                android:id="@+id/title"
+                android:text="@string/title_favourites"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
+                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <!--<TextView-->
+                    <!--android:id="@+id/title"-->
+                    <!--android:text="@string/title_favourites"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="?actionBarSize"-->
+                    <!--android:gravity="center"-->
+                    <!--android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"-->
+                    <!--app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>-->
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!--<FrameLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+            <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="16dp"-->
+                    <!--android:text="@string/large_text"-->
+                    <!--android:textColor="?attr/colorOnBackground" />-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:id="@+id/favouritesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        <!--</FrameLayout>-->
+
+        <!--<FrameLayout-->
+                <!--android:id="@+id/appbar"-->
+                <!--style="@style/Widget.AppBar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/white_90">-->
+
+            <!--<TextView-->
+                    <!--android:id="@+id/title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:gravity="center"-->
+                    <!--android:minHeight="?actionBarSize"-->
+                    <!--android:text="@string/title_favourites"-->
+                    <!--android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle" />-->
+
+        <!--</FrameLayout>-->
 
         <!--<androidx.appcompat.widget.Toolbar-->
                 <!--app:title="Favourites"-->
@@ -36,13 +85,6 @@
                 <!--style="@style/Toolbar">-->
 
         <!--</androidx.appcompat.widget.Toolbar>-->
-
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/favouritesList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-    </LinearLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

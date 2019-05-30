@@ -12,8 +12,7 @@ import ie.dublinmapper.R
 import ie.dublinmapper.model.LiveDataUi
 import ie.dublinmapper.util.getApplicationComponent
 import ie.dublinmapper.util.requireContext
-import kotlinx.android.synthetic.main.view_dart_live_data.view.favouritesList
-import kotlinx.android.synthetic.main.view_dart_live_data.view.toolbar
+import kotlinx.android.synthetic.main.view_dart_live_data.view.*
 
 class DartLiveDataController(
     args: Bundle
@@ -35,7 +34,7 @@ class DartLiveDataController(
     }
 
     private fun setupToolbar(view: View) {
-        view.toolbar.title = args.getString(STATION_NAME)
+        view.title.text = args.getString(STATION_NAME)
     }
 
     private fun setupLiveData(view: View) {
