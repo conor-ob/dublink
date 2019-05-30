@@ -33,6 +33,10 @@
 
     <style name="AppTheme.PopupTheme" parent="ThemeOverlay.MaterialComponents.Light" />
 
+    <style name="AppTheme.AppBarOverlay.Light" parent="ThemeOverlay.MaterialComponents.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
     <style name="TextAppearance.DublinMapper.ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:fontFamily">@font/google_sans_regular</item>
     </style>
@@ -88,6 +92,7 @@
     <style name="SearchToolbarTheme" parent="AppTheme">
         <item name="android:textColorPrimary">@color/text_secondary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:fontFamily">@font/google_sans_regular</item>
     </style>
 
     <style name="MenuItemTextAppearance">

@@ -1,27 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:orientation="vertical"
              android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="@color/grey_200">
+             android:layout_height="match_parent">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            style="@style/Widget.AppBar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                style="@style/Toolbar">
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
+                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />
 
-        </androidx.appcompat.widget.Toolbar>
+        <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs"
+                style="@style/Widget.DublinMapper.Tabs"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize" >
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Northbound"/>
+
+            <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Southbound"/>
+
+        </com.google.android.material.tabs.TabLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:id="@+id/favouritesList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-    </LinearLayout>
-
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

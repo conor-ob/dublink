@@ -1,6 +1,5 @@
 package ie.dublinmapper.view.search
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
@@ -9,13 +8,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.vectordrawable.graphics.drawable.ArgbEvaluator
+import androidx.recyclerview.widget.RecyclerView
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
 import com.xwray.groupie.GroupAdapter
@@ -33,6 +32,8 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
 
     private lateinit var searchQueryView: EditText
     private lateinit var adapter: GroupAdapter<ViewHolder>
+    private lateinit var searchresults: RecyclerView
+    private lateinit var searchHintDetail: TextView
 
     override val layoutId = R.layout.view_search
 
@@ -58,22 +59,22 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         if (changeType == ControllerChangeType.POP_EXIT) {
             hideKeyboard(searchQueryView)
 
-            val colorAnimation =
-                ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.grey_400), getColour(R.color.primary_dark))
-            colorAnimation.duration = 600L
-            colorAnimation.start()
-
-            val window = requireActivity().window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            colorAnimation.addUpdateListener { animator ->
-                val color = animator.animatedValue as Int
-
+//            val colorAnimation =
+//                ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.grey_400), getColour(R.color.primary_dark))
+//            colorAnimation.duration = 600L
+//            colorAnimation.start()
+//
+//            val window = requireActivity().window
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//            colorAnimation.addUpdateListener { animator ->
+//                val color = animator.animatedValue as Int
+//
                 // change status, navigation, and action bar color
-                window.statusBarColor = color
+//                window.statusBarColor = color
 //            window.navigationBarColor = color
 //            supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
-            }
+//            }
 
 
 //        searchQueryView.clearFocus()
@@ -89,22 +90,22 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         super.onChangeEnded(changeHandler, changeType)
         if (changeType == ControllerChangeType.PUSH_ENTER) {
             searchQueryView.requestFocus()
-            val colorAnimation =
-                ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.primary_dark), getColour(R.color.grey_400))
-            colorAnimation.duration = 500L
-            colorAnimation.start()
-
-            val window = requireActivity().window
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-            colorAnimation.addUpdateListener { animator ->
-                val color = animator.animatedValue as Int
-
+//            val colorAnimation =
+//                ValueAnimator.ofObject(ArgbEvaluator(), getColour(R.color.primary_dark), getColour(R.color.grey_400))
+//            colorAnimation.duration = 500L
+//            colorAnimation.start()
+//
+//            val window = requireActivity().window
+//            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//            colorAnimation.addUpdateListener { animator ->
+//                val color = animator.animatedValue as Int
+//
                 // change status, navigation, and action bar color
-                window.statusBarColor = color
+//                window.statusBarColor = color
 //            window.navigationBarColor = color
 //            supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
-            }
+//            }
 
 
 //        searchQueryView.requestFocus()
@@ -123,6 +124,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     private fun setupLayout(view: View) {
         val toolbar: Toolbar = view.findViewById(R.id.toolbar)
         toolbar.setNavigationOnClickListener { router.handleBack() }
+        searchHintDetail = view.searchHintDetail
         searchQueryView = view.findViewById(R.id.search_query)
         searchQueryView.setOnFocusChangeListener { query, hasFocus ->
             if (hasFocus) {
@@ -133,10 +135,11 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         }
         val clearSearch: ImageView = view.findViewById(R.id.clear_search)
         adapter = GroupAdapter()
-        view.search_results.adapter = adapter
-        view.search_results.setHasFixedSize(true)
+        searchresults = view.search_results
+        searchresults.adapter = adapter
+        searchresults.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(requireContext())
-        view.search_results.layoutManager = layoutManager
+        searchresults.layoutManager = layoutManager
 
         val subscription = Observable.create<String> { subscriber ->
 
@@ -169,8 +172,14 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
     override fun showSearchResults(searchResults: List<ServiceLocationUi>) {
-        adapter.clear()
-        adapter.addAll(searchResults.map { it.toItem() })
+        if (searchResults.isEmpty()) {
+            searchresults.visibility = View.GONE
+            searchHintDetail.visibility = View.VISIBLE
+        } else {
+            searchHintDetail.visibility = View.GONE
+            searchresults.visibility = View.VISIBLE
+        }
+        adapter.update(searchResults.map { it.toItem() })
         for (result in searchResults) {
             Timber.d(result.toString())
         }
