@@ -49,6 +49,146 @@ class FavouriteServiceLocationRepository(
                         Operator.DART to setOf(Operator.DART.fullName),
                         Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
                     )
+                ),
+                Favourite(
+                    id = "BROCK",
+                    name = "Blackrock Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "PERSE",
+                    name = "Pearse Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "BROCK",
+                    name = "Blackrock Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "PERSE",
+                    name = "Pearse Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "BROCK",
+                    name = "Blackrock Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "PERSE",
+                    name = "Pearse Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "BROCK",
+                    name = "Blackrock Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "PERSE",
+                    name = "Pearse Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "BROCK",
+                    name = "Blackrock Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "PERSE",
+                    name = "Pearse Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "BROCK",
+                    name = "Blackrock Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "PERSE",
+                    name = "Pearse Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "BROCK",
+                    name = "Blackrock Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
+                    id = "PERSE",
+                    name = "Pearse Dart",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
                 )
             )
         )

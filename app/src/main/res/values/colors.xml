@@ -6,9 +6,14 @@
     <!--<color name="primary_dark">#004ba0</color>-->
     <color name="accent">#FFD740</color>
     <color name="white">#FFFFFF</color>
+    <color name="white_90">#e6ffffff</color>
+    <color name="indigo">#4768fd</color>
+    <color name="indigo_dark">#3c54fe</color>
 
+    <color name="status_bar">@color/white</color>
     <color name="text_primary">@color/grey_900</color>
     <color name="text_secondary">@color/grey_600</color>
+    <color name="text_color_tertiary">#dadce0</color>
     <color name="text_light">@color/grey_400</color>
 
     <color name="aircoachOrange">#EF7B0A</color>

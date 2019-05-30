@@ -56,4 +56,5 @@
     <string name="operator_luas_code">LUAS</string>
     <string name="operator_swordsexpress_id">Swords Express</string>
     <string name="operator_swordsexpress_code">SE</string>
+    <string name="title_favourites">Favourites</string>
 </resources>

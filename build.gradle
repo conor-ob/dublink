@@ -33,7 +33,7 @@ buildscript {
             'android_map_utils'         : '0.5',       // https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils
             'android_reactive_location2': '2.1',       // https://mvnrepository.com/artifact/pl.charmas.android/android-reactive-location2
             'adapter_rxjava2'           : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava2
-            'material'                  : '1.0.0',     // https://mvnrepository.com/artifact/com.google.android.material/material
+            'material'                  : '1.1.0-alpha06',     // https://mvnrepository.com/artifact/com.google.android.material/material
             'conductor'                 : '3.0.0-rc1', // https://mvnrepository.com/artifact/com.bluelinelabs/conductor
             'mvp_conductor'             : '3.1.0',     // https://mvnrepository.com/artifact/com.hannesdorfmann.mosby3/mvp-conductor
             'crashlytics'               : '2.9.8@aar', // https://www.fabric.io/kits/android/crashlytics/update
