@@ -82,8 +82,10 @@ class FavouritesController(
             router.pushController(
                 RouterTransaction
                     .with(searchController)
-                    .pushChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
-                    .popChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
+//                    .pushChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
+//                    .popChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
+                    .pushChangeHandler(FadeChangeHandler())
+                    .popChangeHandler(FadeChangeHandler())
             )
         }
     }
