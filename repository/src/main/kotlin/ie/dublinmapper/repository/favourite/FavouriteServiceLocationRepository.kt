@@ -31,6 +31,16 @@ class FavouriteServiceLocationRepository(
         return Observable.just(
             listOf(
                 Favourite(
+                    id = "CNLLY",
+                    name = "Connolly",
+                    service = Service.IRISH_RAIL,
+                    routes = mapOf(
+                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
+                        Operator.DART to setOf(Operator.DART.fullName),
+                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
+                    )
+                ),
+                Favourite(
                     id = "BROCK",
                     name = "Blackrock Dart",
                     service = Service.IRISH_RAIL,

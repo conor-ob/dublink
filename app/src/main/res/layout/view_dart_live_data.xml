@@ -9,33 +9,50 @@
             android:id="@+id/appbar"
             style="@style/Widget.AppBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:liftOnScroll="true">
 
-        <TextView
-                android:id="@+id/title"
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
-                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />
+                android:layout_height="?attr/actionBarSize">
 
-        <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabs"
-                style="@style/Widget.DublinMapper.Tabs"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize" >
+            <TextView
+                    android:id="@+id/stationName"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
+                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
 
-            <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Northbound"/>
 
-            <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Southbound"/>
+        </androidx.appcompat.widget.Toolbar>
 
-        </com.google.android.material.tabs.TabLayout>
+        <!--<TextView-->
+                <!--android:id="@+id/title"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?actionBarSize"-->
+                <!--android:gravity="center"-->
+                <!--android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"-->
+                <!--app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />-->
+
+        <!--<com.google.android.material.tabs.TabLayout-->
+                <!--android:id="@+id/tabs"-->
+                <!--style="@style/Widget.DublinMapper.Tabs"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?actionBarSize" >-->
+
+            <!--<com.google.android.material.tabs.TabItem-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/tab_dart_northbound"/>-->
+
+            <!--<com.google.android.material.tabs.TabItem-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="@string/tab_dart_southbound"/>-->
+
+        <!--</com.google.android.material.tabs.TabLayout>-->
 
     </com.google.android.material.appbar.AppBarLayout>
 
