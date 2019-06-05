@@ -28,7 +28,7 @@ object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
             val minutes = TimeUtils.timeBetween(ChronoUnit.MINUTES, currentInstant, expectedInstant)
             return Collections.singletonList(DueTime(minutes, TimeUtils.toTime(expectedInstant)))
         }
-        // bug where expectedArrivalTimestamp == "00:11" the next day
+        //TODO bug where expectedArrivalTimestamp == "00:11" the next day - check Traindate field
         val expectedInstant = TimeUtils.timestampToInstant(expectedArrivalTimestamp, Formatter.hourMinute)
         val minutes = TimeUtils.timeBetween(ChronoUnit.MINUTES, currentInstant, expectedInstant)
         return Collections.singletonList(DueTime(minutes, TimeUtils.toTime(expectedInstant)))
@@ -59,7 +59,7 @@ object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
     private fun mapOperatorFromTrainType(trainType: String, trainCode: String): Operator {
         return when (trainType.toUpperCase()) {
             "ARROW" -> Operator.COMMUTER
-            "DART" -> Operator.DART
+            "DART", "DART10" -> Operator.DART
             "DD/90", "ICR" -> Operator.INTERCITY
             else -> throw IllegalStateException("Unknown train type: $trainType, with code: $trainCode")
         }

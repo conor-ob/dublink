@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
+import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
+import ie.dublinmapper.model.DirectionItem
 import ie.dublinmapper.model.LiveDataUi
 import ie.dublinmapper.util.getApplicationComponent
 import ie.dublinmapper.util.requireContext
@@ -34,7 +37,7 @@ class DartLiveDataController(
     }
 
     private fun setupToolbar(view: View) {
-        view.title.text = args.getString(STATION_NAME)
+        view.stationName.text = args.getString(STATION_NAME)
     }
 
     private fun setupLiveData(view: View) {
@@ -54,8 +57,13 @@ class DartLiveDataController(
         super.onDetach(view)
     }
 
-    override fun showLiveData(liveData: List<LiveDataUi>) {
-        adapter.update(liveData.map { it.toItem() })
+    override fun render(viewModel: ViewModel) {
+        val items = mutableListOf<Group>()
+        for (entry in viewModel.liveData.entries) {
+            items.add(DirectionItem(entry.key))
+            items.addAll(entry.value.map { it.toItem() })
+        }
+        adapter.update(items)
     }
 
     companion object {
