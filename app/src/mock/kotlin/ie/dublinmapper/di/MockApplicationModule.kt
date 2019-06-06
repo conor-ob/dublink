@@ -3,8 +3,8 @@ package ie.dublinmapper.di
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.util.MockStringProvider
+import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.util.StringProvider
-import ie.dublinmapper.util.Thread
 import io.reactivex.schedulers.TestScheduler
 
 @Module
@@ -14,8 +14,8 @@ class MockApplicationModule {
     fun stringProvider(): StringProvider = MockStringProvider()
 
     @Provides
-    fun schedulers(): Thread {
-        return Thread(
+    fun schedulers(): RxScheduler {
+        return RxScheduler(
             io = TestScheduler(),
             ui = TestScheduler()
         )

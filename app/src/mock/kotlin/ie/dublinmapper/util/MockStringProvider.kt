@@ -1,49 +1,69 @@
 package ie.dublinmapper.util
 
 class MockStringProvider : StringProvider {
-    
-    override fun jcdecauxBaseUrl(): String {
-        return ""
-    }
-
     override fun jcDecauxContract(): String {
-        return ""
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun jcDecauxApiKey(): String {
-        return ""
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun rtpibaseUrl(): String {
-        return ""
+    override fun rtpiBaseUrl(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun rtpiOperatoreLuas(): String {
-        return ""
+    override fun rtpiOperatorLuas(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun rtpiFormat(): String {
-        return ""
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun irishRailBaseUrl(): String {
-        return ""
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun irishRailApiDartStationType(): String {
-        return ""
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun dublinBusBaseUrl(): String {
-        return ""
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun rtpiOperatoreDublinBus(): String {
-        return ""
+    override fun rtpiOperatorBusEireann(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun rtpiOperatoreGoAhead(): String {
-        return ""
+    override fun rtpiOperatorDublinBus(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
-    
+
+    override fun rtpiOperatorGoAhead(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun swordsExpressBaseUrl(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun aircoachBaseUrl(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun githubBaseUrl(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun databaseName(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun jcDecauxBaseUrl(): String {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
 }
