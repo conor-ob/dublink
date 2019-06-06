@@ -118,9 +118,11 @@ dependencies {
     implementation 'com.bluelinelabs:conductor:3.0.0-rc1'
     implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
 
+    implementation "ma.glasnost.orika:orika-core:${versions.orika_core}"
+
     implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
-    implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
+    implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}" //TODO is this needed?
     implementation "com.google.android.material:material:${versions.material}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
 
@@ -139,6 +141,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-simplexml:2.5.0")
     implementation("com.squareup.okhttp3:okhttp:3.12.1")
 
+    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}" //TODO remove
 
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 }

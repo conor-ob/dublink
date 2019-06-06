@@ -8,6 +8,7 @@ import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
 import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
 import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
+import ie.dublinmapper.repository.mapping.MappingModule
 import ie.dublinmapper.repository.swordsexpress.SwordsExpressRepositoryModule
 import ie.dublinmapper.service.aircoach.AircoachModule
 import ie.dublinmapper.service.di.ServiceModule
@@ -39,7 +40,8 @@ import javax.inject.Singleton
         RtpiModule::class,
         SwordsExpressModule::class,
         DatabaseModule::class,
-        ServiceModule::class
+        ServiceModule::class,
+        MappingModule::class
     ]
 )
 interface BuildVariantApplicationComponent : ApplicationComponent
