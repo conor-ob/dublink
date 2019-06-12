@@ -4,10 +4,8 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter
 
 interface SearchPresenter : MvpPresenter<SearchView> {
 
-    fun onViewAttached()
+    fun start(query: String)
 
-    fun onViewDetached()
-
-    fun onQueryTextSubmit(query: String)
+    fun stop()
 
 }

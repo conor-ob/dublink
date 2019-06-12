@@ -11,25 +11,24 @@ import ie.dublinmapper.util.StringUtils
 import kotlinx.android.synthetic.main.list_item_live_data_dart_condensed.*
 import java.util.*
 
-class DartCondensedLiveDataItem(
+abstract class AbstractDartCondensedLiveDataItem(
     private val liveData: DartLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.list_item_live_data_dart_condensed
-
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.train_type.text = liveData.operator.shortName
+        viewHolder.train_type.text = liveData.operator.fullName
         when (liveData.operator) {
             Operator.DART -> viewHolder.train_type.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.dartGreen))
             Operator.COMMUTER -> viewHolder.train_type.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.commuterBlue))
             Operator.INTERCITY -> viewHolder.train_type.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.intercityGrey))
             else -> { }
         }
-        viewHolder.direction_destination.text = StringUtils.join(
-            Arrays.asList(
-                liveData.direction,
-                liveData.destination
-            ), " ${StringUtils.MIDDLE_DOT} ")
+//        viewHolder.direction_destination.text = StringUtils.join(
+//            Arrays.asList(
+//                liveData.direction,
+//                liveData.destination
+//            ), " ${StringUtils.MIDDLE_DOT} ")
+        viewHolder.direction_destination.text = liveData.destination
         if (liveData.dueTime[0].minutes == 0L) {
             viewHolder.due.text = viewHolder.itemView.resources.getString(R.string.live_data_due)
         } else {
@@ -39,5 +38,21 @@ class DartCondensedLiveDataItem(
             liveData.dueTime.subList(1, liveData.dueTime.size).map { it.minutes.toString() }, ", "
         ))
     }
+
+}
+
+class DartCondensedLiveDataItem(
+    liveData: DartLiveData
+) : AbstractDartLiveDataItem(liveData) {
+
+    override fun getLayout() = R.layout.list_item_live_data_dart_condensed
+
+}
+
+class DartCondensedLiveDataItemEnd(
+    liveData: DartLiveData
+) : AbstractDartLiveDataItem(liveData) {
+
+    override fun getLayout() = R.layout.list_item_live_data_dart_condensed_end
 
 }

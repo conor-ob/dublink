@@ -12,18 +12,28 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bluelinelabs.conductor.ControllerChangeHandler
 import com.bluelinelabs.conductor.ControllerChangeType
+import com.bluelinelabs.conductor.RouterTransaction
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
+import ie.dublinmapper.model.HeaderItem
+import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.ServiceLocationUi
+import ie.dublinmapper.model.SpacerItem
 import ie.dublinmapper.util.*
+import ie.dublinmapper.view.livedata.LiveDataController
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.view_search.view.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -32,8 +42,11 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
 
     private lateinit var searchQueryView: EditText
     private lateinit var adapter: GroupAdapter<ViewHolder>
-    private lateinit var searchresults: RecyclerView
+    private lateinit var searchResults: RecyclerView
     private lateinit var searchHintDetail: TextView
+    private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    override val styleId = R.style.SearchTheme
 
     override val layoutId = R.layout.view_search
 
@@ -42,16 +55,21 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view = super.onCreateView(inflater, container)
+        val contextThemeWrapper = ContextThemeWrapper(requireActivity(), styleId)
+        val themeInflater = inflater.cloneInContext(contextThemeWrapper)
+        val view = super.onCreateView(themeInflater, container)
         setupLayout(view)
+        StatusBarUtil.setLightStatusBar(view, requireActivity())
         return view
+
     }
 
-    //TODO add test for keyboard showing
-    override fun onAttach(view: View) {
-        super.onAttach(view)
-        presenter.onViewAttached()
-    }
+
+//    //TODO add test for keyboard showing
+//    override fun onAttach(view: View) {
+//        super.onAttach(view)
+//        presenter.start("")
+//    }
 
     @SuppressLint("RestrictedApi")
     override fun onChangeStarted(changeHandler: ControllerChangeHandler, changeType: ControllerChangeType) {
@@ -117,7 +135,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
     override fun onDetach(view: View) {
-        presenter.onViewDetached()
+        presenter.stop()
         super.onDetach(view)
     }
 
@@ -134,12 +152,28 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
             }
         }
         val clearSearch: ImageView = view.findViewById(R.id.clear_search)
+
         adapter = GroupAdapter()
-        searchresults = view.search_results
-        searchresults.adapter = adapter
-        searchresults.setHasFixedSize(true)
+        searchResults = view.search_results
+        searchResults.adapter = adapter
+        searchResults.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(requireContext())
-        searchresults.layoutManager = layoutManager
+        searchResults.layoutManager = layoutManager
+        adapter.setOnItemClickListener { item, _ ->
+            val extras = item.extras
+            val serviceLocation = extras["serviceLocation"] as ServiceLocationUi
+            val dartLiveDataController = LiveDataController.Builder(
+                serviceLocationId = serviceLocation.id,
+                serviceLocationName = serviceLocation.name,
+                serviceLocationService = serviceLocation.service,
+                serviceLocationStyleId = serviceLocation.styleId
+            ).build()
+            router.pushController(
+                RouterTransaction.with(dartLiveDataController)
+                    .pushChangeHandler(FadeChangeHandler())
+                    .popChangeHandler(FadeChangeHandler())
+            )
+        }
 
         val subscription = Observable.create<String> { subscriber ->
 
@@ -159,7 +193,12 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
             .debounce(400L, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .filter { it.length > 1 }
-            .doOnNext { presenter.onQueryTextSubmit(it) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnNext {
+                presenter.start(it)
+                val thread = Thread.currentThread().name
+                Timber.d("query ${Thread.currentThread().name}")
+            }
             .subscribe()
 
         searchQueryView.setOnEditorActionListener { _, actionId, _ ->
@@ -169,20 +208,36 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
             true
         }
         clearSearch.setOnClickListener { searchQueryView.setText("") }
+        swipeRefresh = view.swipeRefresh
+    }
+
+    override fun showLoading(isLoading: Boolean) {
+        swipeRefresh.isRefreshing = isLoading
     }
 
     override fun showSearchResults(searchResults: List<ServiceLocationUi>) {
         if (searchResults.isEmpty()) {
-            searchresults.visibility = View.GONE
+            this.searchResults.visibility = View.GONE
             searchHintDetail.visibility = View.VISIBLE
         } else {
             searchHintDetail.visibility = View.GONE
-            searchresults.visibility = View.VISIBLE
+            this.searchResults.visibility = View.VISIBLE
         }
-        adapter.update(searchResults.map { it.toItem() })
-        for (result in searchResults) {
-            Timber.d(result.toString())
+        val groups = mutableListOf<Group>()
+        val serviceLocations = searchResults.groupBy { it.serviceLocation.service }
+        for (entry in serviceLocations) {
+            groups.add(DividerItem())
+            groups.add(HeaderItem(entry.key.fullName))
+            for (item in entry.value) {
+                groups.add(item.toItem())
+            }
         }
+        groups.add(SpacerItem())
+        adapter.update(groups)
+    }
+
+    override fun showError() {
+
     }
 
 }

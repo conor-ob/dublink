@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ThemeAttributes">
+        <attr name="android:colorPrimary" />
+        <attr name="android:colorPrimaryDark" />
+        <attr name="android:background" />
+    </declare-styleable>
+
+</resources>

@@ -14,10 +14,9 @@ import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.model.dart.DartStationItem
-import ie.dublinmapper.util.CircularRevealChangeHandler
 import ie.dublinmapper.util.getApplicationComponent
 import ie.dublinmapper.util.requireContext
-import ie.dublinmapper.view.livedata.dart.DartLiveDataController
+import ie.dublinmapper.view.livedata.LiveDataController
 import ie.dublinmapper.view.search.SearchController
 import kotlinx.android.synthetic.main.view_favourites.view.*
 
@@ -26,6 +25,8 @@ class FavouritesController(
 ) : MvpBaseController<FavouritesView, FavouritesPresenter>(args), FavouritesView {
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
+
+    override val styleId = R.color.luasPurple
 
     override val layoutId = R.layout.view_favourites
 
@@ -43,16 +44,18 @@ class FavouritesController(
     private fun setupFavouritesList(view: View) {
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ -> onItemClicked(item) }
-        view.favouritesList.adapter = adapter
-        view.favouritesList.setHasFixedSize(true)
-        view.favouritesList.layoutManager = LinearLayoutManager(requireContext())
+        view.liveDataList.adapter = adapter
+        view.liveDataList.setHasFixedSize(true)
+        view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun onItemClicked(item: Item<*>) {
         if (item is DartStationItem) {
-            val dartLiveDataController = DartLiveDataController.Builder(
-                stationId = item.dartStation.id,
-                stationName = item.dartStation.name
+            val dartLiveDataController = LiveDataController.Builder(
+                serviceLocationId = item.dartStation.id,
+                serviceLocationName = item.dartStation.name,
+                serviceLocationService = item.dartStation.service,
+                serviceLocationStyleId = item.dartStation.styleId
             ).build()
             router.pushController(
                 RouterTransaction.with(dartLiveDataController)

@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
-import ie.dublinmapper.view.favourite.FavouritesController
+import ie.dublinmapper.util.Service
+import ie.dublinmapper.view.livedata.LiveDataController
+import ie.dublinmapper.view.search.SearchController
 import kotlinx.android.synthetic.main.activity_root.*
 
 class DublinMapperActivity : AppCompatActivity() {
@@ -21,7 +23,13 @@ class DublinMapperActivity : AppCompatActivity() {
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, activity_root, savedInstanceState)
         if (!router.hasRootController()) {
-            router.setRoot(RouterTransaction.with(FavouritesController(Bundle.EMPTY)))
+//            val liveDataController = LiveDataController.Builder(
+//                serviceLocationId = "CNLLY",
+//                serviceLocationName = "Dublin Connolly",
+//                serviceLocationService = Service.IRISH_RAIL,
+//                serviceLocationStyleId = R.style.DartTheme
+//            ).build()
+            router.setRoot(RouterTransaction.with(SearchController(Bundle.EMPTY)))
         }
     }
 
