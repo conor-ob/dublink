@@ -1,29 +1,56 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light">
-        <item name="colorPrimary">@color/indigo</item>
-        <item name="colorAccent">@color/indigo</item>
-        <item name="colorControlActivated">?colorPrimary</item>
-        <item name="toolbarStyle">@style/Widget.Toolbar</item>
-        <item name="tabStyle">@style/Widget.DublinMapper.Tabs</item>
-        <item name="android:textViewStyle">@style/Widget.DublinMapper.TextView</item>
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:statusBarColor">@color/status_bar</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <item name="android:navigationBarColor">@color/indigo_dark</item>
-        <item name="android:textColorTertiary">@color/text_color_tertiary</item>
+    <style name="DublinMapperTheme" parent="Theme.MaterialComponents.Light">
+        <!--<item name="colorPrimary">@color/indigo</item>-->
+        <!--<item name="colorAccent">@color/indigo</item>-->
+        <!--<item name="colorControlActivated">?colorPrimary</item>-->
+        <!--<item name="toolbarStyle">@style/Widget.Toolbar</item>-->
+        <!--<item name="tabStyle">@style/Widget.DublinMapper.Tabs</item>-->
+        <!--<item name="android:textViewStyle">@style/Widget.DublinMapper.TextView</item>-->
+        <!--<item name="android:windowBackground">@color/white</item>-->
+        <!--<item name="android:statusBarColor">@color/status_bar</item>-->
+        <!--<item name="android:windowLightStatusBar" tools:targetApi="m">false</item>-->
+        <!--<item name="android:navigationBarColor">@color/indigo_dark</item>-->
+        <!--<item name="android:textColorTertiary">@color/text_color_tertiary</item>-->
         <!--<item name="colorPrimary">@color/primary</item>-->
         <!--<item name="colorPrimaryDark">@color/primary_dark</item>-->
         <!--<item name="colorAccent">@color/accent</item>-->
         <!--<item name="windowActionBar">false</item>-->
         <!--<item name="windowNoTitle">true</item>-->
         <!--<item name="android:itemTextAppearance">@style/MenuItemTextAppearance</item>-->
-    </style>
-
-    <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="SearchTheme" parent="DublinMapperTheme">
+        <item name="android:colorPrimary">@color/white</item>
+        <item name="android:colorPrimaryDark">@color/grey_200</item>
+        <item name="android:background">@color/white</item>
+        <!--<item name="android:window">@color/dartGreen</item>-->
+    </style>
+
+    <style name="DartTheme" parent="DublinMapperTheme">
+        <item name="android:colorPrimary">@color/dartGreen</item>
+        <item name="android:colorPrimaryDark">@color/dartGreenDark</item>
+        <item name="android:background">@color/dartGreen</item>
+        <!--<item name="android:window">@color/dartGreen</item>-->
+    </style>
+
+    <style name="LuasTheme" parent="DublinMapperTheme">
+        <item name="android:colorPrimary">@color/luasPurple</item>
+        <item name="android:colorPrimaryDark">@color/luasPurpleDark</item>
+        <item name="android:background">@color/luasPurple</item>
+    </style>
+
+    <!--<style name="DublinMapperTheme.NoActionBar">-->
+    <!--<item name="windowActionBar">false</item>-->
+    <!--<item name="windowNoTitle">true</item>-->
+    <!--</style>-->
+
+    <style name="DublinMapperTheme.Launcher">
+        <!--<item name="android:windowBackground">@drawable/bg_launcher</item>-->
+        <item name="android:navigationBarColor">@color/color_navigation_bar_launcher</item>
     </style>
 
     <style name="Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
@@ -38,6 +65,11 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
     <style name="TextAppearance.DublinMapper.ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/google_sans_regular</item>
+    </style>
+
+    <style name="TextAppearance.DublinMapper.LiveDataSectionHeader" parent="@style/Base.TextAppearance.AppCompat.Medium">
         <item name="android:fontFamily">@font/google_sans_regular</item>
     </style>
 
@@ -89,7 +121,7 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
-    <style name="SearchToolbarTheme" parent="AppTheme">
+    <style name="SearchToolbarTheme" parent="DublinMapperTheme">
         <item name="android:textColorPrimary">@color/text_secondary</item>
         <item name="android:textColorSecondary">@color/text_secondary</item>
         <item name="android:fontFamily">@font/google_sans_regular</item>
