@@ -9,6 +9,7 @@
     <color name="white_90">#e6ffffff</color>
     <color name="indigo">#4768fd</color>
     <color name="indigo_dark">#3c54fe</color>
+    <color name="black_alpha_30">#4d000000</color>
 
     <color name="status_bar">@color/white</color>
     <color name="text_primary">@color/grey_900</color>
@@ -18,11 +19,13 @@
 
     <color name="aircoachOrange">#EF7B0A</color>
     <color name="busEireannRed">#A51922</color>
-    <color name="dartGreen">#388E3C</color>
+    <color name="dartGreen">#359245</color>
+    <color name="dartGreenDark">#2B7538</color>
     <color name="dublinBikesTeal">#004D40</color>
     <color name="dublinBusYellow">#FFD740</color>
     <color name="goAheadBlue">#4286F5</color>
     <color name="luasPurple">#512DA8</color>
+    <color name="luasPurpleDark">#3E2381</color>
     <color name="luasBlue">#0277Bd</color>
     <color name="luasGreen">#689F38</color>
     <color name="luasRed">#e53935</color>
@@ -31,6 +34,7 @@
     <color name="swordsExpressGreen">#00A850</color>
 
     <color name="search_status_bar">#bdbdbd</color>
+    <color name="color_navigation_bar_launcher">@color/black_alpha_30</color>
 
     <color name="blahGrey">#D2D2D2</color>
 

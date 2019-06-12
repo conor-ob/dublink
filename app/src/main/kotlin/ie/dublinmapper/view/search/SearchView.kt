@@ -5,6 +5,10 @@ import ie.dublinmapper.model.ServiceLocationUi
 
 interface SearchView : MvpView {
 
+    fun showLoading(isLoading: Boolean)
+
     fun showSearchResults(searchResults: List<ServiceLocationUi>)
+
+    fun showError()
 
 }

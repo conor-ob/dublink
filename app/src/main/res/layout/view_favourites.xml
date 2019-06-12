@@ -54,7 +54,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    android:id="@+id/favouritesList"
+                    android:id="@+id/liveDataList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
 

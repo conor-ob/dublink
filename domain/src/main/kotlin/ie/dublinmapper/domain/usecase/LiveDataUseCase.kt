@@ -2,6 +2,7 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.util.Service
 import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
@@ -31,6 +32,25 @@ class LiveDataUseCase @Inject constructor(
             return getLiveData(serviceLocation)
         }
         return getLiveData(serviceLocation).map { condenseLiveData(it) }
+    }
+
+    fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
+        return when (service) {
+            Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
+            Service.BUS_EIREANN -> return Observable.just(emptyList())
+            Service.IRISH_RAIL -> dartLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
+            Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { Collections.singletonList(it) as List<LiveData> }
+            Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
+            Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
+            Service.SWORDS_EXPRESS -> return Observable.just(emptyList())
+        }
+    }
+
+    fun getCondensedLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
+        if (service == Service.DUBLIN_BIKES) {
+            return getLiveData(serviceLocationId, service)
+        }
+        return getLiveData(serviceLocationId, service).map { condenseLiveData(it) }
     }
 
     private fun condenseLiveData(liveData: List<LiveData>): List<LiveData> {
@@ -69,7 +89,7 @@ class LiveDataUseCase @Inject constructor(
                 condensedLiveData[data.customHash] = cachedLiveData
             }
         }
-        return condensedLiveData.values.toList().take(3)
+        return condensedLiveData.values.toList()
     }
 
 }
