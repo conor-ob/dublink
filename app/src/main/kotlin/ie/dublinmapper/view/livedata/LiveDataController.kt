@@ -2,13 +2,10 @@ package ie.dublinmapper.view.livedata
 
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.ColorRes
-import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
@@ -32,9 +29,18 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         val contextThemeWrapper = ContextThemeWrapper(requireActivity(), args.getInt(SERVICE_LOCATION_STYLE_ID))
         val themeInflater = inflater.cloneInContext(contextThemeWrapper)
         val view = super.onCreateView(themeInflater, container)
+        setupTheme(view)
         setupToolbar(view)
         setupLiveData(view)
         return view
+    }
+
+    private fun setupTheme(view: View) {
+        val attributes = requireActivity().obtainStyledAttributes(styleId, R.styleable.ThemeAttributes)
+        val primaryColour = attributes.getColor(R.styleable.ThemeAttributes_android_colorPrimary, 0)
+        view.appbar.setBackgroundColor(primaryColour)
+        view.liveDataList.setBackgroundColor(primaryColour)
+        attributes.recycle()
     }
 
     private fun setupToolbar(view: View) {

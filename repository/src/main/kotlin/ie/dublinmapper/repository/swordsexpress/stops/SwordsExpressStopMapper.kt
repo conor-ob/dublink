@@ -7,6 +7,7 @@ import ie.dublinmapper.domain.model.SwordsExpressStop
 import ie.dublinmapper.service.swordsexpress.SwordsExpressStopJson
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.Service
 import java.util.*
 
 object SwordsExpressStopMapper {
@@ -45,7 +46,8 @@ object SwordsExpressStopMapper {
                     name = entity.location.name,
                     coordinate = Coordinate(entity.location.latitude, entity.location.longitude),
                     operators = mapOperators(entity.services),
-                    direction = entity.services[0].direction
+                    direction = entity.services[0].direction,
+                    service = Service.SWORDS_EXPRESS
                 )
             )
         }

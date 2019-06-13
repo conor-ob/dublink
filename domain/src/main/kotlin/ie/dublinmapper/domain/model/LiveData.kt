@@ -4,55 +4,79 @@ import ie.dublinmapper.util.Operator
 import org.threeten.bp.LocalTime
 import java.util.*
 
-sealed class LiveData(
-    open val customHash: Int = 0
-)
+interface LiveData {
+
+    val operator: Operator
+
+    val customHash: Int
+
+}
+
+interface TimedLiveData : LiveData {
+
+    val dueTime: List<DueTime>
+
+    val route: String
+
+    val destination: String
+
+}
 
 data class AircoachLiveData(
-    val dueTime: List<DueTime>,
-    val operator: Operator,
-    val route: String,
-    val destination: String
-) : LiveData(
-    Objects.hash(operator, route, destination)
-)
+    override val dueTime: List<DueTime>,
+    override val operator: Operator,
+    override val route: String,
+    override val destination: String,
+    override val customHash: Int = Objects.hash(operator, route, destination)
+) : TimedLiveData
+
+data class BusEireannLiveData(
+    override val dueTime: List<DueTime>,
+    override val operator: Operator,
+    override val route: String,
+    override val destination: String,
+    override val customHash: Int = Objects.hash(operator, route, destination)
+) : TimedLiveData
 
 data class DartLiveData(
-    val dueTime: List<DueTime>,
-    val operator: Operator,
-    val destination: String,
+    override val dueTime: List<DueTime>,
+    override val operator: Operator,
+    override val route: String,
+    override val destination: String,
+    override val customHash: Int = Objects.hash(operator, route, destination),
     val direction: String
-) : LiveData(
-    Objects.hash(operator, destination, direction)
-)
+) : TimedLiveData
 
 data class DublinBikesLiveData(
+    override val operator: Operator,
+    override val customHash: Int = Objects.hash(operator),
     val bikes: Int,
-    val docks: Int,
-    val operator: Operator
-) : LiveData()
+    val docks: Int
+) : LiveData
 
 data class DublinBusLiveData(
-    val dueTime: List<DueTime>,
-    val operator: Operator,
-    val route: String,
-    val destination: String
-) : LiveData(
-    Objects.hash(operator, route, destination)
-)
+    override val dueTime: List<DueTime>,
+    override val operator: Operator,
+    override val route: String,
+    override val destination: String,
+    override val customHash: Int = Objects.hash(operator, route, destination)
+) : TimedLiveData
 
 data class LuasLiveData(
-    val dueTime: List<DueTime>,
-    val operator: Operator,
-    val route: String,
-    val destination: String
-) : LiveData(
-    Objects.hash(operator, route, destination)
-)
+    override val dueTime: List<DueTime>,
+    override val operator: Operator,
+    override val route: String,
+    override val destination: String,
+    override val customHash: Int = Objects.hash(operator, route, destination)
+) : TimedLiveData
 
 data class SwordsExpressLiveData(
-    val placeHolder: Any
-)
+    override val dueTime: List<DueTime>,
+    override val operator: Operator,
+    override val route: String,
+    override val destination: String,
+    override val customHash: Int = Objects.hash(operator, route, destination)
+) : TimedLiveData
 
 data class DueTime(
     val minutes: Long,

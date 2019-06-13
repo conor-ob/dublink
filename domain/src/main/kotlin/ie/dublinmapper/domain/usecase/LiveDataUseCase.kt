@@ -2,8 +2,10 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.Service
 import io.reactivex.Observable
+import org.threeten.bp.LocalTime
 import java.util.*
 import javax.inject.Inject
 
@@ -24,6 +26,7 @@ class LiveDataUseCase @Inject constructor(
             is DublinBusStop -> dublinBusLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is LuasStop -> luasLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is SwordsExpressStop -> return Observable.just(emptyList())
+            else -> TODO()
         }
     }
 
@@ -38,7 +41,14 @@ class LiveDataUseCase @Inject constructor(
         return when (service) {
             Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
             Service.BUS_EIREANN -> return Observable.just(emptyList())
-            Service.IRISH_RAIL -> dartLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
+//            Service.IRISH_RAIL -> dartLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
+            Service.IRISH_RAIL -> Observable.just(listOf(DartLiveData(
+                dueTime = listOf(DueTime(5L, LocalTime.now())),
+                destination = "Greystones",
+                operator = Operator.DART,
+                route = Operator.DART.fullName,
+                direction = "Southbound"
+            )))
             Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { Collections.singletonList(it) as List<LiveData> }
             Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
             Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }

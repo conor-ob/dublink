@@ -33,7 +33,7 @@
     <style name="DartTheme" parent="DublinMapperTheme">
         <item name="android:colorPrimary">@color/dartGreen</item>
         <item name="android:colorPrimaryDark">@color/dartGreenDark</item>
-        <item name="android:background">@color/dartGreen</item>
+        <!--<item name="android:background">@color/dartGreen</item>-->
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
 

@@ -7,6 +7,7 @@ import ie.dublinmapper.domain.model.BusEireannStop
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.Service
 import java.util.*
 
 object BusEireannStopMapper {
@@ -48,6 +49,7 @@ object BusEireannStopMapper {
                     name = entity.location.name,
                     coordinate = Coordinate(entity.location.latitude, entity.location.longitude),
                     operators = mapOperators(entity.services),
+                    service = Service.BUS_EIREANN,
                     routes = mapOperatorsToRoutes(entity.services)
                 )
             )
@@ -63,16 +65,17 @@ object BusEireannStopMapper {
         return operators
     }
 
-    private fun mapOperatorsToRoutes(entities: List<BusEireannStopServiceEntity>): Map<Operator, Set<String>> {
-        val operatorsByRoute = mutableMapOf<Operator, Set<String>>()
+    private fun mapOperatorsToRoutes(entities: List<BusEireannStopServiceEntity>): Map<Operator, List<String>> {
+        val operatorsByRoute = mutableMapOf<Operator, List<String>>()
         for (entity in entities) {
             val operator = Operator.parse(entity.operator)
             val routes = operatorsByRoute[operator]
             if (routes == null) {
-                operatorsByRoute[operator] = setOf(entity.route)
+                operatorsByRoute[operator] = listOf(entity.route)
             } else {
-                val newRoutes = routes.toMutableSet()
+                val newRoutes = routes.toMutableList()
                 newRoutes.add(entity.route)
+//                newRoutes.sortedWith(AlphanumComp)
                 operatorsByRoute[operator] = newRoutes
             }
         }

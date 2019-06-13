@@ -14,6 +14,7 @@ object LiveDataMapper : Mapper<LiveData, LiveDataUi> {
             is DublinBikesLiveData -> DublinBikesLiveDataUi(from)
             is DublinBusLiveData -> DublinBusLiveDataUi(from)
             is LuasLiveData -> LuasLiveDataUi(from)
+            else -> TODO()
         }
     }
 

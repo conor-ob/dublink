@@ -7,6 +7,7 @@ import ie.dublinmapper.domain.model.DublinBikesDock
 import ie.dublinmapper.service.jcdecaux.StationJson
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.Service
 import java.util.*
 
 object DublinBikesDockMapper {
@@ -48,7 +49,8 @@ object DublinBikesDockMapper {
                     operators = mapOperators(entity.services),
                     docks = entity.services[0].docks,
                     availableBikes = entity.services[0].availableBikes,
-                    availableDocks = entity.services[0].availableDocks
+                    availableDocks = entity.services[0].availableDocks,
+                    service = Service.DUBLIN_BIKES
                 )
             )
         }
