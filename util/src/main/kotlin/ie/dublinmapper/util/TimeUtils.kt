@@ -90,6 +90,7 @@ object Formatter {
     val dateTimeAlt: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     val zonedDateTime: DateTimeFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss VV")
 //    val dayMonthYear: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+    val hourMinuteSecond: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
     val hourMinute: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 //    val dayMonth: DateTimeFormatter = DateTimeFormatter.ofPattern("dd MMM")
 //    val dayMonthTime: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM, HH:mm")

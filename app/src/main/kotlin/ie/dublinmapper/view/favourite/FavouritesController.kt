@@ -26,8 +26,6 @@ class FavouritesController(
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
 
-    override val styleId = R.color.luasPurple
-
     override val layoutId = R.layout.view_favourites
 
     override fun createPresenter(): FavouritesPresenter {
@@ -55,7 +53,8 @@ class FavouritesController(
                 serviceLocationId = item.dartStation.id,
                 serviceLocationName = item.dartStation.name,
                 serviceLocationService = item.dartStation.service,
-                serviceLocationStyleId = item.dartStation.styleId
+                serviceLocationStyleId = item.dartStation.styleId,
+                serviceLocationIsFavourite = false
             ).build()
             router.pushController(
                 RouterTransaction.with(dartLiveDataController)

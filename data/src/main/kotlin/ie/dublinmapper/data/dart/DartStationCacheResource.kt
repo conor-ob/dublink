@@ -6,6 +6,6 @@ interface DartStationCacheResource {
 
     fun selectStops(): Maybe<List<DartStationEntity>>
 
-    fun insertStops(stops: Pair<List<DartStationLocationEntity>, List<DartStationServiceEntity>>)
+    fun insertStops(stations: List<DartStationEntity>)
 
 }

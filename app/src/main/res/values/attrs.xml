@@ -2,9 +2,8 @@
 <resources>
 
     <declare-styleable name="ThemeAttributes">
-        <attr name="android:colorPrimary" />
-        <attr name="android:colorPrimaryDark" />
-        <attr name="android:background" />
+        <attr name="colorPrimary" />
+        <attr name="colorPrimaryDark" />
     </declare-styleable>
 
 </resources>

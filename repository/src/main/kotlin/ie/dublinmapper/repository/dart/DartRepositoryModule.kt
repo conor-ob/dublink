@@ -21,6 +21,7 @@ import ie.dublinmapper.service.irishrail.IrishRailApi
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
+import ma.glasnost.orika.MapperFacade
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -45,13 +46,14 @@ class DartRepositoryModule {
         cacheResource: DartStationCacheResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        mapper: MapperFacade
     ): Repository<DartStation> {
         val fetcher = DartStationFetcher(
             api,
             stringProvider.irishRailApiDartStationType()
         )
-        val persister = DartStationPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
+        val persister = DartStationPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return DartStationRepository(store)
     }

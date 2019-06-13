@@ -43,9 +43,10 @@ data class DartLiveData(
     override val operator: Operator,
     override val route: String,
     override val destination: String,
-    override val customHash: Int = Objects.hash(operator, route, destination),
     val direction: String
-) : TimedLiveData
+) : TimedLiveData {
+    override val customHash: Int = Objects.hash(operator, route, destination, direction)
+}
 
 data class DublinBikesLiveData(
     override val operator: Operator,

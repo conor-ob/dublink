@@ -32,12 +32,11 @@ class NearbyMapController(
     //TODO @Inject
     private lateinit var googleMapController: GoogleMapController
 
-    override val styleId = R.color.luasPurple
-
     override val layoutId = R.layout.view_nearby_map
 
     override fun createPresenter(): NearbyMapPresenter {
-        return getApplicationComponent().nearbyMapPresenter()
+        TODO()
+//        return getApplicationComponent().nearbyMapPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {

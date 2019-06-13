@@ -6,13 +6,13 @@
     <item
             android:id="@+id/action_add_favourite"
             android:title="@string/action_save_favourite"
-            android:icon="@drawable/ic_favourite_heart_white"
+            android:icon="@drawable/ic_favourite_unselected"
             app:showAsAction="ifRoom"/>
 
     <!--<item-->
             <!--android:id="@+id/action_refresh"-->
-            <!--android:title="@string/action_refresh"-->
-            <!--android:icon="@drawable/ic_refresh_white"-->
+            <!--android:title="map"-->
+            <!--android:icon="@drawable/pick_from_map"-->
             <!--app:showAsAction="ifRoom"/>-->
 
     <!--<item-->
