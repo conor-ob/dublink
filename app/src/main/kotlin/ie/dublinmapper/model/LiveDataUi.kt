@@ -4,10 +4,6 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.model.aircoach.AircoachCondensedLiveDataItem
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
-import ie.dublinmapper.model.dart.DartCondensedLiveDataItem
-import ie.dublinmapper.model.dart.DartCondensedLiveDataItemEnd
-import ie.dublinmapper.model.dart.DartLiveDataItem
-import ie.dublinmapper.model.dart.DartLiveDataItemEnd
 import ie.dublinmapper.model.dublinbikes.DublinBikesLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusCondensedLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
@@ -35,18 +31,8 @@ class DartLiveDataUi(
 ) : LiveDataUi() {
     override fun toString() = liveData.toString()
 
-    override fun toItem(isLast: Boolean) = if (liveData.dueTime.size > 1) {
-        if (isLast) {
-            DartCondensedLiveDataItemEnd(liveData)
-        } else {
-            DartCondensedLiveDataItem(liveData)
-        }
-    } else {
-        if (isLast) {
-            DartLiveDataItemEnd(liveData)
-        } else {
-            DartLiveDataItem(liveData)
-        }
+    override fun toItem(isLast: Boolean): Item {
+        TODO()
     }
 
 }

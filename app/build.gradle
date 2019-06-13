@@ -42,16 +42,16 @@ android {
         }
     }
 
-//    flavorDimensions "default"
-//    productFlavors {
-//        prod {
-//            dimension "default"
-//        }
-//        mock {
-//            dimension "default"
-//            applicationIdSuffix = ".mock"
-//        }
-//    }
+    flavorDimensions "default"
+    productFlavors {
+        prod {
+            dimension "default"
+        }
+        mock {
+            dimension "default"
+            applicationIdSuffix = ".mock"
+        }
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -62,7 +62,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
 //        prod.java.srcDirs += 'src/prod/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
-//        mock.java.srcDirs += 'src/mock/kotlin'
+        mock.java.srcDirs += 'src/mock/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 

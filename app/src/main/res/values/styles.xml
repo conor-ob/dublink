@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="DublinMapperTheme" parent="Theme.MaterialComponents.Light">
+    <style name="DublinMapperTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!--<item name="colorPrimary">@color/indigo</item>-->
         <!--<item name="colorAccent">@color/indigo</item>-->
         <!--<item name="colorControlActivated">?colorPrimary</item>-->
@@ -10,7 +10,7 @@
         <!--<item name="android:textViewStyle">@style/Widget.DublinMapper.TextView</item>-->
         <!--<item name="android:windowBackground">@color/white</item>-->
         <!--<item name="android:statusBarColor">@color/status_bar</item>-->
-        <!--<item name="android:windowLightStatusBar" tools:targetApi="m">false</item>-->
+        <!--<item name="android:windowLightStatusBar">true</item>-->
         <!--<item name="android:navigationBarColor">@color/indigo_dark</item>-->
         <!--<item name="android:textColorTertiary">@color/text_color_tertiary</item>-->
         <!--<item name="colorPrimary">@color/primary</item>-->
@@ -24,23 +24,38 @@
     </style>
 
     <style name="SearchTheme" parent="DublinMapperTheme">
-        <item name="android:colorPrimary">@color/white</item>
-        <item name="android:colorPrimaryDark">@color/grey_200</item>
-        <item name="android:background">@color/white</item>
+        <item name="colorPrimary">@color/searchPrimary</item>
+        <item name="colorPrimaryDark">@color/searchPrimaryDark</item>
+        <!--<item name="android:background">@color/white</item>-->
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
 
+    <style name="FavouritesTheme" parent="DublinMapperTheme">
+        <item name="colorPrimary">@color/favouritesPrimary</item>
+        <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>
+    </style>
+
     <style name="DartTheme" parent="DublinMapperTheme">
-        <item name="android:colorPrimary">@color/dartGreen</item>
-        <item name="android:colorPrimaryDark">@color/dartGreenDark</item>
+        <item name="colorPrimary">@color/dartGreen</item>
+        <item name="colorPrimaryDark">@color/dartGreenDark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!--<item name="android:textColorSecondary">@color/luasPurple</item>-->
+        <!--<item name="android:windowBackground">@color/dartGreen</item>-->
+        <!--<item name="android:background">@color/dartGreen</item>-->
+        <!--<item name="android:window">@color/dartGreen</item>-->
+    </style>
+
+    <style name="DublinBusTheme" parent="DublinMapperTheme">
+        <item name="android:colorPrimary">@color/dublinBusYellow</item>
+        <item name="android:colorPrimaryDark">@color/dublinBusYellowDark</item>
         <!--<item name="android:background">@color/dartGreen</item>-->
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
 
     <style name="LuasTheme" parent="DublinMapperTheme">
-        <item name="android:colorPrimary">@color/luasPurple</item>
-        <item name="android:colorPrimaryDark">@color/luasPurpleDark</item>
-        <item name="android:background">@color/luasPurple</item>
+        <item name="colorPrimary">@color/luasPurple</item>
+        <item name="colorPrimaryDark">@color/luasPurpleDark</item>
+        <!--<item name="android:background">@color/luasPurple</item>-->
     </style>
 
     <!--<style name="DublinMapperTheme.NoActionBar">-->
@@ -54,8 +69,9 @@
     </style>
 
     <style name="Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="titleTextAppearance">@style/TextAppearance.DublinMapper.ToolbarTitle</item>
-        <item name="popupTheme">@style/AppTheme.PopupTheme</item>
+        <!--<item name="titleTextAppearance">@style/TextAppearance.DublinMapper.ToolbarTitle</item>-->
+        <!--<item name="popupTheme">@style/AppTheme.PopupTheme</item>-->
+        <item name="android:theme">@style/ToolbarTheme</item>
     </style>
 
     <style name="AppTheme.PopupTheme" parent="ThemeOverlay.MaterialComponents.Light" />
@@ -66,11 +82,11 @@
 
     <style name="TextAppearance.DublinMapper.ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textColor">@color/white</item>
-        <item name="android:fontFamily">@font/google_sans_regular</item>
+        <item name="android:fontFamily">@font/google_sans_bold</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.LiveDataSectionHeader" parent="@style/Base.TextAppearance.AppCompat.Medium">
-        <item name="android:fontFamily">@font/google_sans_regular</item>
+        <item name="android:fontFamily">@font/google_sans_medium</item>
     </style>
 
     <style name="Widget.DublinMapper.Tabs" parent="@style/Widget.MaterialComponents.TabLayout">
@@ -96,7 +112,7 @@
 
     <style name="Widget.AppBar" parent="@style/Widget.Design.AppBarLayout">
         <item name="popupTheme">@style/AppTheme.PopupTheme</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:elevation">8dp</item>
         <item name="android:orientation">vertical</item>
     </style>
@@ -104,7 +120,6 @@
     <style name="Toolbar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/primary</item>
         <item name="android:elevation">0dp</item>
         <item name="android:theme">@style/ToolbarTheme</item>
     </style>
@@ -117,7 +132,7 @@
     </style>
 
     <style name="ToolbarTheme">
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/grey_900</item>
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 

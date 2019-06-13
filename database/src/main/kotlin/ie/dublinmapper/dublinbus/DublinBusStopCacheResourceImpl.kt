@@ -17,16 +17,9 @@ class DublinBusStopCacheResourceImpl(
 
     override fun insertStops(stops: List<DublinBusStopEntity>) {
         txRunner.runInTx {
-            dublinBusStopLocationDao.deleteAll()
+            dublinBusStopLocationDao.deleteAll() //TODO test cascade delete
             dublinBusStopLocationDao.insertAll(stops.map { it.location })
             dublinBusStopServiceDao.insertAll(stops.flatMap { it.services })
-        }
-    }
-
-    override fun insertStops(stops: Pair<List<DublinBusStopLocationEntity>, List<DublinBusStopServiceEntity>>) {
-        txRunner.runInTx {
-            dublinBusStopLocationDao.insertAll(stops.first)
-            dublinBusStopServiceDao.insertAll(stops.second)
         }
     }
 

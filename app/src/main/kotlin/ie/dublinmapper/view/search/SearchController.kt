@@ -46,8 +46,6 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     private lateinit var searchHintDetail: TextView
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
-    override val styleId = R.style.SearchTheme
-
     override val layoutId = R.layout.view_search
 
     override fun createPresenter(): SearchPresenter {
@@ -55,21 +53,18 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val contextThemeWrapper = ContextThemeWrapper(requireActivity(), styleId)
-        val themeInflater = inflater.cloneInContext(contextThemeWrapper)
-        val view = super.onCreateView(themeInflater, container)
+        val view = super.onCreateView(inflater, container)
         setupLayout(view)
         StatusBarUtil.setLightStatusBar(view, requireActivity())
         return view
 
     }
 
-
-//    //TODO add test for keyboard showing
-//    override fun onAttach(view: View) {
-//        super.onAttach(view)
-//        presenter.start("")
-//    }
+    //TODO add test for keyboard showing
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        presenter.start("")
+    }
 
     @SuppressLint("RestrictedApi")
     override fun onChangeStarted(changeHandler: ControllerChangeHandler, changeType: ControllerChangeType) {
@@ -162,14 +157,15 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         adapter.setOnItemClickListener { item, _ ->
             val extras = item.extras
             val serviceLocation = extras["serviceLocation"] as ServiceLocationUi
-            val dartLiveDataController = LiveDataController.Builder(
+            val liveDataController = LiveDataController.Builder(
                 serviceLocationId = serviceLocation.id,
                 serviceLocationName = serviceLocation.name,
                 serviceLocationService = serviceLocation.service,
-                serviceLocationStyleId = serviceLocation.styleId
+                serviceLocationStyleId = serviceLocation.styleId,
+                serviceLocationIsFavourite = false
             ).build()
             router.pushController(
-                RouterTransaction.with(dartLiveDataController)
+                RouterTransaction.with(liveDataController)
                     .pushChangeHandler(FadeChangeHandler())
                     .popChangeHandler(FadeChangeHandler())
             )
@@ -232,11 +228,21 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
                 groups.add(item.toItem())
             }
         }
-        groups.add(SpacerItem())
+        groups.add(DividerItem())
         adapter.update(groups)
     }
 
     override fun showError() {
+
+    }
+
+    class Builder(
+        serviceLocationStyleId: Int
+    ) : MvpBaseController.Builder(serviceLocationStyleId) {
+
+        fun build(): SearchController {
+            return SearchController(buildArgs())
+        }
 
     }
 

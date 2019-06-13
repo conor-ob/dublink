@@ -21,6 +21,7 @@ import ie.dublinmapper.service.di.ServiceModule
 import ie.dublinmapper.service.dublinbus.DublinBusModule
 import ie.dublinmapper.service.github.GithubModule
 import ie.dublinmapper.service.irishrail.IrishRailModule
+import ie.dublinmapper.service.irishrail.MockIrishRailModule
 import ie.dublinmapper.service.jcdecaux.JcDecauxModule
 import ie.dublinmapper.service.rtpi.RtpiModule
 import ie.dublinmapper.service.swordsexpress.SwordsExpressModule
@@ -41,7 +42,7 @@ import javax.inject.Singleton
         AircoachModule::class,
         DublinBusModule::class,
         GithubModule::class,
-        IrishRailModule::class,
+        MockIrishRailModule::class,
         JcDecauxModule::class,
         RtpiModule::class,
         SwordsExpressModule::class,
@@ -52,17 +53,9 @@ import javax.inject.Singleton
 )
 interface ApplicationComponent {
 
-    fun nearbyPresenter(): NearbyPresenterImpl
-
-    fun nearbyMapPresenter(): NearbyMapPresenterImpl
-
-    fun nearbyLiveDataPresenter(): NearbyLiveDataPresenterImpl
-
     fun favouritesPresenter(): FavouritesPresenterImpl
 
     fun liveDataPresenter(): LiveDataPresenterImpl
-
-    fun dartLiveDataPresenter(): LiveDataPresenterImpl
 
     fun searchPresenter(): SearchPresenterImpl
 
