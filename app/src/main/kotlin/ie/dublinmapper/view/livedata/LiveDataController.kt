@@ -3,6 +3,8 @@ package ie.dublinmapper.view.livedata
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.DividerItemDecoration.VERTICAL
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
@@ -10,6 +12,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
 import ie.dublinmapper.util.*
+import ie.dublinmapper.view.DublinMapperAdapter
 import kotlinx.android.synthetic.main.view_live_data.view.*
 import timber.log.Timber
 
@@ -22,7 +25,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
     override val layoutId = R.layout.view_live_data
 
     override fun createPresenter(): LiveDataPresenter {
-        return getApplicationComponent().dartLiveDataPresenter()
+        return getApplicationComponent().liveDataPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
@@ -62,6 +65,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         view.liveDataList.adapter = adapter
         view.liveDataList.setHasFixedSize(true)
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
+//        view.liveDataList.addItemDecoration(DartLiveDataItemDecoration()) //TODO different implementations
     }
 
     override fun onAttach(view: View) {

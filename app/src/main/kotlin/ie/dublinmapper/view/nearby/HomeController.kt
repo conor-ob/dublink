@@ -39,7 +39,8 @@ class HomeController(args: Bundle) : MvpBaseController<NearbyView, NearbyPresent
     override val layoutId = R.layout.view_home
 
     override fun createPresenter(): NearbyPresenter {
-        return getApplicationComponent().nearbyPresenter()
+        TODO()
+//        return getApplicationComponent().nearbyPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {

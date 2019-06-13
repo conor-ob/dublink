@@ -28,7 +28,7 @@ class SearchUseCase @Inject constructor(
         val searchResults = mutableListOf<ServiceLocation>()
         for (serviceLocation in serviceLocations) {
             if (serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
-                    serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
+                serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
                 searchResults.add(serviceLocation)
             } else {
                 for (operator in serviceLocation.operators) {
@@ -38,8 +38,26 @@ class SearchUseCase @Inject constructor(
                 }
             }
         }
-        return searchResults
+        return searchResults.filter { it.id == "BROCK" || it.id == "PERSE" }
     }
+
+//    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
+//        val adaptedQuery = query.toLowerCase().trim()
+//        val searchResults = mutableListOf<ServiceLocation>()
+//        for (serviceLocation in serviceLocations) {
+//            if (serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
+//                    serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
+//                searchResults.add(serviceLocation)
+//            } else {
+//                for (operator in serviceLocation.operators) {
+//                    if (operator.fullName.toLowerCase().contains(adaptedQuery)) {
+//                        searchResults.add(serviceLocation)
+//                    }
+//                }
+//            }
+//        }
+//        return searchResults
+//    }
 
 //    fun search(query: String): Observable<List<ServiceLocation>> {
 //        return Observable.combineLatest(

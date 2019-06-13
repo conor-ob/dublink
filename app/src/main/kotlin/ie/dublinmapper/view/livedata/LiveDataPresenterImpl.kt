@@ -1,10 +1,11 @@
 package ie.dublinmapper.view.livedata
 
 import com.xwray.groupie.Group
-import com.xwray.groupie.kotlinandroidextensions.Item
+import com.xwray.groupie.Section
 import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.model.*
+import ie.dublinmapper.model.dart.DartLiveDataItem
 import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.util.Service
 import ie.dublinmapper.view.BasePresenter
@@ -60,17 +61,18 @@ class LiveDataPresenterImpl @Inject constructor(
         val groups = liveDataUi.groupBy { it.liveData.direction }
 
         val items = mutableListOf<Group>()
-        items.add(DividerItem())
+//        items.add(DividerItem())
         for (entry in groups.entries) {
-            items.add(HeaderItem(entry.key))
+            val section = Section(HeaderItem(entry.key))
+//            items.add()
+//            items.add(HeaderItem(entry.key))
             val values = entry.value
             for (i in 0 until values.size) {
-                if (i == values.size - 1) {
-                    items.add(values[i].toItem(true))
-                } else {
-                    items.add(values[i].toItem())
-                }
+                val isLast = i == values.size - 1
+                val isEven = i % 2 == 0
+                section.add(DartLiveDataItem(values[i], isEven, isLast))
             }
+            items.add(section)
             items.add(DividerItem())
         }
         return items

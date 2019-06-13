@@ -23,6 +23,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
                     android:gravity="center_vertical"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit ="1"
+                    android:scrollHorizontally="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
                     app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
 
@@ -63,7 +69,7 @@
                 android:id="@+id/liveDataList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="@dimen/margin_normal"
-                android:paddingEnd="@dimen/margin_normal"/>
+                android:paddingStart="@dimen/padding_m"
+                android:paddingEnd="@dimen/padding_m"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

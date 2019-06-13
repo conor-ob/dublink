@@ -52,17 +52,9 @@ import javax.inject.Singleton
 )
 interface ApplicationComponent {
 
-    fun nearbyPresenter(): NearbyPresenterImpl
-
-    fun nearbyMapPresenter(): NearbyMapPresenterImpl
-
-    fun nearbyLiveDataPresenter(): NearbyLiveDataPresenterImpl
-
     fun favouritesPresenter(): FavouritesPresenterImpl
 
     fun liveDataPresenter(): LiveDataPresenterImpl
-
-    fun dartLiveDataPresenter(): LiveDataPresenterImpl
 
     fun searchPresenter(): SearchPresenterImpl
 

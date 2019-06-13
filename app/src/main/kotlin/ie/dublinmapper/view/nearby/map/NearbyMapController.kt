@@ -37,7 +37,8 @@ class NearbyMapController(
     override val layoutId = R.layout.view_nearby_map
 
     override fun createPresenter(): NearbyMapPresenter {
-        return getApplicationComponent().nearbyMapPresenter()
+        TODO()
+//        return getApplicationComponent().nearbyMapPresenter()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {

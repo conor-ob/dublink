@@ -65,11 +65,11 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
 
-//    //TODO add test for keyboard showing
-//    override fun onAttach(view: View) {
-//        super.onAttach(view)
-//        presenter.start("")
-//    }
+    //TODO add test for keyboard showing
+    override fun onAttach(view: View) {
+        super.onAttach(view)
+        presenter.start("")
+    }
 
     @SuppressLint("RestrictedApi")
     override fun onChangeStarted(changeHandler: ControllerChangeHandler, changeType: ControllerChangeType) {

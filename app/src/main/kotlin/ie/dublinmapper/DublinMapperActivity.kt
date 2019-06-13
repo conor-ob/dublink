@@ -23,13 +23,13 @@ class DublinMapperActivity : AppCompatActivity() {
     private fun setupRouter(savedInstanceState: Bundle?) {
         router = Conductor.attachRouter(this, activity_root, savedInstanceState)
         if (!router.hasRootController()) {
-            val liveDataController = LiveDataController.Builder(
-                serviceLocationId = "CNLLY",
-                serviceLocationName = "Dublin Connolly",
-                serviceLocationService = Service.IRISH_RAIL,
-                serviceLocationStyleId = R.style.DartTheme
-            ).build()
-            router.setRoot(RouterTransaction.with(liveDataController))
+//            val liveDataController = LiveDataController.Builder(
+//                serviceLocationId = "CNLLY",
+//                serviceLocationName = "Dublin Connolly",
+//                serviceLocationService = Service.IRISH_RAIL,
+//                serviceLocationStyleId = R.style.DartTheme
+//            ).build()
+            router.setRoot(RouterTransaction.with(SearchController(Bundle.EMPTY)))
         }
     }
 

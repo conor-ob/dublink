@@ -3,7 +3,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <corners
-            android:topLeftRadius="@dimen/default_padding"
-    android:topRightRadius="@dimen/default_padding"/>
+            android:topLeftRadius="@dimen/padding_s"
+    android:topRightRadius="@dimen/padding_s"/>
 
 </shape>
