@@ -43,7 +43,7 @@ abstract class AbstractDartCondensedLiveDataItem(
 
 class DartCondensedLiveDataItem(
     liveData: DartLiveData
-) : AbstractDartLiveDataItem(liveData) {
+) : AbstractDartCondensedLiveDataItem(liveData) {
 
     override fun getLayout() = R.layout.list_item_live_data_dart_condensed
 
@@ -51,7 +51,7 @@ class DartCondensedLiveDataItem(
 
 class DartCondensedLiveDataItemEnd(
     liveData: DartLiveData
-) : AbstractDartLiveDataItem(liveData) {
+) : AbstractDartCondensedLiveDataItem(liveData) {
 
     override fun getLayout() = R.layout.list_item_live_data_dart_condensed_end
 

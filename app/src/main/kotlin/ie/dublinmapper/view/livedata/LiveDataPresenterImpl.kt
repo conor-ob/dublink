@@ -19,7 +19,7 @@ class LiveDataPresenterImpl @Inject constructor(
 ) : BasePresenter<LiveDataView>(scheduler), LiveDataPresenter {
 
     override fun start(serviceLocationId: String, service: Service) {
-        subscriptions().add(useCase.getLiveData(serviceLocationId, service)
+        subscriptions().add(useCase.getCondensedLiveData(serviceLocationId, service)
             .compose(applySchedulers())
             .map { mapLiveData(service, it) }
             .doOnNext { ifViewAttached { view -> view.showLiveData(it) } }
@@ -44,8 +44,8 @@ class LiveDataPresenterImpl @Inject constructor(
         val groups = liveDataUi.groupBy { it.liveData.direction }
 
         val items = mutableListOf<Group>()
+        items.add(DividerItem())
         for (entry in groups.entries) {
-            items.add(DividerItem())
             items.add(HeaderItem(entry.key))
             val values = entry.value
             for (i in 0 until values.size) {
@@ -55,8 +55,8 @@ class LiveDataPresenterImpl @Inject constructor(
                     items.add(values[i].toItem())
                 }
             }
+            items.add(DividerItem())
         }
-        items.add(SpacerItem())
         return items
     }
 

@@ -28,7 +28,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val contextThemeWrapper = ContextThemeWrapper(requireActivity(), args.getInt(SERVICE_LOCATION_STYLE_ID))
         val themeInflater = inflater.cloneInContext(contextThemeWrapper)
-        val view = super.onCreateView(themeInflater, container)
+        val view = super.onCreateView(inflater, container)
         setupTheme(view)
         setupToolbar(view)
         setupLiveData(view)
