@@ -10,7 +10,7 @@
         <!--<item name="android:textViewStyle">@style/Widget.DublinMapper.TextView</item>-->
         <!--<item name="android:windowBackground">@color/white</item>-->
         <!--<item name="android:statusBarColor">@color/status_bar</item>-->
-        <!--<item name="android:windowLightStatusBar" tools:targetApi="m">false</item>-->
+        <!--<item name="android:windowLightStatusBar">true</item>-->
         <!--<item name="android:navigationBarColor">@color/indigo_dark</item>-->
         <!--<item name="android:textColorTertiary">@color/text_color_tertiary</item>-->
         <!--<item name="colorPrimary">@color/primary</item>-->
@@ -31,8 +31,9 @@
     </style>
 
     <style name="DartTheme" parent="DublinMapperTheme">
-        <item name="android:colorPrimary">@color/dartGreen</item>
-        <item name="android:colorPrimaryDark">@color/dartGreenDark</item>
+        <item name="colorPrimary">@color/dartGreen</item>
+        <item name="colorPrimaryDark">@color/dartGreenDark</item>
+        <!--<item name="android:windowBackground">@color/dartGreen</item>-->
         <!--<item name="android:background">@color/dartGreen</item>-->
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
@@ -45,9 +46,9 @@
     </style>
 
     <style name="LuasTheme" parent="DublinMapperTheme">
-        <item name="android:colorPrimary">@color/luasPurple</item>
-        <item name="android:colorPrimaryDark">@color/luasPurpleDark</item>
-        <item name="android:background">@color/luasPurple</item>
+        <item name="colorPrimary">@color/luasPurple</item>
+        <item name="colorPrimaryDark">@color/luasPurpleDark</item>
+        <!--<item name="android:background">@color/luasPurple</item>-->
     </style>
 
     <!--<style name="DublinMapperTheme.NoActionBar">-->
@@ -103,7 +104,7 @@
 
     <style name="Widget.AppBar" parent="@style/Widget.Design.AppBarLayout">
         <item name="popupTheme">@style/AppTheme.PopupTheme</item>
-        <item name="android:background">@color/white</item>
+        <item name="android:background">?attr/colorPrimary</item>
         <item name="android:elevation">8dp</item>
         <item name="android:orientation">vertical</item>
     </style>

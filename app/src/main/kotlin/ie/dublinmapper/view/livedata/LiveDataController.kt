@@ -28,8 +28,8 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val contextThemeWrapper = ContextThemeWrapper(requireActivity(), args.getInt(SERVICE_LOCATION_STYLE_ID))
         val themeInflater = inflater.cloneInContext(contextThemeWrapper)
-        val view = super.onCreateView(inflater, container)
-        setupTheme(view)
+        val view = super.onCreateView(themeInflater, container)
+//        setupTheme(view)
         setupToolbar(view)
         setupLiveData(view)
         return view
@@ -37,7 +37,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
 
     private fun setupTheme(view: View) {
         val attributes = requireActivity().obtainStyledAttributes(styleId, R.styleable.ThemeAttributes)
-        val primaryColour = attributes.getColor(R.styleable.ThemeAttributes_android_colorPrimary, 0)
+        val primaryColour = attributes.getColor(R.styleable.ThemeAttributes_colorPrimaryDark, 0)
         view.appbar.setBackgroundColor(primaryColour)
         view.liveDataList.setBackgroundColor(primaryColour)
         attributes.recycle()
