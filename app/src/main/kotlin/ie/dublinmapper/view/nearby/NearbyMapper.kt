@@ -15,6 +15,7 @@ object NearbyMapper : Mapper<ServiceLocation, ServiceLocationUi> {
             is DublinBusStop -> DublinBusStopUi(from)
             is LuasStop -> LuasStopUi(from)
             is SwordsExpressStop -> SwordsExpressStopUi(from)
+            else -> TODO()
         }
     }
 

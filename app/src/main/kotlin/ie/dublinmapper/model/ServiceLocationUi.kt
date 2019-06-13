@@ -13,18 +13,16 @@ import ie.dublinmapper.model.swordsexpress.SwordsExpressStopItem
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.Service
-import java.util.*
 
 sealed class ServiceLocationUi(
     open val serviceLocation: ServiceLocation,
     open val mapIconText: String,
     open val styleId: Int,
-    open val styleAttributesId: IntArray,
     val id: String = serviceLocation.id,
     val name: String = serviceLocation.name,
     val service: Service = serviceLocation.service,
     val coordinate: Coordinate = serviceLocation.coordinate,
-    val operators: EnumSet<Operator> = serviceLocation.operators
+    val operators: Set<Operator> = serviceLocation.operators
 ) {
 
     abstract fun toItem(): Item
@@ -50,8 +48,7 @@ data class AircoachStopUi(
 ) : ServiceLocationUi(
     aircoachStop,
     aircoachStop.name,
-    R.style.DublinMapperTheme,
-    IntArray(0)
+    R.style.DublinMapperTheme
 ) {
     override fun toItem() = AircoachStopItem(aircoachStop)
 }
@@ -61,8 +58,7 @@ data class BusEireannStopUi(
 ) : ServiceLocationUi(
     busEireannStop,
     busEireannStop.name,
-    R.style.DublinMapperTheme,
-    IntArray(0)
+    R.style.DublinMapperTheme
 ) {
     override fun toItem() = BusEireannStopItem(busEireannStop)
 }
@@ -72,8 +68,7 @@ data class DartStationUi(
 ) : ServiceLocationUi(
     dartStation,
     dartStation.name,
-    R.style.DartTheme,
-    R.styleable.ThemeAttributes
+    R.style.DartTheme
 ) {
     override fun toItem() = DartStationItem(this)
 }
@@ -83,8 +78,7 @@ data class DublinBikesDockUi(
 ) : ServiceLocationUi(
     dublinBikesDock,
     dublinBikesDock.availableBikes.toString(),
-    R.style.DublinMapperTheme,
-    IntArray(0)
+    R.style.DublinMapperTheme
 ) {
     override fun toItem() = DublinBikesDockItem(dublinBikesDock)
 }
@@ -95,8 +89,7 @@ data class DublinBusStopUi(
 ) : ServiceLocationUi(
     dublinBusStop,
     dublinBusStop.id,
-    R.style.DublinMapperTheme,
-    IntArray(0)
+    R.style.DublinMapperTheme
 ) {
     override fun toItem() = DublinBusStopItem(dublinBusStop)
 }
@@ -106,8 +99,7 @@ data class LuasStopUi(
 ) : ServiceLocationUi(
     luasStop,
     luasStop.name,
-    R.style.DublinMapperTheme,
-    IntArray(0)
+    R.style.DublinMapperTheme
 ) {
     override fun toItem() = LuasStopItem(luasStop)
 }
@@ -117,8 +109,7 @@ data class SwordsExpressStopUi(
 ) : ServiceLocationUi(
     swordsExpressStop,
     swordsExpressStop.name,
-    R.style.DublinMapperTheme,
-    IntArray(0)
+    R.style.DublinMapperTheme
 ) {
     override fun toItem() = SwordsExpressStopItem(swordsExpressStop)
 }
