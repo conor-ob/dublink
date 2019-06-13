@@ -5,6 +5,7 @@ import ie.dublinmapper.data.dublinbus.DublinBusStopServiceEntity
 import ie.dublinmapper.domain.model.DublinBusStop
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.Service
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
@@ -22,7 +23,8 @@ object DublinBusStopEntityToDomainMapper : CustomConverter<DublinBusStopEntity, 
             name = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = convertOperators(source.services),
-            routes = convertOperatorsToRoutes(source.services)
+            routes = convertOperatorsToRoutes(source.services),
+            service = Service.DUBLIN_BUS
         )
     }
 
@@ -34,16 +36,17 @@ object DublinBusStopEntityToDomainMapper : CustomConverter<DublinBusStopEntity, 
         return operators
     }
 
-    private fun convertOperatorsToRoutes(entities: List<DublinBusStopServiceEntity>): Map<Operator, Set<String>> {
-        val operatorsByRoute = mutableMapOf<Operator, Set<String>>()
+    private fun convertOperatorsToRoutes(entities: List<DublinBusStopServiceEntity>): Map<Operator, List<String>> {
+        val operatorsByRoute = mutableMapOf<Operator, List<String>>()
         for (entity in entities) {
             val operator = Operator.parse(entity.operator)
             val routes = operatorsByRoute[operator]
             if (routes == null) {
-                operatorsByRoute[operator] = setOf(entity.route)
+                operatorsByRoute[operator] = listOf(entity.route)
             } else {
-                val newRoutes = routes.toMutableSet()
+                val newRoutes = routes.toMutableList()
                 newRoutes.add(entity.route)
+//                newRoutes.sortedWith(AlphanumComp)
                 operatorsByRoute[operator] = newRoutes
             }
         }

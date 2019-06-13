@@ -7,6 +7,7 @@ import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.service.irishrail.IrishRailStationXml
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.Service
 import java.util.*
 
 object DartStationMapper {
@@ -58,7 +59,8 @@ object DartStationMapper {
                     id = entity.location.id,
                     name = entity.location.name,
                     coordinate = Coordinate(entity.location.latitude, entity.location.longitude),
-                    operators = mapOperators(entity.services)
+                    operators = mapOperators(entity.services),
+                    service = Service.IRISH_RAIL
                 )
             )
         }

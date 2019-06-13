@@ -13,11 +13,13 @@ import java.util.*
 object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
 
     override fun map(from: IrishRailStationDataXml): DartLiveData {
+        val operator = mapOperator(from.trainType!!, from.trainCode!!)
         return DartLiveData(
-            mapDueTime(from.expArrival!!, from.dueIn!!),
-            mapOperator(from.trainType!!, from.trainCode!!),
-            from.destination!!,
-            from.direction!!
+            dueTime = mapDueTime(from.expArrival!!, from.dueIn!!),
+            operator = operator,
+            direction = from.direction!!,
+            route = operator.fullName,
+            destination = from.destination!!
         )
     }
 
