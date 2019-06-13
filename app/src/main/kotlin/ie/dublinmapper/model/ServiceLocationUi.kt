@@ -89,9 +89,9 @@ data class DublinBusStopUi(
 ) : ServiceLocationUi(
     dublinBusStop,
     dublinBusStop.id,
-    R.style.DublinMapperTheme
+    R.style.DublinBusTheme
 ) {
-    override fun toItem() = DublinBusStopItem(dublinBusStop)
+    override fun toItem() = DublinBusStopItem(this)
 }
 
 data class LuasStopUi(

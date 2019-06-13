@@ -1,12 +1,10 @@
 package ie.dublinmapper.view.livedata
 
 import com.xwray.groupie.Group
+import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
-import ie.dublinmapper.model.DartLiveDataUi
-import ie.dublinmapper.model.HeaderItem
-import ie.dublinmapper.model.DividerItem
-import ie.dublinmapper.model.SpacerItem
+import ie.dublinmapper.model.*
 import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.util.Service
 import ie.dublinmapper.view.BasePresenter
@@ -33,10 +31,28 @@ class LiveDataPresenterImpl @Inject constructor(
     }
 
     private fun mapLiveData(service: Service, liveData: List<LiveData>): List<Group> {
-        when (service) {
-            Service.IRISH_RAIL -> return mapDartLiveData(liveData)
+        return when (service) {
+            Service.IRISH_RAIL -> mapDartLiveData(liveData)
+            Service.DUBLIN_BUS -> mapDublinBusLiveData(liveData)
             else -> TODO()
         }
+    }
+
+    private fun mapDublinBusLiveData(liveData: List<LiveData>): List<Group> {
+        val liveDataUi = LiveDataMapper.map(liveData).map { it as DublinBusLiveDataUi }
+
+        val items = mutableListOf<Group>()
+        items.add(DividerItem())
+        items.add(HeaderItem("Departures"))
+        for (i in 0 until liveDataUi.size) {
+            if (i == liveDataUi.size - 1) {
+                items.add(liveDataUi[i].toItem(true))
+            } else {
+                items.add(liveDataUi[i].toItem())
+            }
+        }
+        items.add(DividerItem())
+        return items
     }
 
     private fun mapDartLiveData(liveData: List<LiveData>): List<Group> {

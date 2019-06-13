@@ -162,14 +162,14 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         adapter.setOnItemClickListener { item, _ ->
             val extras = item.extras
             val serviceLocation = extras["serviceLocation"] as ServiceLocationUi
-            val dartLiveDataController = LiveDataController.Builder(
+            val liveDataController = LiveDataController.Builder(
                 serviceLocationId = serviceLocation.id,
                 serviceLocationName = serviceLocation.name,
                 serviceLocationService = serviceLocation.service,
                 serviceLocationStyleId = serviceLocation.styleId
             ).build()
             router.pushController(
-                RouterTransaction.with(dartLiveDataController)
+                RouterTransaction.with(liveDataController)
                     .pushChangeHandler(FadeChangeHandler())
                     .popChangeHandler(FadeChangeHandler())
             )

@@ -4,9 +4,14 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.DublinBusStop
+import ie.dublinmapper.model.DublinBusStopUi
 import kotlinx.android.synthetic.main.list_item_service_location_dublin_bus.*
 
-class DublinBusStopItem(private val dublinBusStop: DublinBusStop) : Item() {
+class DublinBusStopItem(private val dublinBusStop: DublinBusStopUi) : Item() {
+
+    init {
+        extras["serviceLocation"] = dublinBusStop
+    }
 
     override fun getLayout() = R.layout.list_item_service_location_dublin_bus
 

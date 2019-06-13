@@ -37,6 +37,13 @@
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
 
+    <style name="DublinBusTheme" parent="DublinMapperTheme">
+        <item name="android:colorPrimary">@color/dublinBusYellow</item>
+        <item name="android:colorPrimaryDark">@color/dublinBusYellowDark</item>
+        <!--<item name="android:background">@color/dartGreen</item>-->
+        <!--<item name="android:window">@color/dartGreen</item>-->
+    </style>
+
     <style name="LuasTheme" parent="DublinMapperTheme">
         <item name="android:colorPrimary">@color/luasPurple</item>
         <item name="android:colorPrimaryDark">@color/luasPurpleDark</item>
