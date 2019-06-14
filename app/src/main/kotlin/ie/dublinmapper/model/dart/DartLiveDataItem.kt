@@ -24,14 +24,14 @@ class DartLiveDataItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         if (isLast) {
-            viewHolder.root.background = viewHolder.itemView.context.getDrawable(R.drawable.shape_rounded_bottom_corners)
+            viewHolder.rootView.background = viewHolder.itemView.context.getDrawable(R.drawable.shape_rounded_bottom_corners)
         } else {
-            viewHolder.root.background = viewHolder.itemView.context.getDrawable(R.drawable.shape_rectangle)
+            viewHolder.rootView.background = viewHolder.itemView.context.getDrawable(R.drawable.shape_rectangle)
         }
         if (isEven) {
-            viewHolder.root.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.white))
+            viewHolder.rootView.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.white))
         } else {
-            viewHolder.root.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_200))
+            viewHolder.rootView.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_200))
         }
         val liveData = liveDataUi.liveData
         viewHolder.train_type.text = liveData.operator.fullName

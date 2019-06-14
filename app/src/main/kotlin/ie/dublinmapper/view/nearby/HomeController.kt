@@ -34,8 +34,6 @@ class HomeController(args: Bundle) : MvpBaseController<NearbyView, NearbyPresent
     private lateinit var nearbyLiveDataController: NearbyLiveDataController
     private lateinit var searchFab: FloatingActionButton
 
-    override val styleId = R.color.luasPurple
-
     override val layoutId = R.layout.view_home
 
     override fun createPresenter(): NearbyPresenter {

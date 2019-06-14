@@ -29,7 +29,7 @@ class DublinMapperActivity : AppCompatActivity() {
 //                serviceLocationService = Service.IRISH_RAIL,
 //                serviceLocationStyleId = R.style.DartTheme
 //            ).build()
-            router.setRoot(RouterTransaction.with(SearchController(Bundle.EMPTY)))
+            router.setRoot(RouterTransaction.with(SearchController.Builder(R.style.LuasTheme).build()))
         }
     }
 

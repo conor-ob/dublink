@@ -9,11 +9,11 @@
             android:icon="@drawable/ic_favourite_heart_white"
             app:showAsAction="ifRoom"/>
 
-    <!--<item-->
-            <!--android:id="@+id/action_refresh"-->
-            <!--android:title="@string/action_refresh"-->
-            <!--android:icon="@drawable/ic_refresh_white"-->
-            <!--app:showAsAction="ifRoom"/>-->
+    <item
+            android:id="@+id/action_refresh"
+            android:title="map"
+            android:icon="@drawable/pick_from_map"
+            app:showAsAction="ifRoom"/>
 
     <!--<item-->
             <!--android:id="@+id/action_show_map"-->

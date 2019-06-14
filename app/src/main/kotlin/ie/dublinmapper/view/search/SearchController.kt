@@ -46,8 +46,6 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     private lateinit var searchHintDetail: TextView
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
-    override val styleId = R.style.SearchTheme
-
     override val layoutId = R.layout.view_search
 
     override fun createPresenter(): SearchPresenter {
@@ -55,7 +53,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val contextThemeWrapper = ContextThemeWrapper(requireActivity(), styleId)
+        val contextThemeWrapper = ContextThemeWrapper(requireActivity(), R.style.DublinMapperTheme)
         val themeInflater = inflater.cloneInContext(contextThemeWrapper)
         val view = super.onCreateView(themeInflater, container)
         setupLayout(view)
@@ -63,7 +61,6 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         return view
 
     }
-
 
     //TODO add test for keyboard showing
     override fun onAttach(view: View) {
@@ -237,6 +234,16 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
     override fun showError() {
+
+    }
+
+    class Builder(
+        serviceLocationStyleId: Int
+    ) : MvpBaseController.Builder(serviceLocationStyleId) {
+
+        fun build(): SearchController {
+            return SearchController(buildArgs())
+        }
 
     }
 

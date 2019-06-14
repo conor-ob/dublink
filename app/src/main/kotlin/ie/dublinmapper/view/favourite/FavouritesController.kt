@@ -26,8 +26,6 @@ class FavouritesController(
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
 
-    override val styleId = R.color.luasPurple
-
     override val layoutId = R.layout.view_favourites
 
     override fun createPresenter(): FavouritesPresenter {

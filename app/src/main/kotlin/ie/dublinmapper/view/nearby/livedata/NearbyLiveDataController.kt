@@ -29,8 +29,6 @@ class NearbyLiveDataController(
     private lateinit var recyclerView: RecyclerView
     private lateinit var container: View
 
-    override val styleId = R.color.luasPurple
-
     override val layoutId = R.layout.view_nearby_live_data
 
     override fun createPresenter(): NearbyLiveDataPresenter {
