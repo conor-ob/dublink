@@ -22,7 +22,7 @@ class AircoachLiveDataUi(
     override fun toItem(isLast: Boolean) = if (liveData.dueTime.size > 1) {
         AircoachCondensedLiveDataItem(liveData)
     } else {
-        AircoachLiveDataItem(liveData)
+        AircoachLiveDataItem(this)
     }
 }
 
