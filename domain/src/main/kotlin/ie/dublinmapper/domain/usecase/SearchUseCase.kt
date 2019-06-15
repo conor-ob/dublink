@@ -4,6 +4,8 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.functions.Function7
 import javax.inject.Inject
 
@@ -19,8 +21,35 @@ class SearchUseCase @Inject constructor(
 ) {
 
     fun search(query: String): Observable<List<ServiceLocation>> {
-        return dartStationRepository.getAll()
-            .map { search(query, it) }
+        return Observable.combineLatest(
+            aircoachStopRepository.getAll().subscribeOn(scheduler.io),
+//            busEireannStopRepository.getAll().subscribeOn(scheduler.io),
+            dartStationRepository.getAll().subscribeOn(scheduler.io),
+//            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
+//            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
+            luasStopRepository.getAll().subscribeOn(scheduler.io),
+//            swordsExpressStopRepository.getAll().subscribeOn(scheduler.io),
+//            Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
+//                search(query, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops)
+//            }
+            Function3 { aircoachStops, dartStations, luasStops ->
+                search(query, aircoachStops, dartStations, luasStops)
+            }
+        )
+    }
+
+    private fun search(
+        query: String,
+        aircoachStops: List<AircoachStop>,
+        dartStations: List<DartStation>,
+        luasStops: List<LuasStop>
+    ) : List<ServiceLocation> {
+        val searchCollections = mutableListOf<Collection<ServiceLocation>>()
+        searchCollections.add(search(query, aircoachStops))
+        searchCollections.add(search(query, dartStations))
+        searchCollections.add(search(query, luasStops))
+        searchCollections.sortBy { it.size }
+        return searchCollections.flatten()
     }
 
     private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
@@ -40,6 +69,29 @@ class SearchUseCase @Inject constructor(
         }
         return searchResults
     }
+
+//    fun search(query: String): Observable<List<ServiceLocation>> {
+//        return dartStationRepository.getAll()
+//            .map { search(query, it) }
+//    }
+//
+//    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
+//        val adaptedQuery = query.toLowerCase().trim()
+//        val searchResults = mutableListOf<ServiceLocation>()
+//        for (serviceLocation in serviceLocations) {
+//            if (serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
+//                serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
+//                searchResults.add(serviceLocation)
+//            } else {
+//                for (operator in serviceLocation.operators) {
+//                    if (operator.fullName.toLowerCase().contains(adaptedQuery)) {
+//                        searchResults.add(serviceLocation)
+//                    }
+//                }
+//            }
+//        }
+//        return searchResults
+//    }
 
 //    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
 //        val adaptedQuery = query.toLowerCase().trim()
@@ -73,7 +125,7 @@ class SearchUseCase @Inject constructor(
 //            }
 //        )
 //    }
-
+//
 //    private fun search(
 //        query: String,
 //        aircoachStops: List<AircoachStop>,
@@ -95,7 +147,7 @@ class SearchUseCase @Inject constructor(
 //        searchCollections.sortBy { it.size }
 //        return searchCollections.flatten()
 //    }
-
+//
 //    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
 //        val adaptedQuery = query.toLowerCase().trim()
 //        val searchResults = mutableListOf<ServiceLocation>()

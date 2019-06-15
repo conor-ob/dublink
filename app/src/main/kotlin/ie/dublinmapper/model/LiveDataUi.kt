@@ -62,7 +62,7 @@ class LuasLiveDataUi(
     override fun toItem(isLast: Boolean) = if (liveData.dueTime.size > 1) {
         LuasCondensedLiveDataItem(liveData)
     } else {
-        LuasLiveDataItem(liveData)
+        LuasLiveDataItem(this)
     }
 }
 
