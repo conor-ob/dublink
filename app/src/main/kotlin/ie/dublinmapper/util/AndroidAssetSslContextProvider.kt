@@ -1,6 +1,7 @@
 package ie.dublinmapper.util
 
 import android.content.Context
+import timber.log.Timber
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -13,14 +14,15 @@ class AndroidAssetSslContextProvider(private val context: Context) : SslContextP
         val sslContext = SSLContext.getInstance("TLS")
         sslContext.init(null, arrayOf<X509TrustManager>(object : X509TrustManager {
             override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-
+                Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
             }
 
             override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-
+                Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
             }
 
             override fun getAcceptedIssuers(): Array<X509Certificate> {
+                Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
                 return  emptyArray()
             }
 
