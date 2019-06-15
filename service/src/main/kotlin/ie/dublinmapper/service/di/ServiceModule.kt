@@ -38,6 +38,11 @@ class ServiceModule {
     ): OkHttpClient {
         return OkHttpClient.Builder()
             //.addInterceptor(downloadInterceptor)
+//            .hostnameVerifier { hostname, session ->
+//                return@hostnameVerifier hostname == "tracker.aircoach.ie"
+//                        && session.peerHost == "tracker.aircoach.ie"
+//                        && session.peerPort == 443
+//            }
             .sslSocketFactory(sslContextProvider.sslContext().socketFactory)
             .addNetworkInterceptor(NetworkLoggingInterceptor())
             .retryOnConnectionFailure(true)
