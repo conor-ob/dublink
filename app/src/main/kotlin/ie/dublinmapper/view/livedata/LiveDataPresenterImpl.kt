@@ -5,6 +5,7 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.model.*
+import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
 import ie.dublinmapper.model.dart.DartLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
 import ie.dublinmapper.util.RxScheduler
@@ -49,7 +50,20 @@ class LiveDataPresenterImpl @Inject constructor(
         val liveDataUi = LiveDataMapper.map(liveData).map { it as AircoachLiveDataUi }
         val groups = liveDataUi.groupBy { it.liveData.destination }
 
-        return emptyList()
+        val items = mutableListOf<Group>()
+        items.add(DividerItem())
+        for (entry in groups.entries) {
+            val section = Section(HeaderItem(entry.key))
+            val values = entry.value
+            for (i in 0 until values.size) {
+                val isLast = i == values.size - 1
+                val isEven = i % 2 == 0
+                section.add(AircoachLiveDataItem(values[i]))
+            }
+            items.add(section)
+            items.add(DividerItem())
+        }
+        return items
     }
 
     private fun mapLuasLiveData(liveData: List<LiveData>): List<Group> {
