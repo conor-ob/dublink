@@ -29,6 +29,11 @@ class ApplicationModule(
     ): StringProvider = AndroidResourceStringProvider(context, resources)
 
     @Provides
+    fun sslContextProvider(
+        context: Context
+    ): SslContextProvider = AndroidAssetSslContextProvider(context)
+
+    @Provides
     fun mapMarkerManager(context: Context): GoogleMapController =
         GoogleMapController(context)
 

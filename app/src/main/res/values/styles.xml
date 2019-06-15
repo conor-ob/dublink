@@ -35,6 +35,11 @@
         <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>
     </style>
 
+    <style name="AircoachTheme" parent="DublinMapperTheme">
+        <item name="colorPrimary">@color/aircoachOrange</item>
+        <item name="colorPrimaryDark">@color/aircoachOrangeDark</item>
+    </style>
+
     <style name="DartTheme" parent="DublinMapperTheme">
         <item name="colorPrimary">@color/dartGreen</item>
         <item name="colorPrimaryDark">@color/dartGreenDark</item>

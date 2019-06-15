@@ -40,7 +40,7 @@ class AircoachModule {
     @Singleton
     fun aircoachApi(
         stringProvider: StringProvider,
-        okHttpClient: OkHttpClient,
+        @Named("AIRCOACH") okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
     ): AircoachApi {

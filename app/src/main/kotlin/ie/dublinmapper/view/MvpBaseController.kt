@@ -85,8 +85,9 @@ abstract class MvpBaseController<V : MvpView, P : MvpPresenter<V>>(args: Bundle)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         val attributes = requireActivity().obtainStyledAttributes(args.getInt(STYLE_ID), R.styleable.ThemeAttributes)
-        val statusBarColour = attributes.getColor(R.styleable.ThemeAttributes_colorPrimaryDark, 0)
-        window.statusBarColor = statusBarColour
+        val primaryDark = attributes.getColor(R.styleable.ThemeAttributes_colorPrimaryDark, 0)
+        window.statusBarColor = primaryDark
+        window.navigationBarColor = primaryDark
         attributes.recycle()
     }
 

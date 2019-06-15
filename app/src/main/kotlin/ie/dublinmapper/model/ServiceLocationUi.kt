@@ -48,9 +48,9 @@ data class AircoachStopUi(
 ) : ServiceLocationUi(
     aircoachStop,
     aircoachStop.name,
-    R.style.DublinMapperTheme
+    R.style.AircoachTheme
 ) {
-    override fun toItem() = AircoachStopItem(aircoachStop)
+    override fun toItem() = AircoachStopItem(this)
 }
 
 data class BusEireannStopUi(
@@ -99,9 +99,9 @@ data class LuasStopUi(
 ) : ServiceLocationUi(
     luasStop,
     luasStop.name,
-    R.style.DublinMapperTheme
+    R.style.LuasTheme
 ) {
-    override fun toItem() = LuasStopItem(luasStop)
+    override fun toItem() = LuasStopItem(this)
 }
 
 data class SwordsExpressStopUi(

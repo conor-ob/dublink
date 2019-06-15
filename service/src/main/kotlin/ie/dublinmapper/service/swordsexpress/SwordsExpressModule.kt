@@ -17,7 +17,7 @@ class SwordsExpressModule {
     @Singleton
     fun swordsExpressApi(
         stringProvider: StringProvider,
-        okHttpClient: OkHttpClient,
+        @Named("DEFAULT") okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
     ): SwordsExpressApi {
