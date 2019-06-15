@@ -17,7 +17,7 @@ class GithubModule {
     @Singleton
     fun githubApi(
         stringProvider: StringProvider,
-        okHttpClient: OkHttpClient,
+        @Named("DEFAULT") okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
     ): GithubApi {
