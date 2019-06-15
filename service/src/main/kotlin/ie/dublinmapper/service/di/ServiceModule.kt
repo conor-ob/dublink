@@ -2,6 +2,7 @@ package ie.dublinmapper.service.di
 
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.util.SslContextProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -17,9 +18,27 @@ class ServiceModule {
 
     @Provides
     @Singleton
-    fun okHttpClient(): OkHttpClient {
+    @Named("DEFAULT")
+    fun defaultOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             //.addInterceptor(downloadInterceptor)
+            .addNetworkInterceptor(NetworkLoggingInterceptor())
+            .retryOnConnectionFailure(true)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("AIRCOACH")
+    fun okHttpClient(
+        sslContextProvider: SslContextProvider
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            //.addInterceptor(downloadInterceptor)
+            .sslSocketFactory(sslContextProvider.sslContext().socketFactory)
             .addNetworkInterceptor(NetworkLoggingInterceptor())
             .retryOnConnectionFailure(true)
             .connectTimeout(60, TimeUnit.SECONDS)

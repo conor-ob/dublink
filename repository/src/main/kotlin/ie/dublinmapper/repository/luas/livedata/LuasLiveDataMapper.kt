@@ -17,7 +17,8 @@ object LuasLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LuasLiveData>
             mapDueTime(from.arrivalDateTime),
             Operator.LUAS,
             from.route,
-            mapDestination(from)
+            mapDestination(from),
+            from.direction
         )
     }
 

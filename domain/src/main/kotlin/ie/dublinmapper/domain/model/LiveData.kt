@@ -68,8 +68,10 @@ data class LuasLiveData(
     override val operator: Operator,
     override val route: String,
     override val destination: String,
-    override val customHash: Int = Objects.hash(operator, route, destination)
-) : TimedLiveData
+    val direction: String
+) : TimedLiveData {
+    override val customHash: Int = Objects.hash(operator, route, destination, direction)
+}
 
 data class SwordsExpressLiveData(
     override val dueTime: List<DueTime>,
