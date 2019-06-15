@@ -19,13 +19,13 @@
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
+                app:navigationIcon="@drawable/ic_arrow_back"
                 android:layout_height="?attr/actionBarSize">
 
             <TextView
                     android:id="@+id/serviceLocationName"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:layout_marginStart="12dp"
                     android:gravity="center_vertical"
                     android:singleLine="true"
                     android:ellipsize="marquee"
@@ -74,7 +74,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingStart="@dimen/padding_m"
-                android:paddingEnd="@dimen/padding_m"/>
+                android:paddingStart="@dimen/content_padding_horizontal"
+                android:paddingEnd="@dimen/content_padding_horizontal"
+                tools:listitem="@layout/list_item_live_data_dart"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

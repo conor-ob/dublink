@@ -31,7 +31,7 @@ class DartLiveDataItem(
         if (isEven) {
             viewHolder.rootView.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.white))
         } else {
-            viewHolder.rootView.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_200))
+            viewHolder.rootView.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_100))
         }
         val liveData = liveDataUi.liveData
         viewHolder.train_type.text = liveData.operator.fullName

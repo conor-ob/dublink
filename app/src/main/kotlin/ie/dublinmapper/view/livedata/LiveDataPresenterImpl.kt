@@ -61,11 +61,9 @@ class LiveDataPresenterImpl @Inject constructor(
         val groups = liveDataUi.groupBy { it.liveData.direction }
 
         val items = mutableListOf<Group>()
-//        items.add(DividerItem())
+        items.add(DividerItem())
         for (entry in groups.entries) {
             val section = Section(HeaderItem(entry.key))
-//            items.add()
-//            items.add(HeaderItem(entry.key))
             val values = entry.value
             for (i in 0 until values.size) {
                 val isLast = i == values.size - 1

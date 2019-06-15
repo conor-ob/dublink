@@ -28,40 +28,45 @@ class MockIrishRailApi : IrishRailApi {
                     IrishRailStationDataXml(
                         trainType = "DART",
                         trainCode = "DART",
-                        expArrival = "10:10",
-                        dueIn = "13",
+                        expArrival = "10:15",
+                        queryTime = "10:10:00",
+                        dueIn = "5",
                         direction = "Northbound",
                         destination = "Malahide"
                     ),
                     IrishRailStationDataXml(
                         trainType = "ARROW",
                         trainCode = "D",
-                        expArrival = "10:15",
-                        dueIn = "23",
+                        expArrival = "10:17",
+                        queryTime = "10:10:00",
+                        dueIn = "7",
                         direction = "Northbound",
                         destination = "Dublin Connolly"
                     ),
                     IrishRailStationDataXml(
                         trainType = "DART",
                         trainCode = "DART",
-                        expArrival = "10:34",
-                        dueIn = "13",
+                        expArrival = "10:20",
+                        queryTime = "10:10:00",
+                        dueIn = "10",
                         direction = "Southbound",
                         destination = "Bray"
                     ),
                     IrishRailStationDataXml(
                         trainType = "DART",
                         trainCode = "DART",
-                        expArrival = "10:11",
-                        dueIn = "13",
+                        expArrival = "10:31",
+                        queryTime = "10:10:00",
+                        dueIn = "21",
                         direction = "Southbound",
                         destination = "Greystones"
                     ),
                     IrishRailStationDataXml(
                         trainType = "DART",
                         trainCode = "DART",
-                        expArrival = "10:01",
-                        dueIn = "13",
+                        expArrival = "11:06",
+                        queryTime = "10:10:00",
+                        dueIn = "56",
                         direction = "Southbound",
                         destination = "Bray"
                     )

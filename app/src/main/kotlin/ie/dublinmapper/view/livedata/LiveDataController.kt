@@ -31,9 +31,13 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
 
     private fun setupToolbar(view: View) {
         view.serviceLocationName.text = requireStringArg(SERVICE_LOCATION_NAME)
-        view.toolbar.inflateMenu(R.menu.menu_live_data)
+        if (args.getBoolean(SERVICE_LOCATION_IS_FAVOURITE)) {
+            view.toolbar.inflateMenu(R.menu.menu_live_data_favourite)
+        } else {
+            view.toolbar.inflateMenu(R.menu.menu_live_data)
+        }
         view.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        view.toolbar.setLogo(R.drawable.ic_map_marker_dart_1)
+//        view.toolbar.setLogo(R.drawable.ic_map_marker_dart_1)
         view.toolbar.setNavigationOnClickListener { router.handleBack() }
         view.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
@@ -49,6 +53,9 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         view.liveDataList.adapter = adapter
         view.liveDataList.setHasFixedSize(true)
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
+        adapter.setOnItemClickListener { item, view ->
+            Timber.d("clicked")
+        }
     }
 
     override fun onAttach(view: View) {
@@ -73,6 +80,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         private const val SERVICE_LOCATION_ID = "service_location_id"
         private const val SERVICE_LOCATION_NAME = "service_location_name"
         private const val SERVICE_LOCATION_SERVICE = "service_location_service"
+        private const val SERVICE_LOCATION_IS_FAVOURITE = "service_location_is_favourite"
 
     }
 
@@ -80,6 +88,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         private val serviceLocationId: String,
         private val serviceLocationName: String,
         private val serviceLocationService: Service,
+        private val serviceLocationIsFavourite: Boolean,
         serviceLocationStyleId: Int
     ) : MvpBaseController.Builder(serviceLocationStyleId) {
 
@@ -88,6 +97,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
                 putString(SERVICE_LOCATION_ID, serviceLocationId)
                 putString(SERVICE_LOCATION_NAME, serviceLocationName)
                 putSerializable(SERVICE_LOCATION_SERVICE, serviceLocationService)
+                putBoolean(SERVICE_LOCATION_IS_FAVOURITE, serviceLocationIsFavourite)
             }
             return LiveDataController(args)
         }

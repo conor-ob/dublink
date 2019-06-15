@@ -53,7 +53,8 @@ class FavouritesController(
                 serviceLocationId = item.dartStation.id,
                 serviceLocationName = item.dartStation.name,
                 serviceLocationService = item.dartStation.service,
-                serviceLocationStyleId = item.dartStation.styleId
+                serviceLocationStyleId = item.dartStation.styleId,
+                serviceLocationIsFavourite = false
             ).build()
             router.pushController(
                 RouterTransaction.with(dartLiveDataController)

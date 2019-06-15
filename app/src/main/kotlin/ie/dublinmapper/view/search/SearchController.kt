@@ -53,9 +53,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val contextThemeWrapper = ContextThemeWrapper(requireActivity(), R.style.DublinMapperTheme)
-        val themeInflater = inflater.cloneInContext(contextThemeWrapper)
-        val view = super.onCreateView(themeInflater, container)
+        val view = super.onCreateView(inflater, container)
         setupLayout(view)
         StatusBarUtil.setLightStatusBar(view, requireActivity())
         return view
@@ -163,7 +161,8 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
                 serviceLocationId = serviceLocation.id,
                 serviceLocationName = serviceLocation.name,
                 serviceLocationService = serviceLocation.service,
-                serviceLocationStyleId = serviceLocation.styleId
+                serviceLocationStyleId = serviceLocation.styleId,
+                serviceLocationIsFavourite = false
             ).build()
             router.pushController(
                 RouterTransaction.with(liveDataController)
@@ -229,7 +228,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
                 groups.add(item.toItem())
             }
         }
-        groups.add(SpacerItem())
+        groups.add(DividerItem())
         adapter.update(groups)
     }
 

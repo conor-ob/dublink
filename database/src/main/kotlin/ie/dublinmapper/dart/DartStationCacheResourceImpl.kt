@@ -15,10 +15,11 @@ class DartStationCacheResourceImpl(
         return dartStationDao.selectAll()
     }
 
-    override fun insertStops(stops: Pair<List<DartStationLocationEntity>, List<DartStationServiceEntity>>) {
+    override fun insertStops(stations: List<DartStationEntity>) {
         txRunner.runInTx {
-            dartStationLocationDao.insertAll(stops.first)
-            dartStationServiceDao.insertAll(stops.second)
+            dartStationLocationDao.deleteAll() //TODO test cascade delete
+            dartStationLocationDao.insertAll(stations.map { it.location })
+            dartStationServiceDao.insertAll(stations.flatMap { it.services })
         }
     }
 

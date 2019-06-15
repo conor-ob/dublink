@@ -38,7 +38,7 @@ class SearchUseCase @Inject constructor(
                 }
             }
         }
-        return searchResults.filter { it.id == "BROCK" || it.id == "PERSE" }
+        return searchResults
     }
 
 //    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {

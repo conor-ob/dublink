@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.mapping
+package ie.dublinmapper.repository.dublinbus.stops
 
 import ie.dublinmapper.data.dublinbus.DublinBusStopEntity
 import ie.dublinmapper.data.dublinbus.DublinBusStopServiceEntity
@@ -22,8 +22,12 @@ object DublinBusStopEntityToDomainMapper : CustomConverter<DublinBusStopEntity, 
             id = source.location.id,
             name = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
-            operators = convertOperators(source.services),
-            routes = convertOperatorsToRoutes(source.services),
+            operators = convertOperators(
+                source.services
+            ),
+            routes = convertOperatorsToRoutes(
+                source.services
+            ),
             service = Service.DUBLIN_BUS
         )
     }
