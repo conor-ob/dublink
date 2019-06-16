@@ -67,7 +67,7 @@ class NearbyLiveDataController(
         viewModel.serviceLocation?.let {
             liveDataAdapter.add(it.toItem())
         }
-        liveDataAdapter.addAll(viewModel.liveData.map { it.toItem() })
+//        liveDataAdapter.addAll(viewModel.liveData.map { it.toItem() })
         val viewTreeObserver = background.viewTreeObserver
         if (viewTreeObserver.isAlive) {
             viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
