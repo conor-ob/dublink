@@ -6,6 +6,7 @@ import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
+import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
 import ie.dublinmapper.model.dart.DartLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
@@ -40,6 +41,7 @@ class LiveDataPresenterImpl @Inject constructor(
     private fun mapLiveData(service: Service, liveData: List<LiveData>): List<Group> {
         return when (service) {
             Service.AIRCOACH -> mapAircoachLiveData(liveData)
+            Service.BUS_EIREANN -> mapBusEireannLiveData(liveData)
             Service.IRISH_RAIL -> mapDartLiveData(liveData)
             Service.DUBLIN_BUS -> mapDublinBusLiveData(liveData)
             Service.LUAS -> mapLuasLiveData(liveData)
@@ -84,6 +86,22 @@ class LiveDataPresenterImpl @Inject constructor(
             items.add(section)
             items.add(DividerItem())
         }
+        return items
+    }
+
+    private fun mapBusEireannLiveData(liveData: List<LiveData>): List<Group> {
+        val liveDataUi = LiveDataMapper.map(liveData).map { it as BusEireannLiveDataUi }
+
+        val items = mutableListOf<Group>()
+        items.add(DividerItem())
+        val section = Section(HeaderItem("Departures"))
+        for (i in 0 until liveDataUi.size) {
+            val isLast = i == liveDataUi.size - 1
+            val isEven = i % 2 == 0
+            section.add(BusEireannLiveDataItem(liveDataUi[i], isEven, isLast))
+        }
+        items.add(section)
+        items.add(DividerItem())
         return items
     }
 

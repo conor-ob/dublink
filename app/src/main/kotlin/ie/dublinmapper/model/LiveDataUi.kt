@@ -26,6 +26,17 @@ class AircoachLiveDataUi(
     }
 }
 
+class BusEireannLiveDataUi(
+    val liveData: BusEireannLiveData
+) : LiveDataUi() {
+    override fun toString() = liveData.toString()
+    override fun toItem(isLast: Boolean) = if (liveData.dueTime.size > 1) {
+        TODO()
+    } else {
+        TODO()
+    }
+}
+
 class DartLiveDataUi(
     val liveData: DartLiveData
 ) : LiveDataUi() {
