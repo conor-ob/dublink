@@ -24,7 +24,7 @@ class LiveDataPresenterImpl @Inject constructor(
 ) : BasePresenter<LiveDataView>(scheduler), LiveDataPresenter {
 
     override fun start(serviceLocationId: String, service: Service) {
-        subscriptions().add(useCase.getCondensedLiveData(serviceLocationId, service)
+        subscriptions().add(useCase.getCondensedLiveDataStream(serviceLocationId, service)
             .compose(applySchedulers())
             .map { mapLiveData(service, it) }
 //            .map { mapper.mapAsList(it, Group::class.java) }

@@ -12,4 +12,22 @@ class DividerItem : Item() {
 
     }
 
+    override fun isSameAs(other: com.xwray.groupie.Item<*>?): Boolean {
+        if (other is DividerItem) {
+            return id == other.id
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is DividerItem) {
+            return id == other.id
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return id.toInt()
+    }
+
 }

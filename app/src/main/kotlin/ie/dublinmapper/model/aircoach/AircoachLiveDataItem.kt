@@ -2,6 +2,7 @@ package ie.dublinmapper.model.aircoach
 
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
+import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.model.AircoachLiveDataUi
@@ -24,6 +25,24 @@ class AircoachLiveDataItem(
         viewHolder.subtitle.text = liveData.operator.fullName
         viewHolder.operatorIconContainer.setImageResource(R.drawable.ic_bus)
         viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.aircoachBlue))
+    }
+
+    override fun isSameAs(other: Item<*>?): Boolean {
+        if (other is AircoachLiveDataItem) {
+            return liveData.liveData.customHash == other.liveData.liveData.customHash
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is AircoachLiveDataItem) {
+            return liveData.liveData == other.liveData.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.liveData.hashCode()
     }
 
 }

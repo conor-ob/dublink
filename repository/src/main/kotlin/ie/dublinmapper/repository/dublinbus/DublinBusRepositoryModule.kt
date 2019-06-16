@@ -83,6 +83,7 @@ class DublinBusRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<DublinBusLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> DublinBusLiveDataMapper.map(liveData) }
+            .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return DublinBusLiveDataRepository(store)
     }

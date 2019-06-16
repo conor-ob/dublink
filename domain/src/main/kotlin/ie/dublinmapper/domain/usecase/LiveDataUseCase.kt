@@ -7,6 +7,7 @@ import ie.dublinmapper.util.Service
 import io.reactivex.Observable
 import org.threeten.bp.LocalTime
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
@@ -48,6 +49,11 @@ class LiveDataUseCase @Inject constructor(
             Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
             Service.SWORDS_EXPRESS -> TODO()
         }
+    }
+
+    fun getCondensedLiveDataStream(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
+        return Observable.interval(0L, 60L, TimeUnit.SECONDS)
+            .flatMap { getCondensedLiveData(serviceLocationId, service) }
     }
 
     fun getCondensedLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
