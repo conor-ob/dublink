@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +28,6 @@ import ie.dublinmapper.R
 import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.ServiceLocationUi
-import ie.dublinmapper.model.SpacerItem
 import ie.dublinmapper.util.*
 import ie.dublinmapper.view.livedata.LiveDataController
 import io.reactivex.Observable

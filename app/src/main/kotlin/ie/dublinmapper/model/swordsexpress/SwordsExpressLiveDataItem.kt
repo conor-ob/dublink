@@ -9,7 +9,7 @@ class SwordsExpressLiveDataItem(
     private val swordsExpressLiveData: SwordsExpressLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.list_item_live_data_swords_express
+    override fun getLayout() = R.layout.list_item_live_data
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

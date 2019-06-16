@@ -76,6 +76,6 @@
                 android:clipToPadding="false"
                 android:paddingStart="@dimen/content_padding_horizontal"
                 android:paddingEnd="@dimen/content_padding_horizontal"
-                tools:listitem="@layout/list_item_live_data_dart"/>
+                tools:listitem="@layout/list_item_live_data"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
