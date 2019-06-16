@@ -2,6 +2,7 @@ package ie.dublinmapper.model.dublinbus
 
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
+import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.model.DublinBusLiveDataUi
@@ -33,6 +34,24 @@ class DublinBusLiveDataItem(
             }
             else -> { }
         }
+    }
+
+    override fun isSameAs(other: Item<*>?): Boolean {
+        if (other is DublinBusLiveDataItem) {
+            return liveData.liveData.customHash == other.liveData.liveData.customHash
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is DublinBusLiveDataItem) {
+            return liveData.liveData == other.liveData.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.liveData.hashCode()
     }
 
 }

@@ -28,6 +28,9 @@ import javax.inject.Singleton
 class DublinBikesRepositoryModule {
 
     private val memoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(2, TimeUnit.MINUTES) }
+    private val shortTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(30, TimeUnit.SECONDS) }
+    private val midTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(3, TimeUnit.HOURS) }
+    private val longTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(7, TimeUnit.DAYS) }
 
     private fun newMemoryPolicy(value: Long, timeUnit: TimeUnit): MemoryPolicy {
         return MemoryPolicy.builder()
@@ -74,6 +77,7 @@ class DublinBikesRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, StationJson, DublinBikesLiveData>()
             .fetcher(fetcher)
             .parser { liveData -> DublinBikesLiveDataMapper.map(liveData) }
+            .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return DublinBikesLiveDataRepository(store)
     }

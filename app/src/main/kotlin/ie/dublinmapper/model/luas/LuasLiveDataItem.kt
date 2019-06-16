@@ -2,6 +2,7 @@ package ie.dublinmapper.model.luas
 
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
+import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.model.LuasLiveDataUi
@@ -28,6 +29,24 @@ class LuasLiveDataItem(
             liveData.route.equals("Green", ignoreCase = true) -> viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.luasGreen))
             else -> viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.luasPurple))
         }
+    }
+
+    override fun isSameAs(other: Item<*>?): Boolean {
+        if (other is LuasLiveDataItem) {
+            return liveData.liveData.customHash == other.liveData.liveData.customHash
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is LuasLiveDataItem) {
+            return liveData.liveData == other.liveData.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.liveData.hashCode()
     }
 
 }

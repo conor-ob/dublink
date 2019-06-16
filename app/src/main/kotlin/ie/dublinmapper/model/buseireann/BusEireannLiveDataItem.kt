@@ -2,6 +2,7 @@ package ie.dublinmapper.model.buseireann
 
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
+import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.model.BusEireannLiveDataUi
@@ -24,6 +25,24 @@ class BusEireannLiveDataItem(
         viewHolder.subtitle.text = liveData.destination
         viewHolder.operatorIconContainer.setImageResource(R.drawable.ic_bus)
         viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.busEireannRed))
+    }
+
+    override fun isSameAs(other: Item<*>?): Boolean {
+        if (other is BusEireannLiveDataItem) {
+            return liveDataUi.liveData.customHash == other.liveDataUi.liveData.customHash
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is BusEireannLiveDataItem) {
+            return liveDataUi.liveData == other.liveDataUi.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveDataUi.liveData.hashCode()
     }
 
 }
