@@ -63,6 +63,28 @@
         <!--<item name="android:background">@color/luasPurple</item>-->
     </style>
 
+    <style name="ListItemContainer">
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:outlineProvider">bounds</item>
+        <item name="android:paddingTop">@dimen/padding_s</item>
+        <item name="android:paddingBottom">@dimen/padding_s</item>
+        <item name="android:paddingStart">@dimen/padding_m</item>
+        <item name="android:paddingEnd">@dimen/padding_m</item>
+    </style>
+
+    <style name="ListItemTitleTextAppearance">
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/google_sans_medium</item>
+    </style>
+
+    <style name="ListItemSubtitleTextAppearance">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/google_sans_regular</item>
+    </style>
+
     <!--<style name="DublinMapperTheme.NoActionBar">-->
     <!--<item name="windowActionBar">false</item>-->
     <!--<item name="windowNoTitle">true</item>-->
