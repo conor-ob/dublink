@@ -48,7 +48,7 @@ enum class OperatorUi(
     INTERCITY(
         id = R.string.operator_intercity_id,
         code = R.string.operator_intercity_code,
-        colour = R.color.intercityGrey
+        colour = R.color.intercityYellow
     ),
     LUAS(
         id = R.string.operator_luas_id,

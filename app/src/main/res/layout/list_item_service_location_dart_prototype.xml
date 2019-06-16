@@ -82,7 +82,7 @@
                 android:text="InterCity"
                 android:fontFamily="@font/google_sans_regular"
                 android:drawableStart="@drawable/tag_dot"
-                android:drawableTint="@color/intercityGrey"
+                android:drawableTint="@color/intercityYellow"
                 android:gravity="center_vertical"
                 android:drawablePadding="4dp"/>
 
