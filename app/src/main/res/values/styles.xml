@@ -40,6 +40,11 @@
         <item name="colorPrimaryDark">@color/aircoachOrangeDark</item>
     </style>
 
+    <style name="BusEireannTheme" parent="DublinMapperTheme">
+        <item name="colorPrimary">@color/busEireannRed</item>
+        <item name="colorPrimaryDark">@color/busEireannRedDark</item>
+    </style>
+
     <style name="DartTheme" parent="DublinMapperTheme">
         <item name="colorPrimary">@color/dartGreen</item>
         <item name="colorPrimaryDark">@color/dartGreenDark</item>

@@ -58,9 +58,9 @@ data class BusEireannStopUi(
 ) : ServiceLocationUi(
     busEireannStop,
     busEireannStop.name,
-    R.style.DublinMapperTheme
+    R.style.BusEireannTheme
 ) {
-    override fun toItem() = BusEireannStopItem(busEireannStop)
+    override fun toItem() = BusEireannStopItem(this)
 }
 
 data class DartStationUi(

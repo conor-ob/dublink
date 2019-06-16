@@ -4,7 +4,7 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
+import io.reactivex.functions.Function5
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
@@ -21,7 +21,7 @@ class SearchUseCase @Inject constructor(
     fun search(query: String): Observable<List<ServiceLocation>> {
         return Observable.combineLatest(
             aircoachStopRepository.getAll().subscribeOn(scheduler.io),
-//            busEireannStopRepository.getAll().subscribeOn(scheduler.io),
+            busEireannStopRepository.getAll().subscribeOn(scheduler.io),
             dartStationRepository.getAll().subscribeOn(scheduler.io),
 //            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
             dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
@@ -30,8 +30,8 @@ class SearchUseCase @Inject constructor(
 //            Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
 //                search(query, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops)
 //            }
-            Function4 { aircoachStops, dartStations, dublinBusStops, luasStops ->
-                search(query, aircoachStops, dartStations, dublinBusStops, luasStops)
+            Function5 { aircoachStops, busEireannStops, dartStations, dublinBusStops, luasStops ->
+                search(query, aircoachStops, busEireannStops, dartStations, dublinBusStops, luasStops)
             }
         )
     }
@@ -39,17 +39,19 @@ class SearchUseCase @Inject constructor(
     private fun search(
         query: String,
         aircoachStops: List<AircoachStop>,
+        busEireannStops: List<BusEireannStop>,
         dartStations: List<DartStation>,
         dublinBusStops: List<DublinBusStop>,
         luasStops: List<LuasStop>
     ) : List<ServiceLocation> {
         val searchCollections = mutableListOf<Collection<ServiceLocation>>()
         searchCollections.add(search(query, aircoachStops))
+        searchCollections.add(search(query, busEireannStops))
         searchCollections.add(search(query, dartStations))
         searchCollections.add(search(query, dublinBusStops))
         searchCollections.add(search(query, luasStops))
         searchCollections.sortBy { it.size }
-        return searchCollections.flatten()
+        return searchCollections.flatten().take(50)
     }
 
     private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
