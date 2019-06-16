@@ -11,22 +11,22 @@ data class RtpiRealTimeBusInformationResponseJson(
 )
 
 data class RtpiRealTimeBusInformationJson(
-    @SerializedName("arrivaldatetime") val arrivalDateTime: String,
-//    @SerializedName("duetime") val dueTime: String? = null,
+    @SerializedName("arrivaldatetime") val arrivalDateTime: String? = null,
+    @SerializedName("duetime") val dueTime: String? = null,
 //    @SerializedName("departuredatetime") val departureDateTime: String? = null,
 //    @SerializedName("departureduetime") val departureDueTime: String? = null,
 //    @SerializedName("scheduledarrivaldatetime") val scheduledArrivalDateTime: String? = null,
 //    @SerializedName("scheduleddeparturedatetime") val scheduledDepartureDateTime: String? = null,
-    @SerializedName("destination") val destination: String,
+    @SerializedName("destination") val destination: String? = null,
 //    @SerializedName("destinationlocalized") val destinationLocalized: String? = null,
-    @SerializedName("origin") val origin: String,
+    @SerializedName("origin") val origin: String? = null,
 //    @SerializedName("originlocalized") val originLocalized: String? = null,
-    @SerializedName("direction") val direction: String,
-//    @SerializedName("operator") val operator: String? = null,
+    @SerializedName("direction") val direction: String? = null,
+    @SerializedName("operator") val operator: String? = null,
 //    @SerializedName("operatortype") val operatorType: String? = null,
 //    @SerializedName("additionalinformation") val additionalInformation: String? = null,
 //    @SerializedName("lowfloorstatus") val lowFloorStatus: String? = null,
-    @SerializedName("route") val route: String
+    @SerializedName("route") val route: String? = null
 //    @SerializedName("sourcetimestamp") val sourceTimestamp: String? = null,
 //    @SerializedName("monitored") val monitored: String? = null
 )

@@ -51,6 +51,17 @@ object TimeUtils {
         return unit.between(earlierInstant, laterInstant)
     }
 
+    @JvmStatic
+    fun toIso8601Timestamp(timestamp: String, dateTime: DateTimeFormatter): String {
+        val instant = dateTimeStampToInstant(timestamp, dateTime)
+        return Formatter.isoDateTime.format(ZonedDateTime.ofInstant(instant, currentDateTimeProvider.zoneId))
+    }
+
+    @JvmStatic
+    fun formatAsTime(instant: Instant): String {
+        return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime().truncatedTo(ChronoUnit.MINUTES).toString()
+    }
+
 }
 
 interface CurrentDateTimeProvider {
