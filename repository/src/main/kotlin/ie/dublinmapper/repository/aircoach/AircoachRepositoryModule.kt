@@ -59,6 +59,7 @@ class AircoachRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, ServiceResponseJson, List<AircoachLiveData>>()
             .fetcher { stopId -> resource.getLiveData(stopId) }
             .parser { liveData -> AircoachLiveDataMapper.map(liveData.services).filter { it.dueTime.first().minutes >= 0 } } //TODO
+            .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return AircoachLiveDataRepository(store)
     }

@@ -74,6 +74,7 @@ class BusEireannRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<BusEireannLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> BusEireannLiveDataMapper.map(liveData) }
+            .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return BusEireannLiveDataRepository(store)
     }

@@ -71,6 +71,7 @@ class LuasRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LuasLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> LuasLiveDataMapper.map(liveData) }
+            .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return LuasLiveDataRepository(store)
     }
