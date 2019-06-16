@@ -4,9 +4,7 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
-import io.reactivex.functions.Function7
+import io.reactivex.functions.Function4
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
@@ -26,14 +24,14 @@ class SearchUseCase @Inject constructor(
 //            busEireannStopRepository.getAll().subscribeOn(scheduler.io),
             dartStationRepository.getAll().subscribeOn(scheduler.io),
 //            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
-//            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
+            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
             luasStopRepository.getAll().subscribeOn(scheduler.io),
 //            swordsExpressStopRepository.getAll().subscribeOn(scheduler.io),
 //            Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
 //                search(query, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops)
 //            }
-            Function3 { aircoachStops, dartStations, luasStops ->
-                search(query, aircoachStops, dartStations, luasStops)
+            Function4 { aircoachStops, dartStations, dublinBusStops, luasStops ->
+                search(query, aircoachStops, dartStations, dublinBusStops, luasStops)
             }
         )
     }
@@ -42,11 +40,13 @@ class SearchUseCase @Inject constructor(
         query: String,
         aircoachStops: List<AircoachStop>,
         dartStations: List<DartStation>,
+        dublinBusStops: List<DublinBusStop>,
         luasStops: List<LuasStop>
     ) : List<ServiceLocation> {
         val searchCollections = mutableListOf<Collection<ServiceLocation>>()
         searchCollections.add(search(query, aircoachStops))
         searchCollections.add(search(query, dartStations))
+        searchCollections.add(search(query, dublinBusStops))
         searchCollections.add(search(query, luasStops))
         searchCollections.sortBy { it.size }
         return searchCollections.flatten()

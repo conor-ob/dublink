@@ -14,6 +14,7 @@ class DublinBusLiveDataFetcher(
     private val format: String
 ) : Fetcher<List<RtpiRealTimeBusInformationJson>, String> {
 
+    //TODO merge API responses
     override fun fetch(key: String): Single<List<RtpiRealTimeBusInformationJson>> {
         return rtpiApi.realTimeBusInformation(key, dublinBusOperator, format).map { it.results }
     }

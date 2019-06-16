@@ -51,7 +51,7 @@ class DublinBusLiveDataUi(
     override fun toItem(isLast: Boolean) = if (liveData.dueTime.size > 1) {
         DublinBusCondensedLiveDataItem(liveData)
     } else {
-        DublinBusLiveDataItem(liveData)
+        DublinBusLiveDataItem(this, true, true)
     }
 }
 
