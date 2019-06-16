@@ -51,8 +51,8 @@
     </style>
 
     <style name="DublinBusTheme" parent="DublinMapperTheme">
-        <item name="android:colorPrimary">@color/dublinBusYellow</item>
-        <item name="android:colorPrimaryDark">@color/dublinBusYellowDark</item>
+        <item name="colorPrimary">@color/dublinBusYellow</item>
+        <item name="colorPrimaryDark">@color/dublinBusYellowDark</item>
         <!--<item name="android:background">@color/dartGreen</item>-->
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
