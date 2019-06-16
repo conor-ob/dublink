@@ -10,6 +10,7 @@ object LiveDataMapper : Mapper<LiveData, LiveDataUi> {
     override fun map(from: LiveData): LiveDataUi {
         return when (from) {
             is AircoachLiveData -> AircoachLiveDataUi(from)
+            is BusEireannLiveData -> BusEireannLiveDataUi(from)
             is DartLiveData -> DartLiveDataUi(from)
             is DublinBikesLiveData -> DublinBikesLiveDataUi(from)
             is DublinBusLiveData -> DublinBusLiveDataUi(from)

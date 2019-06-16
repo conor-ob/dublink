@@ -24,6 +24,7 @@
     <color name="aircoachOrangeDark">#B35E0C</color>
     <color name="aircoachBlue">#1E9AD0</color>
     <color name="busEireannRed">#A51922</color>
+    <color name="busEireannRedDark">#831118</color>
     <!--<color name="dartGreen">#2d8626</color>-->
     <!--<color name="dartGreenDark">#005800</color>-->
     <color name="dartGreen">#359245</color>
