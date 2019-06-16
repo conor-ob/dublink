@@ -7,6 +7,7 @@ import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
 import ie.dublinmapper.model.dart.DartLiveDataItem
+import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
 import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.util.Service
@@ -91,14 +92,13 @@ class LiveDataPresenterImpl @Inject constructor(
 
         val items = mutableListOf<Group>()
         items.add(DividerItem())
-        items.add(HeaderItem("Departures"))
+        val section = Section(HeaderItem("Departures"))
         for (i in 0 until liveDataUi.size) {
-            if (i == liveDataUi.size - 1) {
-                items.add(liveDataUi[i].toItem(true))
-            } else {
-                items.add(liveDataUi[i].toItem())
-            }
+            val isLast = i == liveDataUi.size - 1
+            val isEven = i % 2 == 0
+            section.add(DublinBusLiveDataItem(liveDataUi[i], isEven, isLast))
         }
+        items.add(section)
         items.add(DividerItem())
         return items
     }
