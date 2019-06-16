@@ -58,7 +58,7 @@ class LiveDataPresenterImpl @Inject constructor(
             for (i in 0 until values.size) {
                 val isLast = i == values.size - 1
                 val isEven = i % 2 == 0
-                section.add(AircoachLiveDataItem(values[i]))
+                section.add(AircoachLiveDataItem(values[i], isEven, isLast))
             }
             items.add(section)
             items.add(DividerItem())
@@ -78,7 +78,7 @@ class LiveDataPresenterImpl @Inject constructor(
             for (i in 0 until values.size) {
                 val isLast = i == values.size - 1
                 val isEven = i % 2 == 0
-                section.add(LuasLiveDataItem(values[i]))
+                section.add(LuasLiveDataItem(values[i], isEven, isLast))
             }
             items.add(section)
             items.add(DividerItem())

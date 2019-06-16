@@ -22,7 +22,7 @@ class AircoachLiveDataUi(
     override fun toItem(isLast: Boolean) = if (liveData.dueTime.size > 1) {
         AircoachCondensedLiveDataItem(liveData)
     } else {
-        AircoachLiveDataItem(this)
+        AircoachLiveDataItem(this, true, true)
     }
 }
 
@@ -62,7 +62,7 @@ class LuasLiveDataUi(
     override fun toItem(isLast: Boolean) = if (liveData.dueTime.size > 1) {
         LuasCondensedLiveDataItem(liveData)
     } else {
-        LuasLiveDataItem(this)
+        LuasLiveDataItem(this, true, true)
     }
 }
 
