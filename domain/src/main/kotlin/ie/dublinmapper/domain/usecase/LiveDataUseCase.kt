@@ -11,6 +11,7 @@ import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
     private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
+    private val busEireannLiveDataRepository: Repository<BusEireannLiveData>,
     private val dartLiveDataRepository: Repository<DartLiveData>,
     private val dublinBikesLiveDataRepository: Repository<DublinBikesLiveData>,
     private val dublinBusLiveDataRepository: Repository<DublinBusLiveData>,
@@ -20,12 +21,12 @@ class LiveDataUseCase @Inject constructor(
     fun getLiveData(serviceLocation: ServiceLocation): Observable<List<LiveData>> {
         return when (serviceLocation) {
             is AircoachStop -> aircoachLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is BusEireannStop -> return Observable.just(emptyList())
+            is BusEireannStop -> busEireannLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is DartStation -> dartLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is DublinBikesDock -> dublinBikesLiveDataRepository.getById(serviceLocation.id).map { Collections.singletonList(it) as List<LiveData> }
             is DublinBusStop -> dublinBusLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
             is LuasStop -> luasLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is SwordsExpressStop -> return Observable.just(emptyList())
+            is SwordsExpressStop -> TODO()
             else -> TODO()
         }
     }
@@ -40,12 +41,12 @@ class LiveDataUseCase @Inject constructor(
     fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
         return when (service) {
             Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
-            Service.BUS_EIREANN -> return Observable.just(emptyList())
+            Service.BUS_EIREANN -> busEireannLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
             Service.IRISH_RAIL -> dartLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
             Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { Collections.singletonList(it) as List<LiveData> }
             Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
             Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
-            Service.SWORDS_EXPRESS -> return Observable.just(emptyList())
+            Service.SWORDS_EXPRESS -> TODO()
         }
     }
 
