@@ -53,7 +53,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = super.onCreateView(inflater, container)
         setupLayout(view)
-        StatusBarUtil.setLightStatusBar(view, requireActivity())
+//        StatusBarUtil.setLightStatusBar(view, requireActivity())
         return view
 
     }
@@ -222,8 +222,10 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         for (entry in serviceLocations) {
             groups.add(DividerItem())
             groups.add(HeaderItem(entry.key.fullName))
-            for (item in entry.value) {
-                groups.add(item.toItem())
+            for (i in 0 until entry.value.size) {
+                val isLast = i == entry.value.size - 1
+                val isEven = i % 2 == 0
+                groups.add(entry.value[i].toItem(isEven, isLast))
             }
         }
         groups.add(DividerItem())

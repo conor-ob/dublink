@@ -1,22 +1,31 @@
 package ie.dublinmapper.model.buseireann
 
-import com.xwray.groupie.kotlinandroidextensions.Item
+import android.content.res.ColorStateList
+import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
-import ie.dublinmapper.domain.model.BusEireannStop
 import ie.dublinmapper.model.BusEireannStopUi
-import kotlinx.android.synthetic.main.list_item_service_location_bus_eireann.*
+import ie.dublinmapper.model.ServiceLocationItemX
+import kotlinx.android.synthetic.main.list_item_service_location.*
 
-class BusEireannStopItem(private val busEireannStop: BusEireannStopUi) : Item() {
+class BusEireannStopItem(
+    private val busEireannStop: BusEireannStopUi,
+    isEven: Boolean,
+    isLast: Boolean
+) : ServiceLocationItemX(isEven, isLast) {
 
     init {
         extras["serviceLocation"] = busEireannStop
     }
 
-    override fun getLayout() = R.layout.list_item_service_location_bus_eireann
+    override fun getLayout() = R.layout.list_item_service_location
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.service_location_name.text = busEireannStop.name
+        super.bind(viewHolder, position)
+        viewHolder.title.text = busEireannStop.name
+        viewHolder.subtitle.text = viewHolder.itemView.context.getString(R.string.stop_number, busEireannStop.id)
+        viewHolder.serviceIconContainer.setImageResource(R.drawable.ic_bus)
+        viewHolder.serviceIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.busEireannRed))
     }
 
 }

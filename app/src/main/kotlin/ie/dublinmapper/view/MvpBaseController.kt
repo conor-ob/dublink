@@ -25,7 +25,6 @@ abstract class MvpBaseController<V : MvpView, P : MvpPresenter<V>>(args: Bundle)
     override fun onContextAvailable(context: Context) {
         super.onContextAvailable(context)
         Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
-        setupStatusBar()
     }
 
     override fun onActivityStarted(activity: Activity) {
@@ -50,6 +49,7 @@ abstract class MvpBaseController<V : MvpView, P : MvpPresenter<V>>(args: Bundle)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
+        setupStatusBar()
         val contextThemeWrapper = ContextThemeWrapper(requireActivity(), requireIntArg(STYLE_ID))
         val themeInflater = inflater.cloneInContext(contextThemeWrapper)
         return themeInflater.inflate(layoutId, container, false)
