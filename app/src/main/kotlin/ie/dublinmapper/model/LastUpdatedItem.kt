@@ -66,7 +66,7 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                textView.visibility = View.GONE
+                textView.visibility = View.INVISIBLE
             }
 
             override fun onAnimationRepeat(animation: Animation?) {
@@ -74,28 +74,33 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
             }
 
         })
+
+        subscriptions.add(Observable.interval(0L, 15L, TimeUnit.SECONDS)
+            .doOnNext {
+                val now = System.currentTimeMillis()
+                val seconds = TimeUnit.MILLISECONDS.toSeconds(now - lastUpdated)
+                if (::textView.isInitialized) {
+                    textViewText = when {
+                        seconds < 5L -> textView.context.getString(R.string.live_data_just_updated)
+                        seconds >= 60L -> {
+                            val minutes = TimeUnit.SECONDS.toMinutes(seconds)
+                            textView.context.resources.getQuantityString(R.plurals.live_data_last_updated_minutes, minutes.toInt(), minutes.toInt())
+                        }
+                        else -> textView.context.getString(R.string.live_data_last_updated_seconds, seconds)
+                    }
+                    textView.startAnimation(fadeIn)
+                }
+            }
+            .subscribe()
+        )
     }
 
     override fun getLayout() = R.layout.list_item_live_data_last_updated
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        textView = viewHolder.lastUpdated
-        subscriptions.add(Observable.interval(0L, 15L, TimeUnit.SECONDS)
-            .doOnNext {
-                val now = System.currentTimeMillis()
-                val seconds = TimeUnit.MILLISECONDS.toSeconds(now - lastUpdated)
-                textViewText = when {
-                    seconds < 5L -> viewHolder.itemView.context.getString(R.string.live_data_just_updated)
-                    seconds >= 60L -> {
-                        val minutes = TimeUnit.SECONDS.toMinutes(seconds)
-                        viewHolder.itemView.context.resources.getQuantityString(R.plurals.live_data_last_updated_minutes, minutes.toInt(), minutes.toInt())
-                    }
-                    else -> viewHolder.itemView.context.getString(R.string.live_data_last_updated_seconds, seconds)
-                }
-                viewHolder.lastUpdated.startAnimation(fadeIn)
-            }
-            .subscribe()
-        )
+        if (!::textView.isInitialized) {
+            textView = viewHolder.lastUpdated
+        }
     }
 
     //TODO

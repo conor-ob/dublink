@@ -9,20 +9,20 @@
         <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/Widget.AppBar"
                 app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize">
+                    android:layout_height="?attr/actionBarSize"
+                    style="@style/Widget.Toolbar">
 
                 <TextView
                 android:id="@+id/title"
                 android:text="@string/title_favourites"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
 
@@ -56,7 +56,11 @@
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     android:id="@+id/liveDataList"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:background="?attr/colorPrimary"
+                    android:clipToPadding="false"
+                    android:paddingStart="@dimen/margin_normal"
+                    android:paddingEnd="@dimen/margin_normal"/>
 
         <!--</FrameLayout>-->
 

@@ -110,7 +110,7 @@
     <!--</style>-->
 
     <style name="DublinMapperTheme.Launcher">
-        <!--<item name="android:windowBackground">@drawable/bg_launcher</item>-->
+        <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:navigationBarColor">@color/color_navigation_bar_launcher</item>
     </style>
 
