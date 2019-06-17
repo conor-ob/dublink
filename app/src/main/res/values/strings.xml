@@ -77,4 +77,10 @@
     <string name="tab_dart_southbound">Southbound</string>
     <string name="action_save_favourite">Save Favourite</string>
     <string name="action_settings">Settings</string>
+    <string name="live_data_just_updated">Just updated</string>
+    <string name="live_data_last_updated_seconds">Updated %d seconds ago</string>
+    <plurals name="live_data_last_updated_minutes">
+        <item quantity="one">Updated %d minute ago</item>
+        <item quantity="other">Updated %d minutes ago</item>
+    </plurals>
 </resources>
