@@ -25,7 +25,7 @@ sealed class ServiceLocationUi(
     val operators: Set<Operator> = serviceLocation.operators
 ) {
 
-    abstract fun toItem(): Item
+    abstract fun toItem(isEven: Boolean, isLast: Boolean): Item
 
 //    override fun equals(other: Any?): Boolean {
 //        if (other == null) {
@@ -50,7 +50,7 @@ data class AircoachStopUi(
     aircoachStop.name,
     R.style.AircoachTheme
 ) {
-    override fun toItem() = AircoachStopItem(this)
+    override fun toItem(isEven: Boolean, isLast: Boolean) = AircoachStopItem(this, isEven, isLast)
 }
 
 data class BusEireannStopUi(
@@ -60,7 +60,7 @@ data class BusEireannStopUi(
     busEireannStop.name,
     R.style.BusEireannTheme
 ) {
-    override fun toItem() = BusEireannStopItem(this)
+    override fun toItem(isEven: Boolean, isLast: Boolean) = BusEireannStopItem(this, isEven, isLast)
 }
 
 data class DartStationUi(
@@ -70,7 +70,7 @@ data class DartStationUi(
     dartStation.name,
     R.style.DartTheme
 ) {
-    override fun toItem() = DartStationItem(this)
+    override fun toItem(isEven: Boolean, isLast: Boolean) = DartStationItem(this, isEven, isLast)
 }
 
 data class DublinBikesDockUi(
@@ -80,7 +80,7 @@ data class DublinBikesDockUi(
     dublinBikesDock.availableBikes.toString(),
     R.style.DublinMapperTheme
 ) {
-    override fun toItem() = DublinBikesDockItem(dublinBikesDock)
+    override fun toItem(isEven: Boolean, isLast: Boolean) = DublinBikesDockItem(dublinBikesDock)
 }
 
 
@@ -91,7 +91,7 @@ data class DublinBusStopUi(
     dublinBusStop.id,
     R.style.DublinBusTheme
 ) {
-    override fun toItem() = DublinBusStopItem(this)
+    override fun toItem(isEven: Boolean, isLast: Boolean) = DublinBusStopItem(this, isEven, isLast)
 }
 
 data class LuasStopUi(
@@ -101,7 +101,7 @@ data class LuasStopUi(
     luasStop.name,
     R.style.LuasTheme
 ) {
-    override fun toItem() = LuasStopItem(this)
+    override fun toItem(isEven: Boolean, isLast: Boolean) = LuasStopItem(this, isEven, isLast)
 }
 
 data class SwordsExpressStopUi(
@@ -111,5 +111,5 @@ data class SwordsExpressStopUi(
     swordsExpressStop.name,
     R.style.DublinMapperTheme
 ) {
-    override fun toItem() = SwordsExpressStopItem(swordsExpressStop)
+    override fun toItem(isEven: Boolean, isLast: Boolean) = SwordsExpressStopItem(swordsExpressStop)
 }
