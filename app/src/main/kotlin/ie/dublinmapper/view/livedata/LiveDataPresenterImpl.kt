@@ -66,6 +66,8 @@ class LiveDataPresenterImpl @Inject constructor(
             items.add(section)
             items.add(DividerItem())
         }
+        items.add(LastUpdatedItem(System.currentTimeMillis()))
+        items.add(DividerItem())
         return items
     }
 
@@ -86,6 +88,8 @@ class LiveDataPresenterImpl @Inject constructor(
             items.add(section)
             items.add(DividerItem())
         }
+        items.add(LastUpdatedItem(System.currentTimeMillis()))
+        items.add(DividerItem())
         return items
     }
 
@@ -102,6 +106,8 @@ class LiveDataPresenterImpl @Inject constructor(
         }
         items.add(section)
         items.add(DividerItem())
+        items.add(LastUpdatedItem(System.currentTimeMillis()))
+        items.add(DividerItem())
         return items
     }
 
@@ -117,6 +123,8 @@ class LiveDataPresenterImpl @Inject constructor(
             section.add(DublinBusLiveDataItem(liveDataUi[i], isEven, isLast))
         }
         items.add(section)
+        items.add(DividerItem())
+        items.add(LastUpdatedItem(System.currentTimeMillis()))
         items.add(DividerItem())
         return items
     }
@@ -138,6 +146,8 @@ class LiveDataPresenterImpl @Inject constructor(
             items.add(section)
             items.add(DividerItem())
         }
+        items.add(LastUpdatedItem(System.currentTimeMillis()))
+        items.add(DividerItem())
         return items
     }
 
