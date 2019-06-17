@@ -75,7 +75,7 @@ class FavouritesController(
     }
 
     override fun showFavourites(favourites: List<ServiceLocationUi>) {
-        adapter.update(favourites.map { it.toItem() })
+        adapter.update(favourites.map { it.toItem(true, true) })
     }
 
     private fun setupSearchFab(view: View) {

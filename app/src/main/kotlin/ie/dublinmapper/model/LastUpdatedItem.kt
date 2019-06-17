@@ -18,10 +18,13 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
     private lateinit var textView: TextView
     private lateinit var textViewText: String
     private val fadeIn = AlphaAnimation(0.0f, 1.0f).apply {
-        duration = 3500L
+        duration = 2000L
+    }
+    private val delay = AlphaAnimation(1.0f, 1.0f).apply {
+        duration = 4000
     }
     private val fadeOut = AlphaAnimation(1.0f, 0.0f).apply {
-        duration = 3500L
+        duration = 3000L
     }
 
     init {
@@ -30,6 +33,21 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
             override fun onAnimationStart(animation: Animation?) {
                 textView.visibility = View.VISIBLE
                 textView.text = textViewText
+            }
+
+            override fun onAnimationEnd(animation: Animation?) {
+                textView.startAnimation(delay)
+            }
+
+            override fun onAnimationRepeat(animation: Animation?) {
+
+            }
+
+        })
+        delay.setAnimationListener(object : Animation.AnimationListener {
+
+            override fun onAnimationStart(animation: Animation?) {
+
             }
 
             override fun onAnimationEnd(animation: Animation?) {

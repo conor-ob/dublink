@@ -30,6 +30,8 @@
     <color name="dartGreen">#359245</color>
     <color name="dartGreenDark">#2B7538</color>
     <color name="dublinBikesTeal">#004D40</color>
+    <color name="dublinBusBlue">#4286F5</color>
+    <color name="dublinBusBlueDark">#346AC2</color>
     <color name="dublinBusYellow">#FFD740</color>
     <color name="dublinBusYellowDark">#C99E17</color>
     <color name="goAheadBlue">#4286F5</color>
