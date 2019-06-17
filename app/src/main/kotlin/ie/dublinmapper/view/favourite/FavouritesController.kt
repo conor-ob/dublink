@@ -7,13 +7,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
+import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
+import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
+import ie.dublinmapper.model.DividerItem
+import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.model.dart.DartStationItem
+import ie.dublinmapper.util.CircularRevealChangeHandler
 import ie.dublinmapper.util.getApplicationComponent
 import ie.dublinmapper.util.requireContext
 import ie.dublinmapper.view.livedata.LiveDataController
@@ -75,21 +80,39 @@ class FavouritesController(
     }
 
     override fun showFavourites(favourites: List<ServiceLocationUi>) {
-        adapter.update(favourites.map { it.toItem(true, true) })
+        val groups = mutableListOf<Group>()
+        groups.add(DividerItem())
+        groups.add(HeaderItem("Favourites"))
+        for (i in 0 until favourites.size) {
+            val isLast = i == favourites.size - 1
+            val isEven = i % 2 == 0
+            groups.add(favourites[i].toItem(isEven, isLast))
+        }
+        groups.add(DividerItem())
+        adapter.update(groups)
     }
 
     private fun setupSearchFab(view: View) {
         view.search_fab.setOnClickListener {
-            val searchController = SearchController(Bundle.EMPTY)
             router.pushController(
                 RouterTransaction
-                    .with(searchController)
-//                    .pushChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
-//                    .popChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
-                    .pushChangeHandler(FadeChangeHandler())
-                    .popChangeHandler(FadeChangeHandler())
+                    .with(SearchController.Builder(R.style.SearchTheme).build())
+                    .pushChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
+                    .popChangeHandler(CircularRevealChangeHandler(view.search_fab, view.view_favourites_root))
+//                    .pushChangeHandler(FadeChangeHandler())
+//                    .popChangeHandler(FadeChangeHandler())
             )
         }
+    }
+
+    class Builder(
+        serviceLocationStyleId: Int
+    ) : MvpBaseController.Builder(serviceLocationStyleId) {
+
+        fun build(): FavouritesController {
+            return FavouritesController(buildArgs())
+        }
+
     }
 
 }

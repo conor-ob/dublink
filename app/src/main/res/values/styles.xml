@@ -32,8 +32,8 @@
         <!--&lt;!&ndash;<item name="android:window">@color/dartGreen</item>&ndash;&gt;-->
     <!--</style>-->
     <style name="SearchTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/favouritesPrimary</item>
-        <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>
+        <item name="colorPrimary">@color/searchPrimary</item>
+        <item name="colorPrimaryDark">@color/searchPrimaryDark</item>
         <!--<item name="android:background">@color/white</item>-->
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
@@ -41,6 +41,7 @@
     <style name="FavouritesTheme" parent="DublinMapperTheme">
         <item name="colorPrimary">@color/favouritesPrimary</item>
         <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>
+        <item name="colorAccent">@color/favouritesAccent</item>
     </style>
 
     <style name="AircoachTheme" parent="DublinMapperTheme">
@@ -64,8 +65,8 @@
     </style>
 
     <style name="DublinBusTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/dublinBusBlue</item>
-        <item name="colorPrimaryDark">@color/dublinBusBlueDark</item>
+        <item name="colorPrimary">@color/dublinBusYellow</item>
+        <item name="colorPrimaryDark">@color/dublinBusYellowDark</item>
         <!--<item name="android:background">@color/dartGreen</item>-->
         <!--<item name="android:window">@color/dartGreen</item>-->
     </style>
@@ -110,7 +111,7 @@
     <!--</style>-->
 
     <style name="DublinMapperTheme.Launcher">
-        <!--<item name="android:windowBackground">@drawable/bg_launcher</item>-->
+        <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:navigationBarColor">@color/color_navigation_bar_launcher</item>
     </style>
 

@@ -6,6 +6,7 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
 import com.bluelinelabs.conductor.RouterTransaction
 import ie.dublinmapper.util.Service
+import ie.dublinmapper.view.favourite.FavouritesController
 import ie.dublinmapper.view.livedata.LiveDataController
 import ie.dublinmapper.view.search.SearchController
 import kotlinx.android.synthetic.main.activity_root.*
@@ -31,7 +32,8 @@ class DublinMapperActivity : AppCompatActivity() {
 //                serviceLocationIsFavourite = false
 //            ).build()
 //            router.setRoot(RouterTransaction.with(liveDataController))
-            router.setRoot(RouterTransaction.with(SearchController.Builder(R.style.SearchTheme).build()))
+//            router.setRoot(RouterTransaction.with(SearchController.Builder(R.style.SearchTheme).build()))
+            router.setRoot(RouterTransaction.with(FavouritesController.Builder(R.style.FavouritesTheme).build()))
         }
     }
 

@@ -6,6 +6,9 @@ import retrofit2.http.Query
 
 interface IrishRailApi {
 
+    @GET("getAllStationsXML")
+    fun getAllStationsXml(): Single<IrishRailStationResponseXml>
+
     @GET("getAllStationsXML_WithStationType")
     fun getAllStationsXmlWithStationType(
         @Query("StationType") stationType: String
