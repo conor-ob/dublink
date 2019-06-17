@@ -39,7 +39,8 @@ class LiveDataPresenterImpl @Inject constructor(
     }
 
     private fun mapLiveData(service: Service, liveData: List<LiveData>): List<Group> {
-        return when (service) {
+        val liveDataItems = mutableListOf<Group>(DividerItem())
+        val groups = when (service) {
             Service.AIRCOACH -> mapAircoachLiveData(liveData)
             Service.BUS_EIREANN -> mapBusEireannLiveData(liveData)
             Service.IRISH_RAIL -> mapDartLiveData(liveData)
@@ -47,6 +48,10 @@ class LiveDataPresenterImpl @Inject constructor(
             Service.LUAS -> mapLuasLiveData(liveData)
             else -> TODO()
         }
+        liveDataItems.addAll(groups)
+//        liveDataItems.add(LastUpdatedItem(System.currentTimeMillis()))
+//        liveDataItems.add(DividerItem())
+        return liveDataItems
     }
 
     private fun mapAircoachLiveData(liveData: List<LiveData>): List<Group> {
@@ -54,7 +59,6 @@ class LiveDataPresenterImpl @Inject constructor(
         val groups = liveDataUi.groupBy { it.liveData.destination }
 
         val items = mutableListOf<Group>()
-        items.add(DividerItem())
         for (entry in groups.entries) {
             val section = Section(HeaderItem(entry.key))
             val values = entry.value
@@ -66,8 +70,6 @@ class LiveDataPresenterImpl @Inject constructor(
             items.add(section)
             items.add(DividerItem())
         }
-        items.add(LastUpdatedItem(System.currentTimeMillis()))
-        items.add(DividerItem())
         return items
     }
 
@@ -76,7 +78,6 @@ class LiveDataPresenterImpl @Inject constructor(
         val groups = liveDataUi.groupBy { it.liveData.direction }
 
         val items = mutableListOf<Group>()
-        items.add(DividerItem())
         for (entry in groups.entries) {
             val section = Section(HeaderItem(entry.key))
             val values = entry.value
@@ -88,8 +89,6 @@ class LiveDataPresenterImpl @Inject constructor(
             items.add(section)
             items.add(DividerItem())
         }
-        items.add(LastUpdatedItem(System.currentTimeMillis()))
-        items.add(DividerItem())
         return items
     }
 
@@ -97,7 +96,6 @@ class LiveDataPresenterImpl @Inject constructor(
         val liveDataUi = LiveDataMapper.map(liveData).map { it as BusEireannLiveDataUi }
 
         val items = mutableListOf<Group>()
-        items.add(DividerItem())
         val section = Section(HeaderItem("Departures"))
         for (i in 0 until liveDataUi.size) {
             val isLast = i == liveDataUi.size - 1
@@ -106,8 +104,6 @@ class LiveDataPresenterImpl @Inject constructor(
         }
         items.add(section)
         items.add(DividerItem())
-        items.add(LastUpdatedItem(System.currentTimeMillis()))
-        items.add(DividerItem())
         return items
     }
 
@@ -115,7 +111,6 @@ class LiveDataPresenterImpl @Inject constructor(
         val liveDataUi = LiveDataMapper.map(liveData).map { it as DublinBusLiveDataUi }
 
         val items = mutableListOf<Group>()
-        items.add(DividerItem())
         val section = Section(HeaderItem("Departures"))
         for (i in 0 until liveDataUi.size) {
             val isLast = i == liveDataUi.size - 1
@@ -123,8 +118,6 @@ class LiveDataPresenterImpl @Inject constructor(
             section.add(DublinBusLiveDataItem(liveDataUi[i], isEven, isLast))
         }
         items.add(section)
-        items.add(DividerItem())
-        items.add(LastUpdatedItem(System.currentTimeMillis()))
         items.add(DividerItem())
         return items
     }
@@ -134,7 +127,6 @@ class LiveDataPresenterImpl @Inject constructor(
         val groups = liveDataUi.groupBy { it.liveData.direction }
 
         val items = mutableListOf<Group>()
-        items.add(DividerItem())
         for (entry in groups.entries) {
             val section = Section(HeaderItem(entry.key))
             val values = entry.value
@@ -146,8 +138,6 @@ class LiveDataPresenterImpl @Inject constructor(
             items.add(section)
             items.add(DividerItem())
         }
-        items.add(LastUpdatedItem(System.currentTimeMillis()))
-        items.add(DividerItem())
         return items
     }
 
