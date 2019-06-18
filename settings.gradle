@@ -2,3 +2,17 @@ include ':app', ':util', ':data', ':database',
         ':domain',
         ':repository',
         ':service'
+
+//app
+//common
+//core
+//database
+//datamodel
+//domain
+//repository
+//service
+//util
+//view-favourites
+//view-livedata
+//view-search
+//view-settings

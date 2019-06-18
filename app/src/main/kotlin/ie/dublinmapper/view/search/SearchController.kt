@@ -229,7 +229,8 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
             }
         }
         groups.add(DividerItem())
-        adapter.update(groups)
+        adapter.clear()
+        adapter.addAll(groups)
     }
 
     override fun showError() {

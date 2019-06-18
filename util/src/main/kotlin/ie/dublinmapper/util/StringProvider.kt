@@ -30,6 +30,10 @@ interface StringProvider {
 
     fun aircoachBaseUrl(): String
 
+    fun aircoachHost(): String
+
+    fun aircoachPort(): String
+
     fun githubBaseUrl(): String
 
     fun databaseName(): String
