@@ -3,6 +3,7 @@ package ie.dublinmapper.service.di
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.util.SslContextProvider
+import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -34,15 +35,16 @@ class ServiceModule {
     @Singleton
     @Named("AIRCOACH")
     fun okHttpClient(
-        sslContextProvider: SslContextProvider
+        sslContextProvider: SslContextProvider,
+        stringProvider: StringProvider
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            //.addInterceptor(downloadInterceptor)
-//            .hostnameVerifier { hostname, session ->
-//                return@hostnameVerifier hostname == "tracker.aircoach.ie"
-//                        && session.peerHost == "tracker.aircoach.ie"
-//                        && session.peerPort == 443
-//            }
+//            .addInterceptor(downloadInterceptor)
+            .hostnameVerifier { hostname, session ->
+                return@hostnameVerifier hostname == stringProvider.aircoachHost()
+                        && session.peerHost == stringProvider.aircoachHost()
+                        && session.peerPort == stringProvider.aircoachPort().toInt()
+            }
             .sslSocketFactory(sslContextProvider.sslContext().socketFactory)
             .addNetworkInterceptor(NetworkLoggingInterceptor())
             .retryOnConnectionFailure(true)

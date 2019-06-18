@@ -82,6 +82,14 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.aircoach_base_url)
     }
 
+    override fun aircoachHost(): String {
+        return resources.getString(R.string.aircoach_host)
+    }
+
+    override fun aircoachPort(): String {
+        return resources.getString(R.string.aircoach_port)
+    }
+
     override fun databaseName(): String {
         return resources.getString(R.string.database_name)
     }
