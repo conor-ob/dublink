@@ -1,10 +1,11 @@
 buildscript {
 
     ext.buildConfig = [
-            'minSdk'    : 23,
-            'targetSdk' : 28,
-            'compileSdk': 28,
-            'version'   : [
+            'applicationId' : "ie.dublinmapper",
+            'minSdk'        : 23,
+            'targetSdk'     : 28,
+            'compileSdk'    : 28,
+            'version'       : [
                     'major'  : 1,
                     'minor'  : 0,
                     'patch'  : 0,

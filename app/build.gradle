@@ -17,7 +17,7 @@ android {
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "ie.dublinmapper"
+        applicationId buildConfig.applicationId
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
         versionCode buildConfig.version.code
@@ -30,10 +30,10 @@ android {
     buildTypes {
         release {
             debuggable false
-//            minifyEnabled true
-//            shrinkResources true
-//            useProguard true
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
@@ -50,6 +50,13 @@ android {
         mock {
             dimension "default"
             applicationIdSuffix = ".mock"
+        }
+    }
+
+    android.variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (variant.buildType.name == 'release' && names.get(0) != "prod") {
+            variant.setIgnore(true)
         }
     }
 
