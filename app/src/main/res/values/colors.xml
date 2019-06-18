@@ -17,8 +17,12 @@
     <color name="text_color_tertiary">#dadce0</color>
     <color name="text_light">@color/grey_400</color>
 
-    <color name="favouritesPrimary">#4E394C</color>
-    <color name="favouritesPrimaryDark">#3D2D3C</color>
+    <color name="slackPrimary">#4E394C</color>
+    <color name="slackPrimaryDark">#3D2D3C</color>
+
+    <color name="favouritesPrimary">#7056A5</color>
+    <color name="favouritesPrimaryDark">#5F498D</color>
+    <color name="favouritesAccent">#4286F5</color>
 
     <color name="aircoachOrange">#EF7B0A</color>
     <color name="aircoachOrangeDark">#B35E0C</color>
@@ -30,8 +34,12 @@
     <color name="dublinBikesTeal">#004D40</color>
     <color name="dublinBusBlue">#4286F5</color>
     <color name="dublinBusBlueDark">#346AC2</color>
-    <color name="dublinBusYellow">#FFD740</color>
-    <color name="dublinBusYellowDark">#C99E17</color>
+    <!--<color name="dublinBusYellow">#FFD740</color>-->
+    <!--<color name="dublinBusYellowDark">#C99E17</color>-->
+    <!--<color name="dublinBusYellow">#FCCB0B</color>-->
+    <!--<color name="dublinBusYellowDark">#D5AB08</color>-->
+    <color name="dublinBusYellow">#FBBF01</color>
+    <color name="dublinBusYellowDark">#D09D00</color>
     <color name="goAheadBlue">#4286F5</color>
     <color name="luasPurple">#512DA8</color>
     <color name="luasPurpleDark">#3E2381</color>

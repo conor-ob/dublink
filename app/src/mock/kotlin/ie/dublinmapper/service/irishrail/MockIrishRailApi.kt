@@ -4,6 +4,10 @@ import io.reactivex.Single
 
 class MockIrishRailApi : IrishRailApi {
 
+    override fun getAllStationsXml(): Single<IrishRailStationResponseXml> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun getAllStationsXmlWithStationType(stationType: String): Single<IrishRailStationResponseXml> {
         return Single.just(
             IrishRailStationResponseXml(
