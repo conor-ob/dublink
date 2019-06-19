@@ -25,7 +25,7 @@ class CircularRevealChangeHandler : AnimatorChangeHandler {
      * @param fromView The view from which the circular reveal should originate
      * @param containerView The view that hosts fromView
      */
-    constructor(fromView: View, containerView: View) : super(500L, true) {
+    constructor(fromView: View, containerView: View) : super(300L, true) {
 
         val fromLocation = IntArray(2)
         fromView.getLocationInWindow(fromLocation)

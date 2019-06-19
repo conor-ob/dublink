@@ -23,6 +23,8 @@
     <string name="database_name">dublinmapper.db</string>
 
     <string name="aircoach_base_url">https://tracker.aircoach.ie/</string>
+    <string name="aircoach_host">tracker.aircoach.ie</string>
+    <string name="aircoach_port">443</string>
     <string name="dublin_bus_api_base_url">http://rtpi.dublinbus.ie/</string>
     <string name="irish_rail_api_base_url">http://api.irishrail.ie/realtime/realtime.asmx/</string>
     <string name="jcdecaux_base_url">https://api.jcdecaux.com/vls/v1/</string>
@@ -80,6 +82,7 @@
     <string name="live_data_just_updated">Just updated</string>
     <string name="live_data_last_updated_seconds">Updated %d seconds ago</string>
     <string name="stop_number">Stop %s</string>
+
     <plurals name="live_data_last_updated_minutes">
         <item quantity="one">Updated %d minute ago</item>
         <item quantity="other">Updated %d minutes ago</item>
