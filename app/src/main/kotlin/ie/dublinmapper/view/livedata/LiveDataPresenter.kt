@@ -5,7 +5,7 @@ import ie.dublinmapper.util.Service
 
 interface LiveDataPresenter : MvpPresenter<LiveDataView> {
 
-    fun start(serviceLocationId: String, service: Service)
+    fun start(serviceLocationId: String, serviceLocationName: String, service: Service)
 
     fun stop()
 

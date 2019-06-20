@@ -41,7 +41,10 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         view.toolbar.setNavigationOnClickListener { router.handleBack() }
         view.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.action_add_favourite -> Timber.d("Add Favourite pressed")
+                R.id.action_add_favourite -> {
+                    Timber.d("Add Favourite pressed")
+                    args.putBoolean(SERVICE_LOCATION_IS_FAVOURITE, true)
+                }
                 R.id.action_settings -> Timber.d("Settings pressed")
             }
             return@setOnMenuItemClickListener true
@@ -62,6 +65,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         super.onAttach(view)
         presenter.start(
             serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
+            serviceLocationName = requireStringArg(SERVICE_LOCATION_NAME),
             service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
         )
     }
@@ -71,8 +75,8 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         super.onDetach(view)
     }
 
-    override fun showLiveData(liveData: List<Group>) {
-        adapter.update(liveData)
+    override fun showLiveData(liveData: Group) {
+        adapter.update(listOf(liveData))
     }
 
     companion object {

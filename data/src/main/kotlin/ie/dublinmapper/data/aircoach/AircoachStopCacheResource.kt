@@ -6,6 +6,6 @@ interface AircoachStopCacheResource {
 
     fun selectStops(): Maybe<List<AircoachStopEntity>>
 
-    fun insertStops(stops: Pair<List<AircoachStopLocationEntity>, List<AircoachStopServiceEntity>>)
+    fun insertStops(stops: List<AircoachStopEntity>)
 
 }

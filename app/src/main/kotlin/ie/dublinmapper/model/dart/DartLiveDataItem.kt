@@ -5,13 +5,14 @@ import androidx.core.content.ContextCompat
 import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
+import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.model.DartLiveDataUi
 import ie.dublinmapper.model.livedata.LiveDataItem
 import ie.dublinmapper.util.Operator
 import kotlinx.android.synthetic.main.list_item_live_data.*
 
 class DartLiveDataItem(
-    private val liveDataUi: DartLiveDataUi,
+    private val liveData: DartLiveData,
     isEven: Boolean,
     isLast: Boolean
 ) : LiveDataItem(isEven, isLast) {
@@ -20,8 +21,8 @@ class DartLiveDataItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        super.bindDueTimes(viewHolder, liveDataUi.liveData.dueTime)
-        val liveData = liveDataUi.liveData
+        super.bindDueTimes(viewHolder, liveData.dueTime)
+        val liveData = liveData
         viewHolder.title.text = liveData.destination
         viewHolder.subtitle.text = liveData.operator.fullName
         viewHolder.operatorIconContainer.setImageResource(R.drawable.ic_train)
@@ -41,20 +42,20 @@ class DartLiveDataItem(
 
     override fun isSameAs(other: Item<*>?): Boolean {
         if (other is DartLiveDataItem) {
-            return liveDataUi.liveData.customHash == other.liveDataUi.liveData.customHash
+            return liveData.customHash == other.liveData.customHash
         }
         return false
     }
 
     override fun equals(other: Any?): Boolean {
         if (other is DartLiveDataItem) {
-            return liveDataUi.liveData == other.liveDataUi.liveData
+            return liveData == other.liveData
         }
         return false
     }
 
     override fun hashCode(): Int {
-        return liveDataUi.liveData.hashCode()
+        return liveData.hashCode()
     }
 
 }

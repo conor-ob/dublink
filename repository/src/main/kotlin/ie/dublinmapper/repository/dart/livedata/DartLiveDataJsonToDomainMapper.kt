@@ -2,25 +2,28 @@ package ie.dublinmapper.repository.dart.livedata
 
 import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.domain.model.DueTime
-import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.irishrail.IrishRailStationDataXml
 import ie.dublinmapper.util.Formatter
 import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.TimeUtils
+import ma.glasnost.orika.CustomConverter
+import ma.glasnost.orika.MappingContext
+import ma.glasnost.orika.metadata.Type
 import org.threeten.bp.LocalTime
-import org.threeten.bp.temporal.ChronoUnit
-import java.util.*
 
-object DartLiveDataMapper : Mapper<IrishRailStationDataXml, DartLiveData> {
+object DartLiveDataJsonToDomainMapper : CustomConverter<IrishRailStationDataXml, DartLiveData>() {
 
-    override fun map(from: IrishRailStationDataXml): DartLiveData {
-        val operator = mapOperator(from.trainType!!, from.trainCode!!)
+    override fun convert(
+        source: IrishRailStationDataXml,
+        destinationType: Type<out DartLiveData>,
+        mappingContext: MappingContext
+    ): DartLiveData {
+        val operator = mapOperator(source.trainType!!, source.trainCode!!)
         return DartLiveData(
-            dueTime = mapDueTime(from.expArrival!!, from.dueIn!!, from.queryTime!!),
+            dueTime = mapDueTime(source.expArrival!!, source.dueIn!!, source.queryTime!!),
             operator = operator,
-            direction = from.direction!!,
+            direction = source.direction!!,
             route = operator.fullName,
-            destination = from.destination!!
+            destination = source.destination!!
         )
     }
 

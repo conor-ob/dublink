@@ -1,6 +1,7 @@
 package ie.dublinmapper.dublinbikes
 
 import ie.dublinmapper.data.TxRunner
+import ie.dublinmapper.data.aircoach.AircoachStopEntity
 import ie.dublinmapper.data.dublinbikes.*
 import io.reactivex.Maybe
 
@@ -15,10 +16,11 @@ class DublinBikesDockCacheResourceImpl(
         return dublinBikesDockDao.selectAll()
     }
 
-    override fun insertDocks(docks: Pair<List<DublinBikesDockLocationEntity>, List<DublinBikesDockServiceEntity>>) {
+    override fun insertDocks(docks: List<DublinBikesDockEntity>) {
         txRunner.runInTx {
-            dublinBikesDockLocationDao.insertAll(docks.first)
-            dublinBikesDockServiceDao.insertAll(docks.second)
+            dublinBikesDockLocationDao.deleteAll() //TODO test cascade delete
+            dublinBikesDockLocationDao.insertAll(docks.map { it.location })
+            dublinBikesDockServiceDao.insertAll(docks.flatMap { it.services })
         }
     }
 

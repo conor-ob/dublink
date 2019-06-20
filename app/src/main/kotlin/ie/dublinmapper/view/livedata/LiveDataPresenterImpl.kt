@@ -1,15 +1,7 @@
 package ie.dublinmapper.view.livedata
 
 import com.xwray.groupie.Group
-import com.xwray.groupie.Section
-import ie.dublinmapper.domain.model.LiveData
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
-import ie.dublinmapper.model.*
-import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
-import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
-import ie.dublinmapper.model.dart.DartLiveDataItem
-import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
-import ie.dublinmapper.model.luas.LuasLiveDataItem
 import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.util.Service
 import ie.dublinmapper.view.BasePresenter
@@ -23,11 +15,10 @@ class LiveDataPresenterImpl @Inject constructor(
     scheduler: RxScheduler
 ) : BasePresenter<LiveDataView>(scheduler), LiveDataPresenter {
 
-    override fun start(serviceLocationId: String, service: Service) {
-        subscriptions().add(useCase.getCondensedLiveDataStream(serviceLocationId, service)
+    override fun start(serviceLocationId: String, serviceLocationName: String, service: Service) {
+        subscriptions().add(useCase.getCondensedLiveDataStream(serviceLocationId, serviceLocationName, service)
             .compose(applySchedulers())
-            .map { mapLiveData(service, it) }
-//            .map { mapper.mapAsList(it, Group::class.java) }
+            .map { liveData -> mapper.map(liveData, Group::class.java) }
             .doOnNext { ifViewAttached { view -> view.showLiveData(it) } }
             .doOnError { Timber.e(it) }
             .subscribe( {Timber.d(it.toString())} , {Timber.e(it)} )
@@ -36,109 +27,6 @@ class LiveDataPresenterImpl @Inject constructor(
 
     override fun stop() {
         unsubscribe()
-    }
-
-    private fun mapLiveData(service: Service, liveData: List<LiveData>): List<Group> {
-        val liveDataItems = mutableListOf<Group>(DividerItem())
-        val groups = when (service) {
-            Service.AIRCOACH -> mapAircoachLiveData(liveData)
-            Service.BUS_EIREANN -> mapBusEireannLiveData(liveData)
-            Service.IRISH_RAIL -> mapDartLiveData(liveData)
-            Service.DUBLIN_BUS -> mapDublinBusLiveData(liveData)
-            Service.LUAS -> mapLuasLiveData(liveData)
-            else -> TODO()
-        }
-        liveDataItems.addAll(groups)
-//        liveDataItems.add(LastUpdatedItem(System.currentTimeMillis()))
-//        liveDataItems.add(DividerItem())
-        return liveDataItems
-    }
-
-    private fun mapAircoachLiveData(liveData: List<LiveData>): List<Group> {
-        val liveDataUi = LiveDataMapper.map(liveData).map { it as AircoachLiveDataUi }
-        val groups = liveDataUi.groupBy { it.liveData.destination }
-
-        val items = mutableListOf<Group>()
-        for (entry in groups.entries) {
-            val section = Section(HeaderItem(entry.key))
-            val values = entry.value
-            for (i in 0 until values.size) {
-                val isLast = i == values.size - 1
-                val isEven = i % 2 == 0
-                section.add(AircoachLiveDataItem(values[i], isEven, isLast))
-            }
-            items.add(section)
-            items.add(DividerItem())
-        }
-        return items
-    }
-
-    private fun mapLuasLiveData(liveData: List<LiveData>): List<Group> {
-        val liveDataUi = LiveDataMapper.map(liveData).map { it as LuasLiveDataUi }
-        val groups = liveDataUi.groupBy { it.liveData.direction }
-
-        val items = mutableListOf<Group>()
-        for (entry in groups.entries) {
-            val section = Section(HeaderItem(entry.key))
-            val values = entry.value
-            for (i in 0 until values.size) {
-                val isLast = i == values.size - 1
-                val isEven = i % 2 == 0
-                section.add(LuasLiveDataItem(values[i], isEven, isLast))
-            }
-            items.add(section)
-            items.add(DividerItem())
-        }
-        return items
-    }
-
-    private fun mapBusEireannLiveData(liveData: List<LiveData>): List<Group> {
-        val liveDataUi = LiveDataMapper.map(liveData).map { it as BusEireannLiveDataUi }
-
-        val items = mutableListOf<Group>()
-        val section = Section(HeaderItem("Departures"))
-        for (i in 0 until liveDataUi.size) {
-            val isLast = i == liveDataUi.size - 1
-            val isEven = i % 2 == 0
-            section.add(BusEireannLiveDataItem(liveDataUi[i], isEven, isLast))
-        }
-        items.add(section)
-        items.add(DividerItem())
-        return items
-    }
-
-    private fun mapDublinBusLiveData(liveData: List<LiveData>): List<Group> {
-        val liveDataUi = LiveDataMapper.map(liveData).map { it as DublinBusLiveDataUi }
-
-        val items = mutableListOf<Group>()
-        val section = Section(HeaderItem("Departures"))
-        for (i in 0 until liveDataUi.size) {
-            val isLast = i == liveDataUi.size - 1
-            val isEven = i % 2 == 0
-            section.add(DublinBusLiveDataItem(liveDataUi[i], isEven, isLast))
-        }
-        items.add(section)
-        items.add(DividerItem())
-        return items
-    }
-
-    private fun mapDartLiveData(liveData: List<LiveData>): List<Group> {
-        val liveDataUi = LiveDataMapper.map(liveData).map { it as DartLiveDataUi }
-        val groups = liveDataUi.groupBy { it.liveData.direction }
-
-        val items = mutableListOf<Group>()
-        for (entry in groups.entries) {
-            val section = Section(HeaderItem(entry.key))
-            val values = entry.value
-            for (i in 0 until values.size) {
-                val isLast = i == values.size - 1
-                val isEven = i % 2 == 0
-                section.add(DartLiveDataItem(values[i], isEven, isLast))
-            }
-            items.add(section)
-            items.add(DividerItem())
-        }
-        return items
     }
 
 }

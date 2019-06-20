@@ -18,9 +18,9 @@ class FavouritesUseCase @Inject constructor(
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>
     ) {
 
-    fun getFavourites(): Observable<List<ServiceLocation>> {
+    fun getFavourites(): Observable<FavouritesResponse> {
         return favouriteRepository.getFavourites()
-            .map { toServiceLocations(it) }
+            .map { FavouritesResponse(toServiceLocations(it)) }
     }
 
     private fun toServiceLocations(favourites: List<Favourite>): List<ServiceLocation> {
@@ -40,3 +40,7 @@ class FavouritesUseCase @Inject constructor(
     }
 
 }
+
+data class FavouritesResponse(
+    val serviceLocations: List<ServiceLocation>
+)

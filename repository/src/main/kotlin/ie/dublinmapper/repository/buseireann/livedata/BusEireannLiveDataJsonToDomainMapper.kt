@@ -1,29 +1,30 @@
-package ie.dublinmapper.repository.luas.livedata
+package ie.dublinmapper.repository.buseireann.livedata
 
+import ie.dublinmapper.domain.model.BusEireannLiveData
 import ie.dublinmapper.domain.model.DueTime
-import ie.dublinmapper.domain.model.LuasLiveData
-import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.Formatter
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.TimeUtils
+import ma.glasnost.orika.CustomConverter
+import ma.glasnost.orika.MappingContext
+import ma.glasnost.orika.metadata.Type
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
-object LuasLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, LuasLiveData> {
+object BusEireannLiveDataJsonToDomainMapper : CustomConverter<RtpiRealTimeBusInformationJson, BusEireannLiveData>() {
 
-    override fun map(from: RtpiRealTimeBusInformationJson): LuasLiveData {
-        return LuasLiveData(
-            mapDueTime(from.arrivalDateTime!!),
-            Operator.LUAS,
-            from.route!!,
-            mapDestination(from),
-            from.direction!!
+    override fun convert(
+        source: RtpiRealTimeBusInformationJson,
+        destinationType: Type<out BusEireannLiveData>,
+        mappingContext: MappingContext
+    ): BusEireannLiveData {
+        return BusEireannLiveData(
+            mapDueTime(source.arrivalDateTime!!),
+            Operator.BUS_EIREANN,
+            source.route!!,
+            source.destination!!
         )
-    }
-
-    private fun mapDestination(from: RtpiRealTimeBusInformationJson): String {
-        return from.destination!!.replace("LUAS", "").trim()
     }
 
     private fun mapDueTime(expectedArrivalDateTimestamp: String): List<DueTime> {

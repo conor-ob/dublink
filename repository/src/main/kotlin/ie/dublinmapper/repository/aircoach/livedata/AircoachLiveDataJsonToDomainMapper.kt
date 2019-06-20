@@ -2,24 +2,30 @@ package ie.dublinmapper.repository.aircoach.livedata
 
 import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.model.DueTime
-import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.aircoach.EtaJson
 import ie.dublinmapper.service.aircoach.ServiceJson
 import ie.dublinmapper.service.aircoach.TimestampJson
 import ie.dublinmapper.util.Formatter
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.TimeUtils
+import ma.glasnost.orika.CustomConverter
+import ma.glasnost.orika.MappingContext
+import ma.glasnost.orika.metadata.Type
 import org.threeten.bp.temporal.ChronoUnit
 import java.util.*
 
-object AircoachLiveDataMapper : Mapper<ServiceJson, AircoachLiveData> {
+object AircoachLiveDataJsonToDomainMapper : CustomConverter<ServiceJson, AircoachLiveData>() {
 
-    override fun map(from: ServiceJson): AircoachLiveData {
+    override fun convert(
+        source: ServiceJson,
+        destinationType: Type<out AircoachLiveData>,
+        mappingContext: MappingContext
+    ): AircoachLiveData {
         return AircoachLiveData(
-            mapDueTime(from.eta, from.time.arrive),
+            mapDueTime(source.eta, source.time.arrive),
             Operator.AIRCOACH,
-            from.route,
-            from.arrival
+            source.route,
+            source.arrival
         )
     }
 

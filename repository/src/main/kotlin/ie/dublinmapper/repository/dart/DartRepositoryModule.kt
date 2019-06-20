@@ -12,7 +12,7 @@ import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dart.livedata.DartLiveDataFetcher
-import ie.dublinmapper.repository.dart.livedata.DartLiveDataMapper
+import ie.dublinmapper.repository.dart.livedata.DartLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.dart.livedata.DartLiveDataRepository
 import ie.dublinmapper.repository.dart.stations.DartStationFetcher
 import ie.dublinmapper.repository.dart.stations.DartStationPersister
@@ -61,12 +61,15 @@ class DartRepositoryModule {
     @Provides
     @Singleton
     fun dartLiveDataRepository(
-        api: IrishRailApi
+        api: IrishRailApi,
+        mapper: MapperFacade
     ): Repository<DartLiveData> {
         val fetcher = DartLiveDataFetcher(api)
         val store = StoreBuilder.parsedWithKey<String, List<IrishRailStationDataXml>, List<DartLiveData>>()
             .fetcher(fetcher)
-            .parser { liveData -> DartLiveDataMapper.map(liveData).sortedBy { it.dueTime[0].minutes } } //TODO do the sorting somewhere else
+            .parser { liveData ->
+                mapper.mapAsList(liveData, DartLiveData::class.java).sortedBy { it.dueTime[0].minutes } //TODO do the sorting somewhere else
+            }
             .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return DartLiveDataRepository(store)

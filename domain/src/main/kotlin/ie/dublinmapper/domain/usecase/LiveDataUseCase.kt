@@ -2,10 +2,8 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.Service
 import io.reactivex.Observable
-import org.threeten.bp.LocalTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -19,48 +17,25 @@ class LiveDataUseCase @Inject constructor(
     private val luasLiveDataRepository: Repository<LuasLiveData>
 ) {
 
-    fun getLiveData(serviceLocation: ServiceLocation): Observable<List<LiveData>> {
-        return when (serviceLocation) {
-            is AircoachStop -> aircoachLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is BusEireannStop -> busEireannLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is DartStation -> dartLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is DublinBikesDock -> dublinBikesLiveDataRepository.getById(serviceLocation.id).map { Collections.singletonList(it) as List<LiveData> }
-            is DublinBusStop -> dublinBusLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is LuasStop -> luasLiveDataRepository.getAllById(serviceLocation.id).map { it as List<LiveData> }
-            is SwordsExpressStop -> TODO()
-            else -> TODO()
-        }
-    }
-
-    fun getCondensedLiveData(serviceLocation: ServiceLocation): Observable<List<LiveData>> {
-        if (serviceLocation is DublinBikesDock) {
-            return getLiveData(serviceLocation)
-        }
-        return getLiveData(serviceLocation).map { condenseLiveData(it) }
-    }
-
-    fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
-        return when (service) {
-            Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
-            Service.BUS_EIREANN -> busEireannLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
-            Service.IRISH_RAIL -> dartLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
-            Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { Collections.singletonList(it) as List<LiveData> }
-            Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
-            Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId).map { it as List<LiveData> }
-            Service.SWORDS_EXPRESS -> TODO()
-        }
-    }
-
-    fun getCondensedLiveDataStream(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
+    fun getCondensedLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
         return Observable.interval(0L, 60L, TimeUnit.SECONDS)
-            .flatMap { getCondensedLiveData(serviceLocationId, service) }
+            .flatMap {
+                getLiveData(serviceLocationId, service).map {
+                    LiveDataResponse(service, serviceLocationName, condenseLiveData(it))
+                }
+            }
     }
 
-    fun getCondensedLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
-        if (service == Service.DUBLIN_BIKES) {
-            return getLiveData(serviceLocationId, service)
-        }
-        return getLiveData(serviceLocationId, service).map { condenseLiveData(it) }
+    private fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
+        return when (service) {
+            Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId)
+            Service.BUS_EIREANN -> busEireannLiveDataRepository.getAllById(serviceLocationId)
+            Service.IRISH_RAIL -> dartLiveDataRepository.getAllById(serviceLocationId)
+            Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { listOf(it) }
+            Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId)
+            Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId)
+            Service.SWORDS_EXPRESS -> TODO()
+        }.map { it as List<LiveData> }
     }
 
     private fun condenseLiveData(liveData: List<LiveData>): List<LiveData> {
@@ -75,6 +50,12 @@ class LiveDataUseCase @Inject constructor(
                         val aircoachLiveData = data as AircoachLiveData
                         val dueTimes = cachedLiveData.dueTime.toMutableList()
                         dueTimes.add(aircoachLiveData.dueTime[0])
+                        cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
+                    }
+                    is BusEireannLiveData -> {
+                        val busEireannLiveData = data as BusEireannLiveData
+                        val dueTimes = cachedLiveData.dueTime.toMutableList()
+                        dueTimes.add(busEireannLiveData.dueTime[0])
                         cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
                     }
                     is DartLiveData -> {

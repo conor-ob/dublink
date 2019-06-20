@@ -142,7 +142,10 @@ dependencies {
 
     implementation "com.nytimes.android:store3:${versions.store3}"
 
+    testImplementation project(path: ':domain', configuration: 'testOutput')
     testImplementation project(path: ':service', configuration: 'testOutput')
+    testImplementation project(path: ':util', configuration: 'testOutput')
+    testImplementation "com.google.truth:truth:0.45"
 
     testImplementation "junit:junit:${testVersions.junit}"
     androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
