@@ -5,14 +5,14 @@ import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.LuasStop
-import ie.dublinmapper.model.ServiceLocationItemX
+import ie.dublinmapper.model.ServiceLocationItem
 import kotlinx.android.synthetic.main.list_item_service_location.*
 
 class LuasStopItem(
     private val luasStop: LuasStop,
     isEven: Boolean,
     isLast: Boolean
-) : ServiceLocationItemX(isEven, isLast) {
+) : ServiceLocationItem(isEven, isLast) {
 
     init {
         extras["serviceLocation"] = luasStop

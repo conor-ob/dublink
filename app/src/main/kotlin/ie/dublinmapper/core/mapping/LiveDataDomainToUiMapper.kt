@@ -23,7 +23,7 @@ class LiveDataDomainToUiMapper(
     override fun convert(
         source: LiveDataResponse,
         destinationType: Type<out Group>,
-        mappingContext: MappingContext
+        mappingContext: MappingContext?
     ): Group {
         return when (source.service) {
             Service.AIRCOACH -> mapAircoachLiveData(source.serviceLocationName, source.liveData.map { it as AircoachLiveData })
@@ -96,9 +96,10 @@ class LiveDataDomainToUiMapper(
     }
 
     private fun mapDartLiveData(serviceLocationName: String, liveData: List<DartLiveData>): Group {
-        val groups = liveData.groupBy { it.direction }
+        val (terminating, departures) = liveData.partition { it.destination == serviceLocationName }
+        val groups = departures.groupBy { it.direction }
         val items = mutableListOf<Group>()
-        if (liveData.isNotEmpty()) {
+        if (groups.isNotEmpty()) {
             items.add(DividerItem())
         }
         for (entry in groups.entries) {
@@ -108,6 +109,15 @@ class LiveDataDomainToUiMapper(
                 val isLast = i == values.size - 1
                 val isEven = i % 2 == 0
                 items.add(DartLiveDataItem(values[i], isEven, isLast))
+            }
+            items.add(DividerItem())
+        }
+        if (terminating.isNotEmpty()) {
+            items.add(HeaderItem(stringProvider.terminating()))
+            for (i in 0 until terminating.size) {
+                val isLast = i == terminating.size - 1
+                val isEven = i % 2 == 0
+                items.add(DartLiveDataItem(terminating[i], isEven, isLast))
             }
             items.add(DividerItem())
         }
