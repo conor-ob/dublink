@@ -25,9 +25,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
-import ie.dublinmapper.model.HeaderItem
-import ie.dublinmapper.model.DividerItem
-import ie.dublinmapper.model.ServiceLocationUi
+import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.util.*
 import ie.dublinmapper.view.livedata.LiveDataController
 import io.reactivex.Observable
@@ -154,12 +152,12 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         searchResults.layoutManager = layoutManager
         adapter.setOnItemClickListener { item, _ ->
             val extras = item.extras
-            val serviceLocation = extras["serviceLocation"] as ServiceLocationUi
+            val serviceLocation = extras["serviceLocation"] as ServiceLocation
             val liveDataController = LiveDataController.Builder(
                 serviceLocationId = serviceLocation.id,
                 serviceLocationName = serviceLocation.name,
                 serviceLocationService = serviceLocation.service,
-                serviceLocationStyleId = serviceLocation.styleId,
+                serviceLocationStyleId = getStyle(serviceLocation.service),
                 serviceLocationIsFavourite = false
             ).build()
             router.pushController(
@@ -205,32 +203,33 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         swipeRefresh = view.swipeRefresh
     }
 
+    // TODO this is bollocks
+    private fun getStyle(service: Service): Int {
+        return when (service) {
+            Service.AIRCOACH -> R.style.AircoachTheme
+            Service.BUS_EIREANN -> R.style.BusEireannTheme
+            Service.DUBLIN_BIKES -> TODO()
+            Service.DUBLIN_BUS -> R.style.DublinBusTheme
+            Service.IRISH_RAIL -> R.style.DartTheme
+            Service.LUAS -> R.style.LuasTheme
+            Service.SWORDS_EXPRESS -> TODO()
+        }
+    }
+
     override fun showLoading(isLoading: Boolean) {
         swipeRefresh.isRefreshing = isLoading
     }
 
-    override fun showSearchResults(searchResults: List<ServiceLocationUi>) {
-        if (searchResults.isEmpty()) {
+    override fun showSearchResults(searchResults: Group) {
+        if (searchResults.itemCount < 0) {
             this.searchResults.visibility = View.GONE
             searchHintDetail.visibility = View.VISIBLE
         } else {
             searchHintDetail.visibility = View.GONE
             this.searchResults.visibility = View.VISIBLE
         }
-        val groups = mutableListOf<Group>()
-        val serviceLocations = searchResults.groupBy { it.serviceLocation.service }
-        for (entry in serviceLocations) {
-            groups.add(DividerItem())
-            groups.add(HeaderItem(entry.key.fullName))
-            for (i in 0 until entry.value.size) {
-                val isLast = i == entry.value.size - 1
-                val isEven = i % 2 == 0
-                groups.add(entry.value[i].toItem(isEven, isLast))
-            }
-        }
-        groups.add(DividerItem())
         adapter.clear()
-        adapter.addAll(groups)
+        adapter.addAll(listOf(searchResults))
     }
 
     override fun showError() {

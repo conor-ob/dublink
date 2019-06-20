@@ -1,13 +1,15 @@
 package ie.dublinmapper.view.search
 
+import com.xwray.groupie.Group
 import ie.dublinmapper.domain.usecase.SearchUseCase
-import ie.dublinmapper.util.ServiceLocationUiMapper
 import ie.dublinmapper.util.RxScheduler
 import ie.dublinmapper.view.BasePresenter
+import ma.glasnost.orika.MapperFacade
 import javax.inject.Inject
 
 class SearchPresenterImpl @Inject constructor(
     private val useCase: SearchUseCase,
+    private val mapper: MapperFacade,
     scheduler: RxScheduler
 ) : BasePresenter<SearchView>(scheduler), SearchPresenter {
 
@@ -17,8 +19,8 @@ class SearchPresenterImpl @Inject constructor(
             .doOnSubscribe {
                 ifViewAttached { view -> view.showLoading(true) }
             }
-            .doOnNext { serviceLocations ->
-                val searchResults = ServiceLocationUiMapper.map(serviceLocations)
+            .doOnNext { response ->
+                val searchResults = mapper.map(response, Group::class.java)
                 ifViewAttached { view -> view.showSearchResults(searchResults) }
             }
             .doFinally {

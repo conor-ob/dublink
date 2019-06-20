@@ -2,23 +2,27 @@ package ie.dublinmapper.repository.dublinbus.livedata
 
 import ie.dublinmapper.domain.model.DublinBusLiveData
 import ie.dublinmapper.domain.model.DueTime
-import ie.dublinmapper.domain.repository.Mapper
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.Formatter
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.TimeUtils
+import ma.glasnost.orika.CustomConverter
+import ma.glasnost.orika.MappingContext
+import ma.glasnost.orika.metadata.Type
 import org.threeten.bp.LocalTime
-import org.threeten.bp.temporal.ChronoUnit
-import java.util.*
 
-object DublinBusLiveDataMapper : Mapper<RtpiRealTimeBusInformationJson, DublinBusLiveData> {
+object DublinBusLiveDataJsonToDomainMapper : CustomConverter<RtpiRealTimeBusInformationJson, DublinBusLiveData>() {
 
-    override fun map(from: RtpiRealTimeBusInformationJson): DublinBusLiveData {
+    override fun convert(
+        source: RtpiRealTimeBusInformationJson,
+        destinationType: Type<out DublinBusLiveData>,
+        mappingContext: MappingContext
+    ): DublinBusLiveData {
         return DublinBusLiveData(
-            mapDueTime(from.arrivalDateTime!!, from.dueTime!!),
+            mapDueTime(source.arrivalDateTime!!, source.dueTime!!),
             Operator.DUBLIN_BUS,
-            from.route!!,
-            from.destination!!
+            source.route!!,
+            source.destination!!
         )
     }
 

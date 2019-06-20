@@ -6,6 +6,6 @@ interface DublinBikesDockCacheResource {
 
     fun selectDocks(): Maybe<List<DublinBikesDockEntity>>
 
-    fun insertDocks(docks: Pair<List<DublinBikesDockLocationEntity>, List<DublinBikesDockServiceEntity>>)
+    fun insertDocks(docks: List<DublinBikesDockEntity>)
 
 }

@@ -15,12 +15,13 @@ import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockFetcher
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataFetcher
-import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataMapper
+import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataRepository
 import ie.dublinmapper.service.jcdecaux.JcDecauxApi
 import ie.dublinmapper.service.jcdecaux.StationJson
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
+import ma.glasnost.orika.MapperFacade
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -46,14 +47,15 @@ class DublinBikesRepositoryModule {
         cacheResource: DublinBikesDockCacheResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        mapper: MapperFacade
     ): Repository<DublinBikesDock> {
         val fetcher = DublinBikesDockFetcher(
             api,
             stringProvider.jcDecauxApiKey(),
             stringProvider.jcDecauxContract()
         )
-        val persister = DublinBikesDockPersister(cacheResource, memoryPolicy, persisterDao, internetManager)
+        val persister = DublinBikesDockPersister(cacheResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return DublinBikesDockRepository(store)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
@@ -67,7 +69,8 @@ class DublinBikesRepositoryModule {
     @Singleton
     fun dublinBikesRealTimeDataRepository(
         api: JcDecauxApi,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        mapper: MapperFacade
     ): Repository<DublinBikesLiveData> {
         val fetcher = DublinBikesLiveDataFetcher(
             api,
@@ -76,7 +79,7 @@ class DublinBikesRepositoryModule {
         )
         val store = StoreBuilder.parsedWithKey<String, StationJson, DublinBikesLiveData>()
             .fetcher(fetcher)
-            .parser { liveData -> DublinBikesLiveDataMapper.map(liveData) }
+            .parser { liveData -> mapper.map(liveData, DublinBikesLiveData::class.java) }
             .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return DublinBikesLiveDataRepository(store)

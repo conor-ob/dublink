@@ -82,6 +82,8 @@
     <string name="live_data_just_updated">Just updated</string>
     <string name="live_data_last_updated_seconds">Updated %d seconds ago</string>
     <string name="stop_number">Stop %s</string>
+    <string name="departures">Departures</string>
+    <string name="terminating">Terminating</string>
 
     <plurals name="live_data_last_updated_minutes">
         <item quantity="one">Updated %d minute ago</item>

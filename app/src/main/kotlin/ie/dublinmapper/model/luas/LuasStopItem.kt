@@ -4,12 +4,12 @@ import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
-import ie.dublinmapper.model.LuasStopUi
+import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.model.ServiceLocationItemX
 import kotlinx.android.synthetic.main.list_item_service_location.*
 
 class LuasStopItem(
-    private val luasStop: LuasStopUi,
+    private val luasStop: LuasStop,
     isEven: Boolean,
     isLast: Boolean
 ) : ServiceLocationItemX(isEven, isLast) {

@@ -1,6 +1,7 @@
 package ie.dublinmapper.domain.model
 
 import ie.dublinmapper.util.Operator
+import ie.dublinmapper.util.Service
 import org.threeten.bp.LocalTime
 import java.util.*
 
@@ -84,4 +85,10 @@ data class SwordsExpressLiveData(
 data class DueTime(
     val minutes: Long,
     val time: LocalTime
+)
+
+data class LiveDataResponse(
+    val service: Service,
+    val serviceLocationName: String,
+    val liveData: List<LiveData>
 )

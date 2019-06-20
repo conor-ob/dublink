@@ -38,4 +38,10 @@ interface StringProvider {
 
     fun databaseName(): String
 
+    fun departures(): String
+
+    fun terminating(): String
+
+    fun favourites(): String
+
 }

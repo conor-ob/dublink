@@ -62,6 +62,7 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         super.onAttach(view)
         presenter.start(
             serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
+            serviceLocationName = requireStringArg(SERVICE_LOCATION_NAME),
             service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
         )
     }
@@ -71,8 +72,8 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         super.onDetach(view)
     }
 
-    override fun showLiveData(liveData: List<Group>) {
-        adapter.update(liveData)
+    override fun showLiveData(liveData: Group) {
+        adapter.update(listOf(liveData))
     }
 
     companion object {

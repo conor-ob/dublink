@@ -12,7 +12,7 @@ import ie.dublinmapper.domain.model.DublinBusLiveData
 import ie.dublinmapper.domain.model.DublinBusStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataFetcher
-import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataMapper
+import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataRepository
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopFetcher
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopPersister
@@ -71,7 +71,8 @@ class DublinBusRepositoryModule {
     fun dublinBusLiveDataRepository(
         dublinBusApi: DublinBusApi,
         api: RtpiApi,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        mapper: MapperFacade
     ): Repository<DublinBusLiveData> {
         val fetcher = DublinBusLiveDataFetcher(
             dublinBusApi,
@@ -82,7 +83,7 @@ class DublinBusRepositoryModule {
         )
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<DublinBusLiveData>>()
             .fetcher(fetcher)
-            .parser { liveData -> DublinBusLiveDataMapper.map(liveData) }
+            .parser { liveData -> mapper.mapAsList(liveData, DublinBusLiveData::class.java) }
             .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return DublinBusLiveDataRepository(store)

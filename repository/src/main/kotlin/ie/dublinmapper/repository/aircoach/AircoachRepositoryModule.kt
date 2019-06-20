@@ -12,7 +12,6 @@ import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataMapper
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopRepository
@@ -20,6 +19,7 @@ import ie.dublinmapper.service.aircoach.AircoachResource
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
 import ie.dublinmapper.util.InternetManager
+import ma.glasnost.orika.MapperFacade
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -43,10 +43,11 @@ class AircoachRepositoryModule {
         resource: AircoachResource,
         cacheResource: AircoachStopCacheResource,
         persisterDao: PersisterDao,
-        internetManager: InternetManager
+        internetManager: InternetManager,
+        mapper: MapperFacade
     ): Repository<AircoachStop> {
         val fetcher = Fetcher<List<AircoachStopJson>, String> { resource.getStops() }
-        val persister = AircoachStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
+        val persister = AircoachStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return AircoachStopRepository(store)
     }
@@ -54,11 +55,12 @@ class AircoachRepositoryModule {
     @Provides
     @Singleton
     fun aircoachLiveDataRepository(
-        resource: AircoachResource
+        resource: AircoachResource,
+        mapper: MapperFacade
     ): Repository<AircoachLiveData> {
         val store = StoreBuilder.parsedWithKey<String, ServiceResponseJson, List<AircoachLiveData>>()
             .fetcher { stopId -> resource.getLiveData(stopId) }
-            .parser { liveData -> AircoachLiveDataMapper.map(liveData.services).filter { it.dueTime.first().minutes >= 0 } } //TODO
+            .parser { liveData -> mapper.mapAsList(liveData.services, AircoachLiveData::class.java).filter { it.dueTime.first().minutes >= 0 } } //TODO
             .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return AircoachLiveDataRepository(store)
