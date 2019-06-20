@@ -1,10 +1,12 @@
 package ie.dublinmapper.view.favourite
 
 import com.hannesdorfmann.mosby3.mvp.MvpView
-import ie.dublinmapper.model.ServiceLocationUi
+import com.xwray.groupie.Group
+import com.xwray.groupie.kotlinandroidextensions.Item
+import ie.dublinmapper.domain.model.ServiceLocation
 
 interface FavouritesView : MvpView {
 
-    fun showFavourites(favourites: List<ServiceLocationUi>)
+    fun showFavourites(favourites: Group)
 
 }

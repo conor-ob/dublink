@@ -94,4 +94,16 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.database_name)
     }
 
+    override fun departures(): String {
+        return resources.getString(R.string.departures)
+    }
+
+    override fun terminating(): String {
+        return resources.getString(R.string.terminating)
+    }
+
+    override fun favourites(): String {
+        return resources.getString(R.string.title_favourites)
+    }
+
 }

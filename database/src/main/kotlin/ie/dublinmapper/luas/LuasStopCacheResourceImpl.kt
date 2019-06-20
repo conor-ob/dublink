@@ -15,10 +15,11 @@ class LuasStopCacheResourceImpl(
         return luasStopDao.selectAll()
     }
 
-    override fun insertStops(stops: Pair<List<LuasStopLocationEntity>, List<LuasStopServiceEntity>>) {
+    override fun insertStops(stops: List<LuasStopEntity>) {
         txRunner.runInTx {
-            luasStopLocationDao.insertAll(stops.first)
-            luasStopServiceDao.insertAll(stops.second)
+            luasStopLocationDao.deleteAll() //TODO test cascade delete
+            luasStopLocationDao.insertAll(stops.map { it.location })
+            luasStopServiceDao.insertAll(stops.flatMap { it.services })
         }
     }
 

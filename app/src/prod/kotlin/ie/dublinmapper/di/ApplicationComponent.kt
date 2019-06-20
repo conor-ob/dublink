@@ -2,9 +2,6 @@ package ie.dublinmapper.di
 
 import ie.dublinmapper.view.favourite.FavouritesPresenterImpl
 import ie.dublinmapper.view.livedata.LiveDataPresenterImpl
-import ie.dublinmapper.view.nearby.NearbyPresenterImpl
-import ie.dublinmapper.view.nearby.livedata.NearbyLiveDataPresenterImpl
-import ie.dublinmapper.view.nearby.map.NearbyMapPresenterImpl
 import ie.dublinmapper.view.search.SearchPresenterImpl
 import dagger.Component
 import ie.dublinmapper.repository.aircoach.AircoachRepositoryModule
@@ -14,7 +11,6 @@ import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
 import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
 import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
-import ie.dublinmapper.repository.mapping.MappingModule
 import ie.dublinmapper.repository.swordsexpress.SwordsExpressRepositoryModule
 import ie.dublinmapper.service.aircoach.AircoachModule
 import ie.dublinmapper.service.di.ServiceModule
@@ -46,8 +42,7 @@ import javax.inject.Singleton
         RtpiModule::class,
         SwordsExpressModule::class,
         DatabaseModule::class,
-        ServiceModule::class,
-        MappingModule::class
+        ServiceModule::class
     ]
 )
 interface ApplicationComponent {

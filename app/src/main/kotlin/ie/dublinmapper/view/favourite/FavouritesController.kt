@@ -14,9 +14,6 @@ import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
-import ie.dublinmapper.model.DividerItem
-import ie.dublinmapper.model.HeaderItem
-import ie.dublinmapper.model.ServiceLocationUi
 import ie.dublinmapper.model.dart.DartStationItem
 import ie.dublinmapper.util.CircularRevealChangeHandler
 import ie.dublinmapper.util.getApplicationComponent
@@ -58,7 +55,7 @@ class FavouritesController(
                 serviceLocationId = item.dartStation.id,
                 serviceLocationName = item.dartStation.name,
                 serviceLocationService = item.dartStation.service,
-                serviceLocationStyleId = item.dartStation.styleId,
+                serviceLocationStyleId = R.style.DartTheme, //TODO
                 serviceLocationIsFavourite = false
             ).build()
             router.pushController(
@@ -79,17 +76,8 @@ class FavouritesController(
         super.onDetach(view)
     }
 
-    override fun showFavourites(favourites: List<ServiceLocationUi>) {
-        val groups = mutableListOf<Group>()
-        groups.add(DividerItem())
-        groups.add(HeaderItem("Favourites"))
-        for (i in 0 until favourites.size) {
-            val isLast = i == favourites.size - 1
-            val isEven = i % 2 == 0
-            groups.add(favourites[i].toItem(isEven, isLast))
-        }
-        groups.add(DividerItem())
-        adapter.update(groups)
+    override fun showFavourites(favourites: Group) {
+        adapter.update(listOf(favourites))
     }
 
     private fun setupSearchFab(view: View) {

@@ -7,7 +7,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import kotlinx.android.synthetic.main.list_item_service_location.*
 
-abstract class ServiceLocationItemX(
+abstract class ServiceLocationItem(
     private val isEven: Boolean,
     private val isLast: Boolean
 ) : Item() {

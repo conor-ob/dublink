@@ -6,6 +6,6 @@ interface LuasStopCacheResource {
 
     fun selectStops(): Maybe<List<LuasStopEntity>>
 
-    fun insertStops(stops: Pair<List<LuasStopLocationEntity>, List<LuasStopServiceEntity>>)
+    fun insertStops(stops: List<LuasStopEntity>)
 
 }

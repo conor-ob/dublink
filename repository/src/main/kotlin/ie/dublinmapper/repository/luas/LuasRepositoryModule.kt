@@ -12,7 +12,7 @@ import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataFetcher
-import ie.dublinmapper.repository.luas.livedata.LuasLiveDataMapper
+import ie.dublinmapper.repository.luas.livedata.LuasLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopFetcher
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
@@ -21,6 +21,7 @@ import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
+import ma.glasnost.orika.MapperFacade
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -45,14 +46,15 @@ class LuasRepositoryModule {
         cacheResource: LuasStopCacheResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        mapper: MapperFacade
     ): Repository<LuasStop> {
         val fetcher = LuasStopFetcher(
             api,
             stringProvider.rtpiOperatorLuas(),
             stringProvider.rtpiFormat()
         )
-        val persister = LuasStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
+        val persister = LuasStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
         return LuasStopRepository(store)
     }
@@ -61,7 +63,8 @@ class LuasRepositoryModule {
     @Singleton
     fun luasRealTimeDataRepository(
         api: RtpiApi,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        mapper: MapperFacade
     ): Repository<LuasLiveData> {
         val fetcher = LuasLiveDataFetcher(
             api,
@@ -70,7 +73,7 @@ class LuasRepositoryModule {
         )
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LuasLiveData>>()
             .fetcher(fetcher)
-            .parser { liveData -> LuasLiveDataMapper.map(liveData) }
+            .parser { liveData -> mapper.mapAsList(liveData, LuasLiveData::class.java) }
             .memoryPolicy(shortTermMemoryPolicy)
             .open()
         return LuasLiveDataRepository(store)

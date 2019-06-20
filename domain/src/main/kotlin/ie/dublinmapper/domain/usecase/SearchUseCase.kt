@@ -18,7 +18,7 @@ class SearchUseCase @Inject constructor(
     private val scheduler: RxScheduler
 ) {
 
-    fun search(query: String): Observable<List<ServiceLocation>> {
+    fun search(query: String): Observable<SearchResponse> {
         return Observable.combineLatest(
             aircoachStopRepository.getAll().subscribeOn(scheduler.io),
             busEireannStopRepository.getAll().subscribeOn(scheduler.io),
@@ -43,7 +43,7 @@ class SearchUseCase @Inject constructor(
         dartStations: List<DartStation>,
         dublinBusStops: List<DublinBusStop>,
         luasStops: List<LuasStop>
-    ) : List<ServiceLocation> {
+    ) : SearchResponse {
         val searchCollections = mutableListOf<Collection<ServiceLocation>>()
         searchCollections.add(search(query, aircoachStops))
         searchCollections.add(search(query, busEireannStops))
@@ -51,7 +51,7 @@ class SearchUseCase @Inject constructor(
         searchCollections.add(search(query, dublinBusStops))
         searchCollections.add(search(query, luasStops))
         searchCollections.sortBy { it.size }
-        return searchCollections.flatten().take(50)
+        return SearchResponse(searchCollections.flatten().take(50))
     }
 
     private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
@@ -169,3 +169,7 @@ class SearchUseCase @Inject constructor(
 //    }
 
 }
+
+data class SearchResponse(
+    val serviceLocations: List<ServiceLocation>
+)

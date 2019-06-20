@@ -15,10 +15,11 @@ class AircoachStopCacheResourceImpl(
         return aircoachStopDao.selectAll()
     }
 
-    override fun insertStops(stops: Pair<List<AircoachStopLocationEntity>, List<AircoachStopServiceEntity>>) {
+    override fun insertStops(stops: List<AircoachStopEntity>) {
         txRunner.runInTx {
-            aircoachStopLocationDao.insertAll(stops.first)
-            aircoachStopServiceDao.insertAll(stops.second)
+            aircoachStopLocationDao.deleteAll() //TODO test cascade delete
+            aircoachStopLocationDao.insertAll(stops.map { it.location })
+            aircoachStopServiceDao.insertAll(stops.flatMap { it.services })
         }
     }
 

@@ -5,6 +5,6 @@ import com.xwray.groupie.Group
 
 interface LiveDataView : MvpView {
 
-    fun showLiveData(liveData: List<Group>)
+    fun showLiveData(liveData: Group)
 
 }
