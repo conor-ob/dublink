@@ -7,4 +7,8 @@ interface LiveDataView : MvpView {
 
     fun showLiveData(liveData: Group)
 
+    fun showFavouriteSaved()
+
+    fun showFavouriteRemoved()
+
 }

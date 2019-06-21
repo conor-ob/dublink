@@ -10,7 +10,7 @@ import ie.dublinmapper.util.Operator
     foreignKeys = [
         ForeignKey(
             entity = FavouriteLocationEntity::class,
-            parentColumns = arrayOf("id"),
+            parentColumns = arrayOf("uuid"),
             childColumns = arrayOf("location_id"),
             onDelete = CASCADE
         )

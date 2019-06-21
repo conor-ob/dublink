@@ -9,6 +9,8 @@ interface FavouriteRepository {
         saveFavourites(listOf(favourite))
     }
 
+    fun removeFavourite(favourite: Favourite)
+
     fun saveFavourites(favourites: List<Favourite>)
 
     fun getFavourites(): Observable<List<Favourite>>

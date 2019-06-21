@@ -1,5 +1,6 @@
 package ie.dublinmapper.data
 
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Update
@@ -17,5 +18,8 @@ interface BaseDao<E> {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun updateAll(entities: List<E>)
+
+    @Delete
+    fun delete(entity: E)
 
 }

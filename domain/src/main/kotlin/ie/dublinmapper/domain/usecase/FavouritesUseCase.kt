@@ -4,6 +4,7 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.Service
+import io.reactivex.Completable
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -17,6 +18,16 @@ class FavouritesUseCase @Inject constructor(
     private val luasStopRepository: Repository<LuasStop>,
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>
     ) {
+
+    fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
+        val favourite = Favourite(serviceLocationId, serviceLocationName, service, emptyMap())
+        return Completable.fromCallable { favouriteRepository.saveFavourite(favourite) }
+    }
+
+    fun removeFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
+        val favourite = Favourite(serviceLocationId, serviceLocationName, service, emptyMap())
+        return Completable.fromCallable { favouriteRepository.removeFavourite(favourite) }
+    }
 
     fun getFavourites(): Observable<FavouritesResponse> {
         return favouriteRepository.getFavourites()
