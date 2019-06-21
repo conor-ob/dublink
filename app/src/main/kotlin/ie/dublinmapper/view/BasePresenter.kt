@@ -3,6 +3,7 @@ package ie.dublinmapper.view
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter
 import com.hannesdorfmann.mosby3.mvp.MvpView
 import ie.dublinmapper.util.RxScheduler
+import io.reactivex.CompletableTransformer
 import io.reactivex.ObservableTransformer
 import io.reactivex.disposables.CompositeDisposable
 
@@ -14,6 +15,13 @@ abstract class BasePresenter<V : MvpView>(
 
     protected fun <T> applySchedulers(): ObservableTransformer<T, T> {
         return ObservableTransformer { upstream ->
+            upstream.subscribeOn(scheduler.io)
+                .observeOn(scheduler.ui)
+        }
+    }
+
+    protected fun applyCompletableSchedulers(): CompletableTransformer {
+        return CompletableTransformer { upstream ->
             upstream.subscribeOn(scheduler.io)
                 .observeOn(scheduler.ui)
         }

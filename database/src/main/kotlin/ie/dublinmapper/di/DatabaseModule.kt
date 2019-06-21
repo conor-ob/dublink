@@ -15,10 +15,7 @@ import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
 import ie.dublinmapper.data.dart.DartStationCacheResource
 import ie.dublinmapper.data.dublinbikes.DublinBikesDockCacheResource
 import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
-import ie.dublinmapper.data.favourite.FavouriteDao
-import ie.dublinmapper.data.favourite.FavouriteLocationDao
-import ie.dublinmapper.data.favourite.FavouriteLocationEntity
-import ie.dublinmapper.data.favourite.FavouriteServiceEntity
+import ie.dublinmapper.data.favourite.*
 import ie.dublinmapper.data.luas.LuasStopCacheResource
 import ie.dublinmapper.data.persister.PersisterDao
 import ie.dublinmapper.data.swordsexpress.SwordsExpressStopCacheResource
@@ -26,6 +23,7 @@ import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
 import ie.dublinmapper.dublinbikes.DublinBikesDockCacheResourceImpl
 import ie.dublinmapper.dublinbus.DublinBusStopCacheResourceImpl
+import ie.dublinmapper.favourite.FavouriteServiceLocationCacheResourceImpl
 import ie.dublinmapper.luas.LuasStopCacheResourceImpl
 import ie.dublinmapper.swordsexpress.SwordsExpressStopCacheResourceImpl
 import ie.dublinmapper.util.Operator
@@ -135,6 +133,15 @@ class DatabaseModule {
         val swordsExpressStopServiceDao = database.swordsExpressStopServiceDao()
         val swordsExpressStopDao = database.swordsExpressStopDao()
         return SwordsExpressStopCacheResourceImpl(swordsExpressStopLocationDao, swordsExpressStopServiceDao, swordsExpressStopDao, txRunner)
+    }
+
+    @Provides
+    @Singleton
+    fun favouriteCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): FavouriteServiceLocationCacheResource {
+        val favouriteLocationDao = database.favouriteLocationDao()
+        val favouriteServiceDao = database.favouriteServiceDao()
+        val favouriteDao = database.favouriteDao()
+        return FavouriteServiceLocationCacheResourceImpl(favouriteLocationDao, favouriteServiceDao, favouriteDao, txRunner)
     }
 
     @Provides

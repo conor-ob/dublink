@@ -41,9 +41,19 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
         view.toolbar.setNavigationOnClickListener { router.handleBack() }
         view.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.action_add_favourite -> {
-                    Timber.d("Add Favourite pressed")
-                    args.putBoolean(SERVICE_LOCATION_IS_FAVOURITE, true)
+                R.id.action_save_favourite -> {
+                    presenter.onSaveFavouritePressed(
+                        serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
+                        serviceLocationName = requireStringArg(SERVICE_LOCATION_NAME),
+                        service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
+                    )
+                }
+                R.id.action_remove_favourite -> {
+                    presenter.onRemoveFavouritePressed(
+                        serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
+                        serviceLocationName = requireStringArg(SERVICE_LOCATION_NAME),
+                        service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
+                    )
                 }
                 R.id.action_settings -> Timber.d("Settings pressed")
             }
@@ -77,6 +87,16 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
 
     override fun showLiveData(liveData: Group) {
         adapter.update(listOf(liveData))
+    }
+
+    override fun showFavouriteSaved() {
+        val favouriteMenuItem = view!!.toolbar.menu.findItem(R.id.action_save_favourite)
+        favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
+    }
+
+    override fun showFavouriteRemoved() {
+        val favouriteMenuItem = view!!.toolbar.menu.findItem(R.id.action_remove_favourite)
+        favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
     }
 
     companion object {

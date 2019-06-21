@@ -23,6 +23,8 @@ import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataJsonTo
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopEntityToDomainMapper
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopJsonToEntityMapper
+import ie.dublinmapper.repository.favourite.FavouriteDomainToEntityMapper
+import ie.dublinmapper.repository.favourite.FavouriteEntityToDomainMapper
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopEntityToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopJsonToEntityMapper
@@ -117,6 +119,9 @@ class ApplicationModule(
             registerConverter(FavouritesDomainToUiMapper(stringProvider))
             registerConverter(LiveDataDomainToUiMapper(stringProvider))
             registerConverter(SearchDomainToUiMapper)
+
+            registerConverter(FavouriteEntityToDomainMapper)
+            registerConverter(FavouriteDomainToEntityMapper)
         }
 
         return mapperFactory.mapperFacade

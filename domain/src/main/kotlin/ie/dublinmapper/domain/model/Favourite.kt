@@ -7,5 +7,5 @@ data class Favourite(
     val id: String,
     val name: String,
     val service: Service,
-    val routes: Map<Operator, Set<String>>
+    val routes: Map<Operator, List<String>>
 )

@@ -14,4 +14,7 @@ interface FavouriteLocationDao : BaseDao<FavouriteLocationEntity> {
     @Query("DELETE FROM favourite_locations")
     fun deleteAll()
 
+    @Query("DELETE FROM favourite_locations WHERE id = ")
+    override fun delete(entity: FavouriteLocationEntity)
+
 }
