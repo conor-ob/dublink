@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "615c5633a64fc4dffe3c7f81130b8c4e",
+    "identityHash": "ed6353f6fcbb6e5b1ec69d9df950a1be",
     "entities": [
       {
         "tableName": "aircoach_stop_locations",
@@ -141,11 +141,11 @@
       },
       {
         "tableName": "buseireann_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `buseireann_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serviceId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `buseireann_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
-            "columnName": "id",
+            "columnName": "serviceId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -170,7 +170,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "serviceId"
           ],
           "autoGenerate": true
         },
@@ -690,103 +690,6 @@
         ]
       },
       {
-        "tableName": "locations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "latitude",
-            "columnName": "latitude",
-            "affinity": "REAL",
-            "notNull": true
-          },
-          {
-            "fieldPath": "longitude",
-            "columnName": "longitude",
-            "affinity": "REAL",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `location_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`location_id`) REFERENCES `locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "locationId",
-            "columnName": "location_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "operator",
-            "columnName": "operator",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "route",
-            "columnName": "route",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [
-          {
-            "name": "index_services_location_id",
-            "unique": false,
-            "columnNames": [
-              "location_id"
-            ],
-            "createSql": "CREATE  INDEX `index_services_location_id` ON `${TABLE_NAME}` (`location_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "locations",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "location_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
-      },
-      {
         "tableName": "persister_last_updated",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `last_updated` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
@@ -814,14 +717,8 @@
       },
       {
         "tableName": "favourite_locations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` TEXT NOT NULL, `name` TEXT NOT NULL, `order` INTEGER NOT NULL, `service` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
-          {
-            "fieldPath": "uuid",
-            "columnName": "uuid",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "id",
             "columnName": "id",
@@ -839,26 +736,20 @@
             "columnName": "order",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "service",
-            "columnName": "service",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
           "columnNames": [
-            "uuid"
+            "id"
           ],
-          "autoGenerate": true
+          "autoGenerate": false
         },
         "indices": [],
         "foreignKeys": []
       },
       {
         "tableName": "favourite_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `location_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`location_id`) REFERENCES `favourite_locations`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `location_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`location_id`) REFERENCES `favourite_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -910,7 +801,7 @@
               "location_id"
             ],
             "referencedColumns": [
-              "uuid"
+              "id"
             ]
           }
         ]
@@ -918,7 +809,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"615c5633a64fc4dffe3c7f81130b8c4e\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"ed6353f6fcbb6e5b1ec69d9df950a1be\")"
     ]
   }
 }

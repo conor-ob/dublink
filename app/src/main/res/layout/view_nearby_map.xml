@@ -12,7 +12,7 @@
     <!--android:orientation="vertical">-->
 
     <!--<androidx.appcompat.widget.Toolbar-->
-    <!--android:id="@+id/toolbar"-->
+    <!--android:serviceId="@+serviceId/toolbar"-->
     <!--style="@style/Toolbar"-->
     <!--app:title="@string/app_name"/>-->
 

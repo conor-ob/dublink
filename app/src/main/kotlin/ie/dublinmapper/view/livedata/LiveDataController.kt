@@ -2,6 +2,7 @@ package ie.dublinmapper.view.livedata
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
@@ -31,29 +32,29 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
 
     private fun setupToolbar(view: View) {
         view.serviceLocationName.text = requireStringArg(SERVICE_LOCATION_NAME)
+        view.toolbar.inflateMenu(R.menu.menu_live_data)
         if (args.getBoolean(SERVICE_LOCATION_IS_FAVOURITE)) {
-            view.toolbar.inflateMenu(R.menu.menu_live_data_favourite)
-        } else {
-            view.toolbar.inflateMenu(R.menu.menu_live_data)
+            val favouriteMenuItem = view.toolbar.menu.findItem(R.id.action_favourite)
+            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
         }
         view.toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
 //        view.toolbar.setLogo(R.drawable.ic_map_marker_dart_1)
         view.toolbar.setNavigationOnClickListener { router.handleBack() }
         view.toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
-                R.id.action_save_favourite -> {
-                    presenter.onSaveFavouritePressed(
-                        serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
-                        serviceLocationName = requireStringArg(SERVICE_LOCATION_NAME),
-                        service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
-                    )
-                }
-                R.id.action_remove_favourite -> {
-                    presenter.onRemoveFavouritePressed(
-                        serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
-                        serviceLocationName = requireStringArg(SERVICE_LOCATION_NAME),
-                        service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
-                    )
+                R.id.action_favourite -> {
+                    if (args.getBoolean(SERVICE_LOCATION_IS_FAVOURITE)) {
+                        presenter.onRemoveFavouritePressed(
+                            serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
+                            service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
+                        )
+                    } else {
+                        presenter.onSaveFavouritePressed(
+                            serviceLocationId = requireStringArg(SERVICE_LOCATION_ID),
+                            serviceLocationName = requireStringArg(SERVICE_LOCATION_NAME),
+                            service = requireSerializableArg(SERVICE_LOCATION_SERVICE) as Service
+                        )
+                    }
                 }
                 R.id.action_settings -> Timber.d("Settings pressed")
             }
@@ -90,12 +91,16 @@ class LiveDataController(args: Bundle) : MvpBaseController<LiveDataView, LiveDat
     }
 
     override fun showFavouriteSaved() {
-        val favouriteMenuItem = view!!.toolbar.menu.findItem(R.id.action_save_favourite)
+        args.putBoolean(SERVICE_LOCATION_IS_FAVOURITE, true)
+        Toast.makeText(requireContext(), R.string.favourite_saved, Toast.LENGTH_SHORT).show()
+        val favouriteMenuItem = requireView().toolbar.menu.findItem(R.id.action_favourite)
         favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
     }
 
     override fun showFavouriteRemoved() {
-        val favouriteMenuItem = view!!.toolbar.menu.findItem(R.id.action_remove_favourite)
+        args.putBoolean(SERVICE_LOCATION_IS_FAVOURITE, false)
+        Toast.makeText(requireContext(), R.string.favourite_removed, Toast.LENGTH_SHORT).show()
+        val favouriteMenuItem = requireView().toolbar.menu.findItem(R.id.action_favourite)
         favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
     }
 

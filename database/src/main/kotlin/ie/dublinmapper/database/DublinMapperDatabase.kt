@@ -1,20 +1,23 @@
 package ie.dublinmapper.database
 
+import android.database.Cursor
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ie.dublinmapper.data.Converters
-import ie.dublinmapper.data.aircoach.*
-import ie.dublinmapper.data.buseireann.*
-import ie.dublinmapper.data.dart.*
-import ie.dublinmapper.data.dublinbikes.*
-import ie.dublinmapper.data.dublinbus.*
-import ie.dublinmapper.data.favourite.*
-import ie.dublinmapper.data.luas.*
-import ie.dublinmapper.data.persister.PersisterDao
-import ie.dublinmapper.data.persister.PersisterEntity
-import ie.dublinmapper.data.swordsexpress.*
-import ie.dublinmapper.data.test.*
+import androidx.sqlite.db.SupportSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteStatement
+import ie.dublinmapper.datamodel.Converters
+import ie.dublinmapper.datamodel.aircoach.*
+import ie.dublinmapper.datamodel.buseireann.*
+import ie.dublinmapper.datamodel.dart.*
+import ie.dublinmapper.datamodel.dublinbikes.*
+import ie.dublinmapper.datamodel.dublinbus.*
+import ie.dublinmapper.datamodel.favourite.*
+import ie.dublinmapper.datamodel.luas.*
+import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.persister.PersisterEntity
+import ie.dublinmapper.datamodel.swordsexpress.*
+import timber.log.Timber
 
 @Database(
     version = 1,
@@ -34,8 +37,6 @@ import ie.dublinmapper.data.test.*
         LuasStopServiceEntity::class,
         SwordsExpressStopLocationEntity::class,
         SwordsExpressStopServiceEntity::class,
-        LocationEntity::class,
-        ServiceEntity::class,
         PersisterEntity::class,
         FavouriteLocationEntity::class,
         FavouriteServiceEntity::class
@@ -86,12 +87,6 @@ abstract class DublinMapperDatabase : RoomDatabase() {
 
     abstract fun swordsExpressStopServiceDao(): SwordsExpressStopServiceDao
 
-    abstract fun locationDao(): LocationDao
-
-    abstract fun serviceDao(): ServiceDao
-
-    abstract fun serviceLocationDao(): ServiceLocationDao
-
     abstract fun persisterDao(): PersisterDao
 
     abstract fun favouriteDao(): FavouriteDao
@@ -99,5 +94,15 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun favouriteLocationDao(): FavouriteLocationDao
 
     abstract fun favouriteServiceDao(): FavouriteServiceDao
+
+    override fun query(query: SupportSQLiteQuery?): Cursor {
+        Timber.d(query?.sql)
+        return super.query(query)
+    }
+
+    override fun compileStatement(sql: String): SupportSQLiteStatement {
+        Timber.d(sql)
+        return super.compileStatement(sql)
+    }
 
 }

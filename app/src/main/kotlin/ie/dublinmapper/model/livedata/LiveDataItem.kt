@@ -7,12 +7,14 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.DueTime
+import ie.dublinmapper.util.Formatter
 import ie.dublinmapper.util.StringUtils
 import kotlinx.android.synthetic.main.list_item_live_data.*
 
 abstract class LiveDataItem(
     private val isEven: Boolean,
-    private val isLast: Boolean
+    private val isLast: Boolean,
+    private val isShowTime: Boolean = false //TODO
 ) : Item() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
@@ -32,22 +34,46 @@ abstract class LiveDataItem(
         if (dueTimes.size == 1) {
             viewHolder.multipleDueTimesContainer.visibility = View.GONE
             viewHolder.singleDueTimeContainer.visibility = View.VISIBLE
-            if (dueTimes[0].minutes == 0L) {
-                viewHolder.dueTime.text = viewHolder.itemView.resources.getString(R.string.live_data_due)
-            } else {
-                viewHolder.dueTime.text = viewHolder.itemView.resources.getString(R.string.live_data_due_time, dueTimes[0].minutes)
-            }
+            bindSingleDueTime(viewHolder, dueTimes.first())
         } else {
             viewHolder.singleDueTimeContainer.visibility = View.GONE
             viewHolder.multipleDueTimesContainer.visibility = View.VISIBLE
-            if (dueTimes[0].minutes == 0L) {
-                viewHolder.firstDueTime.text = viewHolder.itemView.resources.getString(R.string.live_data_due)
-            } else {
-                viewHolder.firstDueTime.text = viewHolder.itemView.resources.getString(R.string.live_data_due_time, dueTimes[0].minutes)
-            }
-            viewHolder.laterDueTimes.text = viewHolder.itemView.resources.getString(R.string.live_data_due_times, StringUtils.join(
-                dueTimes.subList(1, dueTimes.size).map { it.minutes.toString() }, ", "
-            ))
+            bindFirstDueTime(viewHolder, dueTimes.first())
+            bindLaterDueTimes(viewHolder, dueTimes.subList(1, dueTimes.size))
+        }
+    }
+
+    private fun bindSingleDueTime(viewHolder: ViewHolder, dueTime: DueTime) {
+        viewHolder.dueTime.text = getSingleDueTimeText(viewHolder, dueTime)
+    }
+
+    private fun bindFirstDueTime(viewHolder: ViewHolder, dueTime: DueTime) {
+        viewHolder.firstDueTime.text = getSingleDueTimeText(viewHolder, dueTime)
+    }
+
+    private fun bindLaterDueTimes(viewHolder: ViewHolder, dueTimes: List<DueTime>) {
+        viewHolder.laterDueTimes.text = getLaterDueTimesText(viewHolder, dueTimes)
+    }
+
+    private fun getSingleDueTimeText(viewHolder: ViewHolder, dueTime: DueTime): String {
+        return when {
+            dueTime.minutes == 0L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
+            isShowTime -> dueTime.time.format(Formatter.hourMinute)
+            else -> viewHolder.itemView.resources.getString(R.string.live_data_due_time, dueTime.minutes)
+        }
+    }
+
+    private fun getLaterDueTimesText(viewHolder: ViewHolder, dueTimes: List<DueTime>): String {
+        return if (isShowTime) {
+            viewHolder.itemView.resources.getString(
+                R.string.live_data_due_times_time,
+                StringUtils.join(dueTimes.map { it.time.format(Formatter.hourMinute) }, ", ")
+            )
+        } else {
+            viewHolder.itemView.resources.getString(
+                R.string.live_data_due_times,
+                StringUtils.join(dueTimes.map { it.minutes.toString() }, ", ")
+            )
         }
     }
 

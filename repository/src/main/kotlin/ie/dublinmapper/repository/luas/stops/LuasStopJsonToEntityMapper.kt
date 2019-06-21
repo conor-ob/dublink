@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.luas.stops
 
-import ie.dublinmapper.data.luas.LuasStopEntity
-import ie.dublinmapper.data.luas.LuasStopLocationEntity
-import ie.dublinmapper.data.luas.LuasStopServiceEntity
+import ie.dublinmapper.datamodel.luas.LuasStopEntity
+import ie.dublinmapper.datamodel.luas.LuasStopLocationEntity
+import ie.dublinmapper.datamodel.luas.LuasStopServiceEntity
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext

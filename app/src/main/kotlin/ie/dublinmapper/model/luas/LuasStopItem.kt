@@ -9,7 +9,7 @@ import ie.dublinmapper.model.ServiceLocationItem
 import kotlinx.android.synthetic.main.list_item_service_location.*
 
 class LuasStopItem(
-    private val luasStop: LuasStop,
+    val luasStop: LuasStop,
     isEven: Boolean,
     isLast: Boolean
 ) : ServiceLocationItem(isEven, isLast) {

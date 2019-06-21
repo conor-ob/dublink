@@ -40,7 +40,7 @@
         </androidx.appcompat.widget.Toolbar>
 
         <!--<TextView-->
-                <!--android:id="@+id/title"-->
+                <!--android:serviceId="@+serviceId/title"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="?actionBarSize"-->
                 <!--android:gravity="center"-->
@@ -48,7 +48,7 @@
                 <!--app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />-->
 
         <!--<com.google.android.material.tabs.TabLayout-->
-                <!--android:id="@+id/tabs"-->
+                <!--android:serviceId="@+serviceId/tabs"-->
                 <!--style="@style/Widget.DublinMapper.Tabs"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="?actionBarSize" >-->

@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.dublinbus.stops
 
-import ie.dublinmapper.data.dublinbus.DublinBusStopEntity
-import ie.dublinmapper.data.dublinbus.DublinBusStopServiceEntity
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopEntity
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopServiceEntity
 import ie.dublinmapper.domain.model.DublinBusStop
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
@@ -20,7 +20,7 @@ object DublinBusStopEntityToDomainMapper : CustomConverter<DublinBusStopEntity, 
     ): DublinBusStop {
         return DublinBusStop(
             id = source.location.id,
-            name = source.location.name,
+            serviceLocationName = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = convertOperators(
                 source.services

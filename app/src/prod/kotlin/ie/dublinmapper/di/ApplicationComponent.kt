@@ -4,6 +4,7 @@ import ie.dublinmapper.view.favourite.FavouritesPresenterImpl
 import ie.dublinmapper.view.livedata.LiveDataPresenterImpl
 import ie.dublinmapper.view.search.SearchPresenterImpl
 import dagger.Component
+import ie.dublinmapper.domain.usecase.PreloadUseCase
 import ie.dublinmapper.repository.aircoach.AircoachRepositoryModule
 import ie.dublinmapper.repository.buseireann.BusEireannRepositoryModule
 import ie.dublinmapper.repository.dart.DartRepositoryModule
@@ -46,6 +47,8 @@ import javax.inject.Singleton
     ]
 )
 interface ApplicationComponent {
+
+    fun preloadUseCase(): PreloadUseCase
 
     fun favouritesPresenter(): FavouritesPresenterImpl
 

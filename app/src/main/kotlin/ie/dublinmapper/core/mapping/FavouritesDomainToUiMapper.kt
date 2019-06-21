@@ -10,6 +10,7 @@ import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.aircoach.AircoachStopItem
 import ie.dublinmapper.model.buseireann.BusEireannStopItem
 import ie.dublinmapper.model.dart.DartStationItem
+import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
 import ie.dublinmapper.model.dublinbus.DublinBusStopItem
 import ie.dublinmapper.model.luas.LuasStopItem
 import ie.dublinmapper.util.StringProvider
@@ -47,6 +48,7 @@ class FavouritesDomainToUiMapper(
             is AircoachStop -> AircoachStopItem(serviceLocation, isEven, isLast)
             is BusEireannStop -> BusEireannStopItem(serviceLocation, isEven, isLast)
             is DartStation -> DartStationItem(serviceLocation, isEven, isLast)
+            is DublinBikesDock -> DublinBikesDockItem(serviceLocation, isEven, isLast)
             is DublinBusStop -> DublinBusStopItem(serviceLocation, isEven, isLast)
             is LuasStop -> LuasStopItem(serviceLocation, isEven, isLast)
             else -> TODO()

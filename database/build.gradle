@@ -28,7 +28,7 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-    implementation project(':data')
+    implementation project(':datamodel')
     implementation project(':util')
     implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
     implementation "com.google.dagger:dagger:${versions.dagger}"
@@ -36,6 +36,8 @@ dependencies {
     kapt "androidx.room:room-compiler:${versions.androidx.room_compiler}"
     implementation "androidx.room:room-rxjava2:${versions.androidx.room_rxjava2}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+
+    implementation "com.jakewharton.timber:timber:${versions.timber}"
 
     testImplementation "junit:junit:${testVersions.junit}"
     androidTestImplementation "androidx.room:room-testing:${testVersions.androidx.room_testing}"

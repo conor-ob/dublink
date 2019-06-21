@@ -20,7 +20,7 @@ object DublinBusLiveDataJsonToDomainMapper : CustomConverter<RtpiRealTimeBusInfo
     ): DublinBusLiveData {
         return DublinBusLiveData(
             mapDueTime(source.arrivalDateTime!!, source.dueTime!!),
-            Operator.DUBLIN_BUS,
+            Operator.parse(source.operator!!),
             source.route!!,
             source.destination!!
         )

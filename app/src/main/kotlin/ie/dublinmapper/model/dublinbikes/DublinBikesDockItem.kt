@@ -1,20 +1,31 @@
 package ie.dublinmapper.model.dublinbikes
 
-import com.xwray.groupie.kotlinandroidextensions.Item
+import android.content.res.ColorStateList
+import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.R
 import ie.dublinmapper.domain.model.DublinBikesDock
-import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.*
+import ie.dublinmapper.model.ServiceLocationItem
+import kotlinx.android.synthetic.main.list_item_service_location.*
 
 class DublinBikesDockItem(
-    private val dublinBikesDock: DublinBikesDock
-) : Item() {
+    val dublinBikesDock: DublinBikesDock,
+    isEven: Boolean,
+    isLast: Boolean
+) : ServiceLocationItem(isEven, isLast) {
 
-    override fun getLayout() = R.layout.list_item_live_data_dublin_bikes
+    init {
+        extras["serviceLocation"] = dublinBikesDock
+    }
+
+    override fun getLayout() = R.layout.list_item_service_location
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.available_bikes.text = dublinBikesDock.availableBikes.toString()
-        viewHolder.available_docks.text = "?"
+        super.bind(viewHolder, position)
+        viewHolder.title.text = dublinBikesDock.name
+        viewHolder.subtitle.text = "Bikes: ${dublinBikesDock.availableBikes}, Docks: ${dublinBikesDock.availableDocks}"
+        viewHolder.serviceIconContainer.setImageResource(R.drawable.ic_bike)
+        viewHolder.serviceIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.dublinBikesTeal))
     }
 
 }

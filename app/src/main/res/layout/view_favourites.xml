@@ -30,7 +30,7 @@
             </androidx.appcompat.widget.Toolbar>
 
             <!--<TextView-->
-                    <!--android:id="@+id/title"-->
+                    <!--android:serviceId="@+serviceId/title"-->
                     <!--android:text="@string/title_favourites"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="?actionBarSize"-->
@@ -65,14 +65,14 @@
         <!--</FrameLayout>-->
 
         <!--<FrameLayout-->
-                <!--android:id="@+id/appbar"-->
+                <!--android:serviceId="@+serviceId/appbar"-->
                 <!--style="@style/Widget.AppBar"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
                 <!--android:background="@color/white_90">-->
 
             <!--<TextView-->
-                    <!--android:id="@+id/title"-->
+                    <!--android:serviceId="@+serviceId/title"-->
                     <!--android:layout_width="wrap_content"-->
                     <!--android:layout_height="wrap_content"-->
                     <!--android:layout_gravity="center"-->
@@ -85,7 +85,7 @@
 
         <!--<androidx.appcompat.widget.Toolbar-->
                 <!--app:title="Favourites"-->
-                <!--android:id="@+id/toolbar"-->
+                <!--android:serviceId="@+serviceId/toolbar"-->
                 <!--style="@style/Toolbar">-->
 
         <!--</androidx.appcompat.widget.Toolbar>-->

@@ -1,4 +1,4 @@
-include ':app', ':util', ':data', ':database',
+include ':app', ':util', ':datamodel', ':database',
         ':domain',
         ':repository',
         ':service'

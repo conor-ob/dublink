@@ -369,7 +369,7 @@
 //        }
 //
 //        fun getIconId(serviceLocation: ServiceLocationUi, zoom: Float): UUID {
-//            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.id
+//            return icons[serviceLocation.operators]!!.floorEntry(zoom).value.serviceId
 //        }
 //
 //        fun getIcon(serviceLocation: ServiceLocationUi, zoom: Float): BitmapDescriptor {
@@ -440,7 +440,7 @@
 //    }
 //
 //    data class IconOptions(
-//        val id: UUID = UUID.randomUUID(),
+//        val serviceId: UUID = UUID.randomUUID(),
 //        val icon: BitmapDescriptor,
 //        val iconAnchor: Pair<Float, Float>,
 //        val textIconAnchor: Pair<Float, Float>,
