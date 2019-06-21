@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.dublinbus.stops
 
-import ie.dublinmapper.data.dublinbus.DublinBusStopEntity
-import ie.dublinmapper.data.dublinbus.DublinBusStopServiceEntity
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopEntity
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopServiceEntity
 import ie.dublinmapper.domain.model.DublinBusStop
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator

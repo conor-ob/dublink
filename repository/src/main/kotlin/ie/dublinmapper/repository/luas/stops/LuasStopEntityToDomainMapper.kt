@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.luas.stops
 
-import ie.dublinmapper.data.luas.LuasStopEntity
-import ie.dublinmapper.data.luas.LuasStopServiceEntity
+import ie.dublinmapper.datamodel.luas.LuasStopEntity
+import ie.dublinmapper.datamodel.luas.LuasStopServiceEntity
 import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator

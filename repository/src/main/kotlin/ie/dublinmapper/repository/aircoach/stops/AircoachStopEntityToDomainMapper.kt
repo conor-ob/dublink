@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.aircoach.stops
 
-import ie.dublinmapper.data.aircoach.AircoachStopEntity
-import ie.dublinmapper.data.aircoach.AircoachStopServiceEntity
+import ie.dublinmapper.datamodel.aircoach.AircoachStopEntity
+import ie.dublinmapper.datamodel.aircoach.AircoachStopServiceEntity
 import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator

@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.swordsexpress.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.data.persister.PersisterDao
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopCacheResource
+import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopCacheResource
 import ie.dublinmapper.domain.model.SwordsExpressStop
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.swordsexpress.SwordsExpressStopJson

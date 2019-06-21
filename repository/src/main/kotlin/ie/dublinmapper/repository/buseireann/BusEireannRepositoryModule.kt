@@ -7,12 +7,11 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopCacheResource
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.BusEireannLiveData
 import ie.dublinmapper.domain.model.BusEireannStop
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister

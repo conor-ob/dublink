@@ -1,7 +1,7 @@
 package ie.dublinmapper.swordsexpress
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.swordsexpress.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.swordsexpress.*
 import io.reactivex.Maybe
 
 class SwordsExpressStopCacheResourceImpl(

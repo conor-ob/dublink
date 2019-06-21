@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.buseireann.stops
 
-import ie.dublinmapper.data.buseireann.BusEireannStopEntity
-import ie.dublinmapper.data.buseireann.BusEireannStopServiceEntity
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopEntity
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopServiceEntity
 import ie.dublinmapper.domain.model.BusEireannStop
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator

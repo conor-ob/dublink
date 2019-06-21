@@ -3,18 +3,18 @@ package ie.dublinmapper.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ie.dublinmapper.data.Converters
-import ie.dublinmapper.data.aircoach.*
-import ie.dublinmapper.data.buseireann.*
-import ie.dublinmapper.data.dart.*
-import ie.dublinmapper.data.dublinbikes.*
-import ie.dublinmapper.data.dublinbus.*
-import ie.dublinmapper.data.favourite.*
-import ie.dublinmapper.data.luas.*
-import ie.dublinmapper.data.persister.PersisterDao
-import ie.dublinmapper.data.persister.PersisterEntity
-import ie.dublinmapper.data.swordsexpress.*
-import ie.dublinmapper.data.test.*
+import ie.dublinmapper.datamodel.Converters
+import ie.dublinmapper.datamodel.aircoach.*
+import ie.dublinmapper.datamodel.buseireann.*
+import ie.dublinmapper.datamodel.dart.*
+import ie.dublinmapper.datamodel.dublinbikes.*
+import ie.dublinmapper.datamodel.dublinbus.*
+import ie.dublinmapper.datamodel.favourite.*
+import ie.dublinmapper.datamodel.luas.*
+import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.persister.PersisterEntity
+import ie.dublinmapper.datamodel.swordsexpress.*
+import ie.dublinmapper.datamodel.test.*
 
 @Database(
     version = 1,

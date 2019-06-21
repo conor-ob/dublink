@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.dublinbikes.docks
 
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockEntity
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockServiceEntity
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockEntity
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockServiceEntity
 import ie.dublinmapper.domain.model.DublinBikesDock
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator

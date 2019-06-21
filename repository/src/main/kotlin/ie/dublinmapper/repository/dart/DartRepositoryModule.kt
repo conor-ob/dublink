@@ -6,13 +6,12 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.data.dart.DartStationCacheResource
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.dart.DartStationCacheResource
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.DartLiveData
 import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dart.livedata.DartLiveDataFetcher
-import ie.dublinmapper.repository.dart.livedata.DartLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.dart.livedata.DartLiveDataRepository
 import ie.dublinmapper.repository.dart.stations.DartStationFetcher
 import ie.dublinmapper.repository.dart.stations.DartStationPersister

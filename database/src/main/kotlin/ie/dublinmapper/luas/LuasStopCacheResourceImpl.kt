@@ -1,7 +1,7 @@
 package ie.dublinmapper.luas
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.luas.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.luas.*
 import io.reactivex.Maybe
 
 class LuasStopCacheResourceImpl(

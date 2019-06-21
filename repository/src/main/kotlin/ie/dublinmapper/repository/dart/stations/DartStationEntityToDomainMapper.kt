@@ -1,6 +1,6 @@
 package ie.dublinmapper.repository.dart.stations
 
-import ie.dublinmapper.data.dart.DartStationEntity
+import ie.dublinmapper.datamodel.dart.DartStationEntity
 import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator

@@ -1,7 +1,7 @@
 package ie.dublinmapper.dart
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.dart.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.dart.*
 import io.reactivex.Maybe
 
 class DartStationCacheResourceImpl(

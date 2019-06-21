@@ -1,7 +1,7 @@
 package ie.dublinmapper.aircoach
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.aircoach.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.aircoach.*
 import io.reactivex.Maybe
 
 class AircoachStopCacheResourceImpl(

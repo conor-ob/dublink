@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.favourite
 
-import ie.dublinmapper.data.favourite.FavouriteEntity
-import ie.dublinmapper.data.favourite.FavouriteServiceEntity
+import ie.dublinmapper.datamodel.favourite.FavouriteEntity
+import ie.dublinmapper.datamodel.favourite.FavouriteServiceEntity
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.util.Operator
 import ma.glasnost.orika.CustomConverter

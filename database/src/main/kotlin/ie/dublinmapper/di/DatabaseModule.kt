@@ -2,23 +2,21 @@ package ie.dublinmapper.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.aircoach.AircoachStopCacheResourceImpl
 import ie.dublinmapper.buseireann.BusEireannStopCacheResourceImpl
 import ie.dublinmapper.dart.DartStationCacheResourceImpl
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
-import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
-import ie.dublinmapper.data.dart.DartStationCacheResource
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockCacheResource
-import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
-import ie.dublinmapper.data.favourite.*
-import ie.dublinmapper.data.luas.LuasStopCacheResource
-import ie.dublinmapper.data.persister.PersisterDao
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopCacheResource
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.aircoach.AircoachStopCacheResource
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopCacheResource
+import ie.dublinmapper.datamodel.dart.DartStationCacheResource
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockCacheResource
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopCacheResource
+import ie.dublinmapper.datamodel.favourite.*
+import ie.dublinmapper.datamodel.luas.LuasStopCacheResource
+import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopCacheResource
 import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
 import ie.dublinmapper.dublinbikes.DublinBikesDockCacheResourceImpl
@@ -26,8 +24,6 @@ import ie.dublinmapper.dublinbus.DublinBusStopCacheResourceImpl
 import ie.dublinmapper.favourite.FavouriteServiceLocationCacheResourceImpl
 import ie.dublinmapper.luas.LuasStopCacheResourceImpl
 import ie.dublinmapper.swordsexpress.SwordsExpressStopCacheResourceImpl
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 

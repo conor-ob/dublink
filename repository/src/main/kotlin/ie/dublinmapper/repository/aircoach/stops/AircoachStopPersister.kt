@@ -1,9 +1,9 @@
 package ie.dublinmapper.repository.aircoach.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
-import ie.dublinmapper.data.aircoach.AircoachStopEntity
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.aircoach.AircoachStopCacheResource
+import ie.dublinmapper.datamodel.aircoach.AircoachStopEntity
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.aircoach.AircoachStopJson

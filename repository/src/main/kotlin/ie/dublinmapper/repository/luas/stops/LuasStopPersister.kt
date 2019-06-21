@@ -1,9 +1,9 @@
 package ie.dublinmapper.repository.luas.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.data.luas.LuasStopCacheResource
-import ie.dublinmapper.data.luas.LuasStopEntity
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.luas.LuasStopCacheResource
+import ie.dublinmapper.datamodel.luas.LuasStopEntity
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson

@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.buseireann.stops
 
-import ie.dublinmapper.data.buseireann.BusEireannStopEntity
-import ie.dublinmapper.data.buseireann.BusEireannStopLocationEntity
-import ie.dublinmapper.data.buseireann.BusEireannStopServiceEntity
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopEntity
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocationEntity
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopServiceEntity
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext

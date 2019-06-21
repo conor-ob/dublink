@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.dublinbikes.docks
 
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockEntity
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockLocationEntity
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockServiceEntity
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockEntity
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockLocationEntity
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockServiceEntity
 import ie.dublinmapper.service.jcdecaux.StationJson
 import ie.dublinmapper.util.Operator
 import ma.glasnost.orika.CustomConverter

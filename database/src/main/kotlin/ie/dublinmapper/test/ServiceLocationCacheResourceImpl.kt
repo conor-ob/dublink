@@ -1,7 +1,7 @@
 package ie.dublinmapper.test
 
-import ie.dublinmapper.data.*
-import ie.dublinmapper.data.test.*
+import ie.dublinmapper.datamodel.*
+import ie.dublinmapper.datamodel.test.*
 import io.reactivex.Maybe
 
 class ServiceLocationCacheResourceImpl(

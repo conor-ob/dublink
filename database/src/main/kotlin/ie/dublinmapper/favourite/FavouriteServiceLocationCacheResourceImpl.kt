@@ -1,7 +1,7 @@
 package ie.dublinmapper.favourite
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.favourite.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.favourite.*
 import io.reactivex.Maybe
 
 class FavouriteServiceLocationCacheResourceImpl(

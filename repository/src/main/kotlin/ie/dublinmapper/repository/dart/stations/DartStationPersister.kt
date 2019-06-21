@@ -1,9 +1,9 @@
 package ie.dublinmapper.repository.dart.stations
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.data.dart.DartStationCacheResource
-import ie.dublinmapper.data.dart.DartStationEntity
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.dart.DartStationCacheResource
+import ie.dublinmapper.datamodel.dart.DartStationEntity
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.irishrail.IrishRailStationXml

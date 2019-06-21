@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.swordsexpress.stops
 
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopEntity
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopLocationEntity
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopServiceEntity
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopEntity
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopLocationEntity
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopServiceEntity
 import ie.dublinmapper.domain.model.SwordsExpressStop
 import ie.dublinmapper.service.swordsexpress.SwordsExpressStopJson
 import ie.dublinmapper.util.Coordinate

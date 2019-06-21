@@ -1,7 +1,7 @@
 package ie.dublinmapper.buseireann
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.buseireann.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.buseireann.*
 import io.reactivex.Maybe
 
 class BusEireannStopCacheResourceImpl(

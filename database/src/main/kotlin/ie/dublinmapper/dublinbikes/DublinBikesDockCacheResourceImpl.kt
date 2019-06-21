@@ -1,8 +1,7 @@
 package ie.dublinmapper.dublinbikes
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.aircoach.AircoachStopEntity
-import ie.dublinmapper.data.dublinbikes.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.dublinbikes.*
 import io.reactivex.Maybe
 
 class DublinBikesDockCacheResourceImpl(

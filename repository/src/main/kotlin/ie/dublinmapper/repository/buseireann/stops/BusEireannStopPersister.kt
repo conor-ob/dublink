@@ -1,9 +1,9 @@
 package ie.dublinmapper.repository.buseireann.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
-import ie.dublinmapper.data.buseireann.BusEireannStopEntity
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopCacheResource
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopEntity
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.BusEireannStop
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson

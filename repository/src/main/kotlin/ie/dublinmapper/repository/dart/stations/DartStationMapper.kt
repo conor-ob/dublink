@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.dart.stations
 
-import ie.dublinmapper.data.dart.DartStationEntity
-import ie.dublinmapper.data.dart.DartStationLocationEntity
-import ie.dublinmapper.data.dart.DartStationServiceEntity
+import ie.dublinmapper.datamodel.dart.DartStationEntity
+import ie.dublinmapper.datamodel.dart.DartStationLocationEntity
+import ie.dublinmapper.datamodel.dart.DartStationServiceEntity
 import ie.dublinmapper.domain.model.DartStation
 import ie.dublinmapper.service.irishrail.IrishRailStationXml
 import ie.dublinmapper.util.Coordinate
