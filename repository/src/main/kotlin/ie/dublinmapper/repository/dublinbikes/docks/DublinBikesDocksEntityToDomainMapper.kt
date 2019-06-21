@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.dublinbikes.docks
 
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockEntity
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockServiceEntity
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockEntity
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockServiceEntity
 import ie.dublinmapper.domain.model.DublinBikesDock
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
@@ -20,7 +20,7 @@ object DublinBikesDocksEntityToDomainMapper : CustomConverter<DublinBikesDockEnt
     ): DublinBikesDock {
         return DublinBikesDock(
             id = source.location.id,
-            name = source.location.name,
+            serviceLocationName = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = mapOperators(source.services),
             docks = source.services[0].docks,

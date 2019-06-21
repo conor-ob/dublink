@@ -2,7 +2,7 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
 dependencies {
-    implementation project(':data')
+    implementation project(':datamodel')
     implementation project(':domain')
     implementation project(':service')
     implementation project(':util')

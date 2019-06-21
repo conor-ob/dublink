@@ -3,10 +3,10 @@ package ie.dublinmapper.database
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import ie.dublinmapper.data.test.LocationEntity
-import ie.dublinmapper.data.test.ServiceEntity
-import ie.dublinmapper.data.test.ServiceLocationCacheResource
-import ie.dublinmapper.data.test.ServiceLocationEntity
+import ie.dublinmapper.datamodel.test.LocationEntity
+import ie.dublinmapper.datamodel.test.ServiceEntity
+import ie.dublinmapper.datamodel.test.ServiceLocationCacheResource
+import ie.dublinmapper.datamodel.test.ServiceLocationEntity
 import ie.dublinmapper.test.ServiceLocationCacheResourceImpl
 import io.reactivex.observers.TestObserver
 import org.junit.Before

@@ -2,32 +2,28 @@ package ie.dublinmapper.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.aircoach.AircoachStopCacheResourceImpl
-import ie.dublinmapper.buseireann.BusEireannStopCacheResourceImpl
-import ie.dublinmapper.dart.DartStationCacheResourceImpl
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
-import ie.dublinmapper.data.buseireann.BusEireannStopCacheResource
-import ie.dublinmapper.data.dart.DartStationCacheResource
-import ie.dublinmapper.data.dublinbikes.DublinBikesDockCacheResource
-import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
-import ie.dublinmapper.data.favourite.*
-import ie.dublinmapper.data.luas.LuasStopCacheResource
-import ie.dublinmapper.data.persister.PersisterDao
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopCacheResource
+import ie.dublinmapper.database.aircoach.AircoachStopCacheResourceImpl
+import ie.dublinmapper.database.buseireann.BusEireannStopCacheResourceImpl
+import ie.dublinmapper.database.dart.DartStationCacheResourceImpl
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.aircoach.AircoachStopCacheResource
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopCacheResource
+import ie.dublinmapper.datamodel.dart.DartStationCacheResource
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockCacheResource
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopCacheResource
+import ie.dublinmapper.datamodel.luas.LuasStopCacheResource
+import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopCacheResource
 import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
-import ie.dublinmapper.dublinbikes.DublinBikesDockCacheResourceImpl
-import ie.dublinmapper.dublinbus.DublinBusStopCacheResourceImpl
+import ie.dublinmapper.database.dublinbikes.DublinBikesDockCacheResourceImpl
+import ie.dublinmapper.database.dublinbus.DublinBusStopCacheResourceImpl
+import ie.dublinmapper.database.luas.LuasStopCacheResourceImpl
+import ie.dublinmapper.database.swordsexpress.SwordsExpressStopCacheResourceImpl
+import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationCacheResource
 import ie.dublinmapper.favourite.FavouriteServiceLocationCacheResourceImpl
-import ie.dublinmapper.luas.LuasStopCacheResourceImpl
-import ie.dublinmapper.swordsexpress.SwordsExpressStopCacheResourceImpl
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
 import javax.inject.Singleton
 
@@ -47,18 +43,18 @@ class DatabaseModule {
 //                val database = database(context, stringProvider)
 //                database.favouriteLocationDao().insertAll(
 //                    listOf(
-//                        FavouriteLocationEntity(id = "BROCK", name = "Blackrock DART", service = Service.IRISH_RAIL),
-//                        FavouriteLocationEntity(id = "PERSE", name = "Pearse DART", service = Service.IRISH_RAIL)
+//                        FavouriteIrishRailStationLocationEntity(serviceId = "BROCK", name = "Blackrock DART", service = Service.IRISH_RAIL),
+//                        FavouriteIrishRailStationLocationEntity(serviceId = "PERSE", name = "Pearse DART", service = Service.IRISH_RAIL)
 //                    )
 //                )
 //                database.favouriteServiceDao().insertAll(
 //                    listOf(
-//                        FavouriteServiceEntity(locationId = "BROCK", operator = Operator.COMMUTER, route = "Commuter"),
-//                        FavouriteServiceEntity(locationId = "BROCK", operator = Operator.DART, route = "Dart"),
-//                        FavouriteServiceEntity(locationId = "BROCK", operator = Operator.INTERCITY, route = "Intercity"),
-//                        FavouriteServiceEntity(locationId = "PERSE", operator = Operator.COMMUTER, route = "Commuter"),
-//                        FavouriteServiceEntity(locationId = "PERSE", operator = Operator.DART, route = "Dart"),
-//                        FavouriteServiceEntity(locationId = "PERSE", operator = Operator.INTERCITY, route = "Intercity")
+//                        FavouriteIrishRailStationServiceEntity(locationId = "BROCK", operator = Operator.COMMUTER, route = "Commuter"),
+//                        FavouriteIrishRailStationServiceEntity(locationId = "BROCK", operator = Operator.DART, route = "Dart"),
+//                        FavouriteIrishRailStationServiceEntity(locationId = "BROCK", operator = Operator.INTERCITY, route = "Intercity"),
+//                        FavouriteIrishRailStationServiceEntity(locationId = "PERSE", operator = Operator.COMMUTER, route = "Commuter"),
+//                        FavouriteIrishRailStationServiceEntity(locationId = "PERSE", operator = Operator.DART, route = "Dart"),
+//                        FavouriteIrishRailStationServiceEntity(locationId = "PERSE", operator = Operator.INTERCITY, route = "Intercity")
 //                    )
 //                )
 //            }
@@ -148,12 +144,6 @@ class DatabaseModule {
     @Singleton
     fun persisterDao(database: DublinMapperDatabase): PersisterDao {
         return database.persisterDao()
-    }
-
-    @Provides
-    @Singleton
-    fun favouriteDao(database: DublinMapperDatabase): FavouriteDao {
-        return database.favouriteDao()
     }
 
 }

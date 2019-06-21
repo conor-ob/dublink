@@ -30,6 +30,7 @@ import ie.dublinmapper.util.*
 import ie.dublinmapper.view.livedata.LiveDataController
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.view_search.view.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -43,6 +44,8 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
     private lateinit var swipeRefresh: SwipeRefreshLayout
 
     override val layoutId = R.layout.view_search
+
+    private val subscriptions = CompositeDisposable()
 
     override fun createPresenter(): SearchPresenter {
         return getApplicationComponent().searchPresenter()
@@ -158,7 +161,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
                 serviceLocationName = serviceLocation.name,
                 serviceLocationService = serviceLocation.service,
                 serviceLocationStyleId = getStyle(serviceLocation.service),
-                serviceLocationIsFavourite = false
+                serviceLocationIsFavourite = serviceLocation.isFavourite()
             ).build()
             router.pushController(
                 RouterTransaction.with(liveDataController)
@@ -167,31 +170,30 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
             )
         }
 
-        val subscription = Observable.create<String> { subscriber ->
+        subscriptions.add(
+            Observable.create<String> { subscriber ->
+                searchQueryView.addTextChangedListener(object : TextWatcher {
 
-            searchQueryView.addTextChangedListener(object : TextWatcher {
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                        clearSearch.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
+                        subscriber.onNext(s.toString())
+                    }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    clearSearch.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
-                    subscriber.onNext(s.toString())
-                }
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                    override fun afterTextChanged(s: Editable?) {}
 
-                override fun afterTextChanged(s: Editable?) {}
-
-            })
-        }
+                })
+            }
             .debounce(400L, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .filter { it.length > 1 }
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext {
                 presenter.start(it)
-                val thread = Thread.currentThread().name
-                Timber.d("query ${Thread.currentThread().name}")
             }
             .subscribe()
+        )
 
         searchQueryView.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
@@ -208,7 +210,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         return when (service) {
             Service.AIRCOACH -> R.style.AircoachTheme
             Service.BUS_EIREANN -> R.style.BusEireannTheme
-            Service.DUBLIN_BIKES -> TODO()
+            Service.DUBLIN_BIKES -> R.style.DublinBikesTheme
             Service.DUBLIN_BUS -> R.style.DublinBusTheme
             Service.IRISH_RAIL -> R.style.DartTheme
             Service.LUAS -> R.style.LuasTheme

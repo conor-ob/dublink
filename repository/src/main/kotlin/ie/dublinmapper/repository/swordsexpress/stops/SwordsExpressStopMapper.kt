@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.swordsexpress.stops
 
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopEntity
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopLocationEntity
-import ie.dublinmapper.data.swordsexpress.SwordsExpressStopServiceEntity
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopEntity
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopLocationEntity
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopServiceEntity
 import ie.dublinmapper.domain.model.SwordsExpressStop
 import ie.dublinmapper.service.swordsexpress.SwordsExpressStopJson
 import ie.dublinmapper.util.Coordinate
@@ -43,7 +43,7 @@ object SwordsExpressStopMapper {
             stops.add(
                 SwordsExpressStop(
                     id = entity.location.id,
-                    name = entity.location.name,
+                    serviceLocationName = entity.location.name,
                     coordinate = Coordinate(entity.location.latitude, entity.location.longitude),
                     operators = mapOperators(entity.services),
                     direction = entity.services[0].direction,
@@ -68,7 +68,7 @@ object SwordsExpressStopMapper {
 //
 //    override fun map(from: SwordsExpressStopJson): SwordsExpressStop {
 //        return SwordsExpressStop(
-//            id = from.id,
+//            serviceId = from.serviceId,
 //            name = from.name,
 //            coordinate = Coordinate(from.latitude, from.longitude),
 //            direction = from.direction

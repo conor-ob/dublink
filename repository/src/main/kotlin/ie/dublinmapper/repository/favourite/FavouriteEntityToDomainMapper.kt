@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.favourite
 
-import ie.dublinmapper.data.favourite.FavouriteEntity
-import ie.dublinmapper.data.favourite.FavouriteServiceEntity
+import ie.dublinmapper.datamodel.favourite.FavouriteEntity
+import ie.dublinmapper.datamodel.favourite.FavouriteServiceEntity
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.util.Operator
 import ma.glasnost.orika.CustomConverter
@@ -16,9 +16,10 @@ object FavouriteEntityToDomainMapper : CustomConverter<FavouriteEntity, Favourit
         mappingContext: MappingContext
     ): Favourite {
         return Favourite(
-            id = source.location.id,
+            id = source.location.id.serviceId,
             name = source.location.name,
-            service = source.location.service,
+            service = source.location.id.service,
+            order = source.location.order,
             routes = mapRoutes(source.services)
         )
     }

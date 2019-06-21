@@ -5,6 +5,7 @@ import ie.dublinmapper.service.dublinbus.*
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.util.RxScheduler
+import ie.dublinmapper.util.Service
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.functions.Function3
@@ -16,9 +17,9 @@ class DublinBusStopFetcher(
     private val goAheadOperator: String,
     private val format: String,
     private val scheduler: RxScheduler
-) : Fetcher<List<RtpiBusStopInformationJson>, String> {
+) : Fetcher<List<RtpiBusStopInformationJson>, Service> {
 
-    override fun fetch(key: String): Single<List<RtpiBusStopInformationJson>> {
+    override fun fetch(key: Service): Single<List<RtpiBusStopInformationJson>> {
         return Single.fromObservable(fetchInternal())
     }
 

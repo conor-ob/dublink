@@ -1,7 +1,9 @@
 package ie.dublinmapper.favourite
 
-import ie.dublinmapper.data.TxRunner
-import ie.dublinmapper.data.favourite.*
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.favourite.*
+import ie.dublinmapper.util.Service
+import io.reactivex.Completable
 import io.reactivex.Maybe
 
 class FavouriteServiceLocationCacheResourceImpl(
@@ -15,8 +17,14 @@ class FavouriteServiceLocationCacheResourceImpl(
         return favouriteDao.selectAll()
     }
 
-    override fun insertFavourite(favourite: FavouriteEntity) {
-        insertFavourites(listOf(favourite))
+    override fun selectFavourite(id: String, service: Service): Maybe<FavouriteEntity> {
+        return favouriteDao.select(FavouriteKey(id, service))
+    }
+
+    override fun insertFavourite(favourite: FavouriteEntity): Completable {
+        val locationInsert = favouriteLocationDao.insert(favourite.location)
+        val serviceInsert = favouriteServiceDao.insertAll(favourite.services)
+        return Completable.complete()
     }
 
     override fun removeFavourite(favourite: FavouriteEntity) {
@@ -28,6 +36,10 @@ class FavouriteServiceLocationCacheResourceImpl(
             favouriteLocationDao.insertAll(favourites.map { it.location })
             favouriteServiceDao.insertAll(favourites.flatMap { it.services })
         }
+    }
+
+    override fun countFavourites(): Maybe<Long> {
+        return favouriteLocationDao.count()
     }
 
 }

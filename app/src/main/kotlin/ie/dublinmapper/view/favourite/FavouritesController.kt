@@ -10,11 +10,15 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
-import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
+import ie.dublinmapper.model.aircoach.AircoachStopItem
+import ie.dublinmapper.model.buseireann.BusEireannStopItem
 import ie.dublinmapper.model.dart.DartStationItem
+import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
+import ie.dublinmapper.model.dublinbus.DublinBusStopItem
+import ie.dublinmapper.model.luas.LuasStopItem
 import ie.dublinmapper.util.CircularRevealChangeHandler
 import ie.dublinmapper.util.getApplicationComponent
 import ie.dublinmapper.util.requireContext
@@ -50,20 +54,68 @@ class FavouritesController(
     }
 
     private fun onItemClicked(item: Item<*>) {
-        if (item is DartStationItem) {
-            val dartLiveDataController = LiveDataController.Builder(
-                serviceLocationId = item.dartStation.id,
-                serviceLocationName = item.dartStation.name,
-                serviceLocationService = item.dartStation.service,
-                serviceLocationStyleId = R.style.DartTheme, //TODO
-                serviceLocationIsFavourite = false
-            ).build()
-            router.pushController(
-                RouterTransaction.with(dartLiveDataController)
-                    .pushChangeHandler(FadeChangeHandler())
-                    .popChangeHandler(FadeChangeHandler())
-            )
+        val liveDataController: LiveDataController = when (item) {
+            is AircoachStopItem -> {
+                LiveDataController.Builder(
+                    serviceLocationId = item.aircoachStop.id,
+                    serviceLocationName = item.aircoachStop.name,
+                    serviceLocationService = item.aircoachStop.service,
+                    serviceLocationStyleId = R.style.AircoachTheme, //TODO
+                    serviceLocationIsFavourite = true
+                ).build()
+            }
+            is BusEireannStopItem -> {
+                LiveDataController.Builder(
+                    serviceLocationId = item.busEireannStop.id,
+                    serviceLocationName = item.busEireannStop.name,
+                    serviceLocationService = item.busEireannStop.service,
+                    serviceLocationStyleId = R.style.BusEireannTheme, //TODO
+                    serviceLocationIsFavourite = true
+                ).build()
+            }
+            is DartStationItem -> {
+                LiveDataController.Builder(
+                    serviceLocationId = item.dartStation.id,
+                    serviceLocationName = item.dartStation.name,
+                    serviceLocationService = item.dartStation.service,
+                    serviceLocationStyleId = R.style.DartTheme, //TODO
+                    serviceLocationIsFavourite = true
+                ).build()
+            }
+            is DublinBikesDockItem -> {
+                LiveDataController.Builder(
+                    serviceLocationId = item.dublinBikesDock.id,
+                    serviceLocationName = item.dublinBikesDock.name,
+                    serviceLocationService = item.dublinBikesDock.service,
+                    serviceLocationStyleId = R.style.DublinBikesTheme, //TODO
+                    serviceLocationIsFavourite = true
+                ).build()
+            }
+            is DublinBusStopItem -> {
+                LiveDataController.Builder(
+                    serviceLocationId = item.dublinBusStop.id,
+                    serviceLocationName = item.dublinBusStop.name,
+                    serviceLocationService = item.dublinBusStop.service,
+                    serviceLocationStyleId = R.style.DublinBusTheme, //TODO
+                    serviceLocationIsFavourite = true
+                ).build()
+            }
+            is LuasStopItem -> {
+                LiveDataController.Builder(
+                    serviceLocationId = item.luasStop.id,
+                    serviceLocationName = item.luasStop.name,
+                    serviceLocationService = item.luasStop.service,
+                    serviceLocationStyleId = R.style.LuasTheme, //TODO
+                    serviceLocationIsFavourite = true
+                ).build()
+            }
+            else -> TODO()
         }
+        router.pushController(
+            RouterTransaction.with(liveDataController)
+                .pushChangeHandler(FadeChangeHandler())
+                .popChangeHandler(FadeChangeHandler())
+        )
     }
 
     override fun onAttach(view: View) {

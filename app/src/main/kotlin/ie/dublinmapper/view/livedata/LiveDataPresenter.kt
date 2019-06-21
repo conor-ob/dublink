@@ -11,6 +11,6 @@ interface LiveDataPresenter : MvpPresenter<LiveDataView> {
 
     fun onSaveFavouritePressed(serviceLocationId: String, serviceLocationName: String, service: Service)
 
-    fun onRemoveFavouritePressed(serviceLocationId: String, serviceLocationName: String, service: Service)
+    fun onRemoveFavouritePressed(serviceLocationId: String, service: Service)
 
 }

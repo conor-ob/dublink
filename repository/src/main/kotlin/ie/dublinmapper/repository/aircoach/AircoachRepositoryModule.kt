@@ -7,10 +7,11 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.data.aircoach.AircoachStopCacheResource
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.aircoach.AircoachStopCacheResource
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.model.AircoachStop
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
@@ -19,6 +20,7 @@ import ie.dublinmapper.service.aircoach.AircoachResource
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
 import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.util.Service
 import ma.glasnost.orika.MapperFacade
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -42,14 +44,15 @@ class AircoachRepositoryModule {
     fun aircoachStopRepository(
         resource: AircoachResource,
         cacheResource: AircoachStopCacheResource,
+        favouriteRepository: FavouriteRepository,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         mapper: MapperFacade
     ): Repository<AircoachStop> {
-        val fetcher = Fetcher<List<AircoachStopJson>, String> { resource.getStops() }
+        val fetcher = Fetcher<List<AircoachStopJson>, Service> { resource.getStops() }
         val persister = AircoachStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return AircoachStopRepository(store)
+        return AircoachStopRepository(store, favouriteRepository)
     }
 
     @Provides

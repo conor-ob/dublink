@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.dublinbus.stops
 
-import ie.dublinmapper.data.dublinbus.DublinBusStopEntity
-import ie.dublinmapper.data.dublinbus.DublinBusStopLocationEntity
-import ie.dublinmapper.data.dublinbus.DublinBusStopServiceEntity
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopEntity
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocationEntity
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopServiceEntity
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext

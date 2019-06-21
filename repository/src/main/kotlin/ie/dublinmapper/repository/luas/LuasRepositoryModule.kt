@@ -6,13 +6,13 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.data.luas.LuasStopCacheResource
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.luas.LuasStopCacheResource
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.domain.model.LuasStop
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataFetcher
-import ie.dublinmapper.repository.luas.livedata.LuasLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopFetcher
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
@@ -44,6 +44,7 @@ class LuasRepositoryModule {
     fun luasStopRepository(
         api: RtpiApi,
         cacheResource: LuasStopCacheResource,
+        favouriteRepository: FavouriteRepository,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         stringProvider: StringProvider,
@@ -56,7 +57,7 @@ class LuasRepositoryModule {
         )
         val persister = LuasStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return LuasStopRepository(store)
+        return LuasStopRepository(store, favouriteRepository)
     }
 
     @Provides

@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.aircoach.stops
 
-import ie.dublinmapper.data.aircoach.AircoachStopEntity
-import ie.dublinmapper.data.aircoach.AircoachStopLocationEntity
-import ie.dublinmapper.data.aircoach.AircoachStopServiceEntity
+import ie.dublinmapper.datamodel.aircoach.AircoachStopEntity
+import ie.dublinmapper.datamodel.aircoach.AircoachStopLocationEntity
+import ie.dublinmapper.datamodel.aircoach.AircoachStopServiceEntity
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.util.Operator
 import ma.glasnost.orika.CustomConverter

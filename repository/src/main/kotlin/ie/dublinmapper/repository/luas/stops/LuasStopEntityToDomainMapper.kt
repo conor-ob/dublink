@@ -1,7 +1,7 @@
 package ie.dublinmapper.repository.luas.stops
 
-import ie.dublinmapper.data.luas.LuasStopEntity
-import ie.dublinmapper.data.luas.LuasStopServiceEntity
+import ie.dublinmapper.datamodel.luas.LuasStopEntity
+import ie.dublinmapper.datamodel.luas.LuasStopServiceEntity
 import ie.dublinmapper.domain.model.LuasStop
 import ie.dublinmapper.util.Coordinate
 import ie.dublinmapper.util.Operator
@@ -20,7 +20,7 @@ object LuasStopEntityToDomainMapper : CustomConverter<LuasStopEntity, LuasStop>(
     ): LuasStop {
         return LuasStop(
             id = source.location.id,
-            name = source.location.name,
+            serviceLocationName = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = mapOperators(source.services),
             routes = mapOperatorsToRoutes(source.services),

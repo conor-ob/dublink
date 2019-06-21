@@ -4,19 +4,19 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-            android:id="@+id/action_save_favourite"
+            android:id="@+id/action_favourite"
             android:title="@string/action_save_favourite"
             android:icon="@drawable/ic_favourite_unselected"
             app:showAsAction="ifRoom"/>
 
     <!--<item-->
-            <!--android:id="@+id/action_refresh"-->
+            <!--android:serviceId="@+serviceId/action_refresh"-->
             <!--android:title="map"-->
             <!--android:icon="@drawable/pick_from_map"-->
             <!--app:showAsAction="ifRoom"/>-->
 
     <!--<item-->
-            <!--android:id="@+id/action_show_map"-->
+            <!--android:serviceId="@+serviceId/action_show_map"-->
             <!--android:title="@string/action_show_map"-->
             <!--app:showAsAction="never"/>-->
 

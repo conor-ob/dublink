@@ -39,8 +39,8 @@ class LiveDataPresenterImpl @Inject constructor(
         )
     }
 
-    override fun onRemoveFavouritePressed(serviceLocationId: String, serviceLocationName: String, service: Service) {
-        subscriptions().add(favouritesUseCase.removeFavourite(serviceLocationId, serviceLocationName, service)
+    override fun onRemoveFavouritePressed(serviceLocationId: String, service: Service) {
+        subscriptions().add(favouritesUseCase.removeFavourite(serviceLocationId, service)
             .compose(applyCompletableSchedulers())
             .doOnComplete { ifViewAttached { view -> view.showFavouriteRemoved() } }
             .subscribe()

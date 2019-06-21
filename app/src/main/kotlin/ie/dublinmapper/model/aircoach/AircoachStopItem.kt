@@ -9,7 +9,7 @@ import ie.dublinmapper.model.ServiceLocationItem
 import kotlinx.android.synthetic.main.list_item_service_location.*
 
 class AircoachStopItem(
-    private val aircoachStop: AircoachStop,
+    val aircoachStop: AircoachStop,
     isEven: Boolean,
     isLast: Boolean
 ) : ServiceLocationItem(isEven, isLast) {
