@@ -10,10 +10,10 @@ import com.bluelinelabs.conductor.changehandler.FadeChangeHandler
 import com.xwray.groupie.Group
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
-import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.view.MvpBaseController
 import ie.dublinmapper.R
+import ie.dublinmapper.model.aircoach.AircoachStopItem
 import ie.dublinmapper.model.dart.DartStationItem
 import ie.dublinmapper.util.CircularRevealChangeHandler
 import ie.dublinmapper.util.getApplicationComponent
@@ -50,13 +50,26 @@ class FavouritesController(
     }
 
     private fun onItemClicked(item: Item<*>) {
-        if (item is DartStationItem) {
+        if (item is AircoachStopItem) {
+            val liveDataController = LiveDataController.Builder(
+                serviceLocationId = item.aircoachStop.id,
+                serviceLocationName = item.aircoachStop.name,
+                serviceLocationService = item.aircoachStop.service,
+                serviceLocationStyleId = R.style.AircoachTheme, //TODO
+                serviceLocationIsFavourite = true
+            ).build()
+            router.pushController(
+                RouterTransaction.with(liveDataController)
+                    .pushChangeHandler(FadeChangeHandler())
+                    .popChangeHandler(FadeChangeHandler())
+            )
+        } else if (item is DartStationItem) {
             val dartLiveDataController = LiveDataController.Builder(
                 serviceLocationId = item.dartStation.id,
                 serviceLocationName = item.dartStation.name,
                 serviceLocationService = item.dartStation.service,
                 serviceLocationStyleId = R.style.DartTheme, //TODO
-                serviceLocationIsFavourite = false
+                serviceLocationIsFavourite = true
             ).build()
             router.pushController(
                 RouterTransaction.with(dartLiveDataController)

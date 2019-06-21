@@ -1,4 +1,4 @@
-package ie.dublinmapper.dublinbikes
+package ie.dublinmapper.database.dublinbikes
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.dublinbikes.*

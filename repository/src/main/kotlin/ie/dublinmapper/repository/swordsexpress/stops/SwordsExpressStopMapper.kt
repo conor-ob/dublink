@@ -68,7 +68,7 @@ object SwordsExpressStopMapper {
 //
 //    override fun map(from: SwordsExpressStopJson): SwordsExpressStop {
 //        return SwordsExpressStop(
-//            id = from.id,
+//            serviceId = from.serviceId,
 //            name = from.name,
 //            coordinate = Coordinate(from.latitude, from.longitude),
 //            direction = from.direction

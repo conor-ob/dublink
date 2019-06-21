@@ -1,6 +1,7 @@
 package ie.dublinmapper.repository.favourite
 
 import ie.dublinmapper.datamodel.favourite.FavouriteEntity
+import ie.dublinmapper.datamodel.favourite.FavouriteKey
 import ie.dublinmapper.datamodel.favourite.FavouriteLocationEntity
 import ie.dublinmapper.datamodel.favourite.FavouriteServiceEntity
 import ie.dublinmapper.domain.model.Favourite
@@ -16,17 +17,16 @@ object FavouriteDomainToEntityMapper : CustomConverter<Favourite, FavouriteEntit
         mappingContext: MappingContext
     ): FavouriteEntity {
         val locationEntity = FavouriteLocationEntity(
-            id = source.id,
+            id = FavouriteKey(source.id, source.service),
             name = source.name,
-            order = 0, //TODO
-            service = source.service
+            order = source.order
         )
         val serviceEntities = mutableListOf<FavouriteServiceEntity>()
         for (entry in source.routes) {
             for (route in entry.value) {
                 serviceEntities.add(
                     FavouriteServiceEntity(
-                        locationId = source.id,
+                        locationId = FavouriteKey(source.id, source.service),
                         operator = entry.key,
                         route = route
                     )

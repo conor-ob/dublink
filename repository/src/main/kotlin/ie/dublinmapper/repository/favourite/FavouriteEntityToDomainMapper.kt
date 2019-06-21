@@ -16,9 +16,10 @@ object FavouriteEntityToDomainMapper : CustomConverter<FavouriteEntity, Favourit
         mappingContext: MappingContext
     ): Favourite {
         return Favourite(
-            id = source.location.id,
+            id = source.location.id.serviceId,
             name = source.location.name,
-            service = source.location.service,
+            service = source.location.id.service,
+            order = source.location.order,
             routes = mapRoutes(source.services)
         )
     }

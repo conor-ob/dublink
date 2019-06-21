@@ -1,4 +1,4 @@
-package ie.dublinmapper.luas
+package ie.dublinmapper.database.luas
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.luas.*

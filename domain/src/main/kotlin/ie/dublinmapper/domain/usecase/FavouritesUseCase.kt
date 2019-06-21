@@ -20,13 +20,19 @@ class FavouritesUseCase @Inject constructor(
     ) {
 
     fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
-        val favourite = Favourite(serviceLocationId, serviceLocationName, service, emptyMap())
-        return Completable.fromCallable { favouriteRepository.saveFavourite(favourite) }
+        val favourite = Favourite(serviceLocationId, serviceLocationName, service, 0, emptyMap())
+        return favouriteRepository.saveFavourite(favourite)
     }
 
-    fun removeFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
-        val favourite = Favourite(serviceLocationId, serviceLocationName, service, emptyMap())
-        return Completable.fromCallable { favouriteRepository.removeFavourite(favourite) }
+    fun removeFavourite(serviceLocationId: String, service: Service): Completable {
+        return Completable.fromCallable {
+            val favourite = getFavourite(serviceLocationId, service).blockingFirst()
+            favouriteRepository.removeFavourite(favourite)
+        }
+    }
+
+    private fun getFavourite(serviceLocationId: String, service: Service): Observable<Favourite> {
+        return favouriteRepository.getFavourite(serviceLocationId, service)
     }
 
     fun getFavourites(): Observable<FavouritesResponse> {
@@ -40,12 +46,12 @@ class FavouritesUseCase @Inject constructor(
 
     private fun findMatching(favourite: Favourite): ServiceLocation {
         return when (favourite.service) {
-            Service.AIRCOACH -> TODO()
-            Service.BUS_EIREANN -> TODO()
+            Service.AIRCOACH -> aircoachStopRepository.getById(favourite.id).blockingSingle()
+            Service.BUS_EIREANN -> busEireannStopRepository.getById(favourite.id).blockingSingle()
             Service.DUBLIN_BIKES -> TODO()
             Service.DUBLIN_BUS -> TODO()
             Service.IRISH_RAIL -> dartStationRepository.getById(favourite.id).blockingSingle()
-            Service.LUAS -> TODO()
+            Service.LUAS -> luasStopRepository.getById(favourite.id).blockingSingle()
             Service.SWORDS_EXPRESS -> TODO()
         }
     }

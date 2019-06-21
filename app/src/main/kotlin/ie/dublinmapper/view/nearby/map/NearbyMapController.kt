@@ -57,7 +57,7 @@
 //    }
 //
 //    private fun setupGoogleMap(view: View) {
-//        googleMapView = view.findViewById(R.id.google_map_view)
+//        googleMapView = view.findViewById(R.serviceId.google_map_view)
 //        googleMapView.onCreate(Bundle.EMPTY)
 //        googleMapView.onStart()
 //        googleMapView.getMapAsync(this)

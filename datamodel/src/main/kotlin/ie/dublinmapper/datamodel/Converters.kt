@@ -1,6 +1,7 @@
 package ie.dublinmapper.datamodel
 
 import androidx.room.TypeConverter
+import ie.dublinmapper.datamodel.favourite.FavouriteKey
 import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.Service
 import org.threeten.bp.Instant
@@ -54,6 +55,19 @@ object Converters {
     @JvmStatic
     fun toOperator(value: String): Operator {
         return Operator.parse(value)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromFavouriteKey(favouriteKey: FavouriteKey): String {
+        return "${favouriteKey.service.name}::${favouriteKey.serviceId}"
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toFavouriteKey(value: String): FavouriteKey {
+        val parts = value.split("::")
+        return FavouriteKey(parts[1], Service.parse(parts[0]))
     }
 
 }

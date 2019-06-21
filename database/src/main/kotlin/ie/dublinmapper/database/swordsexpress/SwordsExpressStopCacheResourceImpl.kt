@@ -1,4 +1,4 @@
-package ie.dublinmapper.swordsexpress
+package ie.dublinmapper.database.swordsexpress
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.swordsexpress.*

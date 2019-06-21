@@ -4,6 +4,8 @@ import ie.dublinmapper.datamodel.favourite.FavouriteEntity
 import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationCacheResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.repository.FavouriteRepository
+import ie.dublinmapper.util.Service
+import io.reactivex.Completable
 import io.reactivex.Observable
 import ma.glasnost.orika.MapperFacade
 
@@ -12,7 +14,14 @@ class FavouriteServiceLocationRepository(
     private val mapper: MapperFacade
 ) : FavouriteRepository {
 
-    override fun saveFavourites(favourites: List<Favourite>) {
+    override fun saveFavourite(favourite: Favourite): Completable {
+        return cacheResource.countFavourites()
+            .flatMapCompletable { count ->
+                cacheResource.insertFavourite(mapper.map(favourite.copy(order = count), FavouriteEntity::class.java))
+            }
+    }
+
+    override fun updateFavourites(favourites: List<Favourite>) {
         cacheResource.insertFavourites(mapper.mapAsList(favourites, FavouriteEntity::class.java))
     }
 
@@ -24,42 +33,12 @@ class FavouriteServiceLocationRepository(
         return cacheResource.selectFavourites()
             .map { entities -> mapper.mapAsList(entities, Favourite::class.java) }
             .toObservable()
-//        return dao.selectAll()
-//            .map { favouriteEntities ->
-//                favouriteEntities.map {
-//                    Favourite(
-//                        id = it.location.id,
-//                        name = it.location.name,
-//                        service = it.location.service,
-//                        routes = emptyMap() //TODO
-//                    )
-//                }
-//            }
-//            .toObservable()
-//        return Observable.just(
-//            listOf(
-//                Favourite(
-//                    id = "BROCK",
-//                    name = "Blackrock Dart",
-//                    service = Service.IRISH_RAIL,
-//                    routes = mapOf(
-//                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
-//                        Operator.DART to setOf(Operator.DART.fullName),
-//                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
-//                    )
-//                ),
-//                Favourite(
-//                    id = "PERSE",
-//                    name = "Pearse Dart",
-//                    service = Service.IRISH_RAIL,
-//                    routes = mapOf(
-//                        Operator.COMMUTER to setOf(Operator.COMMUTER.fullName),
-//                        Operator.DART to setOf(Operator.DART.fullName),
-//                        Operator.INTERCITY to setOf(Operator.INTERCITY.fullName)
-//                    )
-//                )
-//            )
-//        )
+    }
+
+    override fun getFavourite(id: String, service: Service): Observable<Favourite> {
+        return cacheResource.selectFavourite(id, service)
+            .map { entity -> mapper.map(entity, Favourite::class.java) }
+            .toObservable()
     }
 
 }

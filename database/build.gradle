@@ -37,6 +37,8 @@ dependencies {
     implementation "androidx.room:room-rxjava2:${versions.androidx.room_rxjava2}"
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
 
+    implementation "com.jakewharton.timber:timber:${versions.timber}"
+
     testImplementation "junit:junit:${testVersions.junit}"
     androidTestImplementation "androidx.room:room-testing:${testVersions.androidx.room_testing}"
     androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"

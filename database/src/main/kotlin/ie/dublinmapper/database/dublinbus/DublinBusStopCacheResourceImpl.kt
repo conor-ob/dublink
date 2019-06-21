@@ -1,4 +1,4 @@
-package ie.dublinmapper.dublinbus
+package ie.dublinmapper.database.dublinbus
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.dublinbus.*

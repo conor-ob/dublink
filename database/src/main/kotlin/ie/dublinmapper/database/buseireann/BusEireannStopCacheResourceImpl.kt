@@ -1,4 +1,4 @@
-package ie.dublinmapper.buseireann
+package ie.dublinmapper.database.buseireann
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.buseireann.*

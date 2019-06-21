@@ -43,11 +43,11 @@
 //    }
 //
 //    private fun setupLayout(view: View) {
-//        background = view.findViewById(R.id.background_live_data)
-////        serviceLocationName = view.findViewById(R.id.service_location_name)
-////        serviceLocationInfo = view.findViewById(R.id.service_location_info)
+//        background = view.findViewById(R.serviceId.background_live_data)
+////        serviceLocationName = view.findViewById(R.serviceId.service_location_name)
+////        serviceLocationInfo = view.findViewById(R.serviceId.service_location_info)
 //        liveDataAdapter = GroupAdapter()
-//        recyclerView = view.findViewById(R.id.recycler_view)
+//        recyclerView = view.findViewById(R.serviceId.recycler_view)
 //        recyclerView.adapter = liveDataAdapter
 //        recyclerView.setHasFixedSize(true)
 //        val layoutManager = LinearLayoutManager(requireContext())

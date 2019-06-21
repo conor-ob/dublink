@@ -29,6 +29,10 @@ fun Controller.hideKeyboard(view: View) {
     inputManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
+fun Controller.requireView(): View {
+    return view ?: throw IllegalStateException("${javaClass.simpleName} not attached to a view")
+}
+
 fun Controller.requireContext(): Context {
     return applicationContext ?: throw IllegalStateException("${javaClass.simpleName} not attached to a context")
 }

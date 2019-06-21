@@ -18,7 +18,7 @@ import ie.dublinmapper.util.Service
 //    open val serviceLocation: ServiceLocation,
 //    open val mapIconText: String,
 //    open val styleId: Int,
-//    val id: String = serviceLocation.id,
+//    val serviceId: String = serviceLocation.serviceId,
 //    val name: String = serviceLocation.name,
 //    val service: Service = serviceLocation.service,
 //    val coordinate: Coordinate = serviceLocation.coordinate,
@@ -88,7 +88,7 @@ import ie.dublinmapper.util.Service
 //    val dublinBusStop: DublinBusStop
 //) : ServiceLocationUi(
 //    dublinBusStop,
-//    dublinBusStop.id,
+//    dublinBusStop.serviceId,
 //    R.style.DublinBusTheme
 //) {
 //    override fun toItem(isEven: Boolean, isLast: Boolean) = DublinBusStopItem(this, isEven, isLast)

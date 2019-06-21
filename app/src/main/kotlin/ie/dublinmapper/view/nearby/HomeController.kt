@@ -113,7 +113,7 @@
 //    }
 //
 //    private fun setupSearchFab(view: View) {
-//        searchFab = view.findViewById(R.id.search_fab)
+//        searchFab = view.findViewById(R.serviceId.search_fab)
 //        searchFab.setOnClickListener {
 //            val searchController = SearchController(Bundle.EMPTY)
 //            router.pushController(RouterTransaction

@@ -1,4 +1,4 @@
-package ie.dublinmapper.dart
+package ie.dublinmapper.database.dart
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.dart.*

@@ -1,4 +1,4 @@
-package ie.dublinmapper.aircoach
+package ie.dublinmapper.database.aircoach
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.aircoach.*
