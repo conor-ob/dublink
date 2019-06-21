@@ -7,7 +7,9 @@ import ie.dublinmapper.util.Service
 
 @Entity(tableName = "favourite_locations")
 data class FavouriteLocationEntity(
-    @field:PrimaryKey @field:ColumnInfo(name = "id") val id: String, //TODO there might be collisions between services
+    @field:PrimaryKey(autoGenerate = true) @field:ColumnInfo(name = "uuid") val uuid: Int = 0,
+    @field:ColumnInfo(name = "id") val id: String,
     @field:ColumnInfo(name = "name") val name: String,
+    @field:ColumnInfo(name = "order") val order: Int,
     @field:ColumnInfo(name = "service") val service: Service
 )

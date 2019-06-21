@@ -84,6 +84,7 @@
     <string name="stop_number">Stop %s</string>
     <string name="departures">Departures</string>
     <string name="terminating">Terminating</string>
+    <string name="action_remove_favourite">Remove Favourite</string>
 
     <plurals name="live_data_last_updated_minutes">
         <item quantity="one">Updated %d minute ago</item>
