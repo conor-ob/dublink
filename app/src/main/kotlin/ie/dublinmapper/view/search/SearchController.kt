@@ -208,7 +208,7 @@ class SearchController(args: Bundle) : MvpBaseController<SearchView, SearchPrese
         return when (service) {
             Service.AIRCOACH -> R.style.AircoachTheme
             Service.BUS_EIREANN -> R.style.BusEireannTheme
-            Service.DUBLIN_BIKES -> TODO()
+            Service.DUBLIN_BIKES -> R.style.DublinBikesTheme
             Service.DUBLIN_BUS -> R.style.DublinBusTheme
             Service.IRISH_RAIL -> R.style.DartTheme
             Service.LUAS -> R.style.LuasTheme

@@ -4,8 +4,7 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
-import io.reactivex.functions.Function5
+import io.reactivex.functions.Function6
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
@@ -13,7 +12,7 @@ class SearchUseCase @Inject constructor(
     private val busEireannStopRepository: Repository<BusEireannStop>,
     private val dartStationRepository: Repository<DartStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
-//    private val dublinBusStopRepository: Repository<DublinBusStop>,
+    private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
     private val scheduler: RxScheduler
@@ -24,15 +23,12 @@ class SearchUseCase @Inject constructor(
             aircoachStopRepository.getAll().subscribeOn(scheduler.io),
             busEireannStopRepository.getAll().subscribeOn(scheduler.io),
             dartStationRepository.getAll().subscribeOn(scheduler.io),
-//            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
-//            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
+            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
+            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
             luasStopRepository.getAll().subscribeOn(scheduler.io),
 //            swordsExpressStopRepository.getAll().subscribeOn(scheduler.io),
-//            Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
-//                search(query, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops)
-//            }
-            Function4 { aircoachStops, busEireannStops, dartStations, luasStops ->
-                search(query, aircoachStops, busEireannStops, dartStations, luasStops)
+            Function6 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops ->
+                search(query, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops)
             }
         )
     }
@@ -42,14 +38,16 @@ class SearchUseCase @Inject constructor(
         aircoachStops: List<AircoachStop>,
         busEireannStops: List<BusEireannStop>,
         dartStations: List<DartStation>,
-//        dublinBusStops: List<DublinBusStop>,
+        dublinBikesDocks: List<DublinBikesDock>,
+        dublinBusStops: List<DublinBusStop>,
         luasStops: List<LuasStop>
     ) : SearchResponse {
         val searchCollections = mutableListOf<Collection<ServiceLocation>>()
         searchCollections.add(search(query, aircoachStops))
         searchCollections.add(search(query, busEireannStops))
         searchCollections.add(search(query, dartStations))
-//        searchCollections.add(search(query, dublinBusStops))
+        searchCollections.add(search(query, dublinBikesDocks))
+        searchCollections.add(search(query, dublinBusStops))
         searchCollections.add(search(query, luasStops))
         searchCollections.sortBy { it.size }
         return SearchResponse(searchCollections.flatten().take(50))

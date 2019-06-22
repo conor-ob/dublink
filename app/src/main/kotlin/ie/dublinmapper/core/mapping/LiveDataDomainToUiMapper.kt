@@ -7,6 +7,7 @@ import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
 import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
 import ie.dublinmapper.model.dart.DartLiveDataItem
+import ie.dublinmapper.model.dublinbikes.DublinBikesLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
 import ie.dublinmapper.util.Service
@@ -28,7 +29,7 @@ class LiveDataDomainToUiMapper(
         return when (source.service) {
             Service.AIRCOACH -> mapAircoachLiveData(source.serviceLocationName, source.liveData.map { it as AircoachLiveData })
             Service.BUS_EIREANN -> mapBusEireannLiveData(source.serviceLocationName, source.liveData.map { it as BusEireannLiveData })
-            Service.DUBLIN_BIKES -> TODO()
+            Service.DUBLIN_BIKES -> mapDublinBikesLiveData(source.serviceLocationName, source.liveData.map { it as DublinBikesLiveData })
             Service.DUBLIN_BUS -> mapDublinBusLiveData(source.serviceLocationName, source.liveData.map { it as DublinBusLiveData })
             Service.IRISH_RAIL -> mapDartLiveData(source.serviceLocationName, source.liveData.map { it as DartLiveData })
             Service.LUAS -> mapLuasLiveData(source.serviceLocationName, source.liveData.map { it as LuasLiveData })
@@ -76,6 +77,18 @@ class LiveDataDomainToUiMapper(
         if (items.isNotEmpty()) {
             items.add(DividerItem())
         }
+        return Section(items)
+    }
+
+    private fun mapDublinBikesLiveData(serviceLocationName: String, liveData: List<DublinBikesLiveData>): Group {
+        val items = mutableListOf<Group>()
+        items.add(DividerItem())
+        items.add(HeaderItem("Bikes"))
+        items.add(DublinBikesLiveDataItem(liveData.first(), true, true, true))
+        items.add(DividerItem())
+        items.add(HeaderItem("Docks"))
+        items.add(DublinBikesLiveDataItem(liveData.first(), false, true, true))
+        items.add(DividerItem())
         return Section(items)
     }
 

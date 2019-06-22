@@ -48,8 +48,8 @@ class FavouritesUseCase @Inject constructor(
         return when (favourite.service) {
             Service.AIRCOACH -> aircoachStopRepository.getById(favourite.id).blockingSingle()
             Service.BUS_EIREANN -> busEireannStopRepository.getById(favourite.id).blockingSingle()
-            Service.DUBLIN_BIKES -> TODO()
-            Service.DUBLIN_BUS -> TODO()
+            Service.DUBLIN_BIKES -> dublinBikesDockRepository.getById(favourite.id).blockingSingle()
+            Service.DUBLIN_BUS -> dublinBusStopRepository.getById(favourite.id).blockingSingle()
             Service.IRISH_RAIL -> dartStationRepository.getById(favourite.id).blockingSingle()
             Service.LUAS -> luasStopRepository.getById(favourite.id).blockingSingle()
             Service.SWORDS_EXPRESS -> TODO()
