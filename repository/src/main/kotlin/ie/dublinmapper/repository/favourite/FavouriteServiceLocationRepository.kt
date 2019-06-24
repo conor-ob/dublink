@@ -35,6 +35,10 @@ class FavouriteServiceLocationRepository(
             .toObservable()
     }
 
+    override fun getFavourites(service: Service): Observable<List<Favourite>> {
+        return getFavourites().map { favourites -> favourites.filter { it.service == service } }
+    }
+
     override fun getFavourite(id: String, service: Service): Observable<Favourite> {
         return cacheResource.selectFavourite(id, service)
             .map { entity -> mapper.map(entity, Favourite::class.java) }

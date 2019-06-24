@@ -43,7 +43,7 @@ object SwordsExpressStopMapper {
             stops.add(
                 SwordsExpressStop(
                     id = entity.location.id,
-                    name = entity.location.name,
+                    serviceLocationName = entity.location.name,
                     coordinate = Coordinate(entity.location.latitude, entity.location.longitude),
                     operators = mapOperators(entity.services),
                     direction = entity.services[0].direction,

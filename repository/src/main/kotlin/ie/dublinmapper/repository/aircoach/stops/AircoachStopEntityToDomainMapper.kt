@@ -20,7 +20,7 @@ object AircoachStopEntityToDomainMapper : CustomConverter<AircoachStopEntity, Ai
     ): AircoachStop {
         return AircoachStop(
             id = source.location.id,
-            name = source.location.name,
+            serviceLocationName = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = mapOperators(source.services),
             service = Service.AIRCOACH,

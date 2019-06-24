@@ -8,6 +8,7 @@ import dagger.Provides
 import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopCacheResource
 import ie.dublinmapper.domain.model.SwordsExpressStop
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.swordsexpress.stops.SwordsExpressStopFetcher
 import ie.dublinmapper.repository.swordsexpress.stops.SwordsExpressStopPersister
@@ -36,13 +37,14 @@ class SwordsExpressRepositoryModule {
     fun swordsExpressStopRepository(
         api: GithubApi,
         cacheResource: SwordsExpressStopCacheResource,
+        favouriteRepository: FavouriteRepository,
         persisterDao: PersisterDao,
         internetManager: InternetManager
     ): Repository<SwordsExpressStop> {
         val fetcher = SwordsExpressStopFetcher(api)
         val persister = SwordsExpressStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return SwordsExpressStopRepository(store)
+        return SwordsExpressStopRepository(store, favouriteRepository)
     }
 
 }

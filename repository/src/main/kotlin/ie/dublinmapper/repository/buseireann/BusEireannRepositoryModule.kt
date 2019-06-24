@@ -11,6 +11,7 @@ import ie.dublinmapper.datamodel.buseireann.BusEireannStopCacheResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.BusEireannLiveData
 import ie.dublinmapper.domain.model.BusEireannStop
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
@@ -20,6 +21,7 @@ import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
 import ma.glasnost.orika.MapperFacade
 import java.util.concurrent.TimeUnit
@@ -44,18 +46,19 @@ class BusEireannRepositoryModule {
     fun busEireannStopRepository(
         api: RtpiApi,
         cacheResource: BusEireannStopCacheResource,
+        favouriteRepository: FavouriteRepository,
         persisterDao: PersisterDao,
         stringProvider: StringProvider,
         internetManager: InternetManager,
         mapper: MapperFacade
     ): Repository<BusEireannStop> {
-        val fetcher = Fetcher<List<RtpiBusStopInformationJson>, String> {
+        val fetcher = Fetcher<List<RtpiBusStopInformationJson>, Service> {
             api.busStopInformation(stringProvider.rtpiOperatorBusEireann(), stringProvider.rtpiFormat())
                 .map { it.results }
         }
         val persister = BusEireannStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return BusEireannStopRepository(store)
+        return BusEireannStopRepository(store, favouriteRepository)
     }
 
     @Provides

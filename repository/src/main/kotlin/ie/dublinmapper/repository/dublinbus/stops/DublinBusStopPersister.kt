@@ -8,6 +8,7 @@ import ie.dublinmapper.domain.model.DublinBusStop
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
 import ma.glasnost.orika.MapperFacade
 
@@ -17,15 +18,15 @@ class DublinBusStopPersister(
     memoryPolicy: MemoryPolicy,
     persisterDao: PersisterDao,
     internetManager: InternetManager
-) : AbstractPersister<List<RtpiBusStopInformationJson>, List<DublinBusStop>, String>(memoryPolicy, persisterDao, internetManager) {
+) : AbstractPersister<List<RtpiBusStopInformationJson>, List<DublinBusStop>, Service>(memoryPolicy, persisterDao, internetManager) {
 
-    override fun select(key: String): Maybe<List<DublinBusStop>> {
+    override fun select(key: Service): Maybe<List<DublinBusStop>> {
         return cacheResource.selectStops().map { entities ->
             mapper.mapAsList(entities, DublinBusStop::class.java)
         }
     }
 
-    override fun insert(key: String, raw: List<RtpiBusStopInformationJson>) {
+    override fun insert(key: Service, raw: List<RtpiBusStopInformationJson>) {
         val entities = mapper.mapAsList(raw, DublinBusStopEntity::class.java)
         cacheResource.insertStops(entities)
     }

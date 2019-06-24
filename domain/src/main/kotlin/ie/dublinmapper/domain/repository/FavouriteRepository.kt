@@ -15,6 +15,8 @@ interface FavouriteRepository {
 
     fun getFavourites(): Observable<List<Favourite>>
 
+    fun getFavourites(service: Service): Observable<List<Favourite>>
+
     fun getFavourite(id: String, service: Service): Observable<Favourite>
 
 }

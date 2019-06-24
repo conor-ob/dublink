@@ -20,7 +20,7 @@ object DublinBusStopEntityToDomainMapper : CustomConverter<DublinBusStopEntity, 
     ): DublinBusStop {
         return DublinBusStop(
             id = source.location.id,
-            name = source.location.name,
+            serviceLocationName = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = convertOperators(
                 source.services

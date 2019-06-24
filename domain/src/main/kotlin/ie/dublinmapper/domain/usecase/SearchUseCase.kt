@@ -57,7 +57,8 @@ class SearchUseCase @Inject constructor(
         val adaptedQuery = query.toLowerCase().trim()
         val searchResults = mutableListOf<ServiceLocation>()
         for (serviceLocation in serviceLocations) {
-            if (serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
+            if (serviceLocation.serviceLocationName.toLowerCase().contains(adaptedQuery) ||
+                serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
                 serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
                 searchResults.add(serviceLocation)
             } else {

@@ -8,6 +8,7 @@ import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
 import ma.glasnost.orika.MapperFacade
 
@@ -17,15 +18,15 @@ class AircoachStopPersister(
     memoryPolicy: MemoryPolicy,
     persisterDao: PersisterDao,
     internetManager: InternetManager
-) : AbstractPersister<List<AircoachStopJson>, List<AircoachStop>, String>(memoryPolicy, persisterDao, internetManager) {
+) : AbstractPersister<List<AircoachStopJson>, List<AircoachStop>, Service>(memoryPolicy, persisterDao, internetManager) {
 
-    override fun select(key: String): Maybe<List<AircoachStop>> {
+    override fun select(key: Service): Maybe<List<AircoachStop>> {
         return cacheResource.selectStops().map { entities ->
             mapper.mapAsList(entities, AircoachStop::class.java)
         }
     }
 
-    override fun insert(key: String, raw: List<AircoachStopJson>) {
+    override fun insert(key: Service, raw: List<AircoachStopJson>) {
         val entities = mapper.mapAsList(raw, AircoachStopEntity::class.java)
         cacheResource.insertStops(entities)
     }

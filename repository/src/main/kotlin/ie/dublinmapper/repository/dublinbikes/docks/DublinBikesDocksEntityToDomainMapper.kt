@@ -20,7 +20,7 @@ object DublinBikesDocksEntityToDomainMapper : CustomConverter<DublinBikesDockEnt
     ): DublinBikesDock {
         return DublinBikesDock(
             id = source.location.id,
-            name = source.location.name,
+            serviceLocationName = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = mapOperators(source.services),
             docks = source.services[0].docks,

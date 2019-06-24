@@ -10,6 +10,7 @@ import ie.dublinmapper.datamodel.luas.LuasStopCacheResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.domain.model.LuasStop
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataFetcher
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
@@ -43,6 +44,7 @@ class LuasRepositoryModule {
     fun luasStopRepository(
         api: RtpiApi,
         cacheResource: LuasStopCacheResource,
+        favouriteRepository: FavouriteRepository,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         stringProvider: StringProvider,
@@ -55,7 +57,7 @@ class LuasRepositoryModule {
         )
         val persister = LuasStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return LuasStopRepository(store)
+        return LuasStopRepository(store, favouriteRepository)
     }
 
     @Provides

@@ -18,7 +18,7 @@ object DartStationEntityToDomainMapper : CustomConverter<DartStationEntity, Dart
     ): DartStation {
         return DartStation(
             id = source.location.id,
-            name = source.location.name,
+            serviceLocationName = source.location.name,
             coordinate = Coordinate(source.location.latitude, source.location.longitude),
             operators = source.services.map { Operator.parse(it.operator) }.toSet(),
             service = Service.IRISH_RAIL

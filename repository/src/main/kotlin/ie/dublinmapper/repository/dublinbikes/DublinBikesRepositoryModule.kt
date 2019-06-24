@@ -10,6 +10,7 @@ import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockCacheResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.DublinBikesDock
 import ie.dublinmapper.domain.model.DublinBikesLiveData
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockFetcher
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
@@ -44,6 +45,7 @@ class DublinBikesRepositoryModule {
     fun dublinBikesDockRepository(
         api: JcDecauxApi,
         cacheResource: DublinBikesDockCacheResource,
+        favouriteRepository: FavouriteRepository,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         stringProvider: StringProvider,
@@ -56,7 +58,7 @@ class DublinBikesRepositoryModule {
         )
         val persister = DublinBikesDockPersister(cacheResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return DublinBikesDockRepository(store)
+        return DublinBikesDockRepository(store, favouriteRepository)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
 //            .fetcher(fetcher)
 //            .parser { docks -> DublinBikesDockMapper.map(docks) }

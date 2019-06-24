@@ -17,7 +17,7 @@ class FavouritesUseCase @Inject constructor(
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>
-    ) {
+) {
 
     fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
         val favourite = Favourite(serviceLocationId, serviceLocationName, service, 0, emptyMap())

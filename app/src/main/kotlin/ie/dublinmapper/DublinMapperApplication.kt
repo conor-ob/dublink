@@ -12,12 +12,11 @@ class DublinMapperApplication : Application() {
 
     lateinit var applicationComponent: ApplicationComponent
 
-    //TODO inject app initializers
     override fun onCreate() {
         super.onCreate()
         setupDagger()
         setupTimber()
-        AndroidThreeTen.init(applicationContext)
+        setupThreeTen()
     }
 
     private fun setupDagger() {
@@ -30,6 +29,10 @@ class DublinMapperApplication : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+    }
+
+    private fun setupThreeTen() {
+        AndroidThreeTen.init(applicationContext)
     }
 
 }
