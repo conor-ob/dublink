@@ -34,13 +34,10 @@ dependencies {
         api "android.arch.navigation:navigation-ui-ktx:1.0.0"
     api "android.arch.navigation:navigation-fragment-ktx:1.0.0"
 
-    api "com.google.dagger:dagger:${versions.dagger}"
-    api "com.google.dagger:dagger-android:${versions.dagger}"
+//    api "com.google.dagger:dagger-android:${versions.dagger}"
     api "com.google.dagger:dagger-android-support:${versions.dagger}"
 //    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
 //    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
-
-    api "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
 
     api "com.jakewharton.timber:timber:${versions.timber}"
 }

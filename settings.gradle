@@ -1,2 +1,2 @@
-include ':app', ':ui', ':ui-search', ':core', ':ui-favourites'
+include ':app', ':ui', ':ui-search', ':core', ':ui-favourites', ':service'
 rootProject.name='Dublin Mapper'

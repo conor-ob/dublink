@@ -44,6 +44,12 @@ captures/
 .idea/codeStyles/Project.xml
 .idea/markdown-navigator.xml
 .idea/markdown-navigator/profiles_settings.xml
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
 
 # Keystore files
 *.jks
