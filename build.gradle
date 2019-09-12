@@ -83,6 +83,9 @@ buildscript {
     ]
 
     ext.libraries = [
+            'androidx' : [
+                    'constraintlayout' : "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
+            ],
             'dagger'         : "com.google.dagger:dagger-android:${versions.dagger}",
             'dagger_compiler': "com.google.dagger:dagger-compiler:${versions.dagger_compiler}",
             'kotlin'         : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:background="@color/white"
+        android:padding="16dp">
+
+    <TextView
+            android:id="@+id/service_location_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:fontFamily="@font/google_sans_regular"
+            android:textStyle="bold"
+            tools:text="Dublin Pearse"/>
+
+    <View
+            android:layout_width="0dp"
+            android:layout_height="4dp"/>
+
+    <TextView
+            android:id="@+id/service_location_walk_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:fontFamily="@font/google_sans_regular"
+            android:drawableStart="@drawable/ic_walk"
+            android:drawableTint="#005ecb"
+            android:drawablePadding="4dp"
+            android:text="8 min walk"/>
+
+    <View
+            android:layout_width="0dp"
+            android:layout_height="4dp"/>
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="DART"
+                android:fontFamily="@font/google_sans_regular"
+                android:drawableStart="@drawable/tag_dot"
+                android:drawableTint="@color/dartGreen"
+                android:gravity="center_vertical"
+                android:drawablePadding="4dp"/>
+
+        <View
+                android:layout_width="8dp"
+                android:layout_height="0dp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Commuter"
+                android:fontFamily="@font/google_sans_regular"
+                android:drawableStart="@drawable/tag_dot"
+                android:drawableTint="@color/commuterBlue"
+                android:gravity="center_vertical"
+                android:drawablePadding="4dp"/>
+
+        <View
+                android:layout_width="8dp"
+                android:layout_height="0dp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="InterCity"
+                android:fontFamily="@font/google_sans_regular"
+                android:drawableStart="@drawable/tag_dot"
+                android:drawableTint="@color/intercityYellow"
+                android:gravity="center_vertical"
+                android:drawablePadding="4dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

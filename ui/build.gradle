@@ -40,4 +40,8 @@ dependencies {
 //    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
 
     api "com.jakewharton.timber:timber:${versions.timber}"
+
+    api libraries.androidx.constraintlayout
+
+    implementation "ma.glasnost.orika:orika-core:${versions.orika_core}"
 }

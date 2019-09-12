@@ -5,7 +5,7 @@ import androidx.navigation.NavHost
 import androidx.navigation.findNavController
 import dagger.android.support.DaggerAppCompatActivity
 
-class DublinMapperActivity : DaggerAppCompatActivity(), NavHost {
+class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     private val navigationController by lazy { findNavController(R.id.navHostFragment) }
 
@@ -17,5 +17,9 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost {
     override fun getNavController() = navigationController
 
     override fun onSupportNavigateUp() = navigationController.navigateUp()
+
+    override fun navigateFromFavouritesToSearch() {
+        navigationController.navigate(R.id.favouritesFragment_to_searchFragment)
+    }
 
 }

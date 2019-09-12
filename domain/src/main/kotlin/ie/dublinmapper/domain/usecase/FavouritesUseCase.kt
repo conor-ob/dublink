@@ -3,6 +3,8 @@ package ie.dublinmapper.domain.usecase
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.util.Coordinate
+import ie.dublinmapper.util.Operator
 import ie.dublinmapper.util.Service
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -36,8 +38,22 @@ class FavouritesUseCase @Inject constructor(
     }
 
     fun getFavourites(): Observable<FavouritesResponse> {
-        return favouriteRepository.getFavourites()
-            .map { FavouritesResponse(toServiceLocations(it)) }
+//        return favouriteRepository.getFavourites()
+//            .map { FavouritesResponse(toServiceLocations(it)) }
+        //TODO
+        return Observable.just(
+            FavouritesResponse(
+                listOf(
+                    DartStation(
+                        id = "123",
+                        serviceLocationName = "Tara Street",
+                        coordinate = Coordinate(53.545, -6.23),
+                        service = Service.IRISH_RAIL,
+                        operators = Operator.rail()
+                    )
+                )
+            )
+        )
     }
 
     private fun toServiceLocations(favourites: List<Favourite>): List<ServiceLocation> {
