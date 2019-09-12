@@ -20,7 +20,7 @@ class AircoachModule {
         aircoachScraper: AircoachScraper,
         aircoachApi: AircoachApi,
         fallback: GithubApi
-    ) : AircoachResource {
+    ) : AircoachStopRemoteResource {
         return AircoachWebResource(
             aircoachScraper,
             aircoachApi,

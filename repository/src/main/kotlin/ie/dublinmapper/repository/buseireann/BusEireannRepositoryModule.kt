@@ -7,11 +7,16 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.buseireann.BusEireannStopCacheResource
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopDao
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocalResource
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocationDao
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopServiceDao
+import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.BusEireannLiveData
 import ie.dublinmapper.domain.model.BusEireannStop
-import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
@@ -24,41 +29,30 @@ import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
 import ma.glasnost.orika.MapperFacade
-import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 class BusEireannRepositoryModule {
 
-    private val shortTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(30, TimeUnit.SECONDS) }
-    private val midTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(3, TimeUnit.HOURS) }
-    private val longTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(7, TimeUnit.DAYS) }
-
-    private fun newMemoryPolicy(value: Long, timeUnit: TimeUnit): MemoryPolicy {
-        return MemoryPolicy.builder()
-            .setExpireAfterWrite(value)
-            .setExpireAfterTimeUnit(timeUnit)
-            .build()
-    }
-
     @Provides
     @Singleton
     fun busEireannStopRepository(
         api: RtpiApi,
-        cacheResource: BusEireannStopCacheResource,
-        favouriteRepository: FavouriteRepository,
+        localResource: BusEireannStopLocalResource,
         persisterDao: PersisterDao,
         stringProvider: StringProvider,
         internetManager: InternetManager,
-        mapper: MapperFacade
+        mapper: MapperFacade,
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
     ): Repository<BusEireannStop> {
         val fetcher = Fetcher<List<RtpiBusStopInformationJson>, Service> {
             api.busStopInformation(stringProvider.rtpiOperatorBusEireann(), stringProvider.rtpiFormat())
                 .map { it.results }
         }
-        val persister = BusEireannStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return BusEireannStopRepository(store, favouriteRepository)
+        val persister = BusEireannStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
+        return BusEireannStopRepository(store)
     }
 
     @Provides
@@ -66,7 +60,8 @@ class BusEireannRepositoryModule {
     fun luasRealTimeDataRepository(
         api: RtpiApi,
         stringProvider: StringProvider,
-        mapper: MapperFacade
+        mapper: MapperFacade,
+        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<BusEireannLiveData> {
         val fetcher = LuasLiveDataFetcher(
             api,
@@ -76,7 +71,7 @@ class BusEireannRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<BusEireannLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> mapper.mapAsList(liveData, BusEireannLiveData::class.java) }
-            .memoryPolicy(shortTermMemoryPolicy)
+            .memoryPolicy(memoryPolicy)
             .open()
         return BusEireannLiveDataRepository(store)
     }

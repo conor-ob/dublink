@@ -1,38 +1,37 @@
 package ie.dublinmapper
 
-import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
-import ie.dublinmapper.database.BuildConfig
-import ie.dublinmapper.di.ApplicationComponent
-import ie.dublinmapper.di.ApplicationModule
+import com.ww.roxie.Roxie
+import dagger.android.AndroidInjector
+import dagger.android.DaggerApplication
 import ie.dublinmapper.di.DaggerApplicationComponent
 import timber.log.Timber
 
-class DublinMapperApplication : Application() {
-
-    lateinit var applicationComponent: ApplicationComponent
+class DublinMapperApplication : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        setupDagger()
         setupTimber()
         setupThreeTen()
-    }
-
-    private fun setupDagger() {
-        applicationComponent = DaggerApplicationComponent.builder()
-            .applicationModule(ApplicationModule(this))
-            .build()
     }
 
     private fun setupTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        Roxie.enableLogging(object : Roxie.Logger {
+            override fun log(msg: String) {
+                Timber.tag("Roxie").d(msg)
+            }
+        })
     }
 
     private fun setupThreeTen() {
         AndroidThreeTen.init(applicationContext)
+    }
+
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerApplicationComponent.factory().create(this)
     }
 
 }

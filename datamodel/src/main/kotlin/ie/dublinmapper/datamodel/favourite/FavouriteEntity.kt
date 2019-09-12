@@ -19,6 +19,7 @@ data class FavouriteEntity(
 @Entity(tableName = "favourite_locations")
 data class FavouriteLocationEntity(
     @field:PrimaryKey @field:ColumnInfo(name = "id") val id: FavouriteKey,
+    @field:ColumnInfo(name = "service") val service: Service,
     @field:ColumnInfo(name = "name") val name: String,
     @field:ColumnInfo(name = "order") val order: Long
 )

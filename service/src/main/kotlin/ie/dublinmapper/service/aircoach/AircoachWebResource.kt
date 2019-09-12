@@ -9,7 +9,7 @@ class AircoachWebResource @Inject constructor(
     private val scraper: AircoachScraper,
     private val api: AircoachApi,
     private val fallback: GithubApi
-) : AircoachResource {
+) : AircoachStopRemoteResource {
 
     private val log = LoggerFactory.getLogger(javaClass)
 

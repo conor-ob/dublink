@@ -17,7 +17,6 @@ data class DublinBikesDockLocationEntity(
     @field:ColumnInfo(name = "longitude") val longitude: Double
 )
 
-
 @Entity(
     tableName = "dublinbikes_dock_services",
     indices = [Index("dock_id")],

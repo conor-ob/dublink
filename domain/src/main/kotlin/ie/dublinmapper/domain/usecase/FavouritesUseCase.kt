@@ -12,7 +12,7 @@ class FavouritesUseCase @Inject constructor(
     private val favouriteRepository: FavouriteRepository,
     private val aircoachStopRepository: Repository<AircoachStop>,
     private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val dartStationRepository: Repository<DartStation>,
+    private val irishRailStationRepository: Repository<IrishRailStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
@@ -50,7 +50,7 @@ class FavouritesUseCase @Inject constructor(
             Service.BUS_EIREANN -> busEireannStopRepository.getById(favourite.id).blockingSingle()
             Service.DUBLIN_BIKES -> dublinBikesDockRepository.getById(favourite.id).blockingSingle()
             Service.DUBLIN_BUS -> dublinBusStopRepository.getById(favourite.id).blockingSingle()
-            Service.IRISH_RAIL -> dartStationRepository.getById(favourite.id).blockingSingle()
+            Service.IRISH_RAIL -> irishRailStationRepository.getById(favourite.id).blockingSingle()
             Service.LUAS -> luasStopRepository.getById(favourite.id).blockingSingle()
             Service.SWORDS_EXPRESS -> TODO()
         }

@@ -9,7 +9,7 @@ import javax.inject.Inject
 class PreloadUseCase @Inject constructor(
     private val aircoachStopRepository: Repository<AircoachStop>,
     private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val dartStationRepository: Repository<DartStation>,
+    private val irishRailStationRepository: Repository<IrishRailStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
@@ -23,7 +23,7 @@ class PreloadUseCase @Inject constructor(
         subscriptions.addAll(
             aircoachStopRepository.getAll().subscribeOn(scheduler.io).subscribe(),
             busEireannStopRepository.getAll().subscribeOn(scheduler.io).subscribe(),
-            dartStationRepository.getAll().subscribeOn(scheduler.io).subscribe(),
+            irishRailStationRepository.getAll().subscribeOn(scheduler.io).subscribe(),
             dublinBikesDockRepository.getAll().subscribeOn(scheduler.io).subscribe(),
             dublinBusStopRepository.getAll().subscribeOn(scheduler.io).subscribe(),
             luasStopRepository.getAll().subscribeOn(scheduler.io).subscribe()

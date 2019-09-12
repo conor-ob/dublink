@@ -11,7 +11,7 @@ import javax.inject.Inject
 class LiveDataUseCase @Inject constructor(
     private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
     private val busEireannLiveDataRepository: Repository<BusEireannLiveData>,
-    private val dartLiveDataRepository: Repository<DartLiveData>,
+    private val irishRailLiveDataRepository: Repository<IrishRailLiveData>,
     private val dublinBikesLiveDataRepository: Repository<DublinBikesLiveData>,
     private val dublinBusLiveDataRepository: Repository<DublinBusLiveData>,
     private val luasLiveDataRepository: Repository<LuasLiveData>
@@ -30,7 +30,7 @@ class LiveDataUseCase @Inject constructor(
         return when (service) {
             Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId)
             Service.BUS_EIREANN -> busEireannLiveDataRepository.getAllById(serviceLocationId)
-            Service.IRISH_RAIL -> dartLiveDataRepository.getAllById(serviceLocationId)
+            Service.IRISH_RAIL -> irishRailLiveDataRepository.getAllById(serviceLocationId)
             Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { listOf(it) }
             Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId)
             Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId)
@@ -58,10 +58,10 @@ class LiveDataUseCase @Inject constructor(
                         dueTimes.add(busEireannLiveData.dueTime[0])
                         cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
                     }
-                    is DartLiveData -> {
-                        val dartLiveData = data as DartLiveData
+                    is IrishRailLiveData -> {
+                        val irishRailLiveData = data as IrishRailLiveData
                         val dueTimes = cachedLiveData.dueTime.toMutableList()
-                        dueTimes.add(dartLiveData.dueTime[0])
+                        dueTimes.add(irishRailLiveData.dueTime[0])
                         cachedLiveData = cachedLiveData.copy(dueTime = dueTimes)
                     }
                     is DublinBusLiveData -> {
