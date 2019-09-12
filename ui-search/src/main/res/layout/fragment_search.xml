@@ -59,7 +59,6 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:visibility="gone"
             android:id="@+id/search_results"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -67,14 +66,14 @@
             android:paddingStart="@dimen/margin_normal"
             android:paddingEnd="@dimen/margin_normal"/>
 
-        <TextView
-            android:id="@+id/searchHintDetail"
-            android:paddingTop="120dp"
-            android:gravity="center_horizontal"
-            android:text="@string/search_query_detail"
-            android:fontFamily="@font/google_sans_regular"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+<!--        <TextView-->
+<!--            android:id="@+id/searchHintDetail"-->
+<!--            android:paddingTop="120dp"-->
+<!--            android:gravity="center_horizontal"-->
+<!--            android:text="@string/search_query_detail"-->
+<!--            android:fontFamily="@font/google_sans_regular"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"/>-->
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
