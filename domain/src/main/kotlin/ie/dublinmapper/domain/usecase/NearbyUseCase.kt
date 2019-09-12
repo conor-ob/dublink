@@ -11,7 +11,7 @@ import javax.inject.Inject
 class NearbyUseCase @Inject constructor(
     private val aircoachStopRepository: Repository<AircoachStop>,
     private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val dartStationRepository: Repository<DartStation>,
+    private val irishRailStationRepository: Repository<IrishRailStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
@@ -23,13 +23,13 @@ class NearbyUseCase @Inject constructor(
         return Observable.combineLatest(
             aircoachStopRepository.getAll().startWith(emptyList<AircoachStop>()).subscribeOn(scheduler.io),
             busEireannStopRepository.getAll().startWith(emptyList<BusEireannStop>()).subscribeOn(scheduler.io),
-            dartStationRepository.getAll().startWith(emptyList<DartStation>()).subscribeOn(scheduler.io),
+            irishRailStationRepository.getAll().startWith(emptyList<IrishRailStation>()).subscribeOn(scheduler.io),
             dublinBikesDockRepository.getAll().startWith(emptyList<DublinBikesDock>()).subscribeOn(scheduler.io),
             dublinBusStopRepository.getAll().startWith(emptyList<DublinBusStop>()).subscribeOn(scheduler.io),
             luasStopRepository.getAll().startWith(emptyList<LuasStop>()).subscribeOn(scheduler.io),
             swordsExpressStopRepository.getAll().startWith(emptyList<SwordsExpressStop>()).subscribeOn(scheduler.io),
-            Function7 { aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
-                filter(coordinate, aircoachStops, busEireannStops, dartStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops) }
+            Function7 { aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops ->
+                filter(coordinate, aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops, swordsExpressStops) }
         )
     }
 
@@ -37,7 +37,7 @@ class NearbyUseCase @Inject constructor(
         coordinate: Coordinate,
         aircoachStops: List<AircoachStop>,
         busEireannStops: List<BusEireannStop>,
-        dartStations: List<DartStation>,
+        irishRailStations: List<IrishRailStation>,
         dublinBikesDocks: List<DublinBikesDock>,
         dublinBusStops: List<DublinBusStop>,
         luasStops: List<LuasStop>,
@@ -46,7 +46,7 @@ class NearbyUseCase @Inject constructor(
         val serviceLocations = mutableListOf<ServiceLocation>()
         serviceLocations.addAll(aircoachStops)
         serviceLocations.addAll(busEireannStops)
-        serviceLocations.addAll(dartStations)
+        serviceLocations.addAll(irishRailStations)
         serviceLocations.addAll(dublinBikesDocks)
         serviceLocations.addAll(dublinBusStops)
         serviceLocations.addAll(luasStops)
@@ -62,7 +62,7 @@ class NearbyUseCase @Inject constructor(
         result.addAll(findFirstN(7, Operator.bike(), sorted))
         result.addAll(findFirstN(15, Operator.bus(), sorted))
         result.addAll(findFirstN(5, Operator.tram(), sorted))
-        val isComplete = aircoachStops.isNotEmpty() && busEireannStops.isNotEmpty() && dartStations.isNotEmpty() &&
+        val isComplete = aircoachStops.isNotEmpty() && busEireannStops.isNotEmpty() && irishRailStations.isNotEmpty() &&
                 dublinBikesDocks.isNotEmpty() && dublinBusStops.isNotEmpty() && luasStops.isNotEmpty() &&
                 swordsExpressStops.isNotEmpty()
         return Response(result, isComplete)

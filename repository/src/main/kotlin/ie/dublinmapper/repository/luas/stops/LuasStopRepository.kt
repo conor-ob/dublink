@@ -7,10 +7,8 @@ import ie.dublinmapper.repository.ServiceLocationRepository
 import ie.dublinmapper.util.Service
 
 class LuasStopRepository(
-    serviceLocationStore: StoreRoom<List<LuasStop>, Service>,
-    favouriteRepository: FavouriteRepository
+    serviceLocationStore: StoreRoom<List<LuasStop>, Service>
 ) : ServiceLocationRepository<LuasStop>(
     service = Service.LUAS,
-    serviceLocationStore = serviceLocationStore,
-    favouriteRepository = favouriteRepository
+    serviceLocationStore = serviceLocationStore
 )

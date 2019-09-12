@@ -6,11 +6,16 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.luas.LuasStopCacheResource
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
+import ie.dublinmapper.datamodel.favourite.FavouriteDao
+import ie.dublinmapper.datamodel.luas.LuasStopDao
+import ie.dublinmapper.datamodel.luas.LuasStopLocalResource
+import ie.dublinmapper.datamodel.luas.LuasStopLocationDao
+import ie.dublinmapper.datamodel.luas.LuasStopServiceDao
 import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.LuasLiveData
 import ie.dublinmapper.domain.model.LuasStop
-import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataFetcher
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
@@ -22,42 +27,31 @@ import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
 import ma.glasnost.orika.MapperFacade
-import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 class LuasRepositoryModule {
 
-    private val shortTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(30, TimeUnit.SECONDS) }
-    private val midTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(3, TimeUnit.HOURS) }
-    private val longTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(7, TimeUnit.DAYS) }
-
-    private fun newMemoryPolicy(value: Long, timeUnit: TimeUnit): MemoryPolicy {
-        return MemoryPolicy.builder()
-            .setExpireAfterWrite(value)
-            .setExpireAfterTimeUnit(timeUnit)
-            .build()
-    }
-
     @Provides
     @Singleton
     fun luasStopRepository(
         api: RtpiApi,
-        cacheResource: LuasStopCacheResource,
-        favouriteRepository: FavouriteRepository,
+        localResource: LuasStopLocalResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         stringProvider: StringProvider,
-        mapper: MapperFacade
+        mapper: MapperFacade,
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
     ): Repository<LuasStop> {
         val fetcher = LuasStopFetcher(
             api,
             stringProvider.rtpiOperatorLuas(),
             stringProvider.rtpiFormat()
         )
-        val persister = LuasStopPersister(cacheResource, mapper, longTermMemoryPolicy, persisterDao, internetManager)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
-        return LuasStopRepository(store, favouriteRepository)
+        val persister = LuasStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
+        return LuasStopRepository(store)
     }
 
     @Provides
@@ -65,7 +59,8 @@ class LuasRepositoryModule {
     fun luasRealTimeDataRepository(
         api: RtpiApi,
         stringProvider: StringProvider,
-        mapper: MapperFacade
+        mapper: MapperFacade,
+        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<LuasLiveData> {
         val fetcher = LuasLiveDataFetcher(
             api,
@@ -75,7 +70,7 @@ class LuasRepositoryModule {
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<LuasLiveData>>()
             .fetcher(fetcher)
             .parser { liveData -> mapper.mapAsList(liveData, LuasLiveData::class.java) }
-            .memoryPolicy(shortTermMemoryPolicy)
+            .memoryPolicy(memoryPolicy)
             .open()
         return LuasLiveDataRepository(store)
     }

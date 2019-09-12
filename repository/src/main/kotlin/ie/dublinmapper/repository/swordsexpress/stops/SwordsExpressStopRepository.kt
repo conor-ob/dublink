@@ -8,10 +8,8 @@ import ie.dublinmapper.repository.ServiceLocationRepository
 import ie.dublinmapper.util.Service
 
 class SwordsExpressStopRepository(
-    serviceLocationStore: StoreRoom<List<SwordsExpressStop>, Service>,
-    favouriteRepository: FavouriteRepository
+    serviceLocationStore: StoreRoom<List<SwordsExpressStop>, Service>
 ) : ServiceLocationRepository<SwordsExpressStop>(
     service = Service.SWORDS_EXPRESS,
-    serviceLocationStore = serviceLocationStore,
-    favouriteRepository = favouriteRepository
+    serviceLocationStore = serviceLocationStore
 )

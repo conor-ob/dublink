@@ -1,18 +1,2 @@
-include ':app', ':util', ':datamodel', ':database',
-        ':domain',
-        ':repository',
-        ':service'
-
-//app
-//common
-//core
-//database
-//datamodel
-//domain
-//repository
-//service
-//util
-//view-favourites
-//view-livedata
-//view-search
-//view-settings
+include ':app', ':ui', ':ui-search', ':core', ':ui-favourites', ':service', ':repository', ':domain', ':datamodel', ':database', ':ui-livedata', ':ui-settings'
+rootProject.name='Dublin Mapper'

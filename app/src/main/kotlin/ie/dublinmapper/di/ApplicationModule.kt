@@ -14,9 +14,6 @@ import ie.dublinmapper.repository.aircoach.stops.AircoachStopJsonToEntityMapper
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopEntityToDomainMapper
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopJsonToEntityMapper
-import ie.dublinmapper.repository.dart.livedata.DartLiveDataJsonToDomainMapper
-import ie.dublinmapper.repository.dart.stations.DartStationEntityToDomainMapper
-import ie.dublinmapper.repository.dart.stations.DartStationJsonToEntityMapper
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockJsonToEntityMapper
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDocksEntityToDomainMapper
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataJsonToDomainMapper
@@ -25,10 +22,19 @@ import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopEntityToDomainMap
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopJsonToEntityMapper
 import ie.dublinmapper.repository.favourite.FavouriteDomainToEntityMapper
 import ie.dublinmapper.repository.favourite.FavouriteEntityToDomainMapper
+import ie.dublinmapper.repository.irishrail.livedata.IrishRailLiveDataJsonToDomainMapper
+import ie.dublinmapper.repository.irishrail.stations.IrishRailJsonToEntityMapper
+import ie.dublinmapper.repository.irishrail.stations.IrishRailStationEntityToDomainMapper
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopEntityToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopJsonToEntityMapper
-import ie.dublinmapper.util.*
+import ie.dublinmapper.util.AndroidAssetSslContextProvider
+import ie.dublinmapper.util.AndroidResourceStringProvider
+import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.util.InternetManagerImpl
+import ie.dublinmapper.util.RxScheduler
+import ie.dublinmapper.util.SslContextProvider
+import ie.dublinmapper.util.StringProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ma.glasnost.orika.MapperFacade
@@ -36,14 +42,10 @@ import ma.glasnost.orika.impl.DefaultMapperFactory
 import javax.inject.Singleton
 
 @Module
-class ApplicationModule(
-    private val application: DublinMapperApplication
-) {
+class ApplicationModule {
 
     @Provides
-    fun context(): Context {
-        return application.applicationContext
-    }
+    fun context(application: DublinMapperApplication): Context = application.applicationContext
 
     @Provides
     fun resources(context: Context): Resources {
@@ -79,13 +81,11 @@ class ApplicationModule(
     }
 
     @Provides
-    @Singleton
     fun internetManager(context: Context): InternetManager {
         return InternetManagerImpl(context)
     }
 
     @Provides
-    @Singleton
     fun mapperFacade(
         stringProvider: StringProvider
     ): MapperFacade {
@@ -100,9 +100,9 @@ class ApplicationModule(
             registerConverter(BusEireannStopEntityToDomainMapper)
             registerConverter(BusEireannLiveDataJsonToDomainMapper)
 
-            registerConverter(DartStationJsonToEntityMapper)
-            registerConverter(DartStationEntityToDomainMapper)
-            registerConverter(DartLiveDataJsonToDomainMapper)
+            registerConverter(IrishRailJsonToEntityMapper)
+            registerConverter(IrishRailStationEntityToDomainMapper)
+            registerConverter(IrishRailLiveDataJsonToDomainMapper)
 
             registerConverter(DublinBikesDockJsonToEntityMapper)
             registerConverter(DublinBikesDocksEntityToDomainMapper)
