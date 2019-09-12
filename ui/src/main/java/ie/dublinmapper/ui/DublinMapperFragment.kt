@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -22,6 +23,8 @@ abstract class DublinMapperFragment(
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)

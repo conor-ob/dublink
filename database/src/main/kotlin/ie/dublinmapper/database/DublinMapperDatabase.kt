@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteStatement
 import ie.dublinmapper.datamodel.Converters
 import ie.dublinmapper.datamodel.aircoach.*
 import ie.dublinmapper.datamodel.buseireann.*
-import ie.dublinmapper.datamodel.dart.*
+import ie.dublinmapper.datamodel.irishrail.*
 import ie.dublinmapper.datamodel.dublinbikes.*
 import ie.dublinmapper.datamodel.dublinbus.*
 import ie.dublinmapper.datamodel.favourite.*
@@ -27,8 +27,8 @@ import ie.dublinmapper.datamodel.swordsexpress.*
         AircoachStopServiceEntity::class,
         BusEireannStopLocationEntity::class,
         BusEireannStopServiceEntity::class,
-        DartStationLocationEntity::class,
-        DartStationServiceEntity::class,
+        IrishRailStationLocationEntity::class,
+        IrishRailStationServiceEntity::class,
         DublinBikesDockLocationEntity::class,
         DublinBikesDockServiceEntity::class,
         DublinBusStopLocationEntity::class,
@@ -57,11 +57,11 @@ abstract class DublinMapperDatabase : RoomDatabase() {
 
     abstract fun busEireannStopServiceDao(): BusEireannStopServiceDao
 
-    abstract fun dartStationDao(): DartStationDao
+    abstract fun irishRailStationDao(): IrishRailStationDao
 
-    abstract fun dartStationLocationDao(): DartStationLocationDao
+    abstract fun irishRailStationLocationDao(): IrishRailStationLocationDao
 
-    abstract fun dartStationServiceDao(): DartStationServiceDao
+    abstract fun irishRailStationServiceDao(): IrishRailStationServiceDao
 
     abstract fun dublinBikesDockDao(): DublinBikesDockDao
 

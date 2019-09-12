@@ -2,6 +2,13 @@ package ie.dublinmapper.service.di
 
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.service.aircoach.AircoachModule
+import ie.dublinmapper.service.dublinbus.DublinBusModule
+import ie.dublinmapper.service.github.GithubModule
+import ie.dublinmapper.service.irishrail.IrishRailModule
+import ie.dublinmapper.service.jcdecaux.JcDecauxModule
+import ie.dublinmapper.service.rtpi.RtpiModule
+import ie.dublinmapper.service.swordsexpress.SwordsExpressModule
 import ie.dublinmapper.util.SslContextProvider
 import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
@@ -14,7 +21,17 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(
+    includes = [
+        AircoachModule::class,
+        DublinBusModule::class,
+        GithubModule::class,
+        IrishRailModule::class,
+        JcDecauxModule::class,
+        RtpiModule::class,
+        SwordsExpressModule::class
+    ]
+)
 class ServiceModule {
 
     @Provides

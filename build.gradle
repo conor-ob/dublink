@@ -58,8 +58,10 @@ buildscript {
             'orika_core'                : '1.5.4',     // https://mvnrepository.com/artifact/ma.glasnost.orika/orika-core
             'retrofit'                  : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
             'rhino'                     : '1.0',       // https://mvnrepository.com/artifact/io.apisense/rhino-android
+            'roxie'                     : '0.4.0',     // https://mvnrepository.com/artifact/com.ww/roxie
             'rx_android'                : '2.1.1',     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
             'rx_java'                   : '2.2.8',     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
+            'rx_kotlin'                 : '2.4.0',
             'slf4j_api'                 : '1.7.26',    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
             'slf4j_timber'              : '1.0.1',     // https://mvnrepository.com/artifact/at.favre.lib/slf4j-timber
             'store3'                    : '3.1.1',     // https://mvnrepository.com/artifact/com.nytimes.android/store3
@@ -89,7 +91,10 @@ buildscript {
             'dagger'         : "com.google.dagger:dagger-android:${versions.dagger}",
             'dagger_compiler': "com.google.dagger:dagger-compiler:${versions.dagger_compiler}",
             'kotlin'         : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
+            'roxie'          : "com.ww:roxie:${versions.roxie}",
+            'rx_android'     : "io.reactivex.rxjava2:rxandroid:${versions.rx_android}",
             'rx_java'        : "io.reactivex.rxjava2:rxjava:${versions.rx_java}",
+            'rx_kotlin'      : "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}",
             'slf4j_api'      : "org.slf4j:slf4j-api:${versions.slf4j_api}",
             'slf4j_timber'   : "at.favre.lib:slf4j-timber:${versions.slf4j_timber}",
             'threetenabp'    : "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"

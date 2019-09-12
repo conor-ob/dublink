@@ -5,6 +5,7 @@ dependencies {
     api libraries.dagger
     api libraries.kotlin
     api libraries.rx_java
+    api libraries.rx_kotlin
     api libraries.slf4j_api
     api libraries.slf4j_timber
     api libraries.threetenabp

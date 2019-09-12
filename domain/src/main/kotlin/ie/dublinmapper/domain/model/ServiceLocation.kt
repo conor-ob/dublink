@@ -20,8 +20,6 @@ interface ServiceLocation {
 
     fun isFavourite(): Boolean
 
-    fun cloneWithFavourite(favourite: Favourite): ServiceLocation
-
 }
 
 abstract class AbstractServiceLocation(
@@ -42,11 +40,7 @@ data class AircoachStop(
     override val operators: Set<Operator>,
     private val favourite: Favourite? = null,
     val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite) {
-
-    override fun cloneWithFavourite(favourite: Favourite) = copy(favourite = favourite)
-
-}
+) : AbstractServiceLocation(favourite)
 
 data class BusEireannStop(
     override val id: String,
@@ -56,24 +50,16 @@ data class BusEireannStop(
     override val operators: Set<Operator>,
     private val favourite: Favourite? = null,
     val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite) {
+) : AbstractServiceLocation(favourite)
 
-    override fun cloneWithFavourite(favourite: Favourite) = copy(favourite = favourite)
-
-}
-
-data class DartStation(
+data class IrishRailStation(
     override val id: String,
     override val serviceLocationName: String,
     override val coordinate: Coordinate,
     override val service: Service,
     override val operators: Set<Operator>,
     private val favourite: Favourite? = null
-) : AbstractServiceLocation(favourite) {
-
-    override fun cloneWithFavourite(favourite: Favourite) = copy(favourite = favourite)
-
-}
+) : AbstractServiceLocation(favourite)
 
 data class DublinBikesDock(
     override val id: String,
@@ -85,11 +71,7 @@ data class DublinBikesDock(
     val docks: Int,
     val availableBikes: Int,
     val availableDocks: Int
-) : AbstractServiceLocation(favourite) {
-
-    override fun cloneWithFavourite(favourite: Favourite) = copy(favourite = favourite)
-
-}
+) : AbstractServiceLocation(favourite)
 
 data class DublinBusStop(
     override val id: String,
@@ -99,11 +81,7 @@ data class DublinBusStop(
     override val operators: Set<Operator>,
     private val favourite: Favourite? = null,
     val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite) {
-
-    override fun cloneWithFavourite(favourite: Favourite) = copy(favourite = favourite)
-
-}
+) : AbstractServiceLocation(favourite)
 
 data class LuasStop(
     override val id: String,
@@ -113,11 +91,7 @@ data class LuasStop(
     override val operators: Set<Operator>,
     private val favourite: Favourite? = null,
     val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite) {
-
-    override fun cloneWithFavourite(favourite: Favourite) = copy(favourite = favourite)
-
-}
+) : AbstractServiceLocation(favourite)
 
 data class SwordsExpressStop(
     override val id: String,
@@ -127,8 +101,4 @@ data class SwordsExpressStop(
     override val operators: Set<Operator>,
     private val favourite: Favourite? = null,
     val direction: String
-) : AbstractServiceLocation(favourite) {
-
-    override fun cloneWithFavourite(favourite: Favourite) = copy(favourite = favourite)
-
-}
+) : AbstractServiceLocation(favourite)

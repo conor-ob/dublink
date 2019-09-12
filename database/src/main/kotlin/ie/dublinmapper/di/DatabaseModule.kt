@@ -4,24 +4,24 @@ import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.database.aircoach.AircoachStopCacheResourceImpl
-import ie.dublinmapper.database.buseireann.BusEireannStopCacheResourceImpl
-import ie.dublinmapper.database.dart.DartStationCacheResourceImpl
+import ie.dublinmapper.database.aircoach.AircoachStopLocalResourceImpl
+import ie.dublinmapper.database.buseireann.BusEireannStopLocalResourceImpl
+import ie.dublinmapper.database.irishrail.IrishRailStationLocalResourceImpl
 import ie.dublinmapper.datamodel.TxRunner
-import ie.dublinmapper.datamodel.aircoach.AircoachStopCacheResource
-import ie.dublinmapper.datamodel.buseireann.BusEireannStopCacheResource
-import ie.dublinmapper.datamodel.dart.DartStationCacheResource
-import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockCacheResource
-import ie.dublinmapper.datamodel.dublinbus.DublinBusStopCacheResource
-import ie.dublinmapper.datamodel.luas.LuasStopCacheResource
+import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
+import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocalResource
+import ie.dublinmapper.datamodel.irishrail.IrishRailStationLocalResource
+import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockLocalResource
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocalResource
+import ie.dublinmapper.datamodel.luas.LuasStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopCacheResource
+import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopLocalResource
 import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
-import ie.dublinmapper.database.dublinbikes.DublinBikesDockCacheResourceImpl
-import ie.dublinmapper.database.dublinbus.DublinBusStopCacheResourceImpl
-import ie.dublinmapper.database.luas.LuasStopCacheResourceImpl
-import ie.dublinmapper.database.swordsexpress.SwordsExpressStopCacheResourceImpl
+import ie.dublinmapper.database.dublinbikes.DublinBikesDockLocalResourceImpl
+import ie.dublinmapper.database.dublinbus.DublinBusStopLocalResourceImpl
+import ie.dublinmapper.database.luas.LuasStopLocalResourceImpl
+import ie.dublinmapper.database.swordsexpress.SwordsExpressStopLocalResourceImpl
 import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationCacheResource
 import ie.dublinmapper.favourite.FavouriteServiceLocationCacheResourceImpl
 import ie.dublinmapper.util.StringProvider
@@ -70,65 +70,72 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun aircoachStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): AircoachStopCacheResource {
+    fun aircoachStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): AircoachStopLocalResource {
         val aircoachStopLocationDao = database.aircoachStopLocationDao()
         val aircoachStopServiceDao = database.aircoachStopServiceDao()
         val aircoachStopDao = database.aircoachStopDao()
-        return AircoachStopCacheResourceImpl(aircoachStopLocationDao, aircoachStopServiceDao, aircoachStopDao, txRunner)
+        val favouriteDao = database.favouriteDao()
+        return AircoachStopLocalResourceImpl(aircoachStopLocationDao, aircoachStopServiceDao, aircoachStopDao, favouriteDao, txRunner)
     }
 
     @Provides
     @Singleton
-    fun busEireannStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): BusEireannStopCacheResource {
+    fun busEireannStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): BusEireannStopLocalResource {
         val busEireannStopLocationDao = database.busEireannStopLocationDao()
         val busEireannStopServiceDao = database.busEireannStopServiceDao()
         val busEireannStopDao = database.busEireannStopDao()
-        return BusEireannStopCacheResourceImpl(busEireannStopLocationDao, busEireannStopServiceDao, busEireannStopDao, txRunner)
+        val favouriteDao = database.favouriteDao()
+        return BusEireannStopLocalResourceImpl(busEireannStopLocationDao, busEireannStopServiceDao, busEireannStopDao, favouriteDao, txRunner)
     }
 
     @Provides
     @Singleton
-    fun dartStationCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DartStationCacheResource {
-        val dartStationLocationDao = database.dartStationLocationDao()
-        val dartStationServiceDao = database.dartStationServiceDao()
-        val dartStationDao = database.dartStationDao()
-        return DartStationCacheResourceImpl(dartStationLocationDao, dartStationServiceDao, dartStationDao, txRunner)
+    fun irishRailStationCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): IrishRailStationLocalResource {
+        val irishRailStationLocationDao = database.irishRailStationLocationDao()
+        val irishRailStationServiceDao = database.irishRailStationServiceDao()
+        val irishRailStationDao = database.irishRailStationDao()
+        val favouriteDao = database.favouriteDao()
+        return IrishRailStationLocalResourceImpl(irishRailStationLocationDao, irishRailStationServiceDao, irishRailStationDao, favouriteDao, txRunner)
     }
 
     @Provides
     @Singleton
-    fun dublinBikesDockCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBikesDockCacheResource {
+    fun dublinBikesDockCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBikesDockLocalResource {
         val dublinBikesDockLocationDao = database.dublinBikesDockLocationDao()
         val dublinBikesDockServiceDao = database.dublinBikesDockServiceDao()
         val dublinBikesDockDao = database.dublinBikesDockDao()
-        return DublinBikesDockCacheResourceImpl(dublinBikesDockLocationDao, dublinBikesDockServiceDao, dublinBikesDockDao, txRunner)
+        val favouriteDao = database.favouriteDao()
+        return DublinBikesDockLocalResourceImpl(dublinBikesDockLocationDao, dublinBikesDockServiceDao, dublinBikesDockDao, favouriteDao, txRunner)
     }
 
     @Provides
     @Singleton
-    fun dublinBusStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBusStopCacheResource {
+    fun dublinBusStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBusStopLocalResource {
         val dublinBusStopLocationDao = database.dublinBusStopLocationDao()
         val dublinBusStopServiceDao = database.dublinBusStopServiceDao()
         val dublinBusStopDao = database.dublinBusStopDao()
-        return DublinBusStopCacheResourceImpl(dublinBusStopLocationDao, dublinBusStopServiceDao, dublinBusStopDao, txRunner)
+        val favouriteDao = database.favouriteDao()
+        return DublinBusStopLocalResourceImpl(dublinBusStopLocationDao, dublinBusStopServiceDao, dublinBusStopDao, favouriteDao, txRunner)
     }
 
     @Provides
     @Singleton
-    fun luasStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): LuasStopCacheResource {
+    fun luasStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): LuasStopLocalResource {
         val luasStopLocationDao = database.luasStopLocationDao()
         val luasStopServiceDao = database.luasStopServiceDao()
         val luasStopDao = database.luasStopDao()
-        return LuasStopCacheResourceImpl(luasStopLocationDao, luasStopServiceDao, luasStopDao, txRunner)
+        val favouriteDao = database.favouriteDao()
+        return LuasStopLocalResourceImpl(luasStopLocationDao, luasStopServiceDao, luasStopDao, favouriteDao, txRunner)
     }
 
     @Provides
     @Singleton
-    fun swordsExpressStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): SwordsExpressStopCacheResource {
+    fun swordsExpressStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): SwordsExpressStopLocalResource {
         val swordsExpressStopLocationDao = database.swordsExpressStopLocationDao()
         val swordsExpressStopServiceDao = database.swordsExpressStopServiceDao()
         val swordsExpressStopDao = database.swordsExpressStopDao()
-        return SwordsExpressStopCacheResourceImpl(swordsExpressStopLocationDao, swordsExpressStopServiceDao, swordsExpressStopDao, txRunner)
+        val favouriteDao = database.favouriteDao()
+        return SwordsExpressStopLocalResourceImpl(swordsExpressStopLocationDao, swordsExpressStopServiceDao, swordsExpressStopDao, favouriteDao, txRunner)
     }
 
     @Provides

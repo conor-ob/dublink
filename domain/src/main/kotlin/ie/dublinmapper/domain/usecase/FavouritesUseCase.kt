@@ -14,7 +14,7 @@ class FavouritesUseCase @Inject constructor(
     private val favouriteRepository: FavouriteRepository,
     private val aircoachStopRepository: Repository<AircoachStop>,
     private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val dartStationRepository: Repository<DartStation>,
+    private val irishRailStationRepository: Repository<IrishRailStation>,
     private val dublinBikesDockRepository: Repository<DublinBikesDock>,
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
@@ -40,14 +40,13 @@ class FavouritesUseCase @Inject constructor(
     fun getFavourites(): Observable<FavouritesResponse> {
 //        return favouriteRepository.getFavourites()
 //            .map { FavouritesResponse(toServiceLocations(it)) }
-        //TODO
         return Observable.just(
             FavouritesResponse(
                 listOf(
-                    DartStation(
+                    IrishRailStation(
                         id = "123",
-                        serviceLocationName = "Tara Street",
-                        coordinate = Coordinate(53.545, -6.23),
+                        serviceLocationName = "Blackrock",
+                        coordinate = Coordinate(53.645, -6.232),
                         service = Service.IRISH_RAIL,
                         operators = Operator.rail()
                     )
@@ -66,7 +65,7 @@ class FavouritesUseCase @Inject constructor(
             Service.BUS_EIREANN -> busEireannStopRepository.getById(favourite.id).blockingSingle()
             Service.DUBLIN_BIKES -> dublinBikesDockRepository.getById(favourite.id).blockingSingle()
             Service.DUBLIN_BUS -> dublinBusStopRepository.getById(favourite.id).blockingSingle()
-            Service.IRISH_RAIL -> dartStationRepository.getById(favourite.id).blockingSingle()
+            Service.IRISH_RAIL -> irishRailStationRepository.getById(favourite.id).blockingSingle()
             Service.LUAS -> luasStopRepository.getById(favourite.id).blockingSingle()
             Service.SWORDS_EXPRESS -> TODO()
         }

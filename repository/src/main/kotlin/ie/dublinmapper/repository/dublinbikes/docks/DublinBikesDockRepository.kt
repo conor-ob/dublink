@@ -8,10 +8,8 @@ import ie.dublinmapper.repository.ServiceLocationRepository
 import ie.dublinmapper.util.Service
 
 class DublinBikesDockRepository(
-    serviceLocationStore: StoreRoom<List<DublinBikesDock>, Service>,
-    favouriteRepository: FavouriteRepository
+    serviceLocationStore: StoreRoom<List<DublinBikesDock>, Service>
 ) : ServiceLocationRepository<DublinBikesDock>(
     service = Service.DUBLIN_BIKES,
-    serviceLocationStore = serviceLocationStore,
-    favouriteRepository = favouriteRepository
+    serviceLocationStore = serviceLocationStore
 )

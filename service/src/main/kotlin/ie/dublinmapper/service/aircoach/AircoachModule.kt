@@ -2,8 +2,8 @@ package ie.dublinmapper.service.aircoach
 
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.util.StringProvider
 import ie.dublinmapper.service.github.GithubApi
+import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
@@ -20,7 +20,7 @@ class AircoachModule {
         aircoachScraper: AircoachScraper,
         aircoachApi: AircoachApi,
         fallback: GithubApi
-    ) : AircoachResource {
+    ) : AircoachStopRemoteResource {
         return AircoachWebResource(
             aircoachScraper,
             aircoachApi,

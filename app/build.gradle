@@ -84,9 +84,23 @@ android {
 
 dependencies {
     implementation project(':core')
+    implementation project(':database')
+    implementation project(':datamodel')
+    implementation project(':domain')
+    implementation project(':repository')
+    implementation project(':service')
     implementation project(':ui')
     implementation project(':ui-favourites')
+    implementation project(':ui-livedata')
     implementation project(':ui-search')
+    implementation project(':ui-settings')
+
+    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
+    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+    implementation("com.google.code.gson:gson:2.8.5")
+    implementation("com.squareup.retrofit2:converter-simplexml:2.5.0")
+    implementation "com.nytimes.android:store3:${versions.store3}"
+    implementation("com.squareup.okhttp3:okhttp:3.12.1")
 
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"

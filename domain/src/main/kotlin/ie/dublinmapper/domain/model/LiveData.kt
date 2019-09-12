@@ -39,7 +39,7 @@ data class BusEireannLiveData(
     override val customHash: Int = Objects.hash(operator, route, destination)
 ) : TimedLiveData
 
-data class DartLiveData(
+data class IrishRailLiveData(
     override val dueTime: List<DueTime>,
     override val operator: Operator,
     override val route: String,

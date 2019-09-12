@@ -18,6 +18,7 @@ object FavouriteDomainToEntityMapper : CustomConverter<Favourite, FavouriteEntit
     ): FavouriteEntity {
         val locationEntity = FavouriteLocationEntity(
             id = FavouriteKey(source.id, source.service),
+            service = source.service,
             name = source.name,
             order = source.order
         )
