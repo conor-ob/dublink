@@ -1,7 +1,6 @@
 package ie.dublinmapper.util
 
 import com.google.common.truth.Truth.assertThat
-import ie.dublinmapper.Operator
 import org.junit.Test
 import java.util.*
 

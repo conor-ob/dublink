@@ -2,8 +2,8 @@ package ie.dublinmapper.service.di
 
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.SslContextProvider
-import ie.dublinmapper.StringProvider
+import ie.dublinmapper.util.SslContextProvider
+import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter

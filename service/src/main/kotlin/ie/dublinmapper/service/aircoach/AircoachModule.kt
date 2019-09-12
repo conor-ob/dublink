@@ -2,7 +2,7 @@ package ie.dublinmapper.service.aircoach
 
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.StringProvider
+import ie.dublinmapper.util.StringProvider
 import ie.dublinmapper.service.github.GithubApi
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter

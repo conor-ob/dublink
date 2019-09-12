@@ -2,7 +2,7 @@ package ie.dublinmapper.service.github
 
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.StringProvider
+import ie.dublinmapper.util.StringProvider
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter

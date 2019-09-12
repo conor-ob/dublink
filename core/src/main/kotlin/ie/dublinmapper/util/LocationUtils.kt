@@ -1,7 +1,5 @@
 package ie.dublinmapper.util
 
-import ie.dublinmapper.Coordinate
-
 object LocationUtils {
 
     private const val EARTH_RADIUS = 6371001

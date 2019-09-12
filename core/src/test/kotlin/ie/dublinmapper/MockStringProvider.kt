@@ -1,5 +1,7 @@
 package ie.dublinmapper
 
+import ie.dublinmapper.util.StringProvider
+
 object MockStringProvider : StringProvider {
 
     override fun jcDecauxBaseUrl(): String {
