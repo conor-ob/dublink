@@ -1,0 +1,16 @@
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-kapt'
+
+dependencies {
+    api libraries.kotlin
+    api libraries.rx_java
+    api libraries.threetenabp
+
+    testApi testLibraries.junit
+    testApi testLibraries.truth
+}
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin'
+    test.java.srcDirs += 'src/test/kotlin'
+}

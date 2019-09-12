@@ -9,15 +9,14 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/database" />
-            <option value="$PROJECT_DIR$/datamodel" />
-            <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/repository" />
-            <option value="$PROJECT_DIR$/service" />
-            <option value="$PROJECT_DIR$/util" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/ui-favourites" />
+            <option value="$PROJECT_DIR$/ui-search" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
+        <option name="testRunner" value="PLATFORM" />
       </GradleProjectSettings>
     </option>
   </component>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/nav_graph_main.xml"
+        app:startDestination="@id/favouritesFragment">
+
+    <fragment
+            android:id="@+id/favouritesFragment"
+            android:name="ie.dublinmapper.favourites.FavouritesFragment"
+            android:label="SearchFragment"
+            tools:layout="@layout/fragment_favourites">
+        <action
+                android:id="@+id/favouritesFragment_to_searchFragment"
+                app:destination="@id/searchFragment" />
+
+    </fragment>
+
+
+    <fragment
+            android:id="@+id/searchFragment"
+            android:name="ie.dublinmapper.search.SearchFragment"
+            android:label="SearchFragment"
+            tools:layout="@layout/fragment_search" />
+
+</navigation>
