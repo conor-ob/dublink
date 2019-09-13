@@ -11,6 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import ie.dublinmapper.Navigator
+import ie.dublinmapper.domain.model.ServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
 import ie.dublinmapper.util.hideKeyboard
@@ -22,12 +24,14 @@ import kotlinx.android.synthetic.main.fragment_search.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class SearchFragment : DublinMapperFragment(R.layout.fragment_search, R.style.SearchTheme) {
+class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as SearchViewModel }
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
     private val subscriptions = CompositeDisposable()
+
+    override fun styleId() = R.style.SearchTheme
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,12 +47,13 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search, R.style.Se
         }
 
         adapter = GroupAdapter()
-//        searchResults = view.search_results
         search_results.adapter = adapter
         search_results.setHasFixedSize(true)
         search_results.layoutManager = LinearLayoutManager(requireContext())
         adapter.setOnItemClickListener { item, _ ->
-
+            (item.extras["serviceLocation"] as? ServiceLocation)?.let { serviceLocation ->
+                (activity as Navigator).navigateSearchToLiveData(serviceLocation)
+            }
         }
 
         subscriptions.add(

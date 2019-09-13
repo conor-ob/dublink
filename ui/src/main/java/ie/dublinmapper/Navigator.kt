@@ -1,7 +1,11 @@
 package ie.dublinmapper
 
+import ie.dublinmapper.domain.model.ServiceLocation
+
 interface Navigator {
 
-    fun navigateFromFavouritesToSearch()
+    fun navigateFavouritesToSearch()
+
+    fun navigateSearchToLiveData(serviceLocation: ServiceLocation)
 
 }

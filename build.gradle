@@ -116,7 +116,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath "com.google.gms:google-services:${versions.google_services}"
         classpath "io.fabric.tools:gradle:${versions.fabric}"
-//        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0-alpha07"
+        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 

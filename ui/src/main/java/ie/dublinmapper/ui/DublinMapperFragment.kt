@@ -17,14 +17,15 @@ import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 abstract class DublinMapperFragment(
-    @LayoutRes private val layoutId: Int,
-    @StyleRes private val styleId: Int
+    @LayoutRes private val layoutId: Int
 ) : Fragment(layoutId), HasAndroidInjector {
 
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    protected abstract fun styleId(): Int
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -33,7 +34,7 @@ abstract class DublinMapperFragment(
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setupStatusBar()
-        val contextThemeWrapper = ContextThemeWrapper(requireActivity(), styleId)
+        val contextThemeWrapper = ContextThemeWrapper(requireActivity(), styleId())
         val themeInflater = inflater.cloneInContext(contextThemeWrapper)
         return themeInflater.inflate(layoutId, container, false)
     }
@@ -42,7 +43,7 @@ abstract class DublinMapperFragment(
         val window = requireActivity().window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        val attributes = requireActivity().obtainStyledAttributes(styleId, R.styleable.ThemeAttributes)
+        val attributes = requireActivity().obtainStyledAttributes(styleId(), R.styleable.ThemeAttributes)
         val primaryDark = attributes.getColor(R.styleable.ThemeAttributes_colorPrimaryDark, 0)
         window.statusBarColor = primaryDark
         window.navigationBarColor = primaryDark

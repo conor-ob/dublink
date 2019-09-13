@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
-//apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'androidx.navigation.safeargs'
 
 Properties properties = new Properties()
 if (project.rootProject.file("release.properties").exists()) {

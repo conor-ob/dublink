@@ -1,6 +1,7 @@
 package ie.dublinmapper
 
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.ww.roxie.Roxie
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import ie.dublinmapper.di.DaggerApplicationComponent
@@ -18,6 +19,11 @@ class DublinMapperApplication : DaggerApplication() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        Roxie.enableLogging(object : Roxie.Logger {
+            override fun log(msg: String) {
+                Timber.tag("Roxie").d(msg)
+            }
+        })
     }
 
     private fun setupThreeTen() {

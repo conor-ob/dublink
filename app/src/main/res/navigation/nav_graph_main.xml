@@ -1,25 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/nav_graph_main.xml"
-        app:startDestination="@id/favouritesFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_main.xml"
+    app:startDestination="@id/favouritesFragment">
 
-    <fragment
-            android:id="@+id/favouritesFragment"
-            android:name="ie.dublinmapper.favourites.FavouritesFragment"
-            android:label="SearchFragment">
-        <action
-                android:id="@+id/favouritesFragment_to_searchFragment"
-                app:destination="@id/searchFragment"
+    <fragment android:id="@+id/favouritesFragment"
+        android:name="ie.dublinmapper.favourites.FavouritesFragment"
+        android:label="SearchFragment">
+
+        <action android:id="@+id/favouritesFragment_to_livedataFragment"
+            app:destination="@id/liveDataFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+
+        <action android:id="@+id/favouritesFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"/>
 
     </fragment>
 
 
-    <fragment
-            android:id="@+id/searchFragment"
-            android:name="ie.dublinmapper.search.SearchFragment"
-            android:label="SearchFragment"/>
+    <fragment android:id="@+id/searchFragment"
+        android:name="ie.dublinmapper.search.SearchFragment"
+        android:label="SearchFragment">
+
+        <action android:id="@+id/searchFragment_to_livedataFragment"
+            app:destination="@id/liveDataFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim" />
+
+    </fragment>
+
+    <fragment android:id="@+id/liveDataFragment"
+        android:name="ie.dublinmapper.livedata.LiveDataFragment"
+        android:label="LiveDataFragment">
+
+        <argument
+            android:name="serviceLocationId"
+            app:argType="string" />
+        <argument
+            android:name="serviceLocationName"
+            app:argType="string" />
+        <argument
+            android:name="serviceLocationService"
+            app:argType="ie.dublinmapper.util.Service" />
+        <argument
+            android:name="serviceLocationIsFavourite"
+            app:argType="boolean" />
+        <argument
+            android:name="serviceLocationStyleId"
+            app:argType="integer" />
+
+    </fragment>
 
 </navigation>

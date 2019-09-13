@@ -54,7 +54,7 @@
         <item name="colorPrimaryDark">@color/busEireannRedDark</item>
     </style>
 
-    <style name="DartTheme" parent="DublinMapperTheme">
+    <style name="IrishRailTheme" parent="DublinMapperTheme">
         <item name="colorPrimary">@color/dartGreen</item>
         <item name="colorPrimaryDark">@color/dartGreenDark</item>
 <!--        <item name="colorOnPrimary">@color/white</item>-->
