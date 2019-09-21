@@ -31,6 +31,26 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
             favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
         }
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_favourite -> {
+                    if (arguments!!.getBoolean("serviceLocationIsFavourite")) {
+                        viewModel.dispatch(Action.RemoveFavourite(
+                            serviceLocationId = arguments!!.getString("serviceLocationId")!!,
+                            serviceLocationService = arguments!!.getSerializable("serviceLocationService")!! as Service
+                        ))
+                    } else {
+                        viewModel.dispatch(Action.SaveFavourite(
+                            serviceLocationId = arguments!!.getString("serviceLocationId")!!,
+                            serviceLocationName = arguments!!.getString("serviceLocationName")!!,
+                            serviceLocationService = arguments!!.getSerializable("serviceLocationService")!! as Service
+                        ))
+                    }
+                }
+                R.id.action_settings -> Timber.d("Settings pressed")
+            }
+            return@setOnMenuItemClickListener true
+        }
         serviceLocationName.text = arguments!!.getString("serviceLocationName")
 
         adapter = GroupAdapter()

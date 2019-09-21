@@ -18,7 +18,6 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.jcdecaux_contract)
     }
 
-    // copied from MetadataUtils
     override fun jcDecauxApiKey(): String {
         try {
             val appInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
