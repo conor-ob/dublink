@@ -1,24 +1,29 @@
 package ie.dublinmapper.di
 
-import ie.dublinmapper.view.favourite.FavouritesPresenterImpl
-import ie.dublinmapper.view.livedata.LiveDataPresenterImpl
-import ie.dublinmapper.view.nearby.NearbyPresenterImpl
-import ie.dublinmapper.view.nearby.livedata.NearbyLiveDataPresenterImpl
-import ie.dublinmapper.view.nearby.map.NearbyMapPresenterImpl
-import ie.dublinmapper.view.search.SearchPresenterImpl
+import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
+import ie.dublinmapper.DublinMapperApplication
+import ie.dublinmapper.repository.di.RepositoryModule
+import ie.dublinmapper.service.di.ServiceModule
+import javax.inject.Singleton
 
-interface ApplicationComponent {
+@Singleton
+@Component(
+    modules = [
+        AndroidSupportInjectionModule::class,
+        ApplicationModule::class,
+        ActivityModule::class,
+        FragmentModule::class,
+        ViewModelModule::class,
+        DatabaseModule::class,
+        RepositoryModule::class,
+        ServiceModule::class
+    ]
+)
+interface ApplicationComponent : AndroidInjector<DublinMapperApplication> {
 
-    fun nearbyPresenter(): NearbyPresenterImpl
-
-    fun nearbyMapPresenter(): NearbyMapPresenterImpl
-
-    fun nearbyLiveDataPresenter(): NearbyLiveDataPresenterImpl
-
-    fun favouritesPresenter(): FavouritesPresenterImpl
-
-    fun liveDataPresenter(): LiveDataPresenterImpl
-
-    fun searchPresenter(): SearchPresenterImpl
+    @Component.Factory
+    abstract class Factory : AndroidInjector.Factory<DublinMapperApplication>
 
 }

@@ -27,19 +27,12 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-    implementation project(':data')
-    implementation project(':util')
-    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
-    implementation "com.google.dagger:dagger:${versions.dagger}"
-    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
-    kapt "androidx.room:room-compiler:${versions.androidx.room_compiler}"
-    implementation "androidx.room:room-rxjava2:${versions.androidx.room_rxjava2}"
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+    implementation project(':core')
+    implementation project(':datamodel')
 
-    testImplementation "junit:junit:${testVersions.junit}"
-    androidTestImplementation "androidx.room:room-testing:${testVersions.androidx.room_testing}"
-    androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
-    androidTestImplementation "androidx.test.ext:junit:${testVersions.androidx.junit}"
-    androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
+    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
+    implementation "androidx.room:room-rxjava2:${versions.androidx.room_rxjava2}"
+
+    kapt "androidx.room:room-compiler:${versions.androidx.room_compiler}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
 }

@@ -1,4 +1,2 @@
-include ':app', ':util', ':data', ':database',
-        ':domain',
-        ':repository',
-        ':service'
+include ':app', ':ui', ':ui-search', ':core', ':ui-favourites', ':service', ':repository', ':domain', ':datamodel', ':database', ':ui-livedata', ':ui-settings'
+rootProject.name='Dublin Mapper'

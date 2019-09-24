@@ -6,13 +6,18 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.data.dublinbus.DublinBusStopCacheResource
-import ie.dublinmapper.data.persister.PersisterDao
+import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopDao
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocalResource
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocationDao
+import ie.dublinmapper.datamodel.dublinbus.DublinBusStopServiceDao
+import ie.dublinmapper.datamodel.favourite.FavouriteDao
+import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.domain.model.DublinBusLiveData
 import ie.dublinmapper.domain.model.DublinBusStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataFetcher
-import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataMapper
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataRepository
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopFetcher
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopPersister
@@ -22,34 +27,26 @@ import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
-import ie.dublinmapper.util.Thread
-import java.util.concurrent.TimeUnit
+import ie.dublinmapper.util.RxScheduler
+import ma.glasnost.orika.MapperFacade
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 class DublinBusRepositoryModule {
-
-    private val shortTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(30, TimeUnit.SECONDS) }
-    private val midTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(3, TimeUnit.HOURS) }
-    private val longTermMemoryPolicy: MemoryPolicy by lazy { newMemoryPolicy(7, TimeUnit.DAYS) }
-
-    private fun newMemoryPolicy(value: Long, timeUnit: TimeUnit): MemoryPolicy {
-        return MemoryPolicy.builder()
-            .setExpireAfterWrite(value)
-            .setExpireAfterTimeUnit(timeUnit)
-            .build()
-    }
 
     @Provides
     @Singleton
     fun dublinBusStopRepository(
         dublinBusApi: DublinBusApi,
         rtpiApi: RtpiApi,
-        cacheResource: DublinBusStopCacheResource,
+        localResource: DublinBusStopLocalResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         stringProvider: StringProvider,
-        thread: Thread
+        scheduler: RxScheduler,
+        mapper: MapperFacade,
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DublinBusStop> {
         val fetcher = DublinBusStopFetcher(
             dublinBusApi,
@@ -57,10 +54,10 @@ class DublinBusRepositoryModule {
             stringProvider.rtpiOperatorDublinBus(),
             stringProvider.rtpiOperatorGoAhead(),
             stringProvider.rtpiFormat(),
-            thread
+            scheduler
         )
-        val persister = DublinBusStopPersister(cacheResource, longTermMemoryPolicy, persisterDao, internetManager)
-        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, longTermMemoryPolicy)
+        val persister = DublinBusStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return DublinBusStopRepository(store)
     }
 
@@ -69,7 +66,9 @@ class DublinBusRepositoryModule {
     fun dublinBusLiveDataRepository(
         dublinBusApi: DublinBusApi,
         api: RtpiApi,
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        mapper: MapperFacade,
+        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DublinBusLiveData> {
         val fetcher = DublinBusLiveDataFetcher(
             dublinBusApi,
@@ -80,7 +79,8 @@ class DublinBusRepositoryModule {
         )
         val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<DublinBusLiveData>>()
             .fetcher(fetcher)
-            .parser { liveData -> DublinBusLiveDataMapper.map(liveData) }
+            .parser { liveData -> mapper.mapAsList(liveData, DublinBusLiveData::class.java).sortedBy { it.dueTime.first().minutes } }
+            .memoryPolicy(memoryPolicy)
             .open()
         return DublinBusLiveDataRepository(store)
     }

@@ -17,7 +17,7 @@ class DublinBusModule {
     @Singleton
     fun dublinBusApi(
         stringProvider: StringProvider,
-        okHttpClient: OkHttpClient,
+        @Named("DEFAULT") okHttpClient: OkHttpClient,
         @Named("xml") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
     ): DublinBusApi {

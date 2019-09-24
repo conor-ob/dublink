@@ -1,6 +1,6 @@
 package ie.dublinmapper.database
 
-import ie.dublinmapper.data.TxRunner
+import ie.dublinmapper.datamodel.TxRunner
 
 
 class DatabaseTxRunner(private val database: DublinMapperDatabase) : TxRunner {

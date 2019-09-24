@@ -42,8 +42,15 @@ captures/
 .idea/libraries
 .idea/workspace.xml
 .idea/codeStyles/Project.xml
+.idea/codeStyles/codeStyleConfig.xml
 .idea/markdown-navigator.xml
 .idea/markdown-navigator/profiles_settings.xml
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
+.idea/vcs.xml
 
 # Keystore files
 *.jks
@@ -52,7 +59,7 @@ captures/
 .externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
-google-services.json
+app/google-services.json
 
 # Freeline
 freeline.py

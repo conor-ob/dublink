@@ -17,7 +17,7 @@ class RtpiModule {
     @Singleton
     fun rtpiApi(
         stringProvider: StringProvider,
-        okHttpClient: OkHttpClient,
+        @Named("DEFAULT") okHttpClient: OkHttpClient,
         @Named("json") converterFactory: Converter.Factory,
         callAdapterFactory: CallAdapter.Factory
     ): RtpiApi {
