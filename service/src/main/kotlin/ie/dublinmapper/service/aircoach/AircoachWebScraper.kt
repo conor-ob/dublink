@@ -73,6 +73,9 @@ class AircoachWebScraper(
                 }
             }
         }
+        if (stops.isEmpty()) {
+            throw IllegalStateException("Aircoach stops cannot be empty")
+        }
         return Single.just(stops)
     }
 

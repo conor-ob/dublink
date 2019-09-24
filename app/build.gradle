@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'androidx.navigation.safeargs'
+apply plugin: 'io.fabric'
+apply plugin: 'androidx.navigation.safeargs'
 
 Properties properties = new Properties()
 if (project.rootProject.file("release.properties").exists()) {
@@ -17,23 +18,23 @@ android {
     compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
-        applicationId "ie.dublinmapper"
+        applicationId buildConfig.applicationId
         minSdkVersion buildConfig.minSdk
         targetSdkVersion buildConfig.targetSdk
         versionCode buildConfig.version.code
         versionName buildConfig.version.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [ googleMapsApiKey: "$googleMapsApiKey",
-                                 jcDecauxApiKey: "$jcDecauxApiKey" ]
+        manifestPlaceholders = [googleMapsApiKey: "$googleMapsApiKey",
+                                jcDecauxApiKey  : "$jcDecauxApiKey"]
     }
 
     buildTypes {
         release {
             debuggable false
-//            minifyEnabled true
-//            shrinkResources true
-//            useProguard true
-//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
             debuggable true
@@ -50,6 +51,13 @@ android {
         mock {
             dimension "default"
             applicationIdSuffix = ".mock"
+        }
+    }
+
+    android.variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (variant.buildType.name == 'release' && names.get(0) != "prod") {
+            variant.setIgnore(true)
         }
     }
 
@@ -75,70 +83,27 @@ android {
 }
 
 dependencies {
-    implementation project(':data')
+    implementation project(':core')
     implementation project(':database')
+    implementation project(':datamodel')
     implementation project(':domain')
     implementation project(':repository')
     implementation project(':service')
-    implementation project(':util')
+    implementation project(':ui')
+    implementation project(':ui-favourites')
+    implementation project(':ui-livedata')
+    implementation project(':ui-search')
+    implementation project(':ui-settings')
 
-//    implementation "androidx.lifecycle:lifecycle-viewmodel:2.0.0"
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
-//    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-
-//    implementation "androidx.lifecycle:lifecycle-livedata:2.0.0"
-
-//    implementation "android.arch.lifecycle:extensions:1.1.1"
-//    implementation "android.arch.lifecycle:viewmodel:1.1.1"
-//    compile group: 'android.arch.lifecycle', name: 'livedata', version: '1.1.1'
-//    implementation group: 'android.arch.lifecycle', name: 'livedata-core', version: '1.1.1'
-
-    implementation "io.reactivex.rxjava2:rxandroid:${versions.rx_android}"
-
-    // Google services
-//    implementation "com.google.android.gms:play-services-auth:$playServicesVersion"
-    implementation "com.google.android.gms:play-services-maps:16.0.0"
-    implementation "com.google.maps.android:android-maps-utils:0.5"
-//    implementation "com.google.maps.android:android-maps-utils:15.0.1"
-//    implementation "com.google.firebase:firebase-core:$firebaseVersion"
-//    implementation "com.google.maps.android:android-maps-utils:$mapsUtilsVersion"
-
-    implementation "com.google.dagger:dagger:${versions.dagger}"
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
-
-    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
-
-    implementation "com.xwray:groupie:${versions.groupie}"
-    implementation "com.xwray:groupie-kotlin-android-extensions:${versions.groupie}"
-
-    // Navigation
-//    implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-alpha07"
-//    implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha07"
-
-    implementation 'com.bluelinelabs:conductor:3.0.0-rc1'
-    implementation "com.hannesdorfmann.mosby3:mvp-conductor:${versions.mvp_conductor}"
-
-    implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
-    implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraintlayout}"
-    implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
-    implementation "com.google.android.material:material:${versions.material}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-
-    implementation "com.nytimes.android:store3:${versions.store3}"
-
-    testImplementation project(path: ':service', configuration: 'testOutput')
-
-    testImplementation "junit:junit:${testVersions.junit}"
-    androidTestImplementation "androidx.test:core:${testVersions.androidx.core}"
-    androidTestImplementation "androidx.test:runner:${testVersions.androidx.runner}"
-
-    implementation "com.jakewharton.timber:timber:${versions.timber}"
-
+    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.squareup.retrofit2:converter-simplexml:2.5.0")
+    implementation "com.nytimes.android:store3:${versions.store3}"
     implementation("com.squareup.okhttp3:okhttp:3.12.1")
 
-
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
 }
+
+apply plugin: 'com.google.gms.google-services'

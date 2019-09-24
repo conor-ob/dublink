@@ -2,16 +2,9 @@ apply plugin: 'kotlin'
 apply plugin: 'kotlin-kapt'
 
 dependencies {
-    implementation project(':util')
-    implementation "com.google.dagger:dagger:${versions.dagger}"
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
-    implementation "com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}"
-//    implementation project(':service')
-//    implementation "com.google.code.gson:gson:${versions.gson}"
-//    implementation "com.google.dagger:dagger:${versions.dagger}"
-    implementation "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-//    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
+    implementation project(':core')
+
+    kapt libraries.dagger_compiler
 }
 
 sourceSets {

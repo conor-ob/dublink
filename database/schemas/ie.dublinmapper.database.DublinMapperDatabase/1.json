@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "02745e174d4dfffc3929d9c097d59d72",
+    "identityHash": "03d9cc1d9b77ca75ff4453b9769e8375",
     "entities": [
       {
         "tableName": "aircoach_stop_locations",
@@ -141,11 +141,11 @@
       },
       {
         "tableName": "buseireann_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `buseireann_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serviceId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `buseireann_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
-            "columnName": "id",
+            "columnName": "serviceId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -170,7 +170,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "id"
+            "serviceId"
           ],
           "autoGenerate": true
         },
@@ -199,7 +199,7 @@
         ]
       },
       {
-        "tableName": "dart_station_locations",
+        "tableName": "irishrail_station_locations",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -237,8 +237,8 @@
         "foreignKeys": []
       },
       {
-        "tableName": "dart_station_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `station_id` TEXT NOT NULL, `operator` TEXT NOT NULL, FOREIGN KEY(`station_id`) REFERENCES `dart_station_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "irishrail_station_lservices",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `station_id` TEXT NOT NULL, `operator` TEXT NOT NULL, FOREIGN KEY(`station_id`) REFERENCES `irishrail_station_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -267,17 +267,17 @@
         },
         "indices": [
           {
-            "name": "index_dart_station_services_station_id",
+            "name": "index_irishrail_station_lservices_station_id",
             "unique": false,
             "columnNames": [
               "station_id"
             ],
-            "createSql": "CREATE  INDEX `index_dart_station_services_station_id` ON `${TABLE_NAME}` (`station_id`)"
+            "createSql": "CREATE  INDEX `index_irishrail_station_lservices_station_id` ON `${TABLE_NAME}` (`station_id`)"
           }
         ],
         "foreignKeys": [
           {
-            "table": "dart_station_locations",
+            "table": "irishrail_station_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -690,8 +690,8 @@
         ]
       },
       {
-        "tableName": "locations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
+        "tableName": "persister_last_updated",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `last_updated` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -700,21 +700,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "latitude",
-            "columnName": "latitude",
-            "affinity": "REAL",
-            "notNull": true
-          },
-          {
-            "fieldPath": "longitude",
-            "columnName": "longitude",
-            "affinity": "REAL",
+            "fieldPath": "lastUpdated",
+            "columnName": "last_updated",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -728,8 +716,46 @@
         "foreignKeys": []
       },
       {
-        "tableName": "services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `location_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`location_id`) REFERENCES `locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "favourite_locations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `service` TEXT NOT NULL, `name` TEXT NOT NULL, `order` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "service",
+            "columnName": "service",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "order",
+            "columnName": "order",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "favourite_services",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `location_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`location_id`) REFERENCES `favourite_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -764,17 +790,17 @@
         },
         "indices": [
           {
-            "name": "index_services_location_id",
+            "name": "index_favourite_services_location_id",
             "unique": false,
             "columnNames": [
               "location_id"
             ],
-            "createSql": "CREATE  INDEX `index_services_location_id` ON `${TABLE_NAME}` (`location_id`)"
+            "createSql": "CREATE  INDEX `index_favourite_services_location_id` ON `${TABLE_NAME}` (`location_id`)"
           }
         ],
         "foreignKeys": [
           {
-            "table": "locations",
+            "table": "favourite_locations",
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
@@ -785,37 +811,11 @@
             ]
           }
         ]
-      },
-      {
-        "tableName": "persister_last_updated",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `last_updated` INTEGER NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "lastUpdated",
-            "columnName": "last_updated",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"02745e174d4dfffc3929d9c097d59d72\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"03d9cc1d9b77ca75ff4453b9769e8375\")"
     ]
   }
 }
