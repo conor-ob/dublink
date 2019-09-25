@@ -24,6 +24,8 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     override fun navigateFavouritesToSearch() = navigationController.navigate(R.id.favouritesFragment_to_searchFragment)
 
+    override fun navigateLiveDataToSettings() = navigationController.navigate(R.id.liveDataFragment_to_settingsFragment)
+
     override fun navigateSearchToLiveData(serviceLocation: ServiceLocation) {
         val styleId = getStyleId(serviceLocation.service)
         val intent = SearchFragmentDirections.searchFragmentToLivedataFragment(

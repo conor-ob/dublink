@@ -2,7 +2,9 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.RxScheduler
+import ie.dublinmapper.util.Service
 import io.reactivex.Observable
 import io.reactivex.functions.Function6
 import javax.inject.Inject
@@ -15,7 +17,8 @@ class SearchUseCase @Inject constructor(
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
     private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
-    private val scheduler: RxScheduler
+    private val scheduler: RxScheduler,
+    private val enabledServiceManager: EnabledServiceManager
 ) {
 
     fun search(query: String): Observable<SearchResponse> {
@@ -43,12 +46,24 @@ class SearchUseCase @Inject constructor(
         luasStops: List<LuasStop>
     ) : SearchResponse {
         val searchCollections = mutableListOf<Collection<ServiceLocation>>()
-        searchCollections.add(search(query, aircoachStops))
-        searchCollections.add(search(query, busEireannStops))
-        searchCollections.add(search(query, irishRailStations))
-        searchCollections.add(search(query, dublinBikesDocks))
-        searchCollections.add(search(query, dublinBusStops))
-        searchCollections.add(search(query, luasStops))
+        if (enabledServiceManager.isServiceEnabled(Service.AIRCOACH)) {
+            searchCollections.add(search(query, aircoachStops))
+        }
+        if (enabledServiceManager.isServiceEnabled(Service.BUS_EIREANN)) {
+            searchCollections.add(search(query, busEireannStops))
+        }
+        if (enabledServiceManager.isServiceEnabled(Service.DUBLIN_BIKES)) {
+            searchCollections.add(search(query, dublinBikesDocks))
+        }
+        if (enabledServiceManager.isServiceEnabled(Service.DUBLIN_BUS)) {
+            searchCollections.add(search(query, dublinBusStops))
+        }
+        if (enabledServiceManager.isServiceEnabled(Service.IRISH_RAIL)) {
+            searchCollections.add(search(query, irishRailStations))
+        }
+        if (enabledServiceManager.isServiceEnabled(Service.LUAS)) {
+            searchCollections.add(search(query, luasStops))
+        }
         searchCollections.sortBy { it.size }
         return SearchResponse(searchCollections.flatten().take(50))
     }

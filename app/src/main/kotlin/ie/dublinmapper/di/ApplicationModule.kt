@@ -28,18 +28,14 @@ import ie.dublinmapper.repository.irishrail.stations.IrishRailStationEntityToDom
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopEntityToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopJsonToEntityMapper
-import ie.dublinmapper.util.AndroidAssetSslContextProvider
-import ie.dublinmapper.util.AndroidResourceStringProvider
-import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.InternetManagerImpl
-import ie.dublinmapper.util.RxScheduler
-import ie.dublinmapper.util.SslContextProvider
-import ie.dublinmapper.util.StringProvider
+import ie.dublinmapper.settings.DefaultEnabledServiceManager
+import ie.dublinmapper.settings.DefaultPreferenceStore
+import ie.dublinmapper.settings.R
+import ie.dublinmapper.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
-import javax.inject.Singleton
 
 @Module
 class ApplicationModule {
@@ -125,6 +121,26 @@ class ApplicationModule {
         }
 
         return mapperFactory.mapperFacade
+    }
+
+    @Provides
+    fun preferenceStore(context: Context): PreferenceStore = DefaultPreferenceStore(context)
+
+    @Provides
+    fun enabledServiceManager(
+        context: Context,
+        preferenceStore: PreferenceStore
+    ): EnabledServiceManager {
+        val serviceToEnabledServicePreferenceKey = mapOf(
+            Service.AIRCOACH to context.getString(R.string.preference_enabled_service_aircoach),
+            Service.BUS_EIREANN to context.getString(R.string.preference_enabled_service_bus_eireann),
+            Service.DUBLIN_BIKES to context.getString(R.string.preference_enabled_service_dublin_bikes),
+            Service.DUBLIN_BUS to context.getString(R.string.preference_enabled_service_dublin_bus),
+            Service.IRISH_RAIL to context.getString(R.string.preference_enabled_service_irish_rail),
+            Service.LUAS to context.getString(R.string.preference_enabled_service_luas),
+            Service.SWORDS_EXPRESS to context.getString(R.string.preference_enabled_service_swords_express)
+        )
+        return DefaultEnabledServiceManager(preferenceStore, serviceToEnabledServicePreferenceKey)
     }
 
 }

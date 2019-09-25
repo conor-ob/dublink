@@ -1,12 +1,14 @@
 package ie.dublinmapper.livedata
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import ie.dublinmapper.Navigator
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
 import ie.dublinmapper.util.Service
@@ -46,10 +48,14 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                             serviceLocationService = arguments!!.getSerializable("serviceLocationService")!! as Service
                         ))
                     }
+                    return@setOnMenuItemClickListener true
                 }
-                R.id.action_settings -> Timber.d("Settings pressed")
+                R.id.action_settings -> {
+                    (activity as Navigator).navigateLiveDataToSettings()
+                    return@setOnMenuItemClickListener true
+                }
             }
-            return@setOnMenuItemClickListener true
+            return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
         }
         serviceLocationName.text = arguments!!.getString("serviceLocationName")
 

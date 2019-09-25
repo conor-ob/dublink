@@ -1,2 +1,2 @@
 include ':app', ':ui', ':ui-search', ':core', ':ui-favourites', ':service', ':repository', ':domain', ':datamodel', ':database', ':ui-livedata', ':ui-settings'
-rootProject.name='Dublin Mapper'
+rootProject.name='dublin-mapper'

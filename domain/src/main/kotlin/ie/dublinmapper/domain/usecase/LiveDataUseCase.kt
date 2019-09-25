@@ -18,7 +18,7 @@ class LiveDataUseCase @Inject constructor(
 ) {
 
     fun getCondensedLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
-        return Observable.interval(0L, 60L, TimeUnit.SECONDS)
+        return Observable.interval(0L, 65L, TimeUnit.SECONDS)
             .flatMap {
                 getLiveData(serviceLocationId, service).map {
                     LiveDataResponse(service, serviceLocationName, condenseLiveData(it))

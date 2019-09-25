@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Enabled Services">
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_aircoach"
+                android:title="@string/service_name_aircoach" />
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_bus_eireann"
+                android:title="@string/service_name_bus_eireann" />
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_dublin_bikes"
+                android:title="@string/service_name_dublin_bikes" />
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_dublin_bus"
+                android:title="@string/service_name_dublin_bus" />
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_irish_rail"
+                android:title="@string/service_name_irish_rail" />
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_luas"
+                android:title="@string/service_name_luas" />
+
+        <SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/preference_enabled_service_swords_express"
+                android:title="@string/service_name_swords_express"
+                android:enabled="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

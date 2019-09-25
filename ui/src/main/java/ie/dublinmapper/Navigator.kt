@@ -8,4 +8,6 @@ interface Navigator {
 
     fun navigateSearchToLiveData(serviceLocation: ServiceLocation)
 
+    fun navigateLiveDataToSettings()
+
 }

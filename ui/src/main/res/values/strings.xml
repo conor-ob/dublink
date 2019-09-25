@@ -56,25 +56,33 @@
         ux}cIjwnd@KJaCz@k@LoAj@kAn@w@l@mCjCqBzCo@zAeCvFo@jAi@r@oAx@yBh@w@`@w@t@k@`A[v@oL~a@GNAJqDjM}BhFWr@Qn@SvAOdAOnBEtMWzGy@lIcGtb@GPg@hEo@tD_AjEgAlEi@pCSpAOlBAxCLpBNpAl@zBbAzCl@xBZnBJjADrA?~AGrAUzBUzAKP@R_CnO_Gtc@iD~UeAfGW`AQjAgDpLyA|Fg@dCu@pCgC`Hq@nCMR?NoD|MoAvFi@vA[j@_@f@s@p@u@`@eALqESkB[g@SiAy@g@g@Q_@U?{A_BoAq@i@s@_@y@m@mBWsAo@wFScAs@}Aa@q@iAkAqA}@oAeB]q@G[I?mH_NsB}Ba@Um@C_@RMN[t@Y|A{AfKMh@]j@[Ly@Qk@i@eAo@kA_@cBI}CZy@Cy@R_@\\mAnDILCVwHh_@_@zAARy@tDmLpg@m@hD}@tFk@lFc@bG[lICFOnFqApRiBfP}AtJmCdKoDzHKFETmB`D{BhDuCfEoGvI{Q~WgHrJaCbCcDjCqGzDwD~AwHtBsIn@cDJ_XnBaQ|@mE`@}DTyDf@i]lGqKzBwN`Cq_@nHaHrAcCn@{Aj@gCzAy@n@qBxBk@`@]HCFoAn@iA\\g@z@UbAi@|AYXyBl@MVK`@DpF?|@I`@UXcAVa@Gi@LsD~@cEXgA@sBIyBq@UOaFeEuCkBGe@EB@D
     </string>
 
-    <string name="operator_aircoach_id">Aircoach</string>
+    <string name="service_name_aircoach">Aircoach</string>
+    <string name="service_name_bus_eireann">Bus Éireann</string>
+    <string name="service_name_dublin_bikes">Dublin Bikes</string>
+    <string name="service_name_dublin_bus">Dublin Bus</string>
+    <string name="service_name_irish_rail">Irish Rail</string>
+    <string name="service_name_luas">Luas</string>
+    <string name="service_name_swords_express">Swords Express</string>
+
+    <string name="operator_aircoach_id">@string/service_name_aircoach</string>
     <string name="operator_aircoach_code">AC</string>
-    <string name="operator_buseireann_id">Bus Éireann</string>
+    <string name="operator_buseireann_id">@string/service_name_bus_eireann</string>
     <string name="operator_buseireaann_code">BE</string>
     <string name="operator_commuter_id">Commuter</string>
     <string name="operator_commuter_code">COMM</string>
     <string name="operator_dart_id">DART</string>
     <string name="operator_dart_code">@string/operator_dart_id</string>
-    <string name="operator_dublinbikes_id">Dublin Bikes</string>
+    <string name="operator_dublinbikes_id">@string/service_name_dublin_bikes</string>
     <string name="operator_dublinbikes_code">BIKE</string>
-    <string name="operator_dublinbus_id">Dublin Bus</string>
+    <string name="operator_dublinbus_id">@string/service_name_dublin_bus</string>
     <string name="operator_dublinbus_code">BAC</string>
     <string name="operator_goahead_id">Go Ahead</string>
     <string name="operator_goahead_code">GAD</string>
     <string name="operator_intercity_id">InterCity</string>
     <string name="operator_intercity_code">ICTY</string>
-    <string name="operator_luas_id">Luas</string>
+    <string name="operator_luas_id">@string/service_name_luas</string>
     <string name="operator_luas_code">LUAS</string>
-    <string name="operator_swordsexpress_id">Swords Express</string>
+    <string name="operator_swordsexpress_id">@string/service_name_swords_express</string>
     <string name="operator_swordsexpress_code">SE</string>
     <string name="tab_dart_northbound">Northbound</string>
     <string name="tab_dart_southbound">Southbound</string>
