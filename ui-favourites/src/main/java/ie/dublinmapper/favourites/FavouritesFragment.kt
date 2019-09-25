@@ -28,7 +28,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
             (item.extras["serviceLocation"] as? ServiceLocation)?.let { serviceLocation ->
-                (activity as Navigator).navigateSearchToLiveData(serviceLocation)
+                (activity as Navigator).navigateFavouritesToLiveData(serviceLocation)
             }
         }
         view.liveDataList.adapter = adapter

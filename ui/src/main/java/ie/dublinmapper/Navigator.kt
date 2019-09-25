@@ -6,6 +6,8 @@ interface Navigator {
 
     fun navigateFavouritesToSearch()
 
+    fun navigateFavouritesToLiveData(serviceLocation: ServiceLocation)
+
     fun navigateSearchToLiveData(serviceLocation: ServiceLocation)
 
     fun navigateLiveDataToSettings()
