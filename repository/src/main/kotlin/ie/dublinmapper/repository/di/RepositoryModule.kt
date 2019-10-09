@@ -11,8 +11,10 @@ import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
 import ie.dublinmapper.repository.irishrail.IrishRailRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
 import ie.dublinmapper.repository.swordsexpress.SwordsExpressRepositoryModule
+import io.rtpi.client.RtpiClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module(
     includes = [
@@ -27,6 +29,10 @@ import javax.inject.Named
     ]
 )
 class RepositoryModule {
+
+    @Provides
+    @Singleton
+    fun client(): RtpiClient = RtpiClient()
 
     @Provides
     @Named("SHORT_TERM")

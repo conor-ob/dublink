@@ -7,28 +7,23 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.TxRunner
-import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
-import ie.dublinmapper.datamodel.buseireann.BusEireannStopDao
 import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocalResource
-import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocationDao
-import ie.dublinmapper.datamodel.buseireann.BusEireannStopServiceDao
-import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.BusEireannLiveData
 import ie.dublinmapper.domain.model.BusEireannStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister
-import ie.dublinmapper.repository.luas.livedata.LuasLiveDataFetcher
 import ie.dublinmapper.service.rtpi.RtpiApi
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
-import ie.dublinmapper.service.rtpi.RtpiRealTimeBusInformationJson
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
+import io.reactivex.Single
+import io.rtpi.api.BusEireannLiveData
+import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
+import org.threeten.bp.LocalTime
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -58,19 +53,12 @@ class BusEireannRepositoryModule {
     @Provides
     @Singleton
     fun luasRealTimeDataRepository(
-        api: RtpiApi,
-        stringProvider: StringProvider,
-        mapper: MapperFacade,
+        client: RtpiClient,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<BusEireannLiveData> {
-        val fetcher = LuasLiveDataFetcher(
-            api,
-            stringProvider.rtpiOperatorBusEireann(),
-            stringProvider.rtpiFormat()
-        )
-        val store = StoreBuilder.parsedWithKey<String, List<RtpiRealTimeBusInformationJson>, List<BusEireannLiveData>>()
-            .fetcher(fetcher)
-            .parser { liveData -> mapper.mapAsList(liveData, BusEireannLiveData::class.java) }
+        val store = StoreBuilder.key<String, List<BusEireannLiveData>>()
+            .fetcher { stopId -> client.busEireann().getLiveData(stopId = stopId) }
+//            .fetcher { stopId -> Single.just(client.busEireann().getLiveData(stopId = stopId)) }
             .memoryPolicy(memoryPolicy)
             .open()
         return BusEireannLiveDataRepository(store)

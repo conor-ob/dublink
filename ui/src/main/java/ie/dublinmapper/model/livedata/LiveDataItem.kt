@@ -6,10 +6,12 @@ import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.DueTime
 import ie.dublinmapper.util.Formatter
 import ie.dublinmapper.util.StringUtils
+import io.rtpi.api.Time
+import io.rtpi.api.TimedLiveData
 import kotlinx.android.synthetic.main.list_item_live_data.*
+import org.threeten.bp.LocalTime
 
 abstract class LiveDataItem(
     private val isEven: Boolean,
@@ -30,51 +32,55 @@ abstract class LiveDataItem(
         }
     }
 
-    protected fun bindDueTimes(viewHolder: ViewHolder, dueTimes: List<DueTime>) {
-        if (dueTimes.size == 1) {
+    protected fun bindDueTimes(viewHolder: ViewHolder, liveData: TimedLiveData) {
+        if (liveData.times.size == 1) {
             viewHolder.multipleDueTimesContainer.visibility = View.GONE
             viewHolder.singleDueTimeContainer.visibility = View.VISIBLE
-            bindSingleDueTime(viewHolder, dueTimes.first())
+            bindSingleDueTime(viewHolder, liveData.times.first())
         } else {
             viewHolder.singleDueTimeContainer.visibility = View.GONE
             viewHolder.multipleDueTimesContainer.visibility = View.VISIBLE
-            bindFirstDueTime(viewHolder, dueTimes.first())
-            bindLaterDueTimes(viewHolder, dueTimes.subList(1, dueTimes.size))
+            bindFirstDueTime(viewHolder, liveData.times.first())
+            bindLaterDueTimes(viewHolder, liveData.times.subList(1, liveData.times.size))
         }
     }
 
-    private fun bindSingleDueTime(viewHolder: ViewHolder, dueTime: DueTime) {
+    private fun bindSingleDueTime(viewHolder: ViewHolder, dueTime: Time) {
         viewHolder.dueTime.text = getSingleDueTimeText(viewHolder, dueTime)
     }
 
-    private fun bindFirstDueTime(viewHolder: ViewHolder, dueTime: DueTime) {
+    private fun bindFirstDueTime(viewHolder: ViewHolder, dueTime: Time) {
         viewHolder.firstDueTime.text = getSingleDueTimeText(viewHolder, dueTime)
     }
 
-    private fun bindLaterDueTimes(viewHolder: ViewHolder, dueTimes: List<DueTime>) {
+    private fun bindLaterDueTimes(viewHolder: ViewHolder, dueTimes: List<Time>) {
         viewHolder.laterDueTimes.text = getLaterDueTimesText(viewHolder, dueTimes)
     }
 
-    private fun getSingleDueTimeText(viewHolder: ViewHolder, dueTime: DueTime): String {
+    private fun getSingleDueTimeText(viewHolder: ViewHolder, dueTime: Time): String {
         return when {
-            dueTime.minutes == 0L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
-            isShowTime -> dueTime.time.format(Formatter.hourMinute)
+            dueTime.minutes == 0 -> viewHolder.itemView.resources.getString(R.string.live_data_due)
+//            isShowTime -> dueTime.time.format(Formatter.hourMinute)
             else -> viewHolder.itemView.resources.getString(R.string.live_data_due_time, dueTime.minutes)
         }
     }
 
-    private fun getLaterDueTimesText(viewHolder: ViewHolder, dueTimes: List<DueTime>): String {
-        return if (isShowTime) {
-            viewHolder.itemView.resources.getString(
-                R.string.live_data_due_times_time,
-                StringUtils.join(dueTimes.map { it.time.format(Formatter.hourMinute) }, ", ")
-            )
-        } else {
-            viewHolder.itemView.resources.getString(
+    private fun getLaterDueTimesText(viewHolder: ViewHolder, dueTimes: List<Time>): String {
+//        return if (isShowTime) {
+//            viewHolder.itemView.resources.getString(
+//                R.string.live_data_due_times_time,
+//                StringUtils.join(dueTimes.map { it.time.format(Formatter.hourMinute) }, ", ")
+//            )
+//        } else {
+//            viewHolder.itemView.resources.getString(
+//                R.string.live_data_due_times,
+//                StringUtils.join(dueTimes.map { it.minutes.toString() }, ", ")
+//            )
+//        }
+        return viewHolder.itemView.resources.getString(
                 R.string.live_data_due_times,
                 StringUtils.join(dueTimes.map { it.minutes.toString() }, ", ")
             )
-        }
     }
 
 }

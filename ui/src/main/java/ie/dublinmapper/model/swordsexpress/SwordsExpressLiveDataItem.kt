@@ -3,7 +3,8 @@ package ie.dublinmapper.model.swordsexpress
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.SwordsExpressLiveData
+import io.rtpi.api.SwordsExpressLiveData
+import org.threeten.bp.LocalTime
 
 class SwordsExpressLiveDataItem(
     private val swordsExpressLiveData: SwordsExpressLiveData

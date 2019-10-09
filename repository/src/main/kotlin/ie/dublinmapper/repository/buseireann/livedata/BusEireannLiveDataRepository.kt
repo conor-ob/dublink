@@ -1,9 +1,10 @@
 package ie.dublinmapper.repository.buseireann.livedata
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.model.BusEireannLiveData
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
+import io.rtpi.api.BusEireannLiveData
+import org.threeten.bp.LocalTime
 
 class BusEireannLiveDataRepository(
     private val store: Store<List<BusEireannLiveData>, String>

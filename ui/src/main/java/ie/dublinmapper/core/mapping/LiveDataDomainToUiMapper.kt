@@ -2,7 +2,7 @@ package ie.dublinmapper.core.mapping
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
-import ie.dublinmapper.domain.model.*
+import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
 import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
@@ -12,9 +12,11 @@ import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
 import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
+import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
+import org.threeten.bp.LocalTime
 
 class LiveDataDomainToUiMapper(
     private val stringProvider: StringProvider

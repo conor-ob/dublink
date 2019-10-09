@@ -32,6 +32,8 @@ dependencies {
     api project(':domain')
     implementation project(':core')
 
+    api "io.rtpi:rtpi-api:1-SNAPSHOT"
+
     api "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
 //    api "androidx.core:core-ktx:${versions.androidx.core_ktx}"
 

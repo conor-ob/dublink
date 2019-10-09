@@ -8,24 +8,18 @@ import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
-import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopEntityToDomainMapper
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopJsonToEntityMapper
-import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopEntityToDomainMapper
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopJsonToEntityMapper
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockJsonToEntityMapper
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDocksEntityToDomainMapper
-import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataJsonToDomainMapper
-import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopEntityToDomainMapper
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopJsonToEntityMapper
 import ie.dublinmapper.repository.favourite.FavouriteDomainToEntityMapper
 import ie.dublinmapper.repository.favourite.FavouriteEntityToDomainMapper
-import ie.dublinmapper.repository.irishrail.livedata.IrishRailLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.irishrail.stations.IrishRailJsonToEntityMapper
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationEntityToDomainMapper
-import ie.dublinmapper.repository.luas.livedata.LuasLiveDataJsonToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopEntityToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopJsonToEntityMapper
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
@@ -90,27 +84,21 @@ class ApplicationModule {
         mapperFactory.converterFactory.apply {
             registerConverter(AircoachStopJsonToEntityMapper)
             registerConverter(AircoachStopEntityToDomainMapper)
-            registerConverter(AircoachLiveDataJsonToDomainMapper)
 
             registerConverter(BusEireannStopJsonToEntityMapper)
             registerConverter(BusEireannStopEntityToDomainMapper)
-            registerConverter(BusEireannLiveDataJsonToDomainMapper)
 
             registerConverter(IrishRailJsonToEntityMapper)
             registerConverter(IrishRailStationEntityToDomainMapper)
-            registerConverter(IrishRailLiveDataJsonToDomainMapper)
 
             registerConverter(DublinBikesDockJsonToEntityMapper)
             registerConverter(DublinBikesDocksEntityToDomainMapper)
-            registerConverter(DublinBikesLiveDataJsonToDomainMapper)
 
             registerConverter(DublinBusStopJsonToEntityMapper)
             registerConverter(DublinBusStopEntityToDomainMapper)
-            registerConverter(DublinBusLiveDataJsonToDomainMapper)
 
             registerConverter(LuasStopJsonToEntityMapper)
             registerConverter(LuasStopEntityToDomainMapper)
-            registerConverter(LuasLiveDataJsonToDomainMapper)
 
             registerConverter(FavouritesDomainToUiMapper(stringProvider))
             registerConverter(LiveDataDomainToUiMapper(stringProvider))

@@ -13,7 +13,6 @@ import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
 import ie.dublinmapper.datamodel.aircoach.AircoachStopServiceDao
 import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.model.AircoachStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
@@ -24,7 +23,11 @@ import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.service.aircoach.ServiceResponseJson
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.Service
+import io.reactivex.Single
+import io.rtpi.api.AircoachLiveData
+import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
+import org.threeten.bp.LocalTime
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -50,13 +53,12 @@ class AircoachRepositoryModule {
     @Provides
     @Singleton
     fun aircoachLiveDataRepository(
-        remoteResource: AircoachStopRemoteResource,
-        mapper: MapperFacade,
+        client: RtpiClient,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<AircoachLiveData> {
-        val store = StoreBuilder.parsedWithKey<String, ServiceResponseJson, List<AircoachLiveData>>()
-            .fetcher { stopId -> remoteResource.getLiveData(stopId) }
-            .parser { liveData -> mapper.mapAsList(liveData.services, AircoachLiveData::class.java).filter { it.dueTime.first().minutes >= 0 } } //TODO
+        val store = StoreBuilder.key<String, List<AircoachLiveData>>()
+            .fetcher { stopId -> client.aircoach().getLiveData(stopId = stopId) }
+//            .fetcher { stopId -> Single.just(client.aircoach().getLiveData(stopId = stopId)) }
             .memoryPolicy(memoryPolicy)
             .open()
         return AircoachLiveDataRepository(store)
