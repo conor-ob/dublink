@@ -22,8 +22,7 @@ class LuasStopItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        viewHolder.title.text = luasStop.name
-        viewHolder.subtitle.text = luasStop.id
+        super.bindTitle(viewHolder, luasStop.name, null)
         viewHolder.serviceIconContainer.setImageResource(R.drawable.ic_tram)
         viewHolder.serviceIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.luasPurple))
     }

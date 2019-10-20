@@ -63,8 +63,8 @@ class DublinBusRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DublinBusLiveData> {
         val store = StoreBuilder.key<String, List<DublinBusLiveData>>()
-            .fetcher { stopId -> client.dublinBus().getLiveData(stopId = stopId) }
-//            .fetcher { stopId -> Single.just(client.dublinBus().getLiveData(stopId = stopId)) }
+//            .fetcher { stopId -> client.dublinBus().getLiveData(stopId = stopId) }
+            .fetcher { stopId -> Single.just(client.dublinBus().getLiveData(stopId = stopId)) }
             .memoryPolicy(memoryPolicy)
             .open()
         return DublinBusLiveDataRepository(store)

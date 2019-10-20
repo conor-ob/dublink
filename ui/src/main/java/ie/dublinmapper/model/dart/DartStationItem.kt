@@ -22,8 +22,7 @@ class DartStationItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        viewHolder.title.text = dartStation.name
-        viewHolder.subtitle.text = dartStation.id
+        super.bindTitle(viewHolder, dartStation.name, null)
         viewHolder.serviceIconContainer.setImageResource(R.drawable.ic_train)
         viewHolder.serviceIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.dartGreen))
     }

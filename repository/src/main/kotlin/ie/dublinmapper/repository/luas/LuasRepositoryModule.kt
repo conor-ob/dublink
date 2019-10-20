@@ -56,8 +56,8 @@ class LuasRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<LuasLiveData> {
         val store = StoreBuilder.key<String, List<LuasLiveData>>()
-            .fetcher { stopId -> client.luas().getLiveData(stopId = stopId) }
-//            .fetcher { stopId -> Single.just(client.luas().getLiveData(stopId = stopId)) }
+//            .fetcher { stopId -> client.luas().getLiveData(stopId = stopId) }
+            .fetcher { stopId -> Single.just(client.luas().getLiveData(stopId = stopId)) }
             .memoryPolicy(memoryPolicy)
             .open()
         return LuasLiveDataRepository(store)

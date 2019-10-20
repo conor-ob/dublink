@@ -22,8 +22,7 @@ class DublinBusStopItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        viewHolder.title.text = dublinBusStop.name
-        viewHolder.subtitle.text = viewHolder.itemView.context.getString(R.string.stop_number, dublinBusStop.id)
+        super.bindTitle(viewHolder, dublinBusStop.name, viewHolder.itemView.context.getString(R.string.stop_number, dublinBusStop.id))
         viewHolder.serviceIconContainer.setImageResource(R.drawable.ic_bus)
         viewHolder.serviceIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.dublinBusYellow))
     }

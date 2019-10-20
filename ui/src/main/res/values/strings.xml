@@ -29,7 +29,7 @@
     <string name="dublin_bus_api_base_url">http://rtpi.dublinbus.ie/</string>
     <string name="irish_rail_api_base_url">http://api.irishrail.ie/realtime/realtime.asmx/</string>
     <string name="jcdecaux_base_url">https://api.jcdecaux.com/vls/v1/</string>
-    <string name="rtpi_base_url">https://rtpiapp.rtpi.openskydata.com/RTPIPublicService_V2/service.svc/</string>
+    <string name="rtpi_base_url">https://rtpiapp.rtpi.openskydata.com/RTPIPublicService_V3/service.svc/</string>
     <string name="github_base_url">https://raw.githubusercontent.com/conor-ob/static-data/master/</string>
     <string name="swords_express_api_base_url">https://www.swordsexpress.com/</string>
 

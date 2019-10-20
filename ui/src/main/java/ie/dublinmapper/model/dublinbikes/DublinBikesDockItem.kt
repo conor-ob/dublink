@@ -22,8 +22,7 @@ class DublinBikesDockItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        viewHolder.title.text = dublinBikesDock.name
-        viewHolder.subtitle.text = "Bikes: ${dublinBikesDock.availableBikes}, Docks: ${dublinBikesDock.availableDocks}"
+        super.bindTitle(viewHolder, dublinBikesDock.name, "Bikes: ${dublinBikesDock.availableBikes}, Docks: ${dublinBikesDock.availableDocks}")
         viewHolder.serviceIconContainer.setImageResource(R.drawable.ic_bike)
         viewHolder.serviceIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.dublinBikesTeal))
     }

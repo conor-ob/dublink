@@ -55,8 +55,8 @@ class IrishRailRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<IrishRailLiveData> {
         val store = StoreBuilder.key<String, List<IrishRailLiveData>>()
-            .fetcher { stationId -> client.irishRail().getLiveData(stationId = stationId) }
-//            .fetcher { stationId -> Single.just(client.irishRail().getLiveData(stationId = stationId)) }
+//            .fetcher { stationId -> client.irishRail().getLiveData(stationId = stationId) }
+            .fetcher { stationId -> Single.just(client.irishRail().getLiveData(stationId = stationId)) }
             .memoryPolicy(memoryPolicy)
             .open()
         return IrishRailLiveDataRepository(store)

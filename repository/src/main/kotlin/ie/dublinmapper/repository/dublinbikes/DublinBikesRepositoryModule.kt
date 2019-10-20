@@ -61,8 +61,8 @@ class DublinBikesRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DublinBikesLiveData> {
         val store = StoreBuilder.key<String, DublinBikesLiveData>()
-            .fetcher { dockId -> client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey()) }
-//            .fetcher { dockId -> Single.just(client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey())) }
+//            .fetcher { dockId -> client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey()) }
+            .fetcher { dockId -> Single.just(client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey())) }
             .memoryPolicy(memoryPolicy)
             .open()
         return DublinBikesLiveDataRepository(store)

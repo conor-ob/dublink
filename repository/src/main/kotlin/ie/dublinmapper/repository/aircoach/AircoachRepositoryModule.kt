@@ -57,8 +57,8 @@ class AircoachRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<AircoachLiveData> {
         val store = StoreBuilder.key<String, List<AircoachLiveData>>()
-            .fetcher { stopId -> client.aircoach().getLiveData(stopId = stopId) }
-//            .fetcher { stopId -> Single.just(client.aircoach().getLiveData(stopId = stopId)) }
+//            .fetcher { stopId -> client.aircoach().getLiveData(stopId = stopId) }
+            .fetcher { stopId -> Single.just(client.aircoach().getLiveData(stopId = stopId)) }
             .memoryPolicy(memoryPolicy)
             .open()
         return AircoachLiveDataRepository(store)
