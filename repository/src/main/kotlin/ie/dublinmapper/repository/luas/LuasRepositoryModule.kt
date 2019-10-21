@@ -15,7 +15,6 @@ import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
 import ie.dublinmapper.repository.luas.stops.LuasStopRepository
 import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.StringProvider
 import io.reactivex.Single
 import io.rtpi.api.LuasLiveData
 import io.rtpi.api.LuasStop
@@ -35,7 +34,6 @@ class LuasRepositoryModule {
         localResource: LuasStopLocalResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
-        stringProvider: StringProvider,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DetailedLuasStop> {

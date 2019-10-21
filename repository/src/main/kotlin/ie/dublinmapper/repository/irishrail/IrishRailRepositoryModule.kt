@@ -15,7 +15,6 @@ import ie.dublinmapper.repository.irishrail.livedata.IrishRailLiveDataRepository
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationPersister
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationRepository
 import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.StringProvider
 import io.reactivex.Single
 import io.rtpi.api.IrishRailLiveData
 import io.rtpi.api.IrishRailStation
@@ -35,7 +34,6 @@ class IrishRailRepositoryModule {
         localResource: IrishRailStationLocalResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
-        stringProvider: StringProvider,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DetailedIrishRailStation> {

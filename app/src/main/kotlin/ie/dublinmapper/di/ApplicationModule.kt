@@ -51,13 +51,6 @@ class ApplicationModule {
         return AndroidResourceStringProvider(context, resources)
     }
 
-    @Provides
-    fun sslContextProvider(
-        context: Context
-    ): SslContextProvider {
-        return AndroidAssetSslContextProvider(context) //TODO inject in service module
-    }
-
 //    @Provides
 //    fun mapMarkerManager(context: Context): GoogleMapController {
 //        return GoogleMapController(context)

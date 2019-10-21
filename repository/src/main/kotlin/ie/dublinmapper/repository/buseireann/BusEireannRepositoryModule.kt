@@ -15,7 +15,6 @@ import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataReposito
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister
 import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.StringProvider
 import io.reactivex.Single
 import io.rtpi.api.BusEireannLiveData
 import io.rtpi.api.BusEireannStop
@@ -34,7 +33,6 @@ class BusEireannRepositoryModule {
         client: RtpiClient,
         localResource: BusEireannStopLocalResource,
         persisterDao: PersisterDao,
-        stringProvider: StringProvider,
         internetManager: InternetManager,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
