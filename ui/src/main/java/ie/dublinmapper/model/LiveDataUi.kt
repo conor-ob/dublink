@@ -41,9 +41,3 @@ package ie.dublinmapper.model
 //) : LiveDataUi() {
 //    override fun toString() = liveData.toString()
 //}
-//
-//class SwordsExpressLiveDataUi(
-//    val liveData: SwordsExpressLiveData
-//) : LiveDataUi() {
-//    override fun toString() = liveData.toString()
-//}

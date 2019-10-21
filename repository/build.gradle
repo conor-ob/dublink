@@ -5,7 +5,6 @@ dependencies {
     implementation project(':core')
     implementation project(':datamodel')
     implementation project(':domain')
-    implementation project(':service')
 
     implementation "com.nytimes.android:store3:${versions.store3}"
     implementation "ma.glasnost.orika:orika-core:${versions.orika_core}"

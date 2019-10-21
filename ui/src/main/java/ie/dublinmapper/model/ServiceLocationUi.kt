@@ -99,13 +99,3 @@ import ie.dublinmapper.model.luas.LuasStopItem
 //) {
 //    override fun toItem(isEven: Boolean, isLast: Boolean) = LuasStopItem(this, isEven, isLast)
 //}
-//
-//data class SwordsExpressStopUi(
-//    val swordsExpressStop: SwordsExpressStop
-//) : ServiceLocationUi(
-//    swordsExpressStop,
-//    swordsExpressStop.name,
-//    R.style.DublinMapperTheme
-//) {
-//    override fun toItem(isEven: Boolean, isLast: Boolean) = SwordsExpressStopItem(swordsExpressStop)
-//}

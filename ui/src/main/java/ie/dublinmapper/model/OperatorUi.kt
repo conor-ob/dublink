@@ -54,11 +54,6 @@ enum class OperatorUi(
         id = R.string.operator_luas_id,
         code = R.string.operator_luas_code,
         colour = R.color.luasPurple
-    ),
-    SWORDS_EXPRESS(
-        id = R.string.operator_swordsexpress_id,
-        code = R.string.operator_swordsexpress_code,
-        colour = R.color.swordsExpressGreen
     );
 
 }
