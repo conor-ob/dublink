@@ -74,14 +74,6 @@ package ie.dublinmapper.domain.model
 //    override val customHash: Int = Objects.hash(operator, route, destination, direction)
 //}
 //
-//data class SwordsExpressLiveData(
-//    override val dueTime: List<DueTime>,
-//    override val operator: Operator,
-//    override val route: String,
-//    override val destination: String,
-//    override val customHash: Int = Objects.hash(operator, route, destination)
-//) : TimedLiveData
-//
 //data class DueTime(
 //    val minutes: Long,
 //    val time: LocalTime

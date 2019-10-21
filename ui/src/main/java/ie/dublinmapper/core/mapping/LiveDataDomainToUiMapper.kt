@@ -10,13 +10,11 @@ import ie.dublinmapper.model.dart.DartLiveDataItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
-import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
 import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
-import org.threeten.bp.LocalTime
 
 class LiveDataDomainToUiMapper(
     private val stringProvider: StringProvider
@@ -35,7 +33,7 @@ class LiveDataDomainToUiMapper(
             Service.DUBLIN_BUS -> mapDublinBusLiveData(source.serviceLocationName, source.liveData.map { it as DublinBusLiveData })
             Service.IRISH_RAIL -> mapDartLiveData(source.serviceLocationName, source.liveData.map { it as IrishRailLiveData })
             Service.LUAS -> mapLuasLiveData(source.serviceLocationName, source.liveData.map { it as LuasLiveData })
-            Service.SWORDS_EXPRESS -> TODO()
+            else -> TODO()
         }
     }
 

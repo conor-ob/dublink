@@ -1,14 +1,13 @@
 package ie.dublinmapper.repository.luas.stops
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import ie.dublinmapper.domain.model.LuasStop
-import ie.dublinmapper.domain.repository.FavouriteRepository
+import ie.dublinmapper.domain.model.DetailedLuasStop
 import ie.dublinmapper.repository.ServiceLocationRepository
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Service
 
 class LuasStopRepository(
-    serviceLocationStore: StoreRoom<List<LuasStop>, Service>
-) : ServiceLocationRepository<LuasStop>(
+    serviceLocationStore: StoreRoom<List<DetailedLuasStop>, Service>
+) : ServiceLocationRepository<DetailedLuasStop>(
     service = Service.LUAS,
     serviceLocationStore = serviceLocationStore
 )

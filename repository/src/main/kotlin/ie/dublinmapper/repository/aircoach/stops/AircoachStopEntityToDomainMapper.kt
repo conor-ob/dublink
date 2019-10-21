@@ -2,29 +2,30 @@ package ie.dublinmapper.repository.aircoach.stops
 
 import ie.dublinmapper.datamodel.aircoach.AircoachStopEntity
 import ie.dublinmapper.datamodel.aircoach.AircoachStopServiceEntity
-import ie.dublinmapper.domain.model.AircoachStop
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
+import ie.dublinmapper.domain.model.DetailedAircoachStop
+import io.rtpi.api.AircoachStop
+import io.rtpi.api.Coordinate
+import io.rtpi.api.Operator
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 import java.util.*
 
-object AircoachStopEntityToDomainMapper : CustomConverter<AircoachStopEntity, AircoachStop>() {
+object AircoachStopEntityToDomainMapper : CustomConverter<AircoachStopEntity, DetailedAircoachStop>() {
 
     override fun convert(
         source: AircoachStopEntity,
-        destinationType: Type<out AircoachStop>,
+        destinationType: Type<out DetailedAircoachStop>,
         mappingContext: MappingContext
-    ): AircoachStop {
-        return AircoachStop(
-            id = source.location.id,
-            serviceLocationName = source.location.name,
-            coordinate = Coordinate(source.location.latitude, source.location.longitude),
-            operators = mapOperators(source.services),
-            service = Service.AIRCOACH,
-            routes = mapOperatorsToRoutes(source.services)
+    ): DetailedAircoachStop {
+        return DetailedAircoachStop(
+            AircoachStop(
+                id = source.location.id,
+                name = source.location.name,
+                coordinate = Coordinate(source.location.latitude, source.location.longitude),
+                operators = mapOperators(source.services),
+                routes = mapOperatorsToRoutes(source.services)
+            )
         )
     }
 

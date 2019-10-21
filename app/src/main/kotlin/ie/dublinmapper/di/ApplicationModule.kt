@@ -18,7 +18,7 @@ import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopEntityToDomainMap
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopJsonToEntityMapper
 import ie.dublinmapper.repository.favourite.FavouriteDomainToEntityMapper
 import ie.dublinmapper.repository.favourite.FavouriteEntityToDomainMapper
-import ie.dublinmapper.repository.irishrail.stations.IrishRailJsonToEntityMapper
+import ie.dublinmapper.repository.irishrail.stations.IrishRailStationJsonToEntityMapper
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationEntityToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopEntityToDomainMapper
 import ie.dublinmapper.repository.luas.stops.LuasStopJsonToEntityMapper
@@ -28,6 +28,7 @@ import ie.dublinmapper.settings.R
 import ie.dublinmapper.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.rtpi.api.Service
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 
@@ -88,7 +89,7 @@ class ApplicationModule {
             registerConverter(BusEireannStopJsonToEntityMapper)
             registerConverter(BusEireannStopEntityToDomainMapper)
 
-            registerConverter(IrishRailJsonToEntityMapper)
+            registerConverter(IrishRailStationJsonToEntityMapper)
             registerConverter(IrishRailStationEntityToDomainMapper)
 
             registerConverter(DublinBikesDockJsonToEntityMapper)
@@ -125,8 +126,7 @@ class ApplicationModule {
             Service.DUBLIN_BIKES to context.getString(R.string.preference_enabled_service_dublin_bikes),
             Service.DUBLIN_BUS to context.getString(R.string.preference_enabled_service_dublin_bus),
             Service.IRISH_RAIL to context.getString(R.string.preference_enabled_service_irish_rail),
-            Service.LUAS to context.getString(R.string.preference_enabled_service_luas),
-            Service.SWORDS_EXPRESS to context.getString(R.string.preference_enabled_service_swords_express)
+            Service.LUAS to context.getString(R.string.preference_enabled_service_luas)
         )
         return DefaultEnabledServiceManager(preferenceStore, serviceToEnabledServicePreferenceKey)
     }

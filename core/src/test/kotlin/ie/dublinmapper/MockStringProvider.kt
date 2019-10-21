@@ -52,10 +52,6 @@ object MockStringProvider : StringProvider {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun swordsExpressBaseUrl(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun aircoachBaseUrl(): String {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

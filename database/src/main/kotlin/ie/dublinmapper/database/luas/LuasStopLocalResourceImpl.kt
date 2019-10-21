@@ -4,8 +4,8 @@ import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.favourite.FavouriteEntity
 import ie.dublinmapper.datamodel.luas.*
-import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
+import io.rtpi.api.Service
 
 class LuasStopLocalResourceImpl(
     private val luasStopLocationDao: LuasStopLocationDao,

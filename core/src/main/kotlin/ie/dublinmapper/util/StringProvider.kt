@@ -26,8 +26,6 @@ interface StringProvider {
 
     fun rtpiOperatorGoAhead(): String
 
-    fun swordsExpressBaseUrl(): String
-
     fun aircoachBaseUrl(): String
 
     fun aircoachHost(): String

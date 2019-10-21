@@ -11,6 +11,8 @@ dependencies {
     api libraries.threetenabp
     api "com.google.dagger:dagger:${versions.dagger}"
 
+    implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
+
     testApi testLibraries.junit
     testApi testLibraries.truth
 }

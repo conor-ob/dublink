@@ -49,7 +49,7 @@
             app:argType="string" />
         <argument
             android:name="serviceLocationService"
-            app:argType="ie.dublinmapper.util.Service" />
+            app:argType="io.rtpi.api.Service" />
         <argument
             android:name="serviceLocationIsFavourite"
             app:argType="boolean" />

@@ -4,19 +4,18 @@ import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.RxScheduler
-import ie.dublinmapper.util.Service
 import io.reactivex.Observable
 import io.reactivex.functions.Function6
+import io.rtpi.api.Service
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
-    private val aircoachStopRepository: Repository<AircoachStop>,
-    private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val irishRailStationRepository: Repository<IrishRailStation>,
-    private val dublinBikesDockRepository: Repository<DublinBikesDock>,
-    private val dublinBusStopRepository: Repository<DublinBusStop>,
-    private val luasStopRepository: Repository<LuasStop>,
-    private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
+    private val aircoachStopRepository: Repository<DetailedAircoachStop>,
+    private val busEireannStopRepository: Repository<DetailedBusEireannStop>,
+    private val irishRailStationRepository: Repository<DetailedIrishRailStation>,
+    private val dublinBikesDockRepository: Repository<DetailedDublinBikesDock>,
+    private val dublinBusStopRepository: Repository<DetailedDublinBusStop>,
+    private val luasStopRepository: Repository<DetailedLuasStop>,
     private val scheduler: RxScheduler,
     private val enabledServiceManager: EnabledServiceManager
 ) {
@@ -29,7 +28,6 @@ class SearchUseCase @Inject constructor(
             dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
             dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
             luasStopRepository.getAll().subscribeOn(scheduler.io),
-//            swordsExpressStopRepository.getAll().subscribeOn(scheduler.io),
             Function6 { aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops ->
                 search(query, aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops)
             }
@@ -38,14 +36,14 @@ class SearchUseCase @Inject constructor(
 
     private fun search(
         query: String,
-        aircoachStops: List<AircoachStop>,
-        busEireannStops: List<BusEireannStop>,
-        irishRailStations: List<IrishRailStation>,
-        dublinBikesDocks: List<DublinBikesDock>,
-        dublinBusStops: List<DublinBusStop>,
-        luasStops: List<LuasStop>
+        aircoachStops: List<DetailedAircoachStop>,
+        busEireannStops: List<DetailedBusEireannStop>,
+        irishRailStations: List<DetailedIrishRailStation>,
+        dublinBikesDocks: List<DetailedDublinBikesDock>,
+        dublinBusStops: List<DetailedDublinBusStop>,
+        luasStops: List<DetailedLuasStop>
     ) : SearchResponse {
-        val searchCollections = mutableListOf<Collection<ServiceLocation>>()
+        val searchCollections = mutableListOf<Collection<DetailedServiceLocation>>()
         if (enabledServiceManager.isServiceEnabled(Service.AIRCOACH)) {
             searchCollections.add(search(query, aircoachStops))
         }
@@ -68,9 +66,9 @@ class SearchUseCase @Inject constructor(
         return SearchResponse(searchCollections.flatten().take(50))
     }
 
-    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
+    private fun search(query: String, serviceLocations: List<DetailedServiceLocation>): List<DetailedServiceLocation> {
         val adaptedQuery = query.toLowerCase().trim()
-        val searchResults = mutableListOf<ServiceLocation>()
+        val searchResults = mutableListOf<DetailedServiceLocation>()
         for (serviceLocation in serviceLocations) {
             if (serviceLocation.serviceLocationName.toLowerCase().contains(adaptedQuery) ||
                 serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
@@ -90,5 +88,5 @@ class SearchUseCase @Inject constructor(
 }
 
 data class SearchResponse(
-    val serviceLocations: List<ServiceLocation>
+    val serviceLocations: List<DetailedServiceLocation>
 )

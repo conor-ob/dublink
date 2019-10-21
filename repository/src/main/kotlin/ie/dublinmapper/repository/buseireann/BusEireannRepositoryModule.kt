@@ -9,21 +9,19 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.BusEireannStop
+import ie.dublinmapper.domain.model.DetailedBusEireannStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister
-import ie.dublinmapper.service.rtpi.RtpiApi
-import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
 import io.reactivex.Single
 import io.rtpi.api.BusEireannLiveData
+import io.rtpi.api.BusEireannStop
+import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
-import org.threeten.bp.LocalTime
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -33,18 +31,15 @@ class BusEireannRepositoryModule {
     @Provides
     @Singleton
     fun busEireannStopRepository(
-        api: RtpiApi,
+        client: RtpiClient,
         localResource: BusEireannStopLocalResource,
         persisterDao: PersisterDao,
         stringProvider: StringProvider,
         internetManager: InternetManager,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<BusEireannStop> {
-        val fetcher = Fetcher<List<RtpiBusStopInformationJson>, Service> {
-            api.busStopInformation(stringProvider.rtpiOperatorBusEireann(), stringProvider.rtpiFormat())
-                .map { it.results }
-        }
+    ): Repository<DetailedBusEireannStop> {
+        val fetcher = Fetcher<List<BusEireannStop>, Service> { Single.just(client.busEireann().getStops()) }
         val persister = BusEireannStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return BusEireannStopRepository(store)

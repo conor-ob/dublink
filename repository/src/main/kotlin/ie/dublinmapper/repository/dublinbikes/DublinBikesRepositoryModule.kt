@@ -1,5 +1,6 @@
 package ie.dublinmapper.repository.dublinbikes
 
+import com.nytimes.android.external.store3.base.Fetcher
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.impl.StalePolicy
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
@@ -8,17 +9,17 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.DublinBikesDock
+import ie.dublinmapper.domain.model.DetailedDublinBikesDock
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockFetcher
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataRepository
-import ie.dublinmapper.service.jcdecaux.JcDecauxApi
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
 import io.reactivex.Single
+import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.DublinBikesLiveData
+import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
 import javax.inject.Named
@@ -30,19 +31,15 @@ class DublinBikesRepositoryModule {
     @Provides
     @Singleton
     fun dublinBikesDockRepository(
-        api: JcDecauxApi,
+        client: RtpiClient,
         localResource: DublinBikesDockLocalResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         stringProvider: StringProvider,
         mapper: MapperFacade,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<DublinBikesDock> {
-        val fetcher = DublinBikesDockFetcher(
-            api,
-            stringProvider.jcDecauxApiKey(),
-            stringProvider.jcDecauxContract()
-        )
+    ): Repository<DetailedDublinBikesDock> {
+        val fetcher = Fetcher<List<DublinBikesDock>, Service> { Single.just(client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey())) }
         val persister = DublinBikesDockPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return DublinBikesDockRepository(store)

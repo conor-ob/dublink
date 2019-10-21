@@ -69,10 +69,6 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.dublin_bus_api_base_url)
     }
 
-    override fun swordsExpressBaseUrl(): String {
-        return resources.getString(R.string.swords_express_api_base_url)
-    }
-
     override fun githubBaseUrl(): String {
         return resources.getString(R.string.github_base_url)
     }

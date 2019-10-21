@@ -1,104 +1,66 @@
 package ie.dublinmapper.domain.model
 
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
+import io.rtpi.api.*
 
-interface ServiceLocation {
-
-    val id: String
-
-    val name: String
+interface DetailedServiceLocation : ServiceLocation {
 
     val serviceLocationName: String
 
-    val coordinate: Coordinate
-
-    val service: Service
-
-    val operators: Set<Operator>
-
-    fun isFavourite(): Boolean
+    val isFavourite: Boolean
 
 }
 
-abstract class AbstractServiceLocation(
+abstract class AbstractDetailedServiceLocation(
+    serviceLocation: ServiceLocation,
     private val favourite: Favourite?
-) : ServiceLocation {
-
+) : DetailedServiceLocation {
+    override val id = serviceLocation.id
+    override val serviceLocationName = serviceLocation.name
+    override val coordinate = serviceLocation.coordinate
+    override val operators = serviceLocation.operators
+    override val service = serviceLocation.service
     override val name get() = favourite?.name ?: serviceLocationName
-
-    override fun isFavourite() = favourite != null
-    
+    override val isFavourite = favourite != null
 }
 
-data class AircoachStop(
-    override val id: String,
-    override val serviceLocationName: String,
-    override val coordinate: Coordinate,
-    override val service: Service,
-    override val operators: Set<Operator>,
-    private val favourite: Favourite? = null,
-    val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite)
-
-data class BusEireannStop(
-    override val id: String,
-    override val serviceLocationName: String,
-    override val coordinate: Coordinate,
-    override val service: Service,
-    override val operators: Set<Operator>,
-    private val favourite: Favourite? = null,
-    val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite)
-
-data class IrishRailStation(
-    override val id: String,
-    override val serviceLocationName: String,
-    override val coordinate: Coordinate,
-    override val service: Service,
-    override val operators: Set<Operator>,
+data class DetailedAircoachStop(
+    private val aircoachStop: AircoachStop,
     private val favourite: Favourite? = null
-) : AbstractServiceLocation(favourite)
+) : AbstractDetailedServiceLocation(aircoachStop, favourite) {
+    val routes = aircoachStop.routes
+}
 
-data class DublinBikesDock(
-    override val id: String,
-    override val serviceLocationName: String,
-    override val coordinate: Coordinate,
-    override val service: Service,
-    override val operators: Set<Operator>,
-    private val favourite: Favourite? = null,
-    val docks: Int,
-    val availableBikes: Int,
-    val availableDocks: Int
-) : AbstractServiceLocation(favourite)
+data class DetailedBusEireannStop(
+    private val busEireannStop: BusEireannStop,
+    private val favourite: Favourite? = null
+) : AbstractDetailedServiceLocation(busEireannStop, favourite) {
+    val routes = busEireannStop.routes
+}
 
-data class DublinBusStop(
-    override val id: String,
-    override val serviceLocationName: String,
-    override val coordinate: Coordinate,
-    override val service: Service,
-    override val operators: Set<Operator>,
-    private val favourite: Favourite? = null,
-    val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite)
+data class DetailedIrishRailStation(
+    private val irishRailStation: IrishRailStation,
+    private val favourite: Favourite? = null
+) : AbstractDetailedServiceLocation(irishRailStation, favourite)
 
-data class LuasStop(
-    override val id: String,
-    override val serviceLocationName: String,
-    override val coordinate: Coordinate,
-    override val service: Service,
-    override val operators: Set<Operator>,
-    private val favourite: Favourite? = null,
-    val routes: Map<Operator, List<String>>
-) : AbstractServiceLocation(favourite)
+data class DetailedDublinBikesDock(
+    private val dublinBikesDock: DublinBikesDock,
+    private val favourite: Favourite? = null
+) : AbstractDetailedServiceLocation(dublinBikesDock, favourite) {
+    val docks = dublinBikesDock.docks
+    val availableBikes = dublinBikesDock.availableBikes
+    val availableDocks = dublinBikesDock.availableDocks
+}
 
-data class SwordsExpressStop(
-    override val id: String,
-    override val serviceLocationName: String,
-    override val coordinate: Coordinate,
-    override val service: Service,
-    override val operators: Set<Operator>,
-    private val favourite: Favourite? = null,
-    val direction: String
-) : AbstractServiceLocation(favourite)
+data class DetailedDublinBusStop(
+    private val dublinBusStop: DublinBusStop,
+    private val favourite: Favourite? = null
+) : AbstractDetailedServiceLocation(dublinBusStop, favourite) {
+    val routes = dublinBusStop.routes
+}
+
+data class DetailedLuasStop(
+    private val luasStop: LuasStop,
+    private val favourite: Favourite? = null
+) : AbstractDetailedServiceLocation(luasStop, favourite) {
+    val routes = luasStop.routes
+}

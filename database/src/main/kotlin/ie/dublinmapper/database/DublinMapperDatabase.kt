@@ -16,7 +16,6 @@ import ie.dublinmapper.datamodel.favourite.*
 import ie.dublinmapper.datamodel.luas.*
 import ie.dublinmapper.datamodel.persister.PersisterDao
 import ie.dublinmapper.datamodel.persister.PersisterEntity
-import ie.dublinmapper.datamodel.swordsexpress.*
 //import timber.log.Timber
 
 @Database(
@@ -35,8 +34,6 @@ import ie.dublinmapper.datamodel.swordsexpress.*
         DublinBusStopServiceEntity::class,
         LuasStopLocationEntity::class,
         LuasStopServiceEntity::class,
-        SwordsExpressStopLocationEntity::class,
-        SwordsExpressStopServiceEntity::class,
         PersisterEntity::class,
         FavouriteLocationEntity::class,
         FavouriteServiceEntity::class
@@ -80,12 +77,6 @@ abstract class DublinMapperDatabase : RoomDatabase() {
     abstract fun luasStopLocationDao(): LuasStopLocationDao
 
     abstract fun luasStopServiceDao(): LuasStopServiceDao
-
-    abstract fun swordsExpressStopDao(): SwordsExpressStopDao
-
-    abstract fun swordsExpressStopLocationDao(): SwordsExpressStopLocationDao
-
-    abstract fun swordsExpressStopServiceDao(): SwordsExpressStopServiceDao
 
     abstract fun persisterDao(): PersisterDao
 

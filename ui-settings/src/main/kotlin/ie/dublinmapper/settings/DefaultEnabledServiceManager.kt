@@ -2,7 +2,7 @@ package ie.dublinmapper.settings
 
 import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.PreferenceStore
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Service
 import javax.inject.Inject
 
 class DefaultEnabledServiceManager @Inject constructor(

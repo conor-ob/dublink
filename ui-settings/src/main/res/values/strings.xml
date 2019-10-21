@@ -5,5 +5,4 @@
     <string name="preference_enabled_service_dublin_bus">preference_enabled_service_dublin_bus</string>
     <string name="preference_enabled_service_irish_rail">preference_enabled_service_irish_rail</string>
     <string name="preference_enabled_service_luas">preference_enabled_service_luas</string>
-    <string name="preference_enabled_service_swords_express">preference_enabled_service_swords_express</string>
 </resources>

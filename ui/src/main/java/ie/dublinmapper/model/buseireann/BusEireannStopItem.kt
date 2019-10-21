@@ -4,12 +4,12 @@ import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.BusEireannStop
+import ie.dublinmapper.domain.model.DetailedBusEireannStop
 import ie.dublinmapper.model.ServiceLocationItem
 import kotlinx.android.synthetic.main.list_item_service_location.*
 
 class BusEireannStopItem(
-    val busEireannStop: BusEireannStop,
+    val busEireannStop: DetailedBusEireannStop,
     isEven: Boolean,
     isLast: Boolean
 ) : ServiceLocationItem(isEven, isLast) {

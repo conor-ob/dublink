@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import ie.dublinmapper.datamodel.BaseDao
-import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
+import io.rtpi.api.Service
 
 @Dao
 interface FavouriteDao {

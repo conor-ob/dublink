@@ -3,34 +3,36 @@ package ie.dublinmapper.repository.aircoach.stops
 import ie.dublinmapper.datamodel.aircoach.AircoachStopEntity
 import ie.dublinmapper.datamodel.aircoach.AircoachStopLocationEntity
 import ie.dublinmapper.datamodel.aircoach.AircoachStopServiceEntity
-import ie.dublinmapper.service.aircoach.AircoachStopJson
-import ie.dublinmapper.util.Operator
+import io.rtpi.api.AircoachStop
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 
-object AircoachStopJsonToEntityMapper : CustomConverter<AircoachStopJson, AircoachStopEntity>() {
+object AircoachStopJsonToEntityMapper : CustomConverter<AircoachStop, AircoachStopEntity>() {
 
     override fun convert(
-        source: AircoachStopJson,
+        source: AircoachStop,
         destinationType: Type<out AircoachStopEntity>,
         mappingContext: MappingContext
     ): AircoachStopEntity {
         val locationEntity = AircoachStopLocationEntity(
-            id = source.stopId,
+            id = source.id,
             name = source.name,
-            latitude = source.stopLatitude,
-            longitude = source.stopLongitude
+            latitude = source.coordinate.latitude,
+            longitude = source.coordinate.longitude
         )
         val serviceEntities = mutableListOf<AircoachStopServiceEntity>()
-        for (service in source.services) {
-            serviceEntities.add(
-                AircoachStopServiceEntity(
-                    stopId = source.stopId,
-                    operator = Operator.AIRCOACH.shortName,
-                    route = service.route
+        for (entry in source.routes) {
+            val operator = entry.key
+            for (route in entry.value) {
+                serviceEntities.add(
+                    AircoachStopServiceEntity(
+                        stopId = source.id,
+                        operator = operator.name,
+                        route = route
+                    )
                 )
-            )
+            }
         }
         val entity = AircoachStopEntity(locationEntity)
         entity.services = serviceEntities

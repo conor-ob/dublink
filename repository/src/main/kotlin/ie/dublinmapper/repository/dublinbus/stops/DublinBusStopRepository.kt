@@ -1,15 +1,13 @@
 package ie.dublinmapper.repository.dublinbus.stops
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import ie.dublinmapper.domain.model.DublinBusStop
-import ie.dublinmapper.domain.model.LuasStop
-import ie.dublinmapper.domain.repository.FavouriteRepository
+import ie.dublinmapper.domain.model.DetailedDublinBusStop
 import ie.dublinmapper.repository.ServiceLocationRepository
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Service
 
 class DublinBusStopRepository(
-    serviceLocationStore: StoreRoom<List<DublinBusStop>, Service>
-) : ServiceLocationRepository<DublinBusStop>(
+    serviceLocationStore: StoreRoom<List<DetailedDublinBusStop>, Service>
+) : ServiceLocationRepository<DetailedDublinBusStop>(
     service = Service.DUBLIN_BUS,
     serviceLocationStore = serviceLocationStore
 )

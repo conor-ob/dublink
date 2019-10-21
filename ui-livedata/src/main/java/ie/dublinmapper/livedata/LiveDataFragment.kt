@@ -1,7 +1,6 @@
 package ie.dublinmapper.livedata
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -11,7 +10,7 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.Navigator
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import timber.log.Timber
 

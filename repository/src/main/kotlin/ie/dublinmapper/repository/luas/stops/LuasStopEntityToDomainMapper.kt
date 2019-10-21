@@ -2,29 +2,30 @@ package ie.dublinmapper.repository.luas.stops
 
 import ie.dublinmapper.datamodel.luas.LuasStopEntity
 import ie.dublinmapper.datamodel.luas.LuasStopServiceEntity
-import ie.dublinmapper.domain.model.LuasStop
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
+import ie.dublinmapper.domain.model.DetailedLuasStop
+import io.rtpi.api.Coordinate
+import io.rtpi.api.LuasStop
+import io.rtpi.api.Operator
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 import java.util.*
 
-object LuasStopEntityToDomainMapper : CustomConverter<LuasStopEntity, LuasStop>() {
+object LuasStopEntityToDomainMapper : CustomConverter<LuasStopEntity, DetailedLuasStop>() {
 
     override fun convert(
         source: LuasStopEntity,
-        destinationType: Type<out LuasStop>,
+        destinationType: Type<out DetailedLuasStop>,
         mappingContext: MappingContext
-    ): LuasStop {
-        return LuasStop(
-            id = source.location.id,
-            serviceLocationName = source.location.name,
-            coordinate = Coordinate(source.location.latitude, source.location.longitude),
-            operators = mapOperators(source.services),
-            routes = mapOperatorsToRoutes(source.services),
-            service = Service.LUAS
+    ): DetailedLuasStop {
+        return DetailedLuasStop(
+            LuasStop(
+                id = source.location.id,
+                name = source.location.name,
+                coordinate = Coordinate(source.location.latitude, source.location.longitude),
+                operators = mapOperators(source.services),
+                routes = mapOperatorsToRoutes(source.services)
+            )
         )
     }
 

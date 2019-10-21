@@ -1,10 +1,8 @@
 package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.util.Service
 import io.reactivex.Observable
 import io.rtpi.api.*
-import org.threeten.bp.LocalTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -43,7 +41,6 @@ class LiveDataUseCase @Inject constructor(
             Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { listOf(it) }
             Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId)
             Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId)
-            Service.SWORDS_EXPRESS -> TODO()
         }.map { it as List<LiveData> }
     }
 

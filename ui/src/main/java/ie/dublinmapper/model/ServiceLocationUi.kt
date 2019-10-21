@@ -9,10 +9,6 @@ import ie.dublinmapper.model.dart.DartStationItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
 import ie.dublinmapper.model.dublinbus.DublinBusStopItem
 import ie.dublinmapper.model.luas.LuasStopItem
-import ie.dublinmapper.model.swordsexpress.SwordsExpressStopItem
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
 
 //sealed class ServiceLocationUi(
 //    open val serviceLocation: ServiceLocation,

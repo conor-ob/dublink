@@ -4,7 +4,6 @@ import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
 import io.rtpi.api.LuasLiveData
-import org.threeten.bp.LocalTime
 
 class LuasLiveDataRepository(
     private val store: Store<List<LuasLiveData>, String>

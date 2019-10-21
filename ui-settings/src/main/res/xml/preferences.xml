@@ -33,12 +33,6 @@
                 android:key="@string/preference_enabled_service_luas"
                 android:title="@string/service_name_luas" />
 
-        <SwitchPreference
-                android:defaultValue="false"
-                android:key="@string/preference_enabled_service_swords_express"
-                android:title="@string/service_name_swords_express"
-                android:enabled="false" />
-
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -22,7 +22,6 @@ class SwordsExpressModule {
         callAdapterFactory: CallAdapter.Factory
     ): SwordsExpressApi {
         return Retrofit.Builder()
-            .baseUrl(stringProvider.swordsExpressBaseUrl())
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)

@@ -7,27 +7,22 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.TxRunner
-import ie.dublinmapper.datamodel.aircoach.AircoachStopDao
 import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
-import ie.dublinmapper.datamodel.aircoach.AircoachStopServiceDao
-import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.AircoachStop
+import ie.dublinmapper.domain.model.DetailedAircoachStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopRepository
 import ie.dublinmapper.service.aircoach.AircoachStopRemoteResource
 import ie.dublinmapper.service.aircoach.AircoachStopJson
-import ie.dublinmapper.service.aircoach.ServiceResponseJson
 import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.Service
 import io.reactivex.Single
 import io.rtpi.api.AircoachLiveData
+import io.rtpi.api.AircoachStop
+import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
-import org.threeten.bp.LocalTime
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -37,14 +32,14 @@ class AircoachRepositoryModule {
     @Provides
     @Singleton
     fun aircoachStopRepository(
-        remoteResource: AircoachStopRemoteResource,
+        client: RtpiClient,
         localResource: AircoachStopLocalResource,
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<AircoachStop> {
-        val fetcher = Fetcher<List<AircoachStopJson>, Service> { remoteResource.getStops() }
+    ): Repository<DetailedAircoachStop> {
+        val fetcher = Fetcher<List<AircoachStop>, Service> { Single.just(client.aircoach().getStops()) }
         val persister = AircoachStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return AircoachStopRepository(store)
