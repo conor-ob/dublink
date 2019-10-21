@@ -11,6 +11,7 @@ import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
 import ie.dublinmapper.repository.irishrail.IrishRailRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
 import io.rtpi.client.RtpiClient
+import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
@@ -30,7 +31,18 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun client(): RtpiClient = RtpiClient()
+    fun okHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(NetworkLoggingInterceptor())
+            .retryOnConnectionFailure(true)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+    @Provides
+    @Singleton
+    fun client(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
 
     @Provides
     @Named("SHORT_TERM")
