@@ -4,8 +4,8 @@ import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.DublinBikesLiveData
 import ie.dublinmapper.model.livedata.LiveDataItem
+import io.rtpi.api.DublinBikesLiveData
 import kotlinx.android.synthetic.main.list_item_live_data.*
 
 class DublinBikesLiveDataItem(

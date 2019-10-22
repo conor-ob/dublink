@@ -35,6 +35,7 @@ captures/
 
 # Intellij
 *.iml
+.idea/navEditor.xml
 .idea/shelf/
 .idea/caches/build_file_checksums.ser
 .idea/tasks.xml

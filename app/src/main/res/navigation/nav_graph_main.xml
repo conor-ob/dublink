@@ -36,6 +36,11 @@
         android:name="ie.dublinmapper.livedata.LiveDataFragment"
         android:label="LiveDataFragment">
 
+        <action android:id="@+id/liveDataFragment_to_settingsFragment"
+                app:destination="@id/settingsFragment"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim" />
+
         <argument
             android:name="serviceLocationId"
             app:argType="string" />
@@ -44,7 +49,7 @@
             app:argType="string" />
         <argument
             android:name="serviceLocationService"
-            app:argType="ie.dublinmapper.util.Service" />
+            app:argType="io.rtpi.api.Service" />
         <argument
             android:name="serviceLocationIsFavourite"
             app:argType="boolean" />
@@ -53,5 +58,10 @@
             app:argType="integer" />
 
     </fragment>
+
+    <fragment android:id="@+id/settingsFragment"
+            android:name="ie.dublinmapper.settings.SettingsFragment"
+            android:label="SettingsFragment"/>
+
 
 </navigation>

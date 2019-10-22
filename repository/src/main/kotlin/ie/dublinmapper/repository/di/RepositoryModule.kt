@@ -10,9 +10,11 @@ import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
 import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
 import ie.dublinmapper.repository.irishrail.IrishRailRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
-import ie.dublinmapper.repository.swordsexpress.SwordsExpressRepositoryModule
+import io.rtpi.client.RtpiClient
+import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module(
     includes = [
@@ -22,11 +24,25 @@ import javax.inject.Named
         DublinBikesRepositoryModule::class,
         DublinBusRepositoryModule::class,
         LuasRepositoryModule::class,
-        SwordsExpressRepositoryModule::class,
         FavouriteRepositoryModule::class
     ]
 )
 class RepositoryModule {
+
+    @Provides
+    @Singleton
+    fun okHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(NetworkLoggingInterceptor())
+            .retryOnConnectionFailure(true)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+    @Provides
+    @Singleton
+    fun client(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
 
     @Provides
     @Named("SHORT_TERM")

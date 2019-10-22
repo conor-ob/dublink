@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "03d9cc1d9b77ca75ff4453b9769e8375",
+    "identityHash": "42ca7d9991b04a5e9f47fef90b5ec6f7",
     "entities": [
       {
         "tableName": "aircoach_stop_locations",
@@ -593,103 +593,6 @@
         ]
       },
       {
-        "tableName": "swordsexpress_stop_locations",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, PRIMARY KEY(`id`))",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "latitude",
-            "columnName": "latitude",
-            "affinity": "REAL",
-            "notNull": true
-          },
-          {
-            "fieldPath": "longitude",
-            "columnName": "longitude",
-            "affinity": "REAL",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "swordsexpress_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `direction` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `swordsexpress_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "stopId",
-            "columnName": "stop_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "operator",
-            "columnName": "operator",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "direction",
-            "columnName": "direction",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [
-          {
-            "name": "index_swordsexpress_stop_services_stop_id",
-            "unique": false,
-            "columnNames": [
-              "stop_id"
-            ],
-            "createSql": "CREATE  INDEX `index_swordsexpress_stop_services_stop_id` ON `${TABLE_NAME}` (`stop_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "swordsexpress_stop_locations",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "stop_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
-      },
-      {
         "tableName": "persister_last_updated",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `last_updated` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
@@ -815,7 +718,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"03d9cc1d9b77ca75ff4453b9769e8375\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"42ca7d9991b04a5e9f47fef90b5ec6f7\")"
     ]
   }
 }

@@ -3,7 +3,7 @@ package ie.dublinmapper.repository.favourite
 import ie.dublinmapper.datamodel.favourite.FavouriteEntity
 import ie.dublinmapper.datamodel.favourite.FavouriteServiceEntity
 import ie.dublinmapper.domain.model.Favourite
-import ie.dublinmapper.util.Operator
+import io.rtpi.api.Operator
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.Navigator
-import ie.dublinmapper.domain.model.ServiceLocation
+import ie.dublinmapper.domain.model.DetailedServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
@@ -27,8 +27,8 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
-            (item.extras["serviceLocation"] as? ServiceLocation)?.let { serviceLocation ->
-                (activity as Navigator).navigateSearchToLiveData(serviceLocation)
+            (item.extras["serviceLocation"] as? DetailedServiceLocation)?.let { serviceLocation ->
+                (activity as Navigator).navigateFavouritesToLiveData(serviceLocation)
             }
         }
         view.liveDataList.adapter = adapter

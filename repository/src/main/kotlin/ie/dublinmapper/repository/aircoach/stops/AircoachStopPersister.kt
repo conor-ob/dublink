@@ -3,14 +3,14 @@ package ie.dublinmapper.repository.aircoach.stops
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import ie.dublinmapper.datamodel.aircoach.*
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.AircoachStop
+import ie.dublinmapper.domain.model.DetailedAircoachStop
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.repository.AbstractPersister
-import ie.dublinmapper.service.aircoach.AircoachStopJson
 import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
 import io.reactivex.functions.BiFunction
+import io.rtpi.api.AircoachStop
+import io.rtpi.api.Service
 import ma.glasnost.orika.MapperFacade
 
 class AircoachStopPersister(
@@ -19,17 +19,17 @@ class AircoachStopPersister(
     memoryPolicy: MemoryPolicy,
     persisterDao: PersisterDao,
     internetManager: InternetManager
-) : AbstractPersister<List<AircoachStopJson>, List<AircoachStop>, Service>(memoryPolicy, persisterDao, internetManager) {
+) : AbstractPersister<List<AircoachStop>, List<DetailedAircoachStop>, Service>(memoryPolicy, persisterDao, internetManager) {
 
-    override fun select(key: Service): Maybe<List<AircoachStop>> {
+    override fun select(key: Service): Maybe<List<DetailedAircoachStop>> {
         return Maybe.zip(
-            localResource.selectStops().map { mapper.mapAsList(it, AircoachStop::class.java) },
+            localResource.selectStops().map { mapper.mapAsList(it, DetailedAircoachStop::class.java) },
             localResource.selectFavouriteStops().map { mapper.mapAsList(it, Favourite::class.java) },
             BiFunction { aircoachStops, favourites -> resolve(aircoachStops, favourites) }
         )
     }
 
-    private fun resolve(aircoachStops: List<AircoachStop>, favourites: List<Favourite>): List<AircoachStop> {
+    private fun resolve(aircoachStops: List<DetailedAircoachStop>, favourites: List<Favourite>): List<DetailedAircoachStop> {
         val aircoachStopsById = aircoachStops.associateBy { it.id }.toMutableMap()
         for (favourite in favourites) {
             val aircoachStop = aircoachStopsById[favourite.id]
@@ -42,7 +42,7 @@ class AircoachStopPersister(
         return aircoachStopsById.values.toList()
     }
 
-    override fun insert(key: Service, raw: List<AircoachStopJson>) {
+    override fun insert(key: Service, raw: List<AircoachStop>) {
         val entities = mapper.mapAsList(raw, AircoachStopEntity::class.java)
         localResource.insertStops(entities)
     }

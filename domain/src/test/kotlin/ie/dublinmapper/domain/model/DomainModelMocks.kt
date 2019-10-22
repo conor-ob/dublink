@@ -1,6 +1,5 @@
 package ie.dublinmapper.domain.model
 
-import ie.dublinmapper.util.Operator
 import org.threeten.bp.LocalTime
 
 fun createAircoachLiveData(

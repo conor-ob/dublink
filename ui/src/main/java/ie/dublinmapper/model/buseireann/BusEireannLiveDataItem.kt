@@ -5,9 +5,10 @@ import androidx.core.content.ContextCompat
 import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.BusEireannLiveData
 import ie.dublinmapper.model.livedata.LiveDataItem
+import io.rtpi.api.BusEireannLiveData
 import kotlinx.android.synthetic.main.list_item_live_data.*
+import org.threeten.bp.LocalTime
 
 class BusEireannLiveDataItem(
     private val liveData: BusEireannLiveData,
@@ -19,7 +20,7 @@ class BusEireannLiveDataItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        super.bindDueTimes(viewHolder, liveData.dueTime)
+        super.bindDueTimes(viewHolder, liveData)
         val liveData = liveData
         viewHolder.title.text = liveData.route
         viewHolder.subtitle.text = liveData.destination
@@ -29,7 +30,9 @@ class BusEireannLiveDataItem(
 
     override fun isSameAs(other: Item<*>?): Boolean {
         if (other is BusEireannLiveDataItem) {
-            return liveData.customHash == other.liveData.customHash
+            return liveData.operator == other.liveData.operator &&
+                    liveData.route == other.liveData.route &&
+                    liveData.destination == other.liveData.destination
         }
         return false
     }

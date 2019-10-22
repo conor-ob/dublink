@@ -4,8 +4,8 @@ import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.buseireann.*
 import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.favourite.FavouriteEntity
-import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
+import io.rtpi.api.Service
 
 class BusEireannStopLocalResourceImpl(
     private val busEireannStopLocationDao: BusEireannStopLocationDao,

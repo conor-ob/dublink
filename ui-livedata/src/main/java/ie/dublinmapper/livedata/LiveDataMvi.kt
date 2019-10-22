@@ -3,7 +3,7 @@ package ie.dublinmapper.livedata
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
 import com.xwray.groupie.Group
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Service
 
 sealed class Action : BaseAction {
 

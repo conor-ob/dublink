@@ -59,6 +59,7 @@ buildscript {
             'retrofit'                  : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
             'rhino'                     : '1.0',       // https://mvnrepository.com/artifact/io.apisense/rhino-android
             'roxie'                     : '0.4.0',     // https://mvnrepository.com/artifact/com.ww/roxie
+            'rtpi_client'               : '1-SNAPSHOT',
             'rx_android'                : '2.1.1',     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
             'rx_java'                   : '2.2.8',     // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
             'rx_kotlin'                 : '2.4.0',
@@ -92,6 +93,7 @@ buildscript {
             'dagger_compiler': "com.google.dagger:dagger-compiler:${versions.dagger_compiler}",
             'kotlin'         : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}",
             'roxie'          : "com.ww:roxie:${versions.roxie}",
+            'rtpi_client'    : "io.rtpi:rtpi-client-android-v1:${versions.rtpi_client}",
             'rx_android'     : "io.reactivex.rxjava2:rxandroid:${versions.rx_android}",
             'rx_java'        : "io.reactivex.rxjava2:rxjava:${versions.rx_java}",
             'rx_kotlin'      : "io.reactivex.rxjava2:rxkotlin:${versions.rx_kotlin}",
@@ -106,6 +108,7 @@ buildscript {
     ]
 
     repositories {
+        mavenLocal()
         google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
@@ -126,6 +129,7 @@ buildscript {
 allprojects {
 
     repositories {
+        mavenLocal()
         google()
         jcenter()
         maven {

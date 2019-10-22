@@ -1,8 +1,8 @@
 package ie.dublinmapper.datamodel.favourite
 
 import androidx.room.*
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Operator
+import io.rtpi.api.Service
 
 data class FavouriteKey(
     val serviceId: String,

@@ -3,32 +3,33 @@ package ie.dublinmapper.repository.dublinbus.stops
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopEntity
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocationEntity
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopServiceEntity
-import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
+import io.rtpi.api.DublinBusStop
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 
-object DublinBusStopJsonToEntityMapper : CustomConverter<RtpiBusStopInformationJson, DublinBusStopEntity>() {
+object DublinBusStopJsonToEntityMapper : CustomConverter<DublinBusStop, DublinBusStopEntity>() {
 
     override fun convert(
-        source: RtpiBusStopInformationJson,
+        source: DublinBusStop,
         destinationType: Type<out DublinBusStopEntity>,
         mappingContext: MappingContext
     ): DublinBusStopEntity {
         val locationEntity = DublinBusStopLocationEntity(
-            id = source.stopId,
-            name = source.fullName,
-            latitude = source.latitude.toDouble(),
-            longitude = source.longitude.toDouble()
+            id = source.id,
+            name = source.name,
+            latitude = source.coordinate.latitude,
+            longitude = source.coordinate.longitude
         )
         val serviceEntities = mutableListOf<DublinBusStopServiceEntity>()
-        for (sourceOperator in source.operators) {
-            for (sourceRoute in sourceOperator.routes) {
+        for (entry in source.routes) {
+            val operator = entry.key
+            for (route in entry.value) {
                 serviceEntities.add(
                     DublinBusStopServiceEntity(
-                        stopId = source.stopId,
-                        operator = sourceOperator.name,
-                        route = sourceRoute
+                        stopId = source.id,
+                        operator = operator.name,
+                        route = route
                     )
                 )
             }

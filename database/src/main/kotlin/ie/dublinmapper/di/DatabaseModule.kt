@@ -15,13 +15,11 @@ import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockLocalResource
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocalResource
 import ie.dublinmapper.datamodel.luas.LuasStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.datamodel.swordsexpress.SwordsExpressStopLocalResource
 import ie.dublinmapper.database.DatabaseTxRunner
 import ie.dublinmapper.database.DublinMapperDatabase
 import ie.dublinmapper.database.dublinbikes.DublinBikesDockLocalResourceImpl
 import ie.dublinmapper.database.dublinbus.DublinBusStopLocalResourceImpl
 import ie.dublinmapper.database.luas.LuasStopLocalResourceImpl
-import ie.dublinmapper.database.swordsexpress.SwordsExpressStopLocalResourceImpl
 import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationCacheResource
 import ie.dublinmapper.favourite.FavouriteServiceLocationCacheResourceImpl
 import ie.dublinmapper.util.StringProvider
@@ -126,16 +124,6 @@ class DatabaseModule {
         val luasStopDao = database.luasStopDao()
         val favouriteDao = database.favouriteDao()
         return LuasStopLocalResourceImpl(luasStopLocationDao, luasStopServiceDao, luasStopDao, favouriteDao, txRunner)
-    }
-
-    @Provides
-    @Singleton
-    fun swordsExpressStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): SwordsExpressStopLocalResource {
-        val swordsExpressStopLocationDao = database.swordsExpressStopLocationDao()
-        val swordsExpressStopServiceDao = database.swordsExpressStopServiceDao()
-        val swordsExpressStopDao = database.swordsExpressStopDao()
-        val favouriteDao = database.favouriteDao()
-        return SwordsExpressStopLocalResourceImpl(swordsExpressStopLocationDao, swordsExpressStopServiceDao, swordsExpressStopDao, favouriteDao, txRunner)
     }
 
     @Provides

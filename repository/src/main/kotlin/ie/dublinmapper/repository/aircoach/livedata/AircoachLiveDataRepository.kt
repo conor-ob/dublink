@@ -1,9 +1,10 @@
 package ie.dublinmapper.repository.aircoach.livedata
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.model.AircoachLiveData
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
+import io.rtpi.api.AircoachLiveData
+import org.threeten.bp.LocalTime
 
 class AircoachLiveDataRepository(
     private val store: Store<List<AircoachLiveData>, String>

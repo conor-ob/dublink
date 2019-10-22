@@ -2,9 +2,9 @@ package ie.dublinmapper.favourite
 
 import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.favourite.*
-import ie.dublinmapper.util.Service
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.rtpi.api.Service
 
 class FavouriteServiceLocationCacheResourceImpl(
     private val favouriteLocationDao: FavouriteLocationDao,

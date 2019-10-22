@@ -1,8 +1,8 @@
 package ie.dublinmapper.datamodel.favourite
 
-import ie.dublinmapper.util.Service
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.rtpi.api.Service
 
 interface FavouriteServiceLocationCacheResource {
 

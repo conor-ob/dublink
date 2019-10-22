@@ -2,8 +2,8 @@ package ie.dublinmapper.datamodel
 
 import androidx.room.TypeConverter
 import ie.dublinmapper.datamodel.favourite.FavouriteKey
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Operator
+import io.rtpi.api.Service
 import org.threeten.bp.Instant
 import java.util.UUID
 
