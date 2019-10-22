@@ -1,9 +1,9 @@
 package ie.dublinmapper.domain.repository
 
 import ie.dublinmapper.domain.model.Favourite
-import ie.dublinmapper.util.Service
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.rtpi.api.Service
 
 interface FavouriteRepository {
 

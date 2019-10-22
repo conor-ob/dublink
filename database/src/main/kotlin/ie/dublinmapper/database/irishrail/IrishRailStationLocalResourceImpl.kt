@@ -4,8 +4,8 @@ import ie.dublinmapper.datamodel.TxRunner
 import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.favourite.FavouriteEntity
 import ie.dublinmapper.datamodel.irishrail.*
-import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
+import io.rtpi.api.Service
 
 class IrishRailStationLocalResourceImpl(
     private val irishRailStationLocationDao: IrishRailStationLocationDao,

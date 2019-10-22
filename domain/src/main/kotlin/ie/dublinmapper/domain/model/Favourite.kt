@@ -1,7 +1,7 @@
 package ie.dublinmapper.domain.model
 
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
+import io.rtpi.api.Operator
+import io.rtpi.api.Service
 
 data class Favourite(
     val id: String,

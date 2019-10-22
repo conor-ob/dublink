@@ -4,9 +4,9 @@ import ie.dublinmapper.datamodel.favourite.FavouriteEntity
 import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationCacheResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.repository.FavouriteRepository
-import ie.dublinmapper.util.Service
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.rtpi.api.Service
 import ma.glasnost.orika.MapperFacade
 
 class FavouriteServiceLocationRepository(

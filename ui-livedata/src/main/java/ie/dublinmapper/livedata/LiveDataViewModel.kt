@@ -56,7 +56,7 @@ class LiveDataViewModel @Inject constructor(
     private fun bindActions() {
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
             .switchMap { action ->
-                liveDataUseCase.getCondensedLiveDataStream(
+                liveDataUseCase.getLiveDataStream(
                     action.serviceLocationId,
                     action.serviceLocationName,
                     action.serviceLocationService
@@ -65,7 +65,10 @@ class LiveDataViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Group> { mapper.map(it, Group::class.java) }
                     .map<Change> { Change.GetLiveData(it) }
-                    .onErrorReturn { Change.GetLiveDataError(it) }
+                    .onErrorReturn {
+                        Timber.e(it)
+                        Change.GetLiveDataError(it)
+                    }
                     .startWith(Change.Loading)
             }
 

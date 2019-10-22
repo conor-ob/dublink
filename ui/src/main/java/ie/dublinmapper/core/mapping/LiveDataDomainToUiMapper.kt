@@ -2,16 +2,17 @@ package ie.dublinmapper.core.mapping
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
-import ie.dublinmapper.domain.model.*
+import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
 import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
 import ie.dublinmapper.model.dart.DartLiveDataItem
+import ie.dublinmapper.model.dart.TerminatingIrishRailLiveDataItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
-import ie.dublinmapper.util.Service
 import ie.dublinmapper.util.StringProvider
+import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
@@ -33,7 +34,7 @@ class LiveDataDomainToUiMapper(
             Service.DUBLIN_BUS -> mapDublinBusLiveData(source.serviceLocationName, source.liveData.map { it as DublinBusLiveData })
             Service.IRISH_RAIL -> mapDartLiveData(source.serviceLocationName, source.liveData.map { it as IrishRailLiveData })
             Service.LUAS -> mapLuasLiveData(source.serviceLocationName, source.liveData.map { it as LuasLiveData })
-            Service.SWORDS_EXPRESS -> TODO()
+            else -> TODO()
         }
     }
 
@@ -130,7 +131,7 @@ class LiveDataDomainToUiMapper(
             for (i in 0 until terminating.size) {
                 val isLast = i == terminating.size - 1
                 val isEven = i % 2 == 0
-                items.add(DartLiveDataItem(terminating[i], isEven, isLast))
+                items.add(TerminatingIrishRailLiveDataItem(terminating[i], isEven, isLast))
             }
             items.add(DividerItem())
         }

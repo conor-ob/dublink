@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Settings</string>
+    <string name="preference_enabled_service_aircoach">preference_enabled_service_aircoach</string>
+    <string name="preference_enabled_service_bus_eireann">preference_enabled_service_bus_eireann</string>
+    <string name="preference_enabled_service_dublin_bikes">preference_enabled_service_dublin_bikes</string>
+    <string name="preference_enabled_service_dublin_bus">preference_enabled_service_dublin_bus</string>
+    <string name="preference_enabled_service_irish_rail">preference_enabled_service_irish_rail</string>
+    <string name="preference_enabled_service_luas">preference_enabled_service_luas</string>
 </resources>

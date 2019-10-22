@@ -5,13 +5,12 @@ import androidx.core.content.ContextCompat
 import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.IrishRailLiveData
-import ie.dublinmapper.model.DartLiveDataUi
 import ie.dublinmapper.model.livedata.LiveDataItem
-import ie.dublinmapper.util.Operator
+import io.rtpi.api.IrishRailLiveData
+import io.rtpi.api.Operator
 import kotlinx.android.synthetic.main.list_item_live_data.*
 
-class DartLiveDataItem(
+open class DartLiveDataItem(
     private val liveData: IrishRailLiveData,
     isEven: Boolean,
     isLast: Boolean
@@ -21,7 +20,7 @@ class DartLiveDataItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        super.bindDueTimes(viewHolder, liveData.dueTime)
+        super.bindDueTimes(viewHolder, liveData)
         val liveData = liveData
         viewHolder.title.text = liveData.destination
         viewHolder.subtitle.text = liveData.operator.fullName
@@ -42,7 +41,10 @@ class DartLiveDataItem(
 
     override fun isSameAs(other: Item<*>?): Boolean {
         if (other is DartLiveDataItem) {
-            return liveData.customHash == other.liveData.customHash
+            return liveData.operator == other.liveData.operator &&
+                    liveData.route == other.liveData.route &&
+                    liveData.destination == other.liveData.destination &&
+                    liveData.direction == other.liveData.direction
         }
         return false
     }

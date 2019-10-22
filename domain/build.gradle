@@ -5,6 +5,8 @@ dependencies {
     implementation project(':core')
 
     kapt libraries.dagger_compiler
+
+    implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
 }
 
 sourceSets {

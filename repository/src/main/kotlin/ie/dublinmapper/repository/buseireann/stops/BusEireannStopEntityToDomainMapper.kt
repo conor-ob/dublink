@@ -2,29 +2,30 @@ package ie.dublinmapper.repository.buseireann.stops
 
 import ie.dublinmapper.datamodel.buseireann.BusEireannStopEntity
 import ie.dublinmapper.datamodel.buseireann.BusEireannStopServiceEntity
-import ie.dublinmapper.domain.model.BusEireannStop
-import ie.dublinmapper.util.Coordinate
-import ie.dublinmapper.util.Operator
-import ie.dublinmapper.util.Service
+import ie.dublinmapper.domain.model.DetailedBusEireannStop
+import io.rtpi.api.BusEireannStop
+import io.rtpi.api.Coordinate
+import io.rtpi.api.Operator
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 import java.util.*
 
-object BusEireannStopEntityToDomainMapper : CustomConverter<BusEireannStopEntity, BusEireannStop>() {
+object BusEireannStopEntityToDomainMapper : CustomConverter<BusEireannStopEntity, DetailedBusEireannStop>() {
 
     override fun convert(
         source: BusEireannStopEntity,
-        destinationType: Type<out BusEireannStop>,
+        destinationType: Type<out DetailedBusEireannStop>,
         mappingContext: MappingContext
-    ): BusEireannStop {
-        return BusEireannStop(
-            id = source.location.id,
-            serviceLocationName = source.location.name,
-            coordinate = Coordinate(source.location.latitude, source.location.longitude),
-            operators = mapOperators(source.services),
-            service = Service.BUS_EIREANN,
-            routes = mapOperatorsToRoutes(source.services)
+    ): DetailedBusEireannStop {
+        return DetailedBusEireannStop(
+            BusEireannStop(
+                id = source.location.id,
+                name = source.location.name,
+                coordinate = Coordinate(source.location.latitude, source.location.longitude),
+                operators = mapOperators(source.services),
+                routes = mapOperatorsToRoutes(source.services)
+            )
         )
     }
 

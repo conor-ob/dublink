@@ -1,18 +1,16 @@
 package ie.dublinmapper.repository.irishrail.stations
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.datamodel.TxRunner
-import ie.dublinmapper.datamodel.favourite.FavouriteDao
 import ie.dublinmapper.datamodel.irishrail.*
 import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.domain.model.DetailedIrishRailStation
 import ie.dublinmapper.domain.model.Favourite
-import ie.dublinmapper.domain.model.IrishRailStation
 import ie.dublinmapper.repository.AbstractPersister
-import ie.dublinmapper.service.irishrail.IrishRailStationXml
 import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.Service
 import io.reactivex.Maybe
 import io.reactivex.functions.BiFunction
+import io.rtpi.api.IrishRailStation
+import io.rtpi.api.Service
 import ma.glasnost.orika.MapperFacade
 
 class IrishRailStationPersister(
@@ -21,17 +19,17 @@ class IrishRailStationPersister(
     memoryPolicy: MemoryPolicy,
     persisterDao: PersisterDao,
     internetManager: InternetManager
-) : AbstractPersister<List<IrishRailStationXml>, List<IrishRailStation>, Service>(memoryPolicy, persisterDao, internetManager) {
+) : AbstractPersister<List<IrishRailStation>, List<DetailedIrishRailStation>, Service>(memoryPolicy, persisterDao, internetManager) {
 
-    override fun select(key: Service): Maybe<List<IrishRailStation>> {
+    override fun select(key: Service): Maybe<List<DetailedIrishRailStation>> {
         return Maybe.zip(
-            localResource.selectStations().map { mapper.mapAsList(it, IrishRailStation::class.java) },
+            localResource.selectStations().map { mapper.mapAsList(it, DetailedIrishRailStation::class.java) },
             localResource.selectFavouriteStations().map { mapper.mapAsList(it, Favourite::class.java) },
             BiFunction { irishRailStations, favourites -> resolve(irishRailStations, favourites) }
         )
     }
 
-    private fun resolve(irishRailStations: List<IrishRailStation>, favourites: List<Favourite>): List<IrishRailStation> {
+    private fun resolve(irishRailStations: List<DetailedIrishRailStation>, favourites: List<Favourite>): List<DetailedIrishRailStation> {
         val irishRailStationsById = irishRailStations.associateBy { it.id }.toMutableMap()
         for (favourite in favourites) {
             val irishRailStation = irishRailStationsById[favourite.id]
@@ -44,7 +42,7 @@ class IrishRailStationPersister(
         return irishRailStationsById.values.toList()
     }
 
-    override fun insert(key: Service, raw: List<IrishRailStationXml>) {
+    override fun insert(key: Service, raw: List<IrishRailStation>) {
         val entities = mapper.mapAsList(raw, IrishRailStationEntity::class.java)
         localResource.insertStations(entities)
     }

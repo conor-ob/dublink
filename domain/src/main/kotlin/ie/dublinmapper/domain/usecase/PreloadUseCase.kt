@@ -7,13 +7,12 @@ import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class PreloadUseCase @Inject constructor(
-    private val aircoachStopRepository: Repository<AircoachStop>,
-    private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val irishRailStationRepository: Repository<IrishRailStation>,
-    private val dublinBikesDockRepository: Repository<DublinBikesDock>,
-    private val dublinBusStopRepository: Repository<DublinBusStop>,
-    private val luasStopRepository: Repository<LuasStop>,
-    private val swordsExpressStopRepository: Repository<SwordsExpressStop>,
+    private val aircoachStopRepository: Repository<DetailedAircoachStop>,
+    private val busEireannStopRepository: Repository<DetailedBusEireannStop>,
+    private val irishRailStationRepository: Repository<DetailedIrishRailStation>,
+    private val dublinBikesDockRepository: Repository<DetailedDublinBikesDock>,
+    private val dublinBusStopRepository: Repository<DetailedDublinBusStop>,
+    private val luasStopRepository: Repository<DetailedLuasStop>,
     private val scheduler: RxScheduler
 ) {
 

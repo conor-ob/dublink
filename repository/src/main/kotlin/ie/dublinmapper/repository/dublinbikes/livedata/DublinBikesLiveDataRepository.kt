@@ -1,9 +1,9 @@
 package ie.dublinmapper.repository.dublinbikes.livedata
 
 import com.nytimes.android.external.store3.base.impl.Store
-import ie.dublinmapper.domain.model.DublinBikesLiveData
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
+import io.rtpi.api.DublinBikesLiveData
 
 class DublinBikesLiveDataRepository(
     private val store: Store<DublinBikesLiveData, String>
