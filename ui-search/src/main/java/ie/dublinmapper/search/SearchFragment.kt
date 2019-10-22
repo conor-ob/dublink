@@ -33,6 +33,13 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
     override fun styleId() = R.style.SearchTheme
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.observableState.observe(this, Observer { state ->
+            state?.let { renderState(state) }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -88,10 +95,6 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
             true
         }
         clear_search.setOnClickListener { search_query.setText("") }
-
-        viewModel.observableState.observe(this, Observer { state ->
-            state?.let { renderState(state) }
-        })
     }
 
     private fun renderState(state: State) {

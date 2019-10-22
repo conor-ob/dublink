@@ -20,7 +20,13 @@ class SearchUseCase @Inject constructor(
     private val enabledServiceManager: EnabledServiceManager
 ) {
 
+    private val cache = mutableMapOf<String, SearchResponse>()
+
     fun search(query: String): Observable<SearchResponse> {
+        val cached = cache[query]
+        if (cached != null) {
+            return Observable.just(cached)
+        }
         return Observable.combineLatest(
             aircoachStopRepository.getAll().subscribeOn(scheduler.io),
             busEireannStopRepository.getAll().subscribeOn(scheduler.io),
@@ -63,7 +69,9 @@ class SearchUseCase @Inject constructor(
             searchCollections.add(search(query, luasStops))
         }
         searchCollections.sortBy { it.size }
-        return SearchResponse(searchCollections.flatten().take(50))
+        val response = SearchResponse(searchCollections.flatten().take(50))
+        cache[query] = response
+        return response
     }
 
     private fun search(query: String, serviceLocations: List<DetailedServiceLocation>): List<DetailedServiceLocation> {
