@@ -7,6 +7,7 @@ import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
 import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
 import ie.dublinmapper.model.dart.DartLiveDataItem
+import ie.dublinmapper.model.dart.TerminatingIrishRailLiveDataItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
@@ -130,7 +131,7 @@ class LiveDataDomainToUiMapper(
             for (i in 0 until terminating.size) {
                 val isLast = i == terminating.size - 1
                 val isEven = i % 2 == 0
-                items.add(DartLiveDataItem(terminating[i], isEven, isLast))
+                items.add(TerminatingIrishRailLiveDataItem(terminating[i], isEven, isLast))
             }
             items.add(DividerItem())
         }

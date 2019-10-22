@@ -9,9 +9,8 @@ import ie.dublinmapper.model.livedata.LiveDataItem
 import io.rtpi.api.IrishRailLiveData
 import io.rtpi.api.Operator
 import kotlinx.android.synthetic.main.list_item_live_data.*
-import org.threeten.bp.LocalTime
 
-class DartLiveDataItem(
+open class DartLiveDataItem(
     private val liveData: IrishRailLiveData,
     isEven: Boolean,
     isLast: Boolean

@@ -74,6 +74,7 @@
     <string name="action_remove_favourite">Remove Favourite</string>
     <string name="favourite_saved">Saved to Favourites</string>
     <string name="favourite_removed">Removed from Favourites</string>
+    <string name="from">From %s</string>
 
     <plurals name="live_data_last_updated_minutes">
         <item quantity="one">Updated %d minute ago</item>
