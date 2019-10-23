@@ -4,6 +4,8 @@ import ie.dublinmapper.domain.model.DetailedServiceLocation
 
 interface Navigator {
 
+    fun navigateFavouritesToNearby()
+
     fun navigateFavouritesToSearch()
 
     fun navigateFavouritesToLiveData(serviceLocation: DetailedServiceLocation)

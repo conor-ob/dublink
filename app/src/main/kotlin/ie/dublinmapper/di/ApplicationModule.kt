@@ -8,6 +8,8 @@ import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
+import ie.dublinmapper.location.LocationProvider
+import ie.dublinmapper.nearby.location.GpsLocationProvider
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopEntityToDomainMapper
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopJsonToEntityMapper
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopEntityToDomainMapper
@@ -123,5 +125,8 @@ class ApplicationModule {
         )
         return DefaultEnabledServiceManager(preferenceStore, serviceToEnabledServicePreferenceKey)
     }
+
+    @Provides
+    fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)
 
 }

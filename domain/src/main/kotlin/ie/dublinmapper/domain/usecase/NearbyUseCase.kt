@@ -1,13 +1,18 @@
 package ie.dublinmapper.domain.usecase
 
-import ie.dublinmapper.domain.model.*
-import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.util.*
+import ie.dublinmapper.location.LocationProvider
 import io.reactivex.Observable
-import io.reactivex.functions.Function7
-import io.rtpi.api.Operator
-import java.util.*
+import io.rtpi.api.Coordinate
 import javax.inject.Inject
+
+class NearbyUseCase @Inject constructor(
+    private val locationProvider: LocationProvider
+) {
+    fun getLocationUpdates(): Observable<Coordinate> {
+        return locationProvider.getLocationUpdates()
+    }
+
+}
 
 //class NearbyUseCase @Inject constructor(
 //    private val aircoachStopRepository: Repository<DetailedAircoachStop>,

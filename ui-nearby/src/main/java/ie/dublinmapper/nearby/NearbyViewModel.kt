@@ -1,18 +1,15 @@
-package ie.dublinmapper.favourites
+package ie.dublinmapper.nearby
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
-import com.xwray.groupie.Group
-import ie.dublinmapper.domain.usecase.FavouritesUseCase
+import ie.dublinmapper.domain.usecase.NearbyUseCase
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.rxkotlin.plusAssign
-import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import javax.inject.Inject
 
-class FavouritesViewModel @Inject constructor(
-    private val useCase: FavouritesUseCase,
-    private val mapper: MapperFacade,
+class NearbyViewModel @Inject constructor(
+    private val useCase: NearbyUseCase,
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
@@ -22,18 +19,16 @@ class FavouritesViewModel @Inject constructor(
         when (change) {
             is Change.Loading -> state.copy(
                 isLoading = true,
-                favourites = null,
                 isError = false
             )
-            is Change.GetFavourites -> state.copy(
+            is Change.GetLocation -> state.copy(
                 isLoading = false,
-                favourites = change.favourites,
+                location = change.location,
                 isError = false
             )
-            is Change.GetFavouritesError -> state.copy(
+            is Change.GetLocationError -> state.copy(
                 isLoading = false,
-                favourites = null,
-                isError = true //TODO
+                isError = true
             )
         }
     }
@@ -43,18 +38,17 @@ class FavouritesViewModel @Inject constructor(
     }
 
     private fun bindActions() {
-        val getFavouritesChange = actions.ofType(Action.GetFavourites::class.java)
+        val getLocationChange = actions.ofType(Action.GetLocation::class.java)
             .switchMap { action ->
-                useCase.getFavourites()
+                useCase.getLocationUpdates()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Group> { mapper.map(it, Group::class.java) }
-                    .map<Change> { Change.GetFavourites(it) }
-                    .onErrorReturn { Change.GetFavouritesError(it) }
+                    .map<Change> { Change.GetLocation(it) }
+                    .onErrorReturn { Change.GetLocationError(it) }
                     .startWith(Change.Loading)
             }
 
-        disposables += getFavouritesChange
+        disposables += getLocationChange
             .scan(initialState, reducer)
 //            .filter { !it.isLoading }
             .distinctUntilChanged()

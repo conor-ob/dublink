@@ -1,7 +1,9 @@
 package ie.dublinmapper.favourites
 
+import android.Manifest
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
@@ -45,6 +47,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
 
         search_fab.setOnClickListener { (activity as Navigator).navigateFavouritesToSearch() }
+        nearby_fab.setOnClickListener { (activity as Navigator).navigateFavouritesToNearby() }
 
         viewModel.dispatch(Action.GetFavourites)
     }

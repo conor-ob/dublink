@@ -22,6 +22,8 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     override fun onSupportNavigateUp() = navigationController.navigateUp()
 
+    override fun navigateFavouritesToNearby() = navigationController.navigate(R.id.favouritesFragment_to_nearbyFragment)
+
     override fun navigateFavouritesToSearch() = navigationController.navigate(R.id.favouritesFragment_to_searchFragment)
 
     override fun navigateLiveDataToSettings() = navigationController.navigate(R.id.liveDataFragment_to_settingsFragment)
