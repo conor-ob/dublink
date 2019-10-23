@@ -10,6 +10,8 @@ interface Navigator {
 
     fun navigateFavouritesToLiveData(serviceLocation: DetailedServiceLocation)
 
+    fun navigateNearbyToLiveData(serviceLocation: DetailedServiceLocation)
+
     fun navigateSearchToLiveData(serviceLocation: DetailedServiceLocation)
 
     fun navigateLiveDataToSettings()

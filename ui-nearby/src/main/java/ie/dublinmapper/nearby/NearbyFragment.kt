@@ -9,6 +9,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import ie.dublinmapper.Navigator
+import ie.dublinmapper.domain.model.DetailedServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_nearby.*
@@ -39,12 +41,9 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
-//            (item.extras["serviceLocation"] as? DetailedServiceLocation)?.let { serviceLocation ->
-//                (activity as Navigator).navigateFavouritesToLiveData(serviceLocation)
-//                if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
-//                    enabledServiceManager.enableService(serviceLocation.service)
-//                }
-//            }
+            (item.extras["serviceLocation"] as? DetailedServiceLocation)?.let { serviceLocation ->
+                (activity as Navigator).navigateNearbyToLiveData(serviceLocation)
+            }
         }
         view.nearbyLocations.adapter = adapter
         view.nearbyLocations.setHasFixedSize(true)
