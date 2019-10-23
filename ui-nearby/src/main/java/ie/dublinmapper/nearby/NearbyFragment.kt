@@ -6,15 +6,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_nearby.*
+import kotlinx.android.synthetic.main.fragment_nearby.view.*
 
 private const val locationRequestCode = 42069
 
 class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as NearbyViewModel }
+
+    private lateinit var adapter: GroupAdapter<ViewHolder>
 
     override fun styleId() = R.style.IrishRailTheme //TODO
 
@@ -27,6 +33,23 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+
+        adapter = GroupAdapter()
+        adapter.setOnItemClickListener { item, _ ->
+//            (item.extras["serviceLocation"] as? DetailedServiceLocation)?.let { serviceLocation ->
+//                (activity as Navigator).navigateFavouritesToLiveData(serviceLocation)
+//                if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
+//                    enabledServiceManager.enableService(serviceLocation.service)
+//                }
+//            }
+        }
+        view.nearbyLocations.adapter = adapter
+        view.nearbyLocations.setHasFixedSize(true)
+        view.nearbyLocations.layoutManager = LinearLayoutManager(requireContext())
+
         requestPermissions(
             arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -43,7 +66,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
     ) {
         if (requestCode == locationRequestCode) {
             if (grantResults.all { it == PackageManager.PERMISSION_GRANTED } ) {
-                viewModel.dispatch(Action.GetLocation)
+                viewModel.dispatch(Action.GetNearbyServiceLocations)
             } else {
                 findNavController().navigateUp()
             }
@@ -51,8 +74,8 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
     }
 
     private fun renderState(state: State) {
-        if (state.location != null) {
-            location.text = state.location.toString()
+        if (state.serviceLocations != null) {
+            adapter.update(listOf(state.serviceLocations))
         }
     }
 

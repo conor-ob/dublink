@@ -41,4 +41,8 @@ class AndroidResourceStringProvider(
         return resources.getString(R.string.title_favourites)
     }
 
+    override fun nearby(): String {
+        return resources.getString(R.string.title_nearby)
+    }
+
 }

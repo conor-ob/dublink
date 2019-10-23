@@ -7,6 +7,7 @@ import dagger.Provides
 import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
+import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
 import ie.dublinmapper.location.LocationProvider
 import ie.dublinmapper.nearby.location.GpsLocationProvider
@@ -97,6 +98,7 @@ class ApplicationModule {
             registerConverter(LuasStopEntityToDomainMapper)
 
             registerConverter(FavouritesDomainToUiMapper(stringProvider))
+            registerConverter(NearbyDomainToUiMapper(stringProvider))
             registerConverter(LiveDataDomainToUiMapper(stringProvider))
             registerConverter(SearchDomainToUiMapper)
 

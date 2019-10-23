@@ -2,14 +2,17 @@ package ie.dublinmapper.nearby
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import com.xwray.groupie.Group
 import ie.dublinmapper.domain.usecase.NearbyUseCase
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.rxkotlin.plusAssign
+import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import javax.inject.Inject
 
 class NearbyViewModel @Inject constructor(
     private val useCase: NearbyUseCase,
+    private val mapper: MapperFacade,
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
@@ -21,12 +24,12 @@ class NearbyViewModel @Inject constructor(
                 isLoading = true,
                 isError = false
             )
-            is Change.GetLocation -> state.copy(
+            is Change.GetNearbyServiceLocations -> state.copy(
                 isLoading = false,
-                location = change.location,
+                serviceLocations = change.serviceLocations,
                 isError = false
             )
-            is Change.GetLocationError -> state.copy(
+            is Change.GetNearbyServiceLocationsError -> state.copy(
                 isLoading = false,
                 isError = true
             )
@@ -38,13 +41,14 @@ class NearbyViewModel @Inject constructor(
     }
 
     private fun bindActions() {
-        val getLocationChange = actions.ofType(Action.GetLocation::class.java)
+        val getLocationChange = actions.ofType(Action.GetNearbyServiceLocations::class.java)
             .switchMap { action ->
-                useCase.getLocationUpdates()
+                useCase.getNearbyServiceLocation()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.GetLocation(it) }
-                    .onErrorReturn { Change.GetLocationError(it) }
+                    .map<Group> { mapper.map(it, Group::class.java) }
+                    .map<Change> { Change.GetNearbyServiceLocations(it) }
+                    .onErrorReturn { Change.GetNearbyServiceLocationsError(it) }
                     .startWith(Change.Loading)
             }
 
