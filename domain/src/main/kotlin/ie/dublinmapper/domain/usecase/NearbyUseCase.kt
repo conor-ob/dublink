@@ -3,13 +3,11 @@ package ie.dublinmapper.domain.usecase
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.location.LocationProvider
-import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.LocationUtils
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.functions.Function6
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate
-import io.rtpi.api.Service
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -21,7 +19,6 @@ class NearbyUseCase @Inject constructor(
     private val dublinBusStopRepository: Repository<DetailedDublinBusStop>,
     private val luasStopRepository: Repository<DetailedLuasStop>,
     private val scheduler: RxScheduler,
-    private val enabledServiceManager: EnabledServiceManager,
     private val locationProvider: LocationProvider
 ) {
 
@@ -55,24 +52,12 @@ class NearbyUseCase @Inject constructor(
         luasStops: List<DetailedLuasStop>
     ): NearbyResponse {
         val results = mutableListOf<DetailedServiceLocation>()
-        if (enabledServiceManager.isServiceEnabled(Service.AIRCOACH)) {
-            results.addAll(aircoachStops)
-        }
-        if (enabledServiceManager.isServiceEnabled(Service.BUS_EIREANN)) {
-            results.addAll(busEireannStops)
-        }
-        if (enabledServiceManager.isServiceEnabled(Service.DUBLIN_BIKES)) {
-            results.addAll(dublinBikesDocks)
-        }
-        if (enabledServiceManager.isServiceEnabled(Service.DUBLIN_BUS)) {
-            results.addAll(dublinBusStops)
-        }
-        if (enabledServiceManager.isServiceEnabled(Service.IRISH_RAIL)) {
-            results.addAll(irishRailStations)
-        }
-        if (enabledServiceManager.isServiceEnabled(Service.LUAS)) {
-            results.addAll(luasStops)
-        }
+        results.addAll(aircoachStops)
+        results.addAll(busEireannStops)
+        results.addAll(dublinBikesDocks)
+        results.addAll(dublinBusStops)
+        results.addAll(irishRailStations)
+        results.addAll(luasStops)
         return NearbyResponse(
             results
                 .sortedBy { LocationUtils.haversineDistance(coordinate, it.coordinate) }

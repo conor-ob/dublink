@@ -14,6 +14,7 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.irishrail.livedata.IrishRailLiveDataRepository
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationPersister
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationRepository
+import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.InternetManager
 import io.reactivex.Single
 import io.rtpi.api.IrishRailLiveData
@@ -35,12 +36,13 @@ class IrishRailRepositoryModule {
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         mapper: MapperFacade,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
+        enabledServiceManager: EnabledServiceManager
     ): Repository<DetailedIrishRailStation> {
         val fetcher = Fetcher<List<IrishRailStation>, Service> { Single.just(client.irishRail().getStations()) }
         val persister = IrishRailStationPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return IrishRailStationRepository(store)
+        return IrishRailStationRepository(store, enabledServiceManager)
     }
 
     @Provides

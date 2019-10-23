@@ -3,12 +3,14 @@ package ie.dublinmapper.repository
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import ie.dublinmapper.domain.model.DetailedServiceLocation
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.util.EnabledServiceManager
 import io.reactivex.Observable
 import io.rtpi.api.Service
 
 abstract class ServiceLocationRepository<T : DetailedServiceLocation>(
     private val service: Service,
-    private val serviceLocationStore: StoreRoom<List<T>, Service>
+    private val serviceLocationStore: StoreRoom<List<T>, Service>,
+    private val enabledServiceManager: EnabledServiceManager
 ) : Repository<T> {
 
     private var cache = emptyMap<String, T>()
@@ -18,8 +20,12 @@ abstract class ServiceLocationRepository<T : DetailedServiceLocation>(
     }
 
     override fun getAll(): Observable<List<T>> {
-        return serviceLocationStore.get(service)
-            .doOnNext { serviceLocations -> fillCache(serviceLocations) }
+        if (enabledServiceManager.isServiceEnabled(service)) {
+            return serviceLocationStore.get(service)
+                .doOnNext { serviceLocations -> fillCache(serviceLocations) }
+
+        }
+        return Observable.just(emptyList())
     }
 
 //    override fun getAll(): Observable<List<T>> {

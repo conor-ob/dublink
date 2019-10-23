@@ -14,6 +14,7 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataRepository
+import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.StringProvider
 import io.reactivex.Single
@@ -37,12 +38,13 @@ class DublinBikesRepositoryModule {
         internetManager: InternetManager,
         stringProvider: StringProvider,
         mapper: MapperFacade,
-        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
+        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy,
+        enabledServiceManager: EnabledServiceManager
     ): Repository<DetailedDublinBikesDock> {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { Single.just(client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey())) }
         val persister = DublinBikesDockPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return DublinBikesDockRepository(store)
+        return DublinBikesDockRepository(store, enabledServiceManager)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
 //            .fetcher(fetcher)
 //            .parser { docks -> DublinBikesDockMapper.map(docks) }
