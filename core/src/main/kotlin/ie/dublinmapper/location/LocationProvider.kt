@@ -6,7 +6,7 @@ import io.rtpi.api.Coordinate
 
 interface LocationProvider {
 
-    fun getLastKnownLocation(): Single<Coordinate>
+    fun getLastKnownLocation(): Observable<Coordinate>
 
     fun getLocationUpdates(): Observable<Coordinate>
 

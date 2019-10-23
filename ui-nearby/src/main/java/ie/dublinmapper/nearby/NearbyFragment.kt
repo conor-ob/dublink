@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,13 +50,20 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
         view.nearbyLocations.setHasFixedSize(true)
         view.nearbyLocations.layoutManager = LinearLayoutManager(requireContext())
 
-        requestPermissions(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
-            locationRequestCode
-        )
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            viewModel.dispatch(Action.GetNearbyServiceLocations)
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                locationRequestCode
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(

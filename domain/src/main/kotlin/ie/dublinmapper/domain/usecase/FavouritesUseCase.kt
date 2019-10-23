@@ -3,9 +3,14 @@ package ie.dublinmapper.domain.usecase
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.location.LocationProvider
+import ie.dublinmapper.permission.PermissionChecker
+import ie.dublinmapper.util.LocationUtils
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.rtpi.api.Service
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
@@ -15,7 +20,9 @@ class FavouritesUseCase @Inject constructor(
     private val irishRailStationRepository: Repository<DetailedIrishRailStation>,
     private val dublinBikesDockRepository: Repository<DetailedDublinBikesDock>,
     private val dublinBusStopRepository: Repository<DetailedDublinBusStop>,
-    private val luasStopRepository: Repository<DetailedLuasStop>
+    private val luasStopRepository: Repository<DetailedLuasStop>,
+    private val permissionChecker: PermissionChecker,
+    private val locationProvider: LocationProvider
 ) {
 
     fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
@@ -35,6 +42,23 @@ class FavouritesUseCase @Inject constructor(
     }
 
     fun getFavourites(): Observable<FavouritesResponse> {
+        if (permissionChecker.isLocationPermissionGranted()) {
+            return Observable.zip(
+                favouriteRepository.getFavourites().map { toServiceLocations(it) },
+                Observable.concat(
+                    locationProvider.getLastKnownLocation(),
+                    locationProvider.getLocationUpdates()
+                )
+                    .throttleFirst(30, TimeUnit.SECONDS),
+                BiFunction { serviceLocations, coordinate ->
+                    FavouritesResponse(
+                        serviceLocations.sortedBy {
+                            LocationUtils.haversineDistance(coordinate, it.coordinate)
+                        }
+                    )
+                }
+            )
+        }
         return favouriteRepository.getFavourites()
             .map { FavouritesResponse(toServiceLocations(it)) }
     }

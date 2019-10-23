@@ -2,6 +2,7 @@ package ie.dublinmapper.favourites
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter

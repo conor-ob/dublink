@@ -15,13 +15,11 @@ class GpsLocationProvider @Inject constructor(context: Context) : LocationProvid
     private val locationProvider = ReactiveLocationProvider(context)
     private var lastKnownLocation: Location? = null
 
-    override fun getLastKnownLocation(): Single<Coordinate> {
-        return Single.fromObservable(
-            locationProvider.lastKnownLocation
+    override fun getLastKnownLocation(): Observable<Coordinate> {
+        return locationProvider.lastKnownLocation
                 .filter { isBetterLocation(it) }
                 .doOnNext { lastKnownLocation = it }
                 .map { Coordinate(it.latitude, it.longitude) }
-        )
     }
 
     override fun getLocationUpdates(): Observable<Coordinate> {
