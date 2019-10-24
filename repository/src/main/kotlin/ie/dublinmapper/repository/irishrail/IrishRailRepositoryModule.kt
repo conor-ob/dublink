@@ -9,7 +9,6 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.irishrail.IrishRailStationLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.DetailedIrishRailStation
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.irishrail.livedata.IrishRailLiveDataRepository
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationPersister
@@ -38,7 +37,7 @@ class IrishRailRepositoryModule {
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
-    ): Repository<DetailedIrishRailStation> {
+    ): Repository<IrishRailStation> {
         val fetcher = Fetcher<List<IrishRailStation>, Service> { Single.just(client.irishRail().getStations()) }
         val persister = IrishRailStationPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)

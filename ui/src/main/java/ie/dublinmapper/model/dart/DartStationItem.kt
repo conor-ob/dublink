@@ -3,13 +3,13 @@ package ie.dublinmapper.model.dart
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.domain.model.DetailedIrishRailStation
 import ie.dublinmapper.ui.R
 import ie.dublinmapper.model.ServiceLocationItem
+import io.rtpi.api.IrishRailStation
 import kotlinx.android.synthetic.main.list_item_service_location.*
 
 class DartStationItem(
-    val dartStation: DetailedIrishRailStation,
+    val dartStation: IrishRailStation,
     isEven: Boolean,
     isLast: Boolean
 ) : ServiceLocationItem(isEven, isLast) {

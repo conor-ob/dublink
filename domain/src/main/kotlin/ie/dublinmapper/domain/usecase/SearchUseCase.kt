@@ -1,19 +1,20 @@
 package ie.dublinmapper.domain.usecase
 
-import ie.dublinmapper.domain.model.*
+import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.functions.Function6
+import io.rtpi.api.*
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
-    private val aircoachStopRepository: Repository<DetailedAircoachStop>,
-    private val busEireannStopRepository: Repository<DetailedBusEireannStop>,
-    private val irishRailStationRepository: Repository<DetailedIrishRailStation>,
-    private val dublinBikesDockRepository: Repository<DetailedDublinBikesDock>,
-    private val dublinBusStopRepository: Repository<DetailedDublinBusStop>,
-    private val luasStopRepository: Repository<DetailedLuasStop>,
+    private val aircoachStopRepository: Repository<AircoachStop>,
+    private val busEireannStopRepository: Repository<BusEireannStop>,
+    private val irishRailStationRepository: Repository<IrishRailStation>,
+    private val dublinBikesDockRepository: Repository<DublinBikesDock>,
+    private val dublinBusStopRepository: Repository<DublinBusStop>,
+    private val luasStopRepository: Repository<LuasStop>,
     private val scheduler: RxScheduler
 ) {
 
@@ -39,14 +40,14 @@ class SearchUseCase @Inject constructor(
 
     private fun search(
         query: String,
-        aircoachStops: List<DetailedAircoachStop>,
-        busEireannStops: List<DetailedBusEireannStop>,
-        irishRailStations: List<DetailedIrishRailStation>,
-        dublinBikesDocks: List<DetailedDublinBikesDock>,
-        dublinBusStops: List<DetailedDublinBusStop>,
-        luasStops: List<DetailedLuasStop>
+        aircoachStops: List<AircoachStop>,
+        busEireannStops: List<BusEireannStop>,
+        irishRailStations: List<IrishRailStation>,
+        dublinBikesDocks: List<DublinBikesDock>,
+        dublinBusStops: List<DublinBusStop>,
+        luasStops: List<LuasStop>
     ) : SearchResponse {
-        val searchCollections = mutableListOf<Collection<DetailedServiceLocation>>()
+        val searchCollections = mutableListOf<Collection<ServiceLocation>>()
         searchCollections.add(search(query, aircoachStops))
         searchCollections.add(search(query, busEireannStops))
         searchCollections.add(search(query, dublinBikesDocks))
@@ -59,11 +60,11 @@ class SearchUseCase @Inject constructor(
         return response
     }
 
-    private fun search(query: String, serviceLocations: List<DetailedServiceLocation>): List<DetailedServiceLocation> {
+    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
         val adaptedQuery = query.toLowerCase().trim()
-        val searchResults = mutableListOf<DetailedServiceLocation>()
+        val searchResults = mutableListOf<ServiceLocation>()
         for (serviceLocation in serviceLocations) {
-            if (serviceLocation.serviceLocationName.toLowerCase().contains(adaptedQuery) ||
+            if (serviceLocation.getName().toLowerCase().contains(adaptedQuery) ||
                 serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
                 serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
                 searchResults.add(serviceLocation)
@@ -81,5 +82,5 @@ class SearchUseCase @Inject constructor(
 }
 
 data class SearchResponse(
-    val serviceLocations: List<DetailedServiceLocation>
+    val serviceLocations: List<ServiceLocation>
 )

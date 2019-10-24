@@ -14,6 +14,7 @@ import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
 import ie.dublinmapper.model.dublinbus.DublinBusStopItem
 import ie.dublinmapper.model.luas.LuasStopItem
 import ie.dublinmapper.util.StringProvider
+import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
@@ -43,14 +44,14 @@ class FavouritesDomainToUiMapper(
         return Section(items)
     }
 
-    private fun mapItem(serviceLocation: DetailedServiceLocation, isEven: Boolean, isLast: Boolean): Item {
+    private fun mapItem(serviceLocation: ServiceLocation, isEven: Boolean, isLast: Boolean): Item {
         return when (serviceLocation) {
-            is DetailedAircoachStop -> AircoachStopItem(serviceLocation, isEven, isLast)
-            is DetailedBusEireannStop -> BusEireannStopItem(serviceLocation, isEven, isLast)
-            is DetailedIrishRailStation -> DartStationItem(serviceLocation, isEven, isLast)
-            is DetailedDublinBikesDock -> DublinBikesDockItem(serviceLocation, isEven, isLast)
-            is DetailedDublinBusStop -> DublinBusStopItem(serviceLocation, isEven, isLast)
-            is DetailedLuasStop -> LuasStopItem(serviceLocation, isEven, isLast)
+            is AircoachStop -> AircoachStopItem(serviceLocation, isEven, isLast)
+            is BusEireannStop -> BusEireannStopItem(serviceLocation, isEven, isLast)
+            is IrishRailStation -> DartStationItem(serviceLocation, isEven, isLast)
+            is DublinBikesDock -> DublinBikesDockItem(serviceLocation, isEven, isLast)
+            is DublinBusStop -> DublinBusStopItem(serviceLocation, isEven, isLast)
+            is LuasStop -> LuasStopItem(serviceLocation, isEven, isLast)
             else -> TODO()
         }
     }

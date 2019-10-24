@@ -4,11 +4,12 @@ import android.os.Bundle
 import androidx.navigation.NavHost
 import androidx.navigation.findNavController
 import dagger.android.support.DaggerAppCompatActivity
-import ie.dublinmapper.domain.model.DetailedServiceLocation
+import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.favourites.FavouritesFragmentDirections
 import ie.dublinmapper.nearby.NearbyFragmentDirections
 import ie.dublinmapper.search.SearchFragmentDirections
 import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 
 class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
@@ -29,37 +30,37 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     override fun navigateLiveDataToSettings() = navigationController.navigate(R.id.liveDataFragment_to_settingsFragment)
 
-    override fun navigateFavouritesToLiveData(serviceLocation: DetailedServiceLocation) {
+    override fun navigateFavouritesToLiveData(serviceLocation: ServiceLocation) {
         val styleId = getStyleId(serviceLocation.service)
         val intent = FavouritesFragmentDirections.favouritesFragmentToLivedataFragment(
             serviceLocation.id,
             serviceLocation.name,
             serviceLocation.service,
-            serviceLocation.isFavourite,
+            serviceLocation.isFavourite(),
             styleId
         )
         navigationController.navigate(intent)
     }
 
-    override fun navigateNearbyToLiveData(serviceLocation: DetailedServiceLocation) {
+    override fun navigateNearbyToLiveData(serviceLocation: ServiceLocation) {
         val styleId = getStyleId(serviceLocation.service)
         val intent = NearbyFragmentDirections.nearbyFragmentToLivedataFragment(
             serviceLocation.id,
             serviceLocation.name,
             serviceLocation.service,
-            serviceLocation.isFavourite,
+            serviceLocation.isFavourite(),
             styleId
         )
         navigationController.navigate(intent)
     }
 
-    override fun navigateSearchToLiveData(serviceLocation: DetailedServiceLocation) {
+    override fun navigateSearchToLiveData(serviceLocation: ServiceLocation) {
         val styleId = getStyleId(serviceLocation.service)
         val intent = SearchFragmentDirections.searchFragmentToLivedataFragment(
             serviceLocation.id,
             serviceLocation.name,
             serviceLocation.service,
-            serviceLocation.isFavourite,
+            serviceLocation.isFavourite(),
             styleId
         )
         navigationController.navigate(intent)

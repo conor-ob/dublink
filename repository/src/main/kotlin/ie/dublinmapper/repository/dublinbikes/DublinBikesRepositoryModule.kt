@@ -9,7 +9,6 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.DetailedDublinBikesDock
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
@@ -40,7 +39,7 @@ class DublinBikesRepositoryModule {
         mapper: MapperFacade,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
-    ): Repository<DetailedDublinBikesDock> {
+    ): Repository<DublinBikesDock> {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { Single.just(client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey())) }
         val persister = DublinBikesDockPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)

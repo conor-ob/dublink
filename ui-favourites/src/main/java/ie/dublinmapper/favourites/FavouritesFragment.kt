@@ -2,15 +2,14 @@ package ie.dublinmapper.favourites
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.Navigator
-import ie.dublinmapper.domain.model.DetailedServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
+import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
 
@@ -34,7 +33,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
-            (item.extras["serviceLocation"] as? DetailedServiceLocation)?.let { serviceLocation ->
+            (item.extras["serviceLocation"] as? ServiceLocation)?.let { serviceLocation ->
                 (activity as Navigator).navigateFavouritesToLiveData(serviceLocation)
                 if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
                     enabledServiceManager.enableService(serviceLocation.service)

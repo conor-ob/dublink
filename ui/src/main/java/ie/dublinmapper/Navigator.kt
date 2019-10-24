@@ -1,6 +1,6 @@
 package ie.dublinmapper
 
-import ie.dublinmapper.domain.model.DetailedServiceLocation
+import io.rtpi.api.ServiceLocation
 
 interface Navigator {
 
@@ -8,11 +8,11 @@ interface Navigator {
 
     fun navigateFavouritesToSearch()
 
-    fun navigateFavouritesToLiveData(serviceLocation: DetailedServiceLocation)
+    fun navigateFavouritesToLiveData(serviceLocation: ServiceLocation)
 
-    fun navigateNearbyToLiveData(serviceLocation: DetailedServiceLocation)
+    fun navigateNearbyToLiveData(serviceLocation: ServiceLocation)
 
-    fun navigateSearchToLiveData(serviceLocation: DetailedServiceLocation)
+    fun navigateSearchToLiveData(serviceLocation: ServiceLocation)
 
     fun navigateLiveDataToSettings()
 

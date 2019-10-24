@@ -1,13 +1,13 @@
 package ie.dublinmapper.repository
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import ie.dublinmapper.domain.model.DetailedServiceLocation
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.EnabledServiceManager
 import io.reactivex.Observable
 import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 
-abstract class ServiceLocationRepository<T : DetailedServiceLocation>(
+abstract class ServiceLocationRepository<T : ServiceLocation>(
     private val service: Service,
     private val serviceLocationStore: StoreRoom<List<T>, Service>,
     private val enabledServiceManager: EnabledServiceManager
