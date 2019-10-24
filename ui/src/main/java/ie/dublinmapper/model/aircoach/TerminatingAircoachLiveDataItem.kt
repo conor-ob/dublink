@@ -1,19 +1,18 @@
-package ie.dublinmapper.model.dart
+package ie.dublinmapper.model.aircoach
 
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import io.rtpi.api.IrishRailLiveData
+import io.rtpi.api.AircoachLiveData
 import kotlinx.android.synthetic.main.list_item_live_data.*
 
-class TerminatingIrishRailLiveDataItem(
-    private val liveData: IrishRailLiveData,
+class TerminatingAircoachLiveDataItem(
+    private val liveData: AircoachLiveData,
     isEven: Boolean,
     isLast: Boolean
-) : IrishRailLiveDataItem(liveData, isEven, isLast) {
+) : AircoachLiveDataItem(liveData, isEven, isLast) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
         viewHolder.title.text = String.format(viewHolder.itemView.resources.getString(R.string.from), liveData.origin)
     }
-
 }

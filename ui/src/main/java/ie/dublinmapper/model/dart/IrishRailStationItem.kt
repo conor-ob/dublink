@@ -1,20 +1,20 @@
-package ie.dublinmapper.model.luas
+package ie.dublinmapper.model.dart
 
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
 import ie.dublinmapper.model.ServiceLocationItem
-import io.rtpi.api.LuasStop
+import io.rtpi.api.IrishRailStation
 
-class LuasStopItem(
-    luasStop: LuasStop,
+class IrishRailStationItem(
+    dartStation: IrishRailStation,
     isEven: Boolean,
     isLast: Boolean
-) : ServiceLocationItem(luasStop, isEven, isLast) {
+) : ServiceLocationItem(dartStation, isEven, isLast) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         bindBackground(viewHolder, position)
         bindTitle(viewHolder, getServiceLocation().name, null)
-        bindIcon(viewHolder, R.drawable.ic_tram, R.color.luasPurple)
+        bindIcon(viewHolder, R.drawable.ic_train, R.color.dartGreen)
     }
 
 }

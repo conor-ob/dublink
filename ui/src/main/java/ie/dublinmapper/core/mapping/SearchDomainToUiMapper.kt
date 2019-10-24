@@ -3,13 +3,12 @@ package ie.dublinmapper.core.mapping
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.Item
-import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.usecase.SearchResponse
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.aircoach.AircoachStopItem
 import ie.dublinmapper.model.buseireann.BusEireannStopItem
-import ie.dublinmapper.model.dart.DartStationItem
+import ie.dublinmapper.model.dart.IrishRailStationItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
 import ie.dublinmapper.model.dublinbus.DublinBusStopItem
 import ie.dublinmapper.model.luas.LuasStopItem
@@ -46,7 +45,7 @@ object SearchDomainToUiMapper : CustomConverter<SearchResponse, Group>() {
         return when (serviceLocation) {
             is AircoachStop -> AircoachStopItem(serviceLocation, isEven, isLast)
             is BusEireannStop -> BusEireannStopItem(serviceLocation, isEven, isLast)
-            is IrishRailStation -> DartStationItem(serviceLocation, isEven, isLast)
+            is IrishRailStation -> IrishRailStationItem(serviceLocation, isEven, isLast)
             is DublinBikesDock -> DublinBikesDockItem(serviceLocation, isEven, isLast)
             is DublinBusStop -> DublinBusStopItem(serviceLocation, isEven, isLast)
             is LuasStop -> LuasStopItem(serviceLocation, isEven, isLast)
