@@ -5,7 +5,6 @@ import com.ww.roxie.Reducer
 import com.xwray.groupie.Group
 import ie.dublinmapper.domain.usecase.FavouritesUseCase
 import ie.dublinmapper.util.RxScheduler
-import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import ma.glasnost.orika.MapperFacade
 import timber.log.Timber

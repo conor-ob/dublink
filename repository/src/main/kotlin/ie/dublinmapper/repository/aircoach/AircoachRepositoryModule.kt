@@ -9,11 +9,11 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.DetailedAircoachStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopRepository
+import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.InternetManager
 import io.reactivex.Single
 import io.rtpi.api.AircoachLiveData
@@ -35,12 +35,13 @@ class AircoachRepositoryModule {
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         mapper: MapperFacade,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<DetailedAircoachStop> {
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
+        enabledServiceManager: EnabledServiceManager
+    ): Repository<AircoachStop> {
         val fetcher = Fetcher<List<AircoachStop>, Service> { Single.just(client.aircoach().getStops()) }
         val persister = AircoachStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return AircoachStopRepository(store)
+        return AircoachStopRepository(store, enabledServiceManager)
     }
 
     @Provides

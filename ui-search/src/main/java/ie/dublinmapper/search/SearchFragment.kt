@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.Navigator
-import ie.dublinmapper.domain.model.DetailedServiceLocation
+import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
 import ie.dublinmapper.util.hideKeyboard
@@ -58,9 +58,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         search_results.setHasFixedSize(true)
         search_results.layoutManager = LinearLayoutManager(requireContext())
         adapter.setOnItemClickListener { item, _ ->
-            (item.extras["serviceLocation"] as? DetailedServiceLocation)?.let { serviceLocation ->
-                (activity as Navigator).navigateSearchToLiveData(serviceLocation)
-            }
+            (activity as Navigator).navigateSearchToLiveData(item.getServiceLocation())
         }
 
         subscriptions.add(

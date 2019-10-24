@@ -12,4 +12,6 @@ interface StringProvider {
 
     fun favourites(): String
 
+    fun nearby(): String
+
 }

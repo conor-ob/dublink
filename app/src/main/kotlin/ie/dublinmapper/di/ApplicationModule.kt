@@ -7,7 +7,12 @@ import dagger.Provides
 import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
+import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
+import ie.dublinmapper.location.LocationProvider
+import ie.dublinmapper.nearby.location.GpsLocationProvider
+import ie.dublinmapper.permission.AndroidPermissionsChecker
+import ie.dublinmapper.permission.PermissionChecker
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopEntityToDomainMapper
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopJsonToEntityMapper
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopEntityToDomainMapper
@@ -95,6 +100,7 @@ class ApplicationModule {
             registerConverter(LuasStopEntityToDomainMapper)
 
             registerConverter(FavouritesDomainToUiMapper(stringProvider))
+            registerConverter(NearbyDomainToUiMapper(stringProvider))
             registerConverter(LiveDataDomainToUiMapper(stringProvider))
             registerConverter(SearchDomainToUiMapper)
 
@@ -123,5 +129,11 @@ class ApplicationModule {
         )
         return DefaultEnabledServiceManager(preferenceStore, serviceToEnabledServicePreferenceKey)
     }
+
+    @Provides
+    fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)
+
+    @Provides
+    fun permissionChecker(context: Context): PermissionChecker = AndroidPermissionsChecker(context)
 
 }

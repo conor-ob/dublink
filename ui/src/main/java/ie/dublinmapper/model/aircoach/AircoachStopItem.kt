@@ -1,30 +1,20 @@
 package ie.dublinmapper.model.aircoach
 
-import android.content.res.ColorStateList
-import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.DetailedAircoachStop
 import ie.dublinmapper.model.ServiceLocationItem
-import kotlinx.android.synthetic.main.list_item_service_location.*
+import io.rtpi.api.AircoachStop
 
 class AircoachStopItem(
-    val aircoachStop: DetailedAircoachStop,
+    aircoachStop: AircoachStop,
     isEven: Boolean,
     isLast: Boolean
-) : ServiceLocationItem(isEven, isLast) {
-
-    init {
-        extras["serviceLocation"] = aircoachStop
-    }
-
-    override fun getLayout() = R.layout.list_item_service_location
+) : ServiceLocationItem(aircoachStop, isEven, isLast) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        super.bind(viewHolder, position)
-        super.bindTitle(viewHolder, aircoachStop.name, null)
-        viewHolder.serviceIconContainer.setImageResource(R.drawable.ic_bus)
-        viewHolder.serviceIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.aircoachOrange))
+        bindBackground(viewHolder, position)
+        bindTitle(viewHolder, getServiceLocation().name, null)
+        bindIcon(viewHolder, R.drawable.ic_bus, R.color.aircoachOrange)
     }
 
 }

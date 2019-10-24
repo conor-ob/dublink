@@ -7,6 +7,9 @@ dependencies {
     kapt libraries.dagger_compiler
 
     implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
+
+    testImplementation testLibraries.junit
+    testImplementation testLibraries.truth
 }
 
 sourceSets {

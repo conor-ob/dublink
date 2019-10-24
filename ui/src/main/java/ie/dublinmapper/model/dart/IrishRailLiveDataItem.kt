@@ -5,18 +5,16 @@ import androidx.core.content.ContextCompat
 import com.xwray.groupie.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
-import ie.dublinmapper.model.livedata.LiveDataItem
+import ie.dublinmapper.model.LiveDataItem
 import io.rtpi.api.IrishRailLiveData
 import io.rtpi.api.Operator
 import kotlinx.android.synthetic.main.list_item_live_data.*
 
-open class DartLiveDataItem(
+open class IrishRailLiveDataItem(
     private val liveData: IrishRailLiveData,
     isEven: Boolean,
     isLast: Boolean
 ) : LiveDataItem(isEven, isLast) {
-
-    override fun getLayout() = R.layout.list_item_live_data
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
@@ -40,7 +38,7 @@ open class DartLiveDataItem(
     }
 
     override fun isSameAs(other: Item<*>?): Boolean {
-        if (other is DartLiveDataItem) {
+        if (other is IrishRailLiveDataItem) {
             return liveData.operator == other.liveData.operator &&
                     liveData.route == other.liveData.route &&
                     liveData.destination == other.liveData.destination &&
@@ -50,7 +48,7 @@ open class DartLiveDataItem(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is DartLiveDataItem) {
+        if (other is IrishRailLiveDataItem) {
             return liveData == other.liveData
         }
         return false
