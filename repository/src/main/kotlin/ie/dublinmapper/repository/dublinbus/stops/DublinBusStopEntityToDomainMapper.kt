@@ -2,7 +2,6 @@ package ie.dublinmapper.repository.dublinbus.stops
 
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopEntity
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopServiceEntity
-import ie.dublinmapper.domain.model.DetailedDublinBusStop
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Operator
@@ -11,21 +10,19 @@ import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 import java.util.*
 
-object DublinBusStopEntityToDomainMapper : CustomConverter<DublinBusStopEntity, DetailedDublinBusStop>() {
+object DublinBusStopEntityToDomainMapper : CustomConverter<DublinBusStopEntity, DublinBusStop>() {
 
     override fun convert(
         source: DublinBusStopEntity,
-        destinationType: Type<out DetailedDublinBusStop>,
+        destinationType: Type<out DublinBusStop>,
         mappingContext: MappingContext
-    ): DetailedDublinBusStop {
-        return DetailedDublinBusStop(
-            DublinBusStop(
-                id = source.location.id,
-                name = source.location.name,
-                coordinate = Coordinate(source.location.latitude, source.location.longitude),
-                operators = convertOperators(source.services),
-                routes = convertOperatorsToRoutes(source.services)
-            )
+    ): DublinBusStop {
+        return DublinBusStop(
+            id = source.location.id,
+            name = source.location.name,
+            coordinate = Coordinate(source.location.latitude, source.location.longitude),
+            operators = convertOperators(source.services),
+            routes = convertOperatorsToRoutes(source.services)
         )
     }
 

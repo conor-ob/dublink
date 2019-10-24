@@ -9,7 +9,7 @@ class TerminatingIrishRailLiveDataItem(
     private val liveData: IrishRailLiveData,
     isEven: Boolean,
     isLast: Boolean
-) : DartLiveDataItem(liveData, isEven, isLast) {
+) : IrishRailLiveDataItem(liveData, isEven, isLast) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)

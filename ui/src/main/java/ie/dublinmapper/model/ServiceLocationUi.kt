@@ -1,15 +1,5 @@
 package ie.dublinmapper.model
 
-import com.xwray.groupie.kotlinandroidextensions.Item
-import ie.dublinmapper.ui.R
-import ie.dublinmapper.domain.model.*
-import ie.dublinmapper.model.aircoach.AircoachStopItem
-import ie.dublinmapper.model.buseireann.BusEireannStopItem
-import ie.dublinmapper.model.dart.DartStationItem
-import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
-import ie.dublinmapper.model.dublinbus.DublinBusStopItem
-import ie.dublinmapper.model.luas.LuasStopItem
-
 //sealed class ServiceLocationUi(
 //    open val serviceLocation: ServiceLocation,
 //    open val mapIconText: String,
@@ -66,7 +56,7 @@ import ie.dublinmapper.model.luas.LuasStopItem
 //    dartStation.name,
 //    R.style.DartTheme
 //) {
-//    override fun toItem(isEven: Boolean, isLast: Boolean) = DartStationItem(this, isEven, isLast)
+//    override fun toItem(isEven: Boolean, isLast: Boolean) = IrishRailStationItem(this, isEven, isLast)
 //}
 //
 //data class DublinBikesDockUi(

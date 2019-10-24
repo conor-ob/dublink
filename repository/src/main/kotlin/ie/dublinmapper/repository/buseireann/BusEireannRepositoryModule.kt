@@ -9,11 +9,11 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.DetailedBusEireannStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister
+import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.InternetManager
 import io.reactivex.Single
 import io.rtpi.api.BusEireannLiveData
@@ -35,12 +35,13 @@ class BusEireannRepositoryModule {
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         mapper: MapperFacade,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<DetailedBusEireannStop> {
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
+        enabledServiceManager: EnabledServiceManager
+    ): Repository<BusEireannStop> {
         val fetcher = Fetcher<List<BusEireannStop>, Service> { Single.just(client.busEireann().getStops()) }
         val persister = BusEireannStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return BusEireannStopRepository(store)
+        return BusEireannStopRepository(store, enabledServiceManager)
     }
 
     @Provides

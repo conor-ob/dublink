@@ -1,4 +1,4 @@
-package ie.dublinmapper.model.livedata
+package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
 import android.view.View
@@ -17,6 +17,8 @@ abstract class LiveDataItem(
     private val isLast: Boolean,
     private val isShowTime: Boolean = false //TODO
 ) : Item() {
+
+    override fun getLayout() = R.layout.list_item_live_data
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         if (isLast) {

@@ -9,11 +9,11 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.luas.LuasStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.domain.model.DetailedLuasStop
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
 import ie.dublinmapper.repository.luas.stops.LuasStopRepository
+import ie.dublinmapper.util.EnabledServiceManager
 import ie.dublinmapper.util.InternetManager
 import io.reactivex.Single
 import io.rtpi.api.LuasLiveData
@@ -35,12 +35,13 @@ class LuasRepositoryModule {
         persisterDao: PersisterDao,
         internetManager: InternetManager,
         mapper: MapperFacade,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<DetailedLuasStop> {
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
+        enabledServiceManager: EnabledServiceManager
+    ): Repository<LuasStop> {
         val fetcher = Fetcher<List<LuasStop>, Service> { Single.just(client.luas().getStops()) }
         val persister = LuasStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return LuasStopRepository(store)
+        return LuasStopRepository(store, enabledServiceManager)
     }
 
     @Provides

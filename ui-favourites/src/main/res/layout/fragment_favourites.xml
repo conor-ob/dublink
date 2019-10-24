@@ -90,6 +90,23 @@
 
     <!--</androidx.appcompat.widget.Toolbar>-->
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/nearby_fab"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="start|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_nearby"
+            app:tint="@color/white"
+            android:backgroundTint="?attr/colorAccent"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            app:borderWidth="0dp"
+            app:pressedTranslationZ="12dp"
+            app:layout_dodgeInsetEdges="bottom"
+            app:layout_anchorGravity="start"/>
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/search_fab"

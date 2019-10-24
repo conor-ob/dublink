@@ -5,8 +5,9 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
+import ie.dublinmapper.model.aircoach.TerminatingAircoachLiveDataItem
 import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
-import ie.dublinmapper.model.dart.DartLiveDataItem
+import ie.dublinmapper.model.dart.IrishRailLiveDataItem
 import ie.dublinmapper.model.dart.TerminatingIrishRailLiveDataItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
@@ -45,7 +46,7 @@ class LiveDataDomainToUiMapper(
             items.add(DividerItem())
             items.add(HeaderItem(stringProvider.departures()))
         }
-        for (i in 0 until departures.size) {
+        for (i in departures.indices) {
             val isLast = i == departures.size - 1
             val isEven = i % 2 == 0
             items.add(AircoachLiveDataItem(departures[i], isEven, isLast))
@@ -54,10 +55,10 @@ class LiveDataDomainToUiMapper(
             items.add(DividerItem())
             items.add(HeaderItem(stringProvider.terminating()))
         }
-        for (i in 0 until terminating.size) {
+        for (i in terminating.indices) {
             val isLast = i == terminating.size - 1
             val isEven = i % 2 == 0
-            items.add(AircoachLiveDataItem(terminating[i], isEven, isLast))
+            items.add(TerminatingAircoachLiveDataItem(terminating[i], isEven, isLast))
         }
         if (items.isNotEmpty()) {
             items.add(DividerItem())
@@ -70,7 +71,7 @@ class LiveDataDomainToUiMapper(
         if (liveData.isNotEmpty()) {
             items.add(HeaderItem(stringProvider.departures()))
         }
-        for (i in 0 until liveData.size) {
+        for (i in liveData.indices) {
             val isLast = i == liveData.size - 1
             val isEven = i % 2 == 0
             items.add(BusEireannLiveDataItem(liveData[i], isEven, isLast))
@@ -98,7 +99,7 @@ class LiveDataDomainToUiMapper(
         if (liveData.isNotEmpty()) {
             items.add(HeaderItem(stringProvider.departures()))
         }
-        for (i in 0 until liveData.size) {
+        for (i in liveData.indices) {
             val isLast = i == liveData.size - 1
             val isEven = i % 2 == 0
             items.add(DublinBusLiveDataItem(liveData[i], isEven, isLast))
@@ -119,16 +120,16 @@ class LiveDataDomainToUiMapper(
         for (entry in groups.entries) {
             items.add(HeaderItem(entry.key))
             val values = entry.value
-            for (i in 0 until values.size) {
+            for (i in values.indices) {
                 val isLast = i == values.size - 1
                 val isEven = i % 2 == 0
-                items.add(DartLiveDataItem(values[i], isEven, isLast))
+                items.add(IrishRailLiveDataItem(values[i], isEven, isLast))
             }
             items.add(DividerItem())
         }
         if (terminating.isNotEmpty()) {
             items.add(HeaderItem(stringProvider.terminating()))
-            for (i in 0 until terminating.size) {
+            for (i in terminating.indices) {
                 val isLast = i == terminating.size - 1
                 val isEven = i % 2 == 0
                 items.add(TerminatingIrishRailLiveDataItem(terminating[i], isEven, isLast))
@@ -147,7 +148,7 @@ class LiveDataDomainToUiMapper(
         for (entry in groups.entries) {
             items.add(HeaderItem(entry.key))
             val values = entry.value
-            for (i in 0 until values.size) {
+            for (i in values.indices) {
                 val isLast = i == values.size - 1
                 val isEven = i % 2 == 0
                 items.add(LuasLiveDataItem(values[i], isEven, isLast))

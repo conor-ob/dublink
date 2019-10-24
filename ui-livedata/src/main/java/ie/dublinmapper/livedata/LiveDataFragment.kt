@@ -32,7 +32,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
         toolbar.inflateMenu(R.menu.menu_live_data)
         toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         if (arguments!!.getBoolean("serviceLocationIsFavourite")) {

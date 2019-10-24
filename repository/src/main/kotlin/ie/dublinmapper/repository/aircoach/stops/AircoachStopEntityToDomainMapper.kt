@@ -2,7 +2,6 @@ package ie.dublinmapper.repository.aircoach.stops
 
 import ie.dublinmapper.datamodel.aircoach.AircoachStopEntity
 import ie.dublinmapper.datamodel.aircoach.AircoachStopServiceEntity
-import ie.dublinmapper.domain.model.DetailedAircoachStop
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Coordinate
 import io.rtpi.api.Operator
@@ -11,21 +10,19 @@ import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 import java.util.*
 
-object AircoachStopEntityToDomainMapper : CustomConverter<AircoachStopEntity, DetailedAircoachStop>() {
+object AircoachStopEntityToDomainMapper : CustomConverter<AircoachStopEntity, AircoachStop>() {
 
     override fun convert(
         source: AircoachStopEntity,
-        destinationType: Type<out DetailedAircoachStop>,
+        destinationType: Type<out AircoachStop>,
         mappingContext: MappingContext
-    ): DetailedAircoachStop {
-        return DetailedAircoachStop(
-            AircoachStop(
-                id = source.location.id,
-                name = source.location.name,
-                coordinate = Coordinate(source.location.latitude, source.location.longitude),
-                operators = mapOperators(source.services),
-                routes = mapOperatorsToRoutes(source.services)
-            )
+    ): AircoachStop {
+        return AircoachStop(
+            id = source.location.id,
+            name = source.location.name,
+            coordinate = Coordinate(source.location.latitude, source.location.longitude),
+            operators = mapOperators(source.services),
+            routes = mapOperatorsToRoutes(source.services)
         )
     }
 
