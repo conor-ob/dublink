@@ -1,4 +1,4 @@
-package ie.dublinmapper.repository.di
+package ie.dublinmapper.di
 
 import okhttp3.Interceptor
 import okhttp3.Response

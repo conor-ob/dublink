@@ -15,6 +15,7 @@ class AircoachStopItem(
         bindBackground(viewHolder, position)
         bindTitle(viewHolder, getServiceLocation().name, null)
         bindIcon(viewHolder, R.drawable.ic_bus, R.color.aircoachOrange)
+        bindRoutes(viewHolder, (getServiceLocation() as AircoachStop).routes.values.flatten())
     }
 
 }

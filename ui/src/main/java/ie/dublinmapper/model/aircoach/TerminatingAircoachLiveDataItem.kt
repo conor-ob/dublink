@@ -13,6 +13,6 @@ class TerminatingAircoachLiveDataItem(
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         super.bind(viewHolder, position)
-        viewHolder.title.text = String.format(viewHolder.itemView.resources.getString(R.string.from), liveData.origin)
+        viewHolder.title.text = liveData.route + " " + String.format(viewHolder.itemView.resources.getString(R.string.from), liveData.origin)
     }
 }

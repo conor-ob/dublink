@@ -237,7 +237,7 @@
         "foreignKeys": []
       },
       {
-        "tableName": "irishrail_station_lservices",
+        "tableName": "irishrail_station_services",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `station_id` TEXT NOT NULL, `operator` TEXT NOT NULL, FOREIGN KEY(`station_id`) REFERENCES `irishrail_station_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
