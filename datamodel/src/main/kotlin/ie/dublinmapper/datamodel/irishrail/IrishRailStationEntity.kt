@@ -18,7 +18,7 @@ data class IrishRailStationLocationEntity(
 )
 
 @Entity(
-    tableName = "irishrail_station_lservices",
+    tableName = "irishrail_station_services",
     indices = [Index("station_id")],
     foreignKeys = [
         ForeignKey(

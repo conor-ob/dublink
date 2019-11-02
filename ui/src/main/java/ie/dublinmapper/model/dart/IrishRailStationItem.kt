@@ -15,6 +15,7 @@ class IrishRailStationItem(
         bindBackground(viewHolder, position)
         bindTitle(viewHolder, getServiceLocation().name, null)
         bindIcon(viewHolder, R.drawable.ic_train, R.color.dartGreen)
+        bindRoutes(viewHolder, (getServiceLocation() as IrishRailStation).operators.map { it.fullName })
     }
 
 }

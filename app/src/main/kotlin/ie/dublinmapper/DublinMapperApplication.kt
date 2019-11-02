@@ -1,5 +1,6 @@
 package ie.dublinmapper
 
+import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.ww.roxie.Roxie
 import dagger.android.AndroidInjector
@@ -13,6 +14,7 @@ class DublinMapperApplication : DaggerApplication() {
         super.onCreate()
         setupTimber()
         setupThreeTen()
+        setupStetho()
     }
 
     private fun setupTimber() {
@@ -28,6 +30,12 @@ class DublinMapperApplication : DaggerApplication() {
 
     private fun setupThreeTen() {
         AndroidThreeTen.init(applicationContext)
+    }
+
+    private fun setupStetho() {
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+        }
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

@@ -2,6 +2,7 @@ package ie.dublinmapper.di
 
 import android.content.Context
 import android.content.res.Resources
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.DublinMapperApplication
@@ -34,8 +35,11 @@ import ie.dublinmapper.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.Service
+import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
 @Module
 class ApplicationModule {
@@ -73,6 +77,20 @@ class ApplicationModule {
     fun internetManager(context: Context): InternetManager {
         return InternetManagerImpl(context)
     }
+
+    @Provides
+    fun okHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(NetworkLoggingInterceptor())
+            .addNetworkInterceptor(StethoInterceptor())
+            .retryOnConnectionFailure(true)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+    @Provides
+    fun client(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
 
     @Provides
     fun mapperFacade(

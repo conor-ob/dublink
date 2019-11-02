@@ -55,6 +55,11 @@ abstract class ServiceLocationItem(
             ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, colourId))
     }
 
+    protected fun bindRoutes(viewHolder: ViewHolder, routes: List<String>) {
+        viewHolder.routes.visibility = View.VISIBLE
+        viewHolder.routes.text = routes.joinToString(separator = " · ")
+    }
+
     private fun setServiceLocation(serviceLocation: ServiceLocation) {
         extras[serviceLocationKey] = serviceLocation
     }

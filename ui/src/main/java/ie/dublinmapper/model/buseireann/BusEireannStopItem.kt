@@ -19,6 +19,7 @@ class BusEireannStopItem(
             viewHolder.itemView.context.getString(R.string.stop_number, getServiceLocation().id)
         )
         bindIcon(viewHolder, R.drawable.ic_bus, R.color.busEireannRed)
+        bindRoutes(viewHolder, (getServiceLocation() as BusEireannStop).routes.values.flatten())
     }
 
 }

@@ -5,59 +5,75 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         style="@style/ListItemContainer">
 
-    <ImageView
-            android:id="@+id/serviceIconContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@drawable/text_view_rounded_corner"
-            android:padding="2dp"
-            tools:src="@drawable/ic_train"
-            tools:backgroundTint="@color/dartGreen"/>
-
-    <FrameLayout
-            android:id="@+id/singleTitleContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            android:visibility="gone">
-
-        <TextView
-                android:id="@+id/mainTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/ListItemTitleTextAppearance"
-                tools:text="Greystones"/>
-
-    </FrameLayout>
-
     <LinearLayout
-            android:id="@+id/doubleTitleContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="8dp"
-            android:visibility="gone">
+        android:orientation="horizontal">
 
-        <TextView
-                android:id="@+id/title"
+        <ImageView
+                android:id="@+id/serviceIconContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ListItemTitleTextAppearance"
-                tools:text="Greystones"/>
+                android:layout_gravity="center"
+                android:background="@drawable/text_view_rounded_corner"
+                android:padding="2dp"
+                tools:src="@drawable/ic_train"
+                tools:backgroundTint="@color/dartGreen"/>
 
-        <TextView
-                android:id="@+id/subtitle"
+        <FrameLayout
+                android:id="@+id/singleTitleContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ListItemSubtitleTextAppearance"
-                tools:text="DART"/>
+                android:layout_gravity="bottom"
+                android:layout_marginStart="8dp"
+                android:visibility="gone">
+
+            <TextView
+                    android:id="@+id/mainTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/ListItemTitleTextAppearance"
+                    tools:text="Greystones"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+                android:id="@+id/doubleTitleContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:visibility="gone">
+
+            <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/ListItemTitleTextAppearance"
+                    tools:text="Greystones"/>
+
+            <TextView
+                    android:id="@+id/subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/ListItemSubtitleTextAppearance"
+                    tools:text="DART"/>
+
+        </LinearLayout>
+
 
     </LinearLayout>
+
+    <TextView
+            android:id="@+id/routes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_xs"
+            android:visibility="gone"
+            style="@style/ListItemTextAppearance"/>
 
 </LinearLayout>
