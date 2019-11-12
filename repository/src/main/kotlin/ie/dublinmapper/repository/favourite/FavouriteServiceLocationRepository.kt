@@ -6,11 +6,9 @@ import ie.dublinmapper.domain.repository.FavouriteRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.rtpi.api.Service
-import ma.glasnost.orika.MapperFacade
 
 class FavouriteServiceLocationRepository(
-    private val localResource: FavouriteServiceLocationLocalResource,
-    private val mapper: MapperFacade
+    private val localResource: FavouriteServiceLocationLocalResource
 ) : FavouriteRepository {
 
     override fun saveFavourite(favourite: Favourite): Completable {
@@ -32,8 +30,9 @@ class FavouriteServiceLocationRepository(
     }
 
     override fun getFavourites(): Observable<List<Favourite>> {
-        return localResource.selectFavourites()
-            .map { entities -> mapper.mapAsList(entities, Favourite::class.java) }
+//        return localResource.selectFavourites()
+//            .map { entities -> mapper.mapAsList(entities, Favourite::class.java) }
+        return Observable.empty()
     }
 
     override fun getFavourites(service: Service): Observable<List<Favourite>> {
@@ -41,8 +40,9 @@ class FavouriteServiceLocationRepository(
     }
 
     override fun getFavourite(id: String, service: Service): Observable<Favourite> {
-        return localResource.selectFavourite(id, service)
-            .map { entity -> mapper.map(entity, Favourite::class.java) }
+//        return localResource.selectFavourite(id, service)
+//            .map { entity -> mapper.map(entity, Favourite::class.java) }
+        return Observable.empty()
     }
 
 }

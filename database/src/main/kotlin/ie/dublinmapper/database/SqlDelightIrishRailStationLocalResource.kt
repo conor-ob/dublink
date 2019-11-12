@@ -9,6 +9,7 @@ import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
 import io.rtpi.api.IrishRailStation
 import io.rtpi.api.Operator
+import io.rtpi.api.Service
 import kotlin.Comparator
 
 class SqlDelightIrishRailStationLocalResource(
@@ -23,10 +24,9 @@ class SqlDelightIrishRailStationLocalResource(
             database.irishRailStationServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
-//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.IRISH_RAIL)
-//                .asObservable()
-//                .mapToList(),
+            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.IRISH_RAIL)
+                .asObservable()
+                .mapToList(),
             Function3 {
                     irishRailStationEntities,
                     irishRailStationServiceEntities,

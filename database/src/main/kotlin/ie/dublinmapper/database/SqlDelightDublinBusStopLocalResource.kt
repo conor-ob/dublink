@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DublinBusStop
+import io.rtpi.api.Service
 
 class SqlDelightDublinBusStopLocalResource(
     private val database: Database
@@ -20,10 +21,9 @@ class SqlDelightDublinBusStopLocalResource(
             database.dublinBusStopServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
-//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BUS)
-//                .asObservable()
-//                .mapToList(),
+            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BUS)
+                .asObservable()
+                .mapToList(),
             Function3 {
                     dublinBusStopEntities,
                     dublinBusStopServiceEntities,

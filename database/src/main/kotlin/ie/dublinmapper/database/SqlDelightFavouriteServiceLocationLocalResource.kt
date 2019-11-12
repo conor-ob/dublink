@@ -1,6 +1,5 @@
 package ie.dublinmapper.database
 
-import ie.dublinmapper.database.Database
 import ie.dublinmapper.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.domain.model.Favourite
 import io.reactivex.Completable

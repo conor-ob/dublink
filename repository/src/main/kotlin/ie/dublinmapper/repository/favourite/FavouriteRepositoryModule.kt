@@ -13,10 +13,9 @@ class FavouriteRepositoryModule {
     @Provides
     @Singleton
     fun provideFavouriteRepository(
-        localResource: FavouriteServiceLocationLocalResource,
-        mapper: MapperFacade
+        localResource: FavouriteServiceLocationLocalResource
     ): FavouriteRepository {
-        return FavouriteServiceLocationRepository(localResource, mapper)
+        return FavouriteServiceLocationRepository(localResource)
     }
 
 }

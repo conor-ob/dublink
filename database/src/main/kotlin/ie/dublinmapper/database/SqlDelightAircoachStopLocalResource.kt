@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Coordinate
+import io.rtpi.api.Service
 
 class SqlDelightAircoachStopLocalResource(
     private val database: Database
@@ -20,10 +21,9 @@ class SqlDelightAircoachStopLocalResource(
             database.aircoachStopServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.AIRCOACH)
-//                .asObservable()
-//                .mapToList(),
-            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
+            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.AIRCOACH)
+                .asObservable()
+                .mapToList(),
             Function3 {
                     aircoachStopEntities,
                     aircoachStopServiceEntities,

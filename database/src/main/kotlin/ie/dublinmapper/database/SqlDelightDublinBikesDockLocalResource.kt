@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DublinBikesDock
+import io.rtpi.api.Service
 
 class SqlDelightDublinBikesDockLocalResource(
     private val database: Database
@@ -21,10 +22,9 @@ class SqlDelightDublinBikesDockLocalResource(
             database.dublinBikesDockServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BIKES)
-//                .asObservable()
-//                .mapToList(),
-            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
+            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BIKES)
+                .asObservable()
+                .mapToList(),
             Function3 {
                     locationEntities,
                     serviceEntities,

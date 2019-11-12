@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
 import io.rtpi.api.LuasStop
+import io.rtpi.api.Service
 
 class SqlDelightLuasStopLocalResource(
     private val database: Database
@@ -21,10 +22,9 @@ class SqlDelightLuasStopLocalResource(
             database.luasStopServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
-//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.LUAS)
-//                .asObservable()
-//                .mapToList(),
+            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.LUAS)
+                .asObservable()
+                .mapToList(),
             Function3 {
                     locationEntities,
                     serviceEntities,
