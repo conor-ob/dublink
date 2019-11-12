@@ -39,7 +39,8 @@ class SqlDelightIrishRailStationLocalResourceTest {
             }
         )
     )
-    private val irishRailStationLocalResource = SqlDelightIrishRailStationLocalResource(database)
+    private val irishRailStationLocalResource =
+        SqlDelightIrishRailStationLocalResource(database)
 
     @Test
     fun `test irish rail`() {

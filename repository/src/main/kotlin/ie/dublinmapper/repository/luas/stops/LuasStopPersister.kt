@@ -1,16 +1,13 @@
 package ie.dublinmapper.repository.luas.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.datamodel.luas.*
-import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.datamodel.LuasStopLocalResource
+import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.model.setFavourite
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.util.InternetManager
-import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.rtpi.api.LuasStop
 import io.rtpi.api.Service
 import ma.glasnost.orika.MapperFacade

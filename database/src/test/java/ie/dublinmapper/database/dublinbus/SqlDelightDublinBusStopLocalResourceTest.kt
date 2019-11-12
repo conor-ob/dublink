@@ -16,10 +16,22 @@ class SqlDelightDublinBusStopLocalResourceTest {
         driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
             Database.Schema.create(this)
         },
+        aircoachStopServiceEntityAdapter = AircoachStopServiceEntity.Adapter(
+            operatorAdapter = EnumColumnAdapter()
+        ),
+        busEireannStopServiceEntityAdapter = BusEireannStopServiceEntity.Adapter(
+            operatorAdapter = EnumColumnAdapter()
+        ),
+        dublinBikesDockServiceEntityAdapter = DublinBikesDockServiceEntity.Adapter(
+            operatorAdapter = EnumColumnAdapter()
+        ),
         dublinBusStopServiceEntityAdapter = DublinBusStopServiceEntity.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
         irishRailStationServiceEntityAdapter = IrishRailStationServiceEntity.Adapter(
+            operatorAdapter = EnumColumnAdapter()
+        ),
+        luasStopServiceEntityAdapter = LuasStopServiceEntity.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
         favouriteServiceLocationEntityAdapter = FavouriteServiceLocationEntity.Adapter(
@@ -39,7 +51,8 @@ class SqlDelightDublinBusStopLocalResourceTest {
             }
         )
     )
-    private val dublinBusStopLocalResource = SqlDelightDublinBusStopLocalResource(database)
+    private val dublinBusStopLocalResource =
+        SqlDelightDublinBusStopLocalResource(database)
 
     @Test
     fun `test dublin bus`() {

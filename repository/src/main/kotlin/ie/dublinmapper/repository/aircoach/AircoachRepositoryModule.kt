@@ -7,9 +7,8 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
-import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.datamodel.AircoachStopLocalResource
+import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister

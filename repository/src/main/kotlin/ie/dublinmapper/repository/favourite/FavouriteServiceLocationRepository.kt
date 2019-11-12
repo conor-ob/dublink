@@ -1,7 +1,6 @@
 package ie.dublinmapper.repository.favourite
 
-import ie.dublinmapper.datamodel.favourite.FavouriteEntity
-import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import io.reactivex.Completable

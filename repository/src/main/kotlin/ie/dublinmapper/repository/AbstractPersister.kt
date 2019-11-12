@@ -4,9 +4,7 @@ import com.nytimes.android.external.store3.base.RecordProvider
 import com.nytimes.android.external.store3.base.RecordState
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.room.RoomPersister
-import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.datamodel.persister.PersisterEntity
-import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.TimeUtils
 import io.reactivex.Observable

@@ -1,16 +1,13 @@
 package ie.dublinmapper.repository.buseireann.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.datamodel.buseireann.*
-import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.datamodel.BusEireannStopLocalResource
+import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.model.setFavourite
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.util.InternetManager
-import io.reactivex.Maybe
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.rtpi.api.BusEireannStop
 import io.rtpi.api.Service
 import ma.glasnost.orika.MapperFacade
