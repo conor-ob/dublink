@@ -28,32 +28,32 @@ class SqlDelightIrishRailStationLocalResource(
                 .asObservable()
                 .mapToList(),
             Function3 {
-                    irishRailStationEntities,
-                    irishRailStationServiceEntities,
-                    favoriteIrishRailStationEntities ->
+                    locationEntities,
+                    serviceEntities,
+                    favouriteEntities ->
                 resolve(
-                    irishRailStationEntities,
-                    irishRailStationServiceEntities,
-                    favoriteIrishRailStationEntities
+                    locationEntities,
+                    serviceEntities,
+                    favouriteEntities
                 )
             }
         )
     }
 
     private fun resolve(
-        irishRailStationEntities: List<IrishRailStationLocationEntity>,
-        irishRailStationServiceEntities: List<IrishRailStationServiceEntity>,
-        favoriteIrishRailStationEntities: List<FavouriteServiceLocationEntity>
+        locationEntities: List<IrishRailStationLocationEntity>,
+        serviceEntities: List<IrishRailStationServiceEntity>,
+        favouriteEntities: List<FavouriteServiceLocationEntity>
     ): List<IrishRailStation> {
-        val irishRailStationServiceEntitiesByLocation = irishRailStationServiceEntities
+        val serviceEntitiesByLocation = serviceEntities
             .groupBy { it.locationId }
 
-        val irishRailStations = irishRailStationEntities.map {
+        val locations = locationEntities.map {
             IrishRailStation(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                operators = irishRailStationServiceEntitiesByLocation
+                operators = serviceEntitiesByLocation
                     .getValue(it.id)
                     .map { entity -> entity.operator }
                     .toSortedSet(
@@ -67,11 +67,11 @@ class SqlDelightIrishRailStationLocalResource(
             )
         }.associateBy { it.id }
 
-        favoriteIrishRailStationEntities.forEach {
-            irishRailStations[it.id]?.setFavourite()
+        favouriteEntities.forEach {
+            locations[it.id]?.setFavourite()
         }
 
-        return irishRailStations.values.toList()
+        return locations.values.toList()
     }
 
     override fun insertStations(stations: List<IrishRailStation>) {

@@ -3,6 +3,7 @@ package ie.dublinmapper.database
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import ie.dublinmapper.datamodel.DublinBusStopLocalResource
+import ie.dublinmapper.domain.model.setFavourite
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
@@ -25,28 +26,28 @@ class SqlDelightDublinBusStopLocalResource(
                 .asObservable()
                 .mapToList(),
             Function3 {
-                    dublinBusStopEntities,
-                    dublinBusStopServiceEntities,
-                    favoriteIrishRailStationEntities ->
+                    locationEntities,
+                    serviceEntities,
+                    favouriteEntities ->
                 resolve(
-                    dublinBusStopEntities,
-                    dublinBusStopServiceEntities,
-                    favoriteIrishRailStationEntities
+                    locationEntities,
+                    serviceEntities,
+                    favouriteEntities
                 )
             }
         )
     }
 
     private fun resolve(
-        dublinBusStopEntities: List<DublinBusStopLocationEntity>,
-        dublinBusStopServiceEntities: List<DublinBusStopServiceEntity>,
-        favoriteIrishRailStationEntities: List<FavouriteServiceLocationEntity>
+        locationEntities: List<DublinBusStopLocationEntity>,
+        serviceEntities: List<DublinBusStopServiceEntity>,
+        favouriteEntities: List<FavouriteServiceLocationEntity>
     ): List<DublinBusStop> {
-        val dublinBusStopServiceEntitiesByLocation = dublinBusStopServiceEntities
+        val serviceEntitiesByLocation = serviceEntities
             .groupBy { it.locationId }
 
-        val dublinBusStops = dublinBusStopEntities.map {
-            val serviceEntities = dublinBusStopServiceEntitiesByLocation[it.id]
+        val locations = locationEntities.map {
+            val routesByOperator = serviceEntitiesByLocation[it.id]
                 ?.groupBy { entity -> entity.operator }
                 ?.mapValues { values -> values.value.map { value -> value.route }.sorted() }
 
@@ -54,16 +55,16 @@ class SqlDelightDublinBusStopLocalResource(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                routes = serviceEntities ?: emptyMap(),
-                operators = serviceEntities?.keys ?: emptySet()
+                routes = routesByOperator ?: emptyMap(),
+                operators = routesByOperator?.keys ?: emptySet()
             )
         }.associateBy { it.id }
 
-//        favoriteIrishRailStationEntities.forEach {
-//            irishRailStations[it.id]?.setFavourite()
-//        }
+        favouriteEntities.forEach {
+            locations[it.id]?.setFavourite()
+        }
 
-        return dublinBusStops.values.toList()
+        return locations.values.toList()
     }
 
     override fun insertStops(stops: List<DublinBusStop>) {
