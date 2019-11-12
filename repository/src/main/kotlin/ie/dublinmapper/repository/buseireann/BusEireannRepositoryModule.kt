@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
@@ -32,14 +33,14 @@ class BusEireannRepositoryModule {
     fun busEireannStopRepository(
         client: RtpiClient,
         localResource: BusEireannStopLocalResource,
-        persisterDao: PersisterDao,
+        serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<BusEireannStop> {
-        val fetcher = Fetcher<List<BusEireannStop>, Service> { Single.just(client.busEireann().getStops()) }
-        val persister = BusEireannStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val fetcher = Fetcher<List<BusEireannStop>, Service> { client.busEireann().getStops() }
+        val persister = BusEireannStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return BusEireannStopRepository(store, enabledServiceManager)
     }
@@ -51,8 +52,7 @@ class BusEireannRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<BusEireannLiveData> {
         val store = StoreBuilder.key<String, List<BusEireannLiveData>>()
-//            .fetcher { stopId -> client.busEireann().getLiveData(stopId = stopId) }
-            .fetcher { stopId -> Single.just(client.busEireann().getLiveData(stopId = stopId)) }
+            .fetcher { stopId -> client.busEireann().getLiveData(stopId = stopId) }
             .memoryPolicy(memoryPolicy)
             .open()
         return BusEireannLiveDataRepository(store)

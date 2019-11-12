@@ -1,14 +1,12 @@
 package ie.dublinmapper.datamodel.irishrail
 
-import ie.dublinmapper.datamodel.favourite.FavouriteEntity
-import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.rtpi.api.IrishRailStation
 
 interface IrishRailStationLocalResource {
 
-    fun selectStations(): Maybe<List<IrishRailStationEntity>>
+    fun selectStations(): Observable<List<IrishRailStation>>
 
-    fun selectFavouriteStations(): Maybe<List<FavouriteEntity>>
-
-    fun insertStations(stations: List<IrishRailStationEntity>)
+    fun insertStations(stations: List<IrishRailStation>)
 
 }

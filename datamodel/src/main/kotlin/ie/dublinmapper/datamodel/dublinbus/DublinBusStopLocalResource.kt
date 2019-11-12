@@ -1,14 +1,12 @@
 package ie.dublinmapper.datamodel.dublinbus
 
-import ie.dublinmapper.datamodel.favourite.FavouriteEntity
-import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.rtpi.api.DublinBusStop
 
 interface DublinBusStopLocalResource {
 
-    fun selectStops(): Maybe<List<DublinBusStopEntity>>
+    fun selectStops(): Observable<List<DublinBusStop>>
 
-    fun selectFavouriteStops(): Maybe<List<FavouriteEntity>>
-
-    fun insertStops(stops: List<DublinBusStopEntity>)
+    fun insertStops(stops: List<DublinBusStop>)
 
 }

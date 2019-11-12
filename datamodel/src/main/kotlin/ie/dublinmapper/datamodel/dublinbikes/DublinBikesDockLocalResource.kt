@@ -1,14 +1,12 @@
 package ie.dublinmapper.datamodel.dublinbikes
 
-import ie.dublinmapper.datamodel.favourite.FavouriteEntity
-import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.rtpi.api.DublinBikesDock
 
 interface DublinBikesDockLocalResource {
 
-    fun selectDocks(): Maybe<List<DublinBikesDockEntity>>
+    fun selectDocks(): Observable<List<DublinBikesDock>>
 
-    fun selectFavouriteDocks(): Maybe<List<FavouriteEntity>>
-
-    fun insertDocks(docks: List<DublinBikesDockEntity>)
+    fun insertDocks(docks: List<DublinBikesDock>)
 
 }

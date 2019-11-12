@@ -4,6 +4,7 @@ import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function6
 import io.rtpi.api.*
 import javax.inject.Inject

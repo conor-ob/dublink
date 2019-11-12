@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.luas.LuasStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
@@ -32,14 +33,14 @@ class LuasRepositoryModule {
     fun luasStopRepository(
         client: RtpiClient,
         localResource: LuasStopLocalResource,
-        persisterDao: PersisterDao,
+        serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<LuasStop> {
-        val fetcher = Fetcher<List<LuasStop>, Service> { Single.just(client.luas().getStops()) }
-        val persister = LuasStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val fetcher = Fetcher<List<LuasStop>, Service> { client.luas().getStops() }
+        val persister = LuasStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return LuasStopRepository(store, enabledServiceManager)
     }
@@ -51,8 +52,7 @@ class LuasRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<LuasLiveData> {
         val store = StoreBuilder.key<String, List<LuasLiveData>>()
-//            .fetcher { stopId -> client.luas().getLiveData(stopId = stopId) }
-            .fetcher { stopId -> Single.just(client.luas().getLiveData(stopId = stopId)) }
+            .fetcher { stopId -> client.luas().getLiveData(stopId = stopId) }
             .memoryPolicy(memoryPolicy)
             .open()
         return LuasLiveDataRepository(store)

@@ -121,6 +121,7 @@ buildscript {
         classpath "io.fabric.tools:gradle:${versions.fabric}"
         classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.squareup.sqldelight:gradle-plugin:1.2.0"
     }
 
 

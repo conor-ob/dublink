@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "42ca7d9991b04a5e9f47fef90b5ec6f7",
+    "identityHash": "42e89e367883de28d58c34acdebb8755",
     "entities": [
       {
         "tableName": "aircoach_stop_locations",
@@ -237,57 +237,15 @@
         "foreignKeys": []
       },
       {
-        "tableName": "irishrail_station_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `station_id` TEXT NOT NULL, `operator` TEXT NOT NULL, FOREIGN KEY(`station_id`) REFERENCES `irishrail_station_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "stationId",
-            "columnName": "station_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "operator",
-            "columnName": "operator",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
+        "tableName": "IrishRailStationServiceEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` ()",
+        "fields": [],
         "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
+          "columnNames": [],
+          "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_irishrail_station_lservices_station_id",
-            "unique": false,
-            "columnNames": [
-              "station_id"
-            ],
-            "createSql": "CREATE  INDEX `index_irishrail_station_lservices_station_id` ON `${TABLE_NAME}` (`station_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "irishrail_station_locations",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "station_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "dublinbikes_dock_locations",
@@ -437,63 +395,15 @@
         "foreignKeys": []
       },
       {
-        "tableName": "dublinbus_stop_services",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stop_id` TEXT NOT NULL, `operator` TEXT NOT NULL, `route` TEXT NOT NULL, FOREIGN KEY(`stop_id`) REFERENCES `dublinbus_stop_locations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "stopId",
-            "columnName": "stop_id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "operator",
-            "columnName": "operator",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "route",
-            "columnName": "route",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
+        "tableName": "DublinBusStopServiceEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` ()",
+        "fields": [],
         "primaryKey": {
-          "columnNames": [
-            "id"
-          ],
-          "autoGenerate": true
+          "columnNames": [],
+          "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_dublinbus_stop_services_stop_id",
-            "unique": false,
-            "columnNames": [
-              "stop_id"
-            ],
-            "createSql": "CREATE  INDEX `index_dublinbus_stop_services_stop_id` ON `${TABLE_NAME}` (`stop_id`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "dublinbus_stop_locations",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "stop_id"
-            ],
-            "referencedColumns": [
-              "id"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "luas_stop_locations",
@@ -718,7 +628,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"42ca7d9991b04a5e9f47fef90b5ec6f7\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"42e89e367883de28d58c34acdebb8755\")"
     ]
   }
 }

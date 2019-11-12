@@ -1,14 +1,12 @@
 package ie.dublinmapper.datamodel.aircoach
 
-import ie.dublinmapper.datamodel.favourite.FavouriteEntity
-import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.rtpi.api.AircoachStop
 
 interface AircoachStopLocalResource {
 
-    fun selectStops(): Maybe<List<AircoachStopEntity>>
+    fun selectStops(): Observable<List<AircoachStop>>
 
-    fun selectFavouriteStops(): Maybe<List<FavouriteEntity>>
-
-    fun insertStops(stops: List<AircoachStopEntity>)
+    fun insertStops(stops: List<AircoachStop>)
 
 }

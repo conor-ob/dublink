@@ -1,14 +1,12 @@
 package ie.dublinmapper.datamodel.luas
 
-import ie.dublinmapper.datamodel.favourite.FavouriteEntity
-import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.rtpi.api.LuasStop
 
 interface LuasStopLocalResource {
 
-    fun selectStops(): Maybe<List<LuasStopEntity>>
+    fun selectStops(): Observable<List<LuasStop>>
 
-    fun selectFavouriteStops(): Maybe<List<FavouriteEntity>>
-
-    fun insertStops(stops: List<LuasStopEntity>)
+    fun insertStops(stops: List<LuasStop>)
 
 }

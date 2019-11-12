@@ -1,144 +1,171 @@
 package ie.dublinmapper.di
 
 import android.content.Context
-import androidx.room.Room
+import com.squareup.sqldelight.ColumnAdapter
+import com.squareup.sqldelight.EnumColumnAdapter
+import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.database.aircoach.AircoachStopLocalResourceImpl
-import ie.dublinmapper.database.buseireann.BusEireannStopLocalResourceImpl
-import ie.dublinmapper.database.irishrail.IrishRailStationLocalResourceImpl
-import ie.dublinmapper.datamodel.TxRunner
+import ie.dublinmapper.database.*
+import ie.dublinmapper.database.aircoach.SqlDelightAircoachStopLocalResource
+import ie.dublinmapper.database.buseireann.SqlDelightBusEireannStopLocalResource
+import ie.dublinmapper.database.dublinbikes.SqlDelightDublinBikesDockLocalResource
+import ie.dublinmapper.database.dublinbus.SqlDelightDublinBusStopLocalResource
+import ie.dublinmapper.database.irishrail.SqlDelightIrishRailStationLocalResource
+import ie.dublinmapper.database.luas.SqlDelightLuasStopLocalResource
+import ie.dublinmapper.database.persister.SqlDelightServiceLocationRecordStateLocalResource
 import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
 import ie.dublinmapper.datamodel.buseireann.BusEireannStopLocalResource
-import ie.dublinmapper.datamodel.irishrail.IrishRailStationLocalResource
 import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockLocalResource
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocalResource
+import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.datamodel.irishrail.IrishRailStationLocalResource
 import ie.dublinmapper.datamodel.luas.LuasStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
-import ie.dublinmapper.database.DatabaseTxRunner
-import ie.dublinmapper.database.DublinMapperDatabase
-import ie.dublinmapper.database.dublinbikes.DublinBikesDockLocalResourceImpl
-import ie.dublinmapper.database.dublinbus.DublinBusStopLocalResourceImpl
-import ie.dublinmapper.database.luas.LuasStopLocalResourceImpl
-import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationCacheResource
-import ie.dublinmapper.favourite.FavouriteServiceLocationCacheResourceImpl
+import ie.dublinmapper.datamodel.persister.PersisterEntity
+import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.favourite.SqlDelightFavouriteServiceLocationLocalResource
 import ie.dublinmapper.util.StringProvider
+import io.reactivex.Maybe
+import io.rtpi.api.Service
+import org.threeten.bp.Instant
 import javax.inject.Singleton
+
+data class FavouriteKey(
+    val serviceId: String,
+    val service: Service
+)
 
 @Module
 class DatabaseModule {
 
     @Provides
     @Singleton
-    fun database(context: Context, stringProvider: StringProvider): DublinMapperDatabase = Room
-        .databaseBuilder(context, DublinMapperDatabase::class.java, stringProvider.databaseName())
-        .fallbackToDestructiveMigration() //TODO temporary
-//        .allowMainThreadQueries() //TODO temporary
-//        .addCallback(object : RoomDatabase.Callback() { //TODO temporary
-//
-//            override fun onCreate(db: SupportSQLiteDatabase) {
-//                super.onCreate(db)
-//                val database = database(context, stringProvider)
-//                database.favouriteLocationDao().insertAll(
-//                    listOf(
-//                        FavouriteIrishRailStationLocationEntity(serviceId = "BROCK", name = "Blackrock DART", service = Service.IRISH_RAIL),
-//                        FavouriteIrishRailStationLocationEntity(serviceId = "PERSE", name = "Pearse DART", service = Service.IRISH_RAIL)
-//                    )
-//                )
-//                database.favouriteServiceDao().insertAll(
-//                    listOf(
-//                        FavouriteIrishRailStationServiceEntity(locationId = "BROCK", operator = Operator.COMMUTER, route = "Commuter"),
-//                        FavouriteIrishRailStationServiceEntity(locationId = "BROCK", operator = Operator.DART, route = "Dart"),
-//                        FavouriteIrishRailStationServiceEntity(locationId = "BROCK", operator = Operator.INTERCITY, route = "Intercity"),
-//                        FavouriteIrishRailStationServiceEntity(locationId = "PERSE", operator = Operator.COMMUTER, route = "Commuter"),
-//                        FavouriteIrishRailStationServiceEntity(locationId = "PERSE", operator = Operator.DART, route = "Dart"),
-//                        FavouriteIrishRailStationServiceEntity(locationId = "PERSE", operator = Operator.INTERCITY, route = "Intercity")
-//                    )
-//                )
-//            }
-//
-//        })
-        .build()
+    fun provideDatabase(context: Context, stringProvider: StringProvider): Database {
+        return Database(
+            driver = AndroidSqliteDriver(
+                schema = Database.Schema,
+                context = context,
+                name = stringProvider.databaseName()
+            ),
+            aircoachStopServiceEntityAdapter = AircoachStopServiceEntity.Adapter(
+                operatorAdapter = EnumColumnAdapter()
+            ),
+            busEireannStopServiceEntityAdapter = BusEireannStopServiceEntity.Adapter(
+                operatorAdapter = EnumColumnAdapter()
+            ),
+            dublinBikesDockServiceEntityAdapter = DublinBikesDockServiceEntity.Adapter(
+                operatorAdapter = EnumColumnAdapter()
+            ),
+            dublinBusStopServiceEntityAdapter = DublinBusStopServiceEntity.Adapter(
+                operatorAdapter = EnumColumnAdapter()
+            ),
+            irishRailStationServiceEntityAdapter = IrishRailStationServiceEntity.Adapter(
+                operatorAdapter = EnumColumnAdapter()
+            ),
+            luasStopServiceEntityAdapter = LuasStopServiceEntity.Adapter(
+                operatorAdapter = EnumColumnAdapter()
+            ),
+            favouriteServiceLocationEntityAdapter = FavouriteServiceLocationEntity.Adapter(
+                serviceAdapter = EnumColumnAdapter()
+            ),
+            serviceLocationRecordStateEntityAdapter = ServiceLocationRecordStateEntity.Adapter(
+                lastUpdatedAdapter = object : ColumnAdapter<Instant, String> {
 
-    @Provides
-    @Singleton
-    fun txRunner(database: DublinMapperDatabase): TxRunner {
-        return DatabaseTxRunner(database)
+                    override fun decode(databaseValue: String): Instant {
+                        return Instant.parse(databaseValue)
+                    }
+
+                    override fun encode(value: Instant): String {
+                        return value.toString()
+                    }
+
+                }
+            )
+        )
     }
 
     @Provides
     @Singleton
-    fun aircoachStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): AircoachStopLocalResource {
-        val aircoachStopLocationDao = database.aircoachStopLocationDao()
-        val aircoachStopServiceDao = database.aircoachStopServiceDao()
-        val aircoachStopDao = database.aircoachStopDao()
-        val favouriteDao = database.favouriteDao()
-        return AircoachStopLocalResourceImpl(aircoachStopLocationDao, aircoachStopServiceDao, aircoachStopDao, favouriteDao, txRunner)
+    fun aircoachStopLocalResource(database: Database): AircoachStopLocalResource {
+        return SqlDelightAircoachStopLocalResource(database)
     }
 
     @Provides
     @Singleton
-    fun busEireannStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): BusEireannStopLocalResource {
-        val busEireannStopLocationDao = database.busEireannStopLocationDao()
-        val busEireannStopServiceDao = database.busEireannStopServiceDao()
-        val busEireannStopDao = database.busEireannStopDao()
-        val favouriteDao = database.favouriteDao()
-        return BusEireannStopLocalResourceImpl(busEireannStopLocationDao, busEireannStopServiceDao, busEireannStopDao, favouriteDao, txRunner)
+    fun busEireannStopLocalResource(database: Database): BusEireannStopLocalResource {
+        return SqlDelightBusEireannStopLocalResource(database)
     }
 
     @Provides
     @Singleton
-    fun irishRailStationCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): IrishRailStationLocalResource {
-        val irishRailStationLocationDao = database.irishRailStationLocationDao()
-        val irishRailStationServiceDao = database.irishRailStationServiceDao()
-        val irishRailStationDao = database.irishRailStationDao()
-        val favouriteDao = database.favouriteDao()
-        return IrishRailStationLocalResourceImpl(irishRailStationLocationDao, irishRailStationServiceDao, irishRailStationDao, favouriteDao, txRunner)
+    fun dublinBikesDockLocalResource(database: Database): DublinBikesDockLocalResource {
+        return SqlDelightDublinBikesDockLocalResource(database)
     }
 
     @Provides
     @Singleton
-    fun dublinBikesDockCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBikesDockLocalResource {
-        val dublinBikesDockLocationDao = database.dublinBikesDockLocationDao()
-        val dublinBikesDockServiceDao = database.dublinBikesDockServiceDao()
-        val dublinBikesDockDao = database.dublinBikesDockDao()
-        val favouriteDao = database.favouriteDao()
-        return DublinBikesDockLocalResourceImpl(dublinBikesDockLocationDao, dublinBikesDockServiceDao, dublinBikesDockDao, favouriteDao, txRunner)
+    fun dublinBusStopLocalResource(database: Database): DublinBusStopLocalResource {
+        return SqlDelightDublinBusStopLocalResource(database)
     }
 
     @Provides
     @Singleton
-    fun dublinBusStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): DublinBusStopLocalResource {
-        val dublinBusStopLocationDao = database.dublinBusStopLocationDao()
-        val dublinBusStopServiceDao = database.dublinBusStopServiceDao()
-        val dublinBusStopDao = database.dublinBusStopDao()
-        val favouriteDao = database.favouriteDao()
-        return DublinBusStopLocalResourceImpl(dublinBusStopLocationDao, dublinBusStopServiceDao, dublinBusStopDao, favouriteDao, txRunner)
+    fun irishRailStationLocalResource(database: Database): IrishRailStationLocalResource {
+        return SqlDelightIrishRailStationLocalResource(database)
     }
 
     @Provides
     @Singleton
-    fun luasStopCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): LuasStopLocalResource {
-        val luasStopLocationDao = database.luasStopLocationDao()
-        val luasStopServiceDao = database.luasStopServiceDao()
-        val luasStopDao = database.luasStopDao()
-        val favouriteDao = database.favouriteDao()
-        return LuasStopLocalResourceImpl(luasStopLocationDao, luasStopServiceDao, luasStopDao, favouriteDao, txRunner)
+    fun luasStopLocalResource(database: Database): LuasStopLocalResource {
+        return SqlDelightLuasStopLocalResource(database)
     }
 
     @Provides
     @Singleton
-    fun favouriteCacheResource(database: DublinMapperDatabase, txRunner: TxRunner): FavouriteServiceLocationCacheResource {
-        val favouriteLocationDao = database.favouriteLocationDao()
-        val favouriteServiceDao = database.favouriteServiceDao()
-        val favouriteDao = database.favouriteDao()
-        return FavouriteServiceLocationCacheResourceImpl(favouriteLocationDao, favouriteServiceDao, favouriteDao, txRunner)
+    fun favouriteCacheResource(database: Database): FavouriteServiceLocationLocalResource {
+        return SqlDelightFavouriteServiceLocationLocalResource(database)
     }
 
     @Provides
     @Singleton
-    fun persisterDao(database: DublinMapperDatabase): PersisterDao {
-        return database.persisterDao()
+    fun serviceLocationRecordStateLocalResource(database: Database): ServiceLocationRecordStateLocalResource {
+        return SqlDelightServiceLocationRecordStateLocalResource(database)
+    }
+
+    @Provides
+    @Singleton
+    fun persister(): PersisterDao {
+        return object : PersisterDao {
+
+            override fun select(id: String): Maybe<PersisterEntity> {
+                return Maybe.empty()
+            }
+
+            override fun selectAll(): Maybe<List<PersisterEntity>> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun insert(entity: PersisterEntity): Long {
+                return 0L
+            }
+
+            override fun insertAll(entities: List<PersisterEntity>): List<Long> {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun update(entity: PersisterEntity) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun updateAll(entities: List<PersisterEntity>) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun delete(entity: PersisterEntity) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        }
     }
 
 }

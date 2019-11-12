@@ -3,6 +3,7 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation project(':core')
+    implementation project(':domain')
 
     implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
 

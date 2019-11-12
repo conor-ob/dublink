@@ -1,0 +1,16 @@
+import org.threeten.bp.Instant;
+
+CREATE TABLE serviceLocationRecordStateEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    lastUpdated TEXT AS Instant NOT NULL
+);
+
+selectById:
+SELECT * FROM serviceLocationRecordStateEntity WHERE id = ?;
+
+insertOrReplace:
+INSERT OR REPLACE INTO serviceLocationRecordStateEntity(
+  id,
+  lastUpdated
+)
+VALUES (?, ?);

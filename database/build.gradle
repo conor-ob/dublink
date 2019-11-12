@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "com.squareup.sqldelight"
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -24,17 +25,29 @@ android {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
     }
 
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 }
 
 dependencies {
     implementation project(':core')
+    implementation project(':domain')
     implementation project(':datamodel')
 
     implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
 
-    implementation "androidx.room:room-runtime:${versions.androidx.room_runtime}"
-    implementation "androidx.room:room-rxjava2:${versions.androidx.room_rxjava2}"
+    implementation "com.squareup.sqldelight:android-driver:1.2.0"
+    implementation "com.squareup.sqldelight:rxjava2-extensions:1.2.0"
 
-    kapt "androidx.room:room-compiler:${versions.androidx.room_compiler}"
+    testImplementation 'junit:junit:4.12'
+    testImplementation "com.squareup.sqldelight:sqlite-driver:1.2.0"
+
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
 }

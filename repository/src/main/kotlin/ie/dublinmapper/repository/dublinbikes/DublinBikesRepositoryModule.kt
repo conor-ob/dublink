@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.dublinbikes.DublinBikesDockLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
@@ -33,7 +34,7 @@ class DublinBikesRepositoryModule {
     fun dublinBikesDockRepository(
         client: RtpiClient,
         localResource: DublinBikesDockLocalResource,
-        persisterDao: PersisterDao,
+        serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         stringProvider: StringProvider,
         mapper: MapperFacade,
@@ -41,7 +42,7 @@ class DublinBikesRepositoryModule {
         enabledServiceManager: EnabledServiceManager
     ): Repository<DublinBikesDock> {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { Single.just(client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey())) }
-        val persister = DublinBikesDockPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val persister = DublinBikesDockPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return DublinBikesDockRepository(store, enabledServiceManager)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()

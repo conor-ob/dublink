@@ -1,0 +1,21 @@
+CREATE TABLE dublinBusStopLocationEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL
+);
+
+selectAll:
+SELECT * FROM dublinBusStopLocationEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO dublinBusStopLocationEntity(
+  id,
+  name,
+  latitude,
+  longitude
+)
+VALUES (?, ?, ?, ?);
+
+deleteAll:
+DELETE FROM dublinBusStopLocationEntity;

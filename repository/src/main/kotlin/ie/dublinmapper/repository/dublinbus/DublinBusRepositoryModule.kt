@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopLocalResource
 import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.persister.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataRepository
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopPersister
@@ -20,7 +21,6 @@ import io.rtpi.api.DublinBusLiveData
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
-import ma.glasnost.orika.MapperFacade
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -32,14 +32,13 @@ class DublinBusRepositoryModule {
     fun dublinBusStopRepository(
         client: RtpiClient,
         localResource: DublinBusStopLocalResource,
-        persisterDao: PersisterDao,
+        serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<DublinBusStop> {
-        val fetcher = Fetcher<List<DublinBusStop>, Service> { Single.just(client.dublinBus().getStops()) }
-        val persister = DublinBusStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val fetcher = Fetcher<List<DublinBusStop>, Service> { client.dublinBus().getStops() }
+        val persister = DublinBusStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return DublinBusStopRepository(store, enabledServiceManager)
     }
@@ -51,8 +50,7 @@ class DublinBusRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DublinBusLiveData> {
         val store = StoreBuilder.key<String, List<DublinBusLiveData>>()
-//            .fetcher { stopId -> client.dublinBus().getLiveData(stopId = stopId) }
-            .fetcher { stopId -> Single.just(client.dublinBus().getLiveData(stopId = stopId)) }
+            .fetcher { stopId -> client.dublinBus().getLiveData(stopId = stopId) }
             .memoryPolicy(memoryPolicy)
             .open()
         return DublinBusLiveDataRepository(store)
