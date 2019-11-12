@@ -26,9 +26,10 @@ class SqlDelightBusEireannStopLocalResource(
             database.busEireannStopServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.BUS_EIREANN)
-                .asObservable()
-                .mapToList(),
+//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.BUS_EIREANN)
+//                .asObservable()
+//                .mapToList(),
+            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
             Function3 {
                     locationEntities,
                     serviceEntities,

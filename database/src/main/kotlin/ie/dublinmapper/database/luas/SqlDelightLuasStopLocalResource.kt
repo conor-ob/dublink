@@ -26,9 +26,10 @@ class SqlDelightLuasStopLocalResource(
             database.luasStopServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.LUAS)
-                .asObservable()
-                .mapToList(),
+            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
+//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.LUAS)
+//                .asObservable()
+//                .mapToList(),
             Function3 {
                     locationEntities,
                     serviceEntities,

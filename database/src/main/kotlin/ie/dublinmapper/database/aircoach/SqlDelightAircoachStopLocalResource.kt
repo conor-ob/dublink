@@ -25,9 +25,10 @@ class SqlDelightAircoachStopLocalResource(
             database.aircoachStopServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.AIRCOACH)
-                .asObservable()
-                .mapToList(),
+//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.AIRCOACH)
+//                .asObservable()
+//                .mapToList(),
+            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
             Function3 {
                     aircoachStopEntities,
                     aircoachStopServiceEntities,

@@ -31,11 +31,6 @@ import io.rtpi.api.Service
 import org.threeten.bp.Instant
 import javax.inject.Singleton
 
-data class FavouriteKey(
-    val serviceId: String,
-    val service: Service
-)
-
 @Module
 class DatabaseModule {
 

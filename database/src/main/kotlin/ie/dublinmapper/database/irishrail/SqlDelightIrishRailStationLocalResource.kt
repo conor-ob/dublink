@@ -28,9 +28,10 @@ class SqlDelightIrishRailStationLocalResource(
             database.irishRailStationServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.IRISH_RAIL)
-                .asObservable()
-                .mapToList(),
+            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
+//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.IRISH_RAIL)
+//                .asObservable()
+//                .mapToList(),
             Function3 {
                     irishRailStationEntities,
                     irishRailStationServiceEntities,

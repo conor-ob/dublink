@@ -25,9 +25,10 @@ class SqlDelightDublinBusStopLocalResource(
             database.dublinBusStopServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BUS)
-                .asObservable()
-                .mapToList(),
+            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
+//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BUS)
+//                .asObservable()
+//                .mapToList(),
             Function3 {
                     dublinBusStopEntities,
                     dublinBusStopServiceEntities,

@@ -1,9 +1,7 @@
-import ie.dublinmapper.di.FavouriteKey;
 import io.rtpi.api.Service;
 
 CREATE TABLE favouriteServiceLocationEntity (
-    order INTEGER NOT NULL PRIMARY KEY,
-    id TEXT NOT NULL,
+    id TEXT NOT NULL PRIMARY KEY,
     service TEXT AS Service NOT NULL,
     name TEXT NOT NULL
 );
@@ -16,12 +14,11 @@ SELECT * FROM favouriteServiceLocationEntity WHERE service = ?;
 
 insertOrReplace:
 INSERT OR REPLACE INTO favouriteServiceLocationEntity(
-  order,
   id,
   service,
   name
 )
-VALUES (?, ?, ?, ?);
+VALUES (?, ?, ?);
 
 deleteById:
 DELETE FROM favouriteServiceLocationEntity WHERE id = ? AND service = ?;

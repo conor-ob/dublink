@@ -33,9 +33,10 @@ class SqlDelightDublinBikesDockLocalResource(
             database.dublinBikesDockServiceEntityQueries.selectAll()
                 .asObservable()
                 .mapToList(),
-            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BIKES)
-                .asObservable()
-                .mapToList(),
+//            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BIKES)
+//                .asObservable()
+//                .mapToList(),
+            Observable.just(emptyList<FavouriteServiceLocationEntity>()),
             Function3 {
                     locationEntities,
                     serviceEntities,
