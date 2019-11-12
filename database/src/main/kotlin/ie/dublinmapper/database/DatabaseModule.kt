@@ -106,9 +106,7 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun favouriteCacheResource(database: Database): FavouriteServiceLocationLocalResource {
-        return SqlDelightFavouriteServiceLocationLocalResource(
-            database
-        )
+        return SqlDelightFavouriteServiceLocationLocalResource(database)
     }
 
     @Provides
