@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DublinBusStop
+import io.rtpi.api.Route
 import io.rtpi.api.Service
 
 class SqlDelightDublinBusStopLocalResource(
@@ -47,16 +48,13 @@ class SqlDelightDublinBusStopLocalResource(
             .groupBy { it.locationId }
 
         val locations = locationEntities.map {
-            val routesByOperator = serviceEntitiesByLocation[it.id]
-                ?.groupBy { entity -> entity.operator }
-                ?.mapValues { values -> values.value.map { value -> value.route }.sorted() }
-
+            val routes = serviceEntitiesByLocation[it.id]?.map { thing -> Route(thing.route, thing.operator) }
             return@map DublinBusStop(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                routes = routesByOperator ?: emptyMap(),
-                operators = routesByOperator?.keys ?: emptySet()
+                routes = routes ?: emptyList(),
+                operators = routes?.map { route -> route.operator }?.toSet() ?: emptySet()
             )
         }.associateBy { it.id }
 
@@ -66,6 +64,68 @@ class SqlDelightDublinBusStopLocalResource(
 
         return locations.values.toList()
     }
+
+//    private fun selectStopsNew(): Observable<List<DublinBusStop>> {
+//        return database.dublinBusStopLocationEntityQueries.selectAllTest()
+//            .asObservable()
+//            .mapToList()
+//            .map { entities ->
+//                entities
+//                    .groupBy { entity -> entity.locationId }
+//                    .mapValues {
+//                        val routes = it.value.mapNotNull { hello ->
+//                            if (hello.operator != null && hello.route != null) {
+//                                return@mapNotNull Route(hello.route!!, hello.operator!!)
+//                            }
+//                            return@mapNotNull null
+//                        }
+//
+//                        val defaultEntity = it.value.first()
+//                        val dublinBusStop = DublinBusStop(
+//                            id = defaultEntity.locationId,
+//                            name = defaultEntity.name,
+//                            coordinate = Coordinate(defaultEntity.latitude, defaultEntity.longitude),
+//                            routes = routes,
+//                            operators = routes.map { rte -> rte.operator }.toSet()
+//                        )
+//                        if (defaultEntity.favouriteId != null) {
+//                            dublinBusStop.setFavourite()
+//                        }
+//                        return@mapValues dublinBusStop
+//                    }
+//                    .values.toList()
+//            }
+//    }
+//
+//    private fun selectFavouritesNew(): Observable<List<DublinBusStop>> {
+//        return database.dublinBusStopLocationEntityQueries.selectAllFavouritesTest()
+//            .asObservable()
+//            .mapToList()
+//            .map { entities ->
+//                entities
+//                    .groupBy { entity -> entity.locationId }
+//                    .mapValues {
+//                        val routes = it.value.mapNotNull { hello ->
+//                            if (hello.operator != null && hello.route != null) {
+//                                return@mapNotNull Route(hello.route!!, hello.operator!!)
+//                            }
+//                            return@mapNotNull null
+//                        }
+//
+//                        val defaultEntity = it.value.first()
+//                        val dublinBusStop = DublinBusStop(
+//                            id = defaultEntity.locationId,
+//                            name = defaultEntity.name,
+//                            coordinate = Coordinate(defaultEntity.latitude, defaultEntity.longitude),
+//                            routes = routes,
+//                            operators = routes.map { rte -> rte.operator }.toSet()
+//                        )
+//                        dublinBusStop.setFavourite()
+//                        return@mapValues dublinBusStop
+//                    }
+//                    .values.toList()
+//            }
+//    }
 
     override fun insertStops(stops: List<DublinBusStop>) {
         database.dublinBusStopLocationEntityQueries.deleteAll()
@@ -77,15 +137,12 @@ class SqlDelightDublinBusStopLocalResource(
                 latitude = stop.coordinate.latitude,
                 longitude = stop.coordinate.longitude
             )
-            for (entry in stop.routes) {
-                val operator = entry.key
-                for (route in entry.value) {
-                    database.dublinBusStopServiceEntityQueries.insertOrReplace(
-                        operator = operator,
-                        route = route,
-                        locationId = stop.id
-                    )
-                }
+            for (route in stop.routes) {
+                database.dublinBusStopServiceEntityQueries.insertOrReplace(
+                    operator = route.operator,
+                    route = route.id,
+                    locationId = stop.id
+                )
             }
         }
     }

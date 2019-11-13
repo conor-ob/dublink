@@ -10,7 +10,6 @@ import io.rtpi.api.Coordinate
 import io.rtpi.api.IrishRailStation
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
-import kotlin.Comparator
 
 class SqlDelightIrishRailStationLocalResource(
     private val database: Database

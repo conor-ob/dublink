@@ -8,6 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
 import io.rtpi.api.LuasStop
+import io.rtpi.api.Route
 import io.rtpi.api.Service
 
 class SqlDelightLuasStopLocalResource(
@@ -47,16 +48,13 @@ class SqlDelightLuasStopLocalResource(
             .groupBy { it.locationId }
 
         val locations = locationEntities.map {
-            val routesByOperator = serviceEntitiesByLocation[it.id]
-                ?.groupBy { entity -> entity.operator }
-                ?.mapValues { values -> values.value.map { value -> value.route }.sorted() }
-
+            val routes = serviceEntitiesByLocation[it.id]?.map { thing -> Route(thing.route, thing.operator) }
             return@map LuasStop(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                routes = routesByOperator ?: emptyMap(),
-                operators = routesByOperator?.keys ?: emptySet()
+                routes = routes ?: emptyList(),
+                operators = routes?.map { route -> route.operator }?.toSet() ?: emptySet()
             )
         }.associateBy { it.id }
 
@@ -77,15 +75,12 @@ class SqlDelightLuasStopLocalResource(
                 latitude = stop.coordinate.latitude,
                 longitude = stop.coordinate.longitude
             )
-            for (entry in stop.routes) {
-                val operator = entry.key
-                for (route in entry.value) {
-                    database.luasStopServiceEntityQueries.insertOrReplace(
-                        operator = operator,
-                        route = route,
-                        locationId = stop.id
-                    )
-                }
+            for (route in stop.routes) {
+                database.luasStopServiceEntityQueries.insertOrReplace(
+                    operator = route.operator,
+                    route = route.id,
+                    locationId = stop.id
+                )
             }
         }
     }

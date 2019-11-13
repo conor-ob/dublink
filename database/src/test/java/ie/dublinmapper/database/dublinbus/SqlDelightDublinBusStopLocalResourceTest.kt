@@ -7,6 +7,7 @@ import ie.dublinmapper.database.*
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Operator
+import io.rtpi.api.Service
 import org.junit.Test
 import org.threeten.bp.Instant
 
@@ -55,6 +56,59 @@ class SqlDelightDublinBusStopLocalResourceTest {
         SqlDelightDublinBusStopLocalResource(database)
 
     @Test
+    fun `holy poop`() {
+        database.dublinBusStopLocationEntityQueries.insertOrReplace(
+            id = "769",
+            name = "Stillorgan Road",
+            latitude = 0.0,
+            longitude = 0.0
+        )
+        database.dublinBusStopLocationEntityQueries.insertOrReplace(
+            id = "315",
+            name = "Bachelor's Walk",
+            latitude = 0.0,
+            longitude = 0.0
+        )
+        database.dublinBusStopServiceEntityQueries.insertOrReplace(
+            locationId = "769",
+            operator = Operator.DUBLIN_BUS,
+            route = "46A"
+        )
+        database.dublinBusStopServiceEntityQueries.insertOrReplace(
+            locationId = "769",
+            operator = Operator.DUBLIN_BUS,
+            route = "145"
+        )
+        database.dublinBusStopServiceEntityQueries.insertOrReplace(
+            locationId = "769",
+            operator = Operator.GO_AHEAD,
+            route = "75"
+        )
+        database.dublinBusStopServiceEntityQueries.insertOrReplace(
+            locationId = "315",
+            operator = Operator.DUBLIN_BUS,
+            route = "7A"
+        )
+        database.favouriteServiceLocationEntityQueries.insertOrReplace(
+            id = "769",
+            service = Service.DUBLIN_BUS,
+            name = "hello"
+        )
+
+        val locations = database.dublinBusStopLocationEntityQueries.selectAll().executeAsList()
+        val services = database.dublinBusStopServiceEntityQueries.selectAll().executeAsList()
+        val favourites =
+            database.favouriteServiceLocationEntityQueries.selectAllByService(Service.DUBLIN_BUS)
+                .executeAsList()
+//        val dublinBusStops = database.dublinBusStopLocationEntityQueries.selectAllTest()
+//            .executeAsList()
+//        val favouriteDublinBusStops =
+//            database.dublinBusStopLocationEntityQueries.selectAllFavouritesTest().executeAsList()
+
+        print("")
+    }
+
+    @Test
     fun `test dublin bus`() {
 
 
@@ -65,10 +119,7 @@ class SqlDelightDublinBusStopLocalResourceTest {
                     name = "test",
                     coordinate = Coordinate(latitude = 0.0, longitude = 0.0),
                     operators = setOf(Operator.DUBLIN_BUS, Operator.GO_AHEAD),
-                    routes = mapOf(
-                        Operator.DUBLIN_BUS to listOf("46A", "145", "184"),
-                        Operator.GO_AHEAD to listOf("17", "75")
-                    )
+                    routes = emptyList()
                 )
             )
         )
