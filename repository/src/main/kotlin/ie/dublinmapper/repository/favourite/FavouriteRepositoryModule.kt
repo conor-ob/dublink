@@ -2,7 +2,7 @@ package ie.dublinmapper.repository.favourite
 
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.favourite.FavouriteServiceLocationCacheResource
+import ie.dublinmapper.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ma.glasnost.orika.MapperFacade
 import javax.inject.Singleton
@@ -13,10 +13,9 @@ class FavouriteRepositoryModule {
     @Provides
     @Singleton
     fun provideFavouriteRepository(
-        cacheResource: FavouriteServiceLocationCacheResource,
-        mapper: MapperFacade
+        localResource: FavouriteServiceLocationLocalResource
     ): FavouriteRepository {
-        return FavouriteServiceLocationRepository(cacheResource, mapper)
+        return FavouriteServiceLocationRepository(localResource)
     }
 
 }

@@ -7,8 +7,8 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.aircoach.AircoachStopLocalResource
-import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.AircoachStopLocalResource
+import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
@@ -32,14 +32,14 @@ class AircoachRepositoryModule {
     fun aircoachStopRepository(
         client: RtpiClient,
         localResource: AircoachStopLocalResource,
-        persisterDao: PersisterDao,
+        serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<AircoachStop> {
         val fetcher = Fetcher<List<AircoachStop>, Service> { Single.just(client.aircoach().getStops()) }
-        val persister = AircoachStopPersister(localResource, mapper, memoryPolicy, persisterDao, internetManager)
+        val persister = AircoachStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return AircoachStopRepository(store, enabledServiceManager)
     }

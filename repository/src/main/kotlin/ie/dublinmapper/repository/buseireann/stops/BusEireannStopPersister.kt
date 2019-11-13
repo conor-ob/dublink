@@ -1,14 +1,13 @@
 package ie.dublinmapper.repository.buseireann.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.datamodel.buseireann.*
-import ie.dublinmapper.datamodel.persister.PersisterDao
+import ie.dublinmapper.datamodel.BusEireannStopLocalResource
+import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.model.setFavourite
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.util.InternetManager
-import io.reactivex.Maybe
-import io.reactivex.functions.BiFunction
+import io.reactivex.Observable
 import io.rtpi.api.BusEireannStop
 import io.rtpi.api.Service
 import ma.glasnost.orika.MapperFacade
@@ -17,17 +16,21 @@ class BusEireannStopPersister(
     private val localResource: BusEireannStopLocalResource,
     private val mapper: MapperFacade,
     memoryPolicy: MemoryPolicy,
-    persisterDao: PersisterDao,
+    serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
     internetManager: InternetManager
-) : AbstractPersister<List<BusEireannStop>, List<BusEireannStop>, Service>(memoryPolicy, persisterDao, internetManager) {
+) : AbstractPersister<List<BusEireannStop>, List<BusEireannStop>, Service>(memoryPolicy, serviceLocationRecordStateLocalResource, internetManager) {
 
-    override fun select(key: Service): Maybe<List<BusEireannStop>> {
-        return Maybe.zip(
-            localResource.selectStops().map { mapper.mapAsList(it, BusEireannStop::class.java) },
-            localResource.selectFavouriteStops().map { mapper.mapAsList(it, Favourite::class.java) },
-            BiFunction { busEireannStops, favourites -> resolve(busEireannStops, favourites) }
-        )
+    override fun select(key: Service): Observable<List<BusEireannStop>> {
+        return localResource.selectStops()
     }
+
+//    override fun select(key: Service): Maybe<List<BusEireannStop>> {
+//        return Maybe.zip(
+//            localResource.selectStops().map { mapper.mapAsList(it, BusEireannStop::class.java) },
+//            localResource.selectFavouriteStops().map { mapper.mapAsList(it, Favourite::class.java) },
+//            BiFunction { busEireannStops, favourites -> resolve(busEireannStops, favourites) }
+//        )
+//    }
 
     private fun resolve(busEireannStops: List<BusEireannStop>, favourites: List<Favourite>): List<BusEireannStop> {
         val busEireannStopsById = busEireannStops.associateBy { it.id }.toMutableMap()
@@ -42,8 +45,7 @@ class BusEireannStopPersister(
     }
 
     override fun insert(key: Service, raw: List<BusEireannStop>) {
-        val entities = mapper.mapAsList(raw, BusEireannStopEntity::class.java)
-        localResource.insertStops(entities)
+        localResource.insertStops(raw)
     }
 
 }

@@ -1,7 +1,6 @@
 package ie.dublinmapper.repository.mapping
 
 import ie.dublinmapper.datamodel.dublinbus.DublinBusStopEntity
-import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopJsonToEntityMapper
 import ie.dublinmapper.service.rtpi.RtpiBusStopInformationJson
 import ie.dublinmapper.service.rtpi.RtpiBusStopOperatorInformationJson
 import ma.glasnost.orika.MapperFacade

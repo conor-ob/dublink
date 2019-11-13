@@ -15,7 +15,7 @@ class LuasStopItem(
         bindBackground(viewHolder, position)
         bindTitle(viewHolder, getServiceLocation().name, null)
         bindIcon(viewHolder, R.drawable.ic_tram, R.color.luasPurple)
-        bindRoutes(viewHolder, (getServiceLocation() as LuasStop).routes.values.flatten())
+        bindRoutes(viewHolder, (getServiceLocation() as LuasStop).routes.map { it.id })
     }
 
 }

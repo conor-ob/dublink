@@ -1,0 +1,21 @@
+CREATE TABLE irishRailStationLocationEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL
+);
+
+selectAll:
+SELECT * FROM irishRailStationLocationEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO irishRailStationLocationEntity(
+  id,
+  name,
+  latitude,
+  longitude
+)
+VALUES (?, ?, ?, ?);
+
+deleteAll:
+DELETE FROM irishRailStationLocationEntity;
