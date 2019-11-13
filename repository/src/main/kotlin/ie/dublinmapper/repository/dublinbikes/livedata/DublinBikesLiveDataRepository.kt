@@ -21,8 +21,16 @@ class DublinBikesLiveDataRepository(
         throw UnsupportedOperationException()
     }
 
+    override fun getAllFavorites(): Observable<List<DublinBikesLiveData>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun refresh(): Observable<Boolean> {
         throw UnsupportedOperationException()
+    }
+
+    override fun clearCache() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

@@ -1,7 +1,8 @@
 import io.rtpi.api.Service;
 
 CREATE TABLE favouriteServiceLocationEntity (
-    id TEXT NOT NULL PRIMARY KEY,
+    uid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    id TEXT NOT NULL,
     service TEXT AS Service NOT NULL,
     name TEXT NOT NULL
 );
@@ -20,5 +21,5 @@ INSERT OR REPLACE INTO favouriteServiceLocationEntity(
 )
 VALUES (?, ?, ?);
 
-deleteById:
+deleteByIdAndService:
 DELETE FROM favouriteServiceLocationEntity WHERE id = ? AND service = ?;

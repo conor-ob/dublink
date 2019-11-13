@@ -1,6 +1,7 @@
 package ie.dublinmapper.repository
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
+import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.util.EnabledServiceManager
 import io.reactivex.Observable
@@ -19,6 +20,11 @@ abstract class ServiceLocationRepository<T : ServiceLocation>(
         cache = serviceLocations.associateBy { it.id }
     }
 
+    override fun clearCache() {
+        cache = emptyMap()
+        serviceLocationStore.clear()
+    }
+
     override fun getAll(): Observable<List<T>> {
         if (enabledServiceManager.isServiceEnabled(service)) {
             return serviceLocationStore.get(service)
@@ -26,6 +32,10 @@ abstract class ServiceLocationRepository<T : ServiceLocation>(
 
         }
         return Observable.just(emptyList())
+    }
+
+    override fun getAllFavorites(): Observable<List<T>> {
+        return getAll().map { it.filter { serviceLocation -> serviceLocation.isFavourite() } }
     }
 
 //    override fun getAll(): Observable<List<T>> {
