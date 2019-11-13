@@ -6,9 +6,36 @@ import com.ww.roxie.Roxie
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import ie.dublinmapper.di.DaggerApplicationComponent
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
+import java.io.IOException
+import java.net.SocketException
 
 class DublinMapperApplication : DaggerApplication() {
+
+    init {
+        RxJavaPlugins.setErrorHandler {
+            var e = it
+            if (e is UndeliverableException) {
+                e = e.cause
+            }
+
+            if (e is IOException || e is SocketException) {
+                //
+            } else if (e is InterruptedException) {
+                //
+            } else if (e is NullPointerException || e is IllegalArgumentException) {
+                //
+            } else if (e is IllegalStateException) {
+                //
+                Thread.currentThread().uncaughtExceptionHandler
+                    .uncaughtException(Thread.currentThread(), e)
+            } else {
+                Timber.w(e)
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()

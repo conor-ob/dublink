@@ -50,7 +50,10 @@ class FavouritesViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Group> { mapper.map(it, Group::class.java) }
                     .map<Change> { Change.GetFavourites(it) }
-                    .onErrorReturn { Change.GetFavouritesError(it) }
+                    .onErrorReturn {
+                        Timber.e(it)
+                        Change.GetFavouritesError(it)
+                    }
                     .startWith(Change.Loading)
             }
 

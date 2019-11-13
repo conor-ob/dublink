@@ -8,8 +8,12 @@ interface Repository<T> {
 
     fun getAll(): Observable<List<T>>
 
+    fun getAllFavorites(): Observable<List<T>>
+
     fun getAllById(id: String): Observable<List<T>>
 
     fun refresh(): Observable<Boolean>
+
+    fun clearCache()
 
 }

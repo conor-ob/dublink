@@ -50,7 +50,10 @@ class SearchViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Group> { mapper.map(it, Group::class.java) }
                     .map<Change> { Change.SearchResults(it) }
-                    .onErrorReturn { Change.SearchResultsError(it) }
+                    .onErrorReturn {
+                        Timber.e(it)
+                        Change.SearchResultsError(it)
+                    }
                     .startWith(Change.Loading)
             }
 

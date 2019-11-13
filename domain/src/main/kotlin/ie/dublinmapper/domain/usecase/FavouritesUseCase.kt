@@ -1,6 +1,5 @@
 package ie.dublinmapper.domain.usecase
 
-import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.location.LocationProvider
@@ -9,6 +8,7 @@ import ie.dublinmapper.util.LocationUtils
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function6
 import io.rtpi.api.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -26,25 +26,23 @@ class FavouritesUseCase @Inject constructor(
 ) {
 
     fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
-        val favourite = Favourite(serviceLocationId, serviceLocationName, service, 0, emptyMap())
-        return favouriteRepository.saveFavourite(favourite)
+        return Completable.fromCallable {
+            clearServiceLocationCache(service)
+            favouriteRepository.saveFavourite(serviceLocationId, serviceLocationName, service)
+        }
     }
 
     fun removeFavourite(serviceLocationId: String, service: Service): Completable {
         return Completable.fromCallable {
-            val favourite = getFavourite(serviceLocationId, service).blockingFirst()
-            favouriteRepository.removeFavourite(favourite)
+            clearServiceLocationCache(service)
+            favouriteRepository.removeFavourite(serviceLocationId, service)
         }
-    }
-
-    private fun getFavourite(serviceLocationId: String, service: Service): Observable<Favourite> {
-        return favouriteRepository.getFavourite(serviceLocationId, service)
     }
 
     fun getFavourites(): Observable<FavouritesResponse> {
         if (permissionChecker.isLocationPermissionGranted()) {
             return Observable.zip(
-                favouriteRepository.getFavourites().map { toServiceLocations(it) },
+                getFavouriteServiceLocations(),
                 Observable.concat(
                     locationProvider.getLastKnownLocation(),
                     locationProvider.getLocationUpdates()
@@ -59,22 +57,44 @@ class FavouritesUseCase @Inject constructor(
                 }
             )
         }
-        return favouriteRepository.getFavourites()
-            .map { FavouritesResponse(toServiceLocations(it)) }
+        return getFavouriteServiceLocations().map { FavouritesResponse(it) }
     }
 
-    private fun toServiceLocations(favourites: List<Favourite>): List<ServiceLocation> {
-        return favourites.map { findMatching(it) }
+    private fun getFavouriteServiceLocations(): Observable<List<ServiceLocation>> {
+        return Observable.combineLatest(
+            aircoachStopRepository.getAllFavorites(),
+            busEireannStopRepository.getAllFavorites(),
+            dublinBikesDockRepository.getAllFavorites(),
+            dublinBusStopRepository.getAllFavorites(),
+            irishRailStationRepository.getAllFavorites(),
+            luasStopRepository.getAllFavorites(),
+            Function6 {
+                    aircoachStops,
+                    busEireannStops,
+                    dublinBikesDocks,
+                    dublinBusStops,
+                    irishRailStations,
+                    luasStops ->
+                aircoachStops
+                    .asSequence()
+                    .plus(busEireannStops)
+                    .plus(dublinBikesDocks)
+                    .plus(dublinBusStops)
+                    .plus(irishRailStations)
+                    .plus(luasStops)
+                    .toList()
+            }
+        )
     }
 
-    private fun findMatching(favourite: Favourite): ServiceLocation {
-        return when (favourite.service) {
-            Service.AIRCOACH -> aircoachStopRepository.getById(favourite.id).blockingSingle()
-            Service.BUS_EIREANN -> busEireannStopRepository.getById(favourite.id).blockingSingle()
-            Service.DUBLIN_BIKES -> dublinBikesDockRepository.getById(favourite.id).blockingSingle()
-            Service.DUBLIN_BUS -> dublinBusStopRepository.getById(favourite.id).blockingSingle()
-            Service.IRISH_RAIL -> irishRailStationRepository.getById(favourite.id).blockingSingle()
-            Service.LUAS -> luasStopRepository.getById(favourite.id).blockingSingle()
+    private fun clearServiceLocationCache(service: Service) {
+        when (service) {
+            Service.AIRCOACH -> aircoachStopRepository.clearCache()
+            Service.BUS_EIREANN -> busEireannStopRepository.clearCache()
+            Service.DUBLIN_BIKES -> dublinBikesDockRepository.clearCache()
+            Service.DUBLIN_BUS -> dublinBusStopRepository.clearCache()
+            Service.IRISH_RAIL -> irishRailStationRepository.clearCache()
+            Service.LUAS -> luasStopRepository.clearCache()
         }
     }
 

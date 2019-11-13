@@ -4,7 +4,6 @@ import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
 import io.rtpi.api.AircoachLiveData
-import org.threeten.bp.LocalTime
 
 class AircoachLiveDataRepository(
     private val store: Store<List<AircoachLiveData>, String>
@@ -22,8 +21,16 @@ class AircoachLiveDataRepository(
         throw UnsupportedOperationException()
     }
 
+    override fun getAllFavorites(): Observable<List<AircoachLiveData>> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun refresh(): Observable<Boolean> {
         throw UnsupportedOperationException()
+    }
+
+    override fun clearCache() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

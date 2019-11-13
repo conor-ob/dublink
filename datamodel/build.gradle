@@ -3,10 +3,9 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation project(':core')
+    implementation project(':domain')
 
     implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
-
-    implementation "androidx.room:room-common:${versions.androidx.room_common}"
 }
 
 sourceSets {

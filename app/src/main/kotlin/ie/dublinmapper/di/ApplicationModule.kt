@@ -14,20 +14,6 @@ import ie.dublinmapper.location.LocationProvider
 import ie.dublinmapper.nearby.location.GpsLocationProvider
 import ie.dublinmapper.permission.AndroidPermissionsChecker
 import ie.dublinmapper.permission.PermissionChecker
-import ie.dublinmapper.repository.aircoach.stops.AircoachStopEntityToDomainMapper
-import ie.dublinmapper.repository.aircoach.stops.AircoachStopJsonToEntityMapper
-import ie.dublinmapper.repository.buseireann.stops.BusEireannStopEntityToDomainMapper
-import ie.dublinmapper.repository.buseireann.stops.BusEireannStopJsonToEntityMapper
-import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockJsonToEntityMapper
-import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDocksEntityToDomainMapper
-import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopEntityToDomainMapper
-import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopJsonToEntityMapper
-import ie.dublinmapper.repository.favourite.FavouriteDomainToEntityMapper
-import ie.dublinmapper.repository.favourite.FavouriteEntityToDomainMapper
-import ie.dublinmapper.repository.irishrail.stations.IrishRailStationJsonToEntityMapper
-import ie.dublinmapper.repository.irishrail.stations.IrishRailStationEntityToDomainMapper
-import ie.dublinmapper.repository.luas.stops.LuasStopEntityToDomainMapper
-import ie.dublinmapper.repository.luas.stops.LuasStopJsonToEntityMapper
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.R
@@ -99,31 +85,10 @@ class ApplicationModule {
         val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
 
         mapperFactory.converterFactory.apply {
-            registerConverter(AircoachStopJsonToEntityMapper)
-            registerConverter(AircoachStopEntityToDomainMapper)
-
-            registerConverter(BusEireannStopJsonToEntityMapper)
-            registerConverter(BusEireannStopEntityToDomainMapper)
-
-            registerConverter(IrishRailStationJsonToEntityMapper)
-            registerConverter(IrishRailStationEntityToDomainMapper)
-
-            registerConverter(DublinBikesDockJsonToEntityMapper)
-            registerConverter(DublinBikesDocksEntityToDomainMapper)
-
-            registerConverter(DublinBusStopJsonToEntityMapper)
-            registerConverter(DublinBusStopEntityToDomainMapper)
-
-            registerConverter(LuasStopJsonToEntityMapper)
-            registerConverter(LuasStopEntityToDomainMapper)
-
             registerConverter(FavouritesDomainToUiMapper(stringProvider))
             registerConverter(NearbyDomainToUiMapper(stringProvider))
             registerConverter(LiveDataDomainToUiMapper(stringProvider))
             registerConverter(SearchDomainToUiMapper)
-
-            registerConverter(FavouriteEntityToDomainMapper)
-            registerConverter(FavouriteDomainToEntityMapper)
         }
 
         return mapperFactory.mapperFacade

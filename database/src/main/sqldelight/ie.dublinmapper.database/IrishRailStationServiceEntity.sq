@@ -1,0 +1,21 @@
+import io.rtpi.api.Operator;
+
+CREATE TABLE irishRailStationServiceEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    operator TEXT AS Operator NOT NULL,
+    locationId TEXT NOT NULL,
+    FOREIGN KEY (locationId) REFERENCES irishRailStationLocationEntity(id)
+);
+
+selectAll:
+SELECT * FROM irishRailStationServiceEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO irishRailStationServiceEntity(
+  operator,
+  locationId
+)
+VALUES (?, ?);
+
+deleteAll:
+DELETE FROM irishRailStationServiceEntity;
