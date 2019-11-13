@@ -54,9 +54,9 @@ class SqlDelightDublinBikesDockLocalResource(
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
                 operators = setOf(service.operator),
-                docks = service.docks.toInt(),
-                availableBikes = service.availableBikes.toInt(),
-                availableDocks = service.availableDocks.toInt()
+                docks = service.docks,
+                availableBikes = service.availableBikes,
+                availableDocks = service.availableDocks
             )
         }.associateBy { it.id }
 
@@ -80,9 +80,9 @@ class SqlDelightDublinBikesDockLocalResource(
             for (operator in dock.operators) {
                 database.dublinBikesDockServiceEntityQueries.insertOrReplace(
                     operator = operator,
-                    docks = dock.docks.toLong(),
-                    availableDocks = dock.availableDocks.toLong(),
-                    availableBikes = dock.availableBikes.toLong(),
+                    docks = dock.docks,
+                    availableDocks = dock.availableDocks,
+                    availableBikes = dock.availableBikes,
                     locationId = dock.id
                 )
             }

@@ -3,9 +3,9 @@ import io.rtpi.api.Operator;
 CREATE TABLE dublinBikesDockServiceEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     operator TEXT AS Operator NOT NULL,
-    docks INTEGER NOT NULL,
-    availableDocks INTEGER NOT NULL,
-    availableBikes INTEGER NOT NULL,
+    docks INTEGER AS Int NOT NULL,
+    availableDocks INTEGER AS Int NOT NULL,
+    availableBikes INTEGER AS Int NOT NULL,
     locationId TEXT NOT NULL,
     FOREIGN KEY (locationId) REFERENCES dublinBikesDockLocationEntity(id)
 );
