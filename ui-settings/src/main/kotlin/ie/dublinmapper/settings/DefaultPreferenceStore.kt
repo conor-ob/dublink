@@ -33,4 +33,8 @@ class DefaultPreferenceStore @Inject constructor(context: Context) : PreferenceS
         return preferences.edit().putBoolean(preferenceKey, value).commit()
     }
 
+    override fun contains(preferenceKey: String): Boolean {
+        return preferences.contains(preferenceKey)
+    }
+
 }

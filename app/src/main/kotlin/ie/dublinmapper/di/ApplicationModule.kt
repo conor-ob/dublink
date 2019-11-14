@@ -110,12 +110,12 @@ class ApplicationModule {
         preferenceStore: PreferenceStore
     ): EnabledServiceManager {
         val serviceToEnabledServicePreferenceKey = mapOf(
-            Service.AIRCOACH to context.getString(R.string.preference_enabled_service_aircoach),
-            Service.BUS_EIREANN to context.getString(R.string.preference_enabled_service_bus_eireann),
-            Service.DUBLIN_BIKES to context.getString(R.string.preference_enabled_service_dublin_bikes),
-            Service.DUBLIN_BUS to context.getString(R.string.preference_enabled_service_dublin_bus),
-            Service.IRISH_RAIL to context.getString(R.string.preference_enabled_service_irish_rail),
-            Service.LUAS to context.getString(R.string.preference_enabled_service_luas)
+            Service.AIRCOACH to context.getString(R.string.preference_key_enabled_service_aircoach),
+            Service.BUS_EIREANN to context.getString(R.string.preference_key_enabled_service_bus_eireann),
+            Service.DUBLIN_BIKES to context.getString(R.string.preference_key_enabled_service_dublin_bikes),
+            Service.DUBLIN_BUS to context.getString(R.string.preference_key_enabled_service_dublin_bus),
+            Service.IRISH_RAIL to context.getString(R.string.preference_key_enabled_service_irish_rail),
+            Service.LUAS to context.getString(R.string.preference_key_enabled_service_luas)
         )
         return DefaultEnabledServiceManager(preferenceStore, serviceToEnabledServicePreferenceKey)
     }

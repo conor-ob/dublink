@@ -1,7 +1,6 @@
 package ie.dublinmapper.settings
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
@@ -12,7 +11,7 @@ import javax.inject.Inject
 
 class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
 
-@Inject
+    @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @Inject
     lateinit var themeRepository: ThemeRepository
@@ -23,16 +22,12 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setPreferencesFromResource(R.xml.preferences, rootKey)
-        } else {
-            setPreferencesFromResource(R.xml.preferences_legacy, rootKey)
-        }
+        setPreferencesFromResource(R.xml.preferences, rootKey)
         bindListeners()
     }
 
     private fun bindListeners() {
-        val preferredThemePreference = findPreference<ListPreference>(getString(R.string.preference_preferred_theme))
+        val preferredThemePreference = findPreference<ListPreference>(getString(R.string.preference_key_preferred_theme))
         preferredThemePreference?.setOnPreferenceChangeListener { _, newValue ->
             themeRepository.setTheme(newValue as String)
             return@setOnPreferenceChangeListener true

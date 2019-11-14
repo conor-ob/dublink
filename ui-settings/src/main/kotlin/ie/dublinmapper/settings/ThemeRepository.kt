@@ -13,23 +13,33 @@ class ThemeRepository @Inject constructor(
 ) {
 
     fun setPreferredThemeOrDefault() {
-        val themeMode = getPreferredThemeOrDefault().mode
-        AppCompatDelegate.setDefaultNightMode(themeMode)
+        val theme = getPreferredThemeOrDefault()
+        if (!preferenceStore.contains(
+                resources.getString(R.string.preference_key_preferred_theme))
+        ) {
+            preferenceStore.setString(
+                preferenceKey = resources.getString(R.string.preference_key_preferred_theme),
+                value = resources.getString(theme.value)
+            )
+        }
+        AppCompatDelegate.setDefaultNightMode(theme.mode)
     }
 
     fun setTheme(name: String) {
         val defaultTheme = getDefaultTheme()
-        val theme = getThemes().find { theme -> resources.getString(theme.nameId) == name } ?: defaultTheme
+        val theme = getThemes().find { theme ->
+            resources.getString(theme.value) == name } ?: defaultTheme
         AppCompatDelegate.setDefaultNightMode(theme.mode)
     }
 
     private fun getPreferredThemeOrDefault(): Theme {
         val defaultTheme = getDefaultTheme()
         val preferredThemeOrDefault = preferenceStore.getString(
-            preferenceKey = resources.getString(R.string.preference_preferred_theme),
-            defaultValue = resources.getString(defaultTheme.nameId)
+            preferenceKey = resources.getString(R.string.preference_key_preferred_theme),
+            defaultValue = resources.getString(defaultTheme.value)
         )
-        return getThemes().find { theme -> resources.getString(theme.nameId) == preferredThemeOrDefault } ?: defaultTheme
+        return getThemes().find { theme ->
+            resources.getString(theme.value) == preferredThemeOrDefault } ?: defaultTheme
     }
 
     private fun getDefaultTheme(): Theme {
@@ -50,11 +60,11 @@ class ThemeRepository @Inject constructor(
 
 }
 
-enum class Theme(val mode: Int, @StringRes val nameId: Int) {
+enum class Theme(val mode: Int, @StringRes val value: Int) {
 
-    LIGHT(AppCompatDelegate.MODE_NIGHT_NO, R.string.theme_light),
-    DARK(AppCompatDelegate.MODE_NIGHT_YES, R.string.theme_dark),
-    SYSTEM_DEFAULT(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, R.string.theme_system_default),
-    BATTERY_SAVER(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, R.string.theme_battery_saver)
+    LIGHT(AppCompatDelegate.MODE_NIGHT_NO, R.string.preference_value_light_theme),
+    DARK(AppCompatDelegate.MODE_NIGHT_YES, R.string.preference_value_dark_theme),
+    SYSTEM_DEFAULT(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, R.string.preference_value_system_default_theme),
+    BATTERY_SAVER(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, R.string.preference_value_battery_saver_theme)
 
 }

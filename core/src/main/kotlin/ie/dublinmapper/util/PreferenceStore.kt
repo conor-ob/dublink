@@ -14,4 +14,6 @@ interface PreferenceStore {
 
     fun setBoolean(preferenceKey: String, value: Boolean): Boolean
 
+    fun contains(preferenceKey: String): Boolean
+
 }
