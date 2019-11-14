@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="Theme">
+    <PreferenceCategory android:title="User Interface"
+            android:summary="Customize your app">
 
         <ListPreference
                 android:key="@string/preference_preferred_theme"
                 android:title="Theme"
                 android:entries="@array/ThemeLegacy"
-                android:entryValues="@array/ThemeLegacy" />
+                android:entryValues="@array/ThemeLegacy"
+                app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Enabled Services">
-
-        <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_enabled_service_aircoach"
-                android:title="@string/service_name_aircoach" />
-
-        <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_enabled_service_bus_eireann"
-                android:title="@string/service_name_bus_eireann" />
-
-        <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_enabled_service_dublin_bikes"
-                android:title="@string/service_name_dublin_bikes" />
+    <PreferenceCategory
+            android:title="Transport Services"
+            android:summary="Choose your favourites">
 
         <SwitchPreference
                 android:defaultValue="true"
@@ -42,6 +32,27 @@
                 android:defaultValue="true"
                 android:key="@string/preference_enabled_service_luas"
                 android:title="@string/service_name_luas" />
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_dublin_bikes"
+                android:title="@string/service_name_dublin_bikes" />
+
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="@string/preference_enabled_service_bus_eireann"
+                android:title="@string/service_name_bus_eireann" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="Experimental"
+            android:summary="Might not work consistently">
+
+        <SwitchPreference
+                android:defaultValue="false"
+                android:key="@string/preference_enabled_service_aircoach"
+                android:title="@string/service_name_aircoach" />
 
     </PreferenceCategory>
 

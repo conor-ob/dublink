@@ -14,8 +14,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            style="@style/Widget.Toolbar">
+            android:layout_height="?attr/actionBarSize">
 
             <TextView
                 android:id="@+id/title"
@@ -23,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:gravity="center_vertical"
-                android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
 
 
@@ -97,7 +95,6 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_nearby"
             app:tint="@color/white"
-            android:backgroundTint="?attr/colorAccent"
             android:clickable="true"
             android:elevation="4dp"
             android:focusable="true"
@@ -115,7 +112,6 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_search"
         app:tint="@color/white"
-        android:backgroundTint="?attr/colorAccent"
         android:clickable="true"
         android:elevation="4dp"
         android:focusable="true"

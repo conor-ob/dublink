@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2018 Google, Inc.
+  ~ Copyright 2018 Google LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <color name="swipe_away_background">#333333</color>
-
-    <color name="system_ui_scrim_light">#2EFFFFFF</color> <!-- 18% white -->
-    <color name="system_ui_scrim_dark">#99000000</color> <!-- 60% black -->
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="?attr/colorOnBackground" android:alpha="0.1" />
+</selector>

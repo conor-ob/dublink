@@ -5,8 +5,7 @@
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        style="@style/ListItemContainer">
+        android:orientation="horizontal">
 
     <ImageView
             android:id="@+id/operatorIconContainer"
@@ -29,14 +28,12 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ListItemTitleTextAppearance"
                 tools:text="Greystones"/>
 
         <TextView
                 android:id="@+id/subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ListItemSubtitleTextAppearance"
                 tools:text="DART"/>
 
     </LinearLayout>
@@ -59,7 +56,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:textAlignment="gravity"
-                style="@style/ListItemTitleTextAppearance"
                 tools:text="7 min"/>
 
     </FrameLayout>
@@ -78,7 +74,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:textAlignment="gravity"
-                style="@style/ListItemTitleTextAppearance"
                 tools:text="7 min"/>
 
         <TextView
@@ -87,7 +82,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:textAlignment="gravity"
-                style="@style/ListItemSubtitleTextAppearance"
                 tools:text="and in 9, 13, 25 min"/>
 
     </LinearLayout>

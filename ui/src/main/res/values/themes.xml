@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 Google, Inc.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.navig
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Platform.Theme.DublinMapper" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    </style>
+
+    <style name="Base.Theme.DublinMapper" parent="Platform.Theme.DublinMapper">
+        <item name="actionBarTheme">@style/ThemeOverlay.DublinMapper.ActionBar</item>
+
+        <item name="windowActionModeOverlay">true</item>
+
+        <!-- Default widget styles -->
+        <item name="toolbarStyle">@style/Widget.DublinMapper.Toolbar</item>
+        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
+
+        <!-- Type styles -->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.DublinMapper.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.DublinMapper.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.DublinMapper.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.DublinMapper.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.DublinMapper.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.DublinMapper.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.DublinMapper.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.DublinMapper.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.DublinMapper.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.DublinMapper.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.DublinMapper.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.DublinMapper.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.DublinMapper.Overline</item>
+
+        <item name="textAppearanceLargePopupMenu">?attr/textAppearanceBody1</item>
+        <item name="textAppearanceSmallPopupMenu">?attr/textAppearanceBody2</item>
+        <item name="textAppearancePopupMenuHeader">@style/TextAppearance.DublinMapper.PopupMenu.Header</item>
+    </style>
+
+    <style name="Theme.DublinMapper" parent="Base.Theme.DublinMapper">
+        <item name="colorPrimary">@color/DublinMapper_slate_700</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+
+        <item name="colorPrimaryVariant">@color/DublinMapper_slate_600</item>
+        <item name="colorPrimaryDark">@color/DublinMapper_slate_800</item>
+
+        <item name="colorSecondary">@color/DublinMapper_mtrl_orange_700</item>
+        <item name="colorSecondaryVariant">@color/DublinMapper_mtrl_orange_500</item>
+        <item name="colorOnSecondary">#000000</item>
+    </style>
+
+    <style name="Theme.DublinMapper.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.DublinMapper.Immerse" parent="Theme.DublinMapper.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/use_light_nav_bar</item>
+    </style>
+
+    <style name="Theme.DublinMapper.Home" parent="Theme.DublinMapper.Immerse">
+        <item name="android:windowLightStatusBar">@bool/use_light_status_bar</item>
+    </style>
+
+    <style name="Theme.DublinMapper.ShowDetails" parent="Theme.DublinMapper.Immerse">
+        <item name="android:windowLightStatusBar">@bool/use_light_status_bar</item>
+    </style>
+
+    <style name="Theme.DublinMapper.Settings" />
+
+    <style name="ThemeOverlay.DublinMapper.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="ThemeOverlay.DublinMapper.Primary" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
+        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>
+    </style>
+
+</resources>

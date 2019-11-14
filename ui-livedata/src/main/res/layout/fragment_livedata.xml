@@ -15,7 +15,6 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            style="@style/Widget.Toolbar"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
@@ -33,7 +32,6 @@
                 android:scrollHorizontally="true"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
 
 

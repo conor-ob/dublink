@@ -28,6 +28,15 @@ android {
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 }
 
 dependencies {
@@ -35,6 +44,8 @@ dependencies {
     implementation project(':ui')
 
     implementation "androidx.preference:preference-ktx:1.1.0"
+
+    implementation "androidx.fragment:fragment-ktx:1.2.0-rc02"
 
     testImplementation testLibraries.junit
     testImplementation testLibraries.truth

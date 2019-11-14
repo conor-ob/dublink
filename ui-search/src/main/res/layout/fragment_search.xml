@@ -7,12 +7,12 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppBar">
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            style="@style/Toolbar.Search">
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+            android:id="@+id/toolbar">
 
             <FrameLayout
                 android:layout_width="match_parent"

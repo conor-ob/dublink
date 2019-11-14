@@ -1,44 +1,22 @@
 package ie.dublinmapper.settings
 
-import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import androidx.preference.ListPreference
-import androidx.preference.PreferenceFragmentCompat
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
+import android.view.View
+import androidx.fragment.app.commitNow
+import androidx.navigation.fragment.findNavController
+import ie.dublinmapper.ui.DublinMapperFragment
+import kotlinx.android.synthetic.main.fragment_settings.*
 
-class SettingsFragment : PreferenceFragmentCompat(), HasAndroidInjector {
+class SettingsFragment : DublinMapperFragment(R.layout.fragment_settings) {
 
-    @Inject
-    lateinit var androidInjector: DispatchingAndroidInjector<Any>
-    @Inject
-    lateinit var themeRepository: ThemeRepository
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            setPreferencesFromResource(R.xml.preferences, rootKey)
-        } else {
-            setPreferencesFromResource(R.xml.preferences_legacy, rootKey)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        settings_toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
         }
-        bindListeners()
-    }
-
-    private fun bindListeners() {
-        val preferredThemePreference = findPreference<ListPreference>(getString(R.string.preference_preferred_theme))
-        preferredThemePreference?.setOnPreferenceChangeListener { _, newValue ->
-            themeRepository.setTheme(newValue as String)
-            return@setOnPreferenceChangeListener true
+        childFragmentManager.commitNow {
+            replace(R.id.settings_container, PreferencesFragment())
         }
     }
-
-    override fun androidInjector() = androidInjector
 
 }

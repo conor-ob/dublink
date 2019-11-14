@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2018 Google, Inc.
+  ~ Copyright 2019 Google, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,8 +16,15 @@
   -->
 
 <resources>
-    <color name="swipe_away_background">#333333</color>
+    <style name="Theme.DublinMapper" parent="Base.Theme.DublinMapper">
+        <item name="colorSurface">@color/DublinMapper_slate_200_10pc_over_surface</item>
+        <item name="colorOnSurface">#FFFFFF</item>
 
-    <color name="system_ui_scrim_light">#2EFFFFFF</color> <!-- 18% white -->
-    <color name="system_ui_scrim_dark">#99000000</color> <!-- 60% black -->
+        <item name="colorPrimary">@color/DublinMapper_slate_200</item>
+        <item name="colorOnPrimary">#000000</item>
+
+        <item name="colorSecondary">@color/DublinMapper_mtrl_orange_500</item>
+        <item name="colorSecondaryVariant">@color/DublinMapper_mtrl_orange_700</item>
+        <item name="colorOnSecondary">#000000</item>
+    </style>
 </resources>
