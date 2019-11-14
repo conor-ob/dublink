@@ -25,8 +25,6 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
 
-    override fun styleId() = R.style.IrishRailTheme //TODO
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.observableState.observe(this, Observer { state ->

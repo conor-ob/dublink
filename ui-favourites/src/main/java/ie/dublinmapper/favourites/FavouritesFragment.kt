@@ -19,8 +19,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
 
-    override fun styleId() = R.style.FavouritesTheme
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.observableState.observe(this, Observer { state ->

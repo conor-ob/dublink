@@ -5,4 +5,9 @@
     <string name="preference_enabled_service_dublin_bus">preference_enabled_service_dublin_bus</string>
     <string name="preference_enabled_service_irish_rail">preference_enabled_service_irish_rail</string>
     <string name="preference_enabled_service_luas">preference_enabled_service_luas</string>
+    <string name="preference_preferred_theme">preference_preferred_theme</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system_default">Use System Default</string>
+    <string name="theme_battery_saver">Set by Battery Saver</string>
 </resources>

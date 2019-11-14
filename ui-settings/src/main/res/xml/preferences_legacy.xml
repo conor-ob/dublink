@@ -6,8 +6,8 @@
         <ListPreference
                 android:key="@string/preference_preferred_theme"
                 android:title="Theme"
-                android:entries="@array/Theme"
-                android:entryValues="@array/Theme" />
+                android:entries="@array/ThemeLegacy"
+                android:entryValues="@array/ThemeLegacy" />
 
     </PreferenceCategory>
 

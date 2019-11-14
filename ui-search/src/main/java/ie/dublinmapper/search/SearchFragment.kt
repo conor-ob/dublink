@@ -31,8 +31,6 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     private lateinit var adapter: GroupAdapter<ViewHolder>
     private val subscriptions = CompositeDisposable()
 
-    override fun styleId() = R.style.SearchTheme
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.observableState.observe(this, Observer { state ->

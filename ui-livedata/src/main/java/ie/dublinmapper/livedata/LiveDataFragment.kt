@@ -20,8 +20,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
 
-    override fun styleId() = arguments!!.getInt("serviceLocationStyleId")
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.observableState.observe(this, Observer { state ->

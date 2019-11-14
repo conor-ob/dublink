@@ -17,6 +17,7 @@ import ie.dublinmapper.permission.PermissionChecker
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.R
+import ie.dublinmapper.settings.ThemeRepository
 import ie.dublinmapper.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -96,6 +97,12 @@ class ApplicationModule {
 
     @Provides
     fun preferenceStore(context: Context): PreferenceStore = DefaultPreferenceStore(context)
+
+    @Provides
+    fun themeRepository(
+        resources: Resources,
+        preferenceStore: PreferenceStore
+    ): ThemeRepository = ThemeRepository(resources, preferenceStore)
 
     @Provides
     fun enabledServiceManager(

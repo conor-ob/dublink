@@ -68,9 +68,6 @@
         <argument
             android:name="serviceLocationIsFavourite"
             app:argType="boolean" />
-        <argument
-            android:name="serviceLocationStyleId"
-            app:argType="integer" />
 
     </fragment>
 

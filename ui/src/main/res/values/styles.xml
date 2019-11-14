@@ -1,9 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="DublinMapperTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="colorPrimary">@color/favouritesPrimary</item>
-        <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>
+    <style name="DublinMapperTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:statusBarColor">@color/color_status_bar</item>
+<!--        <item name="colorPrimary">@color/favouritesPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>-->
         <!--<item name="colorPrimary">@color/indigo</item>-->
         <!--<item name="colorAccent">@color/indigo</item>-->
         <!--<item name="colorControlActivated">?colorPrimary</item>-->
@@ -12,7 +13,7 @@
         <!--<item name="android:textViewStyle">@style/Widget.DublinMapper.TextView</item>-->
         <!--<item name="android:windowBackground">@color/white</item>-->
         <!--<item name="android:statusBarColor">@color/status_bar</item>-->
-        <!--<item name="android:windowLightStatusBar">true</item>-->
+        <item name="android:windowLightStatusBar">false</item>
         <!--<item name="android:navigationBarColor">@color/indigo_dark</item>-->
         <!--<item name="android:textColorTertiary">@color/text_color_tertiary</item>-->
         <!--<item name="colorPrimary">@color/primary</item>-->
@@ -21,8 +22,8 @@
         <!--<item name="windowActionBar">false</item>-->
         <!--<item name="windowNoTitle">true</item>-->
         <!--<item name="android:itemTextAppearance">@style/MenuItemTextAppearance</item>-->
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
     </style>
 
     <!--<style name="SearchTheme" parent="DublinMapperTheme">-->
@@ -31,58 +32,58 @@
         <!--&lt;!&ndash;<item name="android:background">@color/white</item>&ndash;&gt;-->
         <!--&lt;!&ndash;<item name="android:window">@color/dartGreen</item>&ndash;&gt;-->
     <!--</style>-->
-    <style name="SearchTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/searchPrimary</item>
-        <item name="colorPrimaryDark">@color/searchPrimaryDark</item>
-        <!--<item name="android:background">@color/white</item>-->
-        <!--<item name="android:window">@color/dartGreen</item>-->
-    </style>
+<!--    <style name="SearchTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/searchPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/searchPrimaryDark</item>-->
+<!--        &lt;!&ndash;<item name="android:background">@color/white</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;<item name="android:window">@color/dartGreen</item>&ndash;&gt;-->
+<!--    </style>-->
 
-    <style name="FavouritesTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/favouritesPrimary</item>
-        <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>
-        <item name="colorAccent">@color/favouritesAccent</item>
-    </style>
+<!--    <style name="FavouritesTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/favouritesPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/favouritesPrimaryDark</item>-->
+<!--        <item name="colorAccent">@color/favouritesAccent</item>-->
+<!--    </style>-->
 
-    <style name="AircoachTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/aircoachOrange</item>
-        <item name="colorPrimaryDark">@color/aircoachOrangeDark</item>
-    </style>
+<!--    <style name="AircoachTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/aircoachOrange</item>-->
+<!--        <item name="colorPrimaryDark">@color/aircoachOrangeDark</item>-->
+<!--    </style>-->
 
-    <style name="BusEireannTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/busEireannRed</item>
-        <item name="colorPrimaryDark">@color/busEireannRedDark</item>
-    </style>
+<!--    <style name="BusEireannTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/busEireannRed</item>-->
+<!--        <item name="colorPrimaryDark">@color/busEireannRedDark</item>-->
+<!--    </style>-->
 
-    <style name="IrishRailTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/dartGreen</item>
-        <item name="colorPrimaryDark">@color/dartGreenDark</item>
-<!--        <item name="colorOnPrimary">@color/white</item>-->
-        <!--<item name="android:textColorSecondary">@color/luasPurple</item>-->
-        <!--<item name="android:windowBackground">@color/dartGreen</item>-->
-        <!--<item name="android:background">@color/dartGreen</item>-->
-        <!--<item name="android:window">@color/dartGreen</item>-->
-    </style>
+<!--    <style name="IrishRailTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/dartGreen</item>-->
+<!--        <item name="colorPrimaryDark">@color/dartGreenDark</item>-->
+<!--&lt;!&ndash;        <item name="colorOnPrimary">@color/white</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;<item name="android:textColorSecondary">@color/luasPurple</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;<item name="android:windowBackground">@color/dartGreen</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;<item name="android:background">@color/dartGreen</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;<item name="android:window">@color/dartGreen</item>&ndash;&gt;-->
+<!--    </style>-->
 
-    <style name="DublinBikesTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/dublinBikesTeal</item>
-        <item name="colorPrimaryDark">@color/dublinBikesTealDark</item>
-        <!--<item name="android:background">@color/dartGreen</item>-->
-        <!--<item name="android:window">@color/dartGreen</item>-->
-    </style>
+<!--    <style name="DublinBikesTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/dublinBikesTeal</item>-->
+<!--        <item name="colorPrimaryDark">@color/dublinBikesTealDark</item>-->
+<!--        &lt;!&ndash;<item name="android:background">@color/dartGreen</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;<item name="android:window">@color/dartGreen</item>&ndash;&gt;-->
+<!--    </style>-->
 
-    <style name="DublinBusTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/dublinBusBlue</item>
-        <item name="colorPrimaryDark">@color/dublinBusBlueDark</item>
-        <!--<item name="android:background">@color/dartGreen</item>-->
-        <!--<item name="android:window">@color/dartGreen</item>-->
-    </style>
+<!--    <style name="DublinBusTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/dublinBusBlue</item>-->
+<!--        <item name="colorPrimaryDark">@color/dublinBusBlueDark</item>-->
+<!--        &lt;!&ndash;<item name="android:background">@color/dartGreen</item>&ndash;&gt;-->
+<!--        &lt;!&ndash;<item name="android:window">@color/dartGreen</item>&ndash;&gt;-->
+<!--    </style>-->
 
-    <style name="LuasTheme" parent="DublinMapperTheme">
-        <item name="colorPrimary">@color/luasPurple</item>
-        <item name="colorPrimaryDark">@color/luasPurpleDark</item>
-        <!--<item name="android:background">@color/luasPurple</item>-->
-    </style>
+<!--    <style name="LuasTheme" parent="DublinMapperTheme">-->
+<!--        <item name="colorPrimary">@color/luasPurple</item>-->
+<!--        <item name="colorPrimaryDark">@color/luasPurpleDark</item>-->
+<!--        &lt;!&ndash;<item name="android:background">@color/luasPurple</item>&ndash;&gt;-->
+<!--    </style>-->
 
     <style name="ListItemContainer">
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
@@ -123,10 +124,10 @@
     <!--<item name="windowNoTitle">true</item>-->
     <!--</style>-->
 
-    <style name="DublinMapperTheme.Launcher">
-        <item name="android:windowBackground">@drawable/splash_screen</item>
-        <item name="android:navigationBarColor">@color/color_navigation_bar_launcher</item>
-    </style>
+<!--    <style name="DublinMapperTheme.Launcher">-->
+<!--        <item name="android:windowBackground">@drawable/splash_screen</item>-->
+<!--        <item name="android:navigationBarColor">@color/color_navigation_bar_launcher</item>-->
+<!--    </style>-->
 
     <style name="Widget.Toolbar" parent="Widget.AppCompat.Toolbar">
         <!--<item name="titleTextAppearance">@style/TextAppearance.DublinMapper.ToolbarTitle</item>-->

@@ -40,7 +40,6 @@
             android:id="@+id/nearbyLocations"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimary"
             android:clipToPadding="false"
             android:paddingStart="@dimen/margin_normal"
             android:paddingEnd="@dimen/margin_normal"/>

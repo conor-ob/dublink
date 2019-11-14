@@ -38,7 +38,7 @@
                 android:value="${jcDecauxApiKey}"/>
 
         <activity android:name=".DublinMapperLauncher"
-                  android:theme="@style/DublinMapperTheme.Launcher">
+                  android:theme="@style/DublinMapperTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

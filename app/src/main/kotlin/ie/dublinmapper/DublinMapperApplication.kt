@@ -6,13 +6,18 @@ import com.ww.roxie.Roxie
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import ie.dublinmapper.di.DaggerApplicationComponent
+import ie.dublinmapper.settings.ThemeRepository
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 import java.io.IOException
 import java.net.SocketException
+import javax.inject.Inject
 
 class DublinMapperApplication : DaggerApplication() {
+
+    @Inject
+    lateinit var themeRepository: ThemeRepository
 
     init {
         RxJavaPlugins.setErrorHandler {
@@ -41,7 +46,12 @@ class DublinMapperApplication : DaggerApplication() {
         super.onCreate()
         setupTimber()
         setupThreeTen()
+        setupTheme()
         setupStetho()
+    }
+
+    private fun setupTheme() {
+        themeRepository.setPreferredThemeOrDefault()
     }
 
     private fun setupTimber() {

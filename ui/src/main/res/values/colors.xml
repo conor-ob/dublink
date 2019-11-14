@@ -71,4 +71,8 @@
 
     <color name="window_background">#ffffff</color>
 
+
+
+
+    <color name="color_status_bar">#FFFFFF</color>
 </resources>

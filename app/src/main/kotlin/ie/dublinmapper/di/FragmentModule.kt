@@ -10,6 +10,8 @@ import ie.dublinmapper.nearby.NearbyFragment
 import ie.dublinmapper.nearby.NearbyModule
 import ie.dublinmapper.search.SearchFragment
 import ie.dublinmapper.search.SearchModule
+import ie.dublinmapper.settings.SettingsFragment
+import ie.dublinmapper.settings.SettingsModule
 
 @Module
 abstract class FragmentModule {
@@ -25,5 +27,8 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector(modules = [SearchModule::class])
     abstract fun contributeSearchFragmentInjector(): SearchFragment
+
+    @ContributesAndroidInjector(modules = [SettingsModule::class])
+    abstract fun contributeSettingsFragmentInjector(): SettingsFragment
 
 }
