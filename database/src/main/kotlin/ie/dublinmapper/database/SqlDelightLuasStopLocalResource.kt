@@ -69,21 +69,23 @@ class SqlDelightLuasStopLocalResource(
     }
 
     override fun insertStops(stops: List<LuasStop>) {
-        database.luasStopLocationEntityQueries.deleteAll()
-        database.luasStopServiceEntityQueries.deleteAll()
-        for (stop in stops) {
-            database.luasStopLocationEntityQueries.insertOrReplace(
-                id = stop.id,
-                name = stop.name,
-                latitude = stop.coordinate.latitude,
-                longitude = stop.coordinate.longitude
-            )
-            for (route in stop.routes) {
-                database.luasStopServiceEntityQueries.insertOrReplace(
-                    operator = route.operator,
-                    route = route.id,
-                    locationId = stop.id
+        database.transaction {
+            database.luasStopLocationEntityQueries.deleteAll()
+            database.luasStopServiceEntityQueries.deleteAll()
+            for (stop in stops) {
+                database.luasStopLocationEntityQueries.insertOrReplace(
+                    id = stop.id,
+                    name = stop.name,
+                    latitude = stop.coordinate.latitude,
+                    longitude = stop.coordinate.longitude
                 )
+                for (route in stop.routes) {
+                    database.luasStopServiceEntityQueries.insertOrReplace(
+                        operator = route.operator,
+                        route = route.id,
+                        locationId = stop.id
+                    )
+                }
             }
         }
     }

@@ -69,21 +69,23 @@ class SqlDelightAircoachStopLocalResource(
     }
 
     override fun insertStops(stops: List<AircoachStop>) {
-        database.aircoachStopLocationEntityQueries.deleteAll()
-        database.aircoachStopServiceEntityQueries.deleteAll()
-        for (stop in stops) {
-            database.aircoachStopLocationEntityQueries.insertOrReplace(
-                id = stop.id,
-                name = stop.name,
-                latitude = stop.coordinate.latitude,
-                longitude = stop.coordinate.longitude
-            )
-            for (route in stop.routes) {
-                database.aircoachStopServiceEntityQueries.insertOrReplace(
-                    operator = route.operator,
-                    route = route.id,
-                    locationId = stop.id
+        database.transaction {
+            database.aircoachStopLocationEntityQueries.deleteAll()
+            database.aircoachStopServiceEntityQueries.deleteAll()
+            for (stop in stops) {
+                database.aircoachStopLocationEntityQueries.insertOrReplace(
+                    id = stop.id,
+                    name = stop.name,
+                    latitude = stop.coordinate.latitude,
+                    longitude = stop.coordinate.longitude
                 )
+                for (route in stop.routes) {
+                    database.aircoachStopServiceEntityQueries.insertOrReplace(
+                        operator = route.operator,
+                        route = route.id,
+                        locationId = stop.id
+                    )
+                }
             }
         }
     }

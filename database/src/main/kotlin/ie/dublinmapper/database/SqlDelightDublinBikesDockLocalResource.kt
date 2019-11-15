@@ -68,23 +68,25 @@ class SqlDelightDublinBikesDockLocalResource(
     }
 
     override fun insertDocks(docks: List<DublinBikesDock>) {
-        database.dublinBikesDockLocationEntityQueries.deleteAll()
-        database.dublinBikesDockServiceEntityQueries.deleteAll()
-        for (dock in docks) {
-            database.dublinBikesDockLocationEntityQueries.insertOrReplace(
-                id = dock.id,
-                name = dock.name,
-                latitude = dock.coordinate.latitude,
-                longitude = dock.coordinate.longitude
-            )
-            for (operator in dock.operators) {
-                database.dublinBikesDockServiceEntityQueries.insertOrReplace(
-                    operator = operator,
-                    docks = dock.docks,
-                    availableDocks = dock.availableDocks,
-                    availableBikes = dock.availableBikes,
-                    locationId = dock.id
+        database.transaction {
+            database.dublinBikesDockLocationEntityQueries.deleteAll()
+            database.dublinBikesDockServiceEntityQueries.deleteAll()
+            for (dock in docks) {
+                database.dublinBikesDockLocationEntityQueries.insertOrReplace(
+                    id = dock.id,
+                    name = dock.name,
+                    latitude = dock.coordinate.latitude,
+                    longitude = dock.coordinate.longitude
                 )
+                for (operator in dock.operators) {
+                    database.dublinBikesDockServiceEntityQueries.insertOrReplace(
+                        operator = operator,
+                        docks = dock.docks,
+                        availableDocks = dock.availableDocks,
+                        availableBikes = dock.availableBikes,
+                        locationId = dock.id
+                    )
+                }
             }
         }
     }

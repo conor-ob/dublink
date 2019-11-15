@@ -74,20 +74,22 @@ class SqlDelightIrishRailStationLocalResource(
     }
 
     override fun insertStations(stations: List<IrishRailStation>) {
-        database.irishRailStationLocationEntityQueries.deleteAll()
-        database.irishRailStationServiceEntityQueries.deleteAll()
-        for (station in stations) {
-            database.irishRailStationLocationEntityQueries.insertOrReplace(
-                id = station.id,
-                name = station.name,
-                latitude = station.coordinate.latitude,
-                longitude = station.coordinate.longitude
-            )
-            for (operator in station.operators) {
-                database.irishRailStationServiceEntityQueries.insertOrReplace(
-                    operator = operator,
-                    locationId = station.id
+        database.transaction {
+            database.irishRailStationLocationEntityQueries.deleteAll()
+            database.irishRailStationServiceEntityQueries.deleteAll()
+            for (station in stations) {
+                database.irishRailStationLocationEntityQueries.insertOrReplace(
+                    id = station.id,
+                    name = station.name,
+                    latitude = station.coordinate.latitude,
+                    longitude = station.coordinate.longitude
                 )
+                for (operator in station.operators) {
+                    database.irishRailStationServiceEntityQueries.insertOrReplace(
+                        operator = operator,
+                        locationId = station.id
+                    )
+                }
             }
         }
     }

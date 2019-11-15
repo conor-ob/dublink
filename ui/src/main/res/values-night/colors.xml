@@ -18,6 +18,17 @@
 <resources>
     <color name="swipe_away_background">#333333</color>
 
+    <color name="aircoachOrange">#FFCC80</color>
+    <color name="busEireannRed">#E57373</color>
+    <color name="dublinBikesTeal">#80CBC4</color>
+    <color name="dublinBusYellow">#FFE082</color>
+    <color name="goAheadBlue">#90CAF9</color>
+    <color name="dartGreen">#A5D6A7</color>
+    <color name="luasGreen">#A5D6A7</color>
+    <color name="luasRed">#F48FB1</color>
+    <color name="commuterBlue">#81D4FA</color>
+    <color name="intercityYellow">#FFE082</color>
+
     <color name="system_ui_scrim_light">#2EFFFFFF</color> <!-- 18% white -->
     <color name="system_ui_scrim_dark">#99000000</color> <!-- 60% black -->
 </resources>
