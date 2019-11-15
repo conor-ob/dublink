@@ -4,22 +4,20 @@ import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.ui.R
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.BusEireannStop
+import io.rtpi.api.Service
 
 class BusEireannStopItem(
-    busEireannStop: BusEireannStop,
-    isEven: Boolean,
-    isLast: Boolean
-) : ServiceLocationItem(busEireannStop, isEven, isLast) {
+    busEireannStop: BusEireannStop
+) : ServiceLocationItem(busEireannStop) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        bindBackground(viewHolder, position)
         bindTitle(
             viewHolder,
             getServiceLocation().name,
-            viewHolder.itemView.context.getString(R.string.stop_number, getServiceLocation().id)
+            "${Service.BUS_EIREANN.fullName} (${getServiceLocation().id})"
         )
         bindIcon(viewHolder, R.drawable.ic_bus, R.color.busEireannRed)
-        bindRoutes(viewHolder, (getServiceLocation() as BusEireannStop).routes.map { it.id })
+        bindRoutes(viewHolder, (getServiceLocation() as BusEireannStop).routes)
     }
 
 }

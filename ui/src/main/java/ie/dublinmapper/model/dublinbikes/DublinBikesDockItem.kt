@@ -6,19 +6,17 @@ import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.DublinBikesDock
 
 class DublinBikesDockItem(
-    dublinBikesDock: DublinBikesDock,
-    isEven: Boolean,
-    isLast: Boolean
-) : ServiceLocationItem(dublinBikesDock, isEven, isLast) {
+    dublinBikesDock: DublinBikesDock
+) : ServiceLocationItem(dublinBikesDock) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        bindBackground(viewHolder, position)
         bindTitle(
             viewHolder,
             getDublinBikesDock().name,
             "Bikes: ${getDublinBikesDock().availableBikes}," + "Docks: ${getDublinBikesDock().availableDocks}"
         )
         bindIcon(viewHolder, R.drawable.ic_bike, R.color.dublinBikesTeal)
+        bindRoutes(viewHolder, emptyList())
     }
 
     private fun getDublinBikesDock(): DublinBikesDock {

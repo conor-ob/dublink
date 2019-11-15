@@ -4,6 +4,7 @@ import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import ie.dublinmapper.datamodel.BusEireannStopLocalResource
 import ie.dublinmapper.domain.model.setFavourite
+import ie.dublinmapper.util.AlphanumComparator
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.BusEireannStop
@@ -53,7 +54,9 @@ class SqlDelightBusEireannStopLocalResource(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                routes = routes ?: emptyList(),
+                routes = routes?.sortedWith(Comparator { r1, r2 ->
+                    AlphanumComparator.getInstance().compare(r1.id, r2.id)
+                }) ?: emptyList(),
                 operators = routes?.map { route -> route.operator }?.toSet() ?: emptySet()
             )
         }.associateBy { it.id }

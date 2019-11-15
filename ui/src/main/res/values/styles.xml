@@ -129,6 +129,25 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textAllCaps">false</item>
     </style>
+
+    <style parent="Widget.MaterialComponents.Chip.Action" name="ThinnerChip">
+        <item name="chipCornerRadius">5dp</item>
+        <item name="chipMinHeight">0dp</item>
+        <item name="chipStartPadding">6dp</item>
+        <item name="iconStartPadding">0dp</item>
+        <item name="iconEndPadding">0dp</item>
+        <item name="textStartPadding">0dp</item>
+        <item name="textEndPadding">0dp</item>
+        <item name="closeIconStartPadding">0dp</item>
+        <item name="closeIconEndPadding">0dp</item>
+        <item name="chipEndPadding">5dp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:textAppearance">@style/SmallerText</item>
+    </style>
+
+    <style parent="TextAppearance.AppCompat.Small" name="SmallerText">
+        <item name="android:textSize">11sp</item>
+    </style>
 </resources>
 
 <!--    &lt;!&ndash; Base application theme. &ndash;&gt;-->

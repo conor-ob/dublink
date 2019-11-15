@@ -1,74 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/rootView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageView
-                android:id="@+id/serviceIconContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/text_view_rounded_corner"
-                android:padding="2dp"
-                tools:src="@drawable/ic_train"
-                tools:backgroundTint="@color/dartGreen"/>
-
-        <FrameLayout
-                android:id="@+id/singleTitleContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginStart="8dp"
-                android:visibility="gone">
-
-            <TextView
-                    android:id="@+id/mainTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Greystones"/>
-
-        </FrameLayout>
-
-        <LinearLayout
-                android:id="@+id/doubleTitleContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:visibility="gone">
-
-            <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Greystones"/>
-
-            <TextView
-                    android:id="@+id/subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="DART"/>
-
-        </LinearLayout>
-
-
-    </LinearLayout>
+        android:orientation="vertical"
+        android:paddingStart="@dimen/padding_s"
+        android:paddingEnd="@dimen/padding_s"
+        android:paddingTop="@dimen/padding_s"
+        android:paddingBottom="@dimen/padding_s">
 
     <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.DublinMapper.Body1"
+            android:alpha="0.8"
+            tools:text="Greystones"/>
+
+    <TextView
+            android:id="@+id/subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"
+            android:alpha="0.5"
+            tools:text="DART"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+    <com.google.android.material.chip.ChipGroup
             android:id="@+id/routes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_xs"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:chipSpacingHorizontal="5dp"
+            app:chipSpacingVertical="5dp"
+            app:singleLine="false" />
 
 </LinearLayout>
+
+<!--<LinearLayout-->
+<!--        xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:id="@+id/rootView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
+
+<!--    <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal">-->
+
+<!--        <ImageView-->
+<!--                android:id="@+id/serviceIconContainer"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:background="@drawable/text_view_rounded_corner"-->
+<!--                android:padding="2dp"-->
+<!--                tools:src="@drawable/ic_train"-->
+<!--                tools:backgroundTint="@color/dartGreen"/>-->
+
+<!--        <FrameLayout-->
+<!--                android:id="@+id/singleTitleContainer"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="bottom"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:visibility="gone">-->
+
+<!--            <TextView-->
+<!--                    android:id="@+id/mainTitle"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    tools:text="Greystones"/>-->
+
+<!--        </FrameLayout>-->
+
+<!--        <LinearLayout-->
+<!--                android:id="@+id/doubleTitleContainer"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:visibility="gone">-->
+
+<!--            <TextView-->
+<!--                    android:id="@+id/title"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    tools:text="Greystones"/>-->
+
+<!--            <TextView-->
+<!--                    android:id="@+id/subtitle"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    tools:text="DART"/>-->
+
+<!--        </LinearLayout>-->
+
+
+<!--    </LinearLayout>-->
+
+<!--    <com.google.android.material.chip.ChipGroup-->
+<!--            android:id="@+id/routes"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="gone"/>-->
+
+<!--</LinearLayout>-->

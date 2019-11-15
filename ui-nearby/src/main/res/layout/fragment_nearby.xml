@@ -7,39 +7,52 @@
         android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/search_app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:liftOnScroll="true">
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:contentInsetLeft="0dp"
-                app:contentInsetStart="0dp"
-                app:contentInsetStartWithNavigation="0dp"
-                app:navigationIcon="@drawable/ic_arrow_back">
-
-            <TextView
-                    android:id="@+id/title"
-                    android:text="@string/title_nearby"
-                    android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize"
-                    android:gravity="center_vertical"
-                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
-
-
-        </androidx.appcompat.widget.Toolbar>
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:title="Nearby Locations" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:liftOnScroll="true">-->
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--                android:id="@+id/toolbar"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?attr/actionBarSize"-->
+<!--                app:contentInsetLeft="0dp"-->
+<!--                app:contentInsetStart="0dp"-->
+<!--                app:contentInsetStartWithNavigation="0dp"-->
+<!--                app:navigationIcon="@drawable/ic_arrow_back">-->
+
+<!--            <TextView-->
+<!--                    android:id="@+id/title"-->
+<!--                    android:text="@string/title_nearby"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="?actionBarSize"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>-->
+
+
+<!--        </androidx.appcompat.widget.Toolbar>-->
+
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/nearbyLocations"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingStart="@dimen/margin_normal"
-            android:paddingEnd="@dimen/margin_normal"/>
+            android:layout_height="match_parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

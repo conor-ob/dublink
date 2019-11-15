@@ -2,8 +2,10 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="User Interface"
-            android:summary="Customize your app">
+<!--    <PreferenceCategory android:title="User Interface"-->
+<!--            android:summary="Customize your app">-->
+
+        <PreferenceCategory android:title="Customization">
 
         <ListPreference
                 android:key="@string/preference_key_preferred_theme"
@@ -21,12 +23,14 @@
         <SwitchPreference
                 android:defaultValue="true"
                 android:key="@string/preference_key_enabled_service_dublin_bus"
-                android:title="@string/service_name_dublin_bus" />
+                android:title="@string/service_name_dublin_bus"
+                android:summary="Dublin Bus and Go Ahead" />
 
         <SwitchPreference
                 android:defaultValue="true"
                 android:key="@string/preference_key_enabled_service_irish_rail"
-                android:title="@string/service_name_irish_rail" />
+                android:title="@string/service_name_irish_rail"
+                android:summary="DART, Commuter and InterCity" />
 
         <SwitchPreference
                 android:defaultValue="true"
@@ -35,18 +39,18 @@
 
         <SwitchPreference
                 android:defaultValue="true"
-                android:key="@string/preference_key_enabled_service_dublin_bikes"
-                android:title="@string/service_name_dublin_bikes" />
+                android:key="@string/preference_key_enabled_service_bus_eireann"
+                android:title="@string/service_name_bus_eireann" />
 
         <SwitchPreference
                 android:defaultValue="true"
-                android:key="@string/preference_key_enabled_service_bus_eireann"
-                android:title="@string/service_name_bus_eireann" />
+                android:key="@string/preference_key_enabled_service_dublin_bikes"
+                android:title="@string/service_name_dublin_bikes" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="Labs"
+            android:title="Labs 🚧"
             android:summary="Try out experimental features">
 
         <SwitchPreference

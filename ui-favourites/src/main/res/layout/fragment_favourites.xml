@@ -7,36 +7,52 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:liftOnScroll="true">
+            android:id="@+id/search_app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
-
-            <TextView
-                android:id="@+id/title"
-                android:text="@string/title_favourites"
+                android:id="@+id/settings_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:gravity="center_vertical"
-                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>
-
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <!--<TextView-->
-        <!--android:serviceId="@+serviceId/title"-->
-        <!--android:text="@string/title_favourites"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?actionBarSize"-->
-        <!--android:gravity="center"-->
-        <!--android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"-->
-        <!--app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>-->
+                android:layout_height="?attr/actionBarSize"
+                app:title="Favourites" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" -->
+<!--            android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"-->
+<!--        app:liftOnScroll="true">-->
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/title"-->
+<!--                android:text="@string/title_favourites"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?actionBarSize"-->
+<!--                android:gravity="center_vertical"-->
+<!--                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>-->
+
+
+<!--        </androidx.appcompat.widget.Toolbar>-->
+
+<!--        &lt;!&ndash;<TextView&ndash;&gt;-->
+<!--        &lt;!&ndash;android:serviceId="@+serviceId/title"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:text="@string/title_favourites"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_height="?actionBarSize"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"&ndash;&gt;-->
+<!--        &lt;!&ndash;app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>&ndash;&gt;-->
+
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <!--<FrameLayout-->
     <!--android:layout_width="match_parent"-->

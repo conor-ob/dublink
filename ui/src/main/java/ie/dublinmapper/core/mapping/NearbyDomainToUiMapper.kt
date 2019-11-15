@@ -33,9 +33,7 @@ class NearbyDomainToUiMapper(
             items.add(HeaderItem(stringProvider.nearby()))
         }
         for (i in 0 until source.serviceLocations.size) {
-            val isLast = i == source.serviceLocations.size - 1
-            val isEven = i % 2 == 0
-            items.add(mapItem(source.serviceLocations[i], isEven, isLast))
+            items.add(mapItem(source.serviceLocations[i]))
         }
         if (items.isNotEmpty()) {
             items.add(DividerItem())
@@ -43,14 +41,14 @@ class NearbyDomainToUiMapper(
         return Section(items)
     }
 
-    private fun mapItem(serviceLocation: ServiceLocation, isEven: Boolean, isLast: Boolean): Item {
+    private fun mapItem(serviceLocation: ServiceLocation): Item {
         return when (serviceLocation) {
-            is AircoachStop -> AircoachStopItem(serviceLocation, isEven, isLast)
-            is BusEireannStop -> BusEireannStopItem(serviceLocation, isEven, isLast)
-            is IrishRailStation -> IrishRailStationItem(serviceLocation, isEven, isLast)
-            is DublinBikesDock -> DublinBikesDockItem(serviceLocation, isEven, isLast)
-            is DublinBusStop -> DublinBusStopItem(serviceLocation, isEven, isLast)
-            is LuasStop -> LuasStopItem(serviceLocation, isEven, isLast)
+            is AircoachStop -> AircoachStopItem(serviceLocation)
+            is BusEireannStop -> BusEireannStopItem(serviceLocation)
+            is IrishRailStation -> IrishRailStationItem(serviceLocation)
+            is DublinBikesDock -> DublinBikesDockItem(serviceLocation)
+            is DublinBusStop -> DublinBusStopItem(serviceLocation)
+            is LuasStop -> LuasStopItem(serviceLocation)
             else -> TODO()
         }
     }
