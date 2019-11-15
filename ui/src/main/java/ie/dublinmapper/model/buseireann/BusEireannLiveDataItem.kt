@@ -16,7 +16,6 @@ class BusEireannLiveDataItem(
 ) : LiveDataItem(isEven, isLast) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        super.bind(viewHolder, position)
         super.bindDueTimes(viewHolder, liveData)
         val liveData = liveData
         viewHolder.title.text = liveData.route

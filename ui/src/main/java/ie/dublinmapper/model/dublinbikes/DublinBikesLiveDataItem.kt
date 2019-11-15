@@ -17,7 +17,6 @@ class DublinBikesLiveDataItem(
 ) : LiveDataItem(isEven, isLast) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        super.bind(viewHolder, position)
         if (isBike) {
             viewHolder.title.text = "Bikes"
             viewHolder.subtitle.text = liveData.bikes.toString()

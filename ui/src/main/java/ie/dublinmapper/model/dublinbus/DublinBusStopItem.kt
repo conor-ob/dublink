@@ -7,10 +7,12 @@ import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service
 
 class DublinBusStopItem(
-    dublinBusStop: DublinBusStop
-) : ServiceLocationItem(dublinBusStop) {
+    dublinBusStop: DublinBusStop,
+    distance: Double?
+) : ServiceLocationItem(dublinBusStop, distance) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        super.bind(viewHolder, position)
         bindTitle(
             viewHolder,
             getServiceLocation().name,

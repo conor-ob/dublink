@@ -1,6 +1,7 @@
 package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
+import android.view.Display
 import android.view.View
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
@@ -13,11 +14,13 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import io.rtpi.api.Operator
 import io.rtpi.api.Route
+import kotlin.math.round
 
 private const val serviceLocationKey = "key_service_location"
 
 abstract class ServiceLocationItem(
-    serviceLocation: ServiceLocation
+    serviceLocation: ServiceLocation,
+    private val distance: Double?
 ) : Item() {
 
     init {
@@ -26,15 +29,29 @@ abstract class ServiceLocationItem(
 
     override fun getLayout() = R.layout.list_item_service_location
 
+    override fun bind(viewHolder: ViewHolder, position: Int) {
+//        if (position % 2 == 0) {
+//            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.white))
+//        } else {
+//            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_100))
+//        }
+    }
+
     protected fun bindIcon(viewHolder: ViewHolder, drawableId: Int, colourId: Int) {
-//        viewHolder.serviceIconContainer.setImageResource(drawableId)
-//        viewHolder.serviceIconContainer.backgroundTintList =
-//            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, colourId))
+        viewHolder.serviceIconContainer.setImageResource(drawableId)
+        viewHolder.serviceIconContainer.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_600))
     }
 
     protected fun bindTitle(viewHolder: ViewHolder, title: String, subtitle: String) {
         viewHolder.title.text = title
         viewHolder.subtitle.text = subtitle
+        if (distance != null) {
+            viewHolder.walkTime.text = distance.formatDistance()
+            viewHolder.walkTime.visibility = View.VISIBLE
+        } else {
+            viewHolder.walkTime.visibility = View.GONE
+        }
     }
 
     protected fun bindRoutes(viewHolder: ViewHolder, routes: List<Route>) {
@@ -100,4 +117,26 @@ abstract class ServiceLocationItem(
 
 fun com.xwray.groupie.Item<com.xwray.groupie.ViewHolder>.getServiceLocation(): ServiceLocation {
     return extras[serviceLocationKey] as ServiceLocation
+}
+
+private fun Double.formatDistance(): String {
+    return when {
+        this <= 1.0 -> "1m"
+        this < 1_000.0 -> "${toInt()}m"
+        this < 10_000.0 -> {
+            val rounded = (this / 1_000.0).round(1)
+            if (rounded == 1.0) {
+                "1km"
+            } else {
+                "${rounded}km"
+            }
+        }
+        else -> "${(this / 1_000.0).toInt()}km"
+    }
+}
+
+private fun Double.round(decimals: Int): Double {
+    var multiplier = 1.0
+    repeat(decimals) { multiplier *= 10 }
+    return round(this * multiplier) / multiplier
 }

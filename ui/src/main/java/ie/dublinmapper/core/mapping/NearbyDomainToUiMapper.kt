@@ -28,27 +28,20 @@ class NearbyDomainToUiMapper(
         mappingContext: MappingContext
     ): Group {
         val items = mutableListOf<Group>()
-        if (source.serviceLocations.isNotEmpty()) {
-            items.add(DividerItem())
-            items.add(HeaderItem(stringProvider.nearby()))
-        }
-        for (i in 0 until source.serviceLocations.size) {
-            items.add(mapItem(source.serviceLocations[i]))
-        }
-        if (items.isNotEmpty()) {
-            items.add(DividerItem())
+        for (entry in source.serviceLocations) {
+            items.add(mapItem(entry.key, entry.value))
         }
         return Section(items)
     }
 
-    private fun mapItem(serviceLocation: ServiceLocation): Item {
+    private fun mapItem(distance: Double, serviceLocation: ServiceLocation): Item {
         return when (serviceLocation) {
-            is AircoachStop -> AircoachStopItem(serviceLocation)
-            is BusEireannStop -> BusEireannStopItem(serviceLocation)
-            is IrishRailStation -> IrishRailStationItem(serviceLocation)
-            is DublinBikesDock -> DublinBikesDockItem(serviceLocation)
-            is DublinBusStop -> DublinBusStopItem(serviceLocation)
-            is LuasStop -> LuasStopItem(serviceLocation)
+            is AircoachStop -> AircoachStopItem(serviceLocation, distance)
+            is BusEireannStop -> BusEireannStopItem(serviceLocation, distance)
+            is IrishRailStation -> IrishRailStationItem(serviceLocation, distance)
+            is DublinBikesDock -> DublinBikesDockItem(serviceLocation, distance)
+            is DublinBusStop -> DublinBusStopItem(serviceLocation, distance)
+            is LuasStop -> LuasStopItem(serviceLocation, distance)
             else -> TODO()
         }
     }

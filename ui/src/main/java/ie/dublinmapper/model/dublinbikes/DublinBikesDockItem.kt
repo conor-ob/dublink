@@ -9,10 +9,12 @@ import io.rtpi.api.Route
 import io.rtpi.api.Service
 
 class DublinBikesDockItem(
-    dublinBikesDock: DublinBikesDock
-) : ServiceLocationItem(dublinBikesDock) {
+    dublinBikesDock: DublinBikesDock,
+    distance: Double?
+) : ServiceLocationItem(dublinBikesDock, distance) {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        super.bind(viewHolder, position)
         bindTitle(
             viewHolder,
             getDublinBikesDock().name,

@@ -43,12 +43,12 @@ class FavouritesDomainToUiMapper(
 
     private fun mapItem(serviceLocation: ServiceLocation): Item {
         return when (serviceLocation) {
-            is AircoachStop -> AircoachStopItem(serviceLocation)
-            is BusEireannStop -> BusEireannStopItem(serviceLocation)
-            is IrishRailStation -> IrishRailStationItem(serviceLocation)
-            is DublinBikesDock -> DublinBikesDockItem(serviceLocation)
-            is DublinBusStop -> DublinBusStopItem(serviceLocation)
-            is LuasStop -> LuasStopItem(serviceLocation)
+            is AircoachStop -> AircoachStopItem(serviceLocation, null)
+            is BusEireannStop -> BusEireannStopItem(serviceLocation, null)
+            is IrishRailStation -> IrishRailStationItem(serviceLocation, null)
+            is DublinBikesDock -> DublinBikesDockItem(serviceLocation, null)
+            is DublinBusStop -> DublinBusStopItem(serviceLocation, null)
+            is LuasStop -> LuasStopItem(serviceLocation, null)
             else -> TODO()
         }
     }

@@ -16,6 +16,7 @@ import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_nearby.*
 import kotlinx.android.synthetic.main.fragment_nearby.view.*
+import androidx.recyclerview.widget.DividerItemDecoration
 
 private const val locationRequestCode = 42069
 
@@ -45,6 +46,12 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
         view.nearbyLocations.adapter = adapter
         view.nearbyLocations.setHasFixedSize(true)
         view.nearbyLocations.layoutManager = LinearLayoutManager(requireContext())
+//        view.nearbyLocations.addItemDecoration(
+//            DividerItemDecoration(
+//                view.nearbyLocations.context,
+//                DividerItemDecoration.VERTICAL
+//            )
+//        )
 
         if (ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
