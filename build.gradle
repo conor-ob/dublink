@@ -69,10 +69,10 @@ buildscript {
 
     ext.testVersions = [
             'androidx'  : [
-                    'core'        : '1.1.0', // https://mvnrepository.com/artifact/androidx.test/core
-                    'junit'       : '1.1.0', // https://mvnrepository.com/artifact/androidx.test.ext/junit
-                    'rules'       : '1.1.1', // https://mvnrepository.com/artifact/androidx.test/rules
-                    'runner'      : '1.1.1'  // https://mvnrepository.com/artifact/androidx.test/runner?repo=google
+                    'core'  : '1.1.0', // https://mvnrepository.com/artifact/androidx.test/core
+                    'junit' : '1.1.0', // https://mvnrepository.com/artifact/androidx.test.ext/junit
+                    'rules' : '1.1.1', // https://mvnrepository.com/artifact/androidx.test/rules
+                    'runner': '1.1.1'  // https://mvnrepository.com/artifact/androidx.test/runner?repo=google
             ],
             //'espresso_core' : '3.0.2', // https://mvnrepository.com/artifact/com.android.support.test.espresso/espresso-core
             'junit'     : '4.12',  // https://mvnrepository.com/artifact/junit/junit

@@ -1,58 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/view_nearby_root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/view_nearby_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/search_app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
+        android:id="@+id/search_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="?attr/homeAsUpIndicator"
-                app:title="Nearby Locations" />
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Nearby Locations" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:liftOnScroll="true">-->
+    <!--    <com.google.android.material.appbar.AppBarLayout-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            app:liftOnScroll="true">-->
 
-<!--        <androidx.appcompat.widget.Toolbar-->
-<!--                android:id="@+id/toolbar"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?attr/actionBarSize"-->
-<!--                app:contentInsetLeft="0dp"-->
-<!--                app:contentInsetStart="0dp"-->
-<!--                app:contentInsetStartWithNavigation="0dp"-->
-<!--                app:navigationIcon="@drawable/ic_arrow_back">-->
+    <!--        <androidx.appcompat.widget.Toolbar-->
+    <!--                android:id="@+id/toolbar"-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="?attr/actionBarSize"-->
+    <!--                app:contentInsetLeft="0dp"-->
+    <!--                app:contentInsetStart="0dp"-->
+    <!--                app:contentInsetStartWithNavigation="0dp"-->
+    <!--                app:navigationIcon="@drawable/ic_arrow_back">-->
 
-<!--            <TextView-->
-<!--                    android:id="@+id/title"-->
-<!--                    android:text="@string/title_nearby"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="?actionBarSize"-->
-<!--                    android:gravity="center_vertical"-->
-<!--                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>-->
+    <!--            <TextView-->
+    <!--                    android:id="@+id/title"-->
+    <!--                    android:text="@string/title_nearby"-->
+    <!--                    android:layout_width="match_parent"-->
+    <!--                    android:layout_height="?actionBarSize"-->
+    <!--                    android:gravity="center_vertical"-->
+    <!--                    app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>-->
 
 
-<!--        </androidx.appcompat.widget.Toolbar>-->
+    <!--        </androidx.appcompat.widget.Toolbar>-->
 
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
+    <!--    </com.google.android.material.appbar.AppBarLayout>-->
 
     <androidx.recyclerview.widget.RecyclerView
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/nearbyLocations"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+        android:id="@+id/nearbyLocations"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

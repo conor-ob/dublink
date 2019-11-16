@@ -36,9 +36,6 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
             (activity as Navigator).navigateNearbyToLiveData(item.getServiceLocation())

@@ -16,4 +16,6 @@
     <string name="preference_value_battery_saver_theme" translatable="false">battery</string>
     <string name="preference_value_system_default_theme" translatable="false">system</string>
 
+    <string name="preference_key_preferred_home_screen">preferred_home_screen</string>
+
 </resources>

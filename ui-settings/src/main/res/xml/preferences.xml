@@ -1,62 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--    <PreferenceCategory android:title="User Interface"-->
-<!--            android:summary="Customize your app">-->
+    <!--    <PreferenceCategory android:title="User Interface"-->
+    <!--            android:summary="Customize your app">-->
 
-        <PreferenceCategory android:title="Customization">
+    <PreferenceCategory android:title="Customization">
 
         <ListPreference
-                android:key="@string/preference_key_preferred_theme"
-                android:title="Theme"
-                android:entries="@array/theme_names"
-                android:entryValues="@array/theme_values"
-                app:useSimpleSummaryProvider="true" />
+            android:entries="@array/theme_names"
+            android:entryValues="@array/theme_values"
+            android:key="@string/preference_key_preferred_theme"
+            android:title="Theme"
+            app:useSimpleSummaryProvider="true" />
+
+<!--        <ListPreference-->
+<!--            android:entries="@array/screen_names"-->
+<!--            android:entryValues="@array/screen_values"-->
+<!--            android:key="@string/preference_key_preferred_home_screen"-->
+<!--            android:title="Home screen"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="Transport Services"
-            android:summary="Choose your favourites">
+        android:summary="Choose your favourites"
+        android:title="Transport Services">
 
         <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_key_enabled_service_dublin_bus"
-                android:title="@string/service_name_dublin_bus"
-                android:summary="Dublin Bus and Go Ahead" />
+            android:defaultValue="true"
+            android:key="@string/preference_key_enabled_service_dublin_bus"
+            android:summary="Dublin Bus and Go Ahead"
+            android:title="@string/service_name_dublin_bus" />
 
         <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_key_enabled_service_irish_rail"
-                android:title="@string/service_name_irish_rail"
-                android:summary="DART, Commuter and InterCity" />
+            android:defaultValue="true"
+            android:key="@string/preference_key_enabled_service_irish_rail"
+            android:summary="DART, Commuter and InterCity"
+            android:title="@string/service_name_irish_rail" />
 
         <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_key_enabled_service_luas"
-                android:title="@string/service_name_luas" />
+            android:defaultValue="true"
+            android:key="@string/preference_key_enabled_service_luas"
+            android:title="@string/service_name_luas" />
 
         <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_key_enabled_service_bus_eireann"
-                android:title="@string/service_name_bus_eireann" />
+            android:defaultValue="true"
+            android:key="@string/preference_key_enabled_service_bus_eireann"
+            android:title="@string/service_name_bus_eireann" />
 
         <SwitchPreference
-                android:defaultValue="true"
-                android:key="@string/preference_key_enabled_service_dublin_bikes"
-                android:title="@string/service_name_dublin_bikes" />
+            android:defaultValue="true"
+            android:key="@string/preference_key_enabled_service_dublin_bikes"
+            android:title="@string/service_name_dublin_bikes" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="Labs 🚧"
-            android:summary="Try out experimental features">
+        android:summary="Try out experimental features"
+        android:title="Labs 🚧">
 
         <SwitchPreference
-                android:defaultValue="false"
-                android:key="@string/preference_key_enabled_service_aircoach"
-                android:title="@string/service_name_aircoach" />
+            android:defaultValue="false"
+            android:key="@string/preference_key_enabled_service_aircoach"
+            android:title="@string/service_name_aircoach" />
 
     </PreferenceCategory>
 

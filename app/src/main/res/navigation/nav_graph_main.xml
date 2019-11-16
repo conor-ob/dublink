@@ -13,6 +13,11 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"/>
 
+        <action android:id="@+id/favouritesFragment_to_newsFragment"
+            app:destination="@id/newsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"/>
+
         <action android:id="@+id/favouritesFragment_to_nearbyFragment"
                 app:destination="@id/nearbyFragment"
                 app:enterAnim="@anim/nav_default_enter_anim"
@@ -25,9 +30,15 @@
 
     </fragment>
 
+    <fragment android:id="@+id/newsFragment"
+        android:name="ie.dublinmapper.news.NewsFragment"
+        android:label="NewsFragment">
+
+    </fragment>
+
     <fragment android:id="@+id/nearbyFragment"
             android:name="ie.dublinmapper.nearby.NearbyFragment"
-            android:label="SearchFragment">
+            android:label="NearbyFragment">
 
         <action android:id="@+id/nearbyFragment_to_livedataFragment"
                 app:destination="@id/liveDataFragment"

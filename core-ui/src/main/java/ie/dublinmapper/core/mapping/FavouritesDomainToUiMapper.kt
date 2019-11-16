@@ -28,16 +28,16 @@ class FavouritesDomainToUiMapper(
         mappingContext: MappingContext
     ): Group {
         val items = mutableListOf<Group>()
-        if (source.serviceLocations.isNotEmpty()) {
-            items.add(DividerItem())
-            items.add(HeaderItem(stringProvider.favourites()))
-        }
+//        if (source.serviceLocations.isNotEmpty()) {
+//            items.add(DividerItem())
+//            items.add(HeaderItem(stringProvider.favourites()))
+//        }
         for (i in 0 until source.serviceLocations.size) {
             items.add(mapItem(source.serviceLocations[i]))
         }
-        if (items.isNotEmpty()) {
-            items.add(DividerItem())
-        }
+//        if (items.isNotEmpty()) {
+//            items.add(DividerItem())
+//        }
         return Section(items)
     }
 

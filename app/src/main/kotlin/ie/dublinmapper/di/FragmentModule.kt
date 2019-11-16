@@ -8,6 +8,8 @@ import ie.dublinmapper.livedata.LiveDataFragment
 import ie.dublinmapper.livedata.LiveDataModule
 import ie.dublinmapper.nearby.NearbyFragment
 import ie.dublinmapper.nearby.NearbyModule
+import ie.dublinmapper.news.NewsFragment
+import ie.dublinmapper.news.NewsModule
 import ie.dublinmapper.search.SearchFragment
 import ie.dublinmapper.search.SearchModule
 import ie.dublinmapper.settings.PreferencesFragment
@@ -23,6 +25,9 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector(modules = [LiveDataModule::class])
     abstract fun contributeLiveDataFragmentInjector(): LiveDataFragment
+
+    @ContributesAndroidInjector(modules = [NewsModule::class])
+    abstract fun contributeNewsFragmentInjector(): NewsFragment
 
     @ContributesAndroidInjector(modules = [NearbyModule::class])
     abstract fun contributeNearbyFragmentInjector(): NearbyFragment

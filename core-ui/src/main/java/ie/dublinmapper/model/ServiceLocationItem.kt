@@ -40,7 +40,7 @@ abstract class ServiceLocationItem(
     protected fun bindIcon(viewHolder: ViewHolder, drawableId: Int, colourId: Int) {
         viewHolder.serviceIconContainer.setImageResource(drawableId)
         viewHolder.serviceIconContainer.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_600))
+            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_850))
     }
 
     protected fun bindTitle(viewHolder: ViewHolder, title: String, subtitle: String) {
@@ -98,8 +98,16 @@ abstract class ServiceLocationItem(
         return extras[serviceLocationKey] as ServiceLocation
     }
 
+//    override fun isSameAs(other: com.xwray.groupie.Item<*>?): Boolean {
+//        return equals(other)
+//    }
+
     override fun isSameAs(other: com.xwray.groupie.Item<*>?): Boolean {
-        return equals(other)
+        if (other is ServiceLocationItem) {
+            return getServiceLocation().id == other.getServiceLocation().id
+                    && getServiceLocation().service == other.getServiceLocation().service
+        }
+        return false
     }
 
     override fun equals(other: Any?): Boolean {

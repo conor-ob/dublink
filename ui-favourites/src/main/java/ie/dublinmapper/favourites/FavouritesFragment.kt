@@ -10,7 +10,6 @@ import ie.dublinmapper.Navigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
@@ -40,9 +39,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.liveDataList.adapter = adapter
         view.liveDataList.setHasFixedSize(true)
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
-
-        search_fab.setOnClickListener { (activity as Navigator).navigateFavouritesToSearch() }
-        nearby_fab.setOnClickListener { (activity as Navigator).navigateFavouritesToNearby() }
 
         viewModel.dispatch(Action.GetFavourites)
     }
