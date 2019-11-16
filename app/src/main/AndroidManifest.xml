@@ -1,53 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="ie.dublinmapper">
+    package="ie.dublinmapper">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-            android:name=".DublinMapperApplication"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/Theme.DublinMapper"
-            android:usesCleartextTraffic="true">
-
-    <!--<application-->
-            <!--android:name=".DublinMapperApplication"-->
-            <!--android:allowBackup="false"-->
-            <!--android:icon="@mipmap/ic_launcher"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:roundIcon="@mipmap/ic_launcher_round"-->
-            <!--android:supportsRtl="true"-->
-            <!--android:theme="@style/DublinMapperTheme"-->
-            <!--android:usesCleartextTraffic="true">-->
+        android:name=".Application"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DublinMapper"
+        android:usesCleartextTraffic="true">
 
         <uses-library
-                android:name="org.apache.http.legacy"
-                android:required="false"/>
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
         <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="${googleMapsApiKey}"/>
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${googleMapsApiKey}" />
         <meta-data
-                android:name="com.developer.jcdecaux.API_KEY"
-                android:value="${jcDecauxApiKey}"/>
+            android:name="com.developer.jcdecaux.API_KEY"
+            android:value="${jcDecauxApiKey}" />
 
-        <activity android:name=".DublinMapperLauncher"
-                  android:theme="@style/Theme.DublinMapper">
+        <activity
+            android:name=".LauncherActivity"
+            android:theme="@style/Theme.DublinMapper">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-                android:name=".DublinMapperActivity"
-                android:theme="@style/Theme.DublinMapper.Home">
-        </activity>
+            android:name=".HomeActivity"
+            android:theme="@style/Theme.DublinMapper.Home" />
+
+        <activity
+            android:name=".livedata.LiveDataActivity"
+            android:theme="@style/Theme.DublinMapper.Home" />
+
     </application>
 
 </manifest>

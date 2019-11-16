@@ -3,7 +3,7 @@ apply plugin: 'kotlin-kapt'
 
 dependencies {
     implementation project(':core')
-    implementation project(':datamodel')
+    implementation project(':data-access')
     implementation project(':domain')
 
     implementation "com.nytimes.android:store3:${versions.store3}"

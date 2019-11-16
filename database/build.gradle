@@ -32,7 +32,7 @@ android {
 dependencies {
     implementation project(':core')
     implementation project(':domain')
-    implementation project(':datamodel')
+    implementation project(':data-access')
 
     implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
 

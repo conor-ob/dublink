@@ -5,7 +5,7 @@ import android.content.res.Resources
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.DublinMapperApplication
+import ie.dublinmapper.Application
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit
 class ApplicationModule {
 
     @Provides
-    fun context(application: DublinMapperApplication): Context = application.applicationContext
+    fun context(application: Application): Context = application.applicationContext
 
     @Provides
     fun resources(context: Context): Resources {

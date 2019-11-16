@@ -11,7 +11,7 @@ import ie.dublinmapper.search.SearchFragmentDirections
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 
-class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
+class HomeActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     private val navigationController by lazy { findNavController(R.id.navHostFragment) }
 

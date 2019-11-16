@@ -14,7 +14,7 @@ import java.io.IOException
 import java.net.SocketException
 import javax.inject.Inject
 
-class DublinMapperApplication : DaggerApplication() {
+class Application : DaggerApplication() {
 
     @Inject
     lateinit var themeRepository: ThemeRepository
