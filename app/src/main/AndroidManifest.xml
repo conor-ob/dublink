@@ -26,6 +26,12 @@
         <meta-data
             android:name="com.developer.jcdecaux.API_KEY"
             android:value="${jcDecauxApiKey}" />
+        <meta-data
+            android:name="com.twitter.sdk.android.CONSUMER_KEY"
+            android:value="${twitterConsumerKey}"/>
+        <meta-data
+            android:name="com.twitter.sdk.android.CONSUMER_SECRET"
+            android:value="${twitterConsumerSecret}"/>
 
         <activity
             android:name=".LauncherActivity"
@@ -42,6 +48,10 @@
 
         <activity
             android:name=".livedata.LiveDataActivity"
+            android:theme="@style/Theme.DublinMapper.Home" />
+
+        <activity
+            android:name=".settings.SettingsActivity"
             android:theme="@style/Theme.DublinMapper.Home" />
 
     </application>

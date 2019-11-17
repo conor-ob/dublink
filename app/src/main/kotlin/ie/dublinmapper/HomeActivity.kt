@@ -34,7 +34,7 @@ class HomeActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     override fun navigateFavouritesToSearch() = navigationController.navigate(R.id.favouritesFragment_to_searchFragment)
 
-    override fun navigateLiveDataToSettings() = navigationController.navigate(R.id.liveDataFragment_to_settingsFragment)
+    override fun navigateLiveDataToSettings() = navigationController.navigate(R.id.settingsActivity)
 
     override fun navigateFavouritesToLiveData(serviceLocation: ServiceLocation) {
         val intent = FavouritesFragmentDirections.favouritesFragmentToLivedataFragment(

@@ -13,6 +13,8 @@ if (project.rootProject.file("release.properties").exists()) {
 }
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
 def jcDecauxApiKey = properties.getProperty('com.developer.jcdecaux.API_KEY')
+def twitterConsumerKey = properties.getProperty('com.twitter.sdk.android.CONSUMER_KEY')
+def twitterConsumerSecret = properties.getProperty('com.twitter.sdk.android.CONSUMER_SECRET')
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -25,7 +27,9 @@ android {
         versionName buildConfig.version.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [googleMapsApiKey: "$googleMapsApiKey",
-                                jcDecauxApiKey  : "$jcDecauxApiKey"]
+                                jcDecauxApiKey: "$jcDecauxApiKey",
+                                twitterConsumerKey:"$twitterConsumerKey",
+                                twitterConsumerSecret: "$twitterConsumerSecret"]
     }
 
     buildTypes {
@@ -111,6 +115,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:3.12.1")
 
     implementation libraries.rtpi_client
+
+    implementation "com.twitter.sdk.android:tweet-ui:3.3.0"
 
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"

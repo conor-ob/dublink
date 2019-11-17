@@ -27,4 +27,6 @@ android {
 dependencies {
     implementation project(':core')
     implementation project(':core-ui')
+
+    implementation "com.twitter.sdk.android:tweet-ui:3.3.0"
 }

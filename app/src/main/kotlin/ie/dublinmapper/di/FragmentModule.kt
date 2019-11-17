@@ -14,8 +14,6 @@ import ie.dublinmapper.search.SearchFragment
 import ie.dublinmapper.search.SearchModule
 import ie.dublinmapper.settings.PreferencesFragment
 import ie.dublinmapper.settings.PreferencesModule
-import ie.dublinmapper.settings.SettingsFragment
-import ie.dublinmapper.settings.SettingsModule
 
 @Module
 abstract class FragmentModule {
@@ -34,10 +32,6 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector(modules = [SearchModule::class])
     abstract fun contributeSearchFragmentInjector(): SearchFragment
-
-    //TODO is this needed?
-    @ContributesAndroidInjector(modules = [SettingsModule::class])
-    abstract fun contributeSettingsFragmentInjector(): SettingsFragment
 
     @ContributesAndroidInjector(modules = [PreferencesModule::class])
     abstract fun contributePreferencesFragmentInjector(): PreferencesFragment
