@@ -1,32 +1,12 @@
 package ie.dublinmapper.model.luas
 
-import android.content.res.ColorStateList
-import androidx.core.content.ContextCompat
 import com.xwray.groupie.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.ui.R
 import ie.dublinmapper.model.LiveDataItem
 import io.rtpi.api.LuasLiveData
-import kotlinx.android.synthetic.main.list_item_live_data.*
 
 class LuasLiveDataItem(
-    private val liveData: LuasLiveData,
-    isEven: Boolean,
-    isLast: Boolean
-) : LiveDataItem(isEven, isLast) {
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        super.bindDueTimes(viewHolder, liveData)
-        val liveData = liveData
-        viewHolder.title.text = liveData.destination
-        viewHolder.subtitle.text = liveData.route
-        viewHolder.operatorIconContainer.setImageResource(R.drawable.ic_tram)
-        when {
-            liveData.route.equals("Red", ignoreCase = true) -> viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.luasRed))
-            liveData.route.equals("Green", ignoreCase = true) -> viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.luasGreen))
-            else -> viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.luasPurple))
-        }
-    }
+    liveData: LuasLiveData
+) : LiveDataItem(liveData) {
 
     override fun isSameAs(other: Item<*>?): Boolean {
         if (other is LuasLiveDataItem) {

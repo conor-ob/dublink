@@ -1,11 +1,7 @@
 package ie.dublinmapper
 
-import android.content.pm.PackageManager
 import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
-import com.twitter.sdk.android.core.Twitter
-import com.twitter.sdk.android.core.TwitterAuthConfig
-import com.twitter.sdk.android.core.TwitterConfig
 import com.ww.roxie.Roxie
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
@@ -52,7 +48,6 @@ class Application : DaggerApplication() {
         setupThreeTen()
         setupTheme()
         setupStetho()
-        setupTwitter()
     }
 
     private fun setupTheme() {
@@ -78,18 +73,6 @@ class Application : DaggerApplication() {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
-    }
-
-    private fun setupTwitter() {
-        val appInfo = applicationContext.packageManager.getApplicationInfo(applicationContext.packageName, PackageManager.GET_META_DATA)
-        val config = TwitterConfig.Builder(applicationContext)
-            .twitterAuthConfig(
-                TwitterAuthConfig(
-                    appInfo.metaData.getString("com.twitter.sdk.android.CONSUMER_KEY"),
-                    appInfo.metaData.getString("com.twitter.sdk.android.CONSUMER_SECRET")
-                )
-            ).build()
-        Twitter.initialize(config)
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

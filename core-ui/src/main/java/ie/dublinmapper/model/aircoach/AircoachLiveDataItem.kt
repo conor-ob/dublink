@@ -1,28 +1,12 @@
 package ie.dublinmapper.model.aircoach
 
-import android.content.res.ColorStateList
-import androidx.core.content.ContextCompat
 import com.xwray.groupie.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.model.LiveDataItem
-import ie.dublinmapper.ui.R
 import io.rtpi.api.AircoachLiveData
-import kotlinx.android.synthetic.main.list_item_live_data.*
 
 open class AircoachLiveDataItem(
-    private val liveData: AircoachLiveData,
-    isEven: Boolean,
-    isLast: Boolean
-) : LiveDataItem(isEven, isLast) {
-
-    override fun bind(viewHolder: ViewHolder, position: Int) {
-        super.bindDueTimes(viewHolder, liveData)
-        val liveData = liveData
-        viewHolder.title.text = liveData.route
-        viewHolder.subtitle.text = liveData.destination
-        viewHolder.operatorIconContainer.setImageResource(R.drawable.ic_bus)
-        viewHolder.operatorIconContainer.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.aircoachBlue))
-    }
+    liveData: AircoachLiveData
+) : LiveDataItem(liveData) {
 
     override fun isSameAs(other: Item<*>?): Boolean {
         if (other is AircoachLiveDataItem) {

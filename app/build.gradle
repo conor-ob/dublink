@@ -116,8 +116,6 @@ dependencies {
 
     implementation libraries.rtpi_client
 
-    implementation "com.twitter.sdk.android:tweet-ui:3.3.0"
-
     kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
     kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
 }

@@ -98,8 +98,8 @@
     </style>
 
     <style name="TextAppearance.DublinMapper.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="fontFamily">@font/google_sans_bold</item>
-        <item name="android:fontFamily">@font/google_sans_bold</item>
+        <item name="fontFamily">@font/google_sans_regular</item>
+        <item name="android:fontFamily">@font/google_sans_regular</item>
         <item name="android:textSize">14.62sp</item>
         <item name="android:letterSpacing">0.001</item>
     </style>
@@ -133,7 +133,7 @@
     <style parent="Widget.MaterialComponents.Chip.Action" name="ThinnerChip">
         <item name="chipCornerRadius">5dp</item>
         <item name="chipMinHeight">0dp</item>
-        <item name="chipStartPadding">6dp</item>
+        <item name="chipStartPadding">5dp</item>
         <item name="iconStartPadding">0dp</item>
         <item name="iconEndPadding">0dp</item>
         <item name="textStartPadding">0dp</item>
@@ -145,7 +145,30 @@
         <item name="android:textAppearance">@style/SmallerText</item>
     </style>
 
+    <style parent="Widget.MaterialComponents.Chip.Action" name="ThinnerChip2">
+        <item name="chipCornerRadius">5dp</item>
+        <item name="chipMinHeight">0dp</item>
+        <item name="chipStartPadding">5dp</item>
+        <item name="iconStartPadding">0dp</item>
+        <item name="iconEndPadding">0dp</item>
+        <item name="textStartPadding">0dp</item>
+        <item name="textEndPadding">0dp</item>
+        <item name="closeIconStartPadding">0dp</item>
+        <item name="closeIconEndPadding">0dp</item>
+        <item name="chipEndPadding">5dp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:textAppearance">@style/SmallerText2</item>
+    </style>
+
+    <style parent="TextAppearance.AppCompat.Small" name="SmallerText2">
+        <item name="fontFamily">@font/google_sans_bold</item>
+        <item name="android:fontFamily">@font/google_sans_bold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
     <style parent="TextAppearance.AppCompat.Small" name="SmallerText">
+        <item name="fontFamily">@font/google_sans_bold</item>
+        <item name="android:fontFamily">@font/google_sans_bold</item>
         <item name="android:textSize">11sp</item>
     </style>
 </resources>
