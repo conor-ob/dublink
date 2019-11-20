@@ -14,7 +14,9 @@ import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.temporal.ChronoUnit
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.format.DateFormat
+import ie.dublinmapper.domain.model.*
 import kotlinx.android.synthetic.main.list_item_live_data.view.*
+import org.threeten.bp.Duration
 
 
 private val format24h = DateTimeFormatter.ofPattern("HH:mm")
@@ -51,54 +53,41 @@ abstract class LiveDataItem(
     }
 
     private fun bindStatus(viewHolder: ViewHolder) {
-        viewHolder.status.text = "Scheduled"
-//        val currentTime = parseTimestampNearestMinute(liveData.liveTime.currentTimestamp)
-//
-//        val scheduledTime = when {
-//            isStarting -> parseTimestampNearestMinute(liveData.liveTime.scheduledDepartureTimestamp!!)
-//            isTerminating -> parseTimestampNearestMinute(liveData.liveTime.scheduledArrivalTimestamp!!)
-//            else -> parseTimestampNearestMinute(liveData.liveTime.scheduledArrivalTimestamp!!)
-//        }
-//
-//        val hasScheduledTimePassed = scheduledTime.isBefore(currentTime)
-//
-//        val status = if (hasScheduledTimePassed && liveData.liveTime.lateTimeMinutes > 0) {
-//            "Late ${liveData.liveTime.lateTimeMinutes} min"
-//        } else if (!hasScheduledTimePassed && liveData.liveTime.lateTimeMinutes > 0) {
-//            "Delayed ${liveData.liveTime.lateTimeMinutes} min"
-//        } else {
-//            "Scheduled"
-//        }
-//
-//        viewHolder.status.text = status
+        viewHolder.status.text = when {
+            liveData.isLate() -> "Late ${liveData.minutesLate()} min"
+            liveData.isDelayed() -> "Delayed ${liveData.minutesDelayed()} min"
+            liveData.isOnTime() -> "On time"
+            else -> "Scheduled"
+        }
     }
 
     private fun bindScheduledTime(viewHolder: ViewHolder) {
-        val scheduledTime = parseTimestampNearestMinute(liveData.liveTime.scheduledTimestamp)
+        val scheduledTime = ZonedDateTime.parse(liveData.liveTime.scheduledTimestamp)
         if (DateFormat.is24HourFormat(viewHolder.itemView.context.applicationContext)) {
-            viewHolder.scheduledTime.text = scheduledTime.format(format24h)
+            viewHolder.scheduledTime.text = scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format24h)
         } else {
-            viewHolder.scheduledTime.text = scheduledTime.format(format12h)
+            viewHolder.scheduledTime.text = scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format12h)
         }
-//        val currentTime = parseTimestampNearestMinute(liveData.liveTime.currentTimestamp)
-//
-//        val scheduledTime = when {
-//            isStarting -> parseTimestampNearestMinute(liveData.liveTime.scheduledDepartureTimestamp!!)
-//            isTerminating -> parseTimestampNearestMinute(liveData.liveTime.scheduledArrivalTimestamp!!)
-//            else -> parseTimestampNearestMinute(liveData.liveTime.scheduledArrivalTimestamp!!)
-//        }
-//
-//        val hasScheduledTimePassed = scheduledTime.isBefore(currentTime)
-//
-//        if (DateFormat.is24HourFormat(viewHolder.itemView.context.applicationContext)) {
-//            viewHolder.scheduledTime.text = scheduledTime.format(format24h)
-//        } else {
-//            viewHolder.scheduledTime.text = scheduledTime.format(format12h)
-//        }
-//        if (hasScheduledTimePassed) {
-//            viewHolder.scheduledTime.paintFlags = viewHolder.scheduledTime.paintFlags or STRIKE_THRU_TEXT_FLAG
-//        } else {
-//            viewHolder.scheduledTime.paintFlags = viewHolder.scheduledTime.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+
+        if (liveData.isLate() || liveData.isDelayed()) {
+            viewHolder.scheduledTime.paintFlags = viewHolder.scheduledTime.paintFlags or STRIKE_THRU_TEXT_FLAG
+        } else {
+            viewHolder.scheduledTime.paintFlags = viewHolder.scheduledTime.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+        }
+
+//        when {
+//            liveData.isLate() -> {
+//                viewHolder.scheduledTime.setTextColor(viewHolder.itemView.resources.getColor(R.color.text_primary))
+//                viewHolder.scheduledTime.paintFlags = viewHolder.scheduledTime.paintFlags or STRIKE_THRU_TEXT_FLAG
+//            }
+//            liveData.isDelayed() -> {
+//                viewHolder.scheduledTime.setTextColor(viewHolder.itemView.resources.getColor(R.color.busEireannRed))
+//                viewHolder.scheduledTime.paintFlags = viewHolder.scheduledTime.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+//            }
+//            else -> {
+//                viewHolder.scheduledTime.setTextColor(viewHolder.itemView.resources.getColor(R.color.text_primary))
+//                viewHolder.scheduledTime.paintFlags = viewHolder.scheduledTime.paintFlags and STRIKE_THRU_TEXT_FLAG.inv()
+//            }
 //        }
     }
 
@@ -109,11 +98,6 @@ abstract class LiveDataItem(
         }
     }
 
-    private fun parseTimestampNearestMinute(timestamp: String): LocalTime {
-        return ZonedDateTime.parse(timestamp)
-            .toLocalTime()
-            .truncatedTo(ChronoUnit.MINUTES)
-    }
 
 //    private fun bindStartingLiveTime(viewHolder: ViewHolder) {
 //        val scheduledDepartureTime = ZonedDateTime.parse(liveData.liveTime.scheduledDepartureTimestamp)
