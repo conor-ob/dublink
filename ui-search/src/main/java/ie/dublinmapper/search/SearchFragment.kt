@@ -56,7 +56,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         search_results.setHasFixedSize(true)
         search_results.layoutManager = LinearLayoutManager(requireContext())
         adapter.setOnItemClickListener { item, _ ->
-            (activity as Navigator).navigateSearchToLiveData(item.getServiceLocation())
+            (activity as Navigator).navigateToLiveData(item.getServiceLocation())
         }
 
         subscriptions.add(

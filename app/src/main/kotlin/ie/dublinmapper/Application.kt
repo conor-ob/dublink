@@ -1,5 +1,6 @@
 package ie.dublinmapper
 
+import androidx.preference.PreferenceManager
 import com.facebook.stetho.Stetho
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.ww.roxie.Roxie
@@ -44,10 +45,15 @@ class Application : DaggerApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        setupPreferences()
         setupTimber()
         setupThreeTen()
         setupTheme()
         setupStetho()
+    }
+
+    private fun setupPreferences() {
+        PreferenceManager.setDefaultValues(applicationContext, R.xml.preferences, false)
     }
 
     private fun setupTheme() {

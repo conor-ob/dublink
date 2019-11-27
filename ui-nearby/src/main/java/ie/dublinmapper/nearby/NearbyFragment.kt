@@ -14,9 +14,7 @@ import ie.dublinmapper.Navigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_nearby.*
 import kotlinx.android.synthetic.main.fragment_nearby.view.*
-import androidx.recyclerview.widget.DividerItemDecoration
 
 private const val locationRequestCode = 42069
 
@@ -38,7 +36,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
-            (activity as Navigator).navigateNearbyToLiveData(item.getServiceLocation())
+            (activity as Navigator).navigateToLiveData(item.getServiceLocation())
         }
         view.nearbyLocations.adapter = adapter
         view.nearbyLocations.setHasFixedSize(true)

@@ -31,7 +31,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
             val serviceLocation = item.getServiceLocation()
-            (activity as Navigator).navigateFavouritesToLiveData(serviceLocation)
+            (activity as Navigator).navigateToLiveData(serviceLocation)
             if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
                 enabledServiceManager.enableService(serviceLocation.service)
             }

@@ -38,7 +38,7 @@ class AircoachRepositoryModule {
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<AircoachStop> {
-        val fetcher = Fetcher<List<AircoachStop>, Service> { Single.just(client.aircoach().getStops()) }
+        val fetcher = Fetcher<List<AircoachStop>, Service> { client.aircoach().getStops() }
         val persister = AircoachStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return AircoachStopRepository(store, enabledServiceManager)
@@ -51,8 +51,7 @@ class AircoachRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<AircoachLiveData> {
         val store = StoreBuilder.key<String, List<AircoachLiveData>>()
-//            .fetcher { stopId -> client.aircoach().getLiveData(stopId = stopId) }
-            .fetcher { stopId -> Single.just(client.aircoach().getLiveData(stopId = stopId)) }
+            .fetcher { stopId -> client.aircoach().getLiveData(stopId = stopId) }
             .memoryPolicy(memoryPolicy)
             .open()
         return AircoachLiveDataRepository(store)

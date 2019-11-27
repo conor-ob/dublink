@@ -1,15 +1,14 @@
 package ie.dublinmapper
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.NavHost
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import dagger.android.support.DaggerAppCompatActivity
-import ie.dublinmapper.domain.model.isFavourite
-import ie.dublinmapper.favourites.FavouritesFragmentDirections
-import ie.dublinmapper.nearby.NearbyFragmentDirections
-import ie.dublinmapper.search.SearchFragmentDirections
+import ie.dublinmapper.livedata.LiveDataFragment
 import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.activity_root.*
 
@@ -21,8 +20,17 @@ class HomeActivity : DaggerAppCompatActivity(), NavHost, Navigator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
         navigation.setupWithNavController(navigationController)
-        navigation.setOnNavigationItemSelectedListener {item ->
+        navigation.setOnNavigationItemSelectedListener { item ->
             onNavDestinationSelected(item, navigationController)
+        }
+        navigationController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.newsFragment,
+                R.id.nearbyFragment,
+                R.id.favouritesFragment,
+                R.id.searchFragment -> navigation.visibility = View.VISIBLE
+                else -> navigation.visibility = View.GONE
+            }
         }
     }
 
@@ -30,39 +38,30 @@ class HomeActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     override fun onSupportNavigateUp() = navigationController.navigateUp()
 
-    override fun navigateFavouritesToNearby() = navigationController.navigate(R.id.favouritesFragment_to_nearbyFragment)
-
-    override fun navigateFavouritesToSearch() = navigationController.navigate(R.id.favouritesFragment_to_searchFragment)
-
-    override fun navigateLiveDataToSettings() = navigationController.navigate(R.id.settingsActivity)
-
-    override fun navigateFavouritesToLiveData(serviceLocation: ServiceLocation) {
-        val intent = FavouritesFragmentDirections.favouritesFragmentToLivedataFragment(
-            serviceLocation.id,
-            serviceLocation.name,
-            serviceLocation.service,
-            serviceLocation.isFavourite()
+    override fun navigateToSettings() {
+        navigationController.navigate(
+            R.id.settingsFragment,
+            Bundle.EMPTY,
+            NavOptions.Builder()
+                .setEnterAnim(R.anim.nav_default_enter_anim)
+                .setExitAnim(R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                .build()
         )
-        navigationController.navigate(intent)
     }
 
-    override fun navigateNearbyToLiveData(serviceLocation: ServiceLocation) {
-        val intent = NearbyFragmentDirections.nearbyFragmentToLivedataFragment(
-            serviceLocation.id,
-            serviceLocation.name,
-            serviceLocation.service,
-            serviceLocation.isFavourite()
+    override fun navigateToLiveData(serviceLocation: ServiceLocation) {
+        navigationController.navigate(
+            R.id.liveDataFragment,
+            LiveDataFragment.toBundle(serviceLocation),
+            NavOptions.Builder()
+                .setEnterAnim(R.anim.nav_default_enter_anim)
+                .setExitAnim(R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                .build()
         )
-        navigationController.navigate(intent)
     }
 
-    override fun navigateSearchToLiveData(serviceLocation: ServiceLocation) {
-        val intent = SearchFragmentDirections.searchFragmentToLivedataFragment(
-            serviceLocation.id,
-            serviceLocation.name,
-            serviceLocation.service,
-            serviceLocation.isFavourite()
-        )
-        navigationController.navigate(intent)
-    }
 }

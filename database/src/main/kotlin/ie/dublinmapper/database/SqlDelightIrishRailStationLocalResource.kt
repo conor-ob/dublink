@@ -6,10 +6,7 @@ import ie.dublinmapper.datamodel.IrishRailStationLocalResource
 import ie.dublinmapper.domain.model.setFavourite
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import io.rtpi.api.Coordinate
-import io.rtpi.api.IrishRailStation
-import io.rtpi.api.Operator
-import io.rtpi.api.Service
+import io.rtpi.api.*
 
 class SqlDelightIrishRailStationLocalResource(
     private val database: Database
@@ -48,21 +45,23 @@ class SqlDelightIrishRailStationLocalResource(
             .groupBy { it.locationId }
 
         val locations = locationEntities.map {
+            val operators = serviceEntitiesByLocation
+                .getValue(it.id)
+                .map { entity -> entity.operator }
+                .toSortedSet(
+                    Comparator { o1, o2 ->
+                        if (o1 == Operator.DART) {
+                            return@Comparator -1
+                        }
+                        return@Comparator o1.name.compareTo(o2.name)
+                    }
+                )
             IrishRailStation(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                operators = serviceEntitiesByLocation
-                    .getValue(it.id)
-                    .map { entity -> entity.operator }
-                    .toSortedSet(
-                        Comparator { o1, o2 ->
-                            if (o1 == Operator.DART) {
-                                return@Comparator -1
-                            }
-                            return@Comparator o1.name.compareTo(o2.name)
-                        }
-                    )
+                operators = operators,
+                routes = operators.map { Route(it.fullName, it) }
             )
         }.associateBy { it.id }
 

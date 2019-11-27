@@ -37,7 +37,7 @@ abstract class LiveDataItem(
     }
 
     private fun bindRoute(viewHolder: ViewHolder) {
-        viewHolder.route.text = liveData.route
+        viewHolder.route.text = " ${liveData.route} "
         val (textColour, backgroundColour) = mapColour(liveData.operator, liveData.route)
         viewHolder.route.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
         viewHolder.route.setChipBackgroundColorResource(backgroundColour)

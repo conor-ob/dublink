@@ -7,6 +7,12 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
+    private val aircoachStopRepository: Repository<AircoachStop>,
+    private val busEireannStopRepository: Repository<BusEireannStop>,
+    private val irishRailStationRepository: Repository<IrishRailStation>,
+    private val dublinBikesDockRepository: Repository<DublinBikesDock>,
+    private val dublinBusStopRepository: Repository<DublinBusStop>,
+    private val luasStopRepository: Repository<LuasStop>,
     private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
     private val busEireannLiveDataRepository: Repository<BusEireannLiveData>,
     private val irishRailLiveDataRepository: Repository<IrishRailLiveData>,
@@ -14,6 +20,17 @@ class LiveDataUseCase @Inject constructor(
     private val dublinBusLiveDataRepository: Repository<DublinBusLiveData>,
     private val luasLiveDataRepository: Repository<LuasLiveData>
 ) {
+
+    fun getServiceLocation(serviceLocationId: String, service: Service): Observable<ServiceLocation> {
+        return when (service) {
+            Service.AIRCOACH -> aircoachStopRepository.getById(serviceLocationId)
+            Service.BUS_EIREANN -> busEireannStopRepository.getById(serviceLocationId)
+            Service.IRISH_RAIL -> irishRailStationRepository.getById(serviceLocationId)
+            Service.DUBLIN_BIKES -> dublinBikesDockRepository.getById(serviceLocationId)
+            Service.DUBLIN_BUS -> dublinBusStopRepository.getById(serviceLocationId)
+            Service.LUAS -> luasStopRepository.getById(serviceLocationId)
+        }.map { it }
+    }
 
     fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
         return Observable.interval(0L, 65L, TimeUnit.SECONDS)

@@ -4,16 +4,8 @@ import io.rtpi.api.ServiceLocation
 
 interface Navigator {
 
-    fun navigateFavouritesToNearby()
+    fun navigateToLiveData(serviceLocation: ServiceLocation)
 
-    fun navigateFavouritesToSearch()
-
-    fun navigateFavouritesToLiveData(serviceLocation: ServiceLocation)
-
-    fun navigateNearbyToLiveData(serviceLocation: ServiceLocation)
-
-    fun navigateSearchToLiveData(serviceLocation: ServiceLocation)
-
-    fun navigateLiveDataToSettings()
+    fun navigateToSettings()
 
 }
