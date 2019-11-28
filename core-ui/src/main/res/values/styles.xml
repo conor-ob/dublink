@@ -145,31 +145,10 @@
         <item name="android:textAppearance">@style/SmallerText</item>
     </style>
 
-    <style parent="Widget.MaterialComponents.Chip.Action" name="ThinnerChip2">
-        <item name="chipCornerRadius">5dp</item>
-        <item name="chipMinHeight">0dp</item>
-        <item name="chipStartPadding">5dp</item>
-        <item name="iconStartPadding">0dp</item>
-        <item name="iconEndPadding">0dp</item>
-        <item name="textStartPadding">0dp</item>
-        <item name="textEndPadding">0dp</item>
-        <item name="closeIconStartPadding">0dp</item>
-        <item name="closeIconEndPadding">0dp</item>
-        <item name="chipEndPadding">5dp</item>
-        <item name="chipMinTouchTargetSize">0dp</item>
-        <item name="android:textAppearance">@style/SmallerText2</item>
-    </style>
-
-    <style parent="TextAppearance.AppCompat.Small" name="SmallerText2">
-        <item name="fontFamily">@font/barlow_bold</item>
-        <item name="android:fontFamily">@font/barlow_bold</item>
-        <item name="android:textSize">15sp</item>
-    </style>
-
     <style parent="TextAppearance.AppCompat.Small" name="SmallerText">
         <item name="fontFamily">@font/barlow_bold</item>
         <item name="android:fontFamily">@font/barlow_bold</item>
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">15sp</item>
     </style>
 </resources>
 

@@ -25,7 +25,7 @@
                 android:id="@+id/route"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ThinnerChip2" />
+                style="@style/ThinnerChip" />
 
             <View
                 android:layout_width="4dp"

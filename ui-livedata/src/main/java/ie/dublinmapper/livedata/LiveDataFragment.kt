@@ -129,6 +129,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
                 val (textColour, backgroundColour) = mapColour(route.operator, route.id)
                 chip.text = " ${route.id} "
+                chip.setTextAppearanceResource(R.style.SmallerText)
                 chip.setTextColor(ColorStateList.valueOf(resources.getColor(textColour)))
                 chip.setChipBackgroundColorResource(backgroundColour)
 //            chip.chipMinHeight = 0f

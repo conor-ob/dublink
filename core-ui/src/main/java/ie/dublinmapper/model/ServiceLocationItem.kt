@@ -62,6 +62,7 @@ abstract class ServiceLocationItem(
             chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
             val (textColour, backgroundColour) = mapColour(route.operator, route.id)
             chip.text = " ${route.id} "
+            chip.setTextAppearanceResource(R.style.SmallerText)
             chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
             chip.setChipBackgroundColorResource(backgroundColour)
 //            chip.chipMinHeight = 0f
