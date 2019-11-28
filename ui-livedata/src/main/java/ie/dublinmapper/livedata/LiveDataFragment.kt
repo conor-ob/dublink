@@ -1,18 +1,24 @@
 package ie.dublinmapper.livedata
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
 import ie.dublinmapper.Navigator
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
+import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
+import io.rtpi.api.ServiceLocationRoutes
 import kotlinx.android.synthetic.main.fragment_livedata.*
+import kotlinx.android.synthetic.main.fragment_livedata.routes
 import timber.log.Timber
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
@@ -34,7 +40,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         super.onViewCreated(view, savedInstanceState)
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
-        toolbar.inflateMenu(R.menu.menu_live_data)
+//        toolbar.inflateMenu(R.menu.menu_live_data)
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() } //TODO
         if (args.serviceLocationIsFavourite) {
             val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
@@ -68,7 +74,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             }
             return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
         }
-        serviceLocationName.text = args.serviceLocationName
+        toolbar.title = args.serviceLocationName
+        toolbar.subtitle = getSubtitle()
+//        serviceLocationName.text = args.serviceLocationName
 
         adapter = GroupAdapter()
         liveDataList.adapter = adapter
@@ -94,6 +102,14 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         )
     }
 
+    private fun getSubtitle(): String{
+        return when (val service = args.serviceLocationService) {
+            Service.BUS_EIREANN,
+            Service.DUBLIN_BUS -> "${service.fullName} (${args.serviceLocationId})"
+            else -> service.fullName
+        }
+    }
+
     private fun renderState(state: State) {
         if (state.isFavourite) {
             args = args.copy(serviceLocationIsFavourite = true)
@@ -105,8 +121,44 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
         }
 
+        if (state.serviceLocation != null && state.serviceLocation is ServiceLocationRoutes) {
+            routes.removeAllViewsInLayout()
+            for (route in state.serviceLocation.routes) {
+//            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
+                val chip = Chip(requireContext())
+                chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
+                val (textColour, backgroundColour) = mapColour(route.operator, route.id)
+                chip.text = " ${route.id} "
+                chip.setTextColor(ColorStateList.valueOf(resources.getColor(textColour)))
+                chip.setChipBackgroundColorResource(backgroundColour)
+//            chip.chipMinHeight = 0f
+                routes.addView(chip)
+            }
+            routes.visibility = View.VISIBLE
+        }
+
         if (state.liveData != null) {
             adapter.update(listOf(state.liveData))
+        }
+    }
+
+    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
+        return when (operator) {
+            Operator.AIRCOACH -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.aircoachOrange)
+            Operator.BUS_EIREANN -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.busEireannRed)
+            Operator.COMMUTER -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.commuterBlue)
+            Operator.DART -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dartGreen)
+            Operator.DUBLIN_BIKES -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dublinBikesTeal)
+            Operator.DUBLIN_BUS -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.dublinBusYellow)
+            Operator.GO_AHEAD -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.goAheadBlue)
+            Operator.INTERCITY -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.intercityYellow)
+            Operator.LUAS -> {
+                when (route) {
+                    "Green", "Green Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasGreen)
+                    "Red", "Red Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasRed)
+                    else -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasPurple)
+                }
+            }
         }
     }
 

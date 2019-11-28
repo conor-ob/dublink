@@ -18,20 +18,22 @@
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/ic_arrow_back">
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:menu="@menu/menu_live_data">
 
-            <TextView
-                android:id="@+id/serviceLocationName"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:ellipsize="marquee"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:gravity="center_vertical"
-                android:marqueeRepeatLimit="1"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />
+<!--            <TextView-->
+<!--                android:id="@+id/serviceLocationName"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="?actionBarSize"-->
+<!--                android:ellipsize="marquee"-->
+<!--                android:focusable="true"-->
+<!--                android:focusableInTouchMode="true"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:marqueeRepeatLimit="1"-->
+<!--                android:scrollHorizontally="true"-->
+<!--                android:singleLine="true"-->
+<!--                android:textAppearance="@style/TextAppearance.DublinMapper.Headline6"-->
+<!--                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />-->
 
 
         </androidx.appcompat.widget.Toolbar>
@@ -61,6 +63,18 @@
         <!--android:text="@string/tab_dart_southbound"/>-->
 
         <!--</com.google.android.material.tabs.TabLayout>-->
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/routes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="12dp"
+            app:chipSpacingHorizontal="5dp"
+            app:chipSpacingVertical="5dp"
+            app:singleLine="false" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

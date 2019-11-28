@@ -10,13 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
+        android:background="@drawable/rectangle"
+        android:backgroundTint="@color/color_surface_93">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Nearby Locations" />
+            app:title="Nearby" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
