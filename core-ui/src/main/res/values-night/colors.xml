@@ -13,4 +13,6 @@
     <color name="colorOnSurface">#FFFFFF</color>
     <color name="colorOnError">#000000</color>
     <color name="scrimBackground">@color/luasGreen</color>
+
+    <color name="colorStatusBar">#282828</color>
 </resources>

@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DublinMapper"
+        android:theme="@style/MyTheme.DayNight"
         android:usesCleartextTraffic="true">
 
         <uses-library
@@ -34,8 +34,7 @@
             android:value="${twitterConsumerSecret}"/>
 
         <activity
-            android:name=".HomeActivity"
-            android:theme="@style/Theme.DublinMapper.Home">
+            android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
