@@ -23,7 +23,7 @@ class LiveDataViewModel @Inject constructor(
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
-    override val initialState = State(isLoading = true)
+    override val initialState = State()
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {

@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright 2018 Google, Inc.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~     http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
 <resources>
-    <color name="swipe_away_background">#333333</color>
-
-<!--    <color name="aircoachOrange">#FFCC80</color>-->
-<!--    <color name="busEireannRed">#E57373</color>-->
-<!--    <color name="dublinBikesTeal">#80CBC4</color>-->
-<!--    <color name="dublinBusYellow">#FFE082</color>-->
-<!--    <color name="goAheadBlue">#90CAF9</color>-->
-<!--    <color name="dartGreen">#A5D6A7</color>-->
-<!--    <color name="luasGreen">#A5D6A7</color>-->
-<!--    <color name="luasRed">#F48FB1</color>-->
-<!--    <color name="commuterBlue">#81D4FA</color>-->
-<!--    <color name="intercityYellow">#FFE082</color>-->
-
-    <color name="system_ui_scrim_light">#2EFFFFFF</color> <!-- 18% white -->
-    <color name="system_ui_scrim_dark">#99000000</color> <!-- 60% black -->
+    <color name="colorPrimary">#BB86FC</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorSecondary">#F9AA33</color>
+    <color name="colorSecondaryVariant">#C78522</color>
+    <color name="colorBackground">#121212</color>
+    <color name="colorSurface">#121212</color>
+    <color name="colorError">#CF6679</color>
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+    <color name="colorOnError">#000000</color>
+    <color name="scrimBackground">@color/luasGreen</color>
 </resources>

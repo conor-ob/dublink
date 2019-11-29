@@ -9,7 +9,6 @@
     <color name="white_90">#e6ffffff</color>
     <color name="indigo">#4768fd</color>
     <color name="indigo_dark">#3c54fe</color>
-    <color name="black_alpha_30">#4d000000</color>
 
     <color name="status_bar">@color/white</color>
     <color name="text_primary">@color/grey_900</color>
@@ -54,7 +53,6 @@
     <color name="searchPrimaryDark">#346AC2</color>
 
     <color name="search_status_bar">#bdbdbd</color>
-    <color name="color_navigation_bar_launcher">@color/black_alpha_30</color>
 
     <color name="blahGrey">#D2D2D2</color>
 
@@ -79,9 +77,6 @@
 
     <color name="DublinMapper_slate_200_10pc_over_surface">#16191A</color>
 
-    <color name="DublinMapper_mtrl_orange_500">#f9aa33</color>
-    <color name="DublinMapper_mtrl_orange_700">#C78522</color>
-
     <color name="tv_test_grey">#c0c0c0</color>
     <color name="tv_test_yellow">#bdc200</color>
     <color name="tv_test_cyan">#00c6c2</color>
@@ -99,4 +94,25 @@
 
 
     <color name="color_status_bar">#FFFFFF</color>
+
+
+
+
+
+
+
+
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorSecondary">#F9AA33</color>
+    <color name="colorSecondaryVariant">#C78522</color>
+    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorError">#B00020</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnBackground">#000000</color>
+    <color name="colorOnSurface">#000000</color>
+    <color name="colorOnError">#FFFFFF</color>
+    <color name="scrimBackground">@color/luasGreen</color>
 </resources>

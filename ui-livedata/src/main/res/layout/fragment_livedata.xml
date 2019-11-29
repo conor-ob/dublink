@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:liftOnScroll="true">
+        android:fitsSystemWindows="true"> <!-- what does this do -->
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|snap|enterAlways"
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:menu="@menu/menu_live_data">
 
-<!--            <TextView-->
-<!--                android:id="@+id/serviceLocationName"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?actionBarSize"-->
-<!--                android:ellipsize="marquee"-->
-<!--                android:focusable="true"-->
-<!--                android:focusableInTouchMode="true"-->
-<!--                android:gravity="center_vertical"-->
-<!--                android:marqueeRepeatLimit="1"-->
-<!--                android:scrollHorizontally="true"-->
-<!--                android:singleLine="true"-->
-<!--                android:textAppearance="@style/TextAppearance.DublinMapper.Headline6"-->
-<!--                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/serviceLocationName"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="?actionBarSize"-->
+            <!--                android:ellipsize="marquee"-->
+            <!--                android:focusable="true"-->
+            <!--                android:focusableInTouchMode="true"-->
+            <!--                android:gravity="center_vertical"-->
+            <!--                android:marqueeRepeatLimit="1"-->
+            <!--                android:scrollHorizontally="true"-->
+            <!--                android:singleLine="true"-->
+            <!--                android:textAppearance="@style/TextAppearance.DublinMapper.Headline6"-->
+            <!--                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />-->
 
 
         </androidx.appcompat.widget.Toolbar>
@@ -70,7 +72,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:layout_marginStart="@dimen/padding_l"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             app:chipSpacingHorizontal="5dp"
             app:chipSpacingVertical="5dp"
@@ -78,12 +80,118 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/liveDataList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/list_item_live_data" />
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/loader"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/liveDataList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/list_item_live_data" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</LinearLayout>
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:id="@+id/appbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fitsSystemWindows="true"> &lt;!&ndash; what does this do &ndash;&gt;-->
+
+<!--        <androidx.appcompat.widget.Toolbar-->
+<!--            android:id="@+id/toolbar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="?attr/actionBarSize"-->
+<!--            app:layout_scrollFlags="scroll|snap|enterAlways"-->
+<!--            app:contentInsetLeft="0dp"-->
+<!--            app:contentInsetStart="0dp"-->
+<!--            app:contentInsetStartWithNavigation="0dp"-->
+<!--            app:navigationIcon="?attr/homeAsUpIndicator"-->
+<!--            app:menu="@menu/menu_live_data">-->
+
+<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/serviceLocationName"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="?actionBarSize"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:ellipsize="marquee"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:focusable="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:focusableInTouchMode="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:gravity="center_vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:marqueeRepeatLimit="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:scrollHorizontally="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:singleLine="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textAppearance="@style/TextAppearance.DublinMapper.Headline6"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />&ndash;&gt;-->
+
+
+<!--        </androidx.appcompat.widget.Toolbar>-->
+
+<!--        &lt;!&ndash;<TextView&ndash;&gt;-->
+<!--        &lt;!&ndash;android:serviceId="@+serviceId/title"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_height="?actionBarSize"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"&ndash;&gt;-->
+<!--        &lt;!&ndash;app:layout_scrollFlags="scroll|snap|exitUntilCollapsed" />&ndash;&gt;-->
+
+<!--        &lt;!&ndash;<com.google.android.material.tabs.TabLayout&ndash;&gt;-->
+<!--        &lt;!&ndash;android:serviceId="@+serviceId/tabs"&ndash;&gt;-->
+<!--        &lt;!&ndash;style="@style/Widget.DublinMapper.Tabs"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_height="?actionBarSize" >&ndash;&gt;-->
+
+<!--        &lt;!&ndash;<com.google.android.material.tabs.TabItem&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:text="@string/tab_dart_northbound"/>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;<com.google.android.material.tabs.TabItem&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+<!--        &lt;!&ndash;android:text="@string/tab_dart_southbound"/>&ndash;&gt;-->
+
+<!--        &lt;!&ndash;</com.google.android.material.tabs.TabLayout>&ndash;&gt;-->
+
+<!--        <com.google.android.material.chip.ChipGroup-->
+<!--            android:id="@+id/routes"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_marginStart="@dimen/padding_l"-->
+<!--            android:layout_marginTop="12dp"-->
+<!--            android:layout_marginBottom="12dp"-->
+<!--            app:chipSpacingHorizontal="5dp"-->
+<!--            app:chipSpacingVertical="5dp"-->
+<!--            app:singleLine="false" />-->
+
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
+
+<!--&lt;!&ndash;    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout&ndash;&gt;-->
+<!--&lt;!&ndash;        android:id="@+id/loader"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:layout_height="match_parent">&ndash;&gt;-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/liveDataList"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:clipToPadding="false"-->
+<!--            app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+<!--            tools:listitem="@layout/list_item_live_data" />-->
+
+<!--&lt;!&ndash;    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>&ndash;&gt;-->
+
+<!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+

@@ -39,8 +39,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
+//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
 //        toolbar.inflateMenu(R.menu.menu_live_data)
+
+        loader.setColorSchemeColors(resources.getColor(R.color.colorOnSurface))
+        loader.setProgressBackgroundColorSchemeResource(R.color.colorSurface)
+
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() } //TODO
         if (args.serviceLocationIsFavourite) {
             val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
@@ -111,6 +115,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderState(state: State) {
+        loader.isRefreshing = state.isLoading
         if (state.isFavourite) {
             args = args.copy(serviceLocationIsFavourite = true)
             val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
@@ -121,7 +126,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
         }
 
-        if (state.serviceLocation != null && state.serviceLocation is ServiceLocationRoutes) {
+        if (state.serviceLocation != null
+            && state.serviceLocation is ServiceLocationRoutes
+            && state.serviceLocation.routes.size != routes.childCount
+        ) {
             routes.removeAllViewsInLayout()
             for (route in state.serviceLocation.routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
