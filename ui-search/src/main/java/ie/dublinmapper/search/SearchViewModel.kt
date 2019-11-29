@@ -16,13 +16,12 @@ class SearchViewModel @Inject constructor(
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
-    override val initialState = State(isLoading = true)
+    override val initialState = State(isLoading = false)
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.Loading -> state.copy(
                 isLoading = true,
-                searchResults = null,
                 isError = false
             )
             is Change.SearchResults -> state.copy(
@@ -59,7 +58,6 @@ class SearchViewModel @Inject constructor(
 
         disposables += searchResultsChange
             .scan(initialState, reducer)
-//            .filter { !it.isLoading }
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
     }

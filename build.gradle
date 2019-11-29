@@ -33,7 +33,7 @@ buildscript {
             'android_map_utils'         : '0.5',       // https://mvnrepository.com/artifact/com.google.maps.android/android-maps-utils
             'android_reactive_location2': '2.1',       // https://mvnrepository.com/artifact/pl.charmas.android/android-reactive-location2
             'adapter_rxjava2'           : '2.5.0',     // https://mvnrepository.com/artifact/com.squareup.retrofit2/adapter-rxjava2
-            'material'                  : '1.1.0-alpha06',     // https://mvnrepository.com/artifact/com.google.android.material/material
+            'material'                  : '1.2.0-alpha02',     // https://mvnrepository.com/artifact/com.google.android.material/material
             'conductor'                 : '3.0.0-rc1', // https://mvnrepository.com/artifact/com.bluelinelabs/conductor
             'mvp_conductor'             : '3.1.0',     // https://mvnrepository.com/artifact/com.hannesdorfmann.mosby3/mvp-conductor
             'crashlytics'               : '2.10.1',
@@ -69,10 +69,10 @@ buildscript {
 
     ext.testVersions = [
             'androidx'  : [
-                    'core'        : '1.1.0', // https://mvnrepository.com/artifact/androidx.test/core
-                    'junit'       : '1.1.0', // https://mvnrepository.com/artifact/androidx.test.ext/junit
-                    'rules'       : '1.1.1', // https://mvnrepository.com/artifact/androidx.test/rules
-                    'runner'      : '1.1.1'  // https://mvnrepository.com/artifact/androidx.test/runner?repo=google
+                    'core'  : '1.1.0', // https://mvnrepository.com/artifact/androidx.test/core
+                    'junit' : '1.1.0', // https://mvnrepository.com/artifact/androidx.test.ext/junit
+                    'rules' : '1.1.1', // https://mvnrepository.com/artifact/androidx.test/rules
+                    'runner': '1.1.1'  // https://mvnrepository.com/artifact/androidx.test/runner?repo=google
             ],
             //'espresso_core' : '3.0.2', // https://mvnrepository.com/artifact/com.android.support.test.espresso/espresso-core
             'junit'     : '4.12',  // https://mvnrepository.com/artifact/junit/junit
@@ -114,7 +114,6 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath "com.google.gms:google-services:${versions.google_services}"
         classpath "io.fabric.tools:gradle:${versions.fabric}"
-        classpath "android.arch.navigation:navigation-safe-args-gradle-plugin:1.0.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.squareup.sqldelight:gradle-plugin:1.2.0"
     }

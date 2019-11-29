@@ -25,17 +25,19 @@ class FavouritesUseCase @Inject constructor(
     private val locationProvider: LocationProvider
 ) {
 
-    fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Completable {
-        return Completable.fromCallable {
+    fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<Boolean> {
+        return Observable.fromCallable {
             clearServiceLocationCache(service)
             favouriteRepository.saveFavourite(serviceLocationId, serviceLocationName, service)
+            return@fromCallable true
         }
     }
 
-    fun removeFavourite(serviceLocationId: String, service: Service): Completable {
-        return Completable.fromCallable {
+    fun removeFavourite(serviceLocationId: String, service: Service): Observable<Boolean> {
+        return Observable.fromCallable {
             clearServiceLocationCache(service)
             favouriteRepository.removeFavourite(serviceLocationId, service)
+            return@fromCallable true
         }
     }
 

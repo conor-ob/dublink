@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--Top level DayNight theme to be used in AndroidManifest.xml-->
+    <style name="MyTheme.DayNight" parent="Base.MyTheme"/>
+
+    <!--Base custom theme which will be shared between both light and dark theme variants-->
+    <style name="Base.MyTheme" parent="Base.MaterialThemeBuilder">
+        <!--Material color attributes -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnError">@color/colorOnError</item>
+
+        <!--Material type attributes-->
+        <item name="textAppearanceHeadline1">@style/TextAppearance.DublinMapper.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.DublinMapper.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.DublinMapper.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.DublinMapper.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.DublinMapper.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.DublinMapper.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.DublinMapper.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.DublinMapper.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.DublinMapper.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.DublinMapper.Body2</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.DublinMapper.Caption</item>
+        <item name="textAppearanceButton">@style/TextAppearance.DublinMapper.Button</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.DublinMapper.Overline</item>
+
+        <!--Material shape attributes-->
+<!--        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyTheme.SmallComponent</item>-->
+<!--        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyTheme.MediumComponent</item>-->
+<!--        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyTheme.LargeComponent</item>-->
+
+        <!--Component styles-->
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.MaterialComponents.Dialog.Alert</item>
+<!--        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.MyTheme.BottomSheetDialog</item>-->
+<!--        <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>-->
+<!--        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>-->
+<!--        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>-->
+<!--        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView</item>-->
+    </style>
+
+    <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+<!--        <item name="alphaEmphasisHigh">@dimen/alpha_emphasis_high</item>-->
+<!--        <item name="alphaEmphasisMedium">@dimen/alpha_emphasis_medium</item>-->
+<!--        <item name="alphaEmphasisDisabled">@dimen/alpha_emphasis_disabled</item>-->
+
+        <item name="android:statusBarColor">@color/colorStatusBar</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?colorControlHighlight</item>
+
+        <!--Remap legacy AppCompat attributes to MaterialComponent attributes-->
+        <item name="colorPrimaryDark">?colorPrimaryVariant</item>
+        <item name="colorAccent">?colorSecondary</item>
+    </style>
+
+
+
+<!--    <style name="Platform.Theme.DublinMapper" parent="Theme.MaterialComponents.DayNight" />-->
+<!---->
+<!--    <style name="Base.Theme.DublinMapper" parent="Platform.Theme.DublinMapper">-->
+<!--        <item name="actionBarTheme">@style/ThemeOverlay.DublinMapper.ActionBar</item>-->
+
+<!--        <item name="windowActionModeOverlay">true</item>-->
+
+        <!-- Default widget styles -->
+<!--        <item name="toolbarStyle">@style/Widget.DublinMapper.Toolbar</item>-->
+<!--        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>-->
+
+        <!-- Type styles -->
+<!--        <item name="textAppearanceHeadline1">@style/TextAppearance.DublinMapper.Headline1</item>-->
+<!--        <item name="textAppearanceHeadline2">@style/TextAppearance.DublinMapper.Headline2</item>-->
+<!--        <item name="textAppearanceHeadline3">@style/TextAppearance.DublinMapper.Headline3</item>-->
+<!--        <item name="textAppearanceHeadline4">@style/TextAppearance.DublinMapper.Headline4</item>-->
+<!--        <item name="textAppearanceHeadline5">@style/TextAppearance.DublinMapper.Headline5</item>-->
+<!--        <item name="textAppearanceHeadline6">@style/TextAppearance.DublinMapper.Headline6</item>-->
+<!--        <item name="textAppearanceSubtitle1">@style/TextAppearance.DublinMapper.Subtitle1</item>-->
+<!--        <item name="textAppearanceSubtitle2">@style/TextAppearance.DublinMapper.Subtitle2</item>-->
+<!--        <item name="textAppearanceBody1">@style/TextAppearance.DublinMapper.Body1</item>-->
+<!--        <item name="textAppearanceBody2">@style/TextAppearance.DublinMapper.Body2</item>-->
+<!--        <item name="textAppearanceCaption">@style/TextAppearance.DublinMapper.Caption</item>-->
+<!--        <item name="textAppearanceButton">@style/TextAppearance.DublinMapper.Button</item>-->
+<!--        <item name="textAppearanceOverline">@style/TextAppearance.DublinMapper.Overline</item>-->
+
+<!--        <item name="textAppearanceLargePopupMenu">?attr/textAppearanceBody1</item>-->
+<!--        <item name="textAppearanceSmallPopupMenu">?attr/textAppearanceBody2</item>-->
+<!--        <item name="textAppearancePopupMenuHeader">@style/TextAppearance.DublinMapper.PopupMenu.Header</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.DublinMapper" parent="Base.Theme.DublinMapper">-->
+
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorSecondary">@color/colorSecondary</item>-->
+<!--        <item name="android:colorBackground">@color/colorBackground</item>-->
+<!--        <item name="colorError">@color/colorError</item>-->
+<!--        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>-->
+<!--        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>-->
+<!--        <item name="colorSurface">@color/colorSurface</item>-->
+<!--        <item name="colorOnPrimary">@color/colorOnPrimary</item>-->
+<!--        <item name="colorOnSecondary">@color/colorOnSecondary</item>-->
+<!--        <item name="colorOnBackground">@color/colorOnBackground</item>-->
+<!--        <item name="colorOnError">@color/colorOnError</item>-->
+<!--        <item name="colorOnSurface">@color/colorOnSurface</item>-->
+<!--        <item name="scrimBackground">@color/scrimBackground</item>-->
+
+<!--        <item name="colorPrimaryVariant">@color/DublinMapper_slate_600</item>-->
+<!--        <item name="colorPrimaryDark">@color/DublinMapper_slate_800</item>-->
+
+<!--        <item name="colorSecondary">@color/DublinMapper_mtrl_orange_700</item>-->
+<!--        <item name="colorSecondaryVariant">@color/DublinMapper_mtrl_orange_500</item>-->
+<!--        <item name="colorOnSecondary">#000000</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.DublinMapper.NoActionBar" parent="Theme.DublinMapper">-->
+<!--        <item name="windowActionBar">false</item>-->
+<!--        <item name="windowNoTitle">true</item>-->
+<!--    </style>-->
+
+<!--    <style name="Theme.DublinMapper.Home" parent="Theme.DublinMapper.NoActionBar">-->
+<!--        <item name="android:windowLightStatusBar">true</item>-->
+<!--    </style>-->
+
+<!--    <style name="ThemeOverlay.DublinMapper.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />-->
+
+<!--    <style name="ThemeOverlay.DublinMapper.Primary" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">-->
+<!--        <item name="android:textColorPrimary">?attr/colorOnPrimary</item>-->
+<!--    </style>-->
+</resources>
+
+
+<!--<item name="android:colorBackground">background, status bar, navigation bar</item>-->
+<!--<item name="colorSurface">app bar, bottom navigation bar</item>-->
+<!--<item name="colorOnSurface">app bar, bottom navigation bar tint</item>-->

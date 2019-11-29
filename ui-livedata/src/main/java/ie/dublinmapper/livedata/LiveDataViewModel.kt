@@ -3,11 +3,15 @@ package ie.dublinmapper.livedata
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import com.xwray.groupie.Group
+import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.domain.usecase.FavouritesUseCase
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import io.rtpi.api.Route
+import io.rtpi.api.ServiceLocationRoutes
+import io.rtpi.api.TimedLiveData
 import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,7 +23,7 @@ class LiveDataViewModel @Inject constructor(
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
-    override val initialState = State(isLoading = true)
+    override val initialState = State()
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
@@ -28,11 +32,25 @@ class LiveDataViewModel @Inject constructor(
                 liveData = null,
                 isError = false
             )
-            is Change.GetLiveData -> state.copy(
-                isLoading = false,
-                liveData = change.liveData,
-                isError = false
+            is Change.GetServicelocation -> state.copy(
+                serviceLocation = change.serviceLocation,
+                isFavourite = change.serviceLocation.isFavourite()
             )
+            is Change.GetLiveData -> {
+                val serviceLocation = state.serviceLocation
+                if (serviceLocation != null && serviceLocation is ServiceLocationRoutes) {
+                    val routes = serviceLocation.routes
+//                    val map = change.liveData.filterIsInstance<TimedLiveData>()
+//                        .map { Route(it.route, it.operator) }
+                    // compare routes with live data and send report if they don't match
+                    // val liveData = change.liveData
+                }
+                state.copy(
+                    isLoading = false,
+                    liveData = change.liveData,
+                    isError = false
+                )
+            }
             is Change.GetLiveDataError -> state.copy(
                 isLoading = false,
                 liveData = null,
@@ -54,6 +72,21 @@ class LiveDataViewModel @Inject constructor(
     }
 
     private fun bindActions() {
+        val getServiceLocationChange = actions.ofType(Action.GetServiceLocation::class.java)
+            .switchMap { action ->
+                liveDataUseCase.getServiceLocation(
+                    action.serviceLocationId,
+                    action.serviceLocationService
+                )
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Change> { Change.GetServicelocation(it) }
+                    .onErrorReturn {
+                        Timber.e(it)
+                        Change.GetLiveDataError(it)
+                    }
+            }
+
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
             .switchMap { action ->
                 liveDataUseCase.getLiveDataStream(
@@ -79,10 +112,9 @@ class LiveDataViewModel @Inject constructor(
                     action.serviceLocationName,
                     action.serviceLocationService
                 )
-                    .toObservable<Change>()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .doOnNext { Change.FavouriteSaved }
+                    .map<Change> { Change.FavouriteSaved }
                     .onErrorReturn { Change.GetLiveDataError(it) }
             }
 
@@ -92,14 +124,13 @@ class LiveDataViewModel @Inject constructor(
                     action.serviceLocationId,
                     action.serviceLocationService
                 )
-                    .toObservable<Change>()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .doOnNext { Change.FavouriteRemoved }
+                    .map<Change> { Change.FavouriteRemoved }
                     .onErrorReturn { Change.GetLiveDataError(it) }
             }
 
-        val allActions = Observable.merge(getLiveDataChange, saveFavouriteChange, removeFavouriteChange)
+        val allActions = Observable.merge(getServiceLocationChange, getLiveDataChange, saveFavouriteChange, removeFavouriteChange)
 
         disposables += allActions
             .scan(initialState, reducer)

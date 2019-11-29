@@ -26,7 +26,7 @@ android {
 
 dependencies {
     implementation project(':core')
-    implementation project(':ui')
+    implementation project(':core-ui')
 
     implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
     implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'

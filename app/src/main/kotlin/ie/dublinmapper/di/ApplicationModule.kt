@@ -5,7 +5,7 @@ import android.content.res.Resources
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.DublinMapperApplication
+import ie.dublinmapper.Application
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
@@ -17,6 +17,7 @@ import ie.dublinmapper.permission.PermissionChecker
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.R
+import ie.dublinmapper.settings.ThemeRepository
 import ie.dublinmapper.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +32,7 @@ import java.util.concurrent.TimeUnit
 class ApplicationModule {
 
     @Provides
-    fun context(application: DublinMapperApplication): Context = application.applicationContext
+    fun context(application: Application): Context = application.applicationContext
 
     @Provides
     fun resources(context: Context): Resources {
@@ -98,17 +99,23 @@ class ApplicationModule {
     fun preferenceStore(context: Context): PreferenceStore = DefaultPreferenceStore(context)
 
     @Provides
+    fun themeRepository(
+        resources: Resources,
+        preferenceStore: PreferenceStore
+    ): ThemeRepository = ThemeRepository(resources, preferenceStore)
+
+    @Provides
     fun enabledServiceManager(
         context: Context,
         preferenceStore: PreferenceStore
     ): EnabledServiceManager {
         val serviceToEnabledServicePreferenceKey = mapOf(
-            Service.AIRCOACH to context.getString(R.string.preference_enabled_service_aircoach),
-            Service.BUS_EIREANN to context.getString(R.string.preference_enabled_service_bus_eireann),
-            Service.DUBLIN_BIKES to context.getString(R.string.preference_enabled_service_dublin_bikes),
-            Service.DUBLIN_BUS to context.getString(R.string.preference_enabled_service_dublin_bus),
-            Service.IRISH_RAIL to context.getString(R.string.preference_enabled_service_irish_rail),
-            Service.LUAS to context.getString(R.string.preference_enabled_service_luas)
+            Service.AIRCOACH to context.getString(R.string.preference_key_enabled_service_aircoach),
+            Service.BUS_EIREANN to context.getString(R.string.preference_key_enabled_service_bus_eireann),
+            Service.DUBLIN_BIKES to context.getString(R.string.preference_key_enabled_service_dublin_bikes),
+            Service.DUBLIN_BUS to context.getString(R.string.preference_key_enabled_service_dublin_bus),
+            Service.IRISH_RAIL to context.getString(R.string.preference_key_enabled_service_irish_rail),
+            Service.LUAS to context.getString(R.string.preference_key_enabled_service_luas)
         )
         return DefaultEnabledServiceManager(preferenceStore, serviceToEnabledServicePreferenceKey)
     }

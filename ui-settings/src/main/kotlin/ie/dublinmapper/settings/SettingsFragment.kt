@@ -1,12 +1,22 @@
 package ie.dublinmapper.settings
 
 import android.os.Bundle
-import androidx.preference.PreferenceFragmentCompat
+import android.view.View
+import androidx.fragment.app.commitNow
+import androidx.navigation.fragment.findNavController
+import ie.dublinmapper.ui.DublinMapperFragment
+import kotlinx.android.synthetic.main.fragment_settings.*
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : DublinMapperFragment(R.layout.fragment_settings) {
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preferences, rootKey)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        settings_toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+        childFragmentManager.commitNow {
+            replace(R.id.settings_container, PreferencesFragment())
+        }
     }
 
 }

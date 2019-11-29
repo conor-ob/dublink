@@ -14,7 +14,6 @@ import ie.dublinmapper.Navigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_nearby.*
 import kotlinx.android.synthetic.main.fragment_nearby.view.*
 
 private const val locationRequestCode = 42069
@@ -24,8 +23,6 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as NearbyViewModel }
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
-
-    override fun styleId() = R.style.IrishRailTheme //TODO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +34,19 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
-
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
-            (activity as Navigator).navigateNearbyToLiveData(item.getServiceLocation())
+            (activity as Navigator).navigateToLiveData(item.getServiceLocation())
         }
         view.nearbyLocations.adapter = adapter
         view.nearbyLocations.setHasFixedSize(true)
         view.nearbyLocations.layoutManager = LinearLayoutManager(requireContext())
+//        view.nearbyLocations.addItemDecoration(
+//            DividerItemDecoration(
+//                view.nearbyLocations.context,
+//                DividerItemDecoration.VERTICAL
+//            )
+//        )
 
         if (ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
