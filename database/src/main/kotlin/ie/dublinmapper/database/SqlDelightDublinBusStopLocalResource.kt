@@ -4,6 +4,7 @@ import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import ie.dublinmapper.datamodel.DublinBusStopLocalResource
 import ie.dublinmapper.domain.model.setFavourite
+import ie.dublinmapper.util.AlphanumComparator
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
@@ -53,7 +54,9 @@ class SqlDelightDublinBusStopLocalResource(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                routes = routes ?: emptyList(),
+                routes = routes?.sortedWith(Comparator { r1, r2 ->
+                    AlphanumComparator.getInstance().compare(r1.id, r2.id)
+                }) ?: emptyList(),
                 operators = routes?.map { route -> route.operator }?.toSet() ?: emptySet()
             )
         }.associateBy { it.id }
@@ -128,21 +131,23 @@ class SqlDelightDublinBusStopLocalResource(
 //    }
 
     override fun insertStops(stops: List<DublinBusStop>) {
-        database.dublinBusStopLocationEntityQueries.deleteAll()
-        database.dublinBusStopServiceEntityQueries.deleteAll()
-        for (stop in stops) {
-            database.dublinBusStopLocationEntityQueries.insertOrReplace(
-                id = stop.id,
-                name = stop.name,
-                latitude = stop.coordinate.latitude,
-                longitude = stop.coordinate.longitude
-            )
-            for (route in stop.routes) {
-                database.dublinBusStopServiceEntityQueries.insertOrReplace(
-                    operator = route.operator,
-                    route = route.id,
-                    locationId = stop.id
+        database.transaction {
+            database.dublinBusStopLocationEntityQueries.deleteAll()
+            database.dublinBusStopServiceEntityQueries.deleteAll()
+            for (stop in stops) {
+                database.dublinBusStopLocationEntityQueries.insertOrReplace(
+                    id = stop.id,
+                    name = stop.name,
+                    latitude = stop.coordinate.latitude,
+                    longitude = stop.coordinate.longitude
                 )
+                for (route in stop.routes) {
+                    database.dublinBusStopServiceEntityQueries.insertOrReplace(
+                        operator = route.operator,
+                        route = route.id,
+                        locationId = stop.id
+                    )
+                }
             }
         }
     }

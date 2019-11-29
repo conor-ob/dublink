@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <declare-styleable name="ThemeAttributes">
-        <attr name="colorPrimary" />
-        <attr name="colorPrimaryDark" />
-    </declare-styleable>
-
-</resources>

@@ -10,7 +10,6 @@ import ie.dublinmapper.Navigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
@@ -18,8 +17,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
 
     private lateinit var adapter: GroupAdapter<ViewHolder>
-
-    override fun styleId() = R.style.FavouritesTheme
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +31,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
             val serviceLocation = item.getServiceLocation()
-            (activity as Navigator).navigateFavouritesToLiveData(serviceLocation)
+            (activity as Navigator).navigateToLiveData(serviceLocation)
             if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
                 enabledServiceManager.enableService(serviceLocation.service)
             }
@@ -42,9 +39,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.liveDataList.adapter = adapter
         view.liveDataList.setHasFixedSize(true)
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
-
-        search_fab.setOnClickListener { (activity as Navigator).navigateFavouritesToSearch() }
-        nearby_fab.setOnClickListener { (activity as Navigator).navigateFavouritesToNearby() }
 
         viewModel.dispatch(Action.GetFavourites)
     }

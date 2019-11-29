@@ -2,12 +2,14 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.location.LocationProvider
+import ie.dublinmapper.util.CollectionUtils
 import ie.dublinmapper.util.LocationUtils
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.functions.Function6
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.rtpi.api.*
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -33,16 +35,27 @@ class NearbyUseCase @Inject constructor(
 
     private fun filterNearby(coordinate: Coordinate): Observable<NearbyResponse> {
         return Observable.combineLatest(
-            aircoachStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<AircoachStop>()),
-            busEireannStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<BusEireannStop>()),
-            irishRailStationRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<IrishRailStation>()),
-            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<DublinBikesDock>()),
-            dublinBusStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<DublinBusStop>()),
-            luasStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<LuasStop>()),
+            aircoachStopRepository.getAll().subscribeOn(scheduler.io),
+            busEireannStopRepository.getAll().subscribeOn(scheduler.io),
+            irishRailStationRepository.getAll().subscribeOn(scheduler.io),
+            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
+            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
+            luasStopRepository.getAll().subscribeOn(scheduler.io),
             Function6 { aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops ->
                 filterBlah(coordinate, aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops)
             }
         )
+//        return Observable.combineLatest(
+//            aircoachStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<AircoachStop>()),
+//            busEireannStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<BusEireannStop>()),
+//            irishRailStationRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<IrishRailStation>()),
+//            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<DublinBikesDock>()),
+//            dublinBusStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<DublinBusStop>()),
+//            luasStopRepository.getAll().subscribeOn(scheduler.io).startWith(emptyList<LuasStop>()),
+//            Function6 { aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops ->
+//                filterBlah(coordinate, aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops)
+//            }
+//        )
     }
 
     private fun filterBlah(
@@ -62,16 +75,19 @@ class NearbyUseCase @Inject constructor(
         results.addAll(irishRailStations)
         results.addAll(luasStops)
         return NearbyResponse(
-            results
-                .sortedBy { LocationUtils.haversineDistance(coordinate, it.coordinate) }
-                .take(50)
+            CollectionUtils.headMap(
+                map = results
+                    .associateBy { LocationUtils.haversineDistance(coordinate, it.coordinate) }
+                    .toSortedMap(),
+                limit = 50
+            )
         )
     }
 
 }
 
 data class NearbyResponse(
-    val serviceLocations: List<ServiceLocation>
+    val serviceLocations: SortedMap<Double, ServiceLocation>
 )
 
 //class NearbyUseCase @Inject constructor(

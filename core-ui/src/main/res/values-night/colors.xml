@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#91B4F1</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorSecondary">#F9AA33</color>
+    <color name="colorSecondaryVariant">#C78522</color>
+    <color name="colorBackground">#202125</color>
+    <color name="colorSurface">#313236</color>
+    <color name="colorError">#CF6679</color>
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnSecondary">#000000</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnSurface">#FFFFFF</color>
+    <color name="colorOnError">#000000</color>
+    <color name="scrimBackground">@color/luasGreen</color>
+
+    <color name="colorStatusBar">#313236</color>
+</resources>

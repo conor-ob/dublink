@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
-apply plugin: 'androidx.navigation.safeargs'
 
 Properties properties = new Properties()
 if (project.rootProject.file("release.properties").exists()) {
@@ -13,6 +12,8 @@ if (project.rootProject.file("release.properties").exists()) {
 }
 def googleMapsApiKey = properties.getProperty('com.google.android.geo.API_KEY')
 def jcDecauxApiKey = properties.getProperty('com.developer.jcdecaux.API_KEY')
+def twitterConsumerKey = properties.getProperty('com.twitter.sdk.android.CONSUMER_KEY')
+def twitterConsumerSecret = properties.getProperty('com.twitter.sdk.android.CONSUMER_SECRET')
 
 android {
     compileSdkVersion buildConfig.compileSdk
@@ -25,7 +26,9 @@ android {
         versionName buildConfig.version.name
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [googleMapsApiKey: "$googleMapsApiKey",
-                                jcDecauxApiKey  : "$jcDecauxApiKey"]
+                                jcDecauxApiKey: "$jcDecauxApiKey",
+                                twitterConsumerKey:"$twitterConsumerKey",
+                                twitterConsumerSecret: "$twitterConsumerSecret"]
     }
 
     buildTypes {
@@ -85,15 +88,18 @@ android {
 dependencies {
     implementation project(':core')
     implementation project(':database')
-    implementation project(':datamodel')
+    implementation project(':data-access')
     implementation project(':domain')
     implementation project(':repository')
-    implementation project(':ui')
+    implementation project(':core-ui')
     implementation project(':ui-favourites')
     implementation project(':ui-livedata')
     implementation project(':ui-nearby')
+    implementation project(':ui-news')
     implementation project(':ui-search')
     implementation project(':ui-settings')
+
+    implementation "androidx.preference:preference-ktx:1.1.0"
 
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'

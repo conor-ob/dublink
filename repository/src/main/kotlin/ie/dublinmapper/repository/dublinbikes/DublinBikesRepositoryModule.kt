@@ -40,7 +40,7 @@ class DublinBikesRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<DublinBikesDock> {
-        val fetcher = Fetcher<List<DublinBikesDock>, Service> { Single.just(client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey())) }
+        val fetcher = Fetcher<List<DublinBikesDock>, Service> { client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey()) }
         val persister = DublinBikesDockPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return DublinBikesDockRepository(store, enabledServiceManager)
@@ -59,8 +59,7 @@ class DublinBikesRepositoryModule {
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): Repository<DublinBikesLiveData> {
         val store = StoreBuilder.key<String, DublinBikesLiveData>()
-//            .fetcher { dockId -> client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey()) }
-            .fetcher { dockId -> Single.just(client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey())) }
+            .fetcher { dockId -> client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey()) }
             .memoryPolicy(memoryPolicy)
             .open()
         return DublinBikesLiveDataRepository(store)
