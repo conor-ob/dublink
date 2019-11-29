@@ -18,8 +18,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Platform.Theme.DublinMapper" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-    </style>
+    <style name="Platform.Theme.DublinMapper" parent="Theme.MaterialComponents.DayNight" />
 
     <style name="Base.Theme.DublinMapper" parent="Platform.Theme.DublinMapper">
         <item name="actionBarTheme">@style/ThemeOverlay.DublinMapper.ActionBar</item>
@@ -62,27 +61,14 @@
         <item name="colorOnSecondary">#000000</item>
     </style>
 
-    <style name="Theme.DublinMapper.NoActionBar">
+    <style name="Theme.DublinMapper.NoActionBar" parent="Theme.DublinMapper">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="Theme.DublinMapper.Immerse" parent="Theme.DublinMapper.NoActionBar">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-
-        <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">@bool/use_light_nav_bar</item>
+    <style name="Theme.DublinMapper.Home" parent="Theme.DublinMapper.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
     </style>
-
-    <style name="Theme.DublinMapper.Home" parent="Theme.DublinMapper.Immerse">
-        <item name="android:windowLightStatusBar">@bool/use_light_status_bar</item>
-    </style>
-
-    <style name="Theme.DublinMapper.ShowDetails" parent="Theme.DublinMapper.Immerse">
-        <item name="android:windowLightStatusBar">@bool/use_light_status_bar</item>
-    </style>
-
-    <style name="Theme.DublinMapper.Settings" />
 
     <style name="ThemeOverlay.DublinMapper.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
 
@@ -91,3 +77,8 @@
     </style>
 
 </resources>
+
+
+<!--<item name="android:colorBackground">background, status bar, navigation bar</item>-->
+<!--<item name="colorSurface">app bar, bottom navigation bar</item>-->
+<!--<item name="colorOnSurface">app bar, bottom navigation bar tint</item>-->

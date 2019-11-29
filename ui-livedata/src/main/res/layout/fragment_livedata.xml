@@ -18,7 +18,7 @@
             app:contentInsetLeft="0dp"
             app:contentInsetStart="0dp"
             app:contentInsetStartWithNavigation="0dp"
-            app:navigationIcon="@drawable/ic_arrow_back"
+            app:navigationIcon="?attr/homeAsUpIndicator"
             app:menu="@menu/menu_live_data">
 
 <!--            <TextView-->
