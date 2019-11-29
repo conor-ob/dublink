@@ -48,6 +48,7 @@
 <!--        <item name="navigationViewStyle">@style/Widget.MyTheme.NavigationView</item>-->
 <!--        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>-->
 <!--        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>-->
+<!--        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView</item>-->
     </style>
 
     <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
