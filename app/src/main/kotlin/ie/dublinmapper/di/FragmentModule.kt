@@ -10,6 +10,8 @@ import ie.dublinmapper.nearby.NearbyFragment
 import ie.dublinmapper.nearby.NearbyModule
 import ie.dublinmapper.news.NewsFragment
 import ie.dublinmapper.news.NewsModule
+import ie.dublinmapper.news.TwitterFragment
+import ie.dublinmapper.news.TwitterModule
 import ie.dublinmapper.search.SearchFragment
 import ie.dublinmapper.search.SearchModule
 import ie.dublinmapper.settings.PreferencesFragment
@@ -28,6 +30,9 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector(modules = [NewsModule::class])
     abstract fun contributeNewsFragmentInjector(): NewsFragment
+
+    @ContributesAndroidInjector(modules = [TwitterModule::class])
+    abstract fun contributeTwitterFragmentInjector(): TwitterFragment
 
     @ContributesAndroidInjector(modules = [NearbyModule::class])
     abstract fun contributeNearbyFragmentInjector(): NearbyFragment
