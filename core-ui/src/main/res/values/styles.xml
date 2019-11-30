@@ -25,6 +25,17 @@
 <!--        <item name="dividerDrawable">?android:attr/listDivider</item>-->
 <!--        <item name="materialBackgroundColor">?attr/colorSurface</item>-->
     </style>
+
+    <style name="Widget.DublinMapper.Tabs" parent="@style/Widget.MaterialComponents.TabLayout">
+        <item name="tabTextAppearance">@style/TextAppearance.DublinMapper.Tab</item>
+        <item name="tabIndicator">@drawable/tab_indicator</item>
+    </style>
+
+    <style name="TextAppearance.DublinMapper.Tab" parent="@style/TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/barlow_regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
     
     <style name="TextAppearance.DublinMapper.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">@font/barlow_regular</item>

@@ -28,7 +28,7 @@
                 style="@style/ThinnerChip" />
 
             <View
-                android:layout_width="4dp"
+                android:layout_width="8dp"
                 android:layout_height="0dp" />
 
             <TextView
