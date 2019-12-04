@@ -10,6 +10,7 @@ import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
+import ie.dublinmapper.init.*
 import ie.dublinmapper.location.LocationProvider
 import ie.dublinmapper.nearby.location.GpsLocationProvider
 import ie.dublinmapper.permission.AndroidPermissionsChecker
@@ -27,12 +28,27 @@ import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module
 class ApplicationModule {
 
     @Provides
     fun context(application: Application): Context = application.applicationContext
+
+    @Provides
+    fun applicationInitializers(themeRepository: ThemeRepository): ApplicationInitializers {
+        return ApplicationInitializers(
+            listOf(
+                PreferencesInitializer(),
+                TimberInitializer(),
+                ThreeTenInitializer(),
+                ThemeInitializer(themeRepository),
+                RxInitilaizer(),
+                StethoInitializer()
+            )
+        )
+    }
 
     @Provides
     fun resources(context: Context): Resources {
