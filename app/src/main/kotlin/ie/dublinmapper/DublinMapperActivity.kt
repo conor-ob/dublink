@@ -12,7 +12,7 @@ import ie.dublinmapper.livedata.LiveDataFragment
 import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.activity_root.*
 
-class HomeActivity : DaggerAppCompatActivity(), NavHost, Navigator {
+class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
 
     private val navigationController by lazy { findNavController(R.id.navHostFragment) }
 

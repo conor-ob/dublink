@@ -6,7 +6,7 @@ import ie.dublinmapper.di.DaggerApplicationComponent
 import ie.dublinmapper.init.ApplicationInitializers
 import javax.inject.Inject
 
-class Application : DaggerApplication() {
+class DublinMapperApplication : DaggerApplication() {
 
     @Inject
     lateinit var initializers: ApplicationInitializers

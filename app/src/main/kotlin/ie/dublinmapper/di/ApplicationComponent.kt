@@ -3,7 +3,7 @@ package ie.dublinmapper.di
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
-import ie.dublinmapper.Application
+import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.database.DatabaseModule
 import ie.dublinmapper.repository.di.RepositoryModule
 import javax.inject.Singleton
@@ -20,9 +20,9 @@ import javax.inject.Singleton
         RepositoryModule::class
     ]
 )
-interface ApplicationComponent : AndroidInjector<Application> {
+interface ApplicationComponent : AndroidInjector<DublinMapperApplication> {
 
     @Component.Factory
-    abstract class Factory : AndroidInjector.Factory<Application>
+    abstract class Factory : AndroidInjector.Factory<DublinMapperApplication>
 
 }

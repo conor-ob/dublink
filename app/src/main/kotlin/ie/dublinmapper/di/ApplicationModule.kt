@@ -5,7 +5,7 @@ import android.content.res.Resources
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.Application
+import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
@@ -28,13 +28,12 @@ import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @Module
 class ApplicationModule {
 
     @Provides
-    fun context(application: Application): Context = application.applicationContext
+    fun context(application: DublinMapperApplication): Context = application.applicationContext
 
     @Provides
     fun applicationInitializers(themeRepository: ThemeRepository): ApplicationInitializers {
