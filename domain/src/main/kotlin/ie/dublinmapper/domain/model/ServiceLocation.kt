@@ -15,12 +15,4 @@ fun ServiceLocation.setCustomName(name: String) {
     data[customName] = name
 }
 
-fun ServiceLocation.getName(): String {
-    return if (isFavourite()) {
-        customName() ?: name
-    } else {
-        name
-    }
-}
-
-private fun ServiceLocation.customName(): String? = data[customName] as String?
+fun ServiceLocation.getName(): String = data[customName] as String? ?: name
