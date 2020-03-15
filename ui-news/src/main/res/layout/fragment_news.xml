@@ -14,10 +14,11 @@
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/settings_toolbar"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="News" />
+            app:title="News"
+            app:menu="@menu/menu_settings" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

@@ -5,7 +5,9 @@ import android.content.res.Resources
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
+import ie.dublinmapper.config.AppConfig
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
@@ -141,4 +143,9 @@ class ApplicationModule {
     @Provides
     fun permissionChecker(context: Context): PermissionChecker = AndroidPermissionsChecker(context)
 
+    @Provides
+    fun appConfig(): AppConfig = object : AppConfig {
+        override fun isDebug() = BuildConfig.DEBUG
+        override fun appVersion() = BuildConfig.VERSION_NAME
+    }
 }

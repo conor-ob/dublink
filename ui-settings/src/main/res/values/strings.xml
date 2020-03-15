@@ -18,4 +18,6 @@
 
     <string name="preference_key_preferred_home_screen">preferred_home_screen</string>
 
+    <string name="preference_key_app_version">app_version</string>
+    <string name="preference_name_app_version">App version</string>
 </resources>

@@ -9,7 +9,9 @@ import com.twitter.sdk.android.tweetui.TwitterListTimeline
 import ie.dublinmapper.ui.DublinMapperFragment
 import kotlinx.android.synthetic.main.fragment_twitter.*
 
-class TwitterFragment(private val listName: String) : DublinMapperFragment(R.layout.fragment_twitter) {
+class TwitterFragment(
+    private val listName: String
+) : DublinMapperFragment(R.layout.fragment_twitter) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
