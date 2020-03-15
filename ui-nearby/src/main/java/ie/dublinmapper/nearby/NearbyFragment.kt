@@ -14,6 +14,8 @@ import ie.dublinmapper.Navigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.ui.DublinMapperFragment
 import ie.dublinmapper.ui.viewModelProvider
+import io.rtpi.api.Service
+import kotlinx.android.synthetic.main.fragment_nearby.*
 import kotlinx.android.synthetic.main.fragment_nearby.view.*
 
 private const val locationRequestCode = 42069
@@ -34,9 +36,22 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_settings -> {
+                    (activity as Navigator).navigateToSettings()
+                    return@setOnMenuItemClickListener true
+                }
+            }
+            return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
+        }
+
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
-            (activity as Navigator).navigateToLiveData(item.getServiceLocation())
+            val serviceLocation = item.getServiceLocation()
+            if (Service.DUBLIN_BIKES != serviceLocation.service) {
+                (activity as Navigator).navigateToLiveData(serviceLocation)
+            }
         }
         view.nearbyLocations.adapter = adapter
         view.nearbyLocations.setHasFixedSize(true)

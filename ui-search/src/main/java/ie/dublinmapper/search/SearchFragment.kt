@@ -21,6 +21,7 @@ import ie.dublinmapper.util.showKeyboard
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_search.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -57,7 +58,10 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         search_recyclerview.setHasFixedSize(true)
         search_recyclerview.layoutManager = LinearLayoutManager(requireContext())
         adapter.setOnItemClickListener { item, _ ->
-            (activity as Navigator).navigateToLiveData(item.getServiceLocation())
+            val serviceLocation = item.getServiceLocation()
+            if (Service.DUBLIN_BIKES != serviceLocation.service) {
+                (activity as Navigator).navigateToLiveData(serviceLocation)
+            }
         }
 
         subscriptions.add(

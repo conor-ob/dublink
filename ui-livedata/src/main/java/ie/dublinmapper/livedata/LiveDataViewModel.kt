@@ -9,9 +9,7 @@ import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.util.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
-import io.rtpi.api.Route
 import io.rtpi.api.ServiceLocationRoutes
-import io.rtpi.api.TimedLiveData
 import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,7 +30,7 @@ class LiveDataViewModel @Inject constructor(
                 liveData = null,
                 isError = false
             )
-            is Change.GetServicelocation -> state.copy(
+            is Change.GetServiceLocation -> state.copy(
                 serviceLocation = change.serviceLocation,
                 isFavourite = change.serviceLocation.isFavourite()
             )
@@ -80,7 +78,7 @@ class LiveDataViewModel @Inject constructor(
                 )
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.GetServicelocation(it) }
+                    .map<Change> { Change.GetServiceLocation(it) }
                     .onErrorReturn {
                         Timber.e(it)
                         Change.GetLiveDataError(it)
