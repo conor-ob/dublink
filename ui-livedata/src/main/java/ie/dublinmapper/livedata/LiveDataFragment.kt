@@ -82,6 +82,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         toolbar.subtitle = getSubtitle()
 //        serviceLocationName.text = args.serviceLocationName
 
+        loader.isEnabled = false
+
         adapter = GroupAdapter()
         liveDataList.adapter = adapter
         liveDataList.setHasFixedSize(true)

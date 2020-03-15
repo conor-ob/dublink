@@ -6,11 +6,13 @@
 
     <TextView
             android:id="@+id/lastUpdated"
+        android:alpha="0.5"
+        android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="end"
             android:textAlignment="gravity"
-            android:layout_marginEnd="16dp"/>
+            android:layout_marginEnd="20dp"/>
 
 </FrameLayout>

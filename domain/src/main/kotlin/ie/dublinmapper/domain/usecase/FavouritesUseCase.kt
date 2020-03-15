@@ -42,23 +42,23 @@ class FavouritesUseCase @Inject constructor(
     }
 
     fun getFavourites(): Observable<FavouritesResponse> {
-        if (permissionChecker.isLocationPermissionGranted()) {
-            return Observable.zip(
-                getFavouriteServiceLocations(),
-                Observable.concat(
-                    locationProvider.getLastKnownLocation(),
-                    locationProvider.getLocationUpdates()
-                )
-                    .throttleFirst(30, TimeUnit.SECONDS),
-                BiFunction { serviceLocations, coordinate ->
-                    FavouritesResponse(
-                        serviceLocations.sortedBy {
-                            LocationUtils.haversineDistance(coordinate, it.coordinate)
-                        }
-                    )
-                }
-            )
-        }
+//        if (permissionChecker.isLocationPermissionGranted()) {
+//            return Observable.zip(
+//                getFavouriteServiceLocations(),
+//                Observable.concat(
+//                    locationProvider.getLastKnownLocation(),
+//                    locationProvider.getLocationUpdates()
+//                )
+//                    .throttleFirst(30, TimeUnit.SECONDS),
+//                BiFunction { serviceLocations, coordinate ->
+//                    FavouritesResponse(
+//                        serviceLocations.sortedBy {
+//                            LocationUtils.haversineDistance(coordinate, it.coordinate)
+//                        }
+//                    )
+//                }
+//            )
+//        }
         return getFavouriteServiceLocations().map { FavouritesResponse(it) }
     }
 

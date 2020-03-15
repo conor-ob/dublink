@@ -34,7 +34,7 @@ sealed class Action : BaseAction {
 
 sealed class Change {
     object Loading : Change()
-    data class GetServicelocation(val serviceLocation: ServiceLocation) : Change()
+    data class GetServiceLocation(val serviceLocation: ServiceLocation) : Change()
 //    data class GetLiveData(val liveData: List<LiveData>) : Change()
     data class GetLiveData(val liveData: Group) : Change()
     object FavouriteSaved : Change()

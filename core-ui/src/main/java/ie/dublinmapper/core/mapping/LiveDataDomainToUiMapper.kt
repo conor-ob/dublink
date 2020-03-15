@@ -104,6 +104,7 @@ class LiveDataDomainToUiMapper(
 //        if (items.isNotEmpty()) {
 //            items.add(DividerItem())
 //        }
+//        items.add(LastUpdatedItem(System.currentTimeMillis()))
         return Section(items)
     }
 
