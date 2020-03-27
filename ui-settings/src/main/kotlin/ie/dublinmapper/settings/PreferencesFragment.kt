@@ -8,7 +8,7 @@ import androidx.preference.PreferenceFragmentCompat
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import ie.dublinmapper.config.AppConfig
+import ie.dublinmapper.core.AppConfig
 import javax.inject.Inject
 
 class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {

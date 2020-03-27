@@ -2,23 +2,25 @@ package ie.dublinmapper.util
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
-import java.util.*
 
 class CollectionsKtxTest {
 
     @Test
-    fun testIntersect() {
-        assertThat(Operator.dublinBus().intersectWith(Operator.bus())).isTrue()
-        assertThat(Operator.dublinBus().intersectWith(Operator.bus())).isTrue()
-        assertThat(Operator.bus().intersectWith(Operator.goAhead())).isTrue()
-        assertThat(Operator.rail().intersectWith(Operator.interCity())).isTrue()
-        assertThat(Operator.commuter().intersectWith(Operator.rail())).isTrue()
-        assertThat(Operator.rail().intersectWith(Operator.dart())).isTrue()
-        assertThat(Operator.rail().intersectWith(Operator.bus())).isFalse()
-        assertThat(Operator.tram().intersectWith(Operator.rail())).isFalse()
-        assertThat(Operator.dublinBikes().intersectWith(Operator.dublinBus())).isFalse()
-        assertThat(Operator.rail().intersectWith(Operator.goAhead())).isFalse()
-        assertThat(Operator.luas().intersectWith(Collections.emptySet())).isFalse()
-    }
+    fun `sorted maps should truncate to the desired number of entries`() {
+        // arrange
+        val limit = 3
+        val map = sortedMapOf(
+            1 to "one",
+            2 to "two",
+            3 to "three",
+            4 to "four",
+            5 to "five"
+        )
 
+        // act
+        val headMap = map.truncateHead(limit)
+
+        // assert
+        assertThat(headMap.size).isEqualTo(limit)
+    }
 }

@@ -1,13 +1,12 @@
 package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.location.LocationProvider
-import ie.dublinmapper.util.CollectionUtils
-import ie.dublinmapper.util.LocationUtils
-import ie.dublinmapper.util.RxScheduler
+import ie.dublinmapper.core.LocationProvider
+import ie.dublinmapper.util.truncateHead
+import ie.dublinmapper.core.RxScheduler
+import ie.dublinmapper.util.haversine
 import io.reactivex.functions.Function6
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.rtpi.api.*
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -75,15 +74,12 @@ class NearbyUseCase @Inject constructor(
         results.addAll(irishRailStations)
         results.addAll(luasStops)
         return NearbyResponse(
-            CollectionUtils.headMap(
-                map = results
-                    .associateBy { LocationUtils.haversineDistance(coordinate, it.coordinate) }
-                    .toSortedMap(),
-                limit = 50
-            )
+            results
+                .associateBy { coordinate.haversine(it.coordinate) }
+                .toSortedMap()
+                .truncateHead(50)
         )
     }
-
 }
 
 data class NearbyResponse(

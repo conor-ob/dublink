@@ -4,7 +4,6 @@ import com.nytimes.android.external.store3.base.impl.Store
 import ie.dublinmapper.domain.repository.Repository
 import io.reactivex.Observable
 import io.rtpi.api.IrishRailLiveData
-import org.threeten.bp.LocalTime
 
 class IrishRailLiveDataRepository(
     private val store: Store<List<IrishRailLiveData>, String>

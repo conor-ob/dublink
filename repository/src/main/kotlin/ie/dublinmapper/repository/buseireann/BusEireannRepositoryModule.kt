@@ -13,8 +13,8 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister
-import ie.dublinmapper.util.EnabledServiceManager
-import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.core.InternetManager
 import io.rtpi.api.BusEireannLiveData
 import io.rtpi.api.BusEireannStop
 import io.rtpi.api.Service

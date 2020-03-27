@@ -10,10 +10,8 @@ import ie.dublinmapper.ui.R
 import io.rtpi.api.Operator
 import io.rtpi.api.TimedLiveData
 import kotlinx.android.synthetic.main.list_item_live_data.*
-import org.threeten.bp.ZonedDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.temporal.ChronoUnit
-
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 private val format24h = DateTimeFormatter.ofPattern("HH:mm")
 private val format12h = DateTimeFormatter.ofPattern("h:mm a")
@@ -58,7 +56,7 @@ abstract class LiveDataItem(
     }
 
     private fun bindScheduledTime(viewHolder: ViewHolder) {
-        val scheduledTime = ZonedDateTime.parse(liveData.liveTime.scheduledTimestamp)
+        val scheduledTime = liveData.liveTime.scheduledDateTime
         if (DateFormat.is24HourFormat(viewHolder.itemView.context.applicationContext)) {
             viewHolder.scheduledTime.text = scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format24h)
         } else {
@@ -89,17 +87,17 @@ abstract class LiveDataItem(
 
     private fun bindWaitTime(viewHolder: ViewHolder) {
         viewHolder.waitTimeMinutes.text = when {
-            liveData.liveTime.waitTimeMinutes < 1 -> viewHolder.itemView.resources.getString(R.string.live_data_due)
+            liveData.liveTime.waitTime.seconds < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
             else -> {
-                if (liveData.liveTime.waitTimeMinutes >= 60) {
-                    val scheduledTime = ZonedDateTime.parse(liveData.liveTime.scheduledTimestamp)
+                if (liveData.liveTime.waitTime.toMinutes() >= 60L) {
+                    val scheduledTime = liveData.liveTime.scheduledDateTime
                     if (DateFormat.is24HourFormat(viewHolder.itemView.context.applicationContext)) {
                         scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format24h)
                     } else {
                         scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format12h)
                     }
                 } else {
-                    viewHolder.itemView.resources.getString(R.string.live_data_due_time, liveData.liveTime.waitTimeMinutes)
+                    viewHolder.itemView.resources.getString(R.string.live_data_due_time, liveData.liveTime.waitTime.toMinutes())
                 }
 //                val minutes = liveData.liveTime.waitTimeMinutes - (hours * 60)
 //                when {

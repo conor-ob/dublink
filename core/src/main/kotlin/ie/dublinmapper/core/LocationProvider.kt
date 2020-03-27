@@ -1,4 +1,4 @@
-package ie.dublinmapper.location
+package ie.dublinmapper.core
 
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -9,5 +9,4 @@ interface LocationProvider {
     fun getLastKnownLocation(): Observable<Coordinate>
 
     fun getLocationUpdates(): Observable<Coordinate>
-
 }

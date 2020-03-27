@@ -8,5 +8,4 @@ class ThemeInitializer(private val themeRepository: ThemeRepository) : Applicati
     override fun initialize(application: Application) {
         themeRepository.setPreferredThemeOrDefault()
     }
-
 }

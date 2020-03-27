@@ -63,5 +63,4 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, Navigator {
                 .build()
         )
     }
-
 }

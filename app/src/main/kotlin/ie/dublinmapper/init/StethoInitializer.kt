@@ -11,5 +11,4 @@ class StethoInitializer : ApplicationInitializer {
             Stetho.initializeWithDefaults(application)
         }
     }
-
 }

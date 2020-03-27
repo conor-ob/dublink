@@ -36,7 +36,7 @@
         <item name="android:textStyle">bold</item>
         <item name="textAllCaps">false</item>
     </style>
-    
+
     <style name="TextAppearance.DublinMapper.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">@font/barlow_regular</item>
         <item name="android:fontFamily">@font/barlow_regular</item>

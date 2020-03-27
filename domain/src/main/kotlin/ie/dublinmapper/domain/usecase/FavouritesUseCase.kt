@@ -2,15 +2,11 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.location.LocationProvider
-import ie.dublinmapper.permission.PermissionChecker
-import ie.dublinmapper.util.LocationUtils
-import io.reactivex.Completable
+import ie.dublinmapper.core.LocationProvider
+import ie.dublinmapper.core.PermissionChecker
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function6
 import io.rtpi.api.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
