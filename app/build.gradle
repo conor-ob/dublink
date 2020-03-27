@@ -106,6 +106,9 @@ dependencies {
 
     implementation "androidx.preference:preference-ktx:1.1.0"
 
+    implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
     implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
 

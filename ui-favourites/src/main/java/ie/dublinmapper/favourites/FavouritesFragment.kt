@@ -6,10 +6,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.Navigator
+import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.getServiceLocation
-import ie.dublinmapper.ui.DublinMapperFragment
-import ie.dublinmapper.ui.viewModelProvider
+import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
@@ -33,7 +33,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_settings -> {
-                    (activity as Navigator).navigateToSettings()
+                    (activity as DublinMapperNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true
                 }
             }
@@ -47,7 +47,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
                 enabledServiceManager.enableService(serviceLocation.service)
             }
             if (Service.DUBLIN_BIKES != serviceLocation.service) {
-                (activity as Navigator).navigateToLiveData(serviceLocation)
+                (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
         view.liveDataList.adapter = adapter

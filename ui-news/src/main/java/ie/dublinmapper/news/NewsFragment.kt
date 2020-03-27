@@ -6,8 +6,8 @@ import android.view.View
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-import ie.dublinmapper.Navigator
-import ie.dublinmapper.ui.DublinMapperFragment
+import ie.dublinmapper.DublinMapperNavigator
+import ie.dublinmapper.DublinMapperFragment
 import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_news.*
 
@@ -42,7 +42,7 @@ class NewsFragment : DublinMapperFragment(R.layout.fragment_news) {
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_settings -> {
-                    (activity as Navigator).navigateToSettings()
+                    (activity as DublinMapperNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true
                 }
             }

@@ -12,6 +12,7 @@ import ie.dublinmapper.repository.irishrail.IrishRailRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module(
     includes = [
@@ -27,12 +28,14 @@ import javax.inject.Named
 class RepositoryModule {
 
     @Provides
+    @Singleton
     @Named("SHORT_TERM")
     fun shortTermMemoryPolicy(): MemoryPolicy {
         return newMemoryPolicy(1, TimeUnit.MINUTES)
     }
 
     @Provides
+    @Singleton
     @Named("LONG_TERM")
     fun longTermMemoryPolicy(): MemoryPolicy {
         return newMemoryPolicy(1, TimeUnit.DAYS)
@@ -44,5 +47,4 @@ class RepositoryModule {
             .setExpireAfterTimeUnit(timeUnit)
             .build()
     }
-
 }

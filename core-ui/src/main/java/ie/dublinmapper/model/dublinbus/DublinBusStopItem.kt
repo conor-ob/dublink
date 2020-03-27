@@ -1,7 +1,7 @@
 package ie.dublinmapper.model.dublinbus
 
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.ui.R
+import ie.dublinmapper.core.R
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service

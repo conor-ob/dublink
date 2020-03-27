@@ -2,7 +2,7 @@ package ie.dublinmapper.model
 
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.ui.R
+import ie.dublinmapper.core.R
 import kotlinx.android.synthetic.main.list_item_live_data_section_header.*
 
 class HeaderItem(private val header: String) : Item() {

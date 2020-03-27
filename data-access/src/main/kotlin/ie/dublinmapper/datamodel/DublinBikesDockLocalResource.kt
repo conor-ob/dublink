@@ -8,5 +8,4 @@ interface DublinBikesDockLocalResource {
     fun selectDocks(): Observable<List<DublinBikesDock>>
 
     fun insertDocks(docks: List<DublinBikesDock>)
-
 }
