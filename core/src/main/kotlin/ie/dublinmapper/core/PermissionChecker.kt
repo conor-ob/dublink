@@ -1,7 +1,6 @@
-package ie.dublinmapper.permission
+package ie.dublinmapper.core
 
 interface PermissionChecker {
 
     fun isLocationPermissionGranted(): Boolean
-
 }

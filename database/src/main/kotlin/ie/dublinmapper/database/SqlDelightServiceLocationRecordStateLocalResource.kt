@@ -1,7 +1,7 @@
 package ie.dublinmapper.database
 
 import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
-import org.threeten.bp.Instant
+import java.time.Instant
 
 class SqlDelightServiceLocationRecordStateLocalResource(
     private val database: Database

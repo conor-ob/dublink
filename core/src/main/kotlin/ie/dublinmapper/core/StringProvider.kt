@@ -1,4 +1,4 @@
-package ie.dublinmapper.util
+package ie.dublinmapper.core
 
 interface StringProvider {
 
@@ -13,5 +13,4 @@ interface StringProvider {
     fun favourites(): String
 
     fun nearby(): String
-
 }

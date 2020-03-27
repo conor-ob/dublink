@@ -13,9 +13,8 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopRepository
-import ie.dublinmapper.util.EnabledServiceManager
-import ie.dublinmapper.util.InternetManager
-import io.reactivex.Single
+import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.core.InternetManager
 import io.rtpi.api.AircoachLiveData
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Service

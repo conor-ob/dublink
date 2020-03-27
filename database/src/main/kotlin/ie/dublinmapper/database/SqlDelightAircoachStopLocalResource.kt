@@ -4,13 +4,13 @@ import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import ie.dublinmapper.datamodel.AircoachStopLocalResource
 import ie.dublinmapper.domain.model.setFavourite
-import ie.dublinmapper.util.AlphanumComparator
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Coordinate
 import io.rtpi.api.Route
 import io.rtpi.api.Service
+import io.rtpi.util.RouteComparator
 
 class SqlDelightAircoachStopLocalResource(
     private val database: Database
@@ -54,9 +54,7 @@ class SqlDelightAircoachStopLocalResource(
                 id = it.id,
                 name = it.name,
                 coordinate = Coordinate(it.latitude, it.longitude),
-                routes = routes?.sortedWith(Comparator { r1, r2 ->
-                    AlphanumComparator.getInstance().compare(r1.id, r2.id)
-                }) ?: emptyList(),
+                routes = routes?.sortedWith(RouteComparator) ?: emptyList(),
                 operators = routes?.map { route -> route.operator }?.toSet() ?: emptySet()
             )
         }.associateBy { it.id }

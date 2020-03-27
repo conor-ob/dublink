@@ -1,31 +1,18 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-android {
-    compileSdkVersion 29
 
+android {
+    compileSdkVersion buildConfig.compileSdk
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
     }
 
     androidExtensions {
         experimental = true
     }
-
 }
 
 dependencies {
@@ -34,7 +21,7 @@ dependencies {
 
     api "com.google.android.material:material:1.2.0-alpha02"
 
-    api "io.rtpi:rtpi-api:1-SNAPSHOT"
+    api libraries.rtpi_api
 
     api "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
 //    api "androidx.core:core-ktx:${versions.androidx.core_ktx}"

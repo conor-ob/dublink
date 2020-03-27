@@ -1,4 +1,4 @@
-package ie.dublinmapper.util
+package ie.dublinmapper.core
 
 interface PreferenceStore {
 
@@ -15,5 +15,4 @@ interface PreferenceStore {
     fun setBoolean(preferenceKey: String, value: Boolean): Boolean
 
     fun contains(preferenceKey: String): Boolean
-
 }

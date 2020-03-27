@@ -5,10 +5,9 @@ import com.nytimes.android.external.store3.base.RecordState
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.room.RoomPersister
 import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
-import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.TimeUtils
+import ie.dublinmapper.core.InternetManager
 import io.reactivex.Observable
-import org.threeten.bp.Instant
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractPersister<Raw, Parsed, Key>(
@@ -44,7 +43,7 @@ abstract class AbstractPersister<Raw, Parsed, Key>(
         if (lastUpdated == null) {
             return RecordState.STALE
         }
-        val elapsedSeconds = TimeUtils.now().epochSecond - lastUpdated.epochSecond
+        val elapsedSeconds = Instant.now().epochSecond - lastUpdated.epochSecond
         if (elapsedSeconds > lifespan) {
             return RecordState.STALE
         }

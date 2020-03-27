@@ -3,6 +3,7 @@ package ie.dublinmapper.util
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import ie.dublinmapper.core.StringProvider
 import ie.dublinmapper.ui.R
 
 class AndroidResourceStringProvider(

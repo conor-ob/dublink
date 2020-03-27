@@ -20,5 +20,4 @@ class TimberInitializer @Inject constructor() : ApplicationInitializer {
             }
         )
     }
-
 }

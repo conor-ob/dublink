@@ -24,5 +24,4 @@ class NetworkLoggingInterceptor : Interceptor {
             level = HttpLoggingInterceptor.Level.HEADERS
         }
     }
-
 }

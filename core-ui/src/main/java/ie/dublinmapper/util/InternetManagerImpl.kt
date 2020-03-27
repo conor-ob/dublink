@@ -3,6 +3,7 @@ package ie.dublinmapper.util
 import android.content.Context
 import android.net.wifi.SupplicantState
 import android.net.wifi.WifiManager
+import ie.dublinmapper.core.InternetManager
 
 class InternetManagerImpl(private val context: Context) : InternetManager {
 
@@ -13,5 +14,4 @@ class InternetManagerImpl(private val context: Context) : InternetManager {
         }
         return false
     }
-
 }

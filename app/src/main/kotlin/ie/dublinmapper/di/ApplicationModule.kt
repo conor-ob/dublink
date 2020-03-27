@@ -7,16 +7,14 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.config.AppConfig
+import ie.dublinmapper.core.*
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
 import ie.dublinmapper.init.*
-import ie.dublinmapper.location.LocationProvider
 import ie.dublinmapper.nearby.location.GpsLocationProvider
 import ie.dublinmapper.permission.AndroidPermissionsChecker
-import ie.dublinmapper.permission.PermissionChecker
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.R
@@ -29,6 +27,7 @@ import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -43,7 +42,6 @@ class ApplicationModule {
             listOf(
                 PreferencesInitializer(),
                 TimberInitializer(),
-                ThreeTenInitializer(),
                 ThemeInitializer(themeRepository),
                 RxInitilaizer(),
                 StethoInitializer()
@@ -94,7 +92,10 @@ class ApplicationModule {
             .build()
 
     @Provides
-    fun client(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
+    fun client(okHttpClient: OkHttpClient): RtpiClient {
+        Timber.d("creating RtpiClient")
+        return RtpiClient(okHttpClient)
+    }
 
     @Provides
     fun mapperFacade(
@@ -144,7 +145,8 @@ class ApplicationModule {
     fun permissionChecker(context: Context): PermissionChecker = AndroidPermissionsChecker(context)
 
     @Provides
-    fun appConfig(): AppConfig = object : AppConfig {
+    fun appConfig(): AppConfig = object :
+        AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
         override fun appVersion() = BuildConfig.VERSION_NAME
     }

@@ -13,8 +13,8 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataRepository
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopPersister
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopRepository
-import ie.dublinmapper.util.EnabledServiceManager
-import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.core.InternetManager
 import io.rtpi.api.DublinBusLiveData
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service

@@ -1,7 +1,7 @@
 package ie.dublinmapper.settings
 
 import com.google.common.truth.Truth.assertThat
-import ie.dublinmapper.util.PreferenceStore
+import ie.dublinmapper.core.PreferenceStore
 import io.mockk.every
 import io.mockk.mockk
 import io.rtpi.api.Service

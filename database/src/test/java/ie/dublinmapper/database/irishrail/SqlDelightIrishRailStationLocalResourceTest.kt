@@ -8,7 +8,7 @@ import io.rtpi.api.Coordinate
 import io.rtpi.api.IrishRailStation
 import io.rtpi.api.Operator
 import org.junit.Test
-import org.threeten.bp.Instant
+import java.time.Instant
 
 class SqlDelightIrishRailStationLocalResourceTest {
 
