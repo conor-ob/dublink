@@ -1,6 +1,6 @@
 package ie.dublinmapper.datamodel
 
-import org.threeten.bp.Instant
+import java.time.Instant
 
 interface ServiceLocationRecordStateLocalResource {
 

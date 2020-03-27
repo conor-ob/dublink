@@ -43,7 +43,6 @@ class ApplicationModule {
             listOf(
                 PreferencesInitializer(),
                 TimberInitializer(),
-                ThreeTenInitializer(),
                 ThemeInitializer(themeRepository),
                 RxInitilaizer(),
                 StethoInitializer()

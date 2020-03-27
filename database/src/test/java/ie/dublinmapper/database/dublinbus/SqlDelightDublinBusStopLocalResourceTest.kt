@@ -9,7 +9,7 @@ import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import org.junit.Test
-import org.threeten.bp.Instant
+import java.time.Instant
 
 class SqlDelightDublinBusStopLocalResourceTest {
 

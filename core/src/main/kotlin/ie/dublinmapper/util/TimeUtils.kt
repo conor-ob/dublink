@@ -1,8 +1,8 @@
 package ie.dublinmapper.util
 
-import org.threeten.bp.*
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.temporal.ChronoUnit
+import java.time.*
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 object TimeUtils {

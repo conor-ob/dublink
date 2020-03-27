@@ -1,7 +1,7 @@
 package ie.dublinmapper
 
 import ie.dublinmapper.util.CurrentDateTimeProvider
-import org.threeten.bp.*
+import java.time.*
 
 class MockCurrentDateTimeProvider : CurrentDateTimeProvider {
 

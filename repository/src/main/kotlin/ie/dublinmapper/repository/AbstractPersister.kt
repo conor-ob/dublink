@@ -8,7 +8,7 @@ import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.util.InternetManager
 import ie.dublinmapper.util.TimeUtils
 import io.reactivex.Observable
-import org.threeten.bp.Instant
+import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractPersister<Raw, Parsed, Key>(

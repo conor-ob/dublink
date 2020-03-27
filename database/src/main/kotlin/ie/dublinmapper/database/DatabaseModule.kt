@@ -15,7 +15,7 @@ import ie.dublinmapper.datamodel.IrishRailStationLocalResource
 import ie.dublinmapper.datamodel.LuasStopLocalResource
 import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.util.StringProvider
-import org.threeten.bp.Instant
+import java.time.Instant
 import javax.inject.Singleton
 
 @Module

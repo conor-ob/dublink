@@ -9,7 +9,7 @@ dependencies {
     implementation "com.nytimes.android:store3:${versions.store3}"
     implementation "ma.glasnost.orika:orika-core:${versions.orika_core}"
 
-    implementation "io.rtpi:rtpi-api:1-SNAPSHOT"
+    implementation libraries.rtpi_api
     implementation libraries.rtpi_client
 
     kapt libraries.dagger_compiler

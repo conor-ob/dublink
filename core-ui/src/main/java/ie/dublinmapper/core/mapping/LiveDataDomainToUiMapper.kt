@@ -143,22 +143,22 @@ class LiveDataDomainToUiMapper(
     }
 
     private fun mapLuasLiveData(serviceLocationName: String, liveData: List<LuasLiveData>): Group {
-        val groups = liveData.groupBy { it.direction }
-        val items = mutableListOf<Group>()
-//        if (liveData.isNotEmpty()) {
-//            items.add(DividerItem())
+//        val groups = liveData.groupBy { it.direction }
+//        val items = mutableListOf<Group>()
+////        if (liveData.isNotEmpty()) {
+////            items.add(DividerItem())
+////        }
+//        for (entry in groups.entries) {
+////            items.add(HeaderItem(entry.key))
+//            val values = entry.value
+//            for (i in values.indices) {
+//                val isLast = i == values.size - 1
+//                val isEven = i % 2 == 0
+//                items.add(LuasLiveDataItem(values[i]))
+//            }
+////            items.add(DividerItem())
 //        }
-        for (entry in groups.entries) {
-//            items.add(HeaderItem(entry.key))
-            val values = entry.value
-            for (i in values.indices) {
-                val isLast = i == values.size - 1
-                val isEven = i % 2 == 0
-                items.add(LuasLiveDataItem(values[i]))
-            }
-//            items.add(DividerItem())
-        }
-        return Section(items)
+        return Section(liveData.map { LuasLiveDataItem(it) })
     }
 
 }
