@@ -114,5 +114,4 @@ class DatabaseModule {
     fun serviceLocationRecordStateLocalResource(database: Database): ServiceLocationRecordStateLocalResource {
         return SqlDelightServiceLocationRecordStateLocalResource(database)
     }
-
 }

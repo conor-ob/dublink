@@ -10,10 +10,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.Navigator
+import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.getServiceLocation
-import ie.dublinmapper.ui.DublinMapperFragment
-import ie.dublinmapper.ui.viewModelProvider
+import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_nearby.*
 import kotlinx.android.synthetic.main.fragment_nearby.view.*
@@ -39,7 +39,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
         toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_settings -> {
-                    (activity as Navigator).navigateToSettings()
+                    (activity as DublinMapperNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true
                 }
             }
@@ -50,7 +50,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
         adapter.setOnItemClickListener { item, _ ->
             val serviceLocation = item.getServiceLocation()
             if (Service.DUBLIN_BIKES != serviceLocation.service) {
-                (activity as Navigator).navigateToLiveData(serviceLocation)
+                (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
         view.nearbyLocations.adapter = adapter

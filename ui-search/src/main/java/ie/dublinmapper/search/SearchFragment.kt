@@ -1,21 +1,16 @@
 package ie.dublinmapper.search
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
-import android.text.TextWatcher
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.Navigator
+import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.getServiceLocation
-import ie.dublinmapper.ui.DublinMapperFragment
-import ie.dublinmapper.ui.viewModelProvider
+import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.viewModelProvider
 import ie.dublinmapper.util.hideKeyboard
 import ie.dublinmapper.util.showKeyboard
 import io.reactivex.Observable
@@ -23,7 +18,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_search.*
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
@@ -60,7 +54,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         adapter.setOnItemClickListener { item, _ ->
             val serviceLocation = item.getServiceLocation()
             if (Service.DUBLIN_BIKES != serviceLocation.service) {
-                (activity as Navigator).navigateToLiveData(serviceLocation)
+                (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
 

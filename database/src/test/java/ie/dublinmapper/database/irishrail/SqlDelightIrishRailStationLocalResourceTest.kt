@@ -63,7 +63,8 @@ class SqlDelightIrishRailStationLocalResourceTest {
                     id = "TARA",
                     name = "Tara Street",
                     coordinate = Coordinate(latitude = 0.0, longitude = 0.0),
-                    operators = setOf(Operator.DART, Operator.COMMUTER, Operator.INTERCITY)
+                    operators = setOf(Operator.DART, Operator.COMMUTER, Operator.INTERCITY),
+                    routes = emptyList()
                 )
             )
         )
@@ -76,7 +77,8 @@ class SqlDelightIrishRailStationLocalResourceTest {
                         id = "TARA",
                         name = "Tara Street",
                         coordinate = Coordinate(0.0, 0.0),
-                        operators = setOf(Operator.DART, Operator.COMMUTER, Operator.INTERCITY)
+                        operators = setOf(Operator.DART, Operator.COMMUTER, Operator.INTERCITY),
+                        routes = emptyList()
                     )
                 )
             )

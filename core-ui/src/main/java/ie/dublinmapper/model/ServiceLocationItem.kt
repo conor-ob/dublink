@@ -1,13 +1,11 @@
 package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
-import android.view.Display
 import android.view.View
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.ui.R
+import ie.dublinmapper.core.R
 import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.list_item_service_location.*
 import com.google.android.material.chip.Chip

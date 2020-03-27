@@ -6,7 +6,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.domain.usecase.FavouritesResponse
 import ie.dublinmapper.model.aircoach.AircoachStopItem
 import ie.dublinmapper.model.buseireann.BusEireannStopItem
-import ie.dublinmapper.model.dart.IrishRailStationItem
+import ie.dublinmapper.model.irishrail.IrishRailStationItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
 import ie.dublinmapper.model.dublinbus.DublinBusStopItem
 import ie.dublinmapper.model.luas.LuasStopItem

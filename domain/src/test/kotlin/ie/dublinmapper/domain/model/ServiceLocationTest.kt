@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import io.rtpi.api.Coordinate
 import io.rtpi.api.LuasStop
 import io.rtpi.api.Operator
+import io.rtpi.api.Route
 import org.junit.Test
 
 class ServiceLocationTest {
@@ -31,7 +32,7 @@ private fun createLuasStop(
     name: String = "St. Stephen's Green",
     coordinate: Coordinate = Coordinate(53.533, -6.232),
     operators: Set<Operator> = setOf(Operator.LUAS),
-    routes: Map<Operator, List<String>> = mapOf(Operator.LUAS to listOf("Green"))
+    routes: List<Route> = emptyList()
 ): LuasStop {
     return LuasStop(
         id = id,

@@ -6,7 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.twitter.sdk.android.tweetui.TweetTimelineRecyclerViewAdapter
 import com.twitter.sdk.android.tweetui.TwitterListTimeline
-import ie.dublinmapper.ui.DublinMapperFragment
+import ie.dublinmapper.DublinMapperFragment
 import kotlinx.android.synthetic.main.fragment_twitter.*
 
 class TwitterFragment(
