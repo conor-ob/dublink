@@ -8,5 +8,4 @@ interface BusEireannStopLocalResource {
     fun selectStops(): Observable<List<BusEireannStop>>
 
     fun insertStops(stops: List<BusEireannStop>)
-
 }

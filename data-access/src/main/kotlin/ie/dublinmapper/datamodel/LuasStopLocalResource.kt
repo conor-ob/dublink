@@ -8,5 +8,4 @@ interface LuasStopLocalResource {
     fun selectStops(): Observable<List<LuasStop>>
 
     fun insertStops(stops: List<LuasStop>)
-
 }
