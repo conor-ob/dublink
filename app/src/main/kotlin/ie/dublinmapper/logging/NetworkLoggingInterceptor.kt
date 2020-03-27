@@ -3,25 +3,19 @@ package ie.dublinmapper.logging
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import timber.log.Timber
 
 class NetworkLoggingInterceptor : Interceptor {
 
     private val httpLoggingInterceptor: Interceptor by lazy { newHttpLoggingInterceptor() }
-    private val log: Logger by lazy { newLogger() }
 
-    override fun intercept(chain: Interceptor.Chain): Response {
-        return httpLoggingInterceptor.intercept(chain)
-    }
+    override fun intercept(chain: Interceptor.Chain): Response = httpLoggingInterceptor.intercept(chain)
 
-    private fun newLogger(): Logger = LoggerFactory.getLogger(javaClass)
-
-    private fun newHttpLoggingInterceptor(): Interceptor {
-        return HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
-            log.debug(it)
-        }).apply {
-            level = HttpLoggingInterceptor.Level.HEADERS
+    private fun newHttpLoggingInterceptor() = HttpLoggingInterceptor(
+        HttpLoggingInterceptor.Logger {
+            Timber.d(it)
         }
+    ).apply {
+        level = HttpLoggingInterceptor.Level.HEADERS
     }
 }

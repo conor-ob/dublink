@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.domain.repository.FavouriteRepository
-import ma.glasnost.orika.MapperFacade
 import javax.inject.Singleton
 
 @Module
@@ -17,5 +16,4 @@ class FavouriteRepositoryModule {
     ): FavouriteRepository {
         return FavouriteServiceLocationRepository(localResource)
     }
-
 }

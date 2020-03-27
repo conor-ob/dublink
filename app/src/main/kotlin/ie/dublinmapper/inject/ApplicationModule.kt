@@ -49,17 +49,15 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun setupContainers(themeRepository: ThemeRepository): SetupContainers {
-        return SetupContainers(
-            listOf(
-                PreferencesContainer(),
-                TimberContainer(),
-                ThemeContainer(themeRepository),
-                RxContainer(),
-                StethoContainer()
-            )
+    fun setupContainers(themeRepository: ThemeRepository): SetupContainers = SetupContainers(
+        listOf(
+            PreferencesContainer(),
+            TimberContainer(),
+            ThemeContainer(themeRepository),
+            RxContainer(),
+            StethoContainer()
         )
-    }
+    )
 
     @Provides
     @Singleton
@@ -70,15 +68,7 @@ class ApplicationModule {
     fun stringProvider(
         context: Context,
         resources: Resources
-    ): StringProvider = StringResourceProvider(
-        context,
-        resources
-    )
-
-//    @Provides
-//    fun mapMarkerManager(context: Context): GoogleMapController {
-//        return GoogleMapController(context)
-//    }
+    ): StringProvider = StringResourceProvider(context, resources)
 
     @Provides
     @Singleton
@@ -89,8 +79,7 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun internetManager(context: Context): InternetManager =
-        WifiManager(context)
+    fun internetManager(context: Context): InternetManager = WifiManager(context)
 
     @Provides
     @Singleton
@@ -153,8 +142,7 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun locationProvider(context: Context): LocationProvider =
-        GpsLocationProvider(context)
+    fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)
 
     @Provides
     @Singleton
