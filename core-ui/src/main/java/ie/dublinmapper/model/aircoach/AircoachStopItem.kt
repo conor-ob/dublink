@@ -1,10 +1,9 @@
 package ie.dublinmapper.model.aircoach
 
 import com.xwray.groupie.kotlinandroidextensions.ViewHolder
-import ie.dublinmapper.ui.R
+import ie.dublinmapper.core.R
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.AircoachStop
-import io.rtpi.api.Operator
 import io.rtpi.api.Service
 
 class AircoachStopItem(

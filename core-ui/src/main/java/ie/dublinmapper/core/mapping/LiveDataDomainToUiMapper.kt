@@ -6,7 +6,7 @@ import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.model.*
 import ie.dublinmapper.model.aircoach.AircoachLiveDataItem
 import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
-import ie.dublinmapper.model.dart.IrishRailLiveDataItem
+import ie.dublinmapper.model.irishrail.IrishRailLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
 import ie.dublinmapper.core.StringProvider
@@ -30,7 +30,7 @@ class LiveDataDomainToUiMapper(
             Service.BUS_EIREANN -> mapBusEireannLiveData(source.serviceLocationName, source.liveData.map { it as BusEireannLiveData })
             Service.DUBLIN_BIKES -> mapDublinBikesLiveData(source.serviceLocationName, source.liveData.map { it as DublinBikesLiveData })
             Service.DUBLIN_BUS -> mapDublinBusLiveData(source.serviceLocationName, source.liveData.map { it as DublinBusLiveData })
-            Service.IRISH_RAIL -> mapDartLiveData(source.serviceLocationName, source.liveData.map { it as IrishRailLiveData })
+            Service.IRISH_RAIL -> mapIrishRailLiveData(source.serviceLocationName, source.liveData.map { it as IrishRailLiveData })
             Service.LUAS -> mapLuasLiveData(source.serviceLocationName, source.liveData.map { it as LuasLiveData })
             else -> TODO()
         }
@@ -108,7 +108,7 @@ class LiveDataDomainToUiMapper(
         return Section(items)
     }
 
-    private fun mapDartLiveData(serviceLocationName: String, liveData: List<IrishRailLiveData>): Group {
+    private fun mapIrishRailLiveData(serviceLocationName: String, liveData: List<IrishRailLiveData>): Group {
         return Section(
             liveData.map {
                 IrishRailLiveDataItem(it)

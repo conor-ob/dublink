@@ -1,4 +1,4 @@
-package ie.dublinmapper.model.dart
+package ie.dublinmapper.model.irishrail
 
 import com.xwray.groupie.Item
 import ie.dublinmapper.model.LiveDataItem

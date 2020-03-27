@@ -1,4 +1,4 @@
-package ie.dublinmapper.ui
+package ie.dublinmapper
 
 import android.content.Context
 import android.os.Bundle

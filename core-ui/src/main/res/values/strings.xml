@@ -46,24 +46,6 @@
     <string name="service_name_irish_rail">Irish Rail</string>
     <string name="service_name_luas">Luas</string>
 
-    <string name="operator_aircoach_id">@string/service_name_aircoach</string>
-    <string name="operator_aircoach_code">AC</string>
-    <string name="operator_buseireann_id">@string/service_name_bus_eireann</string>
-    <string name="operator_buseireaann_code">BE</string>
-    <string name="operator_commuter_id">Commuter</string>
-    <string name="operator_commuter_code">COMM</string>
-    <string name="operator_dart_id">DART</string>
-    <string name="operator_dart_code">@string/operator_dart_id</string>
-    <string name="operator_dublinbikes_id">@string/service_name_dublin_bikes</string>
-    <string name="operator_dublinbikes_code">BIKE</string>
-    <string name="operator_dublinbus_id">@string/service_name_dublin_bus</string>
-    <string name="operator_dublinbus_code">BAC</string>
-    <string name="operator_goahead_id">Go Ahead</string>
-    <string name="operator_goahead_code">GAD</string>
-    <string name="operator_intercity_id">InterCity</string>
-    <string name="operator_intercity_code">ICTY</string>
-    <string name="operator_luas_id">@string/service_name_luas</string>
-    <string name="operator_luas_code">LUAS</string>
     <string name="action_save_favourite">Save Favourite</string>
     <string name="action_settings">Settings</string>
     <string name="live_data_just_updated">Just updated</string>

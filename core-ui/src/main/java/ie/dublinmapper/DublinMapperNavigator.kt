@@ -2,7 +2,7 @@ package ie.dublinmapper
 
 import io.rtpi.api.ServiceLocation
 
-interface Navigator {
+interface DublinMapperNavigator {
 
     fun navigateToLiveData(serviceLocation: ServiceLocation)
 
