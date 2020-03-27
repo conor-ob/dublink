@@ -1,4 +1,4 @@
-package ie.dublinmapper.util
+package ie.dublinmapper.logging
 
 import android.util.Log
 //import com.crashlytics.android.Crashlytics
@@ -15,5 +15,4 @@ class CrashlyticsTree : Timber.Tree() {
 //            Crashlytics.logException(t)
         }
     }
-
 }

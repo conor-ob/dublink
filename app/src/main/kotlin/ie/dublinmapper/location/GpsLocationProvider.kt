@@ -1,4 +1,4 @@
-package ie.dublinmapper.nearby.location
+package ie.dublinmapper.location
 
 import android.content.Context
 import android.location.Location
@@ -9,8 +9,7 @@ import io.rtpi.api.Coordinate
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import javax.inject.Inject
 
-class GpsLocationProvider @Inject constructor(context: Context) :
-    LocationProvider {
+class GpsLocationProvider @Inject constructor(context: Context) : LocationProvider {
 
     private val locationProvider = ReactiveLocationProvider(context)
     private var lastKnownLocation: Location? = null
@@ -83,5 +82,4 @@ class GpsLocationProvider @Inject constructor(context: Context) :
             provider2 == null
         } else provider1 == provider2
     }
-
 }

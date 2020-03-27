@@ -1,4 +1,4 @@
-package ie.dublinmapper.init
+package ie.dublinmapper.setup
 
 import android.app.Application
 import io.reactivex.exceptions.UndeliverableException
@@ -7,9 +7,9 @@ import timber.log.Timber
 import java.io.IOException
 import java.net.SocketException
 
-class RxInitilaizer : ApplicationInitializer {
+class RxContainer : SetupContainer {
 
-    override fun initialize(application: Application) {
+    override fun setup(application: Application) {
         RxJavaPlugins.setErrorHandler {
             var e = it
             if (e is UndeliverableException) {

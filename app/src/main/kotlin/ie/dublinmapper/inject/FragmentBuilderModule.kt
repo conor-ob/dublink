@@ -1,4 +1,4 @@
-package ie.dublinmapper.di
+package ie.dublinmapper.inject
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

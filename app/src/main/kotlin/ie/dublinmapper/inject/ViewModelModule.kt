@@ -1,4 +1,4 @@
-package ie.dublinmapper.di
+package ie.dublinmapper.inject
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

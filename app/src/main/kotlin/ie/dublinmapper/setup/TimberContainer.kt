@@ -1,4 +1,4 @@
-package ie.dublinmapper.init
+package ie.dublinmapper.setup
 
 import android.app.Application
 import com.ww.roxie.Roxie
@@ -6,9 +6,9 @@ import ie.dublinmapper.BuildConfig
 import timber.log.Timber
 import javax.inject.Inject
 
-class TimberInitializer @Inject constructor() : ApplicationInitializer {
+class TimberContainer @Inject constructor() : SetupContainer {
 
-    override fun initialize(application: Application) {
+    override fun setup(application: Application) {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }

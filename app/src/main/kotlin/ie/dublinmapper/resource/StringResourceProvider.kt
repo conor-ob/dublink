@@ -1,4 +1,4 @@
-package ie.dublinmapper.util
+package ie.dublinmapper.resource
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -6,7 +6,7 @@ import android.content.res.Resources
 import ie.dublinmapper.core.StringProvider
 import ie.dublinmapper.ui.R
 
-class AndroidResourceStringProvider(
+class StringResourceProvider(
     private val context: Context,
     private val resources: Resources
 ) : StringProvider {
@@ -45,5 +45,4 @@ class AndroidResourceStringProvider(
     override fun nearby(): String {
         return resources.getString(R.string.title_nearby)
     }
-
 }

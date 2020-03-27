@@ -1,12 +1,12 @@
-package ie.dublinmapper.init
+package ie.dublinmapper.setup
 
 import android.app.Application
 import com.facebook.stetho.Stetho
 import ie.dublinmapper.BuildConfig
 
-class StethoInitializer : ApplicationInitializer {
+class StethoContainer : SetupContainer {
 
-    override fun initialize(application: Application) {
+    override fun setup(application: Application) {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(application)
         }

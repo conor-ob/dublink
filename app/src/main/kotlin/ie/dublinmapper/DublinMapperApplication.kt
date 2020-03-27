@@ -2,18 +2,17 @@ package ie.dublinmapper
 
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
-import ie.dublinmapper.di.DaggerApplicationComponent
-import ie.dublinmapper.init.ApplicationInitializers
+import ie.dublinmapper.inject.DaggerApplicationComponent
+import ie.dublinmapper.setup.SetupContainers
 import javax.inject.Inject
 
 class DublinMapperApplication : DaggerApplication() {
 
-    @Inject
-    lateinit var initializers: ApplicationInitializers
+    @Inject lateinit var containers: SetupContainers
 
     override fun onCreate() {
         super.onCreate()
-        initializers.initialize(this)
+        containers.setup(this)
     }
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {

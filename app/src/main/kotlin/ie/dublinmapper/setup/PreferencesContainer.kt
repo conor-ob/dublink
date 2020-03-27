@@ -1,12 +1,12 @@
-package ie.dublinmapper.init
+package ie.dublinmapper.setup
 
 import android.app.Application
 import androidx.preference.PreferenceManager
 import ie.dublinmapper.R
 
-class PreferencesInitializer : ApplicationInitializer {
+class PreferencesContainer : SetupContainer {
 
-    override fun initialize(application: Application) {
+    override fun setup(application: Application) {
         PreferenceManager.setDefaultValues(application, R.xml.preferences, false)
     }
 }

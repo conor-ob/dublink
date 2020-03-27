@@ -1,4 +1,4 @@
-package ie.dublinmapper.di
+package ie.dublinmapper.logging
 
 import okhttp3.Interceptor
 import okhttp3.Response

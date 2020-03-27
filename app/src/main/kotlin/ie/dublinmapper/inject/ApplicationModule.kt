@@ -1,4 +1,4 @@
-package ie.dublinmapper.di
+package ie.dublinmapper.inject
 
 import android.content.Context
 import android.content.res.Resources
@@ -13,15 +13,17 @@ import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
 import ie.dublinmapper.database.DatabaseModule
-import ie.dublinmapper.init.*
-import ie.dublinmapper.nearby.location.GpsLocationProvider
+import ie.dublinmapper.internet.WifiManager
+import ie.dublinmapper.setup.*
+import ie.dublinmapper.location.GpsLocationProvider
+import ie.dublinmapper.logging.NetworkLoggingInterceptor
 import ie.dublinmapper.permission.AndroidPermissionsChecker
 import ie.dublinmapper.repository.di.RepositoryModule
+import ie.dublinmapper.resource.StringResourceProvider
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.R
 import ie.dublinmapper.settings.ThemeRepository
-import ie.dublinmapper.util.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.Service
@@ -29,8 +31,8 @@ import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @Module(
     includes = [
@@ -42,33 +44,36 @@ import java.util.concurrent.TimeUnit
 class ApplicationModule {
 
     @Provides
+    @Singleton
     fun context(application: DublinMapperApplication): Context = application.applicationContext
 
     @Provides
-    fun applicationInitializers(themeRepository: ThemeRepository): ApplicationInitializers {
-        return ApplicationInitializers(
+    @Singleton
+    fun setupContainers(themeRepository: ThemeRepository): SetupContainers {
+        return SetupContainers(
             listOf(
-                PreferencesInitializer(),
-                TimberInitializer(),
-                ThemeInitializer(themeRepository),
-                RxInitilaizer(),
-                StethoInitializer()
+                PreferencesContainer(),
+                TimberContainer(),
+                ThemeContainer(themeRepository),
+                RxContainer(),
+                StethoContainer()
             )
         )
     }
 
     @Provides
-    fun resources(context: Context): Resources {
-        return context.resources
-    }
+    @Singleton
+    fun resources(context: Context): Resources = context.resources
 
     @Provides
+    @Singleton
     fun stringProvider(
         context: Context,
         resources: Resources
-    ): StringProvider {
-        return AndroidResourceStringProvider(context, resources)
-    }
+    ): StringProvider = StringResourceProvider(
+        context,
+        resources
+    )
 
 //    @Provides
 //    fun mapMarkerManager(context: Context): GoogleMapController {
@@ -76,19 +81,19 @@ class ApplicationModule {
 //    }
 
     @Provides
-    fun schedulers(): RxScheduler {
-        return RxScheduler(
-            io = Schedulers.io(),
-            ui = AndroidSchedulers.mainThread()
-        )
-    }
+    @Singleton
+    fun schedulers(): RxScheduler = RxScheduler(
+        io = Schedulers.io(),
+        ui = AndroidSchedulers.mainThread()
+    )
 
     @Provides
-    fun internetManager(context: Context): InternetManager {
-        return InternetManagerImpl(context)
-    }
+    @Singleton
+    fun internetManager(context: Context): InternetManager =
+        WifiManager(context)
 
     @Provides
+    @Singleton
     fun okHttpClient(): OkHttpClient =
         OkHttpClient.Builder()
             .addNetworkInterceptor(NetworkLoggingInterceptor())
@@ -100,37 +105,37 @@ class ApplicationModule {
             .build()
 
     @Provides
-    fun client(okHttpClient: OkHttpClient): RtpiClient {
-        Timber.d("creating RtpiClient")
-        return RtpiClient(okHttpClient)
-    }
+    @Singleton
+    fun client(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
 
     @Provides
+    @Singleton
     fun mapperFacade(
         stringProvider: StringProvider
     ): MapperFacade {
         val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
-
         mapperFactory.converterFactory.apply {
             registerConverter(FavouritesDomainToUiMapper(stringProvider))
             registerConverter(NearbyDomainToUiMapper(stringProvider))
             registerConverter(LiveDataDomainToUiMapper(stringProvider))
             registerConverter(SearchDomainToUiMapper)
         }
-
         return mapperFactory.mapperFacade
     }
 
     @Provides
+    @Singleton
     fun preferenceStore(context: Context): PreferenceStore = DefaultPreferenceStore(context)
 
     @Provides
+    @Singleton
     fun themeRepository(
         resources: Resources,
         preferenceStore: PreferenceStore
     ): ThemeRepository = ThemeRepository(resources, preferenceStore)
 
     @Provides
+    @Singleton
     fun enabledServiceManager(
         context: Context,
         preferenceStore: PreferenceStore
@@ -147,14 +152,17 @@ class ApplicationModule {
     )
 
     @Provides
-    fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)
+    @Singleton
+    fun locationProvider(context: Context): LocationProvider =
+        GpsLocationProvider(context)
 
     @Provides
+    @Singleton
     fun permissionChecker(context: Context): PermissionChecker = AndroidPermissionsChecker(context)
 
     @Provides
-    fun appConfig(): AppConfig = object :
-        AppConfig {
+    @Singleton
+    fun appConfig(): AppConfig = object : AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
         override fun appVersion() = BuildConfig.VERSION_NAME
     }
