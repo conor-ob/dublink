@@ -74,14 +74,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-//        prod.java.srcDirs += 'src/prod/kotlin'
-        test.java.srcDirs += 'src/test/kotlin'
-//        mock.java.srcDirs += 'src/mock/kotlin'
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
-    }
-
     // Enables view caching in viewholders.
     // See: https://github.com/Kotlin/KEEP/blob/master/proposals/android-extensions-entity-caching.md
     androidExtensions {

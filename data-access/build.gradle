@@ -7,8 +7,3 @@ dependencies {
 
     implementation libraries.rtpi_api
 }
-
-sourceSets {
-    main.java.srcDirs += 'src/main/kotlin'
-    test.java.srcDirs += 'src/test/kotlin'
-}
