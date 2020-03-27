@@ -12,9 +12,11 @@ import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
+import ie.dublinmapper.database.DatabaseModule
 import ie.dublinmapper.init.*
 import ie.dublinmapper.nearby.location.GpsLocationProvider
 import ie.dublinmapper.permission.AndroidPermissionsChecker
+import ie.dublinmapper.repository.di.RepositoryModule
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.R
@@ -30,7 +32,13 @@ import okhttp3.OkHttpClient
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-@Module
+@Module(
+    includes = [
+        ViewModelModule::class,
+        DatabaseModule::class,
+        RepositoryModule::class
+    ]
+)
 class ApplicationModule {
 
     @Provides
@@ -126,8 +134,9 @@ class ApplicationModule {
     fun enabledServiceManager(
         context: Context,
         preferenceStore: PreferenceStore
-    ): EnabledServiceManager {
-        val serviceToEnabledServicePreferenceKey = mapOf(
+    ): EnabledServiceManager = DefaultEnabledServiceManager(
+        preferenceStore = preferenceStore,
+        serviceToEnabledServicePreferenceKey = mapOf(
             Service.AIRCOACH to context.getString(R.string.preference_key_enabled_service_aircoach),
             Service.BUS_EIREANN to context.getString(R.string.preference_key_enabled_service_bus_eireann),
             Service.DUBLIN_BIKES to context.getString(R.string.preference_key_enabled_service_dublin_bikes),
@@ -135,8 +144,7 @@ class ApplicationModule {
             Service.IRISH_RAIL to context.getString(R.string.preference_key_enabled_service_irish_rail),
             Service.LUAS to context.getString(R.string.preference_key_enabled_service_luas)
         )
-        return DefaultEnabledServiceManager(preferenceStore, serviceToEnabledServicePreferenceKey)
-    }
+    )
 
     @Provides
     fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)

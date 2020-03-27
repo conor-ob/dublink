@@ -3,46 +3,38 @@ package ie.dublinmapper.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import ie.dublinmapper.favourites.FavouritesFragment
-import ie.dublinmapper.favourites.FavouritesModule
 import ie.dublinmapper.livedata.LiveDataFragment
-import ie.dublinmapper.livedata.LiveDataModule
 import ie.dublinmapper.nearby.NearbyFragment
-import ie.dublinmapper.nearby.NearbyModule
 import ie.dublinmapper.news.NewsFragment
-import ie.dublinmapper.news.NewsModule
 import ie.dublinmapper.news.TwitterFragment
-import ie.dublinmapper.news.TwitterModule
 import ie.dublinmapper.search.SearchFragment
-import ie.dublinmapper.search.SearchModule
 import ie.dublinmapper.settings.PreferencesFragment
-import ie.dublinmapper.settings.PreferencesModule
 import ie.dublinmapper.settings.SettingsFragment
-import ie.dublinmapper.settings.SettingsModule
 
 @Module
-abstract class FragmentModule {
+abstract class FragmentBuilderModule {
 
-    @ContributesAndroidInjector(modules = [FavouritesModule::class])
+    @ContributesAndroidInjector
     abstract fun contributeFavouritesFragmentInjector(): FavouritesFragment
 
-    @ContributesAndroidInjector(modules = [LiveDataModule::class])
+    @ContributesAndroidInjector
     abstract fun contributeLiveDataFragmentInjector(): LiveDataFragment
 
-    @ContributesAndroidInjector(modules = [NewsModule::class])
+    @ContributesAndroidInjector
     abstract fun contributeNewsFragmentInjector(): NewsFragment
 
-    @ContributesAndroidInjector(modules = [TwitterModule::class])
+    @ContributesAndroidInjector
     abstract fun contributeTwitterFragmentInjector(): TwitterFragment
 
-    @ContributesAndroidInjector(modules = [NearbyModule::class])
+    @ContributesAndroidInjector
     abstract fun contributeNearbyFragmentInjector(): NearbyFragment
 
-    @ContributesAndroidInjector(modules = [SearchModule::class])
+    @ContributesAndroidInjector
     abstract fun contributeSearchFragmentInjector(): SearchFragment
 
-    @ContributesAndroidInjector(modules = [PreferencesModule::class])
+    @ContributesAndroidInjector
     abstract fun contributePreferencesFragmentInjector(): PreferencesFragment
 
-    @ContributesAndroidInjector(modules = [SettingsModule::class])
+    @ContributesAndroidInjector
     abstract fun contributeSettingsFragmentInjector(): SettingsFragment
 }

@@ -18,5 +18,4 @@ class SettingsFragment : DublinMapperFragment(R.layout.fragment_settings) {
             replace(R.id.settings_container, PreferencesFragment())
         }
     }
-
 }

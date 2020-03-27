@@ -1,23 +1,17 @@
 package ie.dublinmapper.di
 
 import dagger.Component
+import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
-import dagger.android.support.AndroidSupportInjectionModule
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.database.DatabaseModule
-import ie.dublinmapper.repository.di.RepositoryModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
-        AndroidSupportInjectionModule::class,
+        AndroidInjectionModule::class,
         ApplicationModule::class,
-        ActivityModule::class,
-        FragmentModule::class,
-        ViewModelModule::class,
-        DatabaseModule::class,
-        RepositoryModule::class
+        ActivityBuilderModule::class
     ]
 )
 interface ApplicationComponent : AndroidInjector<DublinMapperApplication> {

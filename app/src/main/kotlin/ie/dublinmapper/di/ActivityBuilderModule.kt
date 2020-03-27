@@ -5,8 +5,8 @@ import dagger.android.ContributesAndroidInjector
 import ie.dublinmapper.DublinMapperActivity
 
 @Module
-abstract class ActivityModule {
+abstract class ActivityBuilderModule {
 
-    @ContributesAndroidInjector(modules = [ApplicationModule::class])
+    @ContributesAndroidInjector(modules = [FragmentBuilderModule::class])
     abstract fun contributeHomeActivityInjector(): DublinMapperActivity
 }

@@ -57,7 +57,6 @@ class ThemeRepository @Inject constructor(
             listOf(Theme.LIGHT, Theme.DARK, Theme.BATTERY_SAVER)
         }
     }
-
 }
 
 enum class Theme(val mode: Int, @StringRes val value: Int) {
@@ -66,5 +65,4 @@ enum class Theme(val mode: Int, @StringRes val value: Int) {
     DARK(AppCompatDelegate.MODE_NIGHT_YES, R.string.preference_value_dark_theme),
     SYSTEM_DEFAULT(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, R.string.preference_value_system_default_theme),
     BATTERY_SAVER(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, R.string.preference_value_battery_saver_theme)
-
 }
