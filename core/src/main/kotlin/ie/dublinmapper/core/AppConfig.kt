@@ -1,4 +1,4 @@
-package ie.dublinmapper.config
+package ie.dublinmapper.core
 
 interface AppConfig {
 

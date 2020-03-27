@@ -14,7 +14,7 @@ import ie.dublinmapper.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.datamodel.IrishRailStationLocalResource
 import ie.dublinmapper.datamodel.LuasStopLocalResource
 import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
-import ie.dublinmapper.util.StringProvider
+import ie.dublinmapper.core.StringProvider
 import java.time.Instant
 import javax.inject.Singleton
 

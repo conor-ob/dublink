@@ -9,7 +9,7 @@ import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
 import ie.dublinmapper.model.dart.IrishRailLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
-import ie.dublinmapper.util.StringProvider
+import ie.dublinmapper.core.StringProvider
 import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext

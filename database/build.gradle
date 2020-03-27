@@ -35,6 +35,7 @@ dependencies {
     implementation project(':data-access')
 
     implementation libraries.rtpi_api
+    implementation libraries.rtpi_util
 
     implementation "com.squareup.sqldelight:android-driver:1.2.0"
     implementation "com.squareup.sqldelight:rxjava2-extensions:1.2.0"

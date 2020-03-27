@@ -4,7 +4,7 @@ import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
-import ie.dublinmapper.util.PreferenceStore
+import ie.dublinmapper.core.PreferenceStore
 import javax.inject.Inject
 
 class ThemeRepository @Inject constructor(

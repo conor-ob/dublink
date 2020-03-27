@@ -2,7 +2,7 @@ package ie.dublinmapper.repository.irishrail.stations
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import ie.dublinmapper.repository.ServiceLocationRepository
-import ie.dublinmapper.util.EnabledServiceManager
+import ie.dublinmapper.core.EnabledServiceManager
 import io.rtpi.api.IrishRailStation
 import io.rtpi.api.Service
 

@@ -7,16 +7,14 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.config.AppConfig
+import ie.dublinmapper.core.*
 import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
 import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
 import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
 import ie.dublinmapper.init.*
-import ie.dublinmapper.location.LocationProvider
 import ie.dublinmapper.nearby.location.GpsLocationProvider
 import ie.dublinmapper.permission.AndroidPermissionsChecker
-import ie.dublinmapper.permission.PermissionChecker
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.R
@@ -143,7 +141,8 @@ class ApplicationModule {
     fun permissionChecker(context: Context): PermissionChecker = AndroidPermissionsChecker(context)
 
     @Provides
-    fun appConfig(): AppConfig = object : AppConfig {
+    fun appConfig(): AppConfig = object :
+        AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
         override fun appVersion() = BuildConfig.VERSION_NAME
     }

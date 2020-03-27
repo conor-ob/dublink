@@ -13,10 +13,9 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
 import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataRepository
-import ie.dublinmapper.util.EnabledServiceManager
-import ie.dublinmapper.util.InternetManager
-import ie.dublinmapper.util.StringProvider
-import io.reactivex.Single
+import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.core.InternetManager
+import ie.dublinmapper.core.StringProvider
 import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.Service

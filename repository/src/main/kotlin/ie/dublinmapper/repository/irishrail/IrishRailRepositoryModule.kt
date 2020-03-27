@@ -13,8 +13,8 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.irishrail.livedata.IrishRailLiveDataRepository
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationPersister
 import ie.dublinmapper.repository.irishrail.stations.IrishRailStationRepository
-import ie.dublinmapper.util.EnabledServiceManager
-import ie.dublinmapper.util.InternetManager
+import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.core.InternetManager
 import io.rtpi.api.IrishRailLiveData
 import io.rtpi.api.IrishRailStation
 import io.rtpi.api.Service

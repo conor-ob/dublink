@@ -1,7 +1,7 @@
 package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.util.RxScheduler
+import ie.dublinmapper.core.RxScheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.rtpi.api.*
 import javax.inject.Inject
