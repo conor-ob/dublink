@@ -17,7 +17,7 @@ import ie.dublinmapper.internet.WifiManager
 import ie.dublinmapper.setup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
-import ie.dublinmapper.permission.AndroidPermissionsChecker
+import ie.dublinmapper.permission.UserPermissionsChecker
 import ie.dublinmapper.repository.di.RepositoryModule
 import ie.dublinmapper.resource.StringResourceProvider
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
@@ -158,7 +158,7 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun permissionChecker(context: Context): PermissionChecker = AndroidPermissionsChecker(context)
+    fun permissionChecker(context: Context): PermissionChecker = UserPermissionsChecker(context)
 
     @Provides
     @Singleton
