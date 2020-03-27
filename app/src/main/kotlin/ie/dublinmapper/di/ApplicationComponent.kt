@@ -24,5 +24,4 @@ interface ApplicationComponent : AndroidInjector<DublinMapperApplication> {
 
     @Component.Factory
     abstract class Factory : AndroidInjector.Factory<DublinMapperApplication>
-
 }

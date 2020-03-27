@@ -45,5 +45,4 @@ abstract class FragmentModule {
 
     @ContributesAndroidInjector(modules = [SettingsModule::class])
     abstract fun contributeSettingsFragmentInjector(): SettingsFragment
-
 }

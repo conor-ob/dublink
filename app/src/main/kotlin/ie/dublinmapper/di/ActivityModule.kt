@@ -9,5 +9,4 @@ abstract class ActivityModule {
 
     @ContributesAndroidInjector(modules = [ApplicationModule::class])
     abstract fun contributeHomeActivityInjector(): DublinMapperActivity
-
 }

@@ -9,5 +9,4 @@ class PreferencesInitializer : ApplicationInitializer {
     override fun initialize(application: Application) {
         PreferenceManager.setDefaultValues(application, R.xml.preferences, false)
     }
-
 }

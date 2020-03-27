@@ -27,6 +27,7 @@ import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -91,7 +92,10 @@ class ApplicationModule {
             .build()
 
     @Provides
-    fun client(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
+    fun client(okHttpClient: OkHttpClient): RtpiClient {
+        Timber.d("creating RtpiClient")
+        return RtpiClient(okHttpClient)
+    }
 
     @Provides
     fun mapperFacade(

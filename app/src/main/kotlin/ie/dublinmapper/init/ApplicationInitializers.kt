@@ -9,5 +9,4 @@ class ApplicationInitializers(
     fun initialize(application: Application) {
         initializers.forEach { it.initialize(application) }
     }
-
 }

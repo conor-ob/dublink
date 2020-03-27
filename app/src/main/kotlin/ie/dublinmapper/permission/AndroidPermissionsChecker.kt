@@ -6,8 +6,7 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import ie.dublinmapper.core.PermissionChecker
 
-class AndroidPermissionsChecker(private val context: Context) :
-    PermissionChecker {
+class AndroidPermissionsChecker(private val context: Context) : PermissionChecker {
 
     override fun isLocationPermissionGranted(): Boolean {
         return ContextCompat.checkSelfPermission(context,
@@ -15,5 +14,4 @@ class AndroidPermissionsChecker(private val context: Context) :
                 && ContextCompat.checkSelfPermission(context,
             Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
     }
-
 }
