@@ -10,6 +10,12 @@ android {
         targetSdkVersion buildConfig.targetSdk
     }
 
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+
     androidExtensions {
         experimental = true
     }
