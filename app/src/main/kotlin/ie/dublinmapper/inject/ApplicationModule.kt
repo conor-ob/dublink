@@ -77,11 +77,7 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun schedulers(): RxScheduler =
-        RxScheduler(
-            Schedulers.io(),
-            AndroidSchedulers.mainThread()
-        )
+    fun schedulers(): RxScheduler = RxScheduler(Schedulers.io(), AndroidSchedulers.mainThread())
 
     @Provides
     @Singleton
