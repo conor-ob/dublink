@@ -1,6 +1,6 @@
 package ie.dublinmapper.database
 
-import ie.dublinmapper.datamodel.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
 import io.rtpi.api.Service
 
 class SqlDelightFavouriteServiceLocationLocalResource(

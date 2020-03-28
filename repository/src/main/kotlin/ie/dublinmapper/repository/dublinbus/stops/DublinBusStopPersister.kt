@@ -1,8 +1,8 @@
 package ie.dublinmapper.repository.dublinbus.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.datamodel.DublinBusStopLocalResource
-import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.DublinBusStopLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.core.InternetManager
 import io.reactivex.Observable

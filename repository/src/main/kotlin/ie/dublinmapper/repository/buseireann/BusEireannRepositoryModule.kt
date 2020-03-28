@@ -7,8 +7,8 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.BusEireannStopLocalResource
-import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.BusEireannStopLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository

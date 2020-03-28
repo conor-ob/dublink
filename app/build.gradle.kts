@@ -81,7 +81,6 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":database"))
-    implementation(project(":datamodel"))
     implementation(project(":domain"))
     implementation(project(":repository"))
     implementation(project(":ui-app"))

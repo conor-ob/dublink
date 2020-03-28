@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":datamodel"))
     implementation(project(":domain"))
 
     implementation(Libraries.Dagger.dagger)

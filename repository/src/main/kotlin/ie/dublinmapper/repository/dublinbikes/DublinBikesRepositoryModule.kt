@@ -7,8 +7,8 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.DublinBikesDockLocalResource
-import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.DublinBikesDockLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
 import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository

@@ -1,4 +1,4 @@
-package ie.dublinmapper.datamodel
+package ie.dublinmapper.domain.datamodel
 
 import io.reactivex.Observable
 import io.rtpi.api.IrishRailStation

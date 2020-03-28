@@ -4,7 +4,7 @@ import com.nytimes.android.external.store3.base.RecordProvider
 import com.nytimes.android.external.store3.base.RecordState
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.room.RoomPersister
-import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.core.InternetManager
 import io.reactivex.Observable
 import java.time.Instant

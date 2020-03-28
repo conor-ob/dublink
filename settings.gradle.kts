@@ -2,7 +2,6 @@ include(
     ":app",
     ":core",
     ":domain",
-    ":datamodel",
     ":database",
     ":repository",
     ":ui-app",
