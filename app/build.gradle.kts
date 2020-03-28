@@ -1,11 +1,14 @@
 import org.jetbrains.kotlin.konan.properties.loadProperties
+import java.io.BufferedReader
+import java.time.format.DateTimeFormatter
+import java.time.ZonedDateTime
+import java.time.ZoneId
 
 plugins {
     id(BuildPlugins.androidApplication)
     id(BuildPlugins.kotlinAndroid)
     id(BuildPlugins.kotlinAndroidExtensions)
     id(BuildPlugins.kotlinKapt)
-    //apply plugin: 'io.fabric'
 }
 
 val properties = if (project.rootProject.file("release.properties").exists()) {
@@ -14,10 +17,18 @@ val properties = if (project.rootProject.file("release.properties").exists()) {
     loadProperties("debug.properties")
 }
 
-//def apkBuildDateTime = new Date().format('yyyy-MM-dd\'T\'HH:mm:ss')
-//def apkBuildDateTime = new Date().format('yyyy-MM-dd')
-//def gitCommitCount = "git rev-list HEAD --count".execute().text.trim()
-//def gitCommitHash = "git rev-parse HEAD".execute().text.trim().substring(0, 7)
+val apkBuildDateTime: String = ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE)
+val gitCommitHash = Runtime
+    .getRuntime()
+    .exec("git rev-parse --short HEAD")
+    .let<Process, String> { process ->
+        process.waitFor()
+        val output = process.inputStream.use {
+            it.bufferedReader().use(BufferedReader::readText)
+        }
+        process.destroy()
+        output.trim()
+    }
 
 android {
     compileSdkVersion(AndroidSdk.compile)
@@ -39,16 +50,16 @@ android {
 
     buildTypes {
         getByName("release") {
-//            debuggable = false
-//            minifyEnabled = true
-//            shrinkResources = true
-//            useProguard = true
+            isDebuggable = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            isUseProguard = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
         getByName("debug") {
-//            debuggable = true
+            isDebuggable = true
             applicationIdSuffix = ".debug"
-//            versionNameSuffix = "-dev-$apkBuildDateTime-$gitCommitHash"
+            versionNameSuffix = "-dev-$apkBuildDateTime-$gitCommitHash"
 //            ext.enableCrashlytics = false
         }
     }
@@ -67,42 +78,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-//    sourceSets {
-//        main.java.srcDirs += 'src/main/kotlin'
-//        test.java.srcDirs += 'src/test/kotlin'
-//        androidTest.java.srcDirs += 'src/androidTest/kotlin'
-//    }
-
-//    flavorDimensions "default"
-//    productFlavors {
-//        prod {
-//            dimension "default"
-//        }
-//        mock {
-//            dimension "default"
-//            applicationIdSuffix = ".mock"
-//        }
-//    }
-
-//    android.variantFilter { variant ->
-//        def names = variant.flavors*.name
-//        if (variant.buildType.name == 'release' && names.get(0) != "prod") {
-//            variant.setIgnore(true)
-//        }
-//    }
-
-//    compileOptions {
-//        sourceCompatibility JavaVersion.VERSION_1_8
-//        targetCompatibility JavaVersion.VERSION_1_8
-//    }
-
-    // Enables view caching in viewholders.
-    // See: https://github.com/Kotlin/KEEP/blob/master/proposals/android-extensions-entity-caching.md
-//    androidExtensions {
-//        experimental = true
-//    }
-
 }
 
 dependencies {
@@ -119,47 +94,28 @@ dependencies {
     implementation(project(":ui-search"))
     implementation(project(":ui-settings"))
 
-    implementation(Libraries.Dagger.dagger)
-    implementation(Libraries.Dagger.daggerAndroid)
-
-    kapt(Libraries.Dagger.daggerCompiler)
-    kapt(Libraries.Dagger.daggerAndroidProcessor)
-
     implementation(Libraries.Android.Location.playServicesLocation)
     implementation(Libraries.AndroidX.ConstraintLayout.constraintLayout)
-    implementation(Libraries.AndroidX.Preference.preference)
     implementation(Libraries.AndroidX.Navigation.uiKtx)
-    implementation(Libraries.Location.reactiveLocation)
-
+    implementation(Libraries.AndroidX.Preference.preference)
+    implementation(Libraries.Dagger.dagger)
+    implementation(Libraries.Dagger.daggerAndroid)
     implementation(Libraries.Facebook.stetho)
     implementation(Libraries.Facebook.stethoOkhttp)
+    implementation(Libraries.Location.reactiveLocation)
     implementation(Libraries.OkHttp.okhttp)
     implementation(Libraries.OkHttp.loggingInterceptor)
     implementation(Libraries.Rtpi.rtpiClient)
     implementation(Libraries.Rx.rxAndroid)
     implementation(Libraries.Store.store)
 
-//    implementation "androidx.preference:preference-ktx:1.1.0"
-//
-//    implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
-//    implementation 'com.google.android.gms:play-services-location:17.0.0'
-//
-//    implementation 'com.facebook.stetho:stetho:1.5.1'
-//    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
-//
-//    implementation("com.squareup.okhttp3:okhttp:3.12.1")
-//    implementation("com.squareup.okhttp3:logging-interceptor:${versions.logging_interceptor}")
-//
-//    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
-//    implementation("com.google.code.gson:gson:2.8.5")
-//    implementation("com.squareup.retrofit2:converter-simplexml:2.5.0")
-//    implementation "com.nytimes.android:store3:${versions.store3}"
-//    implementation("com.squareup.okhttp3:okhttp:3.12.1")
-//
-//    implementation libraries.rtpi_client
-//
-//    kapt "com.google.dagger:dagger-compiler:${versions.dagger_compiler}"
-//    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
+    kapt(Libraries.Dagger.daggerCompiler)
+    kapt(Libraries.Dagger.daggerAndroidProcessor)
 }
 
-//apply plugin: 'com.google.gms.google-services'
+if (file("google-services.json").exists()) {
+    plugins {
+        id(BuildPlugins.googleServices)
+        id(BuildPlugins.fabric)
+    }
+}

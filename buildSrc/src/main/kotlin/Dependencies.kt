@@ -33,6 +33,8 @@ object BuildPlugins {
 
     const val androidApplication = "com.android.application"
     const val androidLibrary = "com.android.library"
+    const val fabric = "io.fabric"
+    const val googleServices = "com.google.gms.google-services"
     const val kotlin = "kotlin"
     const val kotlinAndroid = "kotlin-android"
     const val kotlinAndroidExtensions = "kotlin-android-extensions"
