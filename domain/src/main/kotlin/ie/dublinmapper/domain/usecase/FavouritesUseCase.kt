@@ -2,8 +2,8 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.core.LocationProvider
-import ie.dublinmapper.core.PermissionChecker
+import ie.dublinmapper.domain.service.LocationProvider
+import ie.dublinmapper.domain.service.PermissionChecker
 import io.reactivex.Observable
 import io.reactivex.functions.Function6
 import io.rtpi.api.*

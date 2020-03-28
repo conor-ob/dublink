@@ -2,7 +2,7 @@ package ie.dublinmapper.repository.dublinbus.stops
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import ie.dublinmapper.repository.ServiceLocationRepository
-import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.domain.service.EnabledServiceManager
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service
 

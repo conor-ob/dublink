@@ -1,6 +1,6 @@
 package ie.dublinmapper.repository.favourite
 
-import ie.dublinmapper.datamodel.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import io.rtpi.api.Service
 

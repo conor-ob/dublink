@@ -2,7 +2,7 @@ package ie.dublinmapper.settings
 
 import android.content.Context
 import androidx.preference.PreferenceManager
-import ie.dublinmapper.core.PreferenceStore
+import ie.dublinmapper.domain.service.PreferenceStore
 import javax.inject.Inject
 
 class DefaultPreferenceStore @Inject constructor(context: Context) :

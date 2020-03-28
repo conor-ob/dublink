@@ -2,7 +2,7 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.core.RxScheduler
+import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.functions.Function6
 import io.rtpi.api.*
