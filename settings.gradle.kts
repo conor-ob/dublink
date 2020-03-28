@@ -5,7 +5,7 @@ include(
     ":datamodel",
     ":database",
     ":repository",
-    ":ui-core",
+    ":ui-app",
     ":ui-favourites",
     ":ui-livedata",
     ":ui-nearby",

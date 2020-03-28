@@ -84,7 +84,7 @@ dependencies {
     implementation(project(":datamodel"))
     implementation(project(":domain"))
     implementation(project(":repository"))
-    implementation(project(":ui-core"))
+    implementation(project(":ui-app"))
     implementation(project(":ui-favourites"))
     implementation(project(":ui-livedata"))
     implementation(project(":ui-nearby"))

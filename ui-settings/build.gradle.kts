@@ -28,7 +28,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":domain"))
-    implementation(project(":ui-core"))
+    implementation(project(":ui-app"))
 
     implementation(Libraries.AndroidX.preferenceKtx)
 }
