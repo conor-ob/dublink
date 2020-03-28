@@ -16,8 +16,8 @@ import java.time.temporal.ChronoUnit
 private val format24h = DateTimeFormatter.ofPattern("HH:mm")
 private val format12h = DateTimeFormatter.ofPattern("h:mm a")
 
-abstract class LiveDataItem(
-    protected val liveData: TimedLiveData //TODO private
+class LiveDataItem(
+    private val liveData: TimedLiveData //TODO private
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data
@@ -107,6 +107,26 @@ abstract class LiveDataItem(
 //                }
             }
         }
+    }
+
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        if (other is LiveDataItem) {
+            return liveData.operator == other.liveData.operator &&
+                    liveData.route == other.liveData.route &&
+                    liveData.destination == other.liveData.destination
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is LiveDataItem) {
+            return liveData == other.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.hashCode()
     }
 
 

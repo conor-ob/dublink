@@ -7,12 +7,13 @@
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/padding_m"
+    android:paddingStart="@dimen/padding_l"
     android:paddingTop="@dimen/padding_s"
-    android:paddingEnd="@dimen/padding_m"
+    android:paddingEnd="@dimen/padding_l"
     android:paddingBottom="@dimen/padding_s">
 
     <LinearLayout
+        android:id="@+id/iconLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -34,6 +35,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/iconPadding"
         android:layout_width="8dp"
         android:layout_height="0dp" />
 
@@ -81,18 +83,25 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="8dp" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/routes"
+        <LinearLayout
+            android:id="@+id/routesLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:chipSpacingHorizontal="5dp"
-            app:chipSpacingVertical="5dp"
-            app:singleLine="false" />
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="8dp" />
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/routes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacingHorizontal="5dp"
+                app:chipSpacingVertical="5dp"
+                app:singleLine="false" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

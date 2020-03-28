@@ -18,7 +18,8 @@ class FavouritesUseCase @Inject constructor(
     private val dublinBusStopRepository: Repository<DublinBusStop>,
     private val luasStopRepository: Repository<LuasStop>,
     private val permissionChecker: PermissionChecker,
-    private val locationProvider: LocationProvider
+    private val locationProvider: LocationProvider,
+    private val liveDataUseCase: LiveDataUseCase
 ) {
 
     fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<Boolean> {
@@ -55,7 +56,21 @@ class FavouritesUseCase @Inject constructor(
 //                }
 //            )
 //        }
-        return getFavouriteServiceLocations().map { FavouritesResponse(it) }
+//        return Observable.concat(
+//            getFavouriteServiceLocations().map {
+//                FavouritesResponse(it.associateWith { emptyList<LiveData>() })
+//            },
+//            getFavouriteServiceLocations().map { favourites ->
+//                FavouritesResponse(favourites.associateWith {
+//                    liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).blockingFirst().liveData.take(3)
+//                })
+//            }
+//        )
+        return getFavouriteServiceLocations().map { favourites ->
+            FavouritesResponse(favourites.associateWith {
+                liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).blockingFirst().liveData.take(3)
+            })
+        }
     }
 
     private fun getFavouriteServiceLocations(): Observable<List<ServiceLocation>> {
@@ -99,5 +114,5 @@ class FavouritesUseCase @Inject constructor(
 }
 
 data class FavouritesResponse(
-    val serviceLocations: List<ServiceLocation>
+    val serviceLocations: Map<ServiceLocation, List<LiveData>>
 )

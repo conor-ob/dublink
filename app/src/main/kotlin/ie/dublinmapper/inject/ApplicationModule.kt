@@ -7,10 +7,10 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.ui.mapping.FavouritesDomainToUiMapper
-import ie.dublinmapper.ui.mapping.LiveDataDomainToUiMapper
-import ie.dublinmapper.ui.mapping.NearbyDomainToUiMapper
-import ie.dublinmapper.ui.mapping.SearchDomainToUiMapper
+import ie.dublinmapper.mapping.FavouritesResponseMapper
+import ie.dublinmapper.mapping.LiveDataResponseMapper
+import ie.dublinmapper.mapping.NearbyResponseMapper
+import ie.dublinmapper.mapping.SearchResponseMapper
 import ie.dublinmapper.database.DatabaseModule
 import ie.dublinmapper.domain.service.*
 import ie.dublinmapper.internet.WifiManager
@@ -143,10 +143,10 @@ class ApplicationModule {
     ): MapperFacade {
         val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
         mapperFactory.converterFactory.apply {
-            registerConverter(FavouritesDomainToUiMapper(stringProvider))
-            registerConverter(NearbyDomainToUiMapper(stringProvider))
-            registerConverter(LiveDataDomainToUiMapper(stringProvider))
-            registerConverter(SearchDomainToUiMapper)
+            registerConverter(FavouritesResponseMapper(stringProvider))
+            registerConverter(NearbyResponseMapper(stringProvider))
+            registerConverter(LiveDataResponseMapper(stringProvider))
+            registerConverter(SearchResponseMapper)
         }
         return mapperFactory.mapperFacade
     }
