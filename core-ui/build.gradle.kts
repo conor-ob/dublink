@@ -26,6 +26,7 @@ dependencies {
     implementation(project(":domain"))
 
     api(Libraries.AndroidX.appCompat)
+    api(Libraries.AndroidX.constraintLayout)
     api(Libraries.AndroidX.navigationFragmentKtx)
     api(Libraries.AndroidX.lifecycleExtensions)
     api(Libraries.AndroidX.fragment)
