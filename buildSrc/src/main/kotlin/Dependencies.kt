@@ -47,9 +47,11 @@ object Libraries {
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.1.0" // https://mvnrepository.com/artifact/androidx.appcompat/appcompat
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3" // https://mvnrepository.com/artifact/androidx.constraintlayout/constraintlayout
+        const val coreKtx = "androidx.core:core-ktx:1.2.0" // https://mvnrepository.com/artifact/androidx.core/core-ktx
         const val fragment = "androidx.fragment:fragment:1.2.3" // https://mvnrepository.com/artifact/androidx.fragment/fragment
         const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:2.2.0" // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-extensions
-        const val lifecycleLiveData =  "androidx.lifecycle:lifecycle-livedata-core:2.2.0" // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-livedata-core
+        const val lifecycleLiveData = "androidx.lifecycle:lifecycle-livedata-core:2.2.0" // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-livedata-core
+        const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0" // https://mvnrepository.com/artifact/androidx.lifecycle/lifecycle-viewmodel-ktx
         const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:2.2.1" // https://mvnrepository.com/artifact/androidx.navigation/navigation-fragment-ktx
         const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:2.2.1" // https://mvnrepository.com/artifact/androidx.navigation/navigation-ui-ktx
         const val preferenceKtx = "androidx.preference:preference-ktx:1.1.0" // https://mvnrepository.com/artifact/androidx.preference/preference-ktx
