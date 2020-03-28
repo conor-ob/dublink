@@ -1,0 +1,15 @@
+include(
+    ":app",
+    ":core",
+    ":core-ui",
+    ":domain",
+    ":data-access",
+    ":database",
+    ":repository",
+    ":ui-favourites",
+    ":ui-livedata",
+    ":ui-nearby",
+    ":ui-news",
+    ":ui-search",
+    ":ui-settings"
+)

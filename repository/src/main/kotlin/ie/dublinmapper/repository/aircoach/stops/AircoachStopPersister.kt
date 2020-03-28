@@ -8,11 +8,9 @@ import ie.dublinmapper.core.InternetManager
 import io.reactivex.Observable
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Service
-import ma.glasnost.orika.MapperFacade
 
 class AircoachStopPersister(
     private val localResource: AircoachStopLocalResource,
-    private val mapper: MapperFacade,
     memoryPolicy: MemoryPolicy,
     serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
     internetManager: InternetManager

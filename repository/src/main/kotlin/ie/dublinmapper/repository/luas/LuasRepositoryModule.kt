@@ -19,7 +19,6 @@ import io.rtpi.api.LuasLiveData
 import io.rtpi.api.LuasStop
 import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
-import ma.glasnost.orika.MapperFacade
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -33,12 +32,11 @@ class LuasRepositoryModule {
         localResource: LuasStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<LuasStop> {
         val fetcher = Fetcher<List<LuasStop>, Service> { client.luas().getStops() }
-        val persister = LuasStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister = LuasStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return LuasStopRepository(store, enabledServiceManager)
     }

@@ -7,5 +7,4 @@ interface DublinMapperNavigator {
     fun navigateToLiveData(serviceLocation: ServiceLocation)
 
     fun navigateToSettings()
-
 }

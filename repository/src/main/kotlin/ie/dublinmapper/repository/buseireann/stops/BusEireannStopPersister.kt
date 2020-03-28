@@ -10,11 +10,9 @@ import ie.dublinmapper.core.InternetManager
 import io.reactivex.Observable
 import io.rtpi.api.BusEireannStop
 import io.rtpi.api.Service
-import ma.glasnost.orika.MapperFacade
 
 class BusEireannStopPersister(
     private val localResource: BusEireannStopLocalResource,
-    private val mapper: MapperFacade,
     memoryPolicy: MemoryPolicy,
     serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
     internetManager: InternetManager

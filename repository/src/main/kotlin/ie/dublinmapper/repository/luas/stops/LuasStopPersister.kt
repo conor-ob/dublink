@@ -10,11 +10,9 @@ import ie.dublinmapper.core.InternetManager
 import io.reactivex.Observable
 import io.rtpi.api.LuasStop
 import io.rtpi.api.Service
-import ma.glasnost.orika.MapperFacade
 
 class LuasStopPersister(
     private val localResource: LuasStopLocalResource,
-    private val mapper: MapperFacade,
     memoryPolicy: MemoryPolicy,
     serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
     internetManager: InternetManager

@@ -19,7 +19,6 @@ import io.rtpi.api.AircoachLiveData
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
-import ma.glasnost.orika.MapperFacade
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -33,12 +32,11 @@ class AircoachRepositoryModule {
         localResource: AircoachStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<AircoachStop> {
         val fetcher = Fetcher<List<AircoachStop>, Service> { client.aircoach().getStops() }
-        val persister = AircoachStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister = AircoachStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return AircoachStopRepository(store, enabledServiceManager)
     }

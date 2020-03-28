@@ -19,7 +19,6 @@ import io.rtpi.api.BusEireannLiveData
 import io.rtpi.api.BusEireannStop
 import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
-import ma.glasnost.orika.MapperFacade
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -33,12 +32,11 @@ class BusEireannRepositoryModule {
         localResource: BusEireannStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<BusEireannStop> {
         val fetcher = Fetcher<List<BusEireannStop>, Service> { client.busEireann().getStops() }
-        val persister = BusEireannStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister = BusEireannStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return BusEireannStopRepository(store, enabledServiceManager)
     }

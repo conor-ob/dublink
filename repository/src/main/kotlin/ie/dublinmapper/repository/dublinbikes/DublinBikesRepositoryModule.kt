@@ -20,7 +20,6 @@ import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
-import ma.glasnost.orika.MapperFacade
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -35,12 +34,11 @@ class DublinBikesRepositoryModule {
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         stringProvider: StringProvider,
-        mapper: MapperFacade,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<DublinBikesDock> {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey()) }
-        val persister = DublinBikesDockPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister = DublinBikesDockPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return DublinBikesDockRepository(store, enabledServiceManager)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
