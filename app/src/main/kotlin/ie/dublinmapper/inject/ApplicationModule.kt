@@ -14,7 +14,7 @@ import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
 import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
 import ie.dublinmapper.database.DatabaseModule
 import ie.dublinmapper.internet.WifiManager
-import ie.dublinmapper.setup.*
+import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
 import ie.dublinmapper.permission.UserPermissionsChecker
@@ -49,13 +49,13 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun setupContainers(themeRepository: ThemeRepository): SetupContainers = SetupContainers(
+    fun startupWorkers(themeRepository: ThemeRepository): StartupWorkers = StartupWorkers(
         listOf(
-            PreferencesContainer(),
-            TimberContainer(),
-            ThemeContainer(themeRepository),
-            RxContainer(),
-            StethoContainer()
+            PreferencesStartupWorker(),
+            TimberStartupWorker(),
+            ThemeStartupWorker(themeRepository),
+            RxStartupWorker(),
+            StethoStartupWorker()
         )
     )
 
