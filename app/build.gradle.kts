@@ -81,10 +81,10 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":database"))
-    implementation(project(":data-access"))
+    implementation(project(":datamodel"))
     implementation(project(":domain"))
     implementation(project(":repository"))
-    implementation(project(":core-ui"))
+    implementation(project(":ui-core"))
     implementation(project(":ui-favourites"))
     implementation(project(":ui-livedata"))
     implementation(project(":ui-nearby"))

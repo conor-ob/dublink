@@ -30,7 +30,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":data-access"))
+    implementation(project(":datamodel"))
     implementation(project(":domain"))
 
     implementation(Libraries.Dagger.dagger)

@@ -1,11 +1,11 @@
 include(
     ":app",
     ":core",
-    ":core-ui",
     ":domain",
-    ":data-access",
+    ":datamodel",
     ":database",
     ":repository",
+    ":ui-core",
     ":ui-favourites",
     ":ui-livedata",
     ":ui-nearby",

@@ -23,8 +23,8 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":core-ui"))
     implementation(project(":domain"))
+    implementation(project(":ui-core"))
 
     implementation(Libraries.Twitter.tweetUi)
 }
