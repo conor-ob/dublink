@@ -1,41 +1,33 @@
-package ie.dublinmapper.core.mapping
+package ie.dublinmapper.ui.mapping
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import com.xwray.groupie.kotlinandroidextensions.Item
-import ie.dublinmapper.domain.usecase.FavouritesResponse
+import ie.dublinmapper.domain.usecase.SearchResponse
 import ie.dublinmapper.model.aircoach.AircoachStopItem
 import ie.dublinmapper.model.buseireann.BusEireannStopItem
 import ie.dublinmapper.model.irishrail.IrishRailStationItem
 import ie.dublinmapper.model.dublinbikes.DublinBikesDockItem
 import ie.dublinmapper.model.dublinbus.DublinBusStopItem
 import ie.dublinmapper.model.luas.LuasStopItem
-import ie.dublinmapper.core.StringProvider
 import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 
-class FavouritesDomainToUiMapper(
-    private val stringProvider: StringProvider
-) : CustomConverter<FavouritesResponse, Group>() {
+object SearchDomainToUiMapper : CustomConverter<SearchResponse, Group>() {
 
     override fun convert(
-        source: FavouritesResponse,
+        source: SearchResponse,
         destinationType: Type<out Group>,
         mappingContext: MappingContext
     ): Group {
         val items = mutableListOf<Group>()
-//        if (source.serviceLocations.isNotEmpty()) {
-//            items.add(DividerItem())
-//            items.add(HeaderItem(stringProvider.favourites()))
-//        }
-        for (i in 0 until source.serviceLocations.size) {
-            items.add(mapItem(source.serviceLocations[i]))
+        val serviceLocations = source.serviceLocations.groupBy { it.service }
+        for (entry in serviceLocations) {
+//            items.add(HeaderItem(entry.key.fullName))
+            items.addAll(entry.value.map { mapItem(it) })
         }
-//        if (items.isNotEmpty()) {
-//            items.add(DividerItem())
-//        }
         return Section(items)
     }
 

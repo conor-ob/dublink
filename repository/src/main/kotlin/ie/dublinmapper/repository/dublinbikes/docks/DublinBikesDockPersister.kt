@@ -6,7 +6,7 @@ import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.model.setFavourite
 import ie.dublinmapper.repository.AbstractPersister
-import ie.dublinmapper.core.InternetManager
+import ie.dublinmapper.domain.service.InternetManager
 import io.reactivex.Observable
 import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.Service

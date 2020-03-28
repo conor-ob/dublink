@@ -1,4 +1,4 @@
-package ie.dublinmapper.core.mapping
+package ie.dublinmapper.ui.mapping
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
@@ -9,7 +9,7 @@ import ie.dublinmapper.model.buseireann.BusEireannLiveDataItem
 import ie.dublinmapper.model.irishrail.IrishRailLiveDataItem
 import ie.dublinmapper.model.dublinbus.DublinBusLiveDataItem
 import ie.dublinmapper.model.luas.LuasLiveDataItem
-import ie.dublinmapper.core.StringProvider
+import ie.dublinmapper.domain.service.StringProvider
 import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext

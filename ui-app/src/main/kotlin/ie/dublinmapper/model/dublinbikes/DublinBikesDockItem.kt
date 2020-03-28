@@ -1,7 +1,7 @@
 package ie.dublinmapper.model.dublinbikes
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.core.R
+import ie.dublinmapper.ui.R
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.DublinBikesDock

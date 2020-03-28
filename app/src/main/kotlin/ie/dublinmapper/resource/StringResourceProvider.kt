@@ -2,8 +2,8 @@ package ie.dublinmapper.resource
 
 import android.content.res.Resources
 import ie.dublinmapper.BuildConfig
-import ie.dublinmapper.core.StringProvider
-import ie.dublinmapper.core.R
+import ie.dublinmapper.domain.service.StringProvider
+import ie.dublinmapper.ui.R
 
 class StringResourceProvider(
     private val resources: Resources

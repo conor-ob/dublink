@@ -22,7 +22,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
     implementation(project(":domain"))
 
     api(Libraries.Android.material)

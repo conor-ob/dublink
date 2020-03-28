@@ -1,4 +1,4 @@
-package ie.dublinmapper.core
+package ie.dublinmapper.domain.service
 
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate

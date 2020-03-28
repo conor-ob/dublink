@@ -6,7 +6,7 @@ import android.view.animation.Animation
 import android.widget.TextView
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.core.R
+import ie.dublinmapper.ui.R
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.list_item_live_data_last_updated.*

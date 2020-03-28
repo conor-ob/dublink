@@ -1,4 +1,4 @@
-package ie.dublinmapper.util
+package ie.dublinmapper.domain.util
 
 import com.google.common.collect.Range
 import com.google.common.truth.Truth.assertThat

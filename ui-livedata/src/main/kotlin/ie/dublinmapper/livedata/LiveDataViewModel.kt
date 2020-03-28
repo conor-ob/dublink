@@ -6,7 +6,7 @@ import com.xwray.groupie.Group
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.domain.usecase.FavouritesUseCase
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
-import ie.dublinmapper.core.RxScheduler
+import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.rtpi.api.ServiceLocationRoutes

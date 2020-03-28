@@ -1,4 +1,4 @@
-package ie.dublinmapper.util
+package ie.dublinmapper.domain.util
 
 import java.util.*
 

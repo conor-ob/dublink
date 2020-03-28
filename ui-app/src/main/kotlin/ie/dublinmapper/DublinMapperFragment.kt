@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
-import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.domain.service.EnabledServiceManager
 import timber.log.Timber
 import javax.inject.Inject
 

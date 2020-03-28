@@ -6,7 +6,7 @@ import android.text.format.DateFormat
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
-import ie.dublinmapper.core.R
+import ie.dublinmapper.ui.R
 import io.rtpi.api.Operator
 import io.rtpi.api.TimedLiveData
 import kotlinx.android.synthetic.main.list_item_live_data.*

@@ -3,8 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core"))
-
     implementation(Libraries.Dagger.dagger)
     implementation(Libraries.Kotlin.stdLib)
     implementation(Libraries.Rtpi.rtpiApi)

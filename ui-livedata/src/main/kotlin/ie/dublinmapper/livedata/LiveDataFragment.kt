@@ -135,7 +135,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             for (route in state.serviceLocation.routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                 val chip = Chip(requireContext())
-                chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.core.R.style.ThinnerChip))
+                chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
                 val (textColour, backgroundColour) = mapColour(route.operator, route.id)
                 chip.text = " ${route.id} "
                 chip.setTextAppearanceResource(R.style.SmallerText)
@@ -154,19 +154,19 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
         return when (operator) {
-            Operator.AIRCOACH -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.aircoachOrange)
-            Operator.BUS_EIREANN -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.busEireannRed)
-            Operator.COMMUTER -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.commuterBlue)
-            Operator.DART -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.dartGreen)
-            Operator.DUBLIN_BIKES -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.dublinBikesTeal)
-            Operator.DUBLIN_BUS -> Pair(ie.dublinmapper.core.R.color.text_primary, ie.dublinmapper.core.R.color.dublinBusYellow)
-            Operator.GO_AHEAD -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.goAheadBlue)
-            Operator.INTERCITY -> Pair(ie.dublinmapper.core.R.color.text_primary, ie.dublinmapper.core.R.color.intercityYellow)
+            Operator.AIRCOACH -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.aircoachOrange)
+            Operator.BUS_EIREANN -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.busEireannRed)
+            Operator.COMMUTER -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.commuterBlue)
+            Operator.DART -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dartGreen)
+            Operator.DUBLIN_BIKES -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dublinBikesTeal)
+            Operator.DUBLIN_BUS -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.dublinBusYellow)
+            Operator.GO_AHEAD -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.goAheadBlue)
+            Operator.INTERCITY -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.intercityYellow)
             Operator.LUAS -> {
                 when (route) {
-                    "Green", "Green Line" -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.luasGreen)
-                    "Red", "Red Line" -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.luasRed)
-                    else -> Pair(ie.dublinmapper.core.R.color.white, ie.dublinmapper.core.R.color.luasPurple)
+                    "Green", "Green Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasGreen)
+                    "Red", "Red Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasRed)
+                    else -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasPurple)
                 }
             }
         }

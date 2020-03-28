@@ -3,7 +3,7 @@ package ie.dublinmapper.repository
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.core.EnabledServiceManager
+import ie.dublinmapper.domain.service.EnabledServiceManager
 import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation

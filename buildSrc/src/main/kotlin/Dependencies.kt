@@ -133,6 +133,10 @@ object TestLibraries {
         const val junit = "junit:junit:4.12" // https://mvnrepository.com/artifact/junit/junit
     }
 
+    object Mockk {
+        const val mockk = "io.mockk:mockk:1.9.3" // https://mvnrepository.com/artifact/io.mockk/mockk
+    }
+
     object Truth {
         const val truth = "com.google.truth:truth:1.0.1" // https://mvnrepository.com/artifact/com.google.truth/truth
     }

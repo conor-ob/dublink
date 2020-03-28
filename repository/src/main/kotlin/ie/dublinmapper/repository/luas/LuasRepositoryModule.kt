@@ -13,8 +13,8 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
 import ie.dublinmapper.repository.luas.stops.LuasStopRepository
-import ie.dublinmapper.core.EnabledServiceManager
-import ie.dublinmapper.core.InternetManager
+import ie.dublinmapper.domain.service.EnabledServiceManager
+import ie.dublinmapper.domain.service.InternetManager
 import io.rtpi.api.LuasLiveData
 import io.rtpi.api.LuasStop
 import io.rtpi.api.Service

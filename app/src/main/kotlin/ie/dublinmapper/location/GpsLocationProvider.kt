@@ -3,13 +3,14 @@ package ie.dublinmapper.location
 import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationRequest
-import ie.dublinmapper.core.LocationProvider
+import ie.dublinmapper.domain.service.LocationProvider
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import javax.inject.Inject
 
-class GpsLocationProvider @Inject constructor(context: Context) : LocationProvider {
+class GpsLocationProvider @Inject constructor(context: Context) :
+    LocationProvider {
 
     private val locationProvider = ReactiveLocationProvider(context)
     private var lastKnownLocation: Location? = null

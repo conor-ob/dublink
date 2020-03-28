@@ -1,8 +1,7 @@
 include(
     ":app",
-    ":core",
-    ":domain",
     ":database",
+    ":domain",
     ":repository",
     ":ui-app",
     ":ui-favourites",

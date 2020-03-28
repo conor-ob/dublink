@@ -7,12 +7,12 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.core.*
-import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
-import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
-import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
-import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
+import ie.dublinmapper.ui.mapping.FavouritesDomainToUiMapper
+import ie.dublinmapper.ui.mapping.LiveDataDomainToUiMapper
+import ie.dublinmapper.ui.mapping.NearbyDomainToUiMapper
+import ie.dublinmapper.ui.mapping.SearchDomainToUiMapper
 import ie.dublinmapper.database.DatabaseModule
+import ie.dublinmapper.domain.service.*
 import ie.dublinmapper.internet.WifiManager
 import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
@@ -77,11 +77,16 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun schedulers(): RxScheduler = RxScheduler(Schedulers.io(), AndroidSchedulers.mainThread())
+    fun schedulers(): RxScheduler =
+        RxScheduler(
+            Schedulers.io(),
+            AndroidSchedulers.mainThread()
+        )
 
     @Provides
     @Singleton
-    fun appConfig(): AppConfig = object : AppConfig {
+    fun appConfig(): AppConfig = object :
+        AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
         override fun appVersion() = BuildConfig.VERSION_NAME
     }
