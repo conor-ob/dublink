@@ -8,7 +8,7 @@ class DublinBusLiveDataItem(
     liveData: DublinBusLiveData
 ) : LiveDataItem(liveData) {
 
-    override fun isSameAs(other: Item<*>?): Boolean {
+    override fun isSameAs(other: Item<*>): Boolean {
         if (other is DublinBusLiveDataItem) {
             return liveData.operator == other.liveData.operator &&
                     liveData.route == other.liveData.route &&

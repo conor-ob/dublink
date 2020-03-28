@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.DublinMapperFragment
@@ -24,7 +24,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as NearbyViewModel }
 
-    private lateinit var adapter: GroupAdapter<ViewHolder>
+    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

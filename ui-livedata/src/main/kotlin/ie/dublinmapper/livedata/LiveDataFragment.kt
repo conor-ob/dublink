@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.DublinMapperFragment
@@ -25,7 +25,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as LiveDataViewModel }
 
-    private lateinit var adapter: GroupAdapter<ViewHolder>
+    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
     private lateinit var args: LiveDataArgs
 
     override fun onCreate(savedInstanceState: Bundle?) {

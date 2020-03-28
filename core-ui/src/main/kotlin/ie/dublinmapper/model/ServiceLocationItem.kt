@@ -4,7 +4,7 @@ import android.content.res.ColorStateList
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.core.R
 import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.list_item_service_location.*
@@ -27,7 +27,7 @@ abstract class ServiceLocationItem(
 
     override fun getLayout() = R.layout.list_item_service_location
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 //        if (position % 2 == 0) {
 //            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.white))
 //        } else {
@@ -35,13 +35,13 @@ abstract class ServiceLocationItem(
 //        }
     }
 
-    protected fun bindIcon(viewHolder: ViewHolder, drawableId: Int, colourId: Int) {
+    protected fun bindIcon(viewHolder: GroupieViewHolder, drawableId: Int, colourId: Int) {
         viewHolder.serviceIconContainer.setImageResource(drawableId)
         viewHolder.serviceIconContainer.backgroundTintList =
             ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_850))
     }
 
-    protected fun bindTitle(viewHolder: ViewHolder, title: String, subtitle: String) {
+    protected fun bindTitle(viewHolder: GroupieViewHolder, title: String, subtitle: String) {
         viewHolder.title.text = title
         viewHolder.subtitle.text = subtitle
         if (distance != null) {
@@ -52,7 +52,7 @@ abstract class ServiceLocationItem(
         }
     }
 
-    protected fun bindRoutes(viewHolder: ViewHolder, routes: List<Route>) {
+    protected fun bindRoutes(viewHolder: GroupieViewHolder, routes: List<Route>) {
         viewHolder.routes.removeAllViewsInLayout()
         for (route in routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
@@ -101,7 +101,7 @@ abstract class ServiceLocationItem(
 //        return equals(other)
 //    }
 
-    override fun isSameAs(other: com.xwray.groupie.Item<*>?): Boolean {
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
         if (other is ServiceLocationItem) {
             return getServiceLocation().id == other.getServiceLocation().id
                     && getServiceLocation().service == other.getServiceLocation().service
@@ -122,7 +122,7 @@ abstract class ServiceLocationItem(
 
 }
 
-fun com.xwray.groupie.Item<com.xwray.groupie.ViewHolder>.getServiceLocation(): ServiceLocation {
+fun com.xwray.groupie.Item<com.xwray.groupie.GroupieViewHolder>.getServiceLocation(): ServiceLocation {
     return extras[serviceLocationKey] as ServiceLocation
 }
 

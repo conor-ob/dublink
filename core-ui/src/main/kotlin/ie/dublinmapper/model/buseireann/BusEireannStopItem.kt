@@ -1,6 +1,6 @@
 package ie.dublinmapper.model.buseireann
 
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.core.R
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.BusEireannStop
@@ -11,7 +11,7 @@ class BusEireannStopItem(
     distance: Double?
 ) : ServiceLocationItem(busEireannStop, distance) {
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         super.bind(viewHolder, position)
         bindTitle(
             viewHolder,

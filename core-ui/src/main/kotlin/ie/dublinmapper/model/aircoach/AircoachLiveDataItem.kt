@@ -8,7 +8,7 @@ open class AircoachLiveDataItem(
     liveData: AircoachLiveData
 ) : LiveDataItem(liveData) {
 
-    override fun isSameAs(other: Item<*>?): Boolean {
+    override fun isSameAs(other: Item<*>): Boolean {
         if (other is AircoachLiveDataItem) {
             return liveData.operator == other.liveData.operator &&
                     liveData.route == other.liveData.route &&

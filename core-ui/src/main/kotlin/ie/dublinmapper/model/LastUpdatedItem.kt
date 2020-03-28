@@ -5,7 +5,7 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.TextView
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.core.R
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -97,7 +97,7 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data_last_updated
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         if (!::textView.isInitialized) {
             textView = viewHolder.lastUpdated
         }
@@ -111,7 +111,7 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
 //        super.unbind(holder)
 //    }
 
-    override fun isSameAs(other: com.xwray.groupie.Item<*>?): Boolean {
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
         if (other is LastUpdatedItem) {
             return id == other.id
         }

@@ -6,7 +6,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.DublinMapperFragment
@@ -24,7 +24,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as SearchViewModel }
 
-    private lateinit var adapter: GroupAdapter<ViewHolder>
+    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
     private val subscriptions = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {

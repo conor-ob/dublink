@@ -5,7 +5,7 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.DublinMapperFragment
@@ -18,7 +18,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
 
-    private lateinit var adapter: GroupAdapter<ViewHolder>
+    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

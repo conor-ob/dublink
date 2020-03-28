@@ -1,6 +1,6 @@
 package ie.dublinmapper.model.irishrail
 
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.core.R
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.IrishRailStation
@@ -12,7 +12,7 @@ class IrishRailStationItem(
     distance: Double?
 ) : ServiceLocationItem(irishRailStation, distance) {
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         super.bind(viewHolder, position)
         bindTitle(viewHolder, getServiceLocation().name, Service.IRISH_RAIL.fullName)
         bindIcon(viewHolder, R.drawable.ic_train, R.color.dartGreen)

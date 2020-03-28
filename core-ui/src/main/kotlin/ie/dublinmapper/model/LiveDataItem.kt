@@ -4,7 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.format.DateFormat
 import com.xwray.groupie.kotlinandroidextensions.Item
-import com.xwray.groupie.kotlinandroidextensions.ViewHolder
+import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.core.R
 import io.rtpi.api.Operator
@@ -22,7 +22,7 @@ abstract class LiveDataItem(
 
     override fun getLayout() = R.layout.list_item_live_data
 
-    override fun bind(viewHolder: ViewHolder, position: Int) {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         bindRoute(viewHolder)
         bindDestination(viewHolder)
         bindStatus(viewHolder)
@@ -30,14 +30,14 @@ abstract class LiveDataItem(
         bindWaitTime(viewHolder)
     }
 
-    private fun bindRoute(viewHolder: ViewHolder) {
+    private fun bindRoute(viewHolder: GroupieViewHolder) {
         viewHolder.route.text = " ${liveData.route} "
         val (textColour, backgroundColour) = mapColour(liveData.operator, liveData.route)
         viewHolder.route.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
         viewHolder.route.setChipBackgroundColorResource(backgroundColour)
     }
 
-    private fun bindDestination(viewHolder: ViewHolder) {
+    private fun bindDestination(viewHolder: GroupieViewHolder) {
 //        when {
 //            isStarting -> viewHolder.destination.text = liveData.destination
 //            isTerminating -> viewHolder.destination.text = "from ${liveData.origin}"
@@ -46,7 +46,7 @@ abstract class LiveDataItem(
         viewHolder.destination.text = liveData.destination
     }
 
-    private fun bindStatus(viewHolder: ViewHolder) {
+    private fun bindStatus(viewHolder: GroupieViewHolder) {
         viewHolder.status.text = when {
             liveData.isLate() -> "Late ${liveData.minutesLate()} min"
             liveData.isDelayed() -> "Delayed ${liveData.minutesDelayed()} min"
@@ -55,7 +55,7 @@ abstract class LiveDataItem(
         }
     }
 
-    private fun bindScheduledTime(viewHolder: ViewHolder) {
+    private fun bindScheduledTime(viewHolder: GroupieViewHolder) {
         val scheduledTime = liveData.liveTime.scheduledDateTime
         if (DateFormat.is24HourFormat(viewHolder.itemView.context.applicationContext)) {
             viewHolder.scheduledTime.text = scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format24h)
@@ -85,7 +85,7 @@ abstract class LiveDataItem(
 //        }
     }
 
-    private fun bindWaitTime(viewHolder: ViewHolder) {
+    private fun bindWaitTime(viewHolder: GroupieViewHolder) {
         viewHolder.waitTimeMinutes.text = when {
             liveData.liveTime.waitTime.seconds < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
             else -> {
