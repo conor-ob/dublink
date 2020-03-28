@@ -1,2 +1,0 @@
-include ':app', ':core-ui', ':ui-search', ':core', ':ui-favourites', ':repository', ':domain', ':data-access', ':database', ':ui-livedata', ':ui-settings', ':ui-nearby', ':ui-news'
-rootProject.name='dublin-mapper'

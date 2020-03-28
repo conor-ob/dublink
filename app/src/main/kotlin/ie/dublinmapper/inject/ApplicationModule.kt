@@ -7,14 +7,14 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.core.*
-import ie.dublinmapper.core.mapping.FavouritesDomainToUiMapper
-import ie.dublinmapper.core.mapping.LiveDataDomainToUiMapper
-import ie.dublinmapper.core.mapping.NearbyDomainToUiMapper
-import ie.dublinmapper.core.mapping.SearchDomainToUiMapper
+import ie.dublinmapper.ui.mapping.FavouritesDomainToUiMapper
+import ie.dublinmapper.ui.mapping.LiveDataDomainToUiMapper
+import ie.dublinmapper.ui.mapping.NearbyDomainToUiMapper
+import ie.dublinmapper.ui.mapping.SearchDomainToUiMapper
 import ie.dublinmapper.database.DatabaseModule
+import ie.dublinmapper.domain.service.*
 import ie.dublinmapper.internet.WifiManager
-import ie.dublinmapper.setup.*
+import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
 import ie.dublinmapper.permission.UserPermissionsChecker
@@ -49,68 +49,7 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun setupContainers(themeRepository: ThemeRepository): SetupContainers = SetupContainers(
-        listOf(
-            PreferencesContainer(),
-            TimberContainer(),
-            ThemeContainer(themeRepository),
-            RxContainer(),
-            StethoContainer()
-        )
-    )
-
-    @Provides
-    @Singleton
     fun resources(context: Context): Resources = context.resources
-
-    @Provides
-    @Singleton
-    fun stringProvider(
-        context: Context,
-        resources: Resources
-    ): StringProvider = StringResourceProvider(context, resources)
-
-    @Provides
-    @Singleton
-    fun schedulers(): RxScheduler = RxScheduler(
-        io = Schedulers.io(),
-        ui = AndroidSchedulers.mainThread()
-    )
-
-    @Provides
-    @Singleton
-    fun internetManager(context: Context): InternetManager = WifiManager(context)
-
-    @Provides
-    @Singleton
-    fun okHttpClient(): OkHttpClient =
-        OkHttpClient.Builder()
-            .addNetworkInterceptor(NetworkLoggingInterceptor())
-            .addNetworkInterceptor(StethoInterceptor())
-            .retryOnConnectionFailure(true)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .build()
-
-    @Provides
-    @Singleton
-    fun client(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
-
-    @Provides
-    @Singleton
-    fun mapperFacade(
-        stringProvider: StringProvider
-    ): MapperFacade {
-        val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
-        mapperFactory.converterFactory.apply {
-            registerConverter(FavouritesDomainToUiMapper(stringProvider))
-            registerConverter(NearbyDomainToUiMapper(stringProvider))
-            registerConverter(LiveDataDomainToUiMapper(stringProvider))
-            registerConverter(SearchDomainToUiMapper)
-        }
-        return mapperFactory.mapperFacade
-    }
 
     @Provides
     @Singleton
@@ -118,10 +57,55 @@ class ApplicationModule {
 
     @Provides
     @Singleton
+    fun stringProvider(resources: Resources): StringProvider = StringResourceProvider(resources)
+
+    @Provides
+    @Singleton
+    fun internetManager(context: Context): InternetManager = WifiManager(context)
+
+    @Provides
+    @Singleton
+    fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)
+
+    @Provides
+    @Singleton
+    fun permissionChecker(context: Context): PermissionChecker = UserPermissionsChecker(context)
+
+    @Provides
+    @Singleton
+    fun rtpiClient(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
+
+    @Provides
+    @Singleton
+    fun schedulers(): RxScheduler = RxScheduler(Schedulers.io(), AndroidSchedulers.mainThread())
+
+    @Provides
+    @Singleton
+    fun appConfig(): AppConfig = object :
+        AppConfig {
+        override fun isDebug() = BuildConfig.DEBUG
+        override fun appVersion() = BuildConfig.VERSION_NAME
+    }
+
+    @Provides
+    @Singleton
     fun themeRepository(
         resources: Resources,
         preferenceStore: PreferenceStore
     ): ThemeRepository = ThemeRepository(resources, preferenceStore)
+
+    @Provides
+    @Singleton
+    fun startupWorkers(themeRepository: ThemeRepository): StartupWorkers = StartupWorkers(
+        listOf(
+            PreferencesStartupWorker(),
+            TimberStartupWorker(),
+            ThemeStartupWorker(themeRepository),
+            RxStartupWorker(),
+            StethoStartupWorker(),
+            TwitterStartupWorker()
+        )
+    )
 
     @Provides
     @Singleton
@@ -142,16 +126,28 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)
+    fun okHttpClient(): OkHttpClient =
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(NetworkLoggingInterceptor())
+            .addNetworkInterceptor(StethoInterceptor())
+            .retryOnConnectionFailure(true)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .build()
 
     @Provides
     @Singleton
-    fun permissionChecker(context: Context): PermissionChecker = UserPermissionsChecker(context)
-
-    @Provides
-    @Singleton
-    fun appConfig(): AppConfig = object : AppConfig {
-        override fun isDebug() = BuildConfig.DEBUG
-        override fun appVersion() = BuildConfig.VERSION_NAME
+    fun mapperFacade(
+        stringProvider: StringProvider
+    ): MapperFacade {
+        val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
+        mapperFactory.converterFactory.apply {
+            registerConverter(FavouritesDomainToUiMapper(stringProvider))
+            registerConverter(NearbyDomainToUiMapper(stringProvider))
+            registerConverter(LiveDataDomainToUiMapper(stringProvider))
+            registerConverter(SearchDomainToUiMapper)
+        }
+        return mapperFactory.mapperFacade
     }
 }

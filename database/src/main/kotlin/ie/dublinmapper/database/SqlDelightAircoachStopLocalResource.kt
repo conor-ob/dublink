@@ -2,7 +2,7 @@ package ie.dublinmapper.database
 
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
-import ie.dublinmapper.datamodel.AircoachStopLocalResource
+import ie.dublinmapper.domain.datamodel.AircoachStopLocalResource
 import ie.dublinmapper.domain.model.setFavourite
 import io.reactivex.Observable
 import io.reactivex.functions.Function3

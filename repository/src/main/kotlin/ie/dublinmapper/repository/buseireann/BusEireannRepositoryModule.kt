@@ -7,19 +7,18 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.datamodel.BusEireannStopLocalResource
-import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.BusEireannStopLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.buseireann.livedata.BusEireannLiveDataRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopRepository
 import ie.dublinmapper.repository.buseireann.stops.BusEireannStopPersister
-import ie.dublinmapper.core.EnabledServiceManager
-import ie.dublinmapper.core.InternetManager
+import ie.dublinmapper.domain.service.EnabledServiceManager
+import ie.dublinmapper.domain.service.InternetManager
 import io.rtpi.api.BusEireannLiveData
 import io.rtpi.api.BusEireannStop
 import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
-import ma.glasnost.orika.MapperFacade
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -33,12 +32,11 @@ class BusEireannRepositoryModule {
         localResource: BusEireannStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        mapper: MapperFacade,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
         enabledServiceManager: EnabledServiceManager
     ): Repository<BusEireannStop> {
         val fetcher = Fetcher<List<BusEireannStop>, Service> { client.busEireann().getStops() }
-        val persister = BusEireannStopPersister(localResource, mapper, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister = BusEireannStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return BusEireannStopRepository(store, enabledServiceManager)
     }

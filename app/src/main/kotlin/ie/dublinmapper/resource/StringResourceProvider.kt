@@ -1,29 +1,16 @@
 package ie.dublinmapper.resource
 
-import android.content.Context
-import android.content.pm.PackageManager
 import android.content.res.Resources
-import ie.dublinmapper.core.StringProvider
-import ie.dublinmapper.core.R
+import ie.dublinmapper.BuildConfig
+import ie.dublinmapper.domain.service.StringProvider
+import ie.dublinmapper.ui.R
 
 class StringResourceProvider(
-    private val context: Context,
     private val resources: Resources
 ) : StringProvider {
 
     override fun jcDecauxApiKey(): String {
-        try {
-            val appInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
-            return if (appInfo.metaData == null) {
-                throw IllegalArgumentException("meta-data cannot be null")
-            } else {
-                appInfo.metaData.getString("com.developer.jcdecaux.API_KEY")!!
-            }
-        } catch (e: PackageManager.NameNotFoundException) {
-            throw IllegalArgumentException("meta-data name not found")
-        } catch (e: NullPointerException) {
-            throw IllegalArgumentException("meta-data name not found")
-        }
+        return BuildConfig.JCDECAUX_API_KEY
     }
 
     override fun databaseName(): String {

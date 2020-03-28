@@ -12,8 +12,10 @@ class NetworkLoggingInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = httpLoggingInterceptor.intercept(chain)
 
     private fun newHttpLoggingInterceptor() = HttpLoggingInterceptor(
-        HttpLoggingInterceptor.Logger {
-            Timber.d(it)
+        object : HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                Timber.d(message)
+            }
         }
     ).apply {
         level = HttpLoggingInterceptor.Level.HEADERS

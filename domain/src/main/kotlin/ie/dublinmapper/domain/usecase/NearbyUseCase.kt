@@ -1,10 +1,10 @@
 package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.core.LocationProvider
-import ie.dublinmapper.util.truncateHead
-import ie.dublinmapper.core.RxScheduler
-import ie.dublinmapper.util.haversine
+import ie.dublinmapper.domain.service.LocationProvider
+import ie.dublinmapper.domain.service.RxScheduler
+import ie.dublinmapper.domain.util.haversine
+import ie.dublinmapper.domain.util.truncateHead
 import io.reactivex.functions.Function6
 import io.reactivex.Observable
 import io.rtpi.api.*

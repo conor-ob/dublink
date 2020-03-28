@@ -1,18 +1,16 @@
 package ie.dublinmapper.repository.aircoach.stops
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
-import ie.dublinmapper.datamodel.AircoachStopLocalResource
-import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.AircoachStopLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.repository.AbstractPersister
-import ie.dublinmapper.core.InternetManager
+import ie.dublinmapper.domain.service.InternetManager
 import io.reactivex.Observable
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Service
-import ma.glasnost.orika.MapperFacade
 
 class AircoachStopPersister(
     private val localResource: AircoachStopLocalResource,
-    private val mapper: MapperFacade,
     memoryPolicy: MemoryPolicy,
     serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
     internetManager: InternetManager

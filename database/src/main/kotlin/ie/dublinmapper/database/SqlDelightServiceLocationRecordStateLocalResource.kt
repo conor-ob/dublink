@@ -1,6 +1,6 @@
 package ie.dublinmapper.database
 
-import ie.dublinmapper.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import java.time.Instant
 
 class SqlDelightServiceLocationRecordStateLocalResource(
