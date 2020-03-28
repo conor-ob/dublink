@@ -2,6 +2,7 @@ package ie.dublinmapper.model.dublinbus
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.core.R
+import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service
@@ -15,7 +16,7 @@ class DublinBusStopItem(
         super.bind(viewHolder, position)
         bindTitle(
             viewHolder,
-            getServiceLocation().name,
+            getServiceLocation().getName(),
             "${Service.DUBLIN_BUS.fullName} (${getServiceLocation().id})"
         )
         bindIcon(viewHolder, R.drawable.ic_bus, R.color.dublinBusYellow)

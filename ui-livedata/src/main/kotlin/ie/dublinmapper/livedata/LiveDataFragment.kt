@@ -12,6 +12,7 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
@@ -108,12 +109,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         )
     }
 
-    private fun getSubtitle(): String{
-        return when (val service = args.serviceLocationService) {
-            Service.BUS_EIREANN,
-            Service.DUBLIN_BUS -> "${service.fullName} (${args.serviceLocationId})"
-            else -> service.fullName
-        }
+    private fun getSubtitle() = when (val service = args.serviceLocationService) {
+        Service.BUS_EIREANN,
+        Service.DUBLIN_BUS -> "${service.fullName} (${args.serviceLocationId})"
+        else -> service.fullName
     }
 
     private fun renderState(state: State) {
@@ -189,25 +188,20 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
         fun toBundle(
             serviceLocation: ServiceLocation
-        ): Bundle  {
-            return Bundle().apply {
-                putString(id, serviceLocation.id)
-                putString(name, serviceLocation.name)
-                putSerializable(service, serviceLocation.service)
-                putBoolean(isFavourite, serviceLocation.isFavourite())
-            }
+        ) = Bundle().apply {
+            putString(id, serviceLocation.id)
+            putString(name, serviceLocation.getName())
+            putSerializable(service, serviceLocation.service)
+            putBoolean(isFavourite, serviceLocation.isFavourite())
         }
 
-        fun fromBundle(
+        private fun fromBundle(
             bundle: Bundle
-        ): LiveDataArgs {
-            return LiveDataArgs(
-                serviceLocationId = bundle.getString(id)!!,
-                serviceLocationName = bundle.getString(name)!!,
-                serviceLocationService = bundle.getSerializable(service) as Service,
-                serviceLocationIsFavourite = bundle.getBoolean(isFavourite)
-            )
-        }
+        ) = LiveDataArgs(
+            serviceLocationId = bundle.getString(id)!!,
+            serviceLocationName = bundle.getString(name)!!,
+            serviceLocationService = bundle.getSerializable(service) as Service,
+            serviceLocationIsFavourite = bundle.getBoolean(isFavourite)
+        )
     }
-
 }

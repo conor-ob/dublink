@@ -2,6 +2,7 @@ package ie.dublinmapper.model.dublinbikes
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.core.R
+import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.model.ServiceLocationItem
 import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.Operator
@@ -17,7 +18,7 @@ class DublinBikesDockItem(
         super.bind(viewHolder, position)
         bindTitle(
             viewHolder,
-            getDublinBikesDock().name,
+            getDublinBikesDock().getName(),
             Service.DUBLIN_BIKES.fullName
         )
         bindIcon(viewHolder, R.drawable.ic_bike, R.color.dublinBikesTeal)
