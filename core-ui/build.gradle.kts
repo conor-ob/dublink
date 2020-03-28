@@ -35,6 +35,7 @@ dependencies {
     api(Libraries.AndroidX.fragment)
     api(Libraries.AndroidX.lifecycleLiveData)
     api(Libraries.AndroidX.lifecycleViewModel)
+    api(Libraries.AndroidX.swipeRefreshLayout)
     api(Libraries.Dagger.dagger)
     api(Libraries.Dagger.daggerAndroid)
     api(Libraries.Dagger.daggerAndroidSupport)

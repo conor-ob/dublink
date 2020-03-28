@@ -34,12 +34,13 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(Libraries.Dagger.dagger)
-    kapt(Libraries.Dagger.daggerCompiler)
     implementation(Libraries.Rtpi.rtpiApi)
     implementation(Libraries.Rtpi.rtpiUtil)
     implementation(Libraries.Rx.rxJava)
     implementation(Libraries.SqlDelight.androidDriver)
     implementation(Libraries.SqlDelight.rxJavaExtensions)
+
+    kapt(Libraries.Dagger.daggerCompiler)
 
     testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.SqlDelight.sqliteDriver)
