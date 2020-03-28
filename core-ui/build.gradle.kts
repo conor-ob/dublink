@@ -26,12 +26,12 @@ dependencies {
     implementation(project(":domain"))
 
 //    api("androidx.navigation:navigation-runtime:2.1.0")
-    api(Libraries.AndroidX.Navigation.fragmentKtx)
+    api(Libraries.AndroidX.navigationFragmentKtx)
 
     api(Libraries.AndroidX.appCompat)
-    api(Libraries.AndroidX.Lifecycle.lifecycleExtensions)
-    api(Libraries.AndroidX.Fragment.fragment)
-    api(Libraries.AndroidX.Lifecycle.liveData)
+    api(Libraries.AndroidX.lifecycleExtensions)
+    api(Libraries.AndroidX.fragment)
+    api(Libraries.AndroidX.lifecycleLiveData)
     api(Libraries.Dagger.dagger)
     api(Libraries.Dagger.daggerAndroid)
     api(Libraries.Dagger.daggerAndroidSupport)
@@ -41,7 +41,7 @@ dependencies {
     api(Libraries.Rtpi.rtpiApi)
     api(Libraries.Rx.rxKotlin)
     api(Libraries.Kotlin.stdLib)
-    api(Libraries.Material.material)
+    api(Libraries.Android.material)
     api(Libraries.Orika.orikaCore)
     api(Libraries.Timber.timber)
 }

@@ -42,7 +42,7 @@ dependencies {
     implementation(Libraries.SqlDelight.androidDriver)
     implementation(Libraries.SqlDelight.rxJavaExtensions)
 
-    testImplementation(TestLibraries.junit)
+    testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.SqlDelight.sqliteDriver)
 }
 

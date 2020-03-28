@@ -14,22 +14,15 @@ object BuildConfig {
 }
 
 object AndroidSdk {
-    const val min = 29
+    const val min = 26
     const val compile = 29
     const val target = 29
 }
 
 object BuildPlugins {
-
-    private object Versions {
-        const val buildToolsVersion = "3.5.3"
-        const val fabric = "1.29.0"
-        const val sqlDelight = "1.2.2"
-    }
-
-    const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:3.5.3"
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-    const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:${Versions.sqlDelight}"
+    const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:1.2.2"
 
     const val androidApplication = "com.android.application"
     const val androidLibrary = "com.android.library"
@@ -45,64 +38,38 @@ object BuildPlugins {
 object Libraries {
 
     object Android {
-
-        object Location {
-            const val playServicesLocation = "com.google.android.gms:play-services-location:17.0.0"
-        }
+        const val material = "com.google.android.material:material:1.2.0-alpha02"
+        const val playServicesLocation = "com.google.android.gms:play-services-location:17.0.0"
     }
 
     object AndroidX {
-
-        private object Versions {
-        }
-
         const val appCompat = "androidx.appcompat:appcompat:1.1.0"
-
-        object ConstraintLayout {
-            const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
-        }
-
-        object Fragment {
-            const val fragment = "androidx.fragment:fragment:1.2.3"
-        }
-
-        object Lifecycle {
-            const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
-            const val liveData =  "androidx.lifecycle:lifecycle-livedata-core:2.2.0"
-        }
-
-        object Navigation {
-            const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:2.1.0"
-            const val uiKtx = "androidx.navigation:navigation-ui-ktx:2.1.0"
-        }
-
-        object Preference {
-            const val preference = "androidx.preference:preference-ktx:1.1.0"
-        }
-
-        object SwipeRefresh {
-            const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-        }
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
+        const val fragment = "androidx.fragment:fragment:1.2.3"
+        const val lifecycleExtensions = "androidx.lifecycle:lifecycle-extensions:2.2.0"
+        const val lifecycleLiveData =  "androidx.lifecycle:lifecycle-livedata-core:2.2.0"
+        const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:2.1.0"
+        const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:2.1.0"
+        const val preferenceKtx = "androidx.preference:preference-ktx:1.1.0"
+        const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     }
 
     object Dagger {
-        private const val version = 2.24
-        const val dagger = "com.google.dagger:dagger:$version"
-        const val daggerAndroid = "com.google.dagger:dagger-android:$version"
-        const val daggerAndroidProcessor =  "com.google.dagger:dagger-android-processor:$version"
-        const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:$version"
-        const val daggerCompiler =  "com.google.dagger:dagger-compiler:$version"
+        const val dagger = "com.google.dagger:dagger:2.24"
+        const val daggerAndroid = "com.google.dagger:dagger-android:2.24"
+        const val daggerAndroidProcessor =  "com.google.dagger:dagger-android-processor:2.24"
+        const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:2.24"
+        const val daggerCompiler =  "com.google.dagger:dagger-compiler:2.24"
     }
 
-    object Facebook {
+    object Stetho {
         const val stetho = "com.facebook.stetho:stetho:1.5.1"
         const val stethoOkhttp = "com.facebook.stetho:stetho-okhttp3:1.5.1"
     }
 
     object Groupie {
-        private const val version = "2.3.0"
-        const val groupie = "com.xwray:groupie:$version"
-        const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:$version"
+        const val groupie = "com.xwray:groupie:2.3.0"
+        const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.3.0"
     }
 
     object Kotlin {
@@ -111,10 +78,6 @@ object Libraries {
 
     object Location {
         const val reactiveLocation = "pl.charmas.android:android-reactive-location2:2.1@aar"
-    }
-
-    object Material {
-        const val material = "com.google.android.material:material:1.2.0-alpha02"
     }
 
     object OkHttp {
@@ -131,33 +94,20 @@ object Libraries {
     }
 
     object Rtpi {
-
-        private object Versions {
-            const val rtpi = "0.1.0"
-        }
-
-        const val rtpiApi = "io.rtpi:rtpi-api:${Versions.rtpi}"
-        const val rtpiClient = "io.rtpi:rtpi-client:${Versions.rtpi}"
-        const val rtpiUtil = "io.rtpi:rtpi-util:${Versions.rtpi}"
+        const val rtpiApi = "io.rtpi:rtpi-api:0.1.0"
+        const val rtpiClient = "io.rtpi:rtpi-client:0.1.0"
+        const val rtpiUtil = "io.rtpi:rtpi-util:0.1.0"
     }
 
     object Rx {
-
-        private object Versions {
-            const val rxAndroid = "2.1.1"
-            const val rxJava = "2.2.8"
-            const val rxKotlin = "2.4.0"
-        }
-
-        const val rxAndroid = "io.reactivex.rxjava2:rxandroid:${Versions.rxAndroid}"
-        const val rxJava = "io.reactivex.rxjava2:rxjava:${Versions.rxJava}"
-        const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:${Versions.rxKotlin}"
+        const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1"
+        const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.8"
+        const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:2.4.0"
     }
 
     object SqlDelight {
-        private const val version = "1.2.0"
-        const val androidDriver = "com.squareup.sqldelight:android-driver:$version"
-        const val rxJavaExtensions = "com.squareup.sqldelight:rxjava2-extensions:$version"
+        const val androidDriver = "com.squareup.sqldelight:android-driver:1.2.0"
+        const val rxJavaExtensions = "com.squareup.sqldelight:rxjava2-extensions:1.2.0"
     }
 
     object Store {
@@ -175,18 +125,15 @@ object Libraries {
 
 object TestLibraries {
 
-    private object Versions {
-        const val junit = "4.12"
-        const val truth = "0.42"
-        const val sqlDelight = "1.2.0"
+    object Junit {
+        const val junit = "junit:junit:4.12"
     }
 
-    const val junit = "junit:junit:${Versions.junit}"
-    const val truth = "com.google.truth:truth:${Versions.truth}"
-
+    object Truth {
+        const val truth = "com.google.truth:truth:0.42"
+    }
 
     object SqlDelight {
-        private const val version = "1.2.0"
-        const val sqliteDriver = "com.squareup.sqldelight:sqlite-driver:$version"
+        const val sqliteDriver = "com.squareup.sqldelight:sqlite-driver:1.2.0"
     }
 }

@@ -26,7 +26,7 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":domain"))
 
-    implementation(Libraries.AndroidX.Preference.preference)
+    implementation(Libraries.AndroidX.preferenceKtx)
 }
 
 //apply plugin: 'com.android.library'

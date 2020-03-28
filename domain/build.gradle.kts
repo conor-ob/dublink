@@ -13,8 +13,8 @@ dependencies {
 
 //    kapt(Libraries.Dagger.daggerCompiler)
 
-    testImplementation(TestLibraries.junit)
-    testImplementation(TestLibraries.truth)
+    testImplementation(TestLibraries.Junit.junit)
+    testImplementation(TestLibraries.Truth.truth)
 }
 
 sourceSets.getByName("main") {

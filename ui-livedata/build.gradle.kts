@@ -26,7 +26,7 @@ dependencies {
     implementation(project(":core-ui"))
     implementation(project(":domain"))
 
-    implementation(Libraries.AndroidX.SwipeRefresh.swipeRefreshLayout)
+    implementation(Libraries.AndroidX.swipeRefreshLayout)
 }
 
 //apply plugin: 'com.android.library'
