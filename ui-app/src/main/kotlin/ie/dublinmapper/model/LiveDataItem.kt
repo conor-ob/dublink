@@ -10,10 +10,12 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.ui.R
 import io.rtpi.api.DublinBikesLiveData
+import io.rtpi.api.LiveData
 import io.rtpi.api.Operator
 import io.rtpi.api.TimedLiveData
 import kotlinx.android.synthetic.main.list_item_dublin_bikes_live_data.*
 import kotlinx.android.synthetic.main.list_item_live_data.*
+import kotlinx.android.synthetic.main.list_item_live_data_grouped.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -268,6 +270,75 @@ class LiveDataItem(
         }
     }
 
+}
+
+class GroupedLiveDataItem(
+    private val liveData: List<TimedLiveData>
+) : Item() {
+
+    override fun getLayout() = R.layout.list_item_live_data_grouped
+
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        bindRoute(viewHolder)
+        bindDestination(viewHolder)
+        bindWaitTime(viewHolder)
+    }
+
+    private fun bindRoute(viewHolder: GroupieViewHolder) {
+        viewHolder.groupedRoute.text = " ${liveData.first().route} "
+        val (textColour, backgroundColour) = mapColour(liveData.first().operator, liveData.first().route)
+        viewHolder.groupedRoute.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
+        viewHolder.groupedRoute.setChipBackgroundColorResource(backgroundColour)
+    }
+
+    private fun bindDestination(viewHolder: GroupieViewHolder) {
+//        when {
+//            isStarting -> viewHolder.destination.text = liveData.destination
+//            isTerminating -> viewHolder.destination.text = "from ${liveData.origin}"
+//            else -> viewHolder.destination.text = liveData.destination
+//        }
+        viewHolder.groupedDestination.text = liveData.first().destination
+    }
+
+    private fun bindWaitTime(viewHolder: GroupieViewHolder) {
+        viewHolder.groupedWaitTimeMinutes.text = if (liveData.size == 1) {
+            val minutes = liveData.first().liveTime.waitTime.toMinutes()
+            if (minutes <= 1L) {
+                "Due"
+            } else {
+                "$minutes min"
+            }
+        } else {
+            "${liveData.map {
+                val minutes = it.liveTime.waitTime.toMinutes()
+                if (minutes <= 1L) {
+                    "Due"
+                } else {
+                    minutes
+                }
+            }.joinToString(", ")} min"
+        }
+    }
+
+    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
+        return when (operator) {
+            Operator.AIRCOACH -> Pair(R.color.white, R.color.aircoachOrange)
+            Operator.BUS_EIREANN -> Pair(R.color.white, R.color.busEireannRed)
+            Operator.COMMUTER -> Pair(R.color.white, R.color.commuterBlue)
+            Operator.DART -> Pair(R.color.white, R.color.dartGreen)
+            Operator.DUBLIN_BIKES -> Pair(R.color.white, R.color.dublinBikesTeal)
+            Operator.DUBLIN_BUS -> Pair(R.color.text_primary, R.color.dublinBusYellow)
+            Operator.GO_AHEAD -> Pair(R.color.white, R.color.goAheadBlue)
+            Operator.INTERCITY -> Pair(R.color.text_primary, R.color.intercityYellow)
+            Operator.LUAS -> {
+                when (route) {
+                    "Green", "Green Line" -> Pair(R.color.white, R.color.luasGreen)
+                    "Red", "Red Line" -> Pair(R.color.white, R.color.luasRed)
+                    else -> Pair(R.color.white, R.color.luasPurple)
+                }
+            }
+        }
+    }
 }
 
 class DublinBikesLiveDataItem(

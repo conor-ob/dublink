@@ -58,30 +58,47 @@ class FavouritesUseCase @Inject constructor(
     private fun getFavouritesWithLiveData(favs: List<ServiceLocation>): Observable<FavouritesResponse> {
         return Observable.combineLatest(
             favs.map {
-                liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).startWith(
-                    LiveDataResponse(it.service, it.name, emptyList(), State.LOADING)
-                )
-            },
-            Function { thing ->
-                val responses = thing.map {
-                    val resp = it as LiveDataResponse
-                    LiveDataResponse(
-                        service = resp.service,
-                        serviceLocationName = resp.serviceLocationName,
-                        liveData = resp.liveData.take(3),
-                        state = resp.state
-                    )
-                }.associateBy { it.serviceLocationName }
-                val favourites = favs.associateBy { it.name }
-                val newMap = mutableMapOf<ServiceLocation, LiveDataResponse>()
-                for (entry in favourites) {
-                    newMap[entry.value] = responses[entry.key]!!
-                }
-                return@Function FavouritesResponse(
-                    newMap
+                liveDataUseCase.getGroupedLiveDataStream(it.id, it.name, it.service)
+                liveDataUseCase.getGroupedLiveDataStream(it.id, it.name, it.service).startWith(
+                    GroupedLiveDataResponse(it.service, it.name, emptyList(), State.LOADING)
                 )
             }
-        )
+        ) { liveDataStreams ->
+            val groupedLiveDataResponses = liveDataStreams.map { it as GroupedLiveDataResponse }
+            val map1 = favs.associateBy { it.name }
+            val map2 = groupedLiveDataResponses.associateBy { it.serviceLocationName }
+
+            val map = mutableMapOf<ServiceLocation, GroupedLiveDataResponse>()
+            for (entry in map1) {
+                val groupedLiveDataResponse = map2[entry.key]
+                map[entry.value] = groupedLiveDataResponse!!
+            }
+
+            return@combineLatest FavouritesResponse(map)
+        }
+
+
+//            Function { thing ->
+//                val responses = thing.map {
+//                    val resp = it as LiveDataResponse
+//                    LiveDataResponse(
+//                        service = resp.service,
+//                        serviceLocationName = resp.serviceLocationName,
+//                        liveData = resp.liveData.take(3),
+//                        state = resp.state
+//                    )
+//                }.associateBy { it.serviceLocationName }
+//                val favourites = favs.associateBy { it.name }
+//                val newMap = mutableMapOf<ServiceLocation, LiveDataResponse>()
+//                for (entry in favourites) {
+//                    newMap[entry.value] = responses[entry.key]!!
+//                }
+//                return@Function FavouritesResponse(
+////                    newMap
+//                emptyMap()
+//                )
+//            }
+//        )
     }
 
     private fun getFavouriteServiceLocations(): Observable<List<ServiceLocation>> {
@@ -111,5 +128,5 @@ class FavouritesUseCase @Inject constructor(
 }
 
 data class FavouritesResponse(
-    val serviceLocations: Map<ServiceLocation, LiveDataResponse>
+    val serviceLocations: Map<ServiceLocation, GroupedLiveDataResponse>
 )

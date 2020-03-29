@@ -6,6 +6,7 @@ dependencies {
     implementation(Libraries.Dagger.dagger)
     implementation(Libraries.Kotlin.stdLib)
     implementation(Libraries.Rtpi.rtpiApi)
+    implementation(Libraries.Rtpi.rtpiUtil)
     implementation(Libraries.Rx.rxJava)
 
     testImplementation(TestLibraries.Junit.junit)
