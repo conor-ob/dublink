@@ -19,7 +19,7 @@ class DeviceInternetManager(private val context: Context) : InternetManager {
                     .openConnection() as HttpURLConnection
                 connection.setRequestProperty("User-Agent", "Android")
                 connection.setRequestProperty("Connection", "close")
-                connection.connectTimeout = 1000
+                connection.connectTimeout = 10000
                 connection.connect()
                 val result = connection.responseCode == 204 && connection.contentLength == 0
                 connection.disconnect()
