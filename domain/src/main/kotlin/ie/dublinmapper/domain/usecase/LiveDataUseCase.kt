@@ -7,6 +7,7 @@ import ie.dublinmapper.domain.repository.ServiceLocationKey
 import io.reactivex.Observable
 import io.rtpi.api.*
 import io.rtpi.util.LiveDataGrouper
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
@@ -16,12 +17,14 @@ class LiveDataUseCase @Inject constructor(
     @Named("LIVE_DATA") private val liveDataRepository: LiveDataRepository
 ) {
 
+    private val refreshInterval = Duration.ofSeconds(10L) // TODO make this configurable
+
     fun getServiceLocation(serviceLocationId: String, service: Service): Observable<ServiceLocation> {
         return locationRepository.get(ServiceLocationKey(service = service, locationId = serviceLocationId))
     }
 
     fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
-        return Observable.interval(0L, 65L, TimeUnit.SECONDS)
+        return Observable.interval(0L, refreshInterval.seconds, TimeUnit.SECONDS)
             .flatMap {
                 getLiveData(serviceLocationId, service).map {
                     LiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
@@ -30,7 +33,7 @@ class LiveDataUseCase @Inject constructor(
     }
 
     fun getGroupedLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<GroupedLiveDataResponse> {
-        return Observable.interval(0L, 65L, TimeUnit.SECONDS)
+        return Observable.interval(0L, refreshInterval.seconds, TimeUnit.SECONDS)
             .flatMap {
                 getGroupedLiveData(serviceLocationId, service).map {
                     GroupedLiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
