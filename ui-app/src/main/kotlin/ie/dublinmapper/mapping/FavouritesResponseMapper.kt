@@ -6,10 +6,7 @@ import ie.dublinmapper.domain.usecase.FavouritesResponse
 import ie.dublinmapper.domain.service.StringProvider
 import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.domain.usecase.State
-import ie.dublinmapper.model.DividerItem
-import ie.dublinmapper.model.LiveDataItem
-import ie.dublinmapper.model.NoLiveDataItem
-import ie.dublinmapper.model.ServiceLocationItem
+import ie.dublinmapper.model.*
 import ie.dublinmapper.ui.R
 import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
@@ -34,8 +31,8 @@ class FavouritesResponseMapper(
                         serviceLocation = serviceLocation,
                         icon = mapIcon(serviceLocation.service),
 //                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
-                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
-//                        routes = null,
+//                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
+                        routes = null,
                         walkDistance = null
                     ),
                     mapLiveData(serviceLocation.service, liveDataResponse),
@@ -46,18 +43,17 @@ class FavouritesResponseMapper(
     )
 
     private fun mapLiveData(service: Service, liveDataResponse: LiveDataResponse): Section {
-        if (liveDataResponse.state == State.LOADING) {
-            return Section(NoLiveDataItem("Loading..."))
+        return if (liveDataResponse.state == State.LOADING) {
+            Section(NoLiveDataItem("Loading..."))
         } else {
             val items = liveDataResponse.liveData.mapNotNull {
                 when (it) {
                     is TimedLiveData -> LiveDataItem(liveData = it)
-                    is DublinBikesLiveData -> null // TODO
+                    is DublinBikesLiveData -> DublinBikesLiveDataItem(liveData = it)
                     else -> null
                 }
             }
-            return when {
-                service == Service.DUBLIN_BIKES -> Section()
+            when {
                 items.isNullOrEmpty() -> Section(NoLiveDataItem(mapMessage(service)))
                 else -> Section(items)
             }
