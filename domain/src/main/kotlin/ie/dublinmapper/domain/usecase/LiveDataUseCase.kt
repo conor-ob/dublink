@@ -33,7 +33,7 @@ class LiveDataUseCase @Inject constructor(
     }
 
     fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
-        return Observable.interval(0L, 60L, TimeUnit.SECONDS)
+        return Observable.interval(0L, 65L, TimeUnit.SECONDS)
             .flatMap {
                 getLiveData(serviceLocationId, service).map {
                     LiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
