@@ -336,6 +336,26 @@ class GroupedLiveDataItem(
             }
         }
     }
+
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        if (other is GroupedLiveDataItem) {
+            return liveData.first().operator == other.liveData.first().operator &&
+                    liveData.first().route == other.liveData.first().route &&
+                    liveData.first().destination == other.liveData.first().destination
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is GroupedLiveDataItem) {
+            return liveData == other.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.hashCode()
+    }
 }
 
 class DublinBikesLiveDataItem(
