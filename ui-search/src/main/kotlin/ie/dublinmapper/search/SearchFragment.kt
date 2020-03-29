@@ -54,9 +54,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         adapter.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()
             if (serviceLocation != null) {
-                if (Service.DUBLIN_BIKES != serviceLocation.service) {
-                    (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
-                }
+                (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
 

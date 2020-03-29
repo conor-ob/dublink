@@ -34,7 +34,8 @@ class FavouritesResponseMapper(
                         serviceLocation = serviceLocation,
                         icon = mapIcon(serviceLocation.service),
 //                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
-                        routes = null,
+                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
+//                        routes = null,
                         walkDistance = null
                     ),
                     mapLiveData(serviceLocation.service, liveDataResponse),
@@ -49,16 +50,16 @@ class FavouritesResponseMapper(
             return Section(NoLiveDataItem("Loading..."))
         } else {
             val items = liveDataResponse.liveData.mapNotNull {
-                if (it is TimedLiveData) {
-                    LiveDataItem(liveData = it)
-                } else {
-                    null // TODO
+                when (it) {
+                    is TimedLiveData -> LiveDataItem(liveData = it)
+                    is DublinBikesLiveData -> null // TODO
+                    else -> null
                 }
             }
-            return if (items.isNullOrEmpty()) {
-                Section(NoLiveDataItem(mapMessage(service)))
-            } else {
-                Section(items)
+            return when {
+                service == Service.DUBLIN_BIKES -> Section()
+                items.isNullOrEmpty() -> Section(NoLiveDataItem(mapMessage(service)))
+                else -> Section(items)
             }
         }
     }
@@ -75,12 +76,19 @@ class FavouritesResponseMapper(
         return "No scheduled $mode"
     }
 
-    private fun mapRoutes(serviceLocation: ServiceLocation): List<Route>? = when (serviceLocation) {
+    private fun mapRoutes(serviceLocation: ServiceLocation, liveData: List<LiveData>): List<Route>? = when (serviceLocation) {
         is ServiceLocationRoutes -> serviceLocation.routes
-        is DublinBikesDock -> listOf(
-            Route("${serviceLocation.availableBikes} Bikes", Operator.DUBLIN_BIKES),
-            Route("${serviceLocation.availableDocks} Docks", Operator.DUBLIN_BIKES)
-        )
+        is DublinBikesDock -> if (liveData.size == 1) {
+            listOf(
+                Route("${(liveData.first() as DublinBikesLiveData).bikes} Bikes", Operator.DUBLIN_BIKES),
+                Route("${(liveData.first() as DublinBikesLiveData).docks} Docks", Operator.DUBLIN_BIKES)
+            )
+        } else {
+            listOf(
+                Route("${serviceLocation.availableBikes} Bikes", Operator.DUBLIN_BIKES),
+                Route("${serviceLocation.availableDocks} Docks", Operator.DUBLIN_BIKES)
+            )
+        }
         else -> null
     }
 

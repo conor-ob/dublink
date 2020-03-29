@@ -5,6 +5,8 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.domain.service.StringProvider
 import ie.dublinmapper.model.LiveDataItem
+import ie.dublinmapper.model.ServiceLocationItem
+import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.TimedLiveData
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
@@ -21,10 +23,10 @@ class LiveDataResponseMapper(
         mappingContext: MappingContext?
     ) = Section(
         source.liveData.mapNotNull {
-            if (it is TimedLiveData) {
-                LiveDataItem(liveData = it)
-            } else {
-                null
+            when (it) {
+                is TimedLiveData -> LiveDataItem(liveData = it)
+                is DublinBikesLiveData -> null
+                else -> null
             }
         }
     )

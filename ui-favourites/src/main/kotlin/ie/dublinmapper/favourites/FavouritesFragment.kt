@@ -47,9 +47,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
                 if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
                     enabledServiceManager.enableService(serviceLocation.service)
                 }
-                if (Service.DUBLIN_BIKES != serviceLocation.service) {
-                    (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
-                }
+                (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
         view.liveDataList.adapter = adapter
