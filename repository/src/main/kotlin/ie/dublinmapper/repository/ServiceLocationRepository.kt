@@ -7,6 +7,10 @@ import ie.dublinmapper.domain.service.EnabledServiceManager
 import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
+import java.io.IOException
+import java.net.SocketException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 abstract class ServiceLocationRepository<T : ServiceLocation>(
     private val service: Service,
@@ -29,7 +33,13 @@ abstract class ServiceLocationRepository<T : ServiceLocation>(
         if (enabledServiceManager.isServiceEnabled(service)) {
             return serviceLocationStore.get(service)
                 .doOnNext { serviceLocations -> fillCache(serviceLocations) }
-
+                .onErrorReturn { e ->
+                    val message = when (e) {
+                        is IOException -> "Please check your internet connection"
+                        else -> "Oops! Something went wrong. Try refreshing the page"
+                    }
+                    emptyList()
+                }
         }
         return Observable.just(emptyList())
     }
@@ -37,23 +47,6 @@ abstract class ServiceLocationRepository<T : ServiceLocation>(
     override fun getAllFavorites(): Observable<List<T>> {
         return getAll().map { it.filter { serviceLocation -> serviceLocation.isFavourite() } }
     }
-
-//    override fun getAll(): Observable<List<T>> {
-//        return Observable.zip(
-//            serviceLocationStore.get(service),
-//            favouriteRepository.getFavourites(service),
-//            BiFunction { serviceLocations, favourites ->
-//                val serviceLocationsById = serviceLocations.associateBy { it.id }.toMutableMap()
-//                for (favourite in favourites) {
-//                    val serviceLocation = serviceLocationsById[favourite.id]
-//                    val serviceLocationWithFavourite = serviceLocation!!.cloneWithFavourite(favourite)
-//                    serviceLocationsById[serviceLocation.id] = serviceLocationWithFavourite as T
-//                }
-//                cache = serviceLocationsById
-//                return@BiFunction cache.values.toList()
-//            }
-//        )
-//    }
 
     override fun getById(id: String): Observable<T> {
         val serviceLocation = cache[id]
@@ -72,5 +65,4 @@ abstract class ServiceLocationRepository<T : ServiceLocation>(
     override fun getAllById(id: String): Observable<List<T>> {
         throw UnsupportedOperationException()
     }
-
 }
