@@ -74,7 +74,15 @@ class FavouritesUseCase @Inject constructor(
                 )
             },
             Function { thing ->
-                val responses = thing.map { it as LiveDataResponse }.associateBy { it.serviceLocationName }
+                val responses = thing.map {
+                    val resp = it as LiveDataResponse
+                    LiveDataResponse(
+                        service = resp.service,
+                        serviceLocationName = resp.serviceLocationName,
+                        liveData = resp.liveData.take(3),
+                        state = resp.state
+                    )
+                }.associateBy { it.serviceLocationName }
                 val favourites = favs.associateBy { it.name }
                 val newMap = mutableMapOf<ServiceLocation, LiveDataResponse>()
                 for (entry in favourites) {
