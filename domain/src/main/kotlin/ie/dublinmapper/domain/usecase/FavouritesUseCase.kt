@@ -60,23 +60,25 @@ class FavouritesUseCase @Inject constructor(
 //        }
     }
 
-    private fun getRawFavourites(favs: List<ServiceLocation>): Observable<FavouritesResponse> {
-        return Observable.just(
-            FavouritesResponse(favs.associateWith { emptyList<LiveData>() })
-        )
-    }
+//    private fun getRawFavourites(favs: List<ServiceLocation>): Observable<FavouritesResponse> {
+//        return Observable.just(
+//            FavouritesResponse(favs.associateWith { emptyList<LiveData>() })
+//        )
+//    }
 
     private fun getFavouritesWithLiveData(favs: List<ServiceLocation>): Observable<FavouritesResponse> {
         return Observable.combineLatest(
-            favs.map { liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).startWith(
-                LiveDataResponse(it.service, it.name, emptyList())
-            ) },
+            favs.map {
+                liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).startWith(
+                    LiveDataResponse(it.service, it.name, emptyList(), State.LOADING)
+                )
+            },
             Function { thing ->
                 val responses = thing.map { it as LiveDataResponse }.associateBy { it.serviceLocationName }
                 val favourites = favs.associateBy { it.name }
-                val newMap = mutableMapOf<ServiceLocation, List<LiveData>>()
+                val newMap = mutableMapOf<ServiceLocation, LiveDataResponse>()
                 for (entry in favourites) {
-                    newMap[entry.value] = responses[entry.key]!!.liveData
+                    newMap[entry.value] = responses[entry.key]!!
                 }
                 return@Function FavouritesResponse(
                     newMap
@@ -95,18 +97,18 @@ class FavouritesUseCase @Inject constructor(
 //        )
     }
 
-    private fun resolving(t1: LiveDataResponse, t2: LiveDataResponse, t3: LiveDataResponse, t4: LiveDataResponse, t5: LiveDataResponse, t6: LiveDataResponse, favs: List<ServiceLocation>): FavouritesResponse {
-        return FavouritesResponse(
-            mapOf(
-                favs[0] to t1.liveData,
-                favs[1] to t2.liveData,
-                favs[2] to t3.liveData,
-                favs[3] to t4.liveData,
-                favs[4] to t5.liveData,
-                favs[5] to t6.liveData
-            )
-        )
-    }
+//    private fun resolving(t1: LiveDataResponse, t2: LiveDataResponse, t3: LiveDataResponse, t4: LiveDataResponse, t5: LiveDataResponse, t6: LiveDataResponse, favs: List<ServiceLocation>): FavouritesResponse {
+//        return FavouritesResponse(
+//            mapOf(
+//                favs[0] to t1.liveData,
+//                favs[1] to t2.liveData,
+//                favs[2] to t3.liveData,
+//                favs[3] to t4.liveData,
+//                favs[4] to t5.liveData,
+//                favs[5] to t6.liveData
+//            )
+//        )
+//    }
 
     private fun getFavouriteServiceLocations(): Observable<List<ServiceLocation>> {
         return Observable.combineLatest(
@@ -165,5 +167,5 @@ class FavouritesUseCase @Inject constructor(
 }
 
 data class FavouritesResponse(
-    val serviceLocations: Map<ServiceLocation, List<LiveData>>
+    val serviceLocations: Map<ServiceLocation, LiveDataResponse>
 )

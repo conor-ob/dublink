@@ -4,6 +4,8 @@ import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.FavouritesResponse
 import ie.dublinmapper.domain.service.StringProvider
+import ie.dublinmapper.domain.usecase.LiveDataResponse
+import ie.dublinmapper.domain.usecase.State
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.LiveDataItem
 import ie.dublinmapper.model.NoLiveDataItem
@@ -25,7 +27,7 @@ class FavouritesResponseMapper(
     ) = Section(
         source.serviceLocations.entries.mapIndexed { index, entry ->
             val serviceLocation = entry.key
-            val liveData = entry.value
+            val liveDataResponse = entry.value
             Section(
                 listOfNotNull(
                     ServiceLocationItem(
@@ -35,25 +37,29 @@ class FavouritesResponseMapper(
                         routes = null,
                         walkDistance = null
                     ),
-                    mapLiveData(serviceLocation.service, liveData),
+                    mapLiveData(serviceLocation.service, liveDataResponse),
                     if (index < source.serviceLocations.entries.size - 1) DividerItem() else null
                 )
             )
         }
     )
 
-    private fun mapLiveData(service: Service, liveData: List<LiveData>): Section {
-        val items = liveData.mapNotNull {
-            if (it is TimedLiveData) {
-                LiveDataItem(liveData = it)
-            } else {
-                null // TODO
-            }
-        }
-        return if (items.isNullOrEmpty()) {
-            Section(NoLiveDataItem(mapMessage(service)))
+    private fun mapLiveData(service: Service, liveDataResponse: LiveDataResponse): Section {
+        if (liveDataResponse.state == State.LOADING) {
+            return Section(NoLiveDataItem("Loading..."))
         } else {
-            Section(items)
+            val items = liveDataResponse.liveData.mapNotNull {
+                if (it is TimedLiveData) {
+                    LiveDataItem(liveData = it)
+                } else {
+                    null // TODO
+                }
+            }
+            return if (items.isNullOrEmpty()) {
+                Section(NoLiveDataItem(mapMessage(service)))
+            } else {
+                Section(items)
+            }
         }
     }
 

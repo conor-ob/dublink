@@ -36,7 +36,7 @@ class LiveDataUseCase @Inject constructor(
         return Observable.interval(0L, 65L, TimeUnit.SECONDS)
             .flatMap {
                 getLiveData(serviceLocationId, service).map {
-                    LiveDataResponse(service, serviceLocationName, it)
+                    LiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
                 }
             }
     }
@@ -57,5 +57,10 @@ class LiveDataUseCase @Inject constructor(
 data class LiveDataResponse(
     val service: Service,
     val serviceLocationName: String,
-    val liveData: List<LiveData>
+    val liveData: List<LiveData>,
+    val state: State
 )
+
+enum class State {
+    LOADING, COMPLETE
+}
