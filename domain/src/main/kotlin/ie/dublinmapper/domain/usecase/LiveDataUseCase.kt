@@ -17,7 +17,7 @@ class LiveDataUseCase @Inject constructor(
     @Named("LIVE_DATA") private val liveDataRepository: LiveDataRepository
 ) {
 
-    private val refreshInterval = Duration.ofSeconds(10L) // TODO make this configurable
+    private val refreshInterval = Duration.ofSeconds(20L) // TODO make this configurable
 
     fun getServiceLocation(serviceLocationId: String, service: Service): Observable<ServiceLocation> {
         return locationRepository.get(ServiceLocationKey(service = service, locationId = serviceLocationId))

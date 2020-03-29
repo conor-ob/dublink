@@ -59,7 +59,7 @@ class DublinBikesRepositoryModule {
     fun dublinBikesRealTimeDataRepository(
         client: RtpiClient,
         stringProvider: StringProvider,
-        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
+        @Named("MEDIUM_TERM") memoryPolicy: MemoryPolicy
     ): LiveDataRepository {
         val store = StoreBuilder.key<String, List<DublinBikesLiveData>>()
             .fetcher { dockId ->

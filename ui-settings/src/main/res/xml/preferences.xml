@@ -24,6 +24,23 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="Favourites">
+
+        <SwitchPreference
+            android:title="Sort by Location"
+            android:summary="Nearby places will be at the top"
+            android:defaultValue="false" />
+
+        <SeekBarPreference
+            android:title="Live Times"
+            android:summary="How many places will display live times"
+            android:max="10"
+            app:showSeekBarValue="true"
+            android:defaultValue="3"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:summary="Choose your favourites"
         android:title="Transport Services">
 
@@ -54,16 +71,25 @@
             android:key="@string/preference_key_enabled_service_dublin_bikes"
             android:title="@string/service_name_dublin_bikes" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:summary="Try out experimental features"
-        android:title="Labs 🚧">
-
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/preference_key_enabled_service_aircoach"
+            android:summary="🚧 Experimental"
             android:title="@string/service_name_aircoach" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Live Times">
+
+        <SeekBarPreference
+            android:title="Refresh Rate"
+            android:summary="How often to refresh live times (seconds)"
+            android:max="60"
+            app:min="20"
+            app:seekBarIncrement="5"
+            app:showSeekBarValue="true"
+            android:defaultValue="45"/>
 
     </PreferenceCategory>
 

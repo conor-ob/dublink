@@ -12,6 +12,6 @@ class ServiceLiveDataRepository<T : LiveData>(
 
     override fun get(key: LiveDataKey): Observable<List<LiveData>> {
         // TODO decide when to use the cache
-        return liveDataStore.fetch(key.locationId).toObservable().map { it }
+        return liveDataStore.get(key.locationId).toObservable().map { it }
     }
 }

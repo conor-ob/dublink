@@ -85,7 +85,14 @@ class RepositoryModule {
     @Singleton
     @Named("SHORT_TERM")
     fun shortTermMemoryPolicy(): MemoryPolicy {
-        return newMemoryPolicy(1, TimeUnit.MINUTES)
+        return newMemoryPolicy(15, TimeUnit.SECONDS)
+    }
+
+    @Provides
+    @Singleton
+    @Named("MEDIUM_TERM")
+    fun mediumTermMemoryPolicy(): MemoryPolicy {
+        return newMemoryPolicy(90, TimeUnit.SECONDS)
     }
 
     @Provides
