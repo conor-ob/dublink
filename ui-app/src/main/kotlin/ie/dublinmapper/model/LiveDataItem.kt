@@ -3,17 +3,14 @@ package ie.dublinmapper.model
 import android.content.res.ColorStateList
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.format.DateFormat
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.ui.R
 import io.rtpi.api.DublinBikesLiveData
-import io.rtpi.api.LiveData
 import io.rtpi.api.Operator
 import io.rtpi.api.TimedLiveData
-import kotlinx.android.synthetic.main.list_item_dublin_bikes_live_data.*
+import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.*
 import kotlinx.android.synthetic.main.list_item_live_data.*
 import kotlinx.android.synthetic.main.list_item_live_data_grouped.*
 import java.time.format.DateTimeFormatter
@@ -345,7 +342,7 @@ class DublinBikesLiveDataItem(
     private val liveData: DublinBikesLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.list_item_dublin_bikes_live_data
+    override fun getLayout() = R.layout.list_item_live_data_dublin_bikes
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.bikesCount.text = if (liveData.bikes == 0) " No " else " ${liveData.bikes} "
