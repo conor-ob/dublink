@@ -106,8 +106,10 @@
     <color name="colorPrimaryVariant">#3700B3</color>
     <color name="colorSecondary">#F9AA33</color>
     <color name="colorSecondaryVariant">#C78522</color>
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorBackground">@color/grey_50</color>
+<!--    <color name="colorBackground">#FFFFFF</color>-->
+    <color name="colorSurface">@color/grey_100</color>
+<!--    <color name="colorSurface">#FFFFFF</color>-->
     <color name="colorError">#B00020</color>
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnSecondary">#000000</color>

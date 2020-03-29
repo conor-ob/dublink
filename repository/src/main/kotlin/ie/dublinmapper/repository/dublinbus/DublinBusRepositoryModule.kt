@@ -9,12 +9,12 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.datamodel.DublinBusStopLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataRepository
 import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopPersister
-import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopRepository
-import ie.dublinmapper.domain.service.EnabledServiceManager
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.ServiceLocationRepository
 import io.rtpi.api.DublinBusLiveData
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service
@@ -27,18 +27,18 @@ class DublinBusRepositoryModule {
 
     @Provides
     @Singleton
+    @Named("DUBLIN_BUS")
     fun dublinBusStopRepository(
         client: RtpiClient,
         localResource: DublinBusStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
-        enabledServiceManager: EnabledServiceManager
-    ): Repository<DublinBusStop> {
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
+    ): LocationRepository {
         val fetcher = Fetcher<List<DublinBusStop>, Service> { client.dublinBus().getStops() }
         val persister = DublinBusStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return DublinBusStopRepository(store, enabledServiceManager)
+        return ServiceLocationRepository(Service.DUBLIN_BUS, store)
     }
 
     @Provides

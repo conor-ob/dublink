@@ -14,6 +14,10 @@ dependencies {
     implementation(Libraries.Store.store)
 
     kapt(Libraries.Dagger.daggerCompiler)
+
+    testImplementation(TestLibraries.Junit.junit)
+    testImplementation(TestLibraries.Mockk.mockk)
+    testImplementation(TestLibraries.Truth.truth)
 }
 
 sourceSets.getByName("main") {

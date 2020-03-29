@@ -277,22 +277,23 @@ class DublinBikesLiveDataItem(
     override fun getLayout() = R.layout.list_item_dublin_bikes_live_data
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.liveData.removeAllViewsInLayout()
-        addChip(viewHolder, "${liveData.bikes} bikes")
-        addChip(viewHolder, "${liveData.docks} docks")
+        viewHolder.bikesCount.text = if (liveData.bikes == 0) " No " else " ${liveData.bikes} "
+        viewHolder.bikes.text = if (liveData.bikes == 1) "Bike" else "Bikes" //TODO plurals
+        viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+        viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(liveData.bikes))
+
+        viewHolder.docksCount.text = if (liveData.docks == 0) " No " else " ${liveData.docks} "
+        viewHolder.docks.text = if (liveData.docks == 1) "Dock" else "Docks" //TODO plurals
+        viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+        viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(liveData.docks))
     }
 
-    private fun addChip(viewHolder: GroupieViewHolder, text: String) {
-        //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
-        val chip = Chip(viewHolder.itemView.context)
-        chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
-        val (textColour, backgroundColour) = R.color.white to R.color.dublinBikesTeal
-        chip.text = " $text "
-        chip.setTextAppearanceResource(R.style.SmallerText)
-        chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
-        chip.setChipBackgroundColorResource(backgroundColour)
-//            chip.chipMinHeight = 0f
-        viewHolder.liveData.addView(chip)
+    private fun getBackgroundColour(amount: Int): Int {
+        return when {
+            amount < 2 -> R.color.luasRed
+            amount < 6 -> R.color.aircoachOrange
+            else -> R.color.dublinBikesTeal
+        }
     }
 
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {

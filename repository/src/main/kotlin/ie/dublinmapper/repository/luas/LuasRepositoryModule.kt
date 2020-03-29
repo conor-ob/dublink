@@ -9,12 +9,12 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.datamodel.LuasStopLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.luas.livedata.LuasLiveDataRepository
 import ie.dublinmapper.repository.luas.stops.LuasStopPersister
-import ie.dublinmapper.repository.luas.stops.LuasStopRepository
-import ie.dublinmapper.domain.service.EnabledServiceManager
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.ServiceLocationRepository
 import io.rtpi.api.LuasLiveData
 import io.rtpi.api.LuasStop
 import io.rtpi.api.Service
@@ -27,18 +27,18 @@ class LuasRepositoryModule {
 
     @Provides
     @Singleton
+    @Named("LUAS")
     fun luasStopRepository(
         client: RtpiClient,
         localResource: LuasStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
-        enabledServiceManager: EnabledServiceManager
-    ): Repository<LuasStop> {
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
+    ): LocationRepository {
         val fetcher = Fetcher<List<LuasStop>, Service> { client.luas().getStops() }
         val persister = LuasStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return LuasStopRepository(store, enabledServiceManager)
+        return ServiceLocationRepository(Service.LUAS, store)
     }
 
     @Provides

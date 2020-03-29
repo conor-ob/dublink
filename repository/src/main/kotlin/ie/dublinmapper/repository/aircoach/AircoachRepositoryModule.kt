@@ -9,12 +9,12 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.datamodel.AircoachStopLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.repository.aircoach.livedata.AircoachLiveDataRepository
 import ie.dublinmapper.repository.aircoach.stops.AircoachStopPersister
-import ie.dublinmapper.repository.aircoach.stops.AircoachStopRepository
-import ie.dublinmapper.domain.service.EnabledServiceManager
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.ServiceLocationRepository
 import io.rtpi.api.AircoachLiveData
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Service
@@ -27,18 +27,18 @@ class AircoachRepositoryModule {
 
     @Provides
     @Singleton
+    @Named("AIRCOACH")
     fun aircoachStopRepository(
         client: RtpiClient,
         localResource: AircoachStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
-        enabledServiceManager: EnabledServiceManager
-    ): Repository<AircoachStop> {
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
+    ): LocationRepository {
         val fetcher = Fetcher<List<AircoachStop>, Service> { client.aircoach().getStops() }
         val persister = AircoachStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return AircoachStopRepository(store, enabledServiceManager)
+        return ServiceLocationRepository(Service.AIRCOACH, store)
     }
 
     @Provides

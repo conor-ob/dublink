@@ -44,7 +44,7 @@ class FavouritesResponseMapper(
 
     private fun mapLiveData(service: Service, liveDataResponse: LiveDataResponse): Section {
         return if (liveDataResponse.state == State.LOADING) {
-            Section(NoLiveDataItem("Loading..."))
+            Section(SimpleMessageItem("Loading..."))
         } else {
             val items = liveDataResponse.liveData.mapNotNull {
                 when (it) {
@@ -54,7 +54,7 @@ class FavouritesResponseMapper(
                 }
             }
             when {
-                items.isNullOrEmpty() -> Section(NoLiveDataItem(mapMessage(service)))
+                items.isNullOrEmpty() -> Section(SimpleMessageItem(mapMessage(service)))
                 else -> Section(items)
             }
         }
@@ -70,22 +70,6 @@ class FavouritesResponseMapper(
             else -> "arrivals"
         }
         return "No scheduled $mode"
-    }
-
-    private fun mapRoutes(serviceLocation: ServiceLocation, liveData: List<LiveData>): List<Route>? = when (serviceLocation) {
-        is ServiceLocationRoutes -> serviceLocation.routes
-        is DublinBikesDock -> if (liveData.size == 1) {
-            listOf(
-                Route("${(liveData.first() as DublinBikesLiveData).bikes} Bikes", Operator.DUBLIN_BIKES),
-                Route("${(liveData.first() as DublinBikesLiveData).docks} Docks", Operator.DUBLIN_BIKES)
-            )
-        } else {
-            listOf(
-                Route("${serviceLocation.availableBikes} Bikes", Operator.DUBLIN_BIKES),
-                Route("${serviceLocation.availableDocks} Docks", Operator.DUBLIN_BIKES)
-            )
-        }
-        else -> null
     }
 
     private fun mapIcon(service: Service): Int = when (service) {

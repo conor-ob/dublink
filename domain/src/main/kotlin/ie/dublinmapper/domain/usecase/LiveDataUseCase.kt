@@ -1,18 +1,16 @@
 package ie.dublinmapper.domain.usecase
 
+import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.domain.repository.ServiceLocationKey
 import io.reactivex.Observable
 import io.rtpi.api.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
 class LiveDataUseCase @Inject constructor(
-    private val aircoachStopRepository: Repository<AircoachStop>,
-    private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val irishRailStationRepository: Repository<IrishRailStation>,
-    private val dublinBikesDockRepository: Repository<DublinBikesDock>,
-    private val dublinBusStopRepository: Repository<DublinBusStop>,
-    private val luasStopRepository: Repository<LuasStop>,
+    @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
     private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
     private val busEireannLiveDataRepository: Repository<BusEireannLiveData>,
     private val irishRailLiveDataRepository: Repository<IrishRailLiveData>,
@@ -22,14 +20,7 @@ class LiveDataUseCase @Inject constructor(
 ) {
 
     fun getServiceLocation(serviceLocationId: String, service: Service): Observable<ServiceLocation> {
-        return when (service) {
-            Service.AIRCOACH -> aircoachStopRepository.getById(serviceLocationId)
-            Service.BUS_EIREANN -> busEireannStopRepository.getById(serviceLocationId)
-            Service.IRISH_RAIL -> irishRailStationRepository.getById(serviceLocationId)
-            Service.DUBLIN_BIKES -> dublinBikesDockRepository.getById(serviceLocationId)
-            Service.DUBLIN_BUS -> dublinBusStopRepository.getById(serviceLocationId)
-            Service.LUAS -> luasStopRepository.getById(serviceLocationId)
-        }.map { it }
+        return locationRepository.get(ServiceLocationKey(service = service, locationId = serviceLocationId))
     }
 
     fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
