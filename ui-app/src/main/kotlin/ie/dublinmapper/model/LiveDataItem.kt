@@ -3,12 +3,16 @@ package ie.dublinmapper.model
 import android.content.res.ColorStateList
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.format.DateFormat
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.ui.R
+import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.Operator
 import io.rtpi.api.TimedLiveData
+import kotlinx.android.synthetic.main.list_item_dublin_bikes_live_data.*
 import kotlinx.android.synthetic.main.list_item_live_data.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -16,8 +20,8 @@ import java.time.temporal.ChronoUnit
 private val format24h = DateTimeFormatter.ofPattern("HH:mm")
 private val format12h = DateTimeFormatter.ofPattern("h:mm a")
 
-abstract class LiveDataItem(
-    protected val liveData: TimedLiveData //TODO private
+class LiveDataItem(
+    private val liveData: TimedLiveData //TODO private
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data
@@ -87,7 +91,7 @@ abstract class LiveDataItem(
 
     private fun bindWaitTime(viewHolder: GroupieViewHolder) {
         viewHolder.waitTimeMinutes.text = when {
-            liveData.liveTime.waitTime.seconds < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
+            liveData.liveTime.waitTime.toMinutes() < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
             else -> {
                 if (liveData.liveTime.waitTime.toMinutes() >= 60L) {
                     val scheduledTime = liveData.liveTime.scheduledDateTime
@@ -107,6 +111,26 @@ abstract class LiveDataItem(
 //                }
             }
         }
+    }
+
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        if (other is LiveDataItem) {
+            return liveData.operator == other.liveData.operator &&
+                    liveData.route == other.liveData.route &&
+                    liveData.destination == other.liveData.destination
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is LiveDataItem) {
+            return liveData == other.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.hashCode()
     }
 
 
@@ -244,4 +268,45 @@ abstract class LiveDataItem(
         }
     }
 
+}
+
+class DublinBikesLiveDataItem(
+    private val liveData: DublinBikesLiveData
+) : Item() {
+
+    override fun getLayout() = R.layout.list_item_dublin_bikes_live_data
+
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.liveData.removeAllViewsInLayout()
+        addChip(viewHolder, "${liveData.bikes} bikes")
+        addChip(viewHolder, "${liveData.docks} docks")
+    }
+
+    private fun addChip(viewHolder: GroupieViewHolder, text: String) {
+        //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
+        val chip = Chip(viewHolder.itemView.context)
+        chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
+        val (textColour, backgroundColour) = R.color.white to R.color.dublinBikesTeal
+        chip.text = " $text "
+        chip.setTextAppearanceResource(R.style.SmallerText)
+        chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
+        chip.setChipBackgroundColorResource(backgroundColour)
+//            chip.chipMinHeight = 0f
+        viewHolder.liveData.addView(chip)
+    }
+
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        return equals(other)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is DublinBikesLiveDataItem) {
+            return liveData == other.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.hashCode()
+    }
 }

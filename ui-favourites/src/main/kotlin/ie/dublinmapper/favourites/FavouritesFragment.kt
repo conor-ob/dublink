@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
-import ie.dublinmapper.model.getServiceLocation
+import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Service
@@ -42,11 +42,11 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
         adapter = GroupAdapter()
         adapter.setOnItemClickListener { item, _ ->
-            val serviceLocation = item.getServiceLocation()
-            if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
-                enabledServiceManager.enableService(serviceLocation.service)
-            }
-            if (Service.DUBLIN_BIKES != serviceLocation.service) {
+            val serviceLocation = item.extractServiceLocation()
+            if (serviceLocation != null) {
+                if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
+                    enabledServiceManager.enableService(serviceLocation.service)
+                }
                 (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }

@@ -13,17 +13,11 @@ class DividerItem : Item() {
     }
 
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
-        if (other is DividerItem) {
-            return id == other.id
-        }
-        return false
+        return equals(other)
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other is DividerItem) {
-            return id == other.id
-        }
-        return false
+        return other is DividerItem
     }
 
     override fun hashCode(): Int {

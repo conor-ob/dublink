@@ -47,7 +47,7 @@ abstract class AbstractPersister<Raw, Parsed, Key>(
         if (elapsedSeconds > lifespan) {
             return RecordState.STALE
         }
-        if (elapsedSeconds > TimeUnit.DAYS.toSeconds(1) && internetManager.isConnectedToWiFi()) {
+        if (elapsedSeconds > TimeUnit.DAYS.toSeconds(1) && internetManager.isWiFiAvailable()) {
             return RecordState.STALE
         }
         return RecordState.FRESH

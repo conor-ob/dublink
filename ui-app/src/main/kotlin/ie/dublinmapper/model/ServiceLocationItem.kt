@@ -10,15 +10,19 @@ import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.list_item_service_location.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
+import ie.dublinmapper.domain.model.getName
 import io.rtpi.api.Operator
 import io.rtpi.api.Route
+import io.rtpi.api.Service
 import kotlin.math.round
 
 private const val serviceLocationKey = "key_service_location"
 
-abstract class ServiceLocationItem(
-    serviceLocation: ServiceLocation,
-    private val distance: Double?
+class ServiceLocationItem(
+    private val serviceLocation: ServiceLocation,
+    private val icon: Int,
+    private val routes: List<Route>?,
+    private val walkDistance: Double?
 ) : Item() {
 
     init {
@@ -28,45 +32,58 @@ abstract class ServiceLocationItem(
     override fun getLayout() = R.layout.list_item_service_location
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-//        if (position % 2 == 0) {
-//            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.white))
-//        } else {
-//            viewHolder.itemView.setBackgroundColor(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_100))
-//        }
+        bindTitle(viewHolder)
+        bindIcon(viewHolder)
+        bindRoutes(viewHolder)
     }
 
-    protected fun bindIcon(viewHolder: GroupieViewHolder, drawableId: Int, colourId: Int) {
-        viewHolder.serviceIconContainer.setImageResource(drawableId)
-        viewHolder.serviceIconContainer.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_850))
+    private fun bindIcon(viewHolder: GroupieViewHolder) {
+        if (icon == null) {
+            viewHolder.iconLayout.visibility = View.GONE
+            viewHolder.iconPadding.visibility = View.GONE
+        } else {
+            viewHolder.serviceIconContainer.setImageResource(icon)
+            viewHolder.serviceIconContainer.backgroundTintList =
+                ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_850))
+            viewHolder.iconLayout.visibility = View.VISIBLE
+            viewHolder.iconPadding.visibility = View.VISIBLE
+        }
     }
 
-    protected fun bindTitle(viewHolder: GroupieViewHolder, title: String, subtitle: String) {
-        viewHolder.title.text = title
-        viewHolder.subtitle.text = subtitle
-        if (distance != null) {
-            viewHolder.walkTime.text = distance.formatDistance()
+    private fun bindTitle(viewHolder: GroupieViewHolder) {
+        viewHolder.title.text = getServiceLocation().getName()
+        viewHolder.subtitle.text = when (val service = serviceLocation.service) {
+            Service.BUS_EIREANN,
+            Service.DUBLIN_BUS -> "${service.fullName} (${serviceLocation.id})"
+            else -> service.fullName
+        }
+        if (walkDistance != null) {
+            viewHolder.walkTime.text = walkDistance.formatDistance()
             viewHolder.walkTime.visibility = View.VISIBLE
         } else {
             viewHolder.walkTime.visibility = View.GONE
         }
     }
 
-    protected fun bindRoutes(viewHolder: GroupieViewHolder, routes: List<Route>) {
-        viewHolder.routes.removeAllViewsInLayout()
-        for (route in routes) {
+    private fun bindRoutes(viewHolder: GroupieViewHolder) {
+        if (routes.isNullOrEmpty()) {
+            viewHolder.routesLayout.visibility = View.GONE
+        } else {
+            viewHolder.routes.removeAllViewsInLayout()
+            for (route in routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
-            val chip = Chip(viewHolder.itemView.context)
-            chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
-            val (textColour, backgroundColour) = mapColour(route.operator, route.id)
-            chip.text = " ${route.id} "
-            chip.setTextAppearanceResource(R.style.SmallerText)
-            chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
-            chip.setChipBackgroundColorResource(backgroundColour)
+                val chip = Chip(viewHolder.itemView.context)
+                chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
+                val (textColour, backgroundColour) = mapColour(route.operator, route.id)
+                chip.text = " ${route.id} "
+                chip.setTextAppearanceResource(R.style.SmallerText)
+                chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
+                chip.setChipBackgroundColorResource(backgroundColour)
 //            chip.chipMinHeight = 0f
-            viewHolder.routes.addView(chip)
+                viewHolder.routes.addView(chip)
+            }
+            viewHolder.routesLayout.visibility = View.VISIBLE
         }
-        viewHolder.routes.visibility = View.VISIBLE
     }
 
     private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
@@ -122,8 +139,8 @@ abstract class ServiceLocationItem(
 
 }
 
-fun com.xwray.groupie.Item<com.xwray.groupie.GroupieViewHolder>.getServiceLocation(): ServiceLocation {
-    return extras[serviceLocationKey] as ServiceLocation
+fun com.xwray.groupie.Item<com.xwray.groupie.GroupieViewHolder>.extractServiceLocation(): ServiceLocation? {
+    return extras[serviceLocationKey] as? ServiceLocation
 }
 
 private fun Double.formatDistance(): String {
