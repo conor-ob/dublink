@@ -43,15 +43,16 @@ class FavouritesUseCase @Inject constructor(
 //            )
 //        }
         val favs = getFavouriteServiceLocations().blockingFirst()
-        return Observable.concat(
-            getRawFavourites(favs),
-            getFavouritesWithLiveData(favs)
+        return getFavouritesWithLiveData(favs)
+//        return Observable.concat(
+//            getRawFavourites(favs),
+
 //            getFavouriteServiceLocations().map { favourites ->
 //                FavouritesResponse(favourites.associateWith {
 //                    liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).blockingFirst().liveData.take(3)
 //                })
 //            }
-        )
+//        )
 //        return getFavouriteServiceLocations().map { favourites ->
 //            FavouritesResponse(favourites.associateWith {
 //                liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).blockingFirst().liveData.take(3)
