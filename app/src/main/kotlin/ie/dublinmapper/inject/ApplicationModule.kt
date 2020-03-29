@@ -13,7 +13,8 @@ import ie.dublinmapper.mapping.NearbyResponseMapper
 import ie.dublinmapper.mapping.SearchResponseMapper
 import ie.dublinmapper.database.DatabaseModule
 import ie.dublinmapper.domain.service.*
-import ie.dublinmapper.internet.WifiManager
+import ie.dublinmapper.internet.DeviceInternetManager
+import ie.dublinmapper.internet.NetworkConnectionInterceptor
 import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
@@ -61,7 +62,7 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun internetManager(context: Context): InternetManager = WifiManager(context)
+    fun internetManager(context: Context): InternetManager = DeviceInternetManager(context)
 
     @Provides
     @Singleton
@@ -126,8 +127,11 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun okHttpClient(): OkHttpClient =
+    fun okHttpClient(
+        internetManager: InternetManager
+    ): OkHttpClient =
         OkHttpClient.Builder()
+            .addNetworkInterceptor(NetworkConnectionInterceptor(internetManager))
             .addNetworkInterceptor(NetworkLoggingInterceptor())
             .addNetworkInterceptor(StethoInterceptor())
             .retryOnConnectionFailure(true)

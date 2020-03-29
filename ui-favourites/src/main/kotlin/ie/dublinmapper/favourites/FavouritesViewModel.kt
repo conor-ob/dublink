@@ -51,7 +51,7 @@ class FavouritesViewModel @Inject constructor(
 
     private fun bindActions() {
         val getFavouritesChange = actions.ofType(Action.GetFavourites::class.java)
-            .switchMap { action ->
+            .switchMap { _ ->
                 useCase.getFavourites()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)

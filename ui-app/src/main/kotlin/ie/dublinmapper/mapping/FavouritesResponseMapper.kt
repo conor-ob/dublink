@@ -31,7 +31,8 @@ class FavouritesResponseMapper(
                     ServiceLocationItem(
                         serviceLocation = serviceLocation,
                         icon = mapIcon(serviceLocation.service),
-                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
+//                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
+                        routes = null,
                         walkDistance = null
                     ),
                     mapLiveData(serviceLocation.service, liveData),

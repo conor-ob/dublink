@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/padding_l"
-    android:paddingTop="@dimen/padding_s"
+    android:paddingTop="@dimen/padding_xxs"
     android:paddingEnd="@dimen/padding_l"
-    android:paddingBottom="@dimen/padding_s">
+    android:paddingBottom="@dimen/padding_m">
 
     <TextView
         android:id="@+id/message"

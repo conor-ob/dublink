@@ -5,6 +5,7 @@ import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
 import io.reactivex.Observable
+import io.reactivex.functions.Function3
 import io.reactivex.functions.Function6
 import io.rtpi.api.*
 import javax.inject.Inject
@@ -21,22 +22,6 @@ class FavouritesUseCase @Inject constructor(
     private val locationProvider: LocationProvider,
     private val liveDataUseCase: LiveDataUseCase
 ) {
-
-    fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<Boolean> {
-        return Observable.fromCallable {
-            clearServiceLocationCache(service)
-            favouriteRepository.saveFavourite(serviceLocationId, serviceLocationName, service)
-            return@fromCallable true
-        }
-    }
-
-    fun removeFavourite(serviceLocationId: String, service: Service): Observable<Boolean> {
-        return Observable.fromCallable {
-            clearServiceLocationCache(service)
-            favouriteRepository.removeFavourite(serviceLocationId, service)
-            return@fromCallable true
-        }
-    }
 
     fun getFavourites(): Observable<FavouritesResponse> {
 //        if (permissionChecker.isLocationPermissionGranted()) {
@@ -56,21 +41,52 @@ class FavouritesUseCase @Inject constructor(
 //                }
 //            )
 //        }
-//        return Observable.concat(
-//            getFavouriteServiceLocations().map {
-//                FavouritesResponse(it.associateWith { emptyList<LiveData>() })
-//            },
+        val favs = getFavouriteServiceLocations().blockingFirst()
+        return Observable.concat(
+            getRawFavourites(favs),
+            getFavouritesWithLiveData(favs)
 //            getFavouriteServiceLocations().map { favourites ->
 //                FavouritesResponse(favourites.associateWith {
 //                    liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).blockingFirst().liveData.take(3)
 //                })
 //            }
-//        )
-        return getFavouriteServiceLocations().map { favourites ->
-            FavouritesResponse(favourites.associateWith {
-                liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).blockingFirst().liveData.take(3)
-            })
-        }
+        )
+//        return getFavouriteServiceLocations().map { favourites ->
+//            FavouritesResponse(favourites.associateWith {
+//                liveDataUseCase.getLiveDataStream(it.id, it.name, it.service).blockingFirst().liveData.take(3)
+//            })
+//        }
+    }
+
+    private fun getRawFavourites(favs: List<ServiceLocation>): Observable<FavouritesResponse> {
+        return Observable.just(
+            FavouritesResponse(favs.associateWith { emptyList<LiveData>() })
+        )
+    }
+
+    private fun getFavouritesWithLiveData(favs: List<ServiceLocation>): Observable<FavouritesResponse> {
+        return Observable.combineLatest(
+            liveDataUseCase.getLiveDataStream(favs[0].id, favs[0].name, favs[0].service),
+            liveDataUseCase.getLiveDataStream(favs[1].id, favs[1].name, favs[1].service),
+            liveDataUseCase.getLiveDataStream(favs[2].id, favs[2].name, favs[2].service),
+            liveDataUseCase.getLiveDataStream(favs[3].id, favs[3].name, favs[3].service),
+            liveDataUseCase.getLiveDataStream(favs[4].id, favs[4].name, favs[4].service),
+            liveDataUseCase.getLiveDataStream(favs[5].id, favs[5].name, favs[5].service),
+            Function6 { t1, t2, t3, t4, t5, t6 -> resolving(t1, t2, t3, t4, t5, t6, favs) }
+        )
+    }
+
+    private fun resolving(t1: LiveDataResponse, t2: LiveDataResponse, t3: LiveDataResponse, t4: LiveDataResponse, t5: LiveDataResponse, t6: LiveDataResponse, favs: List<ServiceLocation>): FavouritesResponse {
+        return FavouritesResponse(
+            mapOf(
+                favs[0] to t1.liveData,
+                favs[1] to t2.liveData,
+                favs[2] to t3.liveData,
+                favs[3] to t4.liveData,
+                favs[4] to t5.liveData,
+                favs[5] to t6.liveData
+            )
+        )
     }
 
     private fun getFavouriteServiceLocations(): Observable<List<ServiceLocation>> {
@@ -108,6 +124,22 @@ class FavouritesUseCase @Inject constructor(
             Service.DUBLIN_BUS -> dublinBusStopRepository.clearCache()
             Service.IRISH_RAIL -> irishRailStationRepository.clearCache()
             Service.LUAS -> luasStopRepository.clearCache()
+        }
+    }
+
+    fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<Boolean> {
+        return Observable.fromCallable {
+            clearServiceLocationCache(service)
+            favouriteRepository.saveFavourite(serviceLocationId, serviceLocationName, service)
+            return@fromCallable true
+        }
+    }
+
+    fun removeFavourite(serviceLocationId: String, service: Service): Observable<Boolean> {
+        return Observable.fromCallable {
+            clearServiceLocationCache(service)
+            favouriteRepository.removeFavourite(serviceLocationId, service)
+            return@fromCallable true
         }
     }
 
