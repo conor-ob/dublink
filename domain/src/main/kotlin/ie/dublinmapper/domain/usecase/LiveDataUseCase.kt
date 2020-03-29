@@ -1,7 +1,8 @@
 package ie.dublinmapper.domain.usecase
 
+import ie.dublinmapper.domain.repository.LiveDataKey
+import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LocationRepository
-import ie.dublinmapper.domain.repository.Repository
 import ie.dublinmapper.domain.repository.ServiceLocationKey
 import io.reactivex.Observable
 import io.rtpi.api.*
@@ -11,12 +12,7 @@ import javax.inject.Named
 
 class LiveDataUseCase @Inject constructor(
     @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
-    private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
-    private val busEireannLiveDataRepository: Repository<BusEireannLiveData>,
-    private val irishRailLiveDataRepository: Repository<IrishRailLiveData>,
-    private val dublinBikesLiveDataRepository: Repository<DublinBikesLiveData>,
-    private val dublinBusLiveDataRepository: Repository<DublinBusLiveData>,
-    private val luasLiveDataRepository: Repository<LuasLiveData>
+    @Named("LIVE_DATA") private val liveDataRepository: LiveDataRepository
 ) {
 
     fun getServiceLocation(serviceLocationId: String, service: Service): Observable<ServiceLocation> {
@@ -33,16 +29,8 @@ class LiveDataUseCase @Inject constructor(
     }
 
     private fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
-        return when (service) {
-            Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId)
-            Service.BUS_EIREANN -> busEireannLiveDataRepository.getAllById(serviceLocationId)
-            Service.IRISH_RAIL -> irishRailLiveDataRepository.getAllById(serviceLocationId)
-            Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { listOf(it) }
-            Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId)
-            Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId)
-        }.map { it as List<LiveData> }
+        return liveDataRepository.get(LiveDataKey(service = service, locationId = serviceLocationId))
     }
-
 }
 
 data class LiveDataResponse(

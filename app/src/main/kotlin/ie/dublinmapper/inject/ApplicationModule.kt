@@ -19,7 +19,7 @@ import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
 import ie.dublinmapper.permission.UserPermissionsChecker
-import ie.dublinmapper.repository.di.RepositoryModule
+import ie.dublinmapper.repository.inject.RepositoryModule
 import ie.dublinmapper.resource.StringResourceProvider
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore

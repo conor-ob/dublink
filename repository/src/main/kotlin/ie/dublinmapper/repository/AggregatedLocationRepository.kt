@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 
-class AggregatedServiceLocationRepository(
+class AggregatedLocationRepository(
     private val locationRepositories: Map<Service, LocationRepository>,
     private val enabledServiceManager: EnabledServiceManager
 ) : LocationRepository {

@@ -6,9 +6,9 @@ import io.reactivex.Observable
 import io.rtpi.api.*
 import org.junit.Test
 
-class AggregatedServiceLocationRepositoryTest {
+class AggregatedLocationRepositoryTest {
 
-    private val aggregatedServiceLocationRepository = AggregatedServiceLocationRepository(
+    private val aggregatedServiceLocationRepository = AggregatedLocationRepository(
         locationRepositories = mapOf(
             Service.IRISH_RAIL to ServiceLocationRepository(
                 Service.IRISH_RAIL,

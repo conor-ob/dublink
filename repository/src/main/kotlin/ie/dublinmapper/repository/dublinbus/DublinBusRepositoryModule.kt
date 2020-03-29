@@ -9,11 +9,10 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.datamodel.DublinBusStopLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LocationRepository
-import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.repository.dublinbus.livedata.DublinBusLiveDataRepository
-import ie.dublinmapper.repository.dublinbus.stops.DublinBusStopPersister
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.ServiceLiveDataRepository
 import ie.dublinmapper.repository.ServiceLocationRepository
 import io.rtpi.api.DublinBusLiveData
 import io.rtpi.api.DublinBusStop
@@ -36,22 +35,29 @@ class DublinBusRepositoryModule {
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
     ): LocationRepository {
         val fetcher = Fetcher<List<DublinBusStop>, Service> { client.dublinBus().getStops() }
-        val persister = DublinBusStopPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister =
+            DublinBusStopPersister(
+                localResource,
+                memoryPolicy,
+                serviceLocationRecordStateLocalResource,
+                internetManager
+            )
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
         return ServiceLocationRepository(Service.DUBLIN_BUS, store)
     }
 
     @Provides
     @Singleton
+    @Named("DUBLIN_BUS")
     fun dublinBusLiveDataRepository(
         client: RtpiClient,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<DublinBusLiveData> {
+    ): LiveDataRepository {
         val store = StoreBuilder.key<String, List<DublinBusLiveData>>()
             .fetcher { stopId -> client.dublinBus().getLiveData(stopId = stopId) }
             .memoryPolicy(memoryPolicy)
             .open()
-        return DublinBusLiveDataRepository(store)
+        return ServiceLiveDataRepository(store)
     }
 
 }

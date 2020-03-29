@@ -1,11 +1,13 @@
-package ie.dublinmapper.repository.di
+package ie.dublinmapper.repository.inject
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.service.EnabledServiceManager
-import ie.dublinmapper.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.repository.AggregatedLiveDataRepository
+import ie.dublinmapper.repository.AggregatedLocationRepository
 import ie.dublinmapper.repository.aircoach.AircoachRepositoryModule
 import ie.dublinmapper.repository.buseireann.BusEireannRepositoryModule
 import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
@@ -43,7 +45,7 @@ class RepositoryModule {
         @Named("LUAS") luasLocationRepository: LocationRepository,
         enabledServiceManager: EnabledServiceManager
     ): LocationRepository {
-        return AggregatedServiceLocationRepository(
+        return AggregatedLocationRepository(
             locationRepositories = mapOf(
                 Service.AIRCOACH to aircoachLocationRepository,
                 Service.BUS_EIREANN to busEireannLocationRepository,
@@ -53,6 +55,29 @@ class RepositoryModule {
                 Service.LUAS to luasLocationRepository
             ),
             enabledServiceManager = enabledServiceManager
+        )
+    }
+
+    @Provides
+    @Singleton
+    @Named("LIVE_DATA")
+    fun liveDataRepository(
+        @Named("AIRCOACH") aircoachLiveDataRepository: LiveDataRepository,
+        @Named("BUS_EIREANN") busEireannLiveDataRepository: LiveDataRepository,
+        @Named("DUBLIN_BIKES") dublinBikesLiveDataRepository: LiveDataRepository,
+        @Named("DUBLIN_BUS") dublinBusLiveDataRepository: LiveDataRepository,
+        @Named("IRISH_RAIL") irishRailLiveDataRepository: LiveDataRepository,
+        @Named("LUAS") luasLiveDataRepository: LiveDataRepository
+    ): LiveDataRepository {
+        return AggregatedLiveDataRepository(
+            liveDataRepositories = mapOf(
+                Service.AIRCOACH to aircoachLiveDataRepository,
+                Service.BUS_EIREANN to busEireannLiveDataRepository,
+                Service.DUBLIN_BIKES to dublinBikesLiveDataRepository,
+                Service.DUBLIN_BUS to dublinBusLiveDataRepository,
+                Service.IRISH_RAIL to irishRailLiveDataRepository,
+                Service.LUAS to luasLiveDataRepository
+            )
         )
     }
 
