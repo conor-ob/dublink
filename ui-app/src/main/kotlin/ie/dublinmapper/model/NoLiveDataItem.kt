@@ -12,4 +12,19 @@ class NoLiveDataItem(private val message: String) : Item() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.message.text = message
     }
+
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        return equals(other)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is NoLiveDataItem) {
+            return other.message == message
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return message.hashCode()
+    }
 }
