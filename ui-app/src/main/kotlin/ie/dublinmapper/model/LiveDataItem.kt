@@ -91,7 +91,7 @@ class LiveDataItem(
 
     private fun bindWaitTime(viewHolder: GroupieViewHolder) {
         viewHolder.waitTimeMinutes.text = when {
-            liveData.liveTime.waitTime.seconds < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
+            liveData.liveTime.waitTime.toMinutes() < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
             else -> {
                 if (liveData.liveTime.waitTime.toMinutes() >= 60L) {
                     val scheduledTime = liveData.liveTime.scheduledDateTime
