@@ -34,7 +34,7 @@ class DublinBikesRepositoryModule {
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         stringProvider: StringProvider,
-        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
+        @Named("MEDIUM_TERM") memoryPolicy: MemoryPolicy
     ): LocationRepository {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey()) }
         val persister =
@@ -59,7 +59,7 @@ class DublinBikesRepositoryModule {
     fun dublinBikesRealTimeDataRepository(
         client: RtpiClient,
         stringProvider: StringProvider,
-        @Named("MEDIUM_TERM") memoryPolicy: MemoryPolicy
+        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
     ): LiveDataRepository {
         val store = StoreBuilder.key<String, List<DublinBikesLiveData>>()
             .fetcher { dockId ->

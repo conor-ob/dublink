@@ -115,7 +115,8 @@ object Libraries {
     }
 
     object Store {
-        const val store = "com.nytimes.android:store3:3.1.1" // https://mvnrepository.com/artifact/com.nytimes.android/store3
+        const val store3 = "com.nytimes.android:store3:3.1.1" // https://mvnrepository.com/artifact/com.nytimes.android/store3
+        const val store4 = "com.dropbox.mobile.store:store4:4.0.0-alpha03" // https://mvnrepository.com/artifact/com.dropbox.mobile.store/store4
     }
 
     object Timber {
