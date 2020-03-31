@@ -9,7 +9,7 @@ class DividerItem : Item() {
     override fun getLayout() = R.layout.list_item_live_data_divider
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
+        // nothing to do
     }
 
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {

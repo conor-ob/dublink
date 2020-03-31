@@ -1,10 +1,10 @@
-package ie.dublinmapper.repository.aircoach.stops
+package ie.dublinmapper.repository.aircoach
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import ie.dublinmapper.domain.datamodel.AircoachStopLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
-import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.AbstractPersister
 import io.reactivex.Observable
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Service

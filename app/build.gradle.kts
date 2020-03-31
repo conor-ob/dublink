@@ -103,7 +103,7 @@ dependencies {
     implementation(Libraries.OkHttp.loggingInterceptor)
     implementation(Libraries.Rtpi.rtpiClient)
     implementation(Libraries.Rx.rxAndroid)
-    implementation(Libraries.Store.store)
+    implementation(Libraries.Store.store3)
     implementation(Libraries.Twitter.tweetUi)
 
     kapt(Libraries.Dagger.daggerCompiler)

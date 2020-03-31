@@ -11,9 +11,14 @@ dependencies {
     implementation(Libraries.Rtpi.rtpiApi)
     implementation(Libraries.Rtpi.rtpiClient)
     implementation(Libraries.Rx.rxJava)
-    implementation(Libraries.Store.store)
+    implementation(Libraries.Store.store3)
+    implementation(Libraries.Store.store4)
 
     kapt(Libraries.Dagger.daggerCompiler)
+
+    testImplementation(TestLibraries.Junit.junit)
+    testImplementation(TestLibraries.Mockk.mockk)
+    testImplementation(TestLibraries.Truth.truth)
 }
 
 sourceSets.getByName("main") {

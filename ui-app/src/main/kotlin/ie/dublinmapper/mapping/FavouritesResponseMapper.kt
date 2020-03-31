@@ -4,6 +4,7 @@ import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.FavouritesResponse
 import ie.dublinmapper.domain.service.StringProvider
+import ie.dublinmapper.domain.usecase.GroupedLiveDataResponse
 import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.domain.usecase.State
 import ie.dublinmapper.model.*
@@ -42,21 +43,37 @@ class FavouritesResponseMapper(
         }
     )
 
-    private fun mapLiveData(service: Service, liveDataResponse: LiveDataResponse): Section {
+    private fun mapLiveData(service: Service, liveDataResponse: GroupedLiveDataResponse): Section {
         return if (liveDataResponse.state == State.LOADING) {
-            Section(NoLiveDataItem("Loading..."))
+            Section(SimpleMessageItem("Loading..."))
+        } else if (liveDataResponse.state == State.WONT_LOAD) {
+            Section()
         } else {
-            val items = liveDataResponse.liveData.mapNotNull {
-                when (it) {
-                    is TimedLiveData -> LiveDataItem(liveData = it)
-                    is DublinBikesLiveData -> DublinBikesLiveDataItem(liveData = it)
-                    else -> null
+            val liveData = liveDataResponse.liveData
+            if (liveData.isNullOrEmpty()) {
+                Section(SimpleMessageItem(mapMessage(service)))
+            } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DublinBikesLiveData) {
+                Section(DublinBikesLiveDataItem(liveData.first().first() as DublinBikesLiveData))
+            } else {
+                val items = mutableListOf<GroupedLiveDataItem>()
+                for (thing in liveData.take(3)) {
+                    items.add(GroupedLiveDataItem(thing as List<TimedLiveData>))
                 }
+                Section(items)
             }
-            when {
-                items.isNullOrEmpty() -> Section(NoLiveDataItem(mapMessage(service)))
-                else -> Section(items)
-            }
+
+
+//            val items = liveDataResponse.liveData.mapNotNull {
+//                when (it) {
+//                    is TimedLiveData -> LiveDataItem(liveData = it)
+//                    is DublinBikesLiveData -> DublinBikesLiveDataItem(liveData = it)
+//                    else -> null
+//                }
+//            }
+//            when {
+//                items.isNullOrEmpty() -> Section(SimpleMessageItem(mapMessage(service)))
+//                else -> Section(items)
+//            }
         }
     }
 
@@ -70,22 +87,6 @@ class FavouritesResponseMapper(
             else -> "arrivals"
         }
         return "No scheduled $mode"
-    }
-
-    private fun mapRoutes(serviceLocation: ServiceLocation, liveData: List<LiveData>): List<Route>? = when (serviceLocation) {
-        is ServiceLocationRoutes -> serviceLocation.routes
-        is DublinBikesDock -> if (liveData.size == 1) {
-            listOf(
-                Route("${(liveData.first() as DublinBikesLiveData).bikes} Bikes", Operator.DUBLIN_BIKES),
-                Route("${(liveData.first() as DublinBikesLiveData).docks} Docks", Operator.DUBLIN_BIKES)
-            )
-        } else {
-            listOf(
-                Route("${serviceLocation.availableBikes} Bikes", Operator.DUBLIN_BIKES),
-                Route("${serviceLocation.availableDocks} Docks", Operator.DUBLIN_BIKES)
-            )
-        }
-        else -> null
     }
 
     private fun mapIcon(service: Service): Int = when (service) {

@@ -4,6 +4,7 @@ import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.NearbyResponse
 import ie.dublinmapper.domain.service.StringProvider
+import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.ui.R
 import io.rtpi.api.*
@@ -20,26 +21,35 @@ class NearbyResponseMapper(
         destinationType: Type<out Group>,
         mappingContext: MappingContext
     ) = Section(
-        source.serviceLocations.entries.map {
+        source.serviceLocations.entries.flatMap {
             val walkDistance = it.key
-            val serviceLocation = it.value
-            ServiceLocationItem(
-                serviceLocation = serviceLocation,
-                icon = mapIcon(serviceLocation.service),
-                routes = mapRoutes(serviceLocation),
-                walkDistance = walkDistance
-            )
+            when (val serviceLocation = it.value) {
+                is ServiceLocationRoutes -> listOf(
+                    ServiceLocationItem(
+                        serviceLocation = serviceLocation,
+                        icon = mapIcon(serviceLocation.service),
+                        routes = serviceLocation.routes,
+                        walkDistance = walkDistance
+                    )
+                )
+                is DublinBikesDock -> listOf(
+                    ServiceLocationItem(
+                        serviceLocation = serviceLocation,
+                        icon = mapIcon(serviceLocation.service),
+                        routes = null,
+                        walkDistance = walkDistance
+                    ),
+                    DublinBikesLiveDataItem(
+                        DublinBikesLiveData(
+                            bikes = serviceLocation.availableBikes,
+                            docks = serviceLocation.availableDocks
+                        )
+                    )
+                )
+                else -> emptyList()
+            }
         }
     )
-
-    private fun mapRoutes(serviceLocation: ServiceLocation): List<Route>? = when (serviceLocation) {
-        is ServiceLocationRoutes -> serviceLocation.routes
-        is DublinBikesDock -> listOf(
-            Route("${serviceLocation.availableBikes} Bikes", Operator.DUBLIN_BIKES),
-            Route("${serviceLocation.availableDocks} Docks", Operator.DUBLIN_BIKES)
-        )
-        else -> null
-    }
 
     private fun mapIcon(service: Service): Int = when (service) {
         Service.AIRCOACH,

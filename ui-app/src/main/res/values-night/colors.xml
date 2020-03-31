@@ -15,4 +15,5 @@
     <color name="scrimBackground">@color/luasGreen</color>
 
     <color name="colorStatusBar">#313236</color>
+    <color name="colorDivider">#343538</color>
 </resources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <bool name="preference_default_favourites_sort_location">false</bool>
+
+    <bool name="preference_default_enabled_service_aircoach">false</bool>
+    <bool name="preference_default_enabled_service_bus_eireann">true</bool>
+    <bool name="preference_default_enabled_service_dublin_bikes">true</bool>
+    <bool name="preference_default_enabled_service_dublin_bus">true</bool>
+    <bool name="preference_default_enabled_service_irish_rail">true</bool>
+    <bool name="preference_default_enabled_service_luas">true</bool>
+</resources>

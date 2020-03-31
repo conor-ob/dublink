@@ -9,13 +9,12 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.datamodel.DublinBikesDockLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
-import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockPersister
-import ie.dublinmapper.repository.dublinbikes.docks.DublinBikesDockRepository
-import ie.dublinmapper.repository.dublinbikes.livedata.DublinBikesLiveDataRepository
-import ie.dublinmapper.domain.service.EnabledServiceManager
+import ie.dublinmapper.domain.repository.LiveDataRepository
+import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.service.InternetManager
 import ie.dublinmapper.domain.service.StringProvider
+import ie.dublinmapper.repository.ServiceLiveDataRepository
+import ie.dublinmapper.repository.ServiceLocationRepository
 import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.Service
@@ -28,19 +27,25 @@ class DublinBikesRepositoryModule {
 
     @Provides
     @Singleton
+    @Named("DUBLIN_BIKES")
     fun dublinBikesDockRepository(
         client: RtpiClient,
         localResource: DublinBikesDockLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         stringProvider: StringProvider,
-        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy,
-        enabledServiceManager: EnabledServiceManager
-    ): Repository<DublinBikesDock> {
+        @Named("MEDIUM_TERM") memoryPolicy: MemoryPolicy
+    ): LocationRepository {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey()) }
-        val persister = DublinBikesDockPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister =
+            DublinBikesDockPersister(
+                localResource,
+                memoryPolicy,
+                serviceLocationRecordStateLocalResource,
+                internetManager
+            )
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return DublinBikesDockRepository(store, enabledServiceManager)
+        return ServiceLocationRepository(Service.DUBLIN_BIKES, store)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
 //            .fetcher(fetcher)
 //            .parser { docks -> DublinBikesDockMapper.map(docks) }
@@ -50,16 +55,20 @@ class DublinBikesRepositoryModule {
 
     @Provides
     @Singleton
+    @Named("DUBLIN_BIKES")
     fun dublinBikesRealTimeDataRepository(
         client: RtpiClient,
         stringProvider: StringProvider,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<DublinBikesLiveData> {
-        val store = StoreBuilder.key<String, DublinBikesLiveData>()
-            .fetcher { dockId -> client.dublinBikes().getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey()) }
+    ): LiveDataRepository {
+        val store = StoreBuilder.key<String, List<DublinBikesLiveData>>()
+            .fetcher { dockId ->
+                client.dublinBikes()
+                    .getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey())
+                    .map { listOf(it) }
+            }
             .memoryPolicy(memoryPolicy)
             .open()
-        return DublinBikesLiveDataRepository(store)
+        return ServiceLiveDataRepository(store)
     }
-
 }

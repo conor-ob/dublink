@@ -3,8 +3,6 @@ package ie.dublinmapper.model
 import android.content.res.ColorStateList
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.format.DateFormat
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
@@ -12,8 +10,9 @@ import ie.dublinmapper.ui.R
 import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.Operator
 import io.rtpi.api.TimedLiveData
-import kotlinx.android.synthetic.main.list_item_dublin_bikes_live_data.*
+import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.*
 import kotlinx.android.synthetic.main.list_item_live_data.*
+import kotlinx.android.synthetic.main.list_item_live_data_grouped.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
@@ -21,7 +20,7 @@ private val format24h = DateTimeFormatter.ofPattern("HH:mm")
 private val format12h = DateTimeFormatter.ofPattern("h:mm a")
 
 class LiveDataItem(
-    private val liveData: TimedLiveData //TODO private
+    val liveData: TimedLiveData //TODO private
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data
@@ -270,29 +269,119 @@ class LiveDataItem(
 
 }
 
+class GroupedLiveDataItem(
+    private val liveData: List<TimedLiveData>
+) : Item() {
+
+    override fun getLayout() = R.layout.list_item_live_data_grouped
+
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        bindRoute(viewHolder)
+        bindDestination(viewHolder)
+        bindWaitTime(viewHolder)
+    }
+
+    private fun bindRoute(viewHolder: GroupieViewHolder) {
+        viewHolder.groupedRoute.text = " ${liveData.first().route} "
+        val (textColour, backgroundColour) = mapColour(liveData.first().operator, liveData.first().route)
+        viewHolder.groupedRoute.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
+        viewHolder.groupedRoute.setChipBackgroundColorResource(backgroundColour)
+    }
+
+    private fun bindDestination(viewHolder: GroupieViewHolder) {
+//        when {
+//            isStarting -> viewHolder.destination.text = liveData.destination
+//            isTerminating -> viewHolder.destination.text = "from ${liveData.origin}"
+//            else -> viewHolder.destination.text = liveData.destination
+//        }
+        viewHolder.groupedDestination.text = liveData.first().destination
+    }
+
+    private fun bindWaitTime(viewHolder: GroupieViewHolder) {
+        viewHolder.groupedWaitTimeMinutes.text = if (liveData.size == 1) {
+            val minutes = liveData.first().liveTime.waitTime.toMinutes()
+            if (minutes <= 1L) {
+                "Due"
+            } else {
+                "$minutes min"
+            }
+        } else {
+            "${liveData.map {
+                val minutes = it.liveTime.waitTime.toMinutes()
+                if (minutes <= 1L) {
+                    "Due"
+                } else {
+                    minutes
+                }
+            }.joinToString(", ")} min"
+        }
+    }
+
+    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
+        return when (operator) {
+            Operator.AIRCOACH -> Pair(R.color.white, R.color.aircoachOrange)
+            Operator.BUS_EIREANN -> Pair(R.color.white, R.color.busEireannRed)
+            Operator.COMMUTER -> Pair(R.color.white, R.color.commuterBlue)
+            Operator.DART -> Pair(R.color.white, R.color.dartGreen)
+            Operator.DUBLIN_BIKES -> Pair(R.color.white, R.color.dublinBikesTeal)
+            Operator.DUBLIN_BUS -> Pair(R.color.text_primary, R.color.dublinBusYellow)
+            Operator.GO_AHEAD -> Pair(R.color.white, R.color.goAheadBlue)
+            Operator.INTERCITY -> Pair(R.color.text_primary, R.color.intercityYellow)
+            Operator.LUAS -> {
+                when (route) {
+                    "Green", "Green Line" -> Pair(R.color.white, R.color.luasGreen)
+                    "Red", "Red Line" -> Pair(R.color.white, R.color.luasRed)
+                    else -> Pair(R.color.white, R.color.luasPurple)
+                }
+            }
+        }
+    }
+
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        if (other is GroupedLiveDataItem) {
+            return liveData.first().operator == other.liveData.first().operator &&
+                    liveData.first().route == other.liveData.first().route &&
+                    liveData.first().destination == other.liveData.first().destination
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is GroupedLiveDataItem) {
+            return liveData == other.liveData
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return liveData.hashCode()
+    }
+}
+
 class DublinBikesLiveDataItem(
     private val liveData: DublinBikesLiveData
 ) : Item() {
 
-    override fun getLayout() = R.layout.list_item_dublin_bikes_live_data
+    override fun getLayout() = R.layout.list_item_live_data_dublin_bikes
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.liveData.removeAllViewsInLayout()
-        addChip(viewHolder, "${liveData.bikes} bikes")
-        addChip(viewHolder, "${liveData.docks} docks")
+        viewHolder.bikesCount.text = if (liveData.bikes == 0) " No " else " ${liveData.bikes} "
+        viewHolder.bikes.text = if (liveData.bikes == 1) "Bike" else "Bikes" //TODO plurals
+        viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+        viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(liveData.bikes))
+
+        viewHolder.docksCount.text = if (liveData.docks == 0) " No " else " ${liveData.docks} "
+        viewHolder.docks.text = if (liveData.docks == 1) "Dock" else "Docks" //TODO plurals
+        viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+        viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(liveData.docks))
     }
 
-    private fun addChip(viewHolder: GroupieViewHolder, text: String) {
-        //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
-        val chip = Chip(viewHolder.itemView.context)
-        chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
-        val (textColour, backgroundColour) = R.color.white to R.color.dublinBikesTeal
-        chip.text = " $text "
-        chip.setTextAppearanceResource(R.style.SmallerText)
-        chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
-        chip.setChipBackgroundColorResource(backgroundColour)
-//            chip.chipMinHeight = 0f
-        viewHolder.liveData.addView(chip)
+    private fun getBackgroundColour(amount: Int): Int {
+        return when {
+            amount < 2 -> R.color.luasRed
+            amount < 6 -> R.color.aircoachOrange
+            else -> R.color.dublinBikesTeal
+        }
     }
 
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
