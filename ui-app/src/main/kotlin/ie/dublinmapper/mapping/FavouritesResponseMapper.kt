@@ -46,6 +46,8 @@ class FavouritesResponseMapper(
     private fun mapLiveData(service: Service, liveDataResponse: GroupedLiveDataResponse): Section {
         return if (liveDataResponse.state == State.LOADING) {
             Section(SimpleMessageItem("Loading..."))
+        } else if (liveDataResponse.state == State.WONT_LOAD) {
+            Section()
         } else {
             val liveData = liveDataResponse.liveData
             if (liveData.isNullOrEmpty()) {

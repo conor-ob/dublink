@@ -20,7 +20,7 @@ private val format24h = DateTimeFormatter.ofPattern("HH:mm")
 private val format12h = DateTimeFormatter.ofPattern("h:mm a")
 
 class LiveDataItem(
-    private val liveData: TimedLiveData //TODO private
+    val liveData: TimedLiveData //TODO private
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data

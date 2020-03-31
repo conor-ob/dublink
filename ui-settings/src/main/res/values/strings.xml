@@ -1,22 +1,48 @@
 <resources>
-    <string name="preference_key_enabled_service_aircoach">aircoach_enabled</string>
-    <string name="preference_key_enabled_service_bus_eireann">bus_eireann_enabled</string>
-    <string name="preference_key_enabled_service_dublin_bikes">dublin_bikes_enabled</string>
-    <string name="preference_key_enabled_service_dublin_bus">dublin_bus_enabled</string>
-    <string name="preference_key_enabled_service_irish_rail">irish_rail_enabled</string>
-    <string name="preference_key_enabled_service_luas">luas_enabled</string>
+    <string name="preference_category_name_customization">Customization</string>
 
+    <string name="preference_name_preferred_theme">Theme</string>
     <string name="preference_key_preferred_theme">preferred_theme</string>
+    <string name="preference_default_preferred_theme">@string/preference_value_battery_saver_theme</string>
     <string name="preference_name_light_theme">Light</string>
     <string name="preference_name_dark_theme">Dark</string>
     <string name="preference_name_battery_saver_theme">Set by Battery Saver</string>
-    <string name="preference_name_system_default_theme">System default</string>
     <string name="preference_value_light_theme" translatable="false">light</string>
     <string name="preference_value_dark_theme" translatable="false">dark</string>
     <string name="preference_value_battery_saver_theme" translatable="false">battery</string>
-    <string name="preference_value_system_default_theme" translatable="false">system</string>
 
+    <string name="preference_name_preferred_home_screen">Home Screen</string>
     <string name="preference_key_preferred_home_screen">preferred_home_screen</string>
+
+    <string name="preference_category_name_favourites">Favourites</string>
+
+    <string name="preference_name_favourites_sort_by_location">Sort by Location</string>
+    <string name="preference_summary_favourites_sort_by_location">Nearby places will be at the top</string>
+    <string name="preference_key_favourites_sort_by_location">favourites_sort_by_location</string>
+
+    <string name="preference_name_favourites_live_data_limit">Live Times</string>
+    <string name="preference_summary_favourites_live_data_limit">How many places will display live times</string>
+    <string name="preference_key_favourites_live_data_limit">favourites_live_data_limit</string>
+
+    <string name="preference_category_services">Transport Services</string>
+    <string name="preference_summary_services">Choose your favourites</string>
+
+    <string name="preference_key_enabled_service_aircoach">aircoach_enabled</string>
+    <string name="preference_summary_enabled_service_aircoach">🚧 Experimental</string>
+    <string name="preference_key_enabled_service_bus_eireann">bus_eireann_enabled</string>
+    <string name="preference_key_enabled_service_dublin_bikes">dublin_bikes_enabled</string>
+    <string name="preference_key_enabled_service_dublin_bus">dublin_bus_enabled</string>
+    <string name="preference_summary_enabled_service_dublin_bus">Dublin Bus and Go Ahead</string>
+    <string name="preference_key_enabled_service_irish_rail">irish_rail_enabled</string>
+    <string name="preference_summary_enabled_service_irish_rail">DART, Commuter and InterCity</string>
+    <string name="preference_key_enabled_service_luas">luas_enabled</string>
+
+    <string name="preference_category_live_times">Live Times</string>
+    <string name="preference_name_live_data_refresh_interval">Refresh Rate</string>
+    <string name="preference_summary_live_data_refresh_interval">How often to refresh live times (seconds)</string>
+    <string name="preference_key_live_data_refresh_interval">live_data_refresh_interval</string>
+
+    <string name="preference_category_about">About</string>
 
     <string name="preference_key_app_version">app_version</string>
     <string name="preference_name_app_version">App version</string>

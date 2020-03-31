@@ -23,11 +23,9 @@ import ie.dublinmapper.repository.inject.RepositoryModule
 import ie.dublinmapper.resource.StringResourceProvider
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
-import ie.dublinmapper.settings.R
 import ie.dublinmapper.settings.ThemeRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.rtpi.api.Service
 import io.rtpi.client.RtpiClient
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
@@ -82,6 +80,12 @@ class ApplicationModule {
 
     @Provides
     @Singleton
+    fun enabledServiceManager(
+        preferenceStore: PreferenceStore
+    ): EnabledServiceManager = DefaultEnabledServiceManager(preferenceStore)
+
+    @Provides
+    @Singleton
     fun appConfig(): AppConfig = object :
         AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
@@ -105,23 +109,6 @@ class ApplicationModule {
             RxStartupWorker(),
             StethoStartupWorker(),
             TwitterStartupWorker()
-        )
-    )
-
-    @Provides
-    @Singleton
-    fun enabledServiceManager(
-        context: Context,
-        preferenceStore: PreferenceStore
-    ): EnabledServiceManager = DefaultEnabledServiceManager(
-        preferenceStore = preferenceStore,
-        serviceToEnabledServicePreferenceKey = mapOf(
-            Service.AIRCOACH to context.getString(R.string.preference_key_enabled_service_aircoach),
-            Service.BUS_EIREANN to context.getString(R.string.preference_key_enabled_service_bus_eireann),
-            Service.DUBLIN_BIKES to context.getString(R.string.preference_key_enabled_service_dublin_bikes),
-            Service.DUBLIN_BUS to context.getString(R.string.preference_key_enabled_service_dublin_bus),
-            Service.IRISH_RAIL to context.getString(R.string.preference_key_enabled_service_irish_rail),
-            Service.LUAS to context.getString(R.string.preference_key_enabled_service_luas)
         )
     )
 

@@ -1,18 +1,22 @@
 package ie.dublinmapper.domain.service
 
+import io.rtpi.api.Service
+
 interface PreferenceStore {
 
-    fun getString(preferenceKey: String, defaultValue: String): String
+    fun containsPreferredTheme(): Boolean
 
-    fun setString(preferenceKey: String, value: String): Boolean
+    fun getPreferredTheme(): String?
 
-    fun getInt(preferenceKey: String, defaultValue: Int): Int
+    fun setPreferredTheme(preferredTheme: String): Boolean
 
-    fun setInt(preferenceKey: String, value: Int): Boolean
+    fun isFavouritesSortByLocation(): Boolean
 
-    fun getBoolean(preferenceKey: String, defaultValue: Boolean): Boolean
+    fun getFavouritesLiveDataLimit(): Int
 
-    fun setBoolean(preferenceKey: String, value: Boolean): Boolean
+    fun getLiveDataRefreshInterval(): Long
 
-    fun contains(preferenceKey: String): Boolean
+    fun isServiceEnabled(service: Service): Boolean
+
+    fun setServiceEnabled(service: Service): Boolean
 }

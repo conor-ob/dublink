@@ -42,6 +42,7 @@ dependencies {
     api(Libraries.Groupie.groupieKtx)
     api(Libraries.Roxie.roxie)
     api(Libraries.Rtpi.rtpiApi)
+    api(Libraries.Rtpi.rtpiUtil)
     api(Libraries.Rx.rxJava)
     api(Libraries.Rx.rxKotlin)
     api(Libraries.Kotlin.stdLib)

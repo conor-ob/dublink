@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preference_default_preferred_theme">@string/preference_value_system_default_theme</string>
+    <string name="preference_name_system_default_theme">System default</string>
+    <string name="preference_value_system_default_theme" translatable="false">system</string>
+</resources>

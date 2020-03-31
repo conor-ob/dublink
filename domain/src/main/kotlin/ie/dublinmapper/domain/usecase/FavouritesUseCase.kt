@@ -4,6 +4,7 @@ import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
+import ie.dublinmapper.domain.service.PreferenceStore
 import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
@@ -15,7 +16,8 @@ class FavouritesUseCase @Inject constructor(
     @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
     private val permissionChecker: PermissionChecker,
     private val locationProvider: LocationProvider,
-    private val liveDataUseCase: LiveDataUseCase
+    private val liveDataUseCase: LiveDataUseCase,
+    private val preferenceStore: PreferenceStore
 ) {
 
     fun getFavourites(): Observable<FavouritesResponse> {
@@ -40,13 +42,25 @@ class FavouritesUseCase @Inject constructor(
         return getFavouritesWithLiveData(favourites)
     }
 
+    // TODO if one fails they all fail!!
     private fun getFavouritesWithLiveData(favourites: List<ServiceLocation>): Observable<FavouritesResponse> {
+        val limit = preferenceStore.getFavouritesLiveDataLimit()
         return Observable.combineLatest(
-            favourites.map {
-                liveDataUseCase.getGroupedLiveDataStream(it.id, it.name, it.service).startWith(
-                    GroupedLiveDataResponse(it.service, it.name, emptyList(), State.LOADING)
-                )
+            favourites.mapIndexed { index, serviceLocation ->
+                if (index < limit) {
+                    liveDataUseCase.getGroupedLiveDataStream(serviceLocation.id, serviceLocation.name, serviceLocation.service).startWith(
+                        GroupedLiveDataResponse(serviceLocation.service, serviceLocation.name, emptyList(), State.LOADING)
+                    )
+                } else {
+                    Observable.just(GroupedLiveDataResponse(serviceLocation.service, serviceLocation.name, emptyList(), State.WONT_LOAD))
+                }
             }
+//
+//            favourites.map {
+//                liveDataUseCase.getGroupedLiveDataStream(it.id, it.name, it.service).startWith(
+//                    GroupedLiveDataResponse(it.service, it.name, emptyList(), State.LOADING)
+//                )
+//            }
         ) { liveDataStreams ->
             val groupedLiveDataResponses = liveDataStreams.map { it as GroupedLiveDataResponse }
             val map1 = favourites.associateBy { it.name }

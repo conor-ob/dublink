@@ -4,27 +4,26 @@ import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.repository.ServiceLocationKey
+import ie.dublinmapper.domain.service.PreferenceStore
 import io.reactivex.Observable
 import io.rtpi.api.*
 import io.rtpi.util.LiveDataGrouper
-import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
 class LiveDataUseCase @Inject constructor(
     @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
-    @Named("LIVE_DATA") private val liveDataRepository: LiveDataRepository
+    @Named("LIVE_DATA") private val liveDataRepository: LiveDataRepository,
+    private val preferenceStore: PreferenceStore
 ) {
-
-    private val refreshInterval = Duration.ofSeconds(45L) // TODO make this configurable
 
     fun getServiceLocation(serviceLocationId: String, service: Service): Observable<ServiceLocation> {
         return locationRepository.get(ServiceLocationKey(service = service, locationId = serviceLocationId))
     }
 
     fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
-        return Observable.interval(0L, refreshInterval.seconds, TimeUnit.SECONDS)
+        return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
             .flatMap {
                 getLiveData(serviceLocationId, service).map {
                     LiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
@@ -33,7 +32,7 @@ class LiveDataUseCase @Inject constructor(
     }
 
     fun getGroupedLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<GroupedLiveDataResponse> {
-        return Observable.interval(0L, refreshInterval.seconds, TimeUnit.SECONDS)
+        return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
             .flatMap {
                 getGroupedLiveData(serviceLocationId, service).map {
                     GroupedLiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
@@ -65,5 +64,5 @@ data class GroupedLiveDataResponse(
 )
 
 enum class State {
-    LOADING, COMPLETE
+    LOADING, COMPLETE, WONT_LOAD
 }

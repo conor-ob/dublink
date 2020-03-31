@@ -36,7 +36,7 @@ class DeviceInternetManager(private val context: Context) : InternetManager {
         googleServers
             .asSequence()
             .map { tryPing(it) }
-            .first { true }
+            .first { it }
     } else {
         false
     }

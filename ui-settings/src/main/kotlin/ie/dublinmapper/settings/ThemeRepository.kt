@@ -14,13 +14,8 @@ class ThemeRepository @Inject constructor(
 
     fun setPreferredThemeOrDefault() {
         val theme = getPreferredThemeOrDefault()
-        if (!preferenceStore.contains(
-                resources.getString(R.string.preference_key_preferred_theme))
-        ) {
-            preferenceStore.setString(
-                preferenceKey = resources.getString(R.string.preference_key_preferred_theme),
-                value = resources.getString(theme.value)
-            )
+        if (!preferenceStore.containsPreferredTheme()) {
+            preferenceStore.setPreferredTheme(resources.getString(theme.value))
         }
         AppCompatDelegate.setDefaultNightMode(theme.mode)
     }
@@ -34,10 +29,7 @@ class ThemeRepository @Inject constructor(
 
     private fun getPreferredThemeOrDefault(): Theme {
         val defaultTheme = getDefaultTheme()
-        val preferredThemeOrDefault = preferenceStore.getString(
-            preferenceKey = resources.getString(R.string.preference_key_preferred_theme),
-            defaultValue = resources.getString(defaultTheme.value)
-        )
+        val preferredThemeOrDefault = preferenceStore.getPreferredTheme()
         return getThemes().find { theme ->
             resources.getString(theme.value) == preferredThemeOrDefault } ?: defaultTheme
     }
