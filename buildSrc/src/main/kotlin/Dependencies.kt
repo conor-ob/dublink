@@ -85,8 +85,8 @@ object Libraries {
     }
 
     object OkHttp {
-        const val okhttp = "com.squareup.okhttp3:okhttp:4.4.1" // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
-        const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.4.1" //
+        const val okhttp = "com.squareup.okhttp3:okhttp:3.12.1" // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+        const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.12.1" //
     }
 
     object Orika {
@@ -99,7 +99,7 @@ object Libraries {
 
     object Rtpi {
         const val rtpiApi = "io.rtpi:rtpi-api:0.1.0"
-        const val rtpiClient = "io.rtpi:rtpi-client:0.1.0"
+        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.1.0"
         const val rtpiUtil = "io.rtpi:rtpi-util:0.1.0"
     }
 
@@ -115,7 +115,8 @@ object Libraries {
     }
 
     object Store {
-        const val store = "com.nytimes.android:store3:3.1.1" // https://mvnrepository.com/artifact/com.nytimes.android/store3
+        const val store3 = "com.nytimes.android:store3:3.1.1" // https://mvnrepository.com/artifact/com.nytimes.android/store3
+        const val store4 = "com.dropbox.mobile.store:store4:4.0.0-alpha03" // https://mvnrepository.com/artifact/com.dropbox.mobile.store/store4
     }
 
     object Timber {

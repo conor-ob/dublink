@@ -11,16 +11,14 @@ class DefaultEnabledServiceManagerTest {
 
     // arrange
     private val preferenceStore = mockk<PreferenceStore> {
-        every { getBoolean(Service.AIRCOACH.name, any()) } returns true
-        every { getBoolean(Service.BUS_EIREANN.name, any()) } returns false
-        every { getBoolean(Service.DUBLIN_BIKES.name, any()) } returns true
-        every { getBoolean(Service.DUBLIN_BUS.name, any()) } returns true
-        every { getBoolean(Service.IRISH_RAIL.name, any()) } returns true
-        every { getBoolean(Service.LUAS.name, any()) } returns true
+        every { isServiceEnabled(Service.AIRCOACH) } returns true
+        every { isServiceEnabled(Service.BUS_EIREANN) } returns false
+        every { isServiceEnabled(Service.DUBLIN_BIKES) } returns true
+        every { isServiceEnabled(Service.DUBLIN_BUS) } returns true
+        every { isServiceEnabled(Service.IRISH_RAIL) } returns true
+        every { isServiceEnabled(Service.LUAS) } returns true
     }
-    private val enabledServiceManager = DefaultEnabledServiceManager(preferenceStore,
-        Service.values().associateBy( { it }, { it.name } )
-    )
+    private val enabledServiceManager = DefaultEnabledServiceManager(preferenceStore)
 
 //    private val preferenceStore = object : PreferenceStore {
 //

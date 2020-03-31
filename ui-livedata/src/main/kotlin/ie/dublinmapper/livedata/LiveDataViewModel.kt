@@ -7,9 +7,12 @@ import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.domain.usecase.FavouritesUseCase
 import ie.dublinmapper.domain.usecase.LiveDataUseCase
 import ie.dublinmapper.domain.service.RxScheduler
+import ie.dublinmapper.model.LiveDataItem
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import io.rtpi.api.Route
 import io.rtpi.api.ServiceLocationRoutes
+import io.rtpi.util.RouteComparator
 import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import javax.inject.Inject
@@ -37,11 +40,26 @@ class LiveDataViewModel @Inject constructor(
             is Change.GetLiveData -> {
                 val serviceLocation = state.serviceLocation
                 if (serviceLocation != null && serviceLocation is ServiceLocationRoutes) {
-                    val routes = serviceLocation.routes
-//                    val map = change.liveData.filterIsInstance<TimedLiveData>()
-//                        .map { Route(it.route, it.operator) }
-                    // compare routes with live data and send report if they don't match
-                    // val liveData = change.liveData
+                    try {
+                        val routes = serviceLocation.routes.toSortedSet(RouteComparator)
+                        val itemCount = change.liveData.itemCount
+                        val currentRoutes = mutableSetOf<Route>()
+                        for (i in 0 until itemCount) {
+                            val item = change.liveData.getItem(i)
+                            if (item is LiveDataItem) {
+                                currentRoutes.add(Route(item.liveData.route, item.liveData.operator))
+                            }
+                        }
+                        val sorted = currentRoutes.toSortedSet(RouteComparator)
+                        Timber.d(routes.toString())
+                        Timber.d(sorted.toString())
+                        // TODO
+                        // if (there is a route in sorted that is not in routes) {
+                        //     Timber.e(log this)
+                        // }
+                    } catch (e: Exception) {
+                        Timber.e(e, "Failed while calculating route discrepancies")
+                    }
                 }
                 state.copy(
                     isLoading = false,

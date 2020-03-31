@@ -9,12 +9,11 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.domain.datamodel.IrishRailStationLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
-import ie.dublinmapper.domain.repository.Repository
-import ie.dublinmapper.repository.irishrail.livedata.IrishRailLiveDataRepository
-import ie.dublinmapper.repository.irishrail.stations.IrishRailStationPersister
-import ie.dublinmapper.repository.irishrail.stations.IrishRailStationRepository
-import ie.dublinmapper.domain.service.EnabledServiceManager
+import ie.dublinmapper.domain.repository.LiveDataRepository
+import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.ServiceLiveDataRepository
+import ie.dublinmapper.repository.ServiceLocationRepository
 import io.rtpi.api.IrishRailLiveData
 import io.rtpi.api.IrishRailStation
 import io.rtpi.api.Service
@@ -27,31 +26,38 @@ class IrishRailRepositoryModule {
 
     @Provides
     @Singleton
+    @Named("IRISH_RAIL")
     fun irishRailStationRepository(
         client: RtpiClient,
         localResource: IrishRailStationLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy,
-        enabledServiceManager: EnabledServiceManager
-    ): Repository<IrishRailStation> {
+        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
+    ): LocationRepository {
         val fetcher = Fetcher<List<IrishRailStation>, Service> { client.irishRail().getStations() }
-        val persister = IrishRailStationPersister(localResource, memoryPolicy, serviceLocationRecordStateLocalResource, internetManager)
+        val persister =
+            IrishRailStationPersister(
+                localResource,
+                memoryPolicy,
+                serviceLocationRecordStateLocalResource,
+                internetManager
+            )
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return IrishRailStationRepository(store, enabledServiceManager)
+        return ServiceLocationRepository(Service.IRISH_RAIL, store)
     }
 
     @Provides
     @Singleton
+    @Named("IRISH_RAIL")
     fun irishRailLiveDataRepository(
         client: RtpiClient,
         @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
-    ): Repository<IrishRailLiveData> {
+    ): LiveDataRepository {
         val store = StoreBuilder.key<String, List<IrishRailLiveData>>()
             .fetcher { stationId -> client.irishRail().getLiveData(stationId = stationId) }
             .memoryPolicy(memoryPolicy)
             .open()
-        return IrishRailLiveDataRepository(store)
+        return ServiceLiveDataRepository(store)
     }
 
 }

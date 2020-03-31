@@ -36,7 +36,7 @@ class DeviceInternetManager(private val context: Context) : InternetManager {
         googleServers
             .asSequence()
             .map { tryPing(it) }
-            .first { true }
+            .first { it }
     } else {
         false
     }
@@ -47,9 +47,9 @@ class DeviceInternetManager(private val context: Context) : InternetManager {
             Timber.d("Attempting to ping $server")
             urlConnection = URL(server).openConnection() as HttpURLConnection
 //            urlConnection.instanceFollowRedirects = false
-//            urlConnection.useCaches = false
+            urlConnection.useCaches = false
 //            urlConnection.allowUserInteraction = false
-//            urlConnection.requestMethod = "GET"
+            urlConnection.requestMethod = "GET"
             urlConnection.setRequestProperty("User-Agent", "Android")
             urlConnection.setRequestProperty("Connection", "close")
             urlConnection.connectTimeout = 10000
@@ -60,12 +60,10 @@ class DeviceInternetManager(private val context: Context) : InternetManager {
                 Timber.d("Pinged $server")
                 return successful
             }
-        } catch (e : IOException) {
-            Timber.e(e)
-            Timber.d("Error while pinging $server")
+        } catch (e: IOException) {
+            Timber.e(e, "Error while pinging $server")
         } catch (e: Exception) {
-            Timber.e(e)
-            Timber.d("Error while pinging $server")
+            Timber.e(e, "Error while pinging $server")
         } finally {
             urlConnection?.disconnect()
         }

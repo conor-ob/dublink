@@ -6,20 +6,12 @@ import io.rtpi.api.Service
 import javax.inject.Inject
 
 class DefaultEnabledServiceManager @Inject constructor(
-    private val preferenceStore: PreferenceStore,
-    private val serviceToEnabledServicePreferenceKey: Map<Service, String>
+    private val preferenceStore: PreferenceStore
 ) : EnabledServiceManager {
 
-    override fun enableService(service: Service) {
-        val result = preferenceStore.setBoolean(serviceToEnabledServicePreferenceKey.getValue(service), true)
-    }
+    override fun enableService(service: Service) = preferenceStore.setServiceEnabled(service)
 
-    override fun isServiceEnabled(service: Service): Boolean {
-        return preferenceStore.getBoolean(serviceToEnabledServicePreferenceKey.getValue(service), true)
-    }
+    override fun isServiceEnabled(service: Service) = preferenceStore.isServiceEnabled(service)
 
-    override fun getEnabledServices(): Set<Service> {
-        return Service.values().filter { isServiceEnabled(it) }.toSet()
-    }
-
+    override fun getEnabledServices() = Service.values().filter { isServiceEnabled(it) }.toSet()
 }

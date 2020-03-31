@@ -1,12 +1,12 @@
-package ie.dublinmapper.repository.dublinbikes.docks
+package ie.dublinmapper.repository.dublinbikes
 
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import ie.dublinmapper.domain.datamodel.DublinBikesDockLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.model.Favourite
 import ie.dublinmapper.domain.model.setFavourite
-import ie.dublinmapper.repository.AbstractPersister
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.AbstractPersister
 import io.reactivex.Observable
 import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.Service

@@ -1,20 +1,15 @@
 package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.getName
-import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
-import io.reactivex.functions.Function6
-import io.rtpi.api.*
+import io.rtpi.api.ServiceLocation
 import javax.inject.Inject
+import javax.inject.Named
 
 class SearchUseCase @Inject constructor(
-    private val aircoachStopRepository: Repository<AircoachStop>,
-    private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val irishRailStationRepository: Repository<IrishRailStation>,
-    private val dublinBikesDockRepository: Repository<DublinBikesDock>,
-    private val dublinBusStopRepository: Repository<DublinBusStop>,
-    private val luasStopRepository: Repository<LuasStop>,
+    @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
     private val scheduler: RxScheduler
 ) {
 
@@ -25,39 +20,7 @@ class SearchUseCase @Inject constructor(
         if (cached != null) {
             return Observable.just(cached)
         }
-        return Observable.combineLatest(
-            aircoachStopRepository.getAll().subscribeOn(scheduler.io),
-            busEireannStopRepository.getAll().subscribeOn(scheduler.io),
-            irishRailStationRepository.getAll().subscribeOn(scheduler.io),
-            dublinBikesDockRepository.getAll().subscribeOn(scheduler.io),
-            dublinBusStopRepository.getAll().subscribeOn(scheduler.io),
-            luasStopRepository.getAll().subscribeOn(scheduler.io),
-            Function6 { aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops ->
-                search(query, aircoachStops, busEireannStops, irishRailStations, dublinBikesDocks, dublinBusStops, luasStops)
-            }
-        )
-    }
-
-    private fun search(
-        query: String,
-        aircoachStops: List<AircoachStop>,
-        busEireannStops: List<BusEireannStop>,
-        irishRailStations: List<IrishRailStation>,
-        dublinBikesDocks: List<DublinBikesDock>,
-        dublinBusStops: List<DublinBusStop>,
-        luasStops: List<LuasStop>
-    ) : SearchResponse {
-        val searchCollections = mutableListOf<Collection<ServiceLocation>>()
-        searchCollections.add(search(query, aircoachStops))
-        searchCollections.add(search(query, busEireannStops))
-        searchCollections.add(search(query, dublinBikesDocks))
-        searchCollections.add(search(query, dublinBusStops))
-        searchCollections.add(search(query, irishRailStations))
-        searchCollections.add(search(query, luasStops))
-        searchCollections.sortBy { it.size }
-        val response = SearchResponse(searchCollections.flatten().take(50))
-        cache[query] = response
-        return response
+        return locationRepository.get().map { SearchResponse(search(query, it).take(50)) }
     }
 
     private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
@@ -78,7 +41,6 @@ class SearchUseCase @Inject constructor(
         }
         return searchResults
     }
-
 }
 
 data class SearchResponse(

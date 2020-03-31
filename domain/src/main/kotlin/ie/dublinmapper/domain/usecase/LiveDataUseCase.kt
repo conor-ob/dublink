@@ -1,39 +1,29 @@
 package ie.dublinmapper.domain.usecase
 
-import ie.dublinmapper.domain.repository.Repository
+import ie.dublinmapper.domain.repository.LiveDataKey
+import ie.dublinmapper.domain.repository.LiveDataRepository
+import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationKey
+import ie.dublinmapper.domain.service.PreferenceStore
 import io.reactivex.Observable
 import io.rtpi.api.*
+import io.rtpi.util.LiveDataGrouper
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import javax.inject.Named
 
 class LiveDataUseCase @Inject constructor(
-    private val aircoachStopRepository: Repository<AircoachStop>,
-    private val busEireannStopRepository: Repository<BusEireannStop>,
-    private val irishRailStationRepository: Repository<IrishRailStation>,
-    private val dublinBikesDockRepository: Repository<DublinBikesDock>,
-    private val dublinBusStopRepository: Repository<DublinBusStop>,
-    private val luasStopRepository: Repository<LuasStop>,
-    private val aircoachLiveDataRepository: Repository<AircoachLiveData>,
-    private val busEireannLiveDataRepository: Repository<BusEireannLiveData>,
-    private val irishRailLiveDataRepository: Repository<IrishRailLiveData>,
-    private val dublinBikesLiveDataRepository: Repository<DublinBikesLiveData>,
-    private val dublinBusLiveDataRepository: Repository<DublinBusLiveData>,
-    private val luasLiveDataRepository: Repository<LuasLiveData>
+    @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
+    @Named("LIVE_DATA") private val liveDataRepository: LiveDataRepository,
+    private val preferenceStore: PreferenceStore
 ) {
 
     fun getServiceLocation(serviceLocationId: String, service: Service): Observable<ServiceLocation> {
-        return when (service) {
-            Service.AIRCOACH -> aircoachStopRepository.getById(serviceLocationId)
-            Service.BUS_EIREANN -> busEireannStopRepository.getById(serviceLocationId)
-            Service.IRISH_RAIL -> irishRailStationRepository.getById(serviceLocationId)
-            Service.DUBLIN_BIKES -> dublinBikesDockRepository.getById(serviceLocationId)
-            Service.DUBLIN_BUS -> dublinBusStopRepository.getById(serviceLocationId)
-            Service.LUAS -> luasStopRepository.getById(serviceLocationId)
-        }.map { it }
+        return locationRepository.get(ServiceLocationKey(service = service, locationId = serviceLocationId))
     }
 
     fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
-        return Observable.interval(0L, 65L, TimeUnit.SECONDS)
+        return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
             .flatMap {
                 getLiveData(serviceLocationId, service).map {
                     LiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
@@ -41,17 +31,22 @@ class LiveDataUseCase @Inject constructor(
             }
     }
 
-    private fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
-        return when (service) {
-            Service.AIRCOACH -> aircoachLiveDataRepository.getAllById(serviceLocationId)
-            Service.BUS_EIREANN -> busEireannLiveDataRepository.getAllById(serviceLocationId)
-            Service.IRISH_RAIL -> irishRailLiveDataRepository.getAllById(serviceLocationId)
-            Service.DUBLIN_BIKES -> dublinBikesLiveDataRepository.getById(serviceLocationId).map { listOf(it) }
-            Service.DUBLIN_BUS -> dublinBusLiveDataRepository.getAllById(serviceLocationId)
-            Service.LUAS -> luasLiveDataRepository.getAllById(serviceLocationId)
-        }.map { it as List<LiveData> }
+    fun getGroupedLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<GroupedLiveDataResponse> {
+        return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+            .flatMap {
+                getGroupedLiveData(serviceLocationId, service).map {
+                    GroupedLiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
+                }
+            }
     }
 
+    private fun getGroupedLiveData(serviceLocationId: String, service: Service): Observable<List<List<LiveData>>> {
+        return getLiveData(serviceLocationId, service).map { LiveDataGrouper.groupLiveData(it) }
+    }
+
+    private fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
+        return liveDataRepository.get(LiveDataKey(service = service, locationId = serviceLocationId))
+    }
 }
 
 data class LiveDataResponse(
@@ -61,6 +56,13 @@ data class LiveDataResponse(
     val state: State
 )
 
+data class GroupedLiveDataResponse(
+    val service: Service,
+    val serviceLocationName: String,
+    val liveData: List<List<LiveData>>,
+    val state: State
+)
+
 enum class State {
-    LOADING, COMPLETE
+    LOADING, COMPLETE, WONT_LOAD
 }
