@@ -6,7 +6,6 @@ import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.service.PreferenceStore
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.rtpi.api.*
 import io.rtpi.util.LiveDataGrouper
 import java.util.concurrent.TimeUnit
@@ -28,18 +27,21 @@ class LiveDataUseCase @Inject constructor(
             .flatMap { getLiveData(serviceLocation) }
     }
 
-    fun getGroupedLiveDataStream(serviceLocation: ServiceLocation): Observable<GroupedLiveDataResponse> {
+    fun getGroupedLiveDataStream(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
         return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
             .flatMap { getGroupedLiveData(serviceLocation) }
     }
 
-    private fun getGroupedLiveData(serviceLocation: ServiceLocation): Observable<GroupedLiveDataResponse> {
+    private fun getGroupedLiveData(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
         return getLiveData(serviceLocation).map { liveDataResponse ->
-            GroupedLiveDataResponse(
-                serviceLocation = liveDataResponse.serviceLocation,
-                liveData = LiveDataGrouper.groupLiveData(liveDataResponse.liveData),
-                state = liveDataResponse.state
-            )
+            if (liveDataResponse is LiveDataResponse.Complete) {
+                LiveDataResponse.Grouped(
+                    serviceLocation,
+                    LiveDataGrouper.groupLiveData(liveDataResponse.liveData)
+                )
+            } else {
+                liveDataResponse
+            }
         }
     }
 
@@ -49,37 +51,44 @@ class LiveDataUseCase @Inject constructor(
                 service = serviceLocation.service,
                 locationId = serviceLocation.id
             )
-        ).map { liveData ->
-            LiveDataResponse(
+        ).map<LiveDataResponse> { liveData ->
+            LiveDataResponse.Complete(
                 serviceLocation = serviceLocation,
-                liveData = liveData,
-                state = State.COMPLETE
+                liveData = liveData
             )
-        }.onErrorReturn { e ->
-            LiveDataResponse(
+        }.onErrorReturn { throwable ->
+            LiveDataResponse.Error(
                 serviceLocation = serviceLocation,
-                liveData = emptyList(),
-                state = State.ERROR
+                throwable = throwable
             )
         }
     }
 }
 
-data class LiveDataResponse(
-    val serviceLocation: ServiceLocation,
-    val liveData: List<LiveData>,
-    val state: State
-)
+sealed class LiveDataResponse(
+    open val serviceLocation: ServiceLocation
+) {
 
-data class GroupedLiveDataResponse(
-    val serviceLocation: ServiceLocation,
-    val liveData: List<List<LiveData>>,
-    val state: State
-)
+    data class Loading(
+        override val serviceLocation: ServiceLocation
+    ) : LiveDataResponse(serviceLocation)
 
-enum class State {
-    LOADING,
-    SKIPPED,
-    COMPLETE,
-    ERROR
+    data class Skipped(
+        override val serviceLocation: ServiceLocation
+    ) : LiveDataResponse(serviceLocation)
+
+    data class Complete(
+        override val serviceLocation: ServiceLocation,
+        val liveData: List<LiveData>
+    ) : LiveDataResponse(serviceLocation)
+
+    data class Grouped(
+        override val serviceLocation: ServiceLocation,
+        val liveData: List<List<LiveData>>
+    ) : LiveDataResponse(serviceLocation)
+
+    data class Error(
+        override val serviceLocation: ServiceLocation,
+        val throwable: Throwable
+    ) : LiveDataResponse(serviceLocation)
 }

@@ -3,16 +3,9 @@ package ie.dublinmapper.favourites
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import com.xwray.groupie.Group
-import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.FavouritesUseCase
 import ie.dublinmapper.domain.service.RxScheduler
-import ie.dublinmapper.domain.usecase.FavouritesResponse
-import ie.dublinmapper.domain.usecase.LiveDataResponse
-import ie.dublinmapper.domain.usecase.SearchResponse
-import ie.dublinmapper.model.DividerItem
 import io.reactivex.rxkotlin.plusAssign
-import io.rtpi.api.LiveData
-import io.rtpi.api.ServiceLocation
 import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import javax.inject.Inject

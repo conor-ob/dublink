@@ -57,15 +57,15 @@ class FavouritesUseCase @Inject constructor(
             favourites.mapIndexed { index, serviceLocation ->
                 if (index < limit) {
                     liveDataUseCase.getGroupedLiveDataStream(serviceLocation).startWith(
-                        GroupedLiveDataResponse(serviceLocation, emptyList(), State.LOADING)
+                        LiveDataResponse.Loading(serviceLocation)
                     )
                 } else {
                     Observable.just(
-                        GroupedLiveDataResponse(serviceLocation, emptyList(), State.SKIPPED)
+                        LiveDataResponse.Skipped(serviceLocation)
                     )
                 }
             }
-        ) { responses -> FavouritesResponse(responses.map { it as GroupedLiveDataResponse }) }
+        ) { responses -> FavouritesResponse(responses.map { it as LiveDataResponse }) }
     }
 
     private fun clearServiceLocationCache(service: Service) {
@@ -91,5 +91,5 @@ class FavouritesUseCase @Inject constructor(
 }
 
 data class FavouritesResponse(
-    val groupedLiveDataResponses: List<GroupedLiveDataResponse>
+    val liveDataResponses: List<LiveDataResponse>
 )
