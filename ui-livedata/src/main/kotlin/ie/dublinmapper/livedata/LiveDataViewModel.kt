@@ -104,11 +104,12 @@ class LiveDataViewModel @Inject constructor(
             }
 
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
-            .switchMap { action ->
+            .switchMap { action -> // TODO find a better way to get the location
                 liveDataUseCase.getLiveDataStream(
-                    action.serviceLocationId,
-                    action.serviceLocationName,
-                    action.serviceLocationService
+                    liveDataUseCase.getServiceLocation(
+                        action.serviceLocationId,
+                        action.serviceLocationService
+                    ).blockingFirst()
                 )
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)

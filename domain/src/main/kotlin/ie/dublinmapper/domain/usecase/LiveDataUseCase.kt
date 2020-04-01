@@ -6,6 +6,7 @@ import ie.dublinmapper.domain.repository.LocationRepository
 import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.service.PreferenceStore
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.rtpi.api.*
 import io.rtpi.util.LiveDataGrouper
 import java.util.concurrent.TimeUnit
@@ -22,47 +23,63 @@ class LiveDataUseCase @Inject constructor(
         return locationRepository.get(ServiceLocationKey(service = service, locationId = serviceLocationId))
     }
 
-    fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
+    fun getLiveDataStream(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
         return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-            .flatMap {
-                getLiveData(serviceLocationId, service).map {
-                    LiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
-                }
-            }
+            .flatMap { getLiveData(serviceLocation) }
     }
 
-    fun getGroupedLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<GroupedLiveDataResponse> {
+    fun getGroupedLiveDataStream(serviceLocation: ServiceLocation): Observable<GroupedLiveDataResponse> {
         return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-            .flatMap {
-                getGroupedLiveData(serviceLocationId, service).map {
-                    GroupedLiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
-                }
-            }
+            .flatMap { getGroupedLiveData(serviceLocation) }
     }
 
-    private fun getGroupedLiveData(serviceLocationId: String, service: Service): Observable<List<List<LiveData>>> {
-        return getLiveData(serviceLocationId, service).map { LiveDataGrouper.groupLiveData(it) }
+    private fun getGroupedLiveData(serviceLocation: ServiceLocation): Observable<GroupedLiveDataResponse> {
+        return getLiveData(serviceLocation).map { liveDataResponse ->
+            GroupedLiveDataResponse(
+                serviceLocation = liveDataResponse.serviceLocation,
+                liveData = LiveDataGrouper.groupLiveData(liveDataResponse.liveData),
+                state = liveDataResponse.state
+            )
+        }
     }
 
-    private fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
-        return liveDataRepository.get(LiveDataKey(service = service, locationId = serviceLocationId))
+    private fun getLiveData(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
+        return liveDataRepository.get(
+            LiveDataKey(
+                service = serviceLocation.service,
+                locationId = serviceLocation.id
+            )
+        ).map { liveData ->
+            LiveDataResponse(
+                serviceLocation = serviceLocation,
+                liveData = liveData,
+                state = State.COMPLETE
+            )
+        }.onErrorReturn { e ->
+            LiveDataResponse(
+                serviceLocation = serviceLocation,
+                liveData = emptyList(),
+                state = State.ERROR
+            )
+        }
     }
 }
 
 data class LiveDataResponse(
-    val service: Service,
-    val serviceLocationName: String,
+    val serviceLocation: ServiceLocation,
     val liveData: List<LiveData>,
     val state: State
 )
 
 data class GroupedLiveDataResponse(
-    val service: Service,
-    val serviceLocationName: String,
+    val serviceLocation: ServiceLocation,
     val liveData: List<List<LiveData>>,
     val state: State
 )
 
 enum class State {
-    LOADING, COMPLETE, WONT_LOAD
+    LOADING,
+    SKIPPED,
+    COMPLETE,
+    ERROR
 }
