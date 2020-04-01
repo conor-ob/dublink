@@ -1,4 +1,4 @@
-package ie.dublinmapper.internet
+package ie.dublinmapper.domain.internet
 
 import java.io.IOException
 

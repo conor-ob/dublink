@@ -1,5 +1,6 @@
 package ie.dublinmapper.internet
 
+import ie.dublinmapper.domain.internet.NetworkUnavailableException
 import ie.dublinmapper.domain.service.InternetManager
 import okhttp3.Interceptor
 import okhttp3.Response

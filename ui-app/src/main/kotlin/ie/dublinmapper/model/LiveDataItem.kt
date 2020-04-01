@@ -133,6 +133,10 @@ class LiveDataItem(
     }
 
 
+    override fun toString(): String {
+        return liveData.toString()
+    }
+
 //    private fun bindStartingLiveTime(viewHolder: ViewHolder) {
 //        val scheduledDepartureTime = ZonedDateTime.parse(liveData.liveTime.scheduledDepartureTimestamp)
 //            .toLocalTime()

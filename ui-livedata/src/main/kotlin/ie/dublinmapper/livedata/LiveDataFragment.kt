@@ -32,9 +32,11 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args = fromBundle(requireArguments())
-        viewModel.observableState.observe(this, Observer { state ->
-            state?.let { renderState(state) }
-        })
+        viewModel.observableState.observe(
+            this, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,14 +94,16 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         adapter.setOnItemClickListener { item, view ->
             Timber.d("clicked")
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
         viewModel.dispatch(
             Action.GetServiceLocation(
                 serviceLocationId = args.serviceLocationId,
                 serviceLocationService = args.serviceLocationService
             )
         )
-
         viewModel.dispatch(
             Action.GetLiveData(
                 serviceLocationId = args.serviceLocationId,

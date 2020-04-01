@@ -22,47 +22,73 @@ class LiveDataUseCase @Inject constructor(
         return locationRepository.get(ServiceLocationKey(service = service, locationId = serviceLocationId))
     }
 
-    fun getLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<LiveDataResponse> {
+    fun getLiveDataStream(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
         return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-            .flatMap {
-                getLiveData(serviceLocationId, service).map {
-                    LiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
-                }
-            }
+            .flatMap { getLiveData(serviceLocation) }
     }
 
-    fun getGroupedLiveDataStream(serviceLocationId: String, serviceLocationName: String, service: Service): Observable<GroupedLiveDataResponse> {
+    fun getGroupedLiveDataStream(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
         return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-            .flatMap {
-                getGroupedLiveData(serviceLocationId, service).map {
-                    GroupedLiveDataResponse(service, serviceLocationName, it, State.COMPLETE)
-                }
+            .flatMap { getGroupedLiveData(serviceLocation) }
+    }
+
+    private fun getGroupedLiveData(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
+        return getLiveData(serviceLocation).map { liveDataResponse ->
+            if (liveDataResponse is LiveDataResponse.Complete) {
+                LiveDataResponse.Grouped(
+                    serviceLocation,
+                    LiveDataGrouper.groupLiveData(liveDataResponse.liveData)
+                )
+            } else {
+                liveDataResponse
             }
+        }
     }
 
-    private fun getGroupedLiveData(serviceLocationId: String, service: Service): Observable<List<List<LiveData>>> {
-        return getLiveData(serviceLocationId, service).map { LiveDataGrouper.groupLiveData(it) }
-    }
-
-    private fun getLiveData(serviceLocationId: String, service: Service): Observable<List<LiveData>> {
-        return liveDataRepository.get(LiveDataKey(service = service, locationId = serviceLocationId))
+    private fun getLiveData(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
+        return liveDataRepository.get(
+            LiveDataKey(
+                service = serviceLocation.service,
+                locationId = serviceLocation.id
+            )
+        ).map<LiveDataResponse> { liveData ->
+            LiveDataResponse.Complete(
+                serviceLocation = serviceLocation,
+                liveData = liveData
+            )
+        }.onErrorReturn { throwable ->
+            LiveDataResponse.Error(
+                serviceLocation = serviceLocation,
+                throwable = throwable
+            )
+        }
     }
 }
 
-data class LiveDataResponse(
-    val service: Service,
-    val serviceLocationName: String,
-    val liveData: List<LiveData>,
-    val state: State
-)
+sealed class LiveDataResponse(
+    open val serviceLocation: ServiceLocation
+) {
 
-data class GroupedLiveDataResponse(
-    val service: Service,
-    val serviceLocationName: String,
-    val liveData: List<List<LiveData>>,
-    val state: State
-)
+    data class Loading(
+        override val serviceLocation: ServiceLocation
+    ) : LiveDataResponse(serviceLocation)
 
-enum class State {
-    LOADING, COMPLETE, WONT_LOAD
+    data class Skipped(
+        override val serviceLocation: ServiceLocation
+    ) : LiveDataResponse(serviceLocation)
+
+    data class Complete(
+        override val serviceLocation: ServiceLocation,
+        val liveData: List<LiveData>
+    ) : LiveDataResponse(serviceLocation)
+
+    data class Grouped(
+        override val serviceLocation: ServiceLocation,
+        val liveData: List<List<LiveData>>
+    ) : LiveDataResponse(serviceLocation)
+
+    data class Error(
+        override val serviceLocation: ServiceLocation,
+        val throwable: Throwable
+    ) : LiveDataResponse(serviceLocation)
 }

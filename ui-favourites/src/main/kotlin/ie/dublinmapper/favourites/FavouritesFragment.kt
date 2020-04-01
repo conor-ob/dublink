@@ -10,7 +10,6 @@ import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.viewModelProvider
-import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
 
@@ -22,9 +21,11 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.observableState.observe(this, Observer { state ->
-            state?.let { renderState(state) }
-        })
+        viewModel.observableState.observe(
+            this, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +54,10 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.liveDataList.adapter = adapter
         view.liveDataList.setHasFixedSize(true)
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
+    }
 
+    override fun onResume() {
+        super.onResume()
         viewModel.dispatch(Action.GetFavourites)
     }
 
@@ -62,5 +66,4 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
             adapter.update(listOf(state.favourites))
         }
     }
-
 }

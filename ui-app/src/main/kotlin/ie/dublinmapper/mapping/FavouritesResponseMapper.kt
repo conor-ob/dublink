@@ -2,17 +2,18 @@ package ie.dublinmapper.mapping
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
+import ie.dublinmapper.domain.internet.NetworkUnavailableException
 import ie.dublinmapper.domain.usecase.FavouritesResponse
 import ie.dublinmapper.domain.service.StringProvider
-import ie.dublinmapper.domain.usecase.GroupedLiveDataResponse
 import ie.dublinmapper.domain.usecase.LiveDataResponse
-import ie.dublinmapper.domain.usecase.State
 import ie.dublinmapper.model.*
 import ie.dublinmapper.ui.R
 import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
+import timber.log.Timber
+import java.net.ConnectException
 
 class FavouritesResponseMapper(
     private val stringProvider: StringProvider
@@ -23,35 +24,38 @@ class FavouritesResponseMapper(
         destinationType: Type<out Group>,
         mappingContext: MappingContext
     ) = Section(
-        source.serviceLocations.entries.mapIndexed { index, entry ->
-            val serviceLocation = entry.key
-            val liveDataResponse = entry.value
+        source.liveDataResponses.mapIndexed { index, liveDataResponse ->
             Section(
                 listOfNotNull(
-                    ServiceLocationItem(
-                        serviceLocation = serviceLocation,
-                        icon = mapIcon(serviceLocation.service),
-//                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
-//                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
-                        routes = null,
-                        walkDistance = null
-                    ),
-                    mapLiveData(serviceLocation.service, liveDataResponse),
-                    if (index < source.serviceLocations.entries.size - 1) DividerItem() else null
+                    mapServiceLocation(liveDataResponse),
+                    mapLiveData(liveDataResponse),
+                    mapDivider(source.liveDataResponses.size, index)
                 )
             )
         }
     )
 
-    private fun mapLiveData(service: Service, liveDataResponse: GroupedLiveDataResponse): Section {
-        return if (liveDataResponse.state == State.LOADING) {
-            Section(SimpleMessageItem("Loading..."))
-        } else if (liveDataResponse.state == State.WONT_LOAD) {
-            Section()
-        } else {
+    private fun mapServiceLocation(
+        liveDataResponse: LiveDataResponse
+    ) = ServiceLocationItem(
+        serviceLocation = liveDataResponse.serviceLocation,
+        icon = mapIcon(liveDataResponse.serviceLocation.service),
+//                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
+//                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
+        routes = null,
+        walkDistance = null
+    )
+
+    private fun mapLiveData(
+        liveDataResponse: LiveDataResponse
+    ) = when (liveDataResponse) {
+        is LiveDataResponse.Loading -> Section(SimpleMessageItem("Loading..."))
+        is LiveDataResponse.Skipped -> Section()
+        is LiveDataResponse.Complete -> TODO()
+        is LiveDataResponse.Grouped -> {
             val liveData = liveDataResponse.liveData
             if (liveData.isNullOrEmpty()) {
-                Section(SimpleMessageItem(mapMessage(service)))
+                Section(SimpleMessageItem(mapMessage(liveDataResponse.serviceLocation.service)))
             } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DublinBikesLiveData) {
                 Section(DublinBikesLiveDataItem(liveData.first().first() as DublinBikesLiveData))
             } else {
@@ -61,21 +65,21 @@ class FavouritesResponseMapper(
                 }
                 Section(items)
             }
-
-
-//            val items = liveDataResponse.liveData.mapNotNull {
-//                when (it) {
-//                    is TimedLiveData -> LiveDataItem(liveData = it)
-//                    is DublinBikesLiveData -> DublinBikesLiveDataItem(liveData = it)
-//                    else -> null
-//                }
-//            }
-//            when {
-//                items.isNullOrEmpty() -> Section(SimpleMessageItem(mapMessage(service)))
-//                else -> Section(items)
-//            }
+        }
+        is LiveDataResponse.Error -> {
+            Timber.e(liveDataResponse.throwable, "Error getting live data")
+            val message = when (liveDataResponse.throwable) {
+                is ConnectException -> "⚠️ We're having trouble reaching ${liveDataResponse.serviceLocation.service.fullName}"
+                is NetworkUnavailableException  -> "Please check your internet connection"
+                else -> "Oops! Something went wrong"
+            }
+            Section(
+                SimpleMessageItem(message)
+            )
         }
     }
+
+    private fun mapDivider(items: Int, index: Int) = if (index < items - 1) DividerItem() else null
 
     private fun mapMessage(service: Service): String {
         val mode = when (service) {
