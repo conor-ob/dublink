@@ -13,14 +13,12 @@ import io.reactivex.rxkotlin.plusAssign
 import io.rtpi.api.Route
 import io.rtpi.api.ServiceLocationRoutes
 import io.rtpi.util.RouteComparator
-import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import javax.inject.Inject
 
 class LiveDataViewModel @Inject constructor(
     private val liveDataUseCase: LiveDataUseCase,
     private val favouritesUseCase: FavouritesUseCase,
-    private val mapper: MapperFacade,
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
@@ -104,15 +102,16 @@ class LiveDataViewModel @Inject constructor(
             }
 
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
-            .switchMap { action ->
+            .switchMap { action -> // TODO find a better way to get the location
                 liveDataUseCase.getLiveDataStream(
-                    action.serviceLocationId,
-                    action.serviceLocationName,
-                    action.serviceLocationService
+                    liveDataUseCase.getServiceLocation(
+                        action.serviceLocationId,
+                        action.serviceLocationService
+                    ).blockingFirst()
                 )
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Group> { mapper.map(it, Group::class.java) }
+                    .map<Group> { LiveDataMapper.map(it) }
                     .map<Change> { Change.GetLiveData(it) }
                     .onErrorReturn {
                         Timber.e(it)

@@ -8,7 +8,6 @@ import dagger.Provides
 import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.mapping.FavouritesResponseMapper
-import ie.dublinmapper.mapping.LiveDataResponseMapper
 import ie.dublinmapper.mapping.NearbyResponseMapper
 import ie.dublinmapper.mapping.SearchResponseMapper
 import ie.dublinmapper.database.DatabaseModule
@@ -136,7 +135,6 @@ class ApplicationModule {
         mapperFactory.converterFactory.apply {
             registerConverter(FavouritesResponseMapper(stringProvider))
             registerConverter(NearbyResponseMapper(stringProvider))
-            registerConverter(LiveDataResponseMapper(stringProvider))
             registerConverter(SearchResponseMapper)
         }
         return mapperFactory.mapperFacade

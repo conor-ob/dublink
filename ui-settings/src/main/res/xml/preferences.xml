@@ -21,25 +21,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/preference_category_name_favourites">
-
-        <SwitchPreference
-            android:title="@string/preference_name_favourites_sort_by_location"
-            android:key="@string/preference_key_favourites_sort_by_location"
-            android:summary="@string/preference_summary_favourites_sort_by_location"
-            android:defaultValue="@bool/preference_default_favourites_sort_location" />
-
-        <SeekBarPreference
-            android:title="@string/preference_name_favourites_live_data_limit"
-            android:key="@string/preference_key_favourites_live_data_limit"
-            android:summary="@string/preference_summary_favourites_live_data_limit"
-            android:defaultValue="@integer/preference_default_favourites_live_data_limit"
-            android:max="10"
-            app:showSeekBarValue="true" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:title="Transport Services"
         android:summary="Choose your favourites">
 
@@ -75,6 +56,25 @@
             android:key="@string/preference_key_enabled_service_aircoach"
             android:summary="@string/preference_summary_enabled_service_aircoach"
             android:title="@string/service_name_aircoach" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_name_favourites">
+
+        <SwitchPreference
+            android:title="@string/preference_name_favourites_sort_by_location"
+            android:key="@string/preference_key_favourites_sort_by_location"
+            android:summary="@string/preference_summary_favourites_sort_by_location"
+            android:defaultValue="@bool/preference_default_favourites_sort_location" />
+
+        <SeekBarPreference
+            android:title="@string/preference_name_favourites_live_data_limit"
+            android:key="@string/preference_key_favourites_live_data_limit"
+            android:summary="@string/preference_summary_favourites_live_data_limit"
+            android:defaultValue="@integer/preference_default_favourites_live_data_limit"
+            android:max="10"
+            app:showSeekBarValue="true" />
 
     </PreferenceCategory>
 
