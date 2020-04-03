@@ -1,15 +1,10 @@
 package ie.dublinmapper.domain.internet
 
 interface InternetStatusMonitor {
-
     fun subscribe(subscriber: InternetStatusSubscriber)
-
     fun unsubscribe(subscriber: InternetStatusSubscriber)
 }
 
 interface InternetStatusSubscriber {
-
-    fun online()
-
-    fun offline()
+    fun onStatusChange(isOnline: Boolean)
 }

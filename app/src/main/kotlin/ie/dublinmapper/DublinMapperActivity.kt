@@ -23,29 +23,29 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
     private var snackBar: Snackbar? = null
     private val subscriber = object : InternetStatusSubscriber {
 
-        override fun online() {
-            snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
-            if (navigation.visibility == View.VISIBLE) {
-                snackBar?.anchorView = navigation
+        override fun onStatusChange(isOnline: Boolean) {
+            if (isOnline) {
+                snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
+                if (navigation.visibility == View.VISIBLE) {
+                    snackBar?.anchorView = navigation
+                }
+                snackBar?.setActionTextColor(getColor(R.color.colorOnError))
+                snackBar?.setTextColor(getColor(R.color.colorOnError))
+                snackBar?.setBackgroundTint(getColor(R.color.colorSuccess))
+                snackBar?.show()
+            } else {
+                snackBar = Snackbar.make(activity_root, "Offline", Snackbar.LENGTH_INDEFINITE)
+                snackBar?.setAction("Dismiss") {
+                    snackBar?.dismiss()
+                }
+                if (navigation.visibility == View.VISIBLE) {
+                    snackBar?.anchorView = navigation
+                }
+                snackBar?.setActionTextColor(getColor(R.color.colorOnError))
+                snackBar?.setTextColor(getColor(R.color.colorOnError))
+                snackBar?.setBackgroundTint(getColor(R.color.colorError))
+                snackBar?.show()
             }
-            snackBar?.setActionTextColor(getColor(R.color.colorOnError))
-            snackBar?.setTextColor(getColor(R.color.colorOnError))
-            snackBar?.setBackgroundTint(getColor(R.color.colorSuccess))
-            snackBar?.show()
-        }
-
-        override fun offline() {
-            snackBar = Snackbar.make(activity_root, "Offline", Snackbar.LENGTH_INDEFINITE)
-            snackBar?.setAction("Dismiss") {
-                snackBar?.dismiss()
-            }
-            if (navigation.visibility == View.VISIBLE) {
-                snackBar?.anchorView = navigation
-            }
-            snackBar?.setActionTextColor(getColor(R.color.colorOnError))
-            snackBar?.setTextColor(getColor(R.color.colorOnError))
-            snackBar?.setBackgroundTint(getColor(R.color.colorError))
-            snackBar?.show()
         }
     }
 

@@ -23,12 +23,10 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
     private val subscriber = object : InternetStatusSubscriber {
 
-        override fun online() {
-            viewModel.dispatch(Action.GetFavourites)
-        }
-
-        override fun offline() {
-            // nothing to do
+        override fun onStatusChange(isOnline: Boolean) {
+            if (isOnline) {
+                viewModel.dispatch(Action.GetFavourites)
+            }
         }
     }
 
