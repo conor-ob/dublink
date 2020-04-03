@@ -35,7 +35,7 @@ class NetworkStatusChangeListener @Inject constructor(
 
     /**
      * Returns an observable of internet connection change events. On application startup when
-     * subscribing to this observable the user doesn't need to be notified  if they are already
+     * subscribing to this observable the user doesn't need to be notified if they are already
      * online but they should be notified if the application starts in an offline state.
      */
     override fun eventStream(): Observable<InternetStatus> = Observable.concat(
