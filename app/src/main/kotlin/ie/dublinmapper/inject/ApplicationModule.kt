@@ -11,11 +11,11 @@ import ie.dublinmapper.mapping.FavouritesResponseMapper
 import ie.dublinmapper.mapping.NearbyResponseMapper
 import ie.dublinmapper.mapping.SearchResponseMapper
 import ie.dublinmapper.database.DatabaseModule
-import ie.dublinmapper.domain.internet.InternetStatusMonitor
+import ie.dublinmapper.domain.internet.InternetStatusChangeListener
 import ie.dublinmapper.domain.service.*
 import ie.dublinmapper.internet.DeviceInternetManager
 import ie.dublinmapper.internet.NetworkConnectionInterceptor
-import ie.dublinmapper.internet.InternetStatusMonitorListener
+import ie.dublinmapper.internet.NetworkStatusChangeListener
 import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
@@ -87,9 +87,9 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun networkConnectivityListener(
+    fun internetStatusChangeListener(
         context: Context
-    ): InternetStatusMonitor = InternetStatusMonitorListener(context)
+    ): InternetStatusChangeListener = NetworkStatusChangeListener(context)
 
     @Provides
     @Singleton

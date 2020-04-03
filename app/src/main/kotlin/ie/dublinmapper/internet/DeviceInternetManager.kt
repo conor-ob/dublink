@@ -1,15 +1,15 @@
 package ie.dublinmapper.internet
 
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.wifi.SupplicantState
 import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.util.getConnectivityManager
+import ie.dublinmapper.util.getWifiManager
+import ie.dublinmapper.util.isConnected
 import timber.log.Timber
 import java.io.IOException
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
-import android.net.wifi.WifiManager as AndroidWifiManager
 
 class DeviceInternetManager(private val context: Context) : InternetManager {
 
@@ -71,19 +71,7 @@ class DeviceInternetManager(private val context: Context) : InternetManager {
         return false
     }
 
-    override fun isNetworkAvailable(): Boolean {
-        val connectivityManager = context.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        if (connectivityManager != null) {
-            return connectivityManager.activeNetworkInfo?.isConnectedOrConnecting ?: false
-        }
-        return false
-    }
+    override fun isNetworkAvailable() = context.getConnectivityManager()?.isConnected() ?: false
 
-    override fun isWiFiAvailable(): Boolean {
-        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as AndroidWifiManager?
-        if (wifiManager != null && wifiManager.isWifiEnabled) {
-            return wifiManager.connectionInfo.supplicantState == SupplicantState.COMPLETED
-        }
-        return false
-    }
+    override fun isWiFiAvailable() = context.getWifiManager()?.isConnected() ?: false
 }

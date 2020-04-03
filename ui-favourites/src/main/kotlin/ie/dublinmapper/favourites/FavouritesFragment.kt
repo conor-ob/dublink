@@ -9,26 +9,16 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
-import ie.dublinmapper.domain.internet.InternetStatusMonitor
-import ie.dublinmapper.domain.internet.InternetStatusSubscriber
+import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
-import javax.inject.Inject
+import timber.log.Timber
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
-    @Inject lateinit var listener: InternetStatusMonitor
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
-    private val subscriber = object : InternetStatusSubscriber {
-
-        override fun onStatusChange(isOnline: Boolean) {
-            if (isOnline) {
-                viewModel.dispatch(Action.GetFavourites)
-            }
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,7 +46,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.liveDataList.adapter = adapter
         view.liveDataList.setHasFixedSize(true)
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
-        listener.subscribe(subscriber)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -66,6 +55,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
                 state?.let { renderState(state) }
             }
         )
+        viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onResume() {
@@ -77,11 +67,13 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         if (state.favourites != null) {
             adapter?.update(listOf(state.favourites))
         }
+        if (state.internetStatusChange == InternetStatus.ONLINE) {
+            viewModel.dispatch(Action.GetFavourites)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         adapter = null
-        listener.unsubscribe(subscriber)
     }
 }
