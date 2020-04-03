@@ -23,9 +23,7 @@ class InternetStatusMonitorListener(context: Context) : InternetStatusMonitor {
                     if (!isOnline) {
                         Timber.d("[CONOR] Online")
                         isOnline = true
-                        for (subscription in subscriptions) {
-                            subscription.online()
-                        }
+                        subscriptions.forEach { it.onStatusChange(isOnline = true) }
                     }
                 }
 
@@ -33,9 +31,7 @@ class InternetStatusMonitorListener(context: Context) : InternetStatusMonitor {
                     super.onLost(network)
                     Timber.d("[CONOR] Lost")
                     isOnline = false
-                    for (subscription in subscriptions) {
-                        subscription.offline()
-                    }
+                    subscriptions.forEach { it.onStatusChange(isOnline = false) }
                 }
             }
         )
