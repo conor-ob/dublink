@@ -9,24 +9,16 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
+import timber.log.Timber
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
-
-    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.observableState.observe(
-            this, Observer { state ->
-                state?.let { renderState(state) }
-            }
-        )
-    }
+    private var adapter: GroupAdapter<GroupieViewHolder>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,7 +34,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         }
 
         adapter = GroupAdapter()
-        adapter.setOnItemClickListener { item, _ ->
+        adapter?.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()
             if (serviceLocation != null) {
                 if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
@@ -56,6 +48,16 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.observableState.observe(
+            viewLifecycleOwner, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
+        viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.dispatch(Action.GetFavourites)
@@ -63,7 +65,15 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     private fun renderState(state: State) {
         if (state.favourites != null) {
-            adapter.update(listOf(state.favourites))
+            adapter?.update(listOf(state.favourites))
         }
+        if (state.internetStatusChange == InternetStatus.ONLINE) {
+            viewModel.dispatch(Action.GetFavourites)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
     }
 }

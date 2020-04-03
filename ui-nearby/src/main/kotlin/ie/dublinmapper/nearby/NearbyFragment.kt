@@ -14,7 +14,6 @@ import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.viewModelProvider
-import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_nearby.*
 import kotlinx.android.synthetic.main.fragment_nearby.view.*
 
@@ -24,14 +23,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as NearbyViewModel }
 
-    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.observableState.observe(this, Observer { state ->
-            state?.let { renderState(state) }
-        })
-    }
+    private var adapter: GroupAdapter<GroupieViewHolder>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,7 +39,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
         }
 
         adapter = GroupAdapter()
-        adapter.setOnItemClickListener { item, _ ->
+        adapter?.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()
             if (serviceLocation != null) {
                 (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
@@ -79,6 +71,15 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
         }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.observableState.observe(
+            viewLifecycleOwner, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -95,8 +96,12 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 
     private fun renderState(state: State) {
         if (state.serviceLocations != null) {
-            adapter.update(listOf(state.serviceLocations))
+            adapter?.update(listOf(state.serviceLocations))
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+    }
 }

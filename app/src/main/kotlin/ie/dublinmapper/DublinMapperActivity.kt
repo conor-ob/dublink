@@ -2,19 +2,27 @@ package ie.dublinmapper
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
+import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.livedata.LiveDataFragment
 import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.activity_root.*
+import javax.inject.Inject
 
 class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNavigator {
 
     private val navigationController by lazy { findNavController(R.id.navHostFragment) }
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    private val viewModel by lazy { viewModelProvider(viewModelFactory) as DublinMapperActivityViewModel }
+    private var snackBar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +32,7 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
             onNavDestinationSelected(item, navigationController)
         }
         navigationController.addOnDestinationChangedListener { _, destination, _ ->
+            snackBar?.dismiss()
             when (destination.id) {
                 R.id.newsFragment,
                 R.id.nearbyFragment,
@@ -32,6 +41,12 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
                 else -> navigation.visibility = View.GONE
             }
         }
+        viewModel.observableState.observe(
+            this, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
+        viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun getNavController() = navigationController
@@ -62,5 +77,33 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
                 .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
                 .build()
         )
+    }
+
+    private fun renderState(state: State) {
+        when (state.internetStatusChange) {
+            InternetStatus.ONLINE -> {
+                snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
+                if (navigation.visibility == View.VISIBLE) {
+                    snackBar?.anchorView = navigation
+                }
+                snackBar?.setActionTextColor(getColor(R.color.colorOnError))
+                snackBar?.setTextColor(getColor(R.color.colorOnError))
+                snackBar?.setBackgroundTint(getColor(R.color.colorSuccess))
+                snackBar?.show()
+            }
+            InternetStatus.OFFLINE -> {
+                snackBar = Snackbar.make(activity_root, "Offline \uD83D\uDE14", Snackbar.LENGTH_INDEFINITE)
+                snackBar?.setAction("Dismiss") {
+                    snackBar?.dismiss()
+                }
+                if (navigation.visibility == View.VISIBLE) {
+                    snackBar?.anchorView = navigation
+                }
+                snackBar?.setActionTextColor(getColor(R.color.colorOnError))
+                snackBar?.setTextColor(getColor(R.color.colorOnError))
+                snackBar?.setBackgroundTint(getColor(R.color.colorError))
+                snackBar?.show()
+            }
+        }
     }
 }

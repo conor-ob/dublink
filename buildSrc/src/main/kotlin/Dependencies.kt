@@ -80,6 +80,10 @@ object Libraries {
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion" // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk8
     }
 
+    object LeakCanary {
+        const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.2" // https://mvnrepository.com/artifact/com.squareup.leakcanary/leakcanary-android
+    }
+
     object Location {
         const val reactiveLocation = "pl.charmas.android:android-reactive-location2:2.1@aar" // https://mvnrepository.com/artifact/pl.charmas.android/android-reactive-location2
     }

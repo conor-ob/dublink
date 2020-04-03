@@ -26,21 +26,13 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as LiveDataViewModel }
 
-    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
+    private var adapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var args: LiveDataArgs
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        args = fromBundle(requireArguments())
-        viewModel.observableState.observe(
-            this, Observer { state ->
-                state?.let { renderState(state) }
-            }
-        )
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        args = fromBundle(requireArguments())
 
 //        toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
 //        toolbar.inflateMenu(R.menu.menu_live_data)
@@ -91,9 +83,18 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         liveDataList.adapter = adapter
         liveDataList.setHasFixedSize(true)
         liveDataList.layoutManager = LinearLayoutManager(requireContext())
-        adapter.setOnItemClickListener { item, view ->
+        adapter?.setOnItemClickListener { item, view ->
             Timber.d("clicked")
         }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.observableState.observe(
+            viewLifecycleOwner, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
     }
 
     override fun onResume() {
@@ -152,8 +153,13 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         }
 
         if (state.liveData != null) {
-            adapter.update(listOf(state.liveData))
+            adapter?.update(listOf(state.liveData))
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
     }
 
     private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {

@@ -16,4 +16,8 @@
 
     <color name="colorStatusBar">#313236</color>
     <color name="colorDivider">#343538</color>
+
+    <color name="colorSuccess">#5A9E66</color>
+
+    <color name="colorIconBackground">@color/grey_850</color>
 </resources>

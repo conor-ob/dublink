@@ -11,9 +11,11 @@ import ie.dublinmapper.mapping.FavouritesResponseMapper
 import ie.dublinmapper.mapping.NearbyResponseMapper
 import ie.dublinmapper.mapping.SearchResponseMapper
 import ie.dublinmapper.database.DatabaseModule
+import ie.dublinmapper.domain.internet.InternetStatusChangeListener
 import ie.dublinmapper.domain.service.*
 import ie.dublinmapper.internet.DeviceInternetManager
 import ie.dublinmapper.internet.NetworkConnectionInterceptor
+import ie.dublinmapper.internet.NetworkStatusChangeListener
 import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
@@ -82,6 +84,12 @@ class ApplicationModule {
     fun enabledServiceManager(
         preferenceStore: PreferenceStore
     ): EnabledServiceManager = DefaultEnabledServiceManager(preferenceStore)
+
+    @Provides
+    @Singleton
+    fun internetStatusChangeListener(
+        context: Context
+    ): InternetStatusChangeListener = NetworkStatusChangeListener(context)
 
     @Provides
     @Singleton

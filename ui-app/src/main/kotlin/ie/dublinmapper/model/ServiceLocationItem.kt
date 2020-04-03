@@ -38,16 +38,9 @@ class ServiceLocationItem(
     }
 
     private fun bindIcon(viewHolder: GroupieViewHolder) {
-        if (icon == null) {
-            viewHolder.iconLayout.visibility = View.GONE
-            viewHolder.iconPadding.visibility = View.GONE
-        } else {
-            viewHolder.serviceIconContainer.setImageResource(icon)
-            viewHolder.serviceIconContainer.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_850))
-            viewHolder.iconLayout.visibility = View.VISIBLE
-            viewHolder.iconPadding.visibility = View.VISIBLE
-        }
+        viewHolder.serviceIconContainer.setImageResource(icon)
+        viewHolder.serviceIconContainer.backgroundTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.colorIconBackground))
     }
 
     private fun bindTitle(viewHolder: GroupieViewHolder) {

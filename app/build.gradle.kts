@@ -106,6 +106,8 @@ dependencies {
     implementation(Libraries.Store.store3)
     implementation(Libraries.Twitter.tweetUi)
 
+    debugImplementation(Libraries.LeakCanary.leakCanary)
+
     kapt(Libraries.Dagger.daggerCompiler)
     kapt(Libraries.Dagger.daggerAndroidProcessor)
 }
