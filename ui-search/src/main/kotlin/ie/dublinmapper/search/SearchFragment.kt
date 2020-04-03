@@ -24,15 +24,8 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as SearchViewModel }
 
-    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
+    private var adapter: GroupAdapter<GroupieViewHolder>? = null
     private val subscriptions = CompositeDisposable()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.observableState.observe(this, Observer { state ->
-            state?.let { renderState(state) }
-        })
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,7 +44,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         search_recyclerview.adapter = adapter
         search_recyclerview.setHasFixedSize(true)
         search_recyclerview.layoutManager = LinearLayoutManager(requireContext())
-        adapter.setOnItemClickListener { item, _ ->
+        adapter?.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()
             if (serviceLocation != null) {
                 (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
@@ -106,11 +99,24 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 //        clear_search.setOnClickListener { search_query.setText("") }
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.observableState.observe(
+            viewLifecycleOwner, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
+    }
+
     private fun renderState(state: State) {
         search_progress.visibility = if (state.isLoading) View.VISIBLE else View.GONE
         if (state.searchResults != null) {
-            adapter.update(listOf(state.searchResults))
+            adapter?.update(listOf(state.searchResults))
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+    }
 }

@@ -7,14 +7,47 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
+import ie.dublinmapper.domain.internet.InternetStatusMonitor
+import ie.dublinmapper.domain.internet.InternetStatusSubscriber
 import ie.dublinmapper.livedata.LiveDataFragment
 import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.activity_root.*
+import javax.inject.Inject
 
 class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNavigator {
 
     private val navigationController by lazy { findNavController(R.id.navHostFragment) }
+    @Inject lateinit var listener: InternetStatusMonitor
+    private val subscriber = object : InternetStatusSubscriber {
+
+        override fun online() {
+            val snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
+            if (navigation.visibility == View.VISIBLE) {
+                snackBar.anchorView = navigation
+            }
+            snackBar.setActionTextColor(getColor(R.color.colorOnError))
+            snackBar.setTextColor(getColor(R.color.colorOnError))
+            snackBar.setBackgroundTint(getColor(R.color.colorSuccess))
+            snackBar.show()
+        }
+
+        override fun offline() {
+            val snackBar = Snackbar.make(activity_root, "Offline", Snackbar.LENGTH_INDEFINITE)
+            snackBar.setAction("Dismiss") {
+                snackBar.dismiss()
+            }
+            if (navigation.visibility == View.VISIBLE) {
+                snackBar.anchorView = navigation
+            }
+//            snackBar.setBackgroundTintMode(PorterDuff.Mode.SRC)
+            snackBar.setActionTextColor(getColor(R.color.colorOnError))
+            snackBar.setTextColor(getColor(R.color.colorOnError))
+            snackBar.setBackgroundTint(getColor(R.color.colorError))
+            snackBar.show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +65,12 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
                 else -> navigation.visibility = View.GONE
             }
         }
+        listener.subscribe(subscriber)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        listener.unsubscribe(subscriber)
     }
 
     override fun getNavController() = navigationController

@@ -13,7 +13,9 @@ import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 import timber.log.Timber
+import java.io.IOException
 import java.net.ConnectException
+import java.net.UnknownHostException
 
 class FavouritesResponseMapper(
     private val stringProvider: StringProvider
@@ -69,8 +71,16 @@ class FavouritesResponseMapper(
         is LiveDataResponse.Error -> {
             Timber.e(liveDataResponse.throwable, "Error getting live data")
             val message = when (liveDataResponse.throwable) {
-                is ConnectException -> "⚠️ We're having trouble reaching ${liveDataResponse.serviceLocation.service.fullName}"
-                is NetworkUnavailableException  -> "Please check your internet connection"
+                // service is down
+                is ConnectException -> "${liveDataResponse.serviceLocation.service.fullName} service is down"
+
+                // user has no internet connection
+                is NetworkUnavailableException,
+                is UnknownHostException -> "Please check your internet connection"
+
+                // network error
+                is IOException -> "⚠️ We're having trouble reaching ${liveDataResponse.serviceLocation.service.fullName}"
+
                 else -> "Oops! Something went wrong"
             }
             Section(

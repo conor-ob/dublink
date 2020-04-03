@@ -9,23 +9,27 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.domain.internet.InternetStatusMonitor
+import ie.dublinmapper.domain.internet.InternetStatusSubscriber
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
+import javax.inject.Inject
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
+    @Inject lateinit var listener: InternetStatusMonitor
+    private var adapter: GroupAdapter<GroupieViewHolder>? = null
+    private val subscriber = object : InternetStatusSubscriber {
 
-    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
+        override fun online() {
+            viewModel.dispatch(Action.GetFavourites)
+        }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.observableState.observe(
-            this, Observer { state ->
-                state?.let { renderState(state) }
-            }
-        )
+        override fun offline() {
+            // nothing to do
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +46,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         }
 
         adapter = GroupAdapter()
-        adapter.setOnItemClickListener { item, _ ->
+        adapter?.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()
             if (serviceLocation != null) {
                 if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
@@ -54,6 +58,16 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.liveDataList.adapter = adapter
         view.liveDataList.setHasFixedSize(true)
         view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
+        listener.subscribe(subscriber)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.observableState.observe(
+            viewLifecycleOwner, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
     }
 
     override fun onResume() {
@@ -63,7 +77,13 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     private fun renderState(state: State) {
         if (state.favourites != null) {
-            adapter.update(listOf(state.favourites))
+            adapter?.update(listOf(state.favourites))
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+        listener.unsubscribe(subscriber)
     }
 }
