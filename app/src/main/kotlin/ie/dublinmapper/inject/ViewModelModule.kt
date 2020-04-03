@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
+import ie.dublinmapper.DublinMapperActivityViewModel
 import ie.dublinmapper.favourites.FavouritesViewModel
 import ie.dublinmapper.livedata.LiveDataViewModel
 import ie.dublinmapper.nearby.NearbyViewModel
@@ -22,6 +23,11 @@ import kotlin.reflect.KClass
 
 @Module
 abstract class ViewModelModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DublinMapperActivityViewModel::class)
+    internal abstract fun bindDublinMapperActivityViewModel(dublinMapperActivityViewModel: DublinMapperActivityViewModel): ViewModel
 
     @Binds
     @IntoMap

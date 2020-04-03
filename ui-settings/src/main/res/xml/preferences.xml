@@ -11,12 +11,12 @@
             android:title="@string/preference_name_preferred_theme"
             app:useSimpleSummaryProvider="true" />
 
-        <ListPreference
-            android:entries="@array/screen_names"
-            android:entryValues="@array/screen_values"
-            android:key="@string/preference_key_preferred_home_screen"
-            android:title="@string/preference_name_preferred_home_screen"
-            app:useSimpleSummaryProvider="true" />
+<!--        <ListPreference-->
+<!--            android:entries="@array/screen_names"-->
+<!--            android:entryValues="@array/screen_values"-->
+<!--            android:key="@string/preference_key_preferred_home_screen"-->
+<!--            android:title="@string/preference_name_preferred_home_screen"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
 
     </PreferenceCategory>
 
@@ -42,14 +42,14 @@
             android:title="@string/service_name_luas" />
 
         <SwitchPreference
-            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
-            android:key="@string/preference_key_enabled_service_bus_eireann"
-            android:title="@string/service_name_bus_eireann" />
-
-        <SwitchPreference
             android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes"
             android:key="@string/preference_key_enabled_service_dublin_bikes"
             android:title="@string/service_name_dublin_bikes" />
+
+        <SwitchPreference
+            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
+            android:key="@string/preference_key_enabled_service_bus_eireann"
+            android:title="@string/service_name_bus_eireann" />
 
         <SwitchPreference
             android:defaultValue="@bool/preference_default_enabled_service_aircoach"
@@ -62,11 +62,11 @@
     <PreferenceCategory
         android:title="@string/preference_category_name_favourites">
 
-        <SwitchPreference
-            android:title="@string/preference_name_favourites_sort_by_location"
-            android:key="@string/preference_key_favourites_sort_by_location"
-            android:summary="@string/preference_summary_favourites_sort_by_location"
-            android:defaultValue="@bool/preference_default_favourites_sort_location" />
+<!--        <SwitchPreference-->
+<!--            android:title="@string/preference_name_favourites_sort_by_location"-->
+<!--            android:key="@string/preference_key_favourites_sort_by_location"-->
+<!--            android:summary="@string/preference_summary_favourites_sort_by_location"-->
+<!--            android:defaultValue="@bool/preference_default_favourites_sort_location" />-->
 
         <SeekBarPreference
             android:title="@string/preference_name_favourites_live_data_limit"
