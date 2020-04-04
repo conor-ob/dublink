@@ -4,7 +4,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.ui.R
 
-class DividerItem : Item() {
+class DividerItem(private val index: Int) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data_divider
 
@@ -17,11 +17,13 @@ class DividerItem : Item() {
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is DividerItem
+        if (other is DividerItem) {
+            return other.index == index
+        }
+        return false
     }
 
     override fun hashCode(): Int {
-        return id.toInt()
+        return index.hashCode()
     }
-
 }

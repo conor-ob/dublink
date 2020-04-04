@@ -17,6 +17,17 @@ val properties = if (project.rootProject.file("release.properties").exists()) {
     loadProperties("debug.properties")
 }
 
+val gitBranch = Runtime
+    .getRuntime()
+    .exec("git rev-parse --abbrev-ref HEAD")
+    .let<Process, String> { process ->
+        process.waitFor()
+        val output = process.inputStream.use {
+            it.bufferedReader().use(BufferedReader::readText)
+        }
+        process.destroy()
+        output.trim()
+    }
 val apkBuildDateTime: String = ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE)
 val gitCommitHash = Runtime
     .getRuntime()
@@ -55,9 +66,9 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
         getByName("debug") {
-            isDebuggable = true
+            isDebuggable = false
             applicationIdSuffix = ".debug"
-            versionNameSuffix = "-dev-$apkBuildDateTime-$gitCommitHash"
+            versionNameSuffix = "-$gitBranch-$apkBuildDateTime-$gitCommitHash"
 //            ext.enableCrashlytics = false
         }
     }
