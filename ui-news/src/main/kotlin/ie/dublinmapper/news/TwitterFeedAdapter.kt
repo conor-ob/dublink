@@ -23,14 +23,12 @@ class TwitterFeedAdapter(
     companion object {
 
         private val twitterFragments = mapOf(
-            "TFI" to TwitterFragment("transport-for-ireland"),
-            Service.DUBLIN_BUS.fullName to TwitterFragment("dublin-bus"),
-            Service.IRISH_RAIL.fullName to TwitterFragment("irish-rail"),
-            Service.LUAS.fullName to TwitterFragment("luas"),
-            Service.DUBLIN_BIKES.fullName to TwitterFragment("dublin-bikes"),
-            Service.BUS_EIREANN.fullName to TwitterFragment("bus-eireann"),
-            Service.AIRCOACH.fullName to TwitterFragment("aircoach")
+            "TFI" to TwitterFragment().apply { arguments = TwitterFragment.toBundle("transport-for-ireland") },
+            Service.DUBLIN_BUS.fullName to TwitterFragment().apply { arguments = TwitterFragment.toBundle("dublin-bus") },
+            Service.IRISH_RAIL.fullName to TwitterFragment().apply { arguments = TwitterFragment.toBundle("irish-rail") },
+            Service.LUAS.fullName to TwitterFragment().apply { arguments = TwitterFragment.toBundle("luas") },
+            Service.BUS_EIREANN.fullName to TwitterFragment().apply { arguments = TwitterFragment.toBundle("bus-eireann") },
+            Service.AIRCOACH.fullName to TwitterFragment().apply { arguments = TwitterFragment.toBundle("aircoach") }
         )
     }
-
 }

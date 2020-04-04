@@ -42,13 +42,9 @@ class NewsFragment : DublinMapperFragment(R.layout.fragment_news) {
         if (enabledServiceManager.isServiceEnabled(Service.BUS_EIREANN)) {
             services.add(Service.BUS_EIREANN.fullName)
         }
-        if (enabledServiceManager.isServiceEnabled(Service.DUBLIN_BIKES)) {
-            services.add(Service.DUBLIN_BIKES.fullName)
-        }
         if (enabledServiceManager.isServiceEnabled(Service.AIRCOACH)) {
             services.add(Service.AIRCOACH.fullName)
         }
         return services
     }
-
 }
