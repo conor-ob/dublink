@@ -33,6 +33,10 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
             return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
         }
 
+        fabNavigateFavouritesToSearch.setOnClickListener {
+            (activity as DublinMapperNavigator).navigateToSearch()
+        }
+
         adapter = GroupAdapter()
         adapter?.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()

@@ -101,5 +101,16 @@
     <!--style="@style/Toolbar">-->
 
     <!--</androidx.appcompat.widget.Toolbar>-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNavigateFavouritesToSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/padding_l"
+        android:layout_marginBottom="@dimen/padding_l"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_search"
+        android:layout_gravity="bottom|end"
+        app:elevation="4dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
