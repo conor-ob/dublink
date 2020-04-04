@@ -123,7 +123,7 @@ class LiveDataItem(
 
     override fun equals(other: Any?): Boolean {
         if (other is LiveDataItem) {
-            return liveData == other.liveData
+            return isSameAs(other) && liveData.liveTime.waitTime.toMinutes() == other.liveData.liveTime.waitTime.toMinutes()
         }
         return false
     }
@@ -352,7 +352,14 @@ class GroupedLiveDataItem(
 
     override fun equals(other: Any?): Boolean {
         if (other is GroupedLiveDataItem) {
-            return liveData == other.liveData
+            if (liveData.size == other.liveData.size) {
+                for (index in liveData.indices) {
+                    if (liveData[index].liveTime.waitTime.toMinutes() != other.liveData[index].liveTime.waitTime.toMinutes()) {
+                        return false
+                    }
+                }
+            }
+            return true
         }
         return false
     }
@@ -382,7 +389,7 @@ class DublinBikesLiveDataItem(
 
     private fun getBackgroundColour(amount: Int): Int {
         return when {
-            amount < 2 -> R.color.luasRed
+            amount < 3 -> R.color.luasRed
             amount < 6 -> R.color.aircoachOrange
             else -> R.color.dublinBikesTeal
         }

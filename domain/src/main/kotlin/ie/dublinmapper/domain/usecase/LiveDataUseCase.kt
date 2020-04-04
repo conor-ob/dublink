@@ -65,30 +65,30 @@ class LiveDataUseCase @Inject constructor(
     }
 }
 
-sealed class LiveDataResponse(
-    open val serviceLocation: ServiceLocation
-) {
+sealed class LiveDataResponse {
+
+    abstract val serviceLocation: ServiceLocation
 
     data class Loading(
         override val serviceLocation: ServiceLocation
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Skipped(
         override val serviceLocation: ServiceLocation
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Complete(
         override val serviceLocation: ServiceLocation,
         val liveData: List<LiveData>
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Grouped(
         override val serviceLocation: ServiceLocation,
         val liveData: List<List<LiveData>>
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Error(
         override val serviceLocation: ServiceLocation,
         val throwable: Throwable
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 }

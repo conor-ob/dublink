@@ -30,7 +30,7 @@ class FavouritesResponseMapper(
             Section(
                 listOfNotNull(
                     mapServiceLocation(liveDataResponse),
-                    mapLiveData(liveDataResponse),
+                    mapLiveData(liveDataResponse, index),
                     mapDivider(source.liveDataResponses.size, index)
                 )
             )
@@ -49,15 +49,16 @@ class FavouritesResponseMapper(
     )
 
     private fun mapLiveData(
-        liveDataResponse: LiveDataResponse
+        liveDataResponse: LiveDataResponse,
+        index: Int
     ) = when (liveDataResponse) {
-        is LiveDataResponse.Loading -> Section(SimpleMessageItem("Loading..."))
+        is LiveDataResponse.Loading -> Section(SimpleMessageItem("Loading...", index))
         is LiveDataResponse.Skipped -> Section()
         is LiveDataResponse.Complete -> TODO()
         is LiveDataResponse.Grouped -> {
             val liveData = liveDataResponse.liveData
             if (liveData.isNullOrEmpty()) {
-                Section(SimpleMessageItem(mapMessage(liveDataResponse.serviceLocation.service)))
+                Section(SimpleMessageItem(mapMessage(liveDataResponse.serviceLocation.service), index))
             } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DublinBikesLiveData) {
                 Section(DublinBikesLiveDataItem(liveData.first().first() as DublinBikesLiveData))
             } else {
@@ -84,12 +85,12 @@ class FavouritesResponseMapper(
                 else -> "Oops! Something went wrong"
             }
             Section(
-                SimpleMessageItem(message)
+                SimpleMessageItem(message, index)
             )
         }
     }
 
-    private fun mapDivider(items: Int, index: Int) = if (index < items - 1) DividerItem() else null
+    private fun mapDivider(items: Int, index: Int) = if (index < items - 1) DividerItem(index) else null
 
     private fun mapMessage(service: Service): String {
         val mode = when (service) {
