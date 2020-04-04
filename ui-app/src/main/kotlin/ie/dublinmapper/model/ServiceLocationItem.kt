@@ -6,14 +6,11 @@ import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.ui.R
-import io.rtpi.api.ServiceLocation
 import kotlinx.android.synthetic.main.list_item_service_location.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import ie.dublinmapper.domain.model.getName
-import io.rtpi.api.Operator
-import io.rtpi.api.Route
-import io.rtpi.api.Service
+import io.rtpi.api.*
 import kotlin.math.round
 
 private const val serviceLocationKey = "key_service_location"
@@ -59,23 +56,54 @@ class ServiceLocationItem(
     }
 
     private fun bindRoutes(viewHolder: GroupieViewHolder) {
-        if (routes.isNullOrEmpty()) {
-            viewHolder.routesLayout.visibility = View.GONE
-        } else {
-            viewHolder.routes.removeAllViewsInLayout()
-            for (route in routes) {
+        if (serviceLocation is ServiceLocationRoutes) {
+            viewHolder.rootViewBikes.visibility = View.GONE
+            if (routes.isNullOrEmpty()) {
+                viewHolder.routes.visibility = View.GONE
+                viewHolder.routesDivider.visibility = View.GONE
+            } else {
+                viewHolder.routes.removeAllViewsInLayout()
+                for (route in routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
-                val chip = Chip(viewHolder.itemView.context)
-                chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
-                val (textColour, backgroundColour) = mapColour(route.operator, route.id)
-                chip.text = " ${route.id} "
-                chip.setTextAppearanceResource(R.style.SmallerText)
-                chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
-                chip.setChipBackgroundColorResource(backgroundColour)
+                    val chip = Chip(viewHolder.itemView.context)
+                    chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
+                    val (textColour, backgroundColour) = mapColour(route.operator, route.id)
+                    chip.text = " ${route.id} "
+                    chip.setTextAppearanceResource(R.style.SmallerText)
+                    chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
+                    chip.setChipBackgroundColorResource(backgroundColour)
 //            chip.chipMinHeight = 0f
-                viewHolder.routes.addView(chip)
+                    viewHolder.routes.addView(chip)
+                }
+                viewHolder.routes.visibility = View.VISIBLE
+                viewHolder.routesDivider.visibility = View.VISIBLE
             }
-            viewHolder.routesLayout.visibility = View.VISIBLE
+        } else if (serviceLocation is DublinBikesDock) {
+            viewHolder.routes.visibility = View.GONE
+            if (routes == null) {
+                viewHolder.routesDivider.visibility = View.GONE
+                viewHolder.rootViewBikes.visibility = View.GONE
+            } else {
+                viewHolder.routesDivider.visibility = View.VISIBLE
+                viewHolder.rootViewBikes.visibility = View.VISIBLE
+                viewHolder.bikesCount.text = if (serviceLocation.availableBikes == 0) " No " else " ${serviceLocation.availableBikes} "
+                viewHolder.bikes.text = if (serviceLocation.availableBikes == 1) "Bike" else "Bikes" //TODO plurals
+                viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+                viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableBikes))
+
+                viewHolder.docksCount.text = if (serviceLocation.availableDocks == 0) " No " else " ${serviceLocation.availableDocks} "
+                viewHolder.docks.text = if (serviceLocation.availableDocks == 1) "Dock" else "Docks" //TODO plurals
+                viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+                viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableDocks))
+            }
+        }
+    }
+
+    private fun getBackgroundColour(amount: Int): Int {
+        return when {
+            amount < 3 -> R.color.luasRed
+            amount < 6 -> R.color.aircoachOrange
+            else -> R.color.dublinBikesTeal
         }
     }
 

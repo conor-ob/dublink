@@ -64,7 +64,7 @@ class FavouritesResponseMapper(
             } else {
                 val items = mutableListOf<GroupedLiveDataItem>()
                 for (thing in liveData.take(3)) {
-                    items.add(GroupedLiveDataItem(thing as List<TimedLiveData>))
+                    items.add(GroupedLiveDataItem(thing.take(3) as List<TimedLiveData>))
                 }
                 Section(items)
             }

@@ -4,7 +4,6 @@ import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.NearbyResponse
 import ie.dublinmapper.domain.service.StringProvider
-import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.ui.R
 import io.rtpi.api.*
@@ -36,14 +35,8 @@ class NearbyResponseMapper(
                     ServiceLocationItem(
                         serviceLocation = serviceLocation,
                         icon = mapIcon(serviceLocation.service),
-                        routes = null,
+                        routes = emptyList(),
                         walkDistance = walkDistance
-                    ),
-                    DublinBikesLiveDataItem(
-                        DublinBikesLiveData(
-                            bikes = serviceLocation.availableBikes,
-                            docks = serviceLocation.availableDocks
-                        )
                     )
                 )
                 else -> emptyList()
