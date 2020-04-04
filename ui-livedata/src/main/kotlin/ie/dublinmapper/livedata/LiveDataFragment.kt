@@ -208,8 +208,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         private fun fromBundle(
             bundle: Bundle
         ) = LiveDataArgs(
-            serviceLocationId = bundle.getString(id)!!,
-            serviceLocationName = bundle.getString(name)!!,
+            serviceLocationId = requireNotNull(bundle.getString(id)),
+            serviceLocationName = requireNotNull(bundle.getString(name)),
             serviceLocationService = bundle.getSerializable(service) as Service,
             serviceLocationIsFavourite = bundle.getBoolean(isFavourite)
         )
