@@ -62,7 +62,7 @@ class FavouritesViewModel @Inject constructor(
                         Timber.e(it)
                         Change.GetFavouritesError(it)
                     }
-                    .throttleLatest(350L, TimeUnit.MILLISECONDS)
+                    .throttleLatest(500L, TimeUnit.MILLISECONDS)
             }
 
         val getInternetStatusChange = actions.ofType(Action.SubscribeToInternetStatusChanges::class.java)
