@@ -3,7 +3,6 @@ package ie.dublinmapper.mapping
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.usecase.SearchResponse
-import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.ui.R
 import io.rtpi.api.*
@@ -32,14 +31,8 @@ object SearchResponseMapper : CustomConverter<SearchResponse, Group>() {
                     ServiceLocationItem(
                         serviceLocation = serviceLocation,
                         icon = mapIcon(serviceLocation.service),
-                        routes = null,
+                        routes = emptyList(),
                         walkDistance = null
-                    ),
-                    DublinBikesLiveDataItem(
-                        DublinBikesLiveData(
-                            bikes = serviceLocation.availableBikes,
-                            docks = serviceLocation.availableDocks
-                        )
                     )
                 )
                 else -> emptyList()
