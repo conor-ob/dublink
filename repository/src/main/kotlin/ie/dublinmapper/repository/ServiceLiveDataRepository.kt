@@ -20,7 +20,8 @@ class ServiceLiveDataRepository<T : LiveData>(
             .observe(
                 StoreRequest.cached(
                     key = key.locationId,
-                    refresh = false)
+                    refresh = false
+                )
             )
             .toObservable()
             .map { it }
