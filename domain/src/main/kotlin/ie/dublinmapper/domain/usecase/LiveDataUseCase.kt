@@ -1,5 +1,6 @@
 package ie.dublinmapper.domain.usecase
 
+import com.dropbox.android.external.store4.StoreResponse
 import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LocationRepository
@@ -51,11 +52,20 @@ class LiveDataUseCase @Inject constructor(
                 service = serviceLocation.service,
                 locationId = serviceLocation.id
             )
-        ).map<LiveDataResponse> { liveData ->
-            LiveDataResponse.Complete(
-                serviceLocation = serviceLocation,
-                liveData = liveData
-            )
+        ).map { storeResponse ->
+            when (storeResponse) {
+                is StoreResponse.Loading -> LiveDataResponse.Loading(
+                    serviceLocation = serviceLocation
+                )
+                is StoreResponse.Data -> LiveDataResponse.Complete(
+                    serviceLocation = serviceLocation,
+                    liveData = storeResponse.value
+                )
+                is StoreResponse.Error -> LiveDataResponse.Error(
+                    serviceLocation = serviceLocation,
+                    throwable = storeResponse.error
+                )
+            }
         }.onErrorReturn { throwable ->
             LiveDataResponse.Error(
                 serviceLocation = serviceLocation,
@@ -65,30 +75,30 @@ class LiveDataUseCase @Inject constructor(
     }
 }
 
-sealed class LiveDataResponse(
-    open val serviceLocation: ServiceLocation
-) {
+sealed class LiveDataResponse {
+
+    abstract val serviceLocation: ServiceLocation
 
     data class Loading(
         override val serviceLocation: ServiceLocation
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Skipped(
         override val serviceLocation: ServiceLocation
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Complete(
         override val serviceLocation: ServiceLocation,
         val liveData: List<LiveData>
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Grouped(
         override val serviceLocation: ServiceLocation,
         val liveData: List<List<LiveData>>
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 
     data class Error(
         override val serviceLocation: ServiceLocation,
         val throwable: Throwable
-    ) : LiveDataResponse(serviceLocation)
+    ) : LiveDataResponse()
 }

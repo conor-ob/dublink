@@ -58,6 +58,10 @@ object Libraries {
         const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0" // https://mvnrepository.com/artifact/androidx.swiperefreshlayout/swiperefreshlayout
     }
 
+    object Coroutines {
+        const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5" // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+    }
+
     object Dagger {
         const val dagger = "com.google.dagger:dagger:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger
         const val daggerAndroid = "com.google.dagger:dagger-android:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger-android
@@ -121,6 +125,7 @@ object Libraries {
     object Store {
         const val store3 = "com.nytimes.android:store3:3.1.1" // https://mvnrepository.com/artifact/com.nytimes.android/store3
         const val store4 = "com.dropbox.mobile.store:store4:4.0.0-alpha03" // https://mvnrepository.com/artifact/com.dropbox.mobile.store/store4
+        const val store4rxJava = "com.dropbox.mobile.store:store-rx2:4.0.0-alpha03" // https://mvnrepository.com/artifact/com.dropbox.mobile.store/store-rx2/4.0.0-alpha03
     }
 
     object Timber {

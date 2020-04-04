@@ -8,6 +8,7 @@ dependencies {
     implementation(Libraries.Rtpi.rtpiApi)
     implementation(Libraries.Rtpi.rtpiUtil)
     implementation(Libraries.Rx.rxJava)
+    implementation(Libraries.Store.store4)
 
     testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.Truth.truth)

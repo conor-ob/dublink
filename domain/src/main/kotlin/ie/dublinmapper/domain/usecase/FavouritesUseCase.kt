@@ -56,13 +56,9 @@ class FavouritesUseCase @Inject constructor(
         return Observable.combineLatest(
             favourites.mapIndexed { index, serviceLocation ->
                 if (index < limit) {
-                    liveDataUseCase.getGroupedLiveDataStream(serviceLocation).startWith(
-                        LiveDataResponse.Loading(serviceLocation)
-                    )
+                    liveDataUseCase.getGroupedLiveDataStream(serviceLocation)
                 } else {
-                    Observable.just(
-                        LiveDataResponse.Skipped(serviceLocation)
-                    )
+                    Observable.just(LiveDataResponse.Skipped(serviceLocation))
                 }
             }
         ) { responses -> FavouritesResponse(responses.map { it as LiveDataResponse }) }

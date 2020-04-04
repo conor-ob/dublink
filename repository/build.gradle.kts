@@ -13,6 +13,7 @@ dependencies {
     implementation(Libraries.Rx.rxJava)
     implementation(Libraries.Store.store3)
     implementation(Libraries.Store.store4)
+    implementation(Libraries.Store.store4rxJava)
 
     kapt(Libraries.Dagger.daggerCompiler)
 

@@ -1,9 +1,11 @@
 package ie.dublinmapper.repository.aircoach
 
+import com.dropbox.android.external.store4.MemoryPolicy
+import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.store.rx2.fromSingle
 import com.nytimes.android.external.store3.base.Fetcher
-import com.nytimes.android.external.store3.base.impl.MemoryPolicy
+import com.nytimes.android.external.store3.base.impl.MemoryPolicy as Store3MemoryPolicy
 import com.nytimes.android.external.store3.base.impl.StalePolicy
-import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
@@ -32,7 +34,7 @@ class AircoachRepositoryModule {
         localResource: AircoachStopLocalResource,
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
-        @Named("LONG_TERM") memoryPolicy: MemoryPolicy
+        @Named("LONG_TERM") memoryPolicy: Store3MemoryPolicy
     ): LocationRepository {
         val fetcher = Fetcher<List<AircoachStop>, Service> { client.aircoach().getStops() }
         val persister =
@@ -51,12 +53,16 @@ class AircoachRepositoryModule {
     @Named("AIRCOACH")
     fun aircoachLiveDataRepository(
         client: RtpiClient,
-        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
+        @Named("SHORT_TERM") memoryPolicy: Store3MemoryPolicy
     ): LiveDataRepository {
-        val store = StoreBuilder.key<String, List<AircoachLiveData>>()
-            .fetcher { stopId -> client.aircoach().getLiveData(stopId = stopId) }
-            .memoryPolicy(memoryPolicy)
-            .open()
-        return ServiceLiveDataRepository(store)
+        val store4 = StoreBuilder.fromSingle { stopId: String ->
+            client.aircoach().getLiveData(stopId = stopId)
+        }.cachePolicy(
+            MemoryPolicy
+                .builder()
+                .setExpireAfterWrite(memoryPolicy.expireAfterWrite)
+                .build()
+        ).build()
+        return ServiceLiveDataRepository(store4)
     }
 }

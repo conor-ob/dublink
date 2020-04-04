@@ -1,9 +1,11 @@
 package ie.dublinmapper.repository.dublinbikes
 
+import com.dropbox.android.external.store4.MemoryPolicy
+import com.dropbox.android.external.store4.StoreBuilder
+import com.dropbox.store.rx2.fromSingle
 import com.nytimes.android.external.store3.base.Fetcher
-import com.nytimes.android.external.store3.base.impl.MemoryPolicy
+import com.nytimes.android.external.store3.base.impl.MemoryPolicy as Store3MemoryPolicy
 import com.nytimes.android.external.store3.base.impl.StalePolicy
-import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
@@ -34,7 +36,7 @@ class DublinBikesRepositoryModule {
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         stringProvider: StringProvider,
-        @Named("MEDIUM_TERM") memoryPolicy: MemoryPolicy
+        @Named("MEDIUM_TERM") memoryPolicy: Store3MemoryPolicy
     ): LocationRepository {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey()) }
         val persister =
@@ -59,16 +61,18 @@ class DublinBikesRepositoryModule {
     fun dublinBikesRealTimeDataRepository(
         client: RtpiClient,
         stringProvider: StringProvider,
-        @Named("SHORT_TERM") memoryPolicy: MemoryPolicy
+        @Named("SHORT_TERM") memoryPolicy: Store3MemoryPolicy
     ): LiveDataRepository {
-        val store = StoreBuilder.key<String, List<DublinBikesLiveData>>()
-            .fetcher { dockId ->
-                client.dublinBikes()
-                    .getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey())
-                    .map { listOf(it) }
-            }
-            .memoryPolicy(memoryPolicy)
-            .open()
-        return ServiceLiveDataRepository(store)
+        val store4 = StoreBuilder.fromSingle { dockId: String ->
+            client.dublinBikes()
+                .getLiveData(dockId = dockId, apiKey = stringProvider.jcDecauxApiKey())
+                .map { listOf(it) }
+        }.cachePolicy(
+            MemoryPolicy
+                .builder()
+                .setExpireAfterWrite(memoryPolicy.expireAfterWrite)
+                .build()
+        ).build()
+        return ServiceLiveDataRepository(store4)
     }
 }
