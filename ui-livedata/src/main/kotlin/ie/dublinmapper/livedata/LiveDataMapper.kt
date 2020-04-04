@@ -11,7 +11,7 @@ object LiveDataMapper {
 
     fun map(response: LiveDataResponse) = Section(
         when (response) {
-            is LiveDataResponse.Loading -> TODO()
+            is LiveDataResponse.Loading -> emptyList()
             is LiveDataResponse.Skipped -> TODO()
             is LiveDataResponse.Grouped -> TODO()
             is LiveDataResponse.Error -> TODO()
