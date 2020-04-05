@@ -9,7 +9,7 @@
     <string name="pref_key_last_location_latitude">last_location_latitude</string>
     <string name="pref_key_last_location_longitude">last_location_longitude</string>
     <string name="pref_key_last_location_zoom">last_location_zoom</string>
-    <string name="live_data_due">Due</string>
+    <string name="live_data_due">Now</string>
     <string name="live_data_due_time">%d min</string>
     <string name="live_data_due_times">and in %s min</string>
     <string name="live_data_due_times_time">and then %s</string>

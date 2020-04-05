@@ -305,7 +305,7 @@ class GroupedLiveDataItem(
         viewHolder.groupedWaitTimeMinutes.text = if (liveData.size == 1) {
             val minutes = liveData.first().liveTime.waitTime.toMinutes()
             if (minutes <= 1L) {
-                "Due"
+                "Now"
             } else {
                 "$minutes min"
             }
@@ -313,7 +313,7 @@ class GroupedLiveDataItem(
             "${liveData.map {
                 val minutes = it.liveTime.waitTime.toMinutes()
                 if (minutes <= 1L) {
-                    "Due"
+                    "Now"
                 } else {
                     minutes
                 }

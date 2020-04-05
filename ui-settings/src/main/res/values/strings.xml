@@ -14,16 +14,6 @@
     <string name="preference_name_preferred_home_screen">Home Screen</string>
     <string name="preference_key_preferred_home_screen">preferred_home_screen</string>
 
-    <string name="preference_category_name_favourites">Favourites</string>
-
-    <string name="preference_name_favourites_sort_by_location">Sort by Location</string>
-    <string name="preference_summary_favourites_sort_by_location">Nearby places will be at the top</string>
-    <string name="preference_key_favourites_sort_by_location">favourites_sort_by_location</string>
-
-    <string name="preference_name_favourites_live_data_limit">Live Times</string>
-    <string name="preference_summary_favourites_live_data_limit">How many places will display live times</string>
-    <string name="preference_key_favourites_live_data_limit">favourites_live_data_limit</string>
-
     <string name="preference_category_services">Transport Services</string>
     <string name="preference_summary_services">Choose your favourites</string>
 
@@ -37,9 +27,20 @@
     <string name="preference_summary_enabled_service_irish_rail">DART, Commuter and InterCity</string>
     <string name="preference_key_enabled_service_luas">luas_enabled</string>
 
-    <string name="preference_category_live_times">Live Times</string>
-    <string name="preference_name_live_data_refresh_interval">Refresh Rate</string>
-    <string name="preference_summary_live_data_refresh_interval">How often to refresh live times (seconds)</string>
+    <string name="preference_category_name_favourites">Favourites</string>
+
+    <string name="preference_name_favourites_sort_by_location">Sort by Location</string>
+    <string name="preference_summary_favourites_sort_by_location">Nearby places will be at the top</string>
+    <string name="preference_key_favourites_sort_by_location">favourites_sort_by_location</string>
+
+    <string name="preference_name_favourites_live_data_limit">Real Time Information</string>
+    <string name="preference_summary_favourites_live_data_limit">How many places will display real time info</string>
+    <string name="preference_key_favourites_live_data_limit">favourites_live_data_limit</string>
+
+    <string name="preference_category_live_times">Real Time Information</string>
+
+    <string name="preference_name_live_data_refresh_interval">Refresh Rate (seconds)</string>
+    <string name="preference_summary_live_data_refresh_interval">How often to refresh real time info</string>
     <string name="preference_key_live_data_refresh_interval">live_data_refresh_interval</string>
 
     <string name="preference_category_about">About</string>
