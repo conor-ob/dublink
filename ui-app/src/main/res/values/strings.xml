@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Dublin Mapper</string>
-    <string name="action_search">Search</string>
+    <string name="feature_name_favourites">Favourites</string>
+    <string name="feature_name_search">Search</string>
+    <string name="feature_name_settings">Settings</string>
     <string name="search_query_hint">Search</string>
     <string name="search_query_detail">Search for stops, stations,\nstreets, addresses, places,\nservices, operators
     </string>

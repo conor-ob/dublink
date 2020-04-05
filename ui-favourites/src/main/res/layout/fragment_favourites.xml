@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/view_favourites_root"
+    android:id="@+id/favourites_layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/search_app_bar"
+        android:id="@+id/favourites_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -14,103 +15,28 @@
         android:backgroundTint="@color/colorSurface">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/favourites_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Favourites"
+            app:title="@string/favourites_toolbar_title"
             app:menu="@menu/menu_settings"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--    <com.google.android.material.appbar.AppBarLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content" -->
-    <!--            android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar"-->
-    <!--        app:liftOnScroll="true">-->
-
-    <!--        <androidx.appcompat.widget.Toolbar-->
-    <!--            android:id="@+id/toolbar"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="?attr/actionBarSize">-->
-
-    <!--            <TextView-->
-    <!--                android:id="@+id/title"-->
-    <!--                android:text="@string/title_favourites"-->
-    <!--                android:layout_width="match_parent"-->
-    <!--                android:layout_height="?actionBarSize"-->
-    <!--                android:gravity="center_vertical"-->
-    <!--                app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>-->
-
-
-    <!--        </androidx.appcompat.widget.Toolbar>-->
-
-    <!--        &lt;!&ndash;<TextView&ndash;&gt;-->
-    <!--        &lt;!&ndash;android:serviceId="@+serviceId/title"&ndash;&gt;-->
-    <!--        &lt;!&ndash;android:text="@string/title_favourites"&ndash;&gt;-->
-    <!--        &lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-    <!--        &lt;!&ndash;android:layout_height="?actionBarSize"&ndash;&gt;-->
-    <!--        &lt;!&ndash;android:gravity="center"&ndash;&gt;-->
-    <!--        &lt;!&ndash;android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle"&ndash;&gt;-->
-    <!--        &lt;!&ndash;app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"/>&ndash;&gt;-->
-
-    <!--    </com.google.android.material.appbar.AppBarLayout>-->
-
-    <!--<FrameLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_margin="16dp"-->
-    <!--android:text="@string/large_text"-->
-    <!--android:textColor="?attr/colorOnBackground" />-->
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/liveDataList"
+        android:id="@+id/favourites_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <!--</FrameLayout>-->
-
-    <!--<FrameLayout-->
-    <!--android:serviceId="@+serviceId/appbar"-->
-    <!--style="@style/Widget.AppBar"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@color/white_90">-->
-
-    <!--<TextView-->
-    <!--android:serviceId="@+serviceId/title"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_gravity="center"-->
-    <!--android:gravity="center"-->
-    <!--android:minHeight="?actionBarSize"-->
-    <!--android:text="@string/title_favourites"-->
-    <!--android:textAppearance="@style/TextAppearance.DublinMapper.ToolbarTitle" />-->
-
-    <!--</FrameLayout>-->
-
-    <!--<androidx.appcompat.widget.Toolbar-->
-    <!--app:title="Favourites"-->
-    <!--android:serviceId="@+serviceId/toolbar"-->
-    <!--style="@style/Toolbar">-->
-
-    <!--</androidx.appcompat.widget.Toolbar>-->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabNavigateFavouritesToSearch"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/favourites_fab_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/padding_l"
-        android:layout_marginBottom="@dimen/padding_l"
-        android:clickable="true"
-        android:focusable="true"
-        android:src="@drawable/ic_search"
-        android:layout_gravity="bottom|end"
-        app:elevation="4dp" />
+        android:text="@string/favourites_fab_search_label"
+        app:icon="@drawable/ic_search"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        style="@style/Widget.DublinMapper.ExtendedFloatingActionButton" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

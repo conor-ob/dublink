@@ -13,7 +13,6 @@ import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
-import timber.log.Timber
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
@@ -23,7 +22,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.setOnMenuItemClickListener { menuItem ->
+        favourites_toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_settings -> {
                     (activity as DublinMapperNavigator).navigateToSettings()
@@ -33,7 +32,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
             return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
         }
 
-        fabNavigateFavouritesToSearch.setOnClickListener {
+        favourites_fab_search.setOnClickListener {
             (activity as DublinMapperNavigator).navigateToSearch()
         }
 
@@ -47,9 +46,9 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
                 (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
-        view.liveDataList.adapter = adapter
-        view.liveDataList.setHasFixedSize(true)
-        view.liveDataList.layoutManager = LinearLayoutManager(requireContext())
+        view.favourites_list.adapter = adapter
+        view.favourites_list.setHasFixedSize(true)
+        view.favourites_list.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
