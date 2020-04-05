@@ -1,10 +1,16 @@
 package ie.dublinmapper.search
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
@@ -16,8 +22,8 @@ import ie.dublinmapper.util.showKeyboard
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_search.*
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
@@ -30,9 +36,18 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
-        search_searchview.setOnFocusChangeListener { query, hasFocus ->
+        search_toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_settings -> {
+                    (activity as DublinMapperNavigator).navigateToSettings()
+                    return@setOnMenuItemClickListener true
+                }
+            }
+            return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
+        }
+
+        search_input.setOnFocusChangeListener { query, hasFocus ->
             if (hasFocus) {
                 showKeyboard(query)
             } else {
@@ -41,9 +56,9 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         }
 
         adapter = GroupAdapter()
-        search_recyclerview.adapter = adapter
-        search_recyclerview.setHasFixedSize(true)
-        search_recyclerview.layoutManager = LinearLayoutManager(requireContext())
+        search_list.adapter = adapter
+        search_list.setHasFixedSize(true)
+        search_list.layoutManager = LinearLayoutManager(requireContext())
         adapter?.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()
             if (serviceLocation != null) {
@@ -51,44 +66,60 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
             }
         }
 
-        subscriptions.add(
-            Observable.create<String> { subscriber ->
-                search_searchview.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        search_input.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener {
 
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        subscriber.onNext(query.toString())
-                        return true
-                    }
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    viewModel.dispatch(Action.Search(query.toString()))
+                    return true
+                }
 
-                    override fun onQueryTextChange(newText: String?): Boolean {
-//                        clear_search.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
-                        subscriber.onNext(newText.toString())
-                        return true
-                    }
-                })
-//                search_query.addTextChangedListener(object : TextWatcher {
+                override fun onQueryTextChange(newText: String?): Boolean {
+    //                        clear_search.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
+                    viewModel.dispatch(Action.Search(newText.toString()))
+                    return true
+                }
+            }
+        )
+
+//        subscriptions.add(
+//            Observable.create<String> { subscriber ->
+//                search_input.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 //
-//                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                        clear_search.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
-//                        subscriber.onNext(s.toString())
+//                    override fun onQueryTextSubmit(query: String?): Boolean {
+//                        subscriber.onNext(query.toString())
+//                        return true
 //                    }
 //
-//                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-//
-//                    override fun afterTextChanged(s: Editable?) {}
-//
+//                    override fun onQueryTextChange(newText: String?): Boolean {
+////                        clear_search.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
+//                        subscriber.onNext(newText.toString())
+//                        return true
+//                    }
 //                })
-            }
-                .debounce(400L, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .filter { it.length > 1 }
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext {
-//                    viewModel.dispatch(Action.Loading)
-                    viewModel.dispatch(Action.Search(it))
-                }
-                .subscribe()
-        )
+////                search_query.addTextChangedListener(object : TextWatcher {
+////
+////                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+////                        clear_search.visibility = if (TextUtils.isEmpty(s)) View.GONE else View.VISIBLE
+////                        subscriber.onNext(s.toString())
+////                    }
+////
+////                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+////
+////                    override fun afterTextChanged(s: Editable?) {}
+////
+////                })
+//            }
+//                .debounce(400L, TimeUnit.MILLISECONDS)
+//                .distinctUntilChanged()
+////                .filter { it.length > 1 }
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .doOnNext {
+////                    viewModel.dispatch(Action.Loading)
+//                    viewModel.dispatch(Action.Search(it))
+//                }
+//                .subscribe()
+//        )
 
 //        search_query.setOnEditorActionListener { _, actionId, _ ->
 //            when (actionId) {
@@ -108,8 +139,26 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         )
     }
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    override fun onResume() {
+        super.onResume()
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            viewModel.dispatch(Action.GetNearbyLocations)
+        }
+        viewModel.dispatch(Action.GetRecentSearches)
+
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+//        fusedLocationClient.lastLocation
+//            .addOnSuccessListener { location : Location? ->
+////                Timber.d("Location=$location")
+//            }
+    }
+
     private fun renderState(state: State) {
-        search_progress.visibility = if (state.isLoading) View.VISIBLE else View.GONE
         if (state.searchResults != null) {
             adapter?.update(listOf(state.searchResults))
         }

@@ -2,6 +2,7 @@ package ie.dublinmapper.domain.usecase
 
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.rtpi.api.ServiceLocation
@@ -10,12 +11,17 @@ import javax.inject.Named
 
 class SearchUseCase @Inject constructor(
     @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
+    private val nearbyUseCase: NearbyUseCase,
+    private val permissionChecker: PermissionChecker,
     private val scheduler: RxScheduler
 ) {
 
     private val cache = mutableMapOf<String, SearchResponse>()
 
     fun search(query: String): Observable<SearchResponse> {
+        if (query.isBlank()) {
+            return Observable.just(SearchResponse(emptyList()))
+        }
         val cached = cache[query]
         if (cached != null) {
             return Observable.just(cached)
@@ -40,6 +46,14 @@ class SearchUseCase @Inject constructor(
             }
         }
         return searchResults
+    }
+
+    fun getNearbyServiceLocations(): Observable<NearbyResponse> {
+        return if (permissionChecker.isLocationPermissionGranted()) {
+            nearbyUseCase.getNearbyServiceLocations()
+        } else {
+            Observable.just(NearbyResponse(sortedMapOf()))
+        }
     }
 }
 

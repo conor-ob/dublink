@@ -58,6 +58,10 @@ object Libraries {
         const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0" // https://mvnrepository.com/artifact/androidx.swiperefreshlayout/swiperefreshlayout
     }
 
+    object PlayServices {
+        const val location = "com.google.android.gms:play-services-location:17.0.0"
+    }
+
     object Dagger {
         const val dagger = "com.google.dagger:dagger:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger
         const val daggerAndroid = "com.google.dagger:dagger-android:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger-android

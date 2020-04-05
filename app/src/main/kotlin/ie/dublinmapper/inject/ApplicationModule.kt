@@ -142,7 +142,6 @@ class ApplicationModule {
         val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
         mapperFactory.converterFactory.apply {
             registerConverter(FavouritesResponseMapper(stringProvider))
-            registerConverter(NearbyResponseMapper(stringProvider))
             registerConverter(SearchResponseMapper)
         }
         return mapperFactory.mapperFacade

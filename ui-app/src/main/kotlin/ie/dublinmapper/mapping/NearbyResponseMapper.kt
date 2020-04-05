@@ -2,6 +2,7 @@ package ie.dublinmapper.mapping
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
+import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.domain.usecase.NearbyResponse
 import ie.dublinmapper.domain.service.StringProvider
 import ie.dublinmapper.model.ServiceLocationItem
@@ -11,38 +12,32 @@ import ma.glasnost.orika.CustomConverter
 import ma.glasnost.orika.MappingContext
 import ma.glasnost.orika.metadata.Type
 
-class NearbyResponseMapper(
-    private val stringProvider: StringProvider
-) : CustomConverter<NearbyResponse, Group>() {
+object NearbyResponseMapper {
 
-    override fun convert(
-        source: NearbyResponse,
-        destinationType: Type<out Group>,
-        mappingContext: MappingContext
-    ) = Section(
-        source.serviceLocations.entries.flatMap {
-            val walkDistance = it.key
-            when (val serviceLocation = it.value) {
-                is ServiceLocationRoutes -> listOf(
-                    ServiceLocationItem(
-                        serviceLocation = serviceLocation,
-                        icon = mapIcon(serviceLocation.service),
-                        routes = serviceLocation.routes,
-                        walkDistance = walkDistance
-                    )
+    fun mapNearbyResponse(
+        source: NearbyResponse
+    ): List<Item> = source.serviceLocations.entries.flatMap {
+        val walkDistance = it.key
+        when (val serviceLocation = it.value) {
+            is ServiceLocationRoutes -> listOf(
+                ServiceLocationItem(
+                    serviceLocation = serviceLocation,
+                    icon = mapIcon(serviceLocation.service),
+                    routes = serviceLocation.routes,
+                    walkDistance = walkDistance
                 )
-                is DublinBikesDock -> listOf(
-                    ServiceLocationItem(
-                        serviceLocation = serviceLocation,
-                        icon = mapIcon(serviceLocation.service),
-                        routes = emptyList(),
-                        walkDistance = walkDistance
-                    )
+            )
+            is DublinBikesDock -> listOf(
+                ServiceLocationItem(
+                    serviceLocation = serviceLocation,
+                    icon = mapIcon(serviceLocation.service),
+                    routes = emptyList(),
+                    walkDistance = walkDistance
                 )
-                else -> emptyList()
-            }
+            )
+            else -> emptyList()
         }
-    )
+    }
 
     private fun mapIcon(service: Service): Int = when (service) {
         Service.AIRCOACH,

@@ -19,7 +19,7 @@ class NearbyUseCase @Inject constructor(
     private val locationProvider: LocationProvider
 ) {
 
-    fun getNearbyServiceLocation(): Observable<NearbyResponse> {
+    fun getNearbyServiceLocations(): Observable<NearbyResponse> {
         return Observable.concat(
             locationProvider.getLastKnownLocation(),
             locationProvider.getLocationUpdates()
