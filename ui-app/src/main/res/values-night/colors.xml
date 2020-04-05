@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Google Drive settings screen -->
+    <!-- Google apps settings screens -->
     <color name="colorPrimary">#91B4F2</color>
     <color name="colorSecondary">@color/colorPrimary</color>
     <color name="colorOnSecondary">#202125</color>
