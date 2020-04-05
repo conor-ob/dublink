@@ -18,16 +18,25 @@ class NetworkStatusChangeListener @Inject constructor(
     private val eventEmitter = PublishSubject.create<InternetStatus>()
     private val connectivityManager = context.getConnectivityManager()?.apply {
 
-        registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+        registerDefaultNetworkCallback(
+            object : ConnectivityManager.NetworkCallback() {
+
+                var isOnline = isConnected()
 
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)
-                    eventEmitter.onNext(InternetStatus.ONLINE)
+                    if (!isOnline) {
+                        isOnline = true
+                        eventEmitter.onNext(InternetStatus.ONLINE)
+                    }
                 }
 
                 override fun onLost(network: Network) {
                     super.onLost(network)
-                    eventEmitter.onNext(InternetStatus.OFFLINE)
+                    if (isOnline) {
+                        isOnline = false
+                        eventEmitter.onNext(InternetStatus.OFFLINE)
+                    }
                 }
             }
         )

@@ -2,6 +2,7 @@ package ie.dublinmapper.livedata
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,18 +10,18 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.DublinMapperNavigator
-import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.model.getName
+import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.ServiceLocationRoutes
 import kotlinx.android.synthetic.main.fragment_livedata.*
-import kotlinx.android.synthetic.main.fragment_livedata.routes
 import timber.log.Timber
+
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -136,6 +137,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             && state.serviceLocation is ServiceLocationRoutes
             && state.serviceLocation.routes.size != routes.childCount
         ) {
+            val dip = 4f
+            val px = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dip,
+                resources.displayMetrics
+            )
             routes.removeAllViewsInLayout()
             for (route in state.serviceLocation.routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
@@ -146,6 +153,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 chip.setTextAppearanceResource(R.style.SmallerText)
                 chip.setTextColor(ColorStateList.valueOf(resources.getColor(textColour)))
                 chip.setChipBackgroundColorResource(backgroundColour)
+                chip.elevation = px
 //            chip.chipMinHeight = 0f
                 routes.addView(chip)
             }
