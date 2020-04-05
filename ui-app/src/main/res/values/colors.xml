@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Google Drive settings screen -->
+    <color name="colorPrimary">#3375E2</color>
+    <color name="colorSecondary">@color/colorPrimary</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+
+    <!-- Material dark theme documentation https://material.io/design/color/dark-theme.html#ui-application -->
+    <color name="colorError">#B00020</color>
+    <color name="colorOnError">#FFFFFF</color>
+
     <color name="primary">#448aff</color>
     <color name="primary_dark">#005ecb</color>
     <!--<color name="primary">#1976d2</color>-->
@@ -102,18 +111,15 @@
 
 
 
-    <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryVariant">#3700B3</color>
-    <color name="colorSecondary">#F9AA33</color>
     <color name="colorSecondaryVariant">#C78522</color>
     <color name="colorBackground">@color/grey_50</color>
     <color name="colorSurface">#FFFFFF</color>
-    <color name="colorError">#B00020</color>
+
     <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorOnSecondary">#000000</color>
     <color name="colorOnBackground">#000000</color>
     <color name="colorOnSurface">#000000</color>
-    <color name="colorOnError">#FFFFFF</color>
+
     <color name="scrimBackground">@color/luasGreen</color>
 
     <color name="colorStatusBar">#FFFFFF</color>
