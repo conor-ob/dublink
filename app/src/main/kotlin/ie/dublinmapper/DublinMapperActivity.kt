@@ -27,20 +27,20 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
-        navigation.setupWithNavController(navigationController)
-        navigation.setOnNavigationItemSelectedListener { item ->
-            onNavDestinationSelected(item, navigationController)
-        }
-        navigationController.addOnDestinationChangedListener { _, destination, _ ->
-            snackBar?.dismiss()
-            when (destination.id) {
-                R.id.newsFragment,
-                R.id.nearbyFragment,
-                R.id.favouritesFragment,
-                R.id.searchFragment -> navigation.visibility = View.VISIBLE
-                else -> navigation.visibility = View.GONE
-            }
-        }
+//        navigation.setupWithNavController(navigationController)
+//        navigation.setOnNavigationItemSelectedListener { item ->
+//            onNavDestinationSelected(item, navigationController)
+//        }
+//        navigationController.addOnDestinationChangedListener { _, destination, _ ->
+//            snackBar?.dismiss()
+//            when (destination.id) {
+//                R.id.newsFragment,
+//                R.id.nearbyFragment,
+//                R.id.favouritesFragment,
+//                R.id.searchFragment -> navigation.visibility = View.VISIBLE
+//                else -> navigation.visibility = View.GONE
+//            }
+//        }
         viewModel.observableState.observe(
             this, Observer { state ->
                 state?.let { renderState(state) }
@@ -56,6 +56,19 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
     override fun navigateToSettings() {
         navigationController.navigate(
             R.id.settingsFragment,
+            Bundle.EMPTY,
+            NavOptions.Builder()
+                .setEnterAnim(R.anim.nav_default_enter_anim)
+                .setExitAnim(R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                .build()
+        )
+    }
+
+    override fun navigateToSearch() {
+        navigationController.navigate(
+            R.id.searchFragment,
             Bundle.EMPTY,
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)
@@ -83,9 +96,9 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
         when (state.internetStatusChange) {
             InternetStatus.ONLINE -> {
                 snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
-                if (navigation.visibility == View.VISIBLE) {
-                    snackBar?.anchorView = navigation
-                }
+//                if (navigation.visibility == View.VISIBLE) {
+//                    snackBar?.anchorView = navigation
+//                }
                 snackBar?.setActionTextColor(getColor(R.color.colorOnError))
                 snackBar?.setTextColor(getColor(R.color.colorOnError))
                 snackBar?.setBackgroundTint(getColor(R.color.colorSuccess))
@@ -96,9 +109,9 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
                 snackBar?.setAction("Dismiss") {
                     snackBar?.dismiss()
                 }
-                if (navigation.visibility == View.VISIBLE) {
-                    snackBar?.anchorView = navigation
-                }
+//                if (navigation.visibility == View.VISIBLE) {
+//                    snackBar?.anchorView = navigation
+//                }
                 snackBar?.setActionTextColor(getColor(R.color.colorOnError))
                 snackBar?.setTextColor(getColor(R.color.colorOnError))
                 snackBar?.setBackgroundTint(getColor(R.color.colorError))

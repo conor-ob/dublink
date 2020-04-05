@@ -22,7 +22,7 @@
 
     <item
             android:id="@+id/action_settings"
-            android:title="@string/action_settings"
+            android:title="@string/feature_name_settings"
             app:showAsAction="never"/>
 
 </menu>

@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Favourites</string>
+    <string name="favourites_fab_search_label">@string/feature_name_search</string>
+    <string name="favourites_toolbar_title">@string/feature_name_favourites</string>
 </resources>

@@ -1,6 +1,7 @@
 package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
+import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.Item
@@ -62,6 +63,12 @@ class ServiceLocationItem(
                 viewHolder.routes.visibility = View.GONE
                 viewHolder.routesDivider.visibility = View.GONE
             } else {
+                val dip = 4f
+                val px = TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    dip,
+                    viewHolder.itemView.resources.displayMetrics
+                )
                 viewHolder.routes.removeAllViewsInLayout()
                 for (route in routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
@@ -72,6 +79,7 @@ class ServiceLocationItem(
                     chip.setTextAppearanceResource(R.style.SmallerText)
                     chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
                     chip.setChipBackgroundColorResource(backgroundColour)
+                    chip.elevation = px
 //            chip.chipMinHeight = 0f
                     viewHolder.routes.addView(chip)
                 }

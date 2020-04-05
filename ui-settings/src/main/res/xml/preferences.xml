@@ -9,6 +9,7 @@
             android:entryValues="@array/theme_values"
             android:key="@string/preference_key_preferred_theme"
             android:title="@string/preference_name_preferred_theme"
+            android:icon="@drawable/ic_paint"
             app:useSimpleSummaryProvider="true" />
 
 <!--        <ListPreference-->
@@ -25,33 +26,39 @@
         android:summary="Choose your favourites">
 
         <SwitchPreference
+            android:icon="@drawable/ic_bus"
             android:defaultValue="@bool/preference_default_enabled_service_dublin_bus"
             android:key="@string/preference_key_enabled_service_dublin_bus"
             android:summary="Dublin Bus and Go Ahead"
             android:title="@string/service_name_dublin_bus" />
 
         <SwitchPreference
+            android:icon="@drawable/ic_train"
             android:defaultValue="@bool/preference_default_enabled_service_irish_rail"
             android:key="@string/preference_key_enabled_service_irish_rail"
             android:summary="@string/preference_summary_enabled_service_irish_rail"
             android:title="@string/service_name_irish_rail" />
 
         <SwitchPreference
+            android:icon="@drawable/ic_tram"
             android:defaultValue="@bool/preference_default_enabled_service_luas"
             android:key="@string/preference_key_enabled_service_luas"
             android:title="@string/service_name_luas" />
 
         <SwitchPreference
+            android:icon="@drawable/ic_bike"
             android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes"
             android:key="@string/preference_key_enabled_service_dublin_bikes"
             android:title="@string/service_name_dublin_bikes" />
 
         <SwitchPreference
+            android:icon="@drawable/ic_bus"
             android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
             android:key="@string/preference_key_enabled_service_bus_eireann"
             android:title="@string/service_name_bus_eireann" />
 
         <SwitchPreference
+            android:icon="@drawable/ic_bus"
             android:defaultValue="@bool/preference_default_enabled_service_aircoach"
             android:key="@string/preference_key_enabled_service_aircoach"
             android:summary="@string/preference_summary_enabled_service_aircoach"
@@ -69,6 +76,7 @@
 <!--            android:defaultValue="@bool/preference_default_favourites_sort_location" />-->
 
         <SeekBarPreference
+            android:icon="@drawable/ic_clock"
             android:title="@string/preference_name_favourites_live_data_limit"
             android:key="@string/preference_key_favourites_live_data_limit"
             android:summary="@string/preference_summary_favourites_live_data_limit"
@@ -82,6 +90,7 @@
         android:title="@string/preference_category_live_times">
 
         <SeekBarPreference
+            android:icon="@drawable/ic_refresh"
             android:title="@string/preference_name_live_data_refresh_interval"
             android:key="@string/preference_key_live_data_refresh_interval"
             android:summary="@string/preference_summary_live_data_refresh_interval"
@@ -97,6 +106,7 @@
         android:title="@string/preference_category_about">
 
         <Preference
+            android:icon="@drawable/ic_info"
             android:key="@string/preference_key_app_version"
             android:title="@string/preference_name_app_version" />
 
