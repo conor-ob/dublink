@@ -21,12 +21,13 @@ class NearbyUseCase @Inject constructor(
 ) {
 
     fun getNearbyServiceLocations(): Observable<NearbyResponse> {
-        return Observable.concat(
-            locationProvider.getLastKnownLocation(),
-            locationProvider.getLocationUpdates()
-        )
-            .throttleFirst(30, TimeUnit.SECONDS)
-            .flatMap { filterNearby(it) }
+//        return Observable.concat(
+//            locationProvider.getLastKnownLocation(),
+//            locationProvider.getLocationUpdates()
+//        )
+//            .throttleFirst(30, TimeUnit.SECONDS)
+//            .flatMap { filterNearby(it) }
+        TODO()
     }
 
     private fun filterNearby(coordinate: Coordinate): Observable<NearbyResponse> {

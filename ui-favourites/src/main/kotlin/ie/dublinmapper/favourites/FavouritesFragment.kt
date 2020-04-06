@@ -63,7 +63,13 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     override fun onResume() {
         super.onResume()
+        viewModel.bindActions()
         viewModel.dispatch(Action.GetFavouritesWithLiveData)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.unbindActions()
     }
 
     private fun renderState(state: State) {

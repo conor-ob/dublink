@@ -41,11 +41,11 @@ class GpsLocationProvider @Inject constructor(context: Context) : LocationProvid
     private fun newRequest(): LocationRequest {
         return LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(500L)
+            .setInterval(5000L)
     }
 
     private fun isBetterLocation(location: Location): Boolean {
-        Timber.d("Locationpoopisbetter=$location")
+        Timber.d(location.toString())
         if (lastKnownLocation == null) {
             // A new location is always better than no location
             return true

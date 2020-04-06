@@ -2,7 +2,6 @@ package ie.dublinmapper.search
 
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
-import com.xwray.groupie.Group
 
 sealed class Action : BaseAction {
     data class Search(val query: String) : Action()
@@ -11,15 +10,13 @@ sealed class Action : BaseAction {
 }
 
 sealed class Change {
-    object Loading : Change()
-    data class NearbyLocations(val nearbyLocations: Group) : Change()
-    data class SearchResults(val searchResults: Group) : Change()
-    data class SearchResultsError(val throwable: Throwable?) : Change()
+    data class NearbyLocations(val nearbyLocations: NearbyLocationsResponse) : Change()
+    data class SearchResults(val searchResults: SearchResultsResponse) : Change()
+    data class RecentSearches(val recentSearches: RecentSearchesResponse) : Change()
 }
 
 data class State(
-    val isLoading: Boolean,
-    val nearbyLocations: Group? = null,
-    val searchResults: Group? = null,
-    val isError: Boolean = false
+    val nearbyLocations: NearbyLocationsResponse? = null,
+    val searchResults: SearchResultsResponse? = null,
+    val recentSearches: RecentSearchesResponse? = null
 ) : BaseState

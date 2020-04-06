@@ -37,7 +37,7 @@ class FavouritesViewModel @Inject constructor(
         bindActions()
     }
 
-    private fun bindActions() {
+    fun bindActions() {
         val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
             .switchMap { _ ->
                 useCase.getFavouritesWithLiveData()
@@ -68,5 +68,9 @@ class FavouritesViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+    }
+
+    fun unbindActions() {
+        disposables.clear()
     }
 }

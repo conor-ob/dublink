@@ -19,13 +19,18 @@
             android:id="@+id/search_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|snap|enterAlways"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="?attr/homeAsUpIndicator"
             app:menu="@menu/menu_settings">
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:iconifiedByDefault="true"/>
+                android:iconifiedByDefault="false"/>
 
         </androidx.appcompat.widget.Toolbar>
 
