@@ -14,6 +14,7 @@ import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.isFavourite
+import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
@@ -134,8 +135,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 //        }
 
         if (state.serviceLocationResponse != null
-            && state.serviceLocationResponse is ServiceLocationRoutes
-            && state.serviceLocationResponse.routes.size != routes.childCount
+            && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
+            && state.serviceLocationResponse.serviceLocation is ServiceLocationRoutes
+            && state.serviceLocationResponse.serviceLocation.routes.size != routes.childCount
         ) {
             val dip = 4f
             val px = TypedValue.applyDimension(
@@ -144,7 +146,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 resources.displayMetrics
             )
             routes.removeAllViewsInLayout()
-            for (route in state.serviceLocationResponse.routes) {
+            for (route in state.serviceLocationResponse.serviceLocation.routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                 val chip = Chip(requireContext())
                 chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
@@ -161,7 +163,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         }
 
         if (state.liveDataResponse != null) {
-//            adapter?.update(listOf(state.liveDataResponse))
+            adapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse)))
         }
     }
 
