@@ -1,9 +1,7 @@
 package ie.dublinmapper.favourites
 
-import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.internet.NetworkUnavailableException
-import ie.dublinmapper.domain.repository.LiveDataResponse
 import ie.dublinmapper.model.*
 import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.Service
@@ -17,38 +15,18 @@ import java.net.UnknownHostException
 object FavouritesMapper {
 
     fun map(
-        favourites: FavouritesPresentationResponse?,
-        liveData: List<LiveDataPresentationResponse>?
-    ): Group {
-        return if (favourites == null && liveData == null) {
-            Section()
-        } else if (favourites == null && liveData != null) {
-            Section() // TODO shouldn't happen
-        } else if (favourites != null && liveData == null) {
+        liveData: List<LiveDataPresentationResponse>
+    ) = Section(
+        liveData.mapIndexed { index: Int, response: LiveDataPresentationResponse ->
             Section(
-                favourites.favourites.mapIndexed { index: Int, serviceLocation: ServiceLocation ->
-                    Section(
-                        listOfNotNull(
-                            mapServiceLocation(serviceLocation),
-                            mapDivider(favourites.favourites.size, index)
-                        )
-                    )
-                }
-            )
-        } else {
-            Section(
-                favourites!!.favourites.mapIndexed { index: Int, serviceLocation: ServiceLocation ->
-                    Section(
-                        listOfNotNull(
-                            mapServiceLocation(serviceLocation),
-                            mapLiveData(liveData!![0], index),
-                            mapDivider(favourites!!.favourites.size, index)
-                        )
-                    )
-                }
+                listOfNotNull(
+                    mapServiceLocation(response.serviceLocation),
+                    mapLiveData(response, index),
+                    mapDivider(liveData.size, index)
+                )
             )
         }
-    }
+    )
 
     private fun mapLiveData(
         liveDataResponse: LiveDataPresentationResponse,

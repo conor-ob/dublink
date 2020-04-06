@@ -63,15 +63,15 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.dispatch(Action.GetFavourites)
-        viewModel.dispatch(Action.GetLiveData)
+        viewModel.dispatch(Action.GetFavouritesWithLiveData)
     }
 
     private fun renderState(state: State) {
-        adapter?.update(listOf(FavouritesMapper.map(state.favourites, state.liveData)))
+        if (state.favouritesWithLiveData != null) {
+            adapter?.update(listOf(FavouritesMapper.map(state.favouritesWithLiveData)))
+        }
         if (state.internetStatusChange == InternetStatus.ONLINE) {
-            viewModel.dispatch(Action.GetFavourites)
-            viewModel.dispatch(Action.GetLiveData)
+            viewModel.dispatch(Action.GetFavouritesWithLiveData)
         }
     }
 
