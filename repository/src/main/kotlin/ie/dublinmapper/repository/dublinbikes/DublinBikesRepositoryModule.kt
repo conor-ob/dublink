@@ -10,11 +10,11 @@ import dagger.Provides
 import ie.dublinmapper.domain.datamodel.DublinBikesDockLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.LiveDataRepository
-import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.InternetManager
 import ie.dublinmapper.domain.service.StringProvider
-import ie.dublinmapper.repository.ServiceLiveDataRepository
-import ie.dublinmapper.repository.ServiceLocationRepository
+import ie.dublinmapper.repository.DefaultLiveDataRepository
+import ie.dublinmapper.repository.DefaultServiceLocationRepository
 import io.rtpi.api.DublinBikesDock
 import io.rtpi.api.DublinBikesLiveData
 import io.rtpi.api.Service
@@ -35,7 +35,7 @@ class DublinBikesRepositoryModule {
         internetManager: InternetManager,
         stringProvider: StringProvider,
         @Named("MEDIUM_TERM") memoryPolicy: MemoryPolicy
-    ): LocationRepository {
+    ): ServiceLocationRepository {
         val fetcher = Fetcher<List<DublinBikesDock>, Service> { client.dublinBikes().getDocks(stringProvider.jcDecauxApiKey()) }
         val persister =
             DublinBikesDockPersister(
@@ -45,7 +45,7 @@ class DublinBikesRepositoryModule {
                 internetManager
             )
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return ServiceLocationRepository(Service.DUBLIN_BIKES, store)
+        return DefaultServiceLocationRepository(Service.DUBLIN_BIKES, store)
 //        val store = StoreBuilder.parsedWithKey<String, List<StationJson>, List<DublinBikesDock>>()
 //            .fetcher(fetcher)
 //            .parser { docks -> DublinBikesDockMapper.map(docks) }
@@ -69,6 +69,6 @@ class DublinBikesRepositoryModule {
             }
             .memoryPolicy(memoryPolicy)
             .open()
-        return ServiceLiveDataRepository(store)
+        return DefaultLiveDataRepository(store)
     }
 }

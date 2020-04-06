@@ -10,10 +10,10 @@ import dagger.Provides
 import ie.dublinmapper.domain.datamodel.AircoachStopLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.LiveDataRepository
-import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.InternetManager
-import ie.dublinmapper.repository.ServiceLiveDataRepository
-import ie.dublinmapper.repository.ServiceLocationRepository
+import ie.dublinmapper.repository.DefaultLiveDataRepository
+import ie.dublinmapper.repository.DefaultServiceLocationRepository
 import io.rtpi.api.AircoachLiveData
 import io.rtpi.api.AircoachStop
 import io.rtpi.api.Service
@@ -33,7 +33,7 @@ class AircoachRepositoryModule {
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): LocationRepository {
+    ): ServiceLocationRepository {
         val fetcher = Fetcher<List<AircoachStop>, Service> { client.aircoach().getStops() }
         val persister =
             AircoachStopPersister(
@@ -43,7 +43,7 @@ class AircoachRepositoryModule {
                 internetManager
             )
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return ServiceLocationRepository(Service.AIRCOACH, store)
+        return DefaultServiceLocationRepository(Service.AIRCOACH, store)
     }
 
     @Provides
@@ -57,6 +57,6 @@ class AircoachRepositoryModule {
             .fetcher { stopId -> client.aircoach().getLiveData(stopId = stopId) }
             .memoryPolicy(memoryPolicy)
             .open()
-        return ServiceLiveDataRepository(store)
+        return DefaultLiveDataRepository(store)
     }
 }

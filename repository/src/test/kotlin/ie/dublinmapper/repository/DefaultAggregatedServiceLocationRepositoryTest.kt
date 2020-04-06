@@ -6,11 +6,11 @@ import io.reactivex.Observable
 import io.rtpi.api.*
 import org.junit.Test
 
-class AggregatedLocationRepositoryTest {
+class DefaultAggregatedServiceLocationRepositoryTest {
 
-    private val aggregatedServiceLocationRepository = AggregatedLocationRepository(
+    private val aggregatedServiceLocationRepository = DefaultAggregatedServiceLocationRepository(
         locationRepositories = mapOf(
-            Service.IRISH_RAIL to ServiceLocationRepository(
+            Service.IRISH_RAIL to DefaultServiceLocationRepository(
                 Service.IRISH_RAIL,
                 object : StoreRoom<List<ServiceLocation>, Service>() {
                     override fun clear() { }
@@ -38,7 +38,7 @@ class AggregatedLocationRepositoryTest {
                     }
                 }
             ),
-            Service.DUBLIN_BUS to ServiceLocationRepository(
+            Service.DUBLIN_BUS to DefaultServiceLocationRepository(
                 Service.DUBLIN_BUS,
                 object : StoreRoom<List<ServiceLocation>, Service>() {
                     override fun clear() { }

@@ -1,7 +1,8 @@
-package ie.dublinmapper.domain.usecase
+package ie.dublinmapper.search
 
 import ie.dublinmapper.domain.model.getName
-import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
@@ -10,8 +11,8 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class SearchUseCase @Inject constructor(
-    @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
-    private val nearbyUseCase: NearbyUseCase,
+    private val serviceLocationRepository: AggregatedServiceLocationRepository,
+//    private val nearbyUseCase: NearbyUseCase,
     private val permissionChecker: PermissionChecker,
     private val scheduler: RxScheduler
 ) {
@@ -20,13 +21,22 @@ class SearchUseCase @Inject constructor(
 
     fun search(query: String): Observable<SearchResponse> {
         if (query.isBlank()) {
-            return Observable.just(SearchResponse(emptyList()))
+            return Observable.just(
+                SearchResponse(
+                    emptyList()
+                )
+            )
         }
         val cached = cache[query]
         if (cached != null) {
             return Observable.just(cached)
         }
-        return locationRepository.get().map { SearchResponse(search(query, it).take(50)) }
+//        return serviceLocationRepository.get().map {
+//            SearchResponse(
+//                search(query, it).take(50)
+//            )
+//        }
+        TODO()
     }
 
     private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
@@ -48,13 +58,13 @@ class SearchUseCase @Inject constructor(
         return searchResults
     }
 
-    fun getNearbyServiceLocations(): Observable<NearbyResponse> {
-        return if (permissionChecker.isLocationPermissionGranted()) {
-            nearbyUseCase.getNearbyServiceLocations()
-        } else {
-            Observable.just(NearbyResponse(sortedMapOf()))
-        }
-    }
+//    fun getNearbyServiceLocations(): Observable<NearbyResponse> {
+//        return if (permissionChecker.isLocationPermissionGranted()) {
+//            nearbyUseCase.getNearbyServiceLocations()
+//        } else {
+//            Observable.just(NearbyResponse(sortedMapOf()))
+//        }
+//    }
 }
 
 data class SearchResponse(

@@ -10,10 +10,10 @@ import dagger.Provides
 import ie.dublinmapper.domain.datamodel.DublinBusStopLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.LiveDataRepository
-import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.InternetManager
-import ie.dublinmapper.repository.ServiceLiveDataRepository
-import ie.dublinmapper.repository.ServiceLocationRepository
+import ie.dublinmapper.repository.DefaultLiveDataRepository
+import ie.dublinmapper.repository.DefaultServiceLocationRepository
 import io.rtpi.api.DublinBusLiveData
 import io.rtpi.api.DublinBusStop
 import io.rtpi.api.Service
@@ -33,7 +33,7 @@ class DublinBusRepositoryModule {
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): LocationRepository {
+    ): ServiceLocationRepository {
         val fetcher = Fetcher<List<DublinBusStop>, Service> { client.dublinBus().getStops() }
         val persister =
             DublinBusStopPersister(
@@ -43,7 +43,7 @@ class DublinBusRepositoryModule {
                 internetManager
             )
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return ServiceLocationRepository(Service.DUBLIN_BUS, store)
+        return DefaultServiceLocationRepository(Service.DUBLIN_BUS, store)
     }
 
     @Provides
@@ -57,7 +57,7 @@ class DublinBusRepositoryModule {
             .fetcher { stopId -> client.dublinBus().getLiveData(stopId = stopId) }
             .memoryPolicy(memoryPolicy)
             .open()
-        return ServiceLiveDataRepository(store)
+        return DefaultLiveDataRepository(store)
     }
 
 }

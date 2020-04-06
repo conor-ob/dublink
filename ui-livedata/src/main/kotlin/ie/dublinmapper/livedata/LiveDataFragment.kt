@@ -122,20 +122,20 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderState(state: State) {
-        loader.isRefreshing = state.isLoading
-        if (state.isFavourite) {
-            args = args.copy(serviceLocationIsFavourite = true)
-            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
-        } else {
-            args = args.copy(serviceLocationIsFavourite = false)
-            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
-        }
+//        loader.isRefreshing = state.isLoading
+//        if (state.isFavourite) {
+//            args = args.copy(serviceLocationIsFavourite = true)
+//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
+//        } else {
+//            args = args.copy(serviceLocationIsFavourite = false)
+//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
+//        }
 
-        if (state.serviceLocation != null
-            && state.serviceLocation is ServiceLocationRoutes
-            && state.serviceLocation.routes.size != routes.childCount
+        if (state.serviceLocationResponse != null
+            && state.serviceLocationResponse is ServiceLocationRoutes
+            && state.serviceLocationResponse.routes.size != routes.childCount
         ) {
             val dip = 4f
             val px = TypedValue.applyDimension(
@@ -144,7 +144,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 resources.displayMetrics
             )
             routes.removeAllViewsInLayout()
-            for (route in state.serviceLocation.routes) {
+            for (route in state.serviceLocationResponse.routes) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                 val chip = Chip(requireContext())
                 chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
@@ -160,8 +160,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             routes.visibility = View.VISIBLE
         }
 
-        if (state.liveData != null) {
-            adapter?.update(listOf(state.liveData))
+        if (state.liveDataResponse != null) {
+//            adapter?.update(listOf(state.liveDataResponse))
         }
     }
 

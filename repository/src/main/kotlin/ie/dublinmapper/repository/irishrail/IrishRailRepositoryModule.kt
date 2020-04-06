@@ -10,10 +10,10 @@ import dagger.Provides
 import ie.dublinmapper.domain.datamodel.IrishRailStationLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.LiveDataRepository
-import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.InternetManager
-import ie.dublinmapper.repository.ServiceLiveDataRepository
-import ie.dublinmapper.repository.ServiceLocationRepository
+import ie.dublinmapper.repository.DefaultLiveDataRepository
+import ie.dublinmapper.repository.DefaultServiceLocationRepository
 import io.rtpi.api.IrishRailLiveData
 import io.rtpi.api.IrishRailStation
 import io.rtpi.api.Service
@@ -33,7 +33,7 @@ class IrishRailRepositoryModule {
         serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
         internetManager: InternetManager,
         @Named("LONG_TERM") memoryPolicy: MemoryPolicy
-    ): LocationRepository {
+    ): ServiceLocationRepository {
         val fetcher = Fetcher<List<IrishRailStation>, Service> { client.irishRail().getStations() }
         val persister =
             IrishRailStationPersister(
@@ -43,7 +43,7 @@ class IrishRailRepositoryModule {
                 internetManager
             )
         val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
-        return ServiceLocationRepository(Service.IRISH_RAIL, store)
+        return DefaultServiceLocationRepository(Service.IRISH_RAIL, store)
     }
 
     @Provides
@@ -57,7 +57,7 @@ class IrishRailRepositoryModule {
             .fetcher { stationId -> client.irishRail().getLiveData(stationId = stationId) }
             .memoryPolicy(memoryPolicy)
             .open()
-        return ServiceLiveDataRepository(store)
+        return DefaultLiveDataRepository(store)
     }
 
 }

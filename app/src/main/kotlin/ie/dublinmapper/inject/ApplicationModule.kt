@@ -7,9 +7,6 @@ import dagger.Module
 import dagger.Provides
 import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
-import ie.dublinmapper.mapping.FavouritesResponseMapper
-import ie.dublinmapper.mapping.NearbyResponseMapper
-import ie.dublinmapper.mapping.SearchResponseMapper
 import ie.dublinmapper.database.DatabaseModule
 import ie.dublinmapper.domain.internet.InternetStatusChangeListener
 import ie.dublinmapper.domain.service.*
@@ -141,8 +138,8 @@ class ApplicationModule {
     ): MapperFacade {
         val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
         mapperFactory.converterFactory.apply {
-            registerConverter(FavouritesResponseMapper(stringProvider))
-            registerConverter(SearchResponseMapper)
+//            registerConverter(FavouritesResponseMapper(stringProvider))
+//            registerConverter(SearchResponseMapper)
         }
         return mapperFactory.mapperFacade
     }

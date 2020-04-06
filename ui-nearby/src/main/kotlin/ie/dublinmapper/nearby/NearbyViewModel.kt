@@ -3,7 +3,6 @@ package ie.dublinmapper.nearby
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import com.xwray.groupie.Group
-import ie.dublinmapper.domain.usecase.NearbyUseCase
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.rxkotlin.plusAssign
 import ma.glasnost.orika.MapperFacade

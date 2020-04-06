@@ -2,9 +2,7 @@ package ie.dublinmapper.favourites
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
-import com.xwray.groupie.Group
 import ie.dublinmapper.domain.internet.InternetStatusChangeListener
-import ie.dublinmapper.domain.usecase.FavouritesUseCase
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
@@ -22,26 +20,22 @@ class FavouritesViewModel @Inject constructor(
 
     override val initialState = State(
         favourites = null,
-        internetStatusChange = null,
-        isError = false
+        liveData = null,
+        internetStatusChange = null
     )
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
-            is Change.GetFavourites -> State(
+            is Change.GetFavourites -> state.copy(
                 favourites = change.favourites,
-                internetStatusChange = null,
-                isError = false
+                internetStatusChange = null
             )
-            is Change.GetFavouritesError -> State(
-                favourites = null,
-                internetStatusChange = null,
-                isError = true //TODO
+            is Change.GetLiveData -> state.copy(
+                liveData = change.liveData,
+                internetStatusChange = null
             )
-            is Change.InternetStatusChange -> State(
-                favourites = state.favourites,
-                internetStatusChange = change.internetStatusChange,
-                isError = state.isError
+            is Change.InternetStatusChange -> state.copy(
+                internetStatusChange = change.internetStatusChange
             )
         }
     }
@@ -56,12 +50,26 @@ class FavouritesViewModel @Inject constructor(
                 useCase.getFavourites()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Group> { mapper.map(it, Group::class.java) }
+//                    .map<Group> { mapper.map(it, Group::class.java) }
                     .map<Change> { Change.GetFavourites(it) }
-                    .onErrorReturn {
-                        Timber.e(it)
-                        Change.GetFavouritesError(it)
-                    }
+//                    .onErrorReturn {
+//                        Timber.e(it)
+//                        Change.GetFavouritesError(it)
+//                    }
+                    .throttleLatest(500L, TimeUnit.MILLISECONDS)
+            }
+
+        val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
+            .switchMap { _ ->
+                useCase.getLiveData()
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+//                    .map<Group> { mapper.map(it, Group::class.java) }
+                    .map<Change> { Change.GetLiveData(it) }
+//                    .onErrorReturn {
+//                        Timber.e(it)
+//                        Change.GetFavouritesError(it)
+//                    }
                     .throttleLatest(500L, TimeUnit.MILLISECONDS)
             }
 
@@ -75,6 +83,7 @@ class FavouritesViewModel @Inject constructor(
 
         val allActions = Observable.merge(
             getFavouritesChange,
+            getLiveDataChange,
             getInternetStatusChange
         )
 

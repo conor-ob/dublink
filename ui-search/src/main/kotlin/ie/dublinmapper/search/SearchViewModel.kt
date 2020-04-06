@@ -3,9 +3,7 @@ package ie.dublinmapper.search
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import com.xwray.groupie.Group
-import ie.dublinmapper.domain.usecase.SearchUseCase
 import ie.dublinmapper.domain.service.RxScheduler
-import ie.dublinmapper.mapping.SearchResponseMapper
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import ma.glasnost.orika.MapperFacade
@@ -67,18 +65,18 @@ class SearchViewModel @Inject constructor(
                     .startWith(Change.Loading)
             }
 
-        val getNearbyLocationsChange = actions.ofType(Action.GetNearbyLocations::class.java)
-            .switchMap { _ ->
-                searchUseCase.getNearbyServiceLocations()
-                    .subscribeOn(scheduler.io)
-                    .observeOn(scheduler.ui)
-                    .map<Group> { SearchResponseMapper.mapNearbyLocations(it) }
-                    .map<Change> { Change.NearbyLocations(it) }
-            }
+//        val getNearbyLocationsChange = actions.ofType(Action.GetNearbyLocations::class.java)
+//            .switchMap { _ ->
+//                searchUseCase.getNearbyServiceLocations()
+//                    .subscribeOn(scheduler.io)
+//                    .observeOn(scheduler.ui)
+//                    .map<Group> { SearchResponseMapper.mapNearbyLocations(it) }
+//                    .map<Change> { Change.NearbyLocations(it) }
+//            }
 
-        val allChanges = Observable.merge(searchResultsChange, getNearbyLocationsChange)
+//        val allChanges = Observable.merge(searchResultsChange, getNearbyLocationsChange)
 
-        disposables += allChanges
+        disposables += searchResultsChange
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)

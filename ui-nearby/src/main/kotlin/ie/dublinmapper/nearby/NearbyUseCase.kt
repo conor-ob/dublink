@@ -1,6 +1,7 @@
-package ie.dublinmapper.domain.usecase
+package ie.dublinmapper.nearby
 
-import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.RxScheduler
 import ie.dublinmapper.domain.util.haversine
@@ -14,7 +15,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class NearbyUseCase @Inject constructor(
-    @Named("SERVICE_LOCATION") private val locationRepository: LocationRepository,
+    private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val scheduler: RxScheduler,
     private val locationProvider: LocationProvider
 ) {
@@ -29,7 +30,8 @@ class NearbyUseCase @Inject constructor(
     }
 
     private fun filterNearby(coordinate: Coordinate): Observable<NearbyResponse> {
-        return locationRepository.get().map { filterBlah(coordinate, it) }
+        TODO()
+//        return serviceLocationRepository.get().map { filterBlah(coordinate, it) }
     }
 
     private fun filterBlah(
