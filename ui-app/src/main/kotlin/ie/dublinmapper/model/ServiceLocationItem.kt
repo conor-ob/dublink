@@ -15,6 +15,15 @@ import io.rtpi.api.*
 import kotlin.math.round
 
 private const val serviceLocationKey = "key_service_location"
+private const val searchCandidateKey = "key_service_candidate"
+
+fun ServiceLocationItem.setSearchCandidate() {
+    extras[searchCandidateKey] = true
+}
+
+fun ServiceLocationItem.isSearchCandidate(): Boolean {
+    return extras[searchCandidateKey] as? Boolean ?: false
+}
 
 class ServiceLocationItem(
     private val serviceLocation: ServiceLocation,

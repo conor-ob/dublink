@@ -17,6 +17,7 @@ import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
 import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
 import ie.dublinmapper.repository.irishrail.IrishRailRepositoryModule
 import ie.dublinmapper.repository.luas.LuasRepositoryModule
+import ie.dublinmapper.repository.search.RecentSearchRepositoryModule
 import io.rtpi.api.Service
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -30,7 +31,8 @@ import javax.inject.Singleton
         DublinBikesRepositoryModule::class,
         DublinBusRepositoryModule::class,
         LuasRepositoryModule::class,
-        FavouriteRepositoryModule::class
+        FavouriteRepositoryModule::class,
+        RecentSearchRepositoryModule::class
     ]
 )
 class RepositoryModule {

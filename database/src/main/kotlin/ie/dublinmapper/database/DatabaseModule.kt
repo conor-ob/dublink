@@ -6,14 +6,7 @@ import com.squareup.sqldelight.EnumColumnAdapter
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.domain.datamodel.AircoachStopLocalResource
-import ie.dublinmapper.domain.datamodel.BusEireannStopLocalResource
-import ie.dublinmapper.domain.datamodel.DublinBikesDockLocalResource
-import ie.dublinmapper.domain.datamodel.DublinBusStopLocalResource
-import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
-import ie.dublinmapper.domain.datamodel.IrishRailStationLocalResource
-import ie.dublinmapper.domain.datamodel.LuasStopLocalResource
-import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.datamodel.*
 import ie.dublinmapper.domain.service.StringProvider
 import java.time.Instant
 import javax.inject.Singleton
@@ -53,6 +46,20 @@ class DatabaseModule {
             ),
             serviceLocationRecordStateEntityAdapter = ServiceLocationRecordStateEntity.Adapter(
                 lastUpdatedAdapter = object : ColumnAdapter<Instant, String> {
+
+                    override fun decode(databaseValue: String): Instant {
+                        return Instant.parse(databaseValue)
+                    }
+
+                    override fun encode(value: Instant): String {
+                        return value.toString()
+                    }
+
+                }
+            ),
+            recentSearchEntityAdapter = RecentSearchEntity.Adapter(
+                serviceAdapter = EnumColumnAdapter(),
+                timestampAdapter = object : ColumnAdapter<Instant, String> {
 
                     override fun decode(databaseValue: String): Instant {
                         return Instant.parse(databaseValue)
@@ -113,5 +120,11 @@ class DatabaseModule {
     @Singleton
     fun serviceLocationRecordStateLocalResource(database: Database): ServiceLocationRecordStateLocalResource {
         return SqlDelightServiceLocationRecordStateLocalResource(database)
+    }
+
+    @Provides
+    @Singleton
+    fun recentServiceLocationSearchLocalResource(database: Database): RecentServiceLocationSearchLocalResource {
+        return SqlDelightRecentServiceLocationSearchLocalResource(database)
     }
 }

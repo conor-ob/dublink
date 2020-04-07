@@ -1,21 +1,27 @@
 package ie.dublinmapper.search
 
+import ie.dublinmapper.domain.model.RecentServiceLocationSearch
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.RecentServiceLocationSearchRepository
+import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.RxScheduler
 import ie.dublinmapper.domain.util.haversine
 import ie.dublinmapper.domain.util.truncateHead
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.rtpi.api.*
+import java.time.Instant
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
+    private val recentSearchRepository: RecentServiceLocationSearchRepository,
     private val permissionChecker: PermissionChecker,
     private val locationProvider: LocationProvider,
     private val scheduler: RxScheduler
@@ -41,8 +47,9 @@ class SearchUseCase @Inject constructor(
                 response.filterIsInstance<ServiceLocationResponse.Data>()
                 .flatMap { it.serviceLocations }
             )
-            return@map SearchResultsResponse(result.take(50))
-
+            return@map SearchResultsResponse(
+                result.take(50)
+            )
         }
     }
 
@@ -94,19 +101,53 @@ class SearchUseCase @Inject constructor(
     }
 
     fun getRecentSearches(): Observable<RecentSearchesResponse> {
-        return Observable.just(
-            RecentSearchesResponse(
-                listOf(
-                    IrishRailStation(
-                        id = "12345",
-                        name = "Platform 9 & 3/4",
-                        coordinate = Coordinate(0.0, 0.0),
-                        routes = listOf(Route("Dart", Operator.DART)),
-                        operators = setOf(Operator.DART)
-                    )
+        return recentSearchRepository
+            .getRecentSearches()
+            .map { recentSearches ->
+                RecentSearchesResponse(
+                    recentSearches.mapNotNull { recentSearch ->
+                        getServiceLocation(recentSearch.service, recentSearch.locationId).blockingFirst().second
+                    }
                 )
+            }
+    }
+
+    private fun getServiceLocation(
+        service: Service,
+        locationId: String
+    ): Observable<Pair<Set<Service>, ServiceLocation?>> {
+        return serviceLocationRepository.get(
+            ServiceLocationKey(
+                service = service,
+                locationId = locationId
             )
-        )
+        ).map<Pair<Set<Service>, ServiceLocation?>> { response ->
+            when (response) {
+                is ServiceLocationResponse.Data -> Pair(emptySet(), response.serviceLocations.first())
+                is ServiceLocationResponse.Error -> Pair(setOf(response.service), null) // TODO exception ignored
+            }
+        }
+    }
+
+    private fun getServiceLocations(): Observable<Pair<Set<Service>, List<ServiceLocation>>> {
+        return serviceLocationRepository.get()
+            .map { responses ->
+                val okResponses = responses.filterIsInstance<ServiceLocationResponse.Data>()
+                val badResponses = responses.filterIsInstance<ServiceLocationResponse.Error>()
+                Pair(
+                    badResponses.map { it.service }.toSet(),
+                    okResponses.flatMap { it.serviceLocations }
+                )
+            }
+    }
+
+    fun addRecentSearch(service: Service, locationId: String): Observable<Boolean> {
+        return Observable.fromCallable {
+            recentSearchRepository.saveRecentSearch(
+                RecentServiceLocationSearch(service, locationId, Instant.now())
+            )
+            return@fromCallable true
+        }
     }
 }
 

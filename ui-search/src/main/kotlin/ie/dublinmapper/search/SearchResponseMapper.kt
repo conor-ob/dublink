@@ -5,6 +5,7 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.model.LoadingItem
 import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.model.SimpleMessageItem
+import ie.dublinmapper.model.setSearchCandidate
 import ie.dublinmapper.ui.R
 import io.rtpi.api.*
 import ma.glasnost.orika.CustomConverter
@@ -125,7 +126,7 @@ object SearchResponseMapper {
                                 routes = serviceLocation.routes,
                                 walkDistance = null
                             ).apply {
-                                extras["searchcandidate"] = true
+                                setSearchCandidate()
                             }
                         )
                         is DublinBikesDock -> listOf(
@@ -134,7 +135,9 @@ object SearchResponseMapper {
                                 icon = mapIcon(serviceLocation.service),
                                 routes = emptyList(),
                                 walkDistance = null
-                            )
+                            ).apply {
+                                setSearchCandidate()
+                            }
                         )
                         else -> emptyList()
                     }

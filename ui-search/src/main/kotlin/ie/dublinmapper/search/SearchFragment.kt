@@ -11,6 +11,8 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.model.ServiceLocationItem
+import ie.dublinmapper.model.isSearchCandidate
 import ie.dublinmapper.viewModelProvider
 import ie.dublinmapper.util.hideKeyboard
 import ie.dublinmapper.util.showKeyboard
@@ -49,9 +51,9 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         adapter?.setOnItemClickListener { item, _ ->
             val serviceLocation = item.extractServiceLocation()
             if (serviceLocation != null) {
-//                if (item.extras["searchCandidate"] as Boolean) {
-                    // viewModel.dispatch(Action.AddRecentSearch())
-//                }
+                if (item is ServiceLocationItem && item.isSearchCandidate()) {
+                    viewModel.dispatch(Action.AddRecentSearch(serviceLocation.service, serviceLocation.id))
+                }
                 (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }

@@ -27,6 +27,7 @@ class SearchViewModel @Inject constructor(
             is Change.RecentSearches -> state.copy(
                 recentSearches = change.recentSearches
             )
+            is Change.AddRecentSearch -> state
         }
     }
 
@@ -61,7 +62,15 @@ class SearchViewModel @Inject constructor(
                     .map<Change> { Change.RecentSearches(it) }
             }
 
-        val allChanges = Observable.merge(searchResultsChange, getNearbyLocationsChange, getRecentSearchesChange)
+        val addRecentSearchChange = actions.ofType(Action.AddRecentSearch::class.java)
+            .switchMap { action ->
+                searchUseCase.addRecentSearch(action.service, action.locationId)
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Change> { Change.AddRecentSearch }
+            }
+
+        val allChanges = Observable.merge(searchResultsChange, getNearbyLocationsChange, getRecentSearchesChange, addRecentSearchChange)
 
         disposables += allChanges
             .scan(initialState, reducer)

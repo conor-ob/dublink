@@ -66,7 +66,7 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
         getByName("debug") {
-            isDebuggable = true
+            isDebuggable = false
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-$gitBranch-$apkBuildDateTime-$gitCommitHash"
 //            ext.enableCrashlytics = false
