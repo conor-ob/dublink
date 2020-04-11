@@ -2,10 +2,7 @@ package ie.dublinmapper.livedata
 
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
-import com.xwray.groupie.Group
-import io.rtpi.api.LiveData
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 
 sealed class Action : BaseAction {
 
@@ -33,19 +30,13 @@ sealed class Action : BaseAction {
 }
 
 sealed class Change {
-    object Loading : Change()
-    data class GetServiceLocation(val serviceLocation: ServiceLocation) : Change()
-//    data class GetLiveData(val liveData: List<LiveData>) : Change()
-    data class GetLiveData(val liveData: Group) : Change()
+    data class GetServiceLocation(val serviceLocationResponse: ServiceLocationPresentationResponse) : Change()
+    data class GetLiveData(val liveDataResponse: LiveDataPresentationResponse) : Change()
     object FavouriteSaved : Change()
     object FavouriteRemoved : Change()
-    data class GetLiveDataError(val throwable: Throwable?) : Change()
 }
 
 data class State(
-    val serviceLocation: ServiceLocation? = null,
-    val isLoading: Boolean = false,
-    val liveData: Group? = null,
-    val isError: Boolean = false,
-    val isFavourite: Boolean = false
+    val serviceLocationResponse: ServiceLocationPresentationResponse? = null,
+    val liveDataResponse: LiveDataPresentationResponse? = null
 ) : BaseState
