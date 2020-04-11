@@ -16,22 +16,22 @@ class SqlDelightIrishRailStationLocalResourceTest {
         driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
             Database.Schema.create(this)
         },
-        aircoachStopServiceEntityAdapter = AircoachServices.Adapter(
+        aircoachStopServiceEntityAdapter = AircoachService.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
         busEireannStopServiceEntityAdapter = Buseireann_services.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
-        dublinBikesDockServiceEntityAdapter = DublinBikesServices.Adapter(
+        dublinBikesDockServiceEntityAdapter = DublinBikesServiceEntity.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
-        dublinBusStopServiceEntityAdapter = DublinBusServices.Adapter(
+        dublinBusStopServiceEntityAdapter = DublinBusServiceEntity.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
-        irishRailStationServiceEntityAdapter = IrishRailServices.Adapter(
+        irishRailStationServiceEntityAdapter = IrishRailServiceEntity.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
-        luasStopServiceEntityAdapter = LuasServices.Adapter(
+        luasStopServiceEntityAdapter = LuasServiceEntity.Adapter(
             operatorAdapter = EnumColumnAdapter()
         ),
         favouriteServiceLocationEntityAdapter = FavouriteServiceLocationEntity.Adapter(

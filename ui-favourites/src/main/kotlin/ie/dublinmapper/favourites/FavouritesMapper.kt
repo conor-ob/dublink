@@ -76,7 +76,7 @@ object FavouritesMapper {
         icon = mapIcon(serviceLocation.service),
 //                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
 //                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
-        routes = null,
+        routeGroups = null,
         walkDistance = null
     )
 

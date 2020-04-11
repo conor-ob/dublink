@@ -11,10 +11,10 @@ class SqlDelightRecentServiceLocationSearchLocalResource(
 ) : RecentServiceLocationSearchLocalResource {
 
     override fun selectRecentSearches(): Observable<List<RecentServiceLocationSearch>> {
-        return database.recentSearchesQueries.selectAll()
+        return database.recentSearchQueries.selectAll()
             .asObservable()
             .mapToList()
-            .map { recentSearchEntities: List<RecentSearches> ->
+            .map { recentSearchEntities: List<RecentSearchEntity> ->
                 recentSearchEntities.map {
                     RecentServiceLocationSearch(
                         service = it.service,
@@ -26,15 +26,27 @@ class SqlDelightRecentServiceLocationSearchLocalResource(
     }
 
     override fun insertRecentSearch(recentSearch: RecentServiceLocationSearch) {
-        val recentSearchEntities = database.recentSearchesQueries.selectAll().executeAsList()
+        val existing = database.recentSearchQueries.select(
+            service = recentSearch.service,
+            locationId = recentSearch.locationId
+        ).executeAsOneOrNull()
+
+        if (existing != null) {
+            database.recentSearchQueries.delete(
+                service = recentSearch.service,
+                locationId = recentSearch.locationId
+            )
+        }
+
+        val recentSearchEntities = database.recentSearchQueries.selectAll().executeAsList()
         if (recentSearchEntities.size > 100) {
             val reduced = recentSearchEntities
                 .sortedByDescending { it.timestamp }
                 .take(50)
             database.transaction {
-                database.recentSearchesQueries.deleteAll()
+                database.recentSearchQueries.deleteAll()
                 for (entity in reduced) {
-                    database.recentSearchesQueries.insertOrReplace(
+                    database.recentSearchQueries.insertOrReplace(
                         service = entity.service,
                         locationId = entity.locationId,
                         timestamp = entity.timestamp
@@ -42,7 +54,7 @@ class SqlDelightRecentServiceLocationSearchLocalResource(
                 }
             }
         }
-        database.recentSearchesQueries.insertOrReplace(
+        database.recentSearchQueries.insertOrReplace(
             service = recentSearch.service,
             locationId = recentSearch.locationId,
             timestamp = recentSearch.timestamp

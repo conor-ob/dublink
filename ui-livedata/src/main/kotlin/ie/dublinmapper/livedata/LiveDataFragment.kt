@@ -137,7 +137,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         if (state.serviceLocationResponse != null
             && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
             && state.serviceLocationResponse.serviceLocation is StopLocation
-            && state.serviceLocationResponse.serviceLocation.routes.size != routes.childCount
+            && state.serviceLocationResponse.serviceLocation.routeGroups.size != routes.childCount //TODO check this
         ) {
             val dip = 4f
             val px = TypedValue.applyDimension(
@@ -146,10 +146,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 resources.displayMetrics
             )
             routes.removeAllViewsInLayout()
-            val routeGroups = state.serviceLocationResponse.serviceLocation.routes
+            val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups
                 .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                 .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
-            for (route in routeGroups) {
+            for (route in sortedRouteGroups) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                 val chip = Chip(requireContext())
                 chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))

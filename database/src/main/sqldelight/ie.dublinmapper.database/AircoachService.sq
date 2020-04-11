@@ -1,18 +1,18 @@
 import io.rtpi.api.Operator;
 
-CREATE TABLE luasServices (
+CREATE TABLE aircoachServiceEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     locationId TEXT NOT NULL,
     route TEXT NOT NULL,
     operator TEXT AS Operator NOT NULL,
-    FOREIGN KEY (locationId) REFERENCES luasLocations(id)
+    FOREIGN KEY (locationId) REFERENCES aircoachLocationEntity(id)
 );
 
 selectAll:
-SELECT * FROM luasServices;
+SELECT * FROM aircoachServiceEntity;
 
 insertOrReplace:
-INSERT OR REPLACE INTO luasServices(
+INSERT OR REPLACE INTO aircoachServiceEntity(
   locationId,
   route,
   operator
@@ -20,4 +20,4 @@ INSERT OR REPLACE INTO luasServices(
 VALUES (?, ?, ?);
 
 deleteAll:
-DELETE FROM luasServices;
+DELETE FROM aircoachServiceEntity;

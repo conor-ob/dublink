@@ -1,4 +1,4 @@
-CREATE TABLE dublinBusLocations (
+CREATE TABLE irishRailLocationEntity (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     latitude REAL NOT NULL,
@@ -6,10 +6,10 @@ CREATE TABLE dublinBusLocations (
 );
 
 selectAll:
-SELECT * FROM dublinBusLocations;
+SELECT * FROM irishRailLocationEntity;
 
 insertOrReplace:
-INSERT OR REPLACE INTO dublinBusLocations(
+INSERT OR REPLACE INTO irishRailLocationEntity(
   id,
   name,
   latitude,
@@ -18,4 +18,4 @@ INSERT OR REPLACE INTO dublinBusLocations(
 VALUES (?, ?, ?, ?);
 
 deleteAll:
-DELETE FROM dublinBusLocations;
+DELETE FROM irishRailLocationEntity;

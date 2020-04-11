@@ -23,25 +23,25 @@ class DatabaseModule {
                 context = context,
                 name = stringProvider.databaseName()
             ),
-            aircoachServicesAdapter = AircoachServices.Adapter(
+            aircoachServiceEntityAdapter = AircoachServiceEntity.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            busEireannServicesAdapter = BusEireannServices.Adapter(
+            busEireannServiceEntityAdapter = BusEireannServiceEntity.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            dublinBusServicesAdapter = DublinBusServices.Adapter(
+            dublinBusServiceEntityAdapter = DublinBusServiceEntity.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            irishRailServicesAdapter = IrishRailServices.Adapter(
+            irishRailServiceEntityAdapter = IrishRailServiceEntity.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            luasServicesAdapter = LuasServices.Adapter(
+            luasServiceEntityAdapter = LuasServiceEntity.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            favouriteLocationsAdapter = FavouriteLocations.Adapter(
+            favouriteLocationEntityAdapter = FavouriteLocationEntity.Adapter(
                 serviceAdapter = EnumColumnAdapter()
             ),
-            locationExpirationsAdapter = LocationExpirations.Adapter(
+            locationExpirationEntityAdapter = LocationExpirationEntity.Adapter(
                 serviceAdapter = EnumColumnAdapter(),
                 lastUpdatedAdapter = object : ColumnAdapter<Instant, String> {
 
@@ -55,7 +55,7 @@ class DatabaseModule {
 
                 }
             ),
-            recentSearchesAdapter = RecentSearches.Adapter(
+            recentSearchEntityAdapter = RecentSearchEntity.Adapter(
                 serviceAdapter = EnumColumnAdapter(),
                 timestampAdapter = object : ColumnAdapter<Instant, String> {
 

@@ -14,27 +14,27 @@ class SqlDelightServiceLocationLocalResource(
 
     override fun selectServiceLocations(service: Service): Observable<List<ServiceLocation>> {
         val locationsObservable = when (service) {
-            Service.AIRCOACH -> database.aircoachLocationsQueries
+            Service.AIRCOACH -> database.aircoachLocationQueries
                 .selectAll { id, name, latitude, longitude ->
                     toLocationEntity(id, name, latitude, longitude)
                 }
-            Service.BUS_EIREANN -> database.busEireannLocationsQueries
+            Service.BUS_EIREANN -> database.busEireannLocationQueries
                 .selectAll { id, name, latitude, longitude ->
                     toLocationEntity(id, name, latitude, longitude)
                 }
-            Service.DUBLIN_BIKES -> database.dublinBikesLocationsQueries
+            Service.DUBLIN_BIKES -> database.dublinBikesLocationQueries
                 .selectAll { id, name, latitude, longitude ->
                     toLocationEntity(id, name, latitude, longitude)
                 }
-            Service.DUBLIN_BUS -> database.dublinBusLocationsQueries
+            Service.DUBLIN_BUS -> database.dublinBusLocationQueries
                 .selectAll { id, name, latitude, longitude ->
                     toLocationEntity(id, name, latitude, longitude)
                 }
-            Service.IRISH_RAIL -> database.irishRailLocationsQueries
+            Service.IRISH_RAIL -> database.irishRailLocationQueries
                 .selectAll { id, name, latitude, longitude ->
                     toLocationEntity(id, name, latitude, longitude)
                 }
-            Service.LUAS -> database.luasLocationsQueries
+            Service.LUAS -> database.luasLocationQueries
                 .selectAll { id, name, latitude, longitude ->
                     toLocationEntity(id, name, latitude, longitude)
                 }
@@ -43,27 +43,27 @@ class SqlDelightServiceLocationLocalResource(
             .mapToList()
 
         val servicesObservable = when (service) {
-            Service.AIRCOACH -> database.aircoachServicesQueries
+            Service.AIRCOACH -> database.aircoachServiceQueries
                 .selectAll { _, locationId, route, operator ->
                     toServiceEntity(locationId, route, operator)
                 }
-            Service.BUS_EIREANN -> database.busEireannServicesQueries
+            Service.BUS_EIREANN -> database.busEireannServiceQueries
                 .selectAll { _, locationId, route, operator ->
                     toServiceEntity(locationId, route, operator)
                 }
-            Service.DUBLIN_BIKES -> database.dublinBikesServicesQueries
+            Service.DUBLIN_BIKES -> database.dublinBikesServiceQueries
                 .selectAll { _, locationId, availableBikes, availableDocks, totalDocks ->
                     toServiceEntity(locationId, availableBikes, availableDocks, totalDocks)
                 }
-            Service.DUBLIN_BUS -> database.dublinBusServicesQueries
+            Service.DUBLIN_BUS -> database.dublinBusServiceQueries
                 .selectAll { _, locationId, route, operator ->
                     toServiceEntity(locationId, route, operator)
                 }
-            Service.IRISH_RAIL -> database.irishRailServicesQueries
+            Service.IRISH_RAIL -> database.irishRailServiceQueries
                 .selectAll { _, locationId, route, operator ->
                     toServiceEntity(locationId, route, operator)
                 }
-            Service.LUAS -> database.luasServicesQueries
+            Service.LUAS -> database.luasServiceQueries
                 .selectAll { _, locationId, route, operator ->
                     toServiceEntity(locationId, route, operator)
                 }
@@ -72,7 +72,7 @@ class SqlDelightServiceLocationLocalResource(
             .mapToList()
 
 
-        val favouritesObservable = database.favouriteLocationsQueries
+        val favouritesObservable = database.favouriteLocationQueries
             .selectAllByService(service) { _, _, locationId, _ ->
                 toFavouriteEntity(locationId)
             }
@@ -130,7 +130,7 @@ class SqlDelightServiceLocationLocalResource(
                     name = it.name,
                     service = service,
                     coordinate = it.coordinate,
-                    routes = routeGroups
+                    routeGroups = routeGroups
                 )
             }
             Service.DUBLIN_BIKES -> locationEntities.map {
@@ -212,9 +212,9 @@ class SqlDelightServiceLocationLocalResource(
         when (service) {
             Service.AIRCOACH -> {
                 if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routes) {
+                    for (routeGroup in serviceLocation.routeGroups) {
                         for (route in routeGroup.routes) {
-                            database.aircoachServicesQueries.insertOrReplace(
+                            database.aircoachServiceQueries.insertOrReplace(
                                 locationId = serviceLocation.id,
                                 route = route,
                                 operator = routeGroup.operator
@@ -225,9 +225,9 @@ class SqlDelightServiceLocationLocalResource(
             }
             Service.BUS_EIREANN -> {
                 if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routes) {
+                    for (routeGroup in serviceLocation.routeGroups) {
                         for (route in routeGroup.routes) {
-                            database.busEireannServicesQueries.insertOrReplace(
+                            database.busEireannServiceQueries.insertOrReplace(
                                 locationId = serviceLocation.id,
                                 route = route,
                                 operator = routeGroup.operator
@@ -238,7 +238,7 @@ class SqlDelightServiceLocationLocalResource(
             }
             Service.DUBLIN_BIKES -> {
                 if (serviceLocation is DockLocation) {
-                    database.dublinBikesServicesQueries.insertOrReplace(
+                    database.dublinBikesServiceQueries.insertOrReplace(
                         locationId = serviceLocation.id,
                         availableBikes = serviceLocation.availableBikes,
                         availableDocks = serviceLocation.availableDocks,
@@ -248,9 +248,9 @@ class SqlDelightServiceLocationLocalResource(
             }
             Service.DUBLIN_BUS -> {
                 if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routes) {
+                    for (routeGroup in serviceLocation.routeGroups) {
                         for (route in routeGroup.routes) {
-                            database.dublinBusServicesQueries.insertOrReplace(
+                            database.dublinBusServiceQueries.insertOrReplace(
                                 locationId = serviceLocation.id,
                                 route = route,
                                 operator = routeGroup.operator
@@ -261,9 +261,9 @@ class SqlDelightServiceLocationLocalResource(
             }
             Service.IRISH_RAIL -> {
                 if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routes) {
+                    for (routeGroup in serviceLocation.routeGroups) {
                         for (route in routeGroup.routes) {
-                            database.irishRailServicesQueries.insertOrReplace(
+                            database.irishRailServiceQueries.insertOrReplace(
                                 locationId = serviceLocation.id,
                                 route = route,
                                 operator = routeGroup.operator
@@ -274,9 +274,9 @@ class SqlDelightServiceLocationLocalResource(
             }
             Service.LUAS -> {
                 if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routes) {
+                    for (routeGroup in serviceLocation.routeGroups) {
                         for (route in routeGroup.routes) {
-                            database.luasServicesQueries.insertOrReplace(
+                            database.luasServiceQueries.insertOrReplace(
                                 locationId = serviceLocation.id,
                                 route = route,
                                 operator = routeGroup.operator
@@ -290,37 +290,37 @@ class SqlDelightServiceLocationLocalResource(
 
     private fun insertLocations(service: Service, serviceLocation: ServiceLocation) {
         when (service) {
-            Service.AIRCOACH -> database.aircoachLocationsQueries.insertOrReplace(
+            Service.AIRCOACH -> database.aircoachLocationQueries.insertOrReplace(
                 id = serviceLocation.id,
                 name = serviceLocation.name,
                 latitude = serviceLocation.coordinate.latitude,
                 longitude = serviceLocation.coordinate.longitude
             )
-            Service.BUS_EIREANN -> database.busEireannLocationsQueries.insertOrReplace(
+            Service.BUS_EIREANN -> database.busEireannLocationQueries.insertOrReplace(
                 id = serviceLocation.id,
                 name = serviceLocation.name,
                 latitude = serviceLocation.coordinate.latitude,
                 longitude = serviceLocation.coordinate.longitude
             )
-            Service.DUBLIN_BIKES -> database.dublinBikesLocationsQueries.insertOrReplace(
+            Service.DUBLIN_BIKES -> database.dublinBikesLocationQueries.insertOrReplace(
                 id = serviceLocation.id,
                 name = serviceLocation.name,
                 latitude = serviceLocation.coordinate.latitude,
                 longitude = serviceLocation.coordinate.longitude
             )
-            Service.DUBLIN_BUS -> database.dublinBusLocationsQueries.insertOrReplace(
+            Service.DUBLIN_BUS -> database.dublinBusLocationQueries.insertOrReplace(
                 id = serviceLocation.id,
                 name = serviceLocation.name,
                 latitude = serviceLocation.coordinate.latitude,
                 longitude = serviceLocation.coordinate.longitude
             )
-            Service.IRISH_RAIL -> database.irishRailLocationsQueries.insertOrReplace(
+            Service.IRISH_RAIL -> database.irishRailLocationQueries.insertOrReplace(
                 id = serviceLocation.id,
                 name = serviceLocation.name,
                 latitude = serviceLocation.coordinate.latitude,
                 longitude = serviceLocation.coordinate.longitude
             )
-            Service.LUAS -> database.luasLocationsQueries.insertOrReplace(
+            Service.LUAS -> database.luasLocationQueries.insertOrReplace(
                 id = serviceLocation.id,
                 name = serviceLocation.name,
                 latitude = serviceLocation.coordinate.latitude,
@@ -332,28 +332,28 @@ class SqlDelightServiceLocationLocalResource(
     private fun deleteLocations(service: Service) {
         when (service) {
             Service.AIRCOACH -> {
-                database.aircoachLocationsQueries.deleteAll()
-                database.aircoachServicesQueries.deleteAll()
+                database.aircoachLocationQueries.deleteAll()
+                database.aircoachServiceQueries.deleteAll()
             }
             Service.BUS_EIREANN -> {
-                database.busEireannLocationsQueries.deleteAll()
-                database.busEireannServicesQueries.deleteAll()
+                database.busEireannLocationQueries.deleteAll()
+                database.busEireannServiceQueries.deleteAll()
             }
             Service.DUBLIN_BIKES -> {
-                database.dublinBikesLocationsQueries.deleteAll()
-                database.dublinBikesServicesQueries.deleteAll()
+                database.dublinBikesLocationQueries.deleteAll()
+                database.dublinBikesServiceQueries.deleteAll()
             }
             Service.DUBLIN_BUS -> {
-                database.dublinBusLocationsQueries.deleteAll()
-                database.dublinBusServicesQueries.deleteAll()
+                database.dublinBusLocationQueries.deleteAll()
+                database.dublinBusServiceQueries.deleteAll()
             }
             Service.IRISH_RAIL -> {
-                database.irishRailLocationsQueries.deleteAll()
-                database.irishRailServicesQueries.deleteAll()
+                database.irishRailLocationQueries.deleteAll()
+                database.irishRailServiceQueries.deleteAll()
             }
             Service.LUAS -> {
-                database.luasLocationsQueries.deleteAll()
-                database.luasServicesQueries.deleteAll()
+                database.luasLocationQueries.deleteAll()
+                database.luasServiceQueries.deleteAll()
             }
         }
     }

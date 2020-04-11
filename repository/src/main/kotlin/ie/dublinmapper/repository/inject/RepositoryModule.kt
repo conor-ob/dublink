@@ -7,17 +7,19 @@ import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
+import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.domain.datamodel.RecentServiceLocationSearchLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.repository.*
 import ie.dublinmapper.domain.service.EnabledServiceManager
 import ie.dublinmapper.domain.service.InternetManager
-import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
+import ie.dublinmapper.repository.favourite.FavouriteServiceLocationRepository
 import ie.dublinmapper.repository.livedata.DefaultLiveDataRepository
 import ie.dublinmapper.repository.location.DefaultAggregatedServiceLocationRepository
 import ie.dublinmapper.repository.location.DefaultServiceLocationRepository
 import ie.dublinmapper.repository.location.ServiceLocationPersister
-import ie.dublinmapper.repository.search.RecentSearchRepositoryModule
+import ie.dublinmapper.repository.search.DefaultRecentServiceLocationSearchRepository
 import io.rtpi.api.LiveData
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
@@ -25,12 +27,7 @@ import io.rtpi.client.RtpiClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-@Module(
-    includes = [
-        FavouriteRepositoryModule::class,
-        RecentSearchRepositoryModule::class
-    ]
-)
+@Module
 class RepositoryModule {
 
     @Provides
@@ -128,4 +125,20 @@ class RepositoryModule {
             .setExpireAfterTimeUnit(timeUnit)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideFavouriteRepository(
+        localResource: FavouriteServiceLocationLocalResource
+    ): FavouriteRepository {
+        return FavouriteServiceLocationRepository(localResource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecentSearchRepository(
+        recentServiceLocationSearchLocalResource: RecentServiceLocationSearchLocalResource
+    ): RecentServiceLocationSearchRepository = DefaultRecentServiceLocationSearchRepository(
+        recentServiceLocationSearchLocalResource
+    )
 }

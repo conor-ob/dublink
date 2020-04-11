@@ -1,6 +1,6 @@
 import io.rtpi.api.Service;
 
-CREATE TABLE favouriteLocations (
+CREATE TABLE favouriteLocationEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     service TEXT AS Service NOT NULL,
     locationId TEXT NOT NULL,
@@ -8,18 +8,18 @@ CREATE TABLE favouriteLocations (
 );
 
 selectAll:
-SELECT * FROM favouriteLocations;
+SELECT * FROM favouriteLocationEntity;
 
 selectAllByService:
-SELECT * FROM favouriteLocations WHERE service = ?;
+SELECT * FROM favouriteLocationEntity WHERE service = ?;
 
 insertOrReplace:
-INSERT OR REPLACE INTO favouriteLocations(
+INSERT OR REPLACE INTO favouriteLocationEntity(
   service,
   locationId,
   name
 )
 VALUES (?, ?, ?);
 
-deleteByIdAndService:
-DELETE FROM favouriteLocations WHERE locationId = ? AND service = ?;
+delete:
+DELETE FROM favouriteLocationEntity WHERE service = ? AND locationId = ?;

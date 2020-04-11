@@ -1,18 +1,18 @@
 import io.rtpi.api.Operator;
 
-CREATE TABLE irishRailServices (
+CREATE TABLE irishRailServiceEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     locationId TEXT NOT NULL,
     route TEXT NOT NULL,
     operator TEXT AS Operator NOT NULL,
-    FOREIGN KEY (locationId) REFERENCES irishRailLocations(id)
+    FOREIGN KEY (locationId) REFERENCES irishRailLocationEntity(id)
 );
 
 selectAll:
-SELECT * FROM irishRailServices;
+SELECT * FROM irishRailServiceEntity;
 
 insertOrReplace:
-INSERT OR REPLACE INTO irishRailServices(
+INSERT OR REPLACE INTO irishRailServiceEntity(
   locationId,
   route,
   operator
@@ -20,4 +20,4 @@ INSERT OR REPLACE INTO irishRailServices(
 VALUES (?, ?, ?);
 
 deleteAll:
-DELETE FROM irishRailServices;
+DELETE FROM irishRailServiceEntity;

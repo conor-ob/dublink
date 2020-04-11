@@ -1,4 +1,4 @@
-CREATE TABLE busEireannLocations (
+CREATE TABLE luasLocationEntity (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     latitude REAL NOT NULL,
@@ -6,10 +6,10 @@ CREATE TABLE busEireannLocations (
 );
 
 selectAll:
-SELECT * FROM busEireannLocations;
+SELECT * FROM luasLocationEntity;
 
 insertOrReplace:
-INSERT OR REPLACE INTO busEireannLocations(
+INSERT OR REPLACE INTO luasLocationEntity(
   id,
   name,
   latitude,
@@ -18,4 +18,4 @@ INSERT OR REPLACE INTO busEireannLocations(
 VALUES (?, ?, ?, ?);
 
 deleteAll:
-DELETE FROM busEireannLocations;
+DELETE FROM luasLocationEntity;

@@ -1,19 +1,19 @@
 import io.rtpi.api.Operator;
 
-CREATE TABLE dublinBikesServices (
+CREATE TABLE dublinBikesServiceEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     locationId TEXT NOT NULL,
     availableBikes INTEGER AS Int NOT NULL,
     availableDocks INTEGER AS Int NOT NULL,
     totalDocks INTEGER AS Int NOT NULL,
-    FOREIGN KEY (locationId) REFERENCES dublinBikesLocations(id)
+    FOREIGN KEY (locationId) REFERENCES dublinBikesLocationEntity(id)
 );
 
 selectAll:
-SELECT * FROM dublinBikesServices;
+SELECT * FROM dublinBikesServiceEntity;
 
 insertOrReplace:
-INSERT OR REPLACE INTO dublinBikesServices(
+INSERT OR REPLACE INTO dublinBikesServiceEntity(
   locationId,
   availableBikes,
   availableDocks,
@@ -22,4 +22,4 @@ INSERT OR REPLACE INTO dublinBikesServices(
 VALUES (?, ?, ?, ?);
 
 deleteAll:
-DELETE FROM dublinBikesServices;
+DELETE FROM dublinBikesServiceEntity;

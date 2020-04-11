@@ -1,4 +1,4 @@
-CREATE TABLE aircoachLocations (
+CREATE TABLE dublinBikesLocationEntity (
     id TEXT NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
     latitude REAL NOT NULL,
@@ -6,10 +6,10 @@ CREATE TABLE aircoachLocations (
 );
 
 selectAll:
-SELECT * FROM aircoachLocations;
+SELECT * FROM dublinBikesLocationEntity;
 
 insertOrReplace:
-INSERT OR REPLACE INTO aircoachLocations(
+INSERT OR REPLACE INTO dublinBikesLocationEntity(
   id,
   name,
   latitude,
@@ -18,4 +18,4 @@ INSERT OR REPLACE INTO aircoachLocations(
 VALUES (?, ?, ?, ?);
 
 deleteAll:
-DELETE FROM aircoachLocations;
+DELETE FROM dublinBikesLocationEntity;

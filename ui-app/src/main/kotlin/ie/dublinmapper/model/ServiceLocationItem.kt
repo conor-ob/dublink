@@ -30,7 +30,7 @@ fun ServiceLocationItem.isSearchCandidate(): Boolean {
 class ServiceLocationItem(
     private val serviceLocation: ServiceLocation,
     private val icon: Int,
-    private val routes: List<RouteGroup>?,
+    private val routeGroups: List<RouteGroup>?,
     private val walkDistance: Double?
 ) : Item() {
 
@@ -70,7 +70,7 @@ class ServiceLocationItem(
     private fun bindRoutes(viewHolder: GroupieViewHolder) {
         if (serviceLocation is StopLocation) {
             viewHolder.rootViewBikes.visibility = View.GONE
-            if (routes.isNullOrEmpty()) {
+            if (routeGroups.isNullOrEmpty()) {
                 viewHolder.routes.visibility = View.GONE
                 viewHolder.routesDivider.visibility = View.GONE
             } else {
@@ -81,10 +81,10 @@ class ServiceLocationItem(
                     viewHolder.itemView.resources.displayMetrics
                 )
                 viewHolder.routes.removeAllViewsInLayout()
-                val routeGroups = routes
+                val sortedRouteGroups = routeGroups
                     .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                     .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
-                for (route in routeGroups) {
+                for (route in sortedRouteGroups) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                     val chip = Chip(viewHolder.itemView.context)
                     chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
@@ -102,7 +102,7 @@ class ServiceLocationItem(
             }
         } else if (serviceLocation is DockLocation) {
             viewHolder.routes.visibility = View.GONE
-            if (routes == null) {
+            if (routeGroups == null) {
                 viewHolder.routesDivider.visibility = View.GONE
                 viewHolder.rootViewBikes.visibility = View.GONE
             } else {
