@@ -1,10 +1,15 @@
 package ie.dublinmapper.search
 
+import android.app.Activity
+import android.content.res.Resources
+import android.graphics.Rect
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
+import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -15,7 +20,6 @@ import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.model.isSearchCandidate
 import ie.dublinmapper.viewModelProvider
 import ie.dublinmapper.util.hideKeyboard
-import ie.dublinmapper.util.showKeyboard
 import kotlinx.android.synthetic.main.fragment_search.*
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
@@ -81,6 +85,17 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
                 state?.let { renderState(state) }
             }
         )
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (activity?.isKeyboardOpened() == true) {
+                        hideKeyboard(search_input)
+                    } else {
+                        findNavController().navigateUp()
+                    }
+                }
+            }
+        )
     }
 
     override fun onResume() {
@@ -111,4 +126,25 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         super.onDestroyView()
         adapter = null
     }
+}
+
+fun Activity.isKeyboardOpened(): Boolean {
+    val r = Rect()
+
+    val activityRoot = getActivityRoot()
+    val visibleThreshold = dip(100)
+
+    activityRoot.getWindowVisibleDisplayFrame(r)
+
+    val heightDiff = activityRoot.rootView.height - r.height()
+
+    return heightDiff > visibleThreshold;
+}
+
+fun Activity.getActivityRoot(): View {
+    return (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0);
+}
+
+fun dip(value: Int): Int {
+    return (value * Resources.getSystem().displayMetrics.density).toInt()
 }
