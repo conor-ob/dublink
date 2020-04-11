@@ -1,27 +1,23 @@
 package ie.dublinmapper.livedata
 
 import com.xwray.groupie.Section
-import ie.dublinmapper.domain.usecase.LiveDataResponse
 import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.LiveDataItem
-import io.rtpi.api.DublinBikesLiveData
-import io.rtpi.api.TimedLiveData
+import io.rtpi.api.DockLiveData
+import io.rtpi.api.PredictionLiveData
 
 object LiveDataMapper {
 
-    fun map(response: LiveDataResponse) = Section(
+    fun map(response: LiveDataPresentationResponse) = Section(
         when (response) {
-            is LiveDataResponse.Loading -> emptyList()
-            is LiveDataResponse.Skipped -> TODO()
-            is LiveDataResponse.Grouped -> TODO()
-            is LiveDataResponse.Error -> TODO()
-            is LiveDataResponse.Complete -> response.liveData.mapNotNull {
+            is LiveDataPresentationResponse.Data -> response.liveData.mapNotNull {
                 when (it) {
-                    is TimedLiveData -> LiveDataItem(it)
-                    is DublinBikesLiveData -> DublinBikesLiveDataItem(it)
+                    is PredictionLiveData -> LiveDataItem(it)
+                    is DockLiveData -> DublinBikesLiveDataItem(it)
                     else -> null
                 }
             }
+            is LiveDataPresentationResponse.Error -> TODO()
         }
     )
 }

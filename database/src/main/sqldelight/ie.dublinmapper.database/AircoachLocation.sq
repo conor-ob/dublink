@@ -1,0 +1,21 @@
+CREATE TABLE aircoachLocationEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL
+);
+
+selectAll:
+SELECT * FROM aircoachLocationEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO aircoachLocationEntity(
+  id,
+  name,
+  latitude,
+  longitude
+)
+VALUES (?, ?, ?, ?);
+
+deleteAll:
+DELETE FROM aircoachLocationEntity;

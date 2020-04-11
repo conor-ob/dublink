@@ -1,105 +1,122 @@
 package ie.dublinmapper.repository.inject
 
+import com.nytimes.android.external.store3.base.Fetcher
 import com.nytimes.android.external.store3.base.impl.MemoryPolicy
+import com.nytimes.android.external.store3.base.impl.StalePolicy
+import com.nytimes.android.external.store3.base.impl.StoreBuilder
+import com.nytimes.android.external.store3.base.impl.room.StoreRoom
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.domain.repository.LiveDataRepository
-import ie.dublinmapper.domain.repository.LocationRepository
+import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.domain.datamodel.RecentServiceLocationSearchLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.repository.*
 import ie.dublinmapper.domain.service.EnabledServiceManager
-import ie.dublinmapper.repository.AggregatedLiveDataRepository
-import ie.dublinmapper.repository.AggregatedLocationRepository
-import ie.dublinmapper.repository.aircoach.AircoachRepositoryModule
-import ie.dublinmapper.repository.buseireann.BusEireannRepositoryModule
-import ie.dublinmapper.repository.dublinbikes.DublinBikesRepositoryModule
-import ie.dublinmapper.repository.dublinbus.DublinBusRepositoryModule
-import ie.dublinmapper.repository.favourite.FavouriteRepositoryModule
-import ie.dublinmapper.repository.irishrail.IrishRailRepositoryModule
-import ie.dublinmapper.repository.luas.LuasRepositoryModule
+import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.repository.favourite.FavouriteServiceLocationRepository
+import ie.dublinmapper.repository.livedata.DefaultLiveDataRepository
+import ie.dublinmapper.repository.location.DefaultAggregatedServiceLocationRepository
+import ie.dublinmapper.repository.location.DefaultServiceLocationRepository
+import ie.dublinmapper.repository.location.ServiceLocationPersister
+import ie.dublinmapper.repository.search.DefaultRecentServiceLocationSearchRepository
+import io.rtpi.api.LiveData
 import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
+import io.rtpi.client.RtpiClient
 import java.util.concurrent.TimeUnit
-import javax.inject.Named
 import javax.inject.Singleton
 
-@Module(
-    includes = [
-        AircoachRepositoryModule::class,
-        BusEireannRepositoryModule::class,
-        IrishRailRepositoryModule::class,
-        DublinBikesRepositoryModule::class,
-        DublinBusRepositoryModule::class,
-        LuasRepositoryModule::class,
-        FavouriteRepositoryModule::class
-    ]
-)
+@Module
 class RepositoryModule {
 
     @Provides
     @Singleton
-    @Named("SERVICE_LOCATION")
     fun locationRepository(
-        @Named("AIRCOACH") aircoachLocationRepository: LocationRepository,
-        @Named("BUS_EIREANN") busEireannLocationRepository: LocationRepository,
-        @Named("DUBLIN_BIKES") dublinBikesLocationRepository: LocationRepository,
-        @Named("DUBLIN_BUS") dublinBusLocationRepository: LocationRepository,
-        @Named("IRISH_RAIL") irishRailLocationRepository: LocationRepository,
-        @Named("LUAS") luasLocationRepository: LocationRepository,
+        rtpiClient: RtpiClient,
+        serviceLocationLocalResource: ServiceLocationLocalResource,
+        serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
+        internetManager: InternetManager,
         enabledServiceManager: EnabledServiceManager
-    ): LocationRepository {
-        return AggregatedLocationRepository(
-            locationRepositories = mapOf(
-                Service.AIRCOACH to aircoachLocationRepository,
-                Service.BUS_EIREANN to busEireannLocationRepository,
-                Service.DUBLIN_BIKES to dublinBikesLocationRepository,
-                Service.DUBLIN_BUS to dublinBusLocationRepository,
-                Service.IRISH_RAIL to irishRailLocationRepository,
-                Service.LUAS to luasLocationRepository
-            ),
+    ): AggregatedServiceLocationRepository {
+        return DefaultAggregatedServiceLocationRepository(
+            serviceLocationRepositories = Service.values()
+                .associateBy { it }
+                .mapValues { entry ->
+                    newServiceLocationRepository(
+                        entry.value,
+                        rtpiClient,
+                        newServiceLocationMemoryPolicy(entry.value),
+                        serviceLocationLocalResource,
+                        serviceLocationRecordStateLocalResource,
+                        internetManager
+                    )
+                },
             enabledServiceManager = enabledServiceManager
         )
     }
 
     @Provides
     @Singleton
-    @Named("LIVE_DATA")
     fun liveDataRepository(
-        @Named("AIRCOACH") aircoachLiveDataRepository: LiveDataRepository,
-        @Named("BUS_EIREANN") busEireannLiveDataRepository: LiveDataRepository,
-        @Named("DUBLIN_BIKES") dublinBikesLiveDataRepository: LiveDataRepository,
-        @Named("DUBLIN_BUS") dublinBusLiveDataRepository: LiveDataRepository,
-        @Named("IRISH_RAIL") irishRailLiveDataRepository: LiveDataRepository,
-        @Named("LUAS") luasLiveDataRepository: LiveDataRepository
+        rtpiClient: RtpiClient
     ): LiveDataRepository {
-        return AggregatedLiveDataRepository(
-            liveDataRepositories = mapOf(
-                Service.AIRCOACH to aircoachLiveDataRepository,
-                Service.BUS_EIREANN to busEireannLiveDataRepository,
-                Service.DUBLIN_BIKES to dublinBikesLiveDataRepository,
-                Service.DUBLIN_BUS to dublinBusLiveDataRepository,
-                Service.IRISH_RAIL to irishRailLiveDataRepository,
-                Service.LUAS to luasLiveDataRepository
+        val fetcher = Fetcher<List<LiveData>, LiveDataKey> {
+            rtpiClient.getLiveData(it.service, it.locationId)
+        }
+        val store = StoreBuilder.key<LiveDataKey, List<LiveData>>()
+            .fetcher(fetcher)
+            .memoryPolicy(shortTermMemoryPolicy())
+            .open()
+        return DefaultLiveDataRepository(store)
+    }
+
+    private fun newServiceLocationRepository(
+        service: Service,
+        rtpiClient: RtpiClient,
+        memoryPolicy: MemoryPolicy,
+        serviceLocationLocalResource: ServiceLocationLocalResource,
+        serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
+        internetManager: InternetManager
+    ): ServiceLocationRepository {
+        val fetcher = Fetcher<List<ServiceLocation>, Service> {
+            rtpiClient.getServiceLocations(it)
+        }
+        val persister =
+            ServiceLocationPersister(
+                memoryPolicy,
+                serviceLocationLocalResource,
+                serviceLocationRecordStateLocalResource,
+                internetManager
             )
+        val store = StoreRoom.from(fetcher, persister, StalePolicy.REFRESH_ON_STALE, memoryPolicy)
+        return DefaultServiceLocationRepository(
+            service,
+            store
         )
     }
 
-    @Provides
-    @Singleton
-    @Named("SHORT_TERM")
-    fun shortTermMemoryPolicy(): MemoryPolicy {
+    private fun shortTermMemoryPolicy(): MemoryPolicy {
         return newMemoryPolicy(15, TimeUnit.SECONDS)
     }
 
-    @Provides
-    @Singleton
-    @Named("MEDIUM_TERM")
-    fun mediumTermMemoryPolicy(): MemoryPolicy {
+    private fun mediumTermMemoryPolicy(): MemoryPolicy {
         return newMemoryPolicy(90, TimeUnit.SECONDS)
     }
 
-    @Provides
-    @Singleton
-    @Named("LONG_TERM")
-    fun longTermMemoryPolicy(): MemoryPolicy {
+    private fun longTermMemoryPolicy(): MemoryPolicy {
         return newMemoryPolicy(1, TimeUnit.DAYS)
+    }
+
+    private fun newServiceLocationMemoryPolicy(service: Service): MemoryPolicy {
+        return when (service) {
+            Service.AIRCOACH -> longTermMemoryPolicy()
+            Service.BUS_EIREANN -> longTermMemoryPolicy()
+            Service.DUBLIN_BIKES -> mediumTermMemoryPolicy()
+            Service.DUBLIN_BUS -> longTermMemoryPolicy()
+            Service.IRISH_RAIL -> longTermMemoryPolicy()
+            Service.LUAS -> longTermMemoryPolicy()
+        }
     }
 
     private fun newMemoryPolicy(value: Long, timeUnit: TimeUnit): MemoryPolicy {
@@ -108,4 +125,20 @@ class RepositoryModule {
             .setExpireAfterTimeUnit(timeUnit)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideFavouriteRepository(
+        localResource: FavouriteServiceLocationLocalResource
+    ): FavouriteRepository {
+        return FavouriteServiceLocationRepository(localResource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRecentSearchRepository(
+        recentServiceLocationSearchLocalResource: RecentServiceLocationSearchLocalResource
+    ): RecentServiceLocationSearchRepository = DefaultRecentServiceLocationSearchRepository(
+        recentServiceLocationSearchLocalResource
+    )
 }

@@ -1,0 +1,23 @@
+import io.rtpi.api.Operator;
+
+CREATE TABLE aircoachServiceEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    locationId TEXT NOT NULL,
+    route TEXT NOT NULL,
+    operator TEXT AS Operator NOT NULL,
+    FOREIGN KEY (locationId) REFERENCES aircoachLocationEntity(id)
+);
+
+selectAll:
+SELECT * FROM aircoachServiceEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO aircoachServiceEntity(
+  locationId,
+  route,
+  operator
+)
+VALUES (?, ?, ?);
+
+deleteAll:
+DELETE FROM aircoachServiceEntity;

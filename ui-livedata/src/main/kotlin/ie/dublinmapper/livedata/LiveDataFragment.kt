@@ -18,7 +18,8 @@ import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
-import io.rtpi.api.ServiceLocationRoutes
+import io.rtpi.api.StopLocation
+import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import timber.log.Timber
 
@@ -122,20 +123,21 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderState(state: State) {
-        loader.isRefreshing = state.isLoading
-        if (state.isFavourite) {
-            args = args.copy(serviceLocationIsFavourite = true)
-            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
-        } else {
-            args = args.copy(serviceLocationIsFavourite = false)
-            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
-        }
+//        loader.isRefreshing = state.isLoading
+//        if (state.isFavourite) {
+//            args = args.copy(serviceLocationIsFavourite = true)
+//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
+//        } else {
+//            args = args.copy(serviceLocationIsFavourite = false)
+//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
+//        }
 
-        if (state.serviceLocation != null
-            && state.serviceLocation is ServiceLocationRoutes
-            && state.serviceLocation.routes.size != routes.childCount
+        if (state.serviceLocationResponse != null
+            && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
+            && state.serviceLocationResponse.serviceLocation is StopLocation
+            && state.serviceLocationResponse.serviceLocation.routeGroups.size != routes.childCount //TODO check this
         ) {
             val dip = 4f
             val px = TypedValue.applyDimension(
@@ -144,12 +146,15 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 resources.displayMetrics
             )
             routes.removeAllViewsInLayout()
-            for (route in state.serviceLocation.routes) {
+            val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups
+                .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
+                .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
+            for (route in sortedRouteGroups) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                 val chip = Chip(requireContext())
                 chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
-                val (textColour, backgroundColour) = mapColour(route.operator, route.id)
-                chip.text = " ${route.id} "
+                val (textColour, backgroundColour) = mapColour(route.first, route.second)
+                chip.text = " ${route.second} "
                 chip.setTextAppearanceResource(R.style.SmallerText)
                 chip.setTextColor(ColorStateList.valueOf(resources.getColor(textColour)))
                 chip.setChipBackgroundColorResource(backgroundColour)
@@ -160,8 +165,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             routes.visibility = View.VISIBLE
         }
 
-        if (state.liveData != null) {
-            adapter?.update(listOf(state.liveData))
+        if (state.liveDataResponse != null) {
+            adapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse)))
         }
     }
 

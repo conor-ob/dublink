@@ -7,9 +7,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.ui.R
-import io.rtpi.api.DublinBikesLiveData
-import io.rtpi.api.Operator
-import io.rtpi.api.TimedLiveData
+import io.rtpi.api.*
 import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.*
 import kotlinx.android.synthetic.main.list_item_live_data.*
 import kotlinx.android.synthetic.main.list_item_live_data_grouped.*
@@ -20,7 +18,7 @@ private val format24h = DateTimeFormatter.ofPattern("HH:mm")
 private val format12h = DateTimeFormatter.ofPattern("h:mm a")
 
 class LiveDataItem(
-    val liveData: TimedLiveData //TODO private
+    val liveData: PredictionLiveData //TODO private
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data
@@ -34,8 +32,8 @@ class LiveDataItem(
     }
 
     private fun bindRoute(viewHolder: GroupieViewHolder) {
-        viewHolder.route.text = " ${liveData.route} "
-        val (textColour, backgroundColour) = mapColour(liveData.operator, liveData.route)
+        viewHolder.route.text = " ${liveData.routeInfo.route} "
+        val (textColour, backgroundColour) = mapColour(liveData.operator, liveData.routeInfo.route)
         viewHolder.route.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
         viewHolder.route.setChipBackgroundColorResource(backgroundColour)
     }
@@ -46,7 +44,7 @@ class LiveDataItem(
 //            isTerminating -> viewHolder.destination.text = "from ${liveData.origin}"
 //            else -> viewHolder.destination.text = liveData.destination
 //        }
-        viewHolder.destination.text = liveData.destination
+        viewHolder.destination.text = liveData.routeInfo.destination
     }
 
     private fun bindStatus(viewHolder: GroupieViewHolder) {
@@ -59,7 +57,7 @@ class LiveDataItem(
     }
 
     private fun bindScheduledTime(viewHolder: GroupieViewHolder) {
-        val scheduledTime = liveData.liveTime.scheduledDateTime
+        val scheduledTime = liveData.prediction.scheduledDateTime
         if (DateFormat.is24HourFormat(viewHolder.itemView.context.applicationContext)) {
             viewHolder.scheduledTime.text = scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format24h)
         } else {
@@ -90,17 +88,17 @@ class LiveDataItem(
 
     private fun bindWaitTime(viewHolder: GroupieViewHolder) {
         viewHolder.waitTimeMinutes.text = when {
-            liveData.liveTime.waitTime.toMinutes() < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
+            liveData.prediction.waitTime.toMinutes() < 1L -> viewHolder.itemView.resources.getString(R.string.live_data_due)
             else -> {
-                if (liveData.liveTime.waitTime.toMinutes() >= 60L) {
-                    val scheduledTime = liveData.liveTime.scheduledDateTime
+                if (liveData.prediction.waitTime.toMinutes() >= 60L) {
+                    val scheduledTime = liveData.prediction.scheduledDateTime
                     if (DateFormat.is24HourFormat(viewHolder.itemView.context.applicationContext)) {
                         scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format24h)
                     } else {
                         scheduledTime.toLocalTime().truncatedTo(ChronoUnit.MINUTES).format(format12h)
                     }
                 } else {
-                    viewHolder.itemView.resources.getString(R.string.live_data_due_time, liveData.liveTime.waitTime.toMinutes())
+                    viewHolder.itemView.resources.getString(R.string.live_data_due_time, liveData.prediction.waitTime.toMinutes())
                 }
 //                val minutes = liveData.liveTime.waitTimeMinutes - (hours * 60)
 //                when {
@@ -115,15 +113,15 @@ class LiveDataItem(
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
         if (other is LiveDataItem) {
             return liveData.operator == other.liveData.operator &&
-                    liveData.route == other.liveData.route &&
-                    liveData.destination == other.liveData.destination
+                    liveData.routeInfo.route == other.liveData.routeInfo.route &&
+                    liveData.routeInfo.destination == other.liveData.routeInfo.destination
         }
         return false
     }
 
     override fun equals(other: Any?): Boolean {
         if (other is LiveDataItem) {
-            return isSameAs(other) && liveData.liveTime.waitTime.toMinutes() == other.liveData.liveTime.waitTime.toMinutes()
+            return isSameAs(other) && liveData.prediction.waitTime.toMinutes() == other.liveData.prediction.waitTime.toMinutes()
         }
         return false
     }
@@ -274,7 +272,7 @@ class LiveDataItem(
 }
 
 class GroupedLiveDataItem(
-    private val liveData: List<TimedLiveData>
+    private val liveData: List<PredictionLiveData>
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data_grouped
@@ -286,8 +284,8 @@ class GroupedLiveDataItem(
     }
 
     private fun bindRoute(viewHolder: GroupieViewHolder) {
-        viewHolder.groupedRoute.text = " ${liveData.first().route} "
-        val (textColour, backgroundColour) = mapColour(liveData.first().operator, liveData.first().route)
+        viewHolder.groupedRoute.text = " ${liveData.first().routeInfo.route} "
+        val (textColour, backgroundColour) = mapColour(liveData.first().operator, liveData.first().routeInfo.route)
         viewHolder.groupedRoute.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
         viewHolder.groupedRoute.setChipBackgroundColorResource(backgroundColour)
     }
@@ -298,12 +296,12 @@ class GroupedLiveDataItem(
 //            isTerminating -> viewHolder.destination.text = "from ${liveData.origin}"
 //            else -> viewHolder.destination.text = liveData.destination
 //        }
-        viewHolder.groupedDestination.text = liveData.first().destination
+        viewHolder.groupedDestination.text = liveData.first().routeInfo.destination
     }
 
     private fun bindWaitTime(viewHolder: GroupieViewHolder) {
         viewHolder.groupedWaitTimeMinutes.text = if (liveData.size == 1) {
-            val minutes = liveData.first().liveTime.waitTime.toMinutes()
+            val minutes = liveData.first().prediction.waitTime.toMinutes()
             if (minutes <= 1L) {
                 "Now"
             } else {
@@ -311,7 +309,7 @@ class GroupedLiveDataItem(
             }
         } else {
             "${liveData.map {
-                val minutes = it.liveTime.waitTime.toMinutes()
+                val minutes = it.prediction.waitTime.toMinutes()
                 if (minutes <= 1L) {
                     "Now"
                 } else {
@@ -344,8 +342,8 @@ class GroupedLiveDataItem(
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
         if (other is GroupedLiveDataItem) {
             return liveData.first().operator == other.liveData.first().operator &&
-                    liveData.first().route == other.liveData.first().route &&
-                    liveData.first().destination == other.liveData.first().destination
+                    liveData.first().routeInfo.route == other.liveData.first().routeInfo.route &&
+                    liveData.first().routeInfo.destination == other.liveData.first().routeInfo.destination
         }
         return false
     }
@@ -354,7 +352,7 @@ class GroupedLiveDataItem(
         if (other is GroupedLiveDataItem) {
             if (liveData.size == other.liveData.size) {
                 for (index in liveData.indices) {
-                    if (liveData[index].liveTime.waitTime.toMinutes() != other.liveData[index].liveTime.waitTime.toMinutes()) {
+                    if (liveData[index].prediction.waitTime.toMinutes() != other.liveData[index].prediction.waitTime.toMinutes()) {
                         return false
                     }
                 }
@@ -370,21 +368,21 @@ class GroupedLiveDataItem(
 }
 
 class DublinBikesLiveDataItem(
-    private val liveData: DublinBikesLiveData
+    private val liveData: DockLiveData
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data_dublin_bikes
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.bikesCount.text = if (liveData.bikes == 0) " No " else " ${liveData.bikes} "
-        viewHolder.bikes.text = if (liveData.bikes == 1) "Bike" else "Bikes" //TODO plurals
+        viewHolder.bikesCount.text = if (liveData.availableBikes == 0) " No " else " ${liveData.availableBikes} "
+        viewHolder.bikes.text = if (liveData.availableBikes == 1) "Bike" else "Bikes" //TODO plurals
         viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
-        viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(liveData.bikes))
+        viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableBikes))
 
-        viewHolder.docksCount.text = if (liveData.docks == 0) " No " else " ${liveData.docks} "
-        viewHolder.docks.text = if (liveData.docks == 1) "Dock" else "Docks" //TODO plurals
+        viewHolder.docksCount.text = if (liveData.availableDocks == 0) " No " else " ${liveData.availableDocks} "
+        viewHolder.docks.text = if (liveData.availableDocks == 1) "Dock" else "Docks" //TODO plurals
         viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
-        viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(liveData.docks))
+        viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableDocks))
     }
 
     private fun getBackgroundColour(amount: Int): Int {

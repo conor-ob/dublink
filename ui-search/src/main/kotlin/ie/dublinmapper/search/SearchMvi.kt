@@ -2,20 +2,24 @@ package ie.dublinmapper.search
 
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
-import com.xwray.groupie.Group
+import io.rtpi.api.Service
 
 sealed class Action : BaseAction {
     data class Search(val query: String) : Action()
+    object GetNearbyLocations : Action()
+    object GetRecentSearches : Action()
+    data class AddRecentSearch(val service: Service, val locationId: String) : Action()
 }
 
 sealed class Change {
-    object Loading : Change()
-    data class SearchResults(val searchResults: Group) : Change()
-    data class SearchResultsError(val throwable: Throwable?) : Change()
+    data class NearbyLocations(val nearbyLocations: NearbyLocationsResponse) : Change()
+    data class SearchResults(val searchResults: SearchResultsResponse) : Change()
+    data class RecentSearches(val recentSearches: RecentSearchesResponse) : Change()
+    object AddRecentSearch : Change()
 }
 
 data class State(
-    val isLoading: Boolean,
-    val searchResults: Group? = null,
-    val isError: Boolean = false
+    val nearbyLocations: NearbyLocationsResponse? = null,
+    val searchResults: SearchResultsResponse? = null,
+    val recentSearches: RecentSearchesResponse? = null
 ) : BaseState

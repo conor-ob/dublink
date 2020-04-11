@@ -3,17 +3,26 @@ package ie.dublinmapper.location
 import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import ie.dublinmapper.domain.service.LocationProvider
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
+import timber.log.Timber
 import javax.inject.Inject
 
-class GpsLocationProvider @Inject constructor(context: Context) :
-    LocationProvider {
+class GpsLocationProvider @Inject constructor(context: Context) : LocationProvider {
+
+    private var lastKnownLocation: Location? = null
+//    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context).apply {
+//        lastLocation.addOnSuccessListener { location : Location? ->
+//            Timber.d("Locationpoop=$location")
+//            lastKnownLocation = location
+//        }
+//    }
 
     private val locationProvider = ReactiveLocationProvider(context)
-    private var lastKnownLocation: Location? = null
+
 
     override fun getLastKnownLocation(): Observable<Coordinate> {
         return locationProvider.lastKnownLocation
@@ -32,10 +41,11 @@ class GpsLocationProvider @Inject constructor(context: Context) :
     private fun newRequest(): LocationRequest {
         return LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(500L)
+            .setInterval(5000L)
     }
 
     private fun isBetterLocation(location: Location): Boolean {
+        Timber.d(location.toString())
         if (lastKnownLocation == null) {
             // A new location is always better than no location
             return true

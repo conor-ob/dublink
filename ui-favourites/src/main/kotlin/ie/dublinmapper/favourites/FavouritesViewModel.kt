@@ -2,13 +2,10 @@ package ie.dublinmapper.favourites
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
-import com.xwray.groupie.Group
 import ie.dublinmapper.domain.internet.InternetStatusChangeListener
-import ie.dublinmapper.domain.usecase.FavouritesUseCase
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
-import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -16,32 +13,22 @@ import javax.inject.Inject
 class FavouritesViewModel @Inject constructor(
     private val useCase: FavouritesUseCase,
     private val internetStatusChangeListener: InternetStatusChangeListener,
-    private val mapper: MapperFacade,
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
     override val initialState = State(
-        favourites = null,
-        internetStatusChange = null,
-        isError = false
+        favouritesWithLiveData = null,
+        internetStatusChange = null
     )
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
-            is Change.GetFavourites -> State(
-                favourites = change.favourites,
-                internetStatusChange = null,
-                isError = false
+            is Change.FavouritesWithLiveData -> state.copy(
+                favouritesWithLiveData = change.favouritesWithLiveData,
+                internetStatusChange = null
             )
-            is Change.GetFavouritesError -> State(
-                favourites = null,
-                internetStatusChange = null,
-                isError = true //TODO
-            )
-            is Change.InternetStatusChange -> State(
-                favourites = state.favourites,
-                internetStatusChange = change.internetStatusChange,
-                isError = state.isError
+            is Change.InternetStatusChange -> state.copy(
+                internetStatusChange = change.internetStatusChange
             )
         }
     }
@@ -50,18 +37,17 @@ class FavouritesViewModel @Inject constructor(
         bindActions()
     }
 
-    private fun bindActions() {
-        val getFavouritesChange = actions.ofType(Action.GetFavourites::class.java)
+    fun bindActions() {
+        val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
             .switchMap { _ ->
-                useCase.getFavourites()
+                useCase.getFavouritesWithLiveData()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Group> { mapper.map(it, Group::class.java) }
-                    .map<Change> { Change.GetFavourites(it) }
-                    .onErrorReturn {
-                        Timber.e(it)
-                        Change.GetFavouritesError(it)
-                    }
+                    .map<Change> { Change.FavouritesWithLiveData(it) }
+//                    .onErrorReturn {
+//                        Timber.e(it)
+//                        Change.GetFavouritesError(it)
+//                    }
                     .throttleLatest(500L, TimeUnit.MILLISECONDS)
             }
 
@@ -74,7 +60,7 @@ class FavouritesViewModel @Inject constructor(
             }
 
         val allActions = Observable.merge(
-            getFavouritesChange,
+            getFavouritesWithLiveDataChange,
             getInternetStatusChange
         )
 
@@ -82,5 +68,9 @@ class FavouritesViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+    }
+
+    fun unbindActions() {
+        disposables.clear()
     }
 }
