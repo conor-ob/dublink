@@ -12,6 +12,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import ie.dublinmapper.domain.model.getName
 import io.rtpi.api.*
+import io.rtpi.util.AlphaNumericComparator
+import java.util.Comparator
 import kotlin.math.round
 
 private const val serviceLocationKey = "key_service_location"
@@ -28,7 +30,7 @@ fun ServiceLocationItem.isSearchCandidate(): Boolean {
 class ServiceLocationItem(
     private val serviceLocation: ServiceLocation,
     private val icon: Int,
-    private val routes: List<Route>?,
+    private val routeGroups: List<RouteGroup>?,
     private val walkDistance: Double?
 ) : Item() {
 
@@ -66,9 +68,9 @@ class ServiceLocationItem(
     }
 
     private fun bindRoutes(viewHolder: GroupieViewHolder) {
-        if (serviceLocation is ServiceLocationRoutes) {
+        if (serviceLocation is StopLocation) {
             viewHolder.rootViewBikes.visibility = View.GONE
-            if (routes.isNullOrEmpty()) {
+            if (routeGroups.isNullOrEmpty()) {
                 viewHolder.routes.visibility = View.GONE
                 viewHolder.routesDivider.visibility = View.GONE
             } else {
@@ -79,12 +81,15 @@ class ServiceLocationItem(
                     viewHolder.itemView.resources.displayMetrics
                 )
                 viewHolder.routes.removeAllViewsInLayout()
-                for (route in routes) {
+                val sortedRouteGroups = routeGroups
+                    .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
+                    .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
+                for (route in sortedRouteGroups) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                     val chip = Chip(viewHolder.itemView.context)
                     chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
-                    val (textColour, backgroundColour) = mapColour(route.operator, route.id)
-                    chip.text = " ${route.id} "
+                    val (textColour, backgroundColour) = mapColour(route.first, route.second)
+                    chip.text = " ${route.second} "
                     chip.setTextAppearanceResource(R.style.SmallerText)
                     chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
                     chip.setChipBackgroundColorResource(backgroundColour)
@@ -95,9 +100,9 @@ class ServiceLocationItem(
                 viewHolder.routes.visibility = View.VISIBLE
                 viewHolder.routesDivider.visibility = View.VISIBLE
             }
-        } else if (serviceLocation is DublinBikesDock) {
+        } else if (serviceLocation is DockLocation) {
             viewHolder.routes.visibility = View.GONE
-            if (routes == null) {
+            if (routeGroups == null) {
                 viewHolder.routesDivider.visibility = View.GONE
                 viewHolder.rootViewBikes.visibility = View.GONE
             } else {

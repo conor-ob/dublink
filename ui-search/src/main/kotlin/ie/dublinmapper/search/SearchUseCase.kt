@@ -11,7 +11,6 @@ import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.RxScheduler
 import ie.dublinmapper.domain.util.haversine
 import ie.dublinmapper.domain.util.truncateHead
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.rtpi.api.*
 import java.time.Instant
@@ -62,11 +61,12 @@ class SearchUseCase @Inject constructor(
                 serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
                 searchResults.add(serviceLocation)
             } else {
-                for (operator in serviceLocation.operators) {
-                    if (operator.fullName.toLowerCase().contains(adaptedQuery)) {
-                        searchResults.add(serviceLocation)
-                    }
-                }
+                // TODO operators
+//                for (operator in serviceLocation.operators) {
+//                    if (operator.fullName.toLowerCase().contains(adaptedQuery)) {
+//                        searchResults.add(serviceLocation)
+//                    }
+//                }
             }
         }
         return searchResults

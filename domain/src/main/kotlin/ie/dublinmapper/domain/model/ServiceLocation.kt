@@ -5,14 +5,14 @@ import io.rtpi.api.ServiceLocation
 private const val favourite = "key_favourite"
 private const val customName = "key_custom_name"
 
-fun ServiceLocation.isFavourite(): Boolean = data[favourite] as Boolean? ?: false
+fun ServiceLocation.isFavourite(): Boolean = properties[favourite] as Boolean? ?: false
 
 fun ServiceLocation.setFavourite() {
-    data[favourite] = true
+    properties[favourite] = true
 }
 
 fun ServiceLocation.setCustomName(name: String) {
-    data[customName] = name
+    properties[customName] = name
 }
 
-fun ServiceLocation.getName(): String = data[customName] as String? ?: name
+fun ServiceLocation.getName(): String = properties[customName] as String? ?: name

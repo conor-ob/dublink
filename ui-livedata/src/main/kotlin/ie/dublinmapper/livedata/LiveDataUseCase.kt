@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
-    private val liveDataRepository: AggregatedLiveDataRepository,
+    private val liveDataRepository: LiveDataRepository,
     private val favouriteRepository: FavouriteRepository,
     private val preferenceStore: PreferenceStore
 ) {

@@ -14,18 +14,6 @@ import ma.glasnost.orika.metadata.Type
 
 object SearchResponseMapper {
 
-    /**
-     * Places near me/you
-     *  Enable location         HIDE
-     * ---
-     * Recent searches
-     *  1
-     *  2
-     *  3
-     *  ...
-     *
-     */
-
     fun map(
         nearbyLocationsResponse: NearbyLocationsResponse?,
         searchResultsResponse: SearchResultsResponse?,
@@ -47,23 +35,25 @@ object SearchResponseMapper {
                 SimpleMessageItem("Recent searches", 6),
                 recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
                     when (serviceLocation) {
-                        is ServiceLocationRoutes -> listOf(
+                        is StopLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),
-                                routes = serviceLocation.routes,
+                                routeGroups = serviceLocation.routeGroups,
                                 walkDistance = null
                             ).apply {
-                                extras["searchcandidate"] = true
+                                setSearchCandidate()
                             }
                         )
-                        is DublinBikesDock -> listOf(
+                        is DockLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),
-                                routes = emptyList(),
+                                routeGroups = emptyList(),
                                 walkDistance = null
-                            )
+                            ).apply {
+                                setSearchCandidate()
+                            }
                         )
                         else -> emptyList()
                     }
@@ -85,21 +75,25 @@ object SearchResponseMapper {
 //                    LoadingItem(),
                     nearbyLocationsResponse.serviceLocations.entries.flatMap { entry ->
                         when (val serviceLocation = entry.value) {
-                            is ServiceLocationRoutes -> listOf(
+                            is StopLocation -> listOf(
                                 ServiceLocationItem(
                                     serviceLocation = serviceLocation,
                                     icon = mapIcon(serviceLocation.service),
-                                    routes = serviceLocation.routes,
+                                    routeGroups = serviceLocation.routeGroups,
                                     walkDistance = entry.key
-                                )
+                                ).apply {
+                                    setSearchCandidate()
+                                }
                             )
-                            is DublinBikesDock -> listOf(
+                            is DockLocation -> listOf(
                                 ServiceLocationItem(
                                     serviceLocation = serviceLocation,
                                     icon = mapIcon(serviceLocation.service),
-                                    routes = emptyList(),
+                                    routeGroups = emptyList(),
                                     walkDistance = entry.key
-                                )
+                                ).apply {
+                                    setSearchCandidate()
+                                }
                             )
                             else -> emptyList()
                         }
@@ -119,21 +113,21 @@ object SearchResponseMapper {
             return Section(
                 searchResultsResponse.serviceLocations.flatMap { serviceLocation ->
                     when (serviceLocation) {
-                        is ServiceLocationRoutes -> listOf(
+                        is StopLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),
-                                routes = serviceLocation.routes,
+                                routeGroups = serviceLocation.routeGroups,
                                 walkDistance = null
                             ).apply {
                                 setSearchCandidate()
                             }
                         )
-                        is DublinBikesDock -> listOf(
+                        is DockLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),
-                                routes = emptyList(),
+                                routeGroups = emptyList(),
                                 walkDistance = null
                             ).apply {
                                 setSearchCandidate()
@@ -147,55 +141,6 @@ object SearchResponseMapper {
             return null
         }
     }
-//        if (searchResultsResponse != null && searchResultsResponse.serviceLocations.isNotEmpty()) {
-//            return Section(
-//                searchResultsResponse.serviceLocations.flatMap { serviceLocation ->
-//                    when (serviceLocation) {
-//                        is ServiceLocationRoutes -> listOf(
-//                            ServiceLocationItem(
-//                                serviceLocation = serviceLocation,
-//                                icon = mapIcon(serviceLocation.service),
-//                                routes = serviceLocation.routes,
-//                                walkDistance = null
-//                            )
-//                        )
-//                        is DublinBikesDock -> listOf(
-//                            ServiceLocationItem(
-//                                serviceLocation = serviceLocation,
-//                                icon = mapIcon(serviceLocation.service),
-//                                routes = emptyList(),
-//                                walkDistance = null
-//                            )
-//                        )
-//                        else -> emptyList()
-//                    }
-//                }
-//            )
-//        }
-//        return Section()
-//    }
-//        source.serviceLocations.flatMap { serviceLocation ->
-//            when (serviceLocation) {
-//                is ServiceLocationRoutes -> listOf(
-//                    ServiceLocationItem(
-//                        serviceLocation = serviceLocation,
-//                        icon = mapIcon(serviceLocation.service),
-//                        routes = serviceLocation.routes,
-//                        walkDistance = null
-//                    )
-//                )
-//                is DublinBikesDock -> listOf(
-//                    ServiceLocationItem(
-//                        serviceLocation = serviceLocation,
-//                        icon = mapIcon(serviceLocation.service),
-//                        routes = emptyList(),
-//                        walkDistance = null
-//                    )
-//                )
-//                else -> emptyList()
-//            }
-//        }
-//    )
 
     private fun mapIcon(service: Service): Int = when (service) {
         Service.AIRCOACH,

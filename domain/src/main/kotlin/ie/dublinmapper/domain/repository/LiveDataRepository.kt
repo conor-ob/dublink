@@ -8,10 +8,6 @@ interface LiveDataRepository {
     fun get(key: LiveDataKey): Observable<LiveDataResponse>
 }
 
-interface AggregatedLiveDataRepository {
-    fun get(key: LiveDataKey): Observable<LiveDataResponse>
-}
-
 data class LiveDataKey(
     val service: Service,
     val locationId: String
