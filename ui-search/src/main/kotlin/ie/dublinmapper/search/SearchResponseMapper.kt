@@ -47,7 +47,7 @@ object SearchResponseMapper {
                 SimpleMessageItem("Recent searches", 6),
                 recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
                     when (serviceLocation) {
-                        is ServiceLocationRoutes -> listOf(
+                        is StopLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),
@@ -57,7 +57,7 @@ object SearchResponseMapper {
                                 extras["searchcandidate"] = true
                             }
                         )
-                        is DublinBikesDock -> listOf(
+                        is DockLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),
@@ -85,7 +85,7 @@ object SearchResponseMapper {
 //                    LoadingItem(),
                     nearbyLocationsResponse.serviceLocations.entries.flatMap { entry ->
                         when (val serviceLocation = entry.value) {
-                            is ServiceLocationRoutes -> listOf(
+                            is StopLocation -> listOf(
                                 ServiceLocationItem(
                                     serviceLocation = serviceLocation,
                                     icon = mapIcon(serviceLocation.service),
@@ -93,7 +93,7 @@ object SearchResponseMapper {
                                     walkDistance = entry.key
                                 )
                             )
-                            is DublinBikesDock -> listOf(
+                            is DockLocation -> listOf(
                                 ServiceLocationItem(
                                     serviceLocation = serviceLocation,
                                     icon = mapIcon(serviceLocation.service),
@@ -119,7 +119,7 @@ object SearchResponseMapper {
             return Section(
                 searchResultsResponse.serviceLocations.flatMap { serviceLocation ->
                     when (serviceLocation) {
-                        is ServiceLocationRoutes -> listOf(
+                        is StopLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),
@@ -129,7 +129,7 @@ object SearchResponseMapper {
                                 setSearchCandidate()
                             }
                         )
-                        is DublinBikesDock -> listOf(
+                        is DockLocation -> listOf(
                             ServiceLocationItem(
                                 serviceLocation = serviceLocation,
                                 icon = mapIcon(serviceLocation.service),

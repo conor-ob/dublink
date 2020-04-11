@@ -1,0 +1,21 @@
+CREATE TABLE aircoachLocations (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL
+);
+
+selectAll:
+SELECT * FROM aircoachLocations;
+
+insertOrReplace:
+INSERT OR REPLACE INTO aircoachLocations(
+  id,
+  name,
+  latitude,
+  longitude
+)
+VALUES (?, ?, ?, ?);
+
+deleteAll:
+DELETE FROM aircoachLocations;

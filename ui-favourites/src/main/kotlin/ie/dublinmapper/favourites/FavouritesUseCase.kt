@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
-    private val liveDataRepository: AggregatedLiveDataRepository,
+    private val liveDataRepository: LiveDataRepository,
     private val preferenceStore: PreferenceStore
 ) {
 

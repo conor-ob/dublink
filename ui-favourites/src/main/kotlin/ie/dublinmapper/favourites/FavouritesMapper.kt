@@ -3,10 +3,10 @@ package ie.dublinmapper.favourites
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.internet.NetworkUnavailableException
 import ie.dublinmapper.model.*
-import io.rtpi.api.DublinBikesLiveData
+import io.rtpi.api.DockLiveData
+import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
-import io.rtpi.api.TimedLiveData
 import timber.log.Timber
 import java.io.IOException
 import java.net.ConnectException
@@ -38,12 +38,12 @@ object FavouritesMapper {
             val liveData = liveDataResponse.liveData
             if (liveData.isNullOrEmpty()) {
                 Section(SimpleMessageItem(mapMessage(liveDataResponse.serviceLocation.service), index))
-            } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DublinBikesLiveData) {
-                Section(DublinBikesLiveDataItem(liveData.first().first() as DublinBikesLiveData))
+            } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DockLiveData) {
+                Section(DublinBikesLiveDataItem(liveData.first().first() as DockLiveData))
             } else {
                 val items = mutableListOf<GroupedLiveDataItem>()
                 for (thing in liveData.take(3)) {
-                    items.add(GroupedLiveDataItem(thing.take(3) as List<TimedLiveData>))
+                    items.add(GroupedLiveDataItem(thing.take(3) as List<PredictionLiveData>))
                 }
                 Section(items)
             }

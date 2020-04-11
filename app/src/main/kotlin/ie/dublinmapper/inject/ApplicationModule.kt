@@ -25,6 +25,7 @@ import ie.dublinmapper.settings.ThemeRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.client.RtpiClient
+import io.rtpi.client.RtpiClientConfiguration
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
@@ -70,11 +71,19 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun rtpiClient(okHttpClient: OkHttpClient): RtpiClient = RtpiClient(okHttpClient)
+    fun schedulers(): RxScheduler = RxScheduler(Schedulers.io(), AndroidSchedulers.mainThread())
 
     @Provides
     @Singleton
-    fun schedulers(): RxScheduler = RxScheduler(Schedulers.io(), AndroidSchedulers.mainThread())
+    fun rtpiClient(
+        okHttpClient: OkHttpClient,
+        stringProvider: StringProvider
+    ): RtpiClient = RtpiClient(
+        RtpiClientConfiguration(
+            okHttpClient,
+            stringProvider.jcDecauxApiKey()
+        )
+    )
 
     @Provides
     @Singleton

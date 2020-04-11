@@ -1,0 +1,25 @@
+import io.rtpi.api.Service;
+
+CREATE TABLE favouriteLocations (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    service TEXT AS Service NOT NULL,
+    locationId TEXT NOT NULL,
+    name TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM favouriteLocations;
+
+selectAllByService:
+SELECT * FROM favouriteLocations WHERE service = ?;
+
+insertOrReplace:
+INSERT OR REPLACE INTO favouriteLocations(
+  service,
+  locationId,
+  name
+)
+VALUES (?, ?, ?);
+
+deleteByIdAndService:
+DELETE FROM favouriteLocations WHERE locationId = ? AND service = ?;

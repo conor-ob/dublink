@@ -3,8 +3,8 @@ package ie.dublinmapper.livedata
 import com.xwray.groupie.Section
 import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.LiveDataItem
-import io.rtpi.api.DublinBikesLiveData
-import io.rtpi.api.TimedLiveData
+import io.rtpi.api.DockLiveData
+import io.rtpi.api.PredictionLiveData
 
 object LiveDataMapper {
 
@@ -12,8 +12,8 @@ object LiveDataMapper {
         when (response) {
             is LiveDataPresentationResponse.Data -> response.liveData.mapNotNull {
                 when (it) {
-                    is TimedLiveData -> LiveDataItem(it)
-                    is DublinBikesLiveData -> DublinBikesLiveDataItem(it)
+                    is PredictionLiveData -> LiveDataItem(it)
+                    is DockLiveData -> DublinBikesLiveDataItem(it)
                     else -> null
                 }
             }

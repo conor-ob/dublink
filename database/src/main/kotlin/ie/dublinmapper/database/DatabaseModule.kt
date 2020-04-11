@@ -23,28 +23,26 @@ class DatabaseModule {
                 context = context,
                 name = stringProvider.databaseName()
             ),
-            aircoachStopServiceEntityAdapter = AircoachStopServiceEntity.Adapter(
+            aircoachServicesAdapter = AircoachServices.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            busEireannStopServiceEntityAdapter = BusEireannStopServiceEntity.Adapter(
+            busEireannServicesAdapter = BusEireannServices.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            dublinBikesDockServiceEntityAdapter = DublinBikesDockServiceEntity.Adapter(
+            dublinBusServicesAdapter = DublinBusServices.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            dublinBusStopServiceEntityAdapter = DublinBusStopServiceEntity.Adapter(
+            irishRailServicesAdapter = IrishRailServices.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            irishRailStationServiceEntityAdapter = IrishRailStationServiceEntity.Adapter(
+            luasServicesAdapter = LuasServices.Adapter(
                 operatorAdapter = EnumColumnAdapter()
             ),
-            luasStopServiceEntityAdapter = LuasStopServiceEntity.Adapter(
-                operatorAdapter = EnumColumnAdapter()
-            ),
-            favouriteServiceLocationEntityAdapter = FavouriteServiceLocationEntity.Adapter(
+            favouriteLocationsAdapter = FavouriteLocations.Adapter(
                 serviceAdapter = EnumColumnAdapter()
             ),
-            serviceLocationRecordStateEntityAdapter = ServiceLocationRecordStateEntity.Adapter(
+            locationExpirationsAdapter = LocationExpirations.Adapter(
+                serviceAdapter = EnumColumnAdapter(),
                 lastUpdatedAdapter = object : ColumnAdapter<Instant, String> {
 
                     override fun decode(databaseValue: String): Instant {
@@ -57,7 +55,7 @@ class DatabaseModule {
 
                 }
             ),
-            recentSearchEntityAdapter = RecentSearchEntity.Adapter(
+            recentSearchesAdapter = RecentSearches.Adapter(
                 serviceAdapter = EnumColumnAdapter(),
                 timestampAdapter = object : ColumnAdapter<Instant, String> {
 
@@ -68,7 +66,6 @@ class DatabaseModule {
                     override fun encode(value: Instant): String {
                         return value.toString()
                     }
-
                 }
             )
         )
@@ -76,44 +73,14 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun aircoachStopLocalResource(database: Database): AircoachStopLocalResource {
-        return SqlDelightAircoachStopLocalResource(database)
-    }
-
-    @Provides
-    @Singleton
-    fun busEireannStopLocalResource(database: Database): BusEireannStopLocalResource {
-        return SqlDelightBusEireannStopLocalResource(database)
-    }
-
-    @Provides
-    @Singleton
-    fun dublinBikesDockLocalResource(database: Database): DublinBikesDockLocalResource {
-        return SqlDelightDublinBikesDockLocalResource(database)
-    }
-
-    @Provides
-    @Singleton
-    fun dublinBusStopLocalResource(database: Database): DublinBusStopLocalResource {
-        return SqlDelightDublinBusStopLocalResource(database)
-    }
-
-    @Provides
-    @Singleton
-    fun irishRailStationLocalResource(database: Database): IrishRailStationLocalResource {
-        return SqlDelightIrishRailStationLocalResource(database)
-    }
-
-    @Provides
-    @Singleton
-    fun luasStopLocalResource(database: Database): LuasStopLocalResource {
-        return SqlDelightLuasStopLocalResource(database)
-    }
-
-    @Provides
-    @Singleton
     fun favouriteCacheResource(database: Database): FavouriteServiceLocationLocalResource {
         return SqlDelightFavouriteServiceLocationLocalResource(database)
+    }
+
+    @Provides
+    @Singleton
+    fun serviceLocationLocalResource(database: Database): ServiceLocationLocalResource {
+        return SqlDelightServiceLocationLocalResource(database)
     }
 
     @Provides

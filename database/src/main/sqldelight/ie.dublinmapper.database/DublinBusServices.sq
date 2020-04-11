@@ -1,0 +1,23 @@
+import io.rtpi.api.Operator;
+
+CREATE TABLE dublinBusServices (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    locationId TEXT NOT NULL,
+    route TEXT NOT NULL,
+    operator TEXT AS Operator NOT NULL,
+    FOREIGN KEY (locationId) REFERENCES dublinBusLocations(id)
+);
+
+selectAll:
+SELECT * FROM dublinBusServices;
+
+insertOrReplace:
+INSERT OR REPLACE INTO dublinBusServices(
+  locationId,
+  route,
+  operator
+)
+VALUES (?, ?, ?);
+
+deleteAll:
+DELETE FROM dublinBusServices;

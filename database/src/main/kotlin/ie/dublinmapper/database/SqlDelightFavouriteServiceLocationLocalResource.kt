@@ -8,18 +8,17 @@ class SqlDelightFavouriteServiceLocationLocalResource(
 ) : FavouriteServiceLocationLocalResource {
 
     override fun insertFavourite(serviceLocationId: String, serviceLocationName: String, service: Service) {
-        database.favouriteServiceLocationEntityQueries.insertOrReplace(
-            id = serviceLocationId,
+        database.favouriteLocationsQueries.insertOrReplace(
+            locationId = serviceLocationId,
             name = serviceLocationName,
             service = service
         )
     }
 
     override fun deleteFavourite(serviceLocationId: String, service: Service) {
-        database.favouriteServiceLocationEntityQueries.deleteByIdAndService(
-            id = serviceLocationId,
+        database.favouriteLocationsQueries.deleteByIdAndService(
+            locationId = serviceLocationId,
             service = service
         )
     }
-
 }

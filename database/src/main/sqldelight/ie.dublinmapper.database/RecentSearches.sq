@@ -1,0 +1,23 @@
+import io.rtpi.api.Service;
+import java.time.Instant;
+
+CREATE TABLE recentSearches (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    service TEXT AS Service NOT NULL,
+    locationId TEXT NOT NULL,
+    timestamp TEXT AS Instant NOT NULL
+);
+
+selectAll:
+SELECT * FROM recentSearches;
+
+insertOrReplace:
+INSERT OR REPLACE INTO recentSearches(
+  service,
+  locationId,
+  timestamp
+)
+VALUES (?, ?, ?);
+
+deleteAll:
+DELETE FROM recentSearches;

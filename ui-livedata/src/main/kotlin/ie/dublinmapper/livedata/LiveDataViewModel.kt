@@ -7,8 +7,6 @@ import ie.dublinmapper.domain.service.RxScheduler
 import ie.dublinmapper.model.LiveDataItem
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
-import io.rtpi.api.Route
-import io.rtpi.api.ServiceLocationRoutes
 import io.rtpi.util.RouteComparator
 import timber.log.Timber
 import javax.inject.Inject

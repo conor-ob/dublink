@@ -14,12 +14,12 @@ import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.isFavourite
-import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
-import io.rtpi.api.ServiceLocationRoutes
+import io.rtpi.api.StopLocation
+import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import timber.log.Timber
 
@@ -136,7 +136,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
         if (state.serviceLocationResponse != null
             && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
-            && state.serviceLocationResponse.serviceLocation is ServiceLocationRoutes
+            && state.serviceLocationResponse.serviceLocation is StopLocation
             && state.serviceLocationResponse.serviceLocation.routes.size != routes.childCount
         ) {
             val dip = 4f
@@ -146,12 +146,15 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 resources.displayMetrics
             )
             routes.removeAllViewsInLayout()
-            for (route in state.serviceLocationResponse.serviceLocation.routes) {
+            val routeGroups = state.serviceLocationResponse.serviceLocation.routes
+                .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
+                .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
+            for (route in routeGroups) {
 //            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
                 val chip = Chip(requireContext())
                 chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
-                val (textColour, backgroundColour) = mapColour(route.operator, route.id)
-                chip.text = " ${route.id} "
+                val (textColour, backgroundColour) = mapColour(route.first, route.second)
+                chip.text = " ${route.second} "
                 chip.setTextAppearanceResource(R.style.SmallerText)
                 chip.setTextColor(ColorStateList.valueOf(resources.getColor(textColour)))
                 chip.setChipBackgroundColorResource(backgroundColour)

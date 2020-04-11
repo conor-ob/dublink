@@ -1,0 +1,21 @@
+CREATE TABLE luasLocations (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL
+);
+
+selectAll:
+SELECT * FROM luasLocations;
+
+insertOrReplace:
+INSERT OR REPLACE INTO luasLocations(
+  id,
+  name,
+  latitude,
+  longitude
+)
+VALUES (?, ?, ?, ?);
+
+deleteAll:
+DELETE FROM luasLocations;
