@@ -25,7 +25,6 @@ class FavouritesUseCase @Inject constructor(
         if (preferenceStore.isFavouritesSortByLocation() && permissionChecker.isLocationPermissionGranted()) {
             return locationProvider.getLocationUpdates(25.0)
                 .flatMap { coordinate ->
-                    Timber.d("CONOR here we are=$coordinate")
                     getFavouritesWithLiveData(
                         showLoading = showLoading,
                         comparator = Comparator { s1, s2 ->
