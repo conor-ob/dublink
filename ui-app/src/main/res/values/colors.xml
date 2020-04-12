@@ -68,8 +68,8 @@
 
     <color name="colorPrimaryVariant">#FFFFFF</color>
     <color name="colorSecondaryVariant">#C78522</color>
-    <color name="colorBackground">@color/grey_50</color>
-    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorBackground">@color/grey_100</color>
+    <color name="colorSurface">@color/grey_50</color>
 
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnBackground">#000000</color>
@@ -78,7 +78,7 @@
 
     <color name="scrimBackground">@color/luasGreen</color>
 
-    <color name="colorStatusBar">#FFFFFF</color>
+    <color name="colorStatusBar">@color/grey_50</color>
     <color name="colorDivider">#E4E4E4</color>
 
     <color name="colorSuccess">#438E50</color>
