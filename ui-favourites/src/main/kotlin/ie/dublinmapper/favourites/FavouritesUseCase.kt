@@ -1,5 +1,6 @@
 package ie.dublinmapper.favourites
 
+import ie.dublinmapper.domain.model.getOrder
 import ie.dublinmapper.domain.repository.*
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
@@ -35,7 +36,7 @@ class FavouritesUseCase @Inject constructor(
         } else {
             return getFavouritesWithLiveData(
                 showLoading = showLoading,
-                comparator = Comparator { s1, s2 -> s1.name.compareTo(s2.name) }
+                comparator = Comparator { s1, s2 -> s1.getOrder().compareTo(s2.getOrder()) }
             )
         }
     }
