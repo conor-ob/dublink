@@ -49,10 +49,10 @@ class GpsLocationProvider @Inject constructor(
             .map { Coordinate(it.latitude, it.longitude) }
     }
 
-    private fun newRequest(): LocationRequest {
-        return LocationRequest.create()
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(10000L)
+    private fun newRequest() = LocationRequest.create().apply {
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        fastestInterval = 5000L
+        interval = 10000L
     }
 
     private fun isBetterLocation(location: Location): Boolean {

@@ -9,7 +9,6 @@ import io.reactivex.Observable
 import io.rtpi.api.LiveData
 import io.rtpi.api.ServiceLocation
 import io.rtpi.util.LiveDataGrouper
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
