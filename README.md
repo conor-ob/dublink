@@ -2,9 +2,13 @@
 
 Dublin Mapper is a **work-in-progress** Android app for getting real time data for Dublin Bus :trolleybus: Irish Rail :railway_car: Luas :tram: Bus Éireann :bus: Dublin Bikes :bike: Aircoach :airplane:
 
-| Favourites | Search | Live Data | Settings |
-| ------ | ----- | ------ | ----- |
-| ![Favourites](/assets/screenshots/favourites.jpg) | ![Search](/assets/screenshots/search.jpg) | ![Live Data](/assets/screenshots/livedata.jpg) | ![Settings](/assets/screenshots/settings.jpg) |
+| Favourites | Search |
+| ------ | ----- |
+| ![Favourites](/assets/screenshots/favourites.jpg) | ![Search](/assets/screenshots/search.jpg) |
+
+| Live Data | Settings |
+| ------ | ----- |
+| ![Live Data](/assets/screenshots/livedata.jpg) | ![Settings](/assets/screenshots/settings.jpg) |
 
 ## Android development
 
