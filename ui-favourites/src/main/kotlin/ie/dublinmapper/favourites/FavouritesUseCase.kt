@@ -9,6 +9,7 @@ import io.reactivex.Observable
 import io.rtpi.api.LiveData
 import io.rtpi.api.ServiceLocation
 import io.rtpi.util.LiveDataGrouper
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -26,71 +27,59 @@ class FavouritesUseCase @Inject constructor(
                 locationProvider.getLastKnownLocation(),
                 locationProvider.getLocationUpdates()
             )
-                .throttleLatest(10, TimeUnit.SECONDS)
+                .distinctUntilChanged { t1, t2 -> t1.haversine(t2) <= 25.0 } //TODO check less than or greater than
                 .flatMap { coordinate ->
-                    val limit = preferenceStore.getFavouritesLiveDataLimit()
-                    serviceLocationRepository.getFavourites()
-                        .flatMap { responses ->
-                            Observable.combineLatest(
-                                responses
-                                    .filterIsInstance<ServiceLocationResponse.Data>()
-                                    .flatMap { it.serviceLocations }
-                                    .sortedBy { coordinate.haversine(it.coordinate) }
-                                    .mapIndexed { index: Int, serviceLocation: ServiceLocation ->
-                                        if (index < limit) {
-                                            if (showLoading) {
-                                                getGroupedLiveData(serviceLocation)
-                                                    .startWith(
-                                                        LiveDataPresentationResponse.Loading(
-                                                            serviceLocation = serviceLocation
-                                                        )
-                                                    )
-                                            } else {
-                                                getGroupedLiveData(serviceLocation)
-                                            }
-                                        } else {
-                                            Observable.just(
-                                                LiveDataPresentationResponse.Skipped(
-                                                    serviceLocation = serviceLocation
-                                                )
-                                            )
-                                        }
-                                    }
-                            ) { streams -> streams.map { it as LiveDataPresentationResponse } }
+                    Timber.d("CONOR here we are=$coordinate")
+                    getFavouritesWithLiveData(
+                        showLoading = showLoading,
+                        comparator = Comparator { s1, s2 ->
+                            s1.coordinate.haversine(coordinate)
+                                .compareTo(s2.coordinate.haversine(coordinate))
                         }
+                    )
                 }
         } else {
-            val limit = preferenceStore.getFavouritesLiveDataLimit()
-            return serviceLocationRepository.getFavourites()
-                .flatMap { responses ->
-                    Observable.combineLatest(
-                        responses
-                            .filterIsInstance<ServiceLocationResponse.Data>()
-                            .flatMap { it.serviceLocations }
-//                    .sortedBy { it.id }
-                            .mapIndexed { index: Int, serviceLocation: ServiceLocation ->
-                                if (index < limit) {
-                                    if (showLoading) {
-                                        getGroupedLiveData(serviceLocation)
-                                            .startWith(
-                                                LiveDataPresentationResponse.Loading(
-                                                    serviceLocation = serviceLocation
-                                                )
-                                            )
-                                    } else {
-                                        getGroupedLiveData(serviceLocation)
-                                    }
-                                } else {
-                                    Observable.just(
-                                        LiveDataPresentationResponse.Skipped(
-                                            serviceLocation = serviceLocation
-                                        )
-                                    )
-                                }
-                            }
-                    ) { streams -> streams.map { it as LiveDataPresentationResponse } }
-                }
+            return getFavouritesWithLiveData(
+                showLoading = showLoading,
+                comparator = Comparator { s1, s2 -> s1.name.compareTo(s2.name) }
+            )
         }
+    }
+
+    private fun getFavouritesWithLiveData(
+        showLoading: Boolean,
+        comparator: Comparator<ServiceLocation>
+    ): Observable<List<LiveDataPresentationResponse>> {
+        val limit = preferenceStore.getFavouritesLiveDataLimit()
+        return serviceLocationRepository.getFavourites()
+            .flatMap { responses ->
+                Observable.combineLatest(
+                    responses
+                        .filterIsInstance<ServiceLocationResponse.Data>()
+                        .flatMap { it.serviceLocations }
+                        .sortedWith(comparator)
+                        .mapIndexed { index: Int, serviceLocation: ServiceLocation ->
+                            if (index < limit) {
+                                if (showLoading) {
+                                    getGroupedLiveData(serviceLocation)
+                                        .startWith(
+                                            LiveDataPresentationResponse.Loading(
+                                                serviceLocation = serviceLocation
+                                            )
+                                        )
+                                } else {
+                                    getGroupedLiveData(serviceLocation)
+                                }
+                            } else {
+                                Observable.just(
+                                    LiveDataPresentationResponse.Skipped(
+                                        serviceLocation = serviceLocation
+                                    )
+                                )
+                            }
+                        }
+                ) { streams -> streams.map { it as LiveDataPresentationResponse } }
+            }
     }
 
     private fun getGroupedLiveData(
