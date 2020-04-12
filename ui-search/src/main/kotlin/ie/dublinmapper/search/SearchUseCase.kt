@@ -77,23 +77,23 @@ class SearchUseCase @Inject constructor(
                 locationProvider.getLastKnownLocation(),
                 locationProvider.getLocationUpdates()
             )
-                .throttleLatest(10, TimeUnit.SECONDS)
+                .distinctUntilChanged { t1, t2 -> t1.haversine(t2) <= 25.0 } //TODO check less than or greater than
                 .flatMap { coordinate ->
-                serviceLocationRepository
-                    .get()
-                    .map { responses ->
-                        responses.filterIsInstance<ServiceLocationResponse.Data>()
-                    }
-                    .map { response ->
-                        NearbyLocationsResponse.Data(
-                            serviceLocations = response
-                                .flatMap { it.serviceLocations }
-                                .associateBy { it.coordinate.haversine(coordinate) }
-                                .toSortedMap()
-                                .truncateHead(5)
-                        )
-                    }
-            }
+                    serviceLocationRepository
+                        .get()
+                        .map { responses ->
+                            responses.filterIsInstance<ServiceLocationResponse.Data>()
+                        }
+                        .map { response ->
+                            NearbyLocationsResponse.Data(
+                                serviceLocations = response
+                                    .flatMap { it.serviceLocations }
+                                    .associateBy { it.coordinate.haversine(coordinate) }
+                                    .toSortedMap()
+                                    .truncateHead(5)
+                            )
+                        }
+                }
         } else {
             Observable.just(NearbyLocationsResponse.LocationDisabled)
         }

@@ -41,7 +41,7 @@ class GpsLocationProvider @Inject constructor(context: Context) : LocationProvid
     private fun newRequest(): LocationRequest {
         return LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(5000L)
+            .setInterval(10000L)
     }
 
     private fun isBetterLocation(location: Location): Boolean {
