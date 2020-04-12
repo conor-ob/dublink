@@ -23,11 +23,7 @@ class FavouritesUseCase @Inject constructor(
 
     fun getFavouritesWithLiveData(showLoading: Boolean): Observable<List<LiveDataPresentationResponse>> {
         if (preferenceStore.isFavouritesSortByLocation() && permissionChecker.isLocationPermissionGranted()) {
-            return Observable.concat(
-                locationProvider.getLastKnownLocation(),
-                locationProvider.getLocationUpdates()
-            )
-                .distinctUntilChanged { t1, t2 -> t1.haversine(t2) <= 25.0 } //TODO check less than or greater than
+            return locationProvider.getLocationUpdates(25.0)
                 .flatMap { coordinate ->
                     Timber.d("CONOR here we are=$coordinate")
                     getFavouritesWithLiveData(

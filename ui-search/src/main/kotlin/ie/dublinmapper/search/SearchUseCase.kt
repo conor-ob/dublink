@@ -8,14 +8,12 @@ import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
-import ie.dublinmapper.domain.service.RxScheduler
 import ie.dublinmapper.domain.util.haversine
 import ie.dublinmapper.domain.util.truncateHead
 import io.reactivex.Observable
 import io.rtpi.api.*
 import java.time.Instant
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
@@ -73,11 +71,7 @@ class SearchUseCase @Inject constructor(
 
     fun getNearbyServiceLocations(): Observable<NearbyLocationsResponse> {
         return if (permissionChecker.isLocationPermissionGranted()) {
-            return Observable.concat(
-                locationProvider.getLastKnownLocation(),
-                locationProvider.getLocationUpdates()
-            )
-                .distinctUntilChanged { t1, t2 -> t1.haversine(t2) <= 25.0 } //TODO check less than or greater than
+            return locationProvider.getLocationUpdates(25.0)
                 .flatMap { coordinate ->
                     serviceLocationRepository
                         .get()
