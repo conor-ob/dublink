@@ -4,7 +4,7 @@ Dublin Mapper is a **work-in-progress** Android app for getting real time data f
 
 | Favourites | Search | Live Data | Settings |
 | ------ | ----- | ------ | ----- |
-| ![Favourites](/assets/screenshots/favourites.jpg) | ![Search](/assets/screenshots/search.jpg) | ![Live Data](/assets/screenshots/livedata.jpg) | ![Settings](/assets/screenshots/settings.jpg |
+| ![Favourites](/assets/screenshots/favourites.jpg) | ![Search](/assets/screenshots/search.jpg) | ![Live Data](/assets/screenshots/livedata.jpg) | ![Settings](/assets/screenshots/settings.jpg) |
 
 ## Android development
 
