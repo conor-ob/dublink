@@ -22,8 +22,7 @@ class SearchUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val recentSearchRepository: RecentServiceLocationSearchRepository,
     private val permissionChecker: PermissionChecker,
-    private val locationProvider: LocationProvider,
-    private val scheduler: RxScheduler
+    private val locationProvider: LocationProvider
 ) {
 
     private val cache = mutableMapOf<String, SearchResultsResponse>()
@@ -78,7 +77,7 @@ class SearchUseCase @Inject constructor(
                 locationProvider.getLastKnownLocation(),
                 locationProvider.getLocationUpdates()
             )
-                .throttleLatest(30, TimeUnit.SECONDS)
+                .throttleLatest(10, TimeUnit.SECONDS)
                 .flatMap { coordinate ->
                 serviceLocationRepository
                     .get()

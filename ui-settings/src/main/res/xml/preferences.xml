@@ -68,11 +68,11 @@
     <PreferenceCategory
         android:title="@string/preference_category_name_favourites">
 
-<!--        <SwitchPreference-->
-<!--            android:title="@string/preference_name_favourites_sort_by_location"-->
-<!--            android:key="@string/preference_key_favourites_sort_by_location"-->
-<!--            android:summary="@string/preference_summary_favourites_sort_by_location"-->
-<!--            android:defaultValue="@bool/preference_default_favourites_sort_location" />-->
+        <SwitchPreference
+            android:title="@string/preference_name_favourites_sort_by_location"
+            android:key="@string/preference_key_favourites_sort_by_location"
+            android:summary="@string/preference_summary_favourites_sort_by_location"
+            android:defaultValue="@bool/preference_default_favourites_sort_location" />
 
         <SeekBarPreference
             android:icon="@drawable/ic_clock"
