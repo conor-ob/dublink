@@ -71,7 +71,7 @@ class SearchUseCase @Inject constructor(
 
     fun getNearbyServiceLocations(): Observable<NearbyLocationsResponse> {
         return if (permissionChecker.isLocationPermissionGranted()) {
-            return locationProvider.getLocationUpdates(25.0)
+            return locationProvider.getLocationUpdates(thresholdDistance = 25.0)
                 .flatMap { coordinate ->
                     serviceLocationRepository
                         .get()
