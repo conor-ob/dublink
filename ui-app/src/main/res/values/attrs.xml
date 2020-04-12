@@ -3,4 +3,7 @@
     <attr name="emphasisHighAlpha" format="float"/>
     <attr name="emphasisMediumAlpha" format="float"/>
     <attr name="emphasisDisabledAlpha" format="float"/>
+    <attr name="colorSurfaceDivider" format="float"/>
+    <attr name="colorSuccess" format="float"/>
+    <attr name="colorOnSuccess" format="float"/>
 </resources>

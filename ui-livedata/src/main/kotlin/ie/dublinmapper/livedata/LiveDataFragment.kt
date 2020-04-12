@@ -40,8 +40,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 //        toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
 //        toolbar.inflateMenu(R.menu.menu_live_data)
 
-        loader.setColorSchemeColors(resources.getColor(R.color.colorOnSurface))
-        loader.setProgressBackgroundColorSchemeResource(R.color.colorSurface)
+        loader.setColorSchemeColors(resources.getColor(R.color.color_on_surface, null))
+        loader.setProgressBackgroundColorSchemeResource(R.color.color_surface)
 
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() } //TODO
         if (args.serviceLocationIsFavourite) {
