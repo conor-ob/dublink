@@ -31,7 +31,7 @@
         android:marqueeRepeatLimit="1"
         android:scrollHorizontally="true"
         android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.DublinMapper.Body1"/>
+        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle"/>
 
     <View
         android:layout_width="0dp"
@@ -43,6 +43,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textAppearance="@style/TextAppearance.DublinMapper.Body1" />
+        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
 
 </LinearLayout>

@@ -1,94 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--https://material.io/design/typography/the-type-system.html#type-scale-->
+
     <style name="TextAppearance.DublinMapper.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="fontFamily">@font/barlow_bold</item>
+        <item name="fontFamily">@font/barlow_light</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">101.03sp</item>
+<!--        <item name="android:textSize">101.03sp</item>-->
         <item name="android:letterSpacing">-0.15</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
-        <item name="fontFamily">@font/barlow_bold</item>
+        <item name="fontFamily">@font/barlow_light</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">63.15sp</item>
+<!--        <item name="android:textSize">63.15sp</item>-->
         <item name="android:letterSpacing">-0.005</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Headline3" parent="TextAppearance.MaterialComponents.Headline3">
-        <item name="fontFamily">@font/barlow_bold</item>
+        <item name="fontFamily">@font/barlow_regular</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">50.12sp</item>
+<!--        <item name="android:textSize">50.12sp</item>-->
         <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
-        <item name="fontFamily">@font/barlow_bold</item>
+        <item name="fontFamily">@font/barlow_regular</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">35.5sp</item>
+<!--        <item name="android:textSize">35.5sp</item>-->
         <item name="android:letterSpacing">0.0025</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
-        <item name="fontFamily">@font/barlow_bold</item>
+        <item name="fontFamily">@font/barlow_regular</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">25.06sp</item>
+<!--        <item name="android:textSize">25.06sp</item>-->
         <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/barlow_medium</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">20.76sp</item>
+<!--        <item name="android:textSize">20.76sp</item>-->
         <item name="android:letterSpacing">0.0025</item>
     </style>
 
-    <style name="TextAppearance.DublinMapper.Body1" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.DublinMapper.ListItemTitle" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">@font/barlow_medium</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">16.71sp</item>
+        <!--        <item name="android:textSize">16.71sp</item>-->
+        <item name="android:letterSpacing">0.001</item>
+    </style>
+
+    <style name="TextAppearance.DublinMapper.ListItemSubtitle" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/barlow_regular</item>
+        <item name="android:textColor">@color/color_on_surface_emphasis_medium</item>
+        <!--        <item name="android:textSize">16.71sp</item>-->
+        <item name="android:letterSpacing">0.0025</item>
+    </style>
+
+    <style name="TextAppearance.DublinMapper.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/barlow_regular</item>
+        <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
+<!--        <item name="android:textSize">16.71sp</item>-->
+        <item name="android:letterSpacing">0.0015</item>
+    </style>
+
+    <style name="TextAppearance.DublinMapper.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/barlow_medium</item>
+        <item name="android:textColor">@color/color_on_surface_emphasis_medium</item>
+<!--        <item name="android:textSize">14.62sp</item>-->
+        <item name="android:letterSpacing">0.001</item>
+    </style>
+
+    <style name="TextAppearance.DublinMapper.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/barlow_regular</item>
+        <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
+<!--        <item name="android:textSize">16.71sp</item>-->
         <item name="android:letterSpacing">0.005</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Body2" parent="TextAppearance.MaterialComponents.Body2">
         <item name="fontFamily">@font/barlow_regular</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">14.62sp</item>
+<!--        <item name="android:textSize">14.62sp</item>-->
         <item name="android:letterSpacing">0.0025</item>
-    </style>
-
-    <style name="TextAppearance.DublinMapper.Subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
-        <item name="fontFamily">@font/barlow_medium</item>
-        <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">16.71sp</item>
-        <item name="android:letterSpacing">0.0015</item>
-    </style>
-
-    <style name="TextAppearance.DublinMapper.Subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="fontFamily">@font/barlow_regular</item>
-        <item name="android:textColor">@color/color_on_surface_emphasis_medium</item>
-        <item name="android:textSize">14.62sp</item>
-        <item name="android:letterSpacing">0.001</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Button" parent="TextAppearance.MaterialComponents.Button">
         <item name="fontFamily">@font/barlow_bold</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">14.53sp</item>
+<!--        <item name="android:textSize">14.53sp</item>-->
         <item name="android:letterSpacing">0.0125</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Caption" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="fontFamily">@font/barlow_bold</item>
-        <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">12.53sp</item>
+        <item name="fontFamily">@font/barlow_regular</item>
+        <item name="android:textColor">@color/color_on_surface_emphasis_medium</item>
+<!--        <item name="android:textSize">12.53sp</item>-->
         <item name="android:letterSpacing">0.004</item>
     </style>
 
     <style name="TextAppearance.DublinMapper.Overline" parent="TextAppearance.MaterialComponents.Overline">
-        <item name="fontFamily">@font/barlow_bold</item>
+        <item name="fontFamily">@font/barlow_regular</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
-        <item name="android:textSize">12.53sp</item>
+<!--        <item name="android:textSize">12.53sp</item>-->
         <item name="android:letterSpacing">0.2</item>
     </style>
 

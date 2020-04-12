@@ -41,7 +41,7 @@
                 android:marqueeRepeatLimit="1"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Body1"/>
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle"/>
 
         </LinearLayout>
 
@@ -58,7 +58,7 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"/>
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
                 android:id="@+id/scheduledTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"/>
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"/>
 
         </LinearLayout>
 
@@ -87,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textAppearance="@style/TextAppearance.DublinMapper.Body1" />
+        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
 
 </LinearLayout>
 

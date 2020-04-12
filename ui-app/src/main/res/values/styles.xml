@@ -3,7 +3,10 @@
 
     <style name="Widget.DublinMapper.AppBar" parent="Widget.MaterialComponents.AppBarLayout.Surface" />
 
-    <style name="Widget.DublinMapper.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface" />
+    <style name="Widget.DublinMapper.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <item name="titleTextAppearance">@style/TextAppearance.DublinMapper.Headline6</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
 
     <style name="Widget.DublinMapper.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
             <item name="android:layout_gravity">bottom|center</item>
