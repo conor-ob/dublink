@@ -13,8 +13,11 @@ import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.*
+import timber.log.Timber
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
+
+    private var showLoading = true
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
@@ -64,7 +67,8 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
     override fun onResume() {
         super.onResume()
         viewModel.bindActions()
-        viewModel.dispatch(Action.GetFavouritesWithLiveData)
+        Timber.d("firstLoad=$showLoading")
+        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading))
     }
 
     override fun onPause() {
@@ -75,9 +79,10 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
     private fun renderState(state: State) {
         if (state.favouritesWithLiveData != null) {
             adapter?.update(listOf(FavouritesMapper.map(state.favouritesWithLiveData)))
+            showLoading = false
         }
         if (state.internetStatusChange == InternetStatus.ONLINE) {
-            viewModel.dispatch(Action.GetFavouritesWithLiveData)
+            viewModel.dispatch(Action.GetFavouritesWithLiveData(true))
         }
     }
 

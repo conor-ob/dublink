@@ -39,8 +39,8 @@ class FavouritesViewModel @Inject constructor(
 
     fun bindActions() {
         val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
-            .switchMap { _ ->
-                useCase.getFavouritesWithLiveData()
+            .switchMap { action ->
+                useCase.getFavouritesWithLiveData(action.showLoading)
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.FavouritesWithLiveData(it) }

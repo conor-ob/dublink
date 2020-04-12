@@ -15,7 +15,7 @@ class FavouritesUseCase @Inject constructor(
     private val preferenceStore: PreferenceStore
 ) {
 
-    fun getFavouritesWithLiveData(): Observable<List<LiveDataPresentationResponse>> {
+    fun getFavouritesWithLiveData(showLoading: Boolean): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()
         return serviceLocationRepository.getFavourites()
             .flatMap { responses ->
@@ -26,12 +26,16 @@ class FavouritesUseCase @Inject constructor(
 //                    .sortedBy { it.id }
                         .mapIndexed { index: Int, serviceLocation: ServiceLocation ->
                             if (index < limit) {
-                                getGroupedLiveData(serviceLocation)
-                                    .startWith(
-                                        LiveDataPresentationResponse.Loading(
-                                            serviceLocation = serviceLocation
+                                if (showLoading) {
+                                    getGroupedLiveData(serviceLocation)
+                                        .startWith(
+                                            LiveDataPresentationResponse.Loading(
+                                                serviceLocation = serviceLocation
+                                            )
                                         )
-                                    )
+                                } else {
+                                    getGroupedLiveData(serviceLocation)
+                                }
                             } else {
                                 Observable.just(
                                     LiveDataPresentationResponse.Skipped(

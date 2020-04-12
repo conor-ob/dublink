@@ -5,7 +5,7 @@ import com.ww.roxie.BaseState
 import ie.dublinmapper.domain.internet.InternetStatus
 
 sealed class Action : BaseAction {
-    object GetFavouritesWithLiveData : Action()
+    data class GetFavouritesWithLiveData(val showLoading: Boolean) : Action()
     object SubscribeToInternetStatusChanges : Action()
 }
 
