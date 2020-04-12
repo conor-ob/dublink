@@ -37,16 +37,16 @@ class GpsLocationProvider @Inject constructor(
                 .map { Coordinate(it.latitude, it.longitude) }
     }
 
-    private fun saveLocation(location: Location) {
-        lastKnownLocation = location
-        preferenceStore.setLastKnownLocation(Coordinate(location.latitude, location.longitude))
-    }
-
     private fun getLocationUpdates(): Observable<Coordinate> {
         return locationProvider.getUpdatedLocation(newRequest())
             .filter { isBetterLocation(it) }
             .doOnNext { saveLocation(it) }
             .map { Coordinate(it.latitude, it.longitude) }
+    }
+
+    private fun saveLocation(location: Location) {
+        lastKnownLocation = location
+        preferenceStore.setLastKnownLocation(Coordinate(location.latitude, location.longitude))
     }
 
     private fun newRequest() = LocationRequest.create().apply {

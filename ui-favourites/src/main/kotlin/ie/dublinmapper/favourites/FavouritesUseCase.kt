@@ -21,8 +21,12 @@ class FavouritesUseCase @Inject constructor(
     private val preferenceStore: PreferenceStore
 ) {
 
-    fun getFavouritesWithLiveData(showLoading: Boolean): Observable<List<LiveDataPresentationResponse>> {
-        if (preferenceStore.isFavouritesSortByLocation() && permissionChecker.isLocationPermissionGranted()) {
+    fun getFavouritesWithLiveData(
+        showLoading: Boolean
+    ): Observable<List<LiveDataPresentationResponse>> {
+        if (preferenceStore.isFavouritesSortByLocation() &&
+            permissionChecker.isLocationPermissionGranted()
+        ) {
             return locationProvider.getLocationUpdates(thresholdDistance = 25.0)
                 .flatMap { coordinate ->
                     getFavouritesWithLiveData(
