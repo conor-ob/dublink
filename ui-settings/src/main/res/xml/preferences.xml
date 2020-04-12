@@ -46,6 +46,12 @@
             android:title="@string/service_name_luas" />
 
         <SwitchPreference
+            android:icon="@drawable/ic_bus"
+            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
+            android:key="@string/preference_key_enabled_service_bus_eireann"
+            android:title="@string/service_name_bus_eireann" />
+
+        <SwitchPreference
             android:icon="@drawable/ic_bike"
             android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes"
             android:key="@string/preference_key_enabled_service_dublin_bikes"
@@ -53,15 +59,8 @@
 
         <SwitchPreference
             android:icon="@drawable/ic_bus"
-            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
-            android:key="@string/preference_key_enabled_service_bus_eireann"
-            android:title="@string/service_name_bus_eireann" />
-
-        <SwitchPreference
-            android:icon="@drawable/ic_bus"
             android:defaultValue="@bool/preference_default_enabled_service_aircoach"
             android:key="@string/preference_key_enabled_service_aircoach"
-            android:summary="@string/preference_summary_enabled_service_aircoach"
             android:title="@string/service_name_aircoach" />
 
     </PreferenceCategory>

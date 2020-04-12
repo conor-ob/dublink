@@ -15,7 +15,7 @@
         android:id="@+id/bikesCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ThinnerChip" />
+        style="@style/Widget.DublinMapper.RouteChip" />
 
     <View
         android:layout_width="4dp"
@@ -35,7 +35,7 @@
         android:id="@+id/docksCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/ThinnerChip" />
+        style="@style/Widget.DublinMapper.RouteChip" />
 
     <View
         android:layout_width="4dp"

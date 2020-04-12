@@ -18,7 +18,6 @@
     <string name="preference_summary_services">Choose your favourites</string>
 
     <string name="preference_key_enabled_service_aircoach">aircoach_enabled</string>
-    <string name="preference_summary_enabled_service_aircoach">🚧 Experimental</string>
     <string name="preference_key_enabled_service_bus_eireann">bus_eireann_enabled</string>
     <string name="preference_key_enabled_service_dublin_bikes">dublin_bikes_enabled</string>
     <string name="preference_key_enabled_service_dublin_bus">dublin_bus_enabled</string>

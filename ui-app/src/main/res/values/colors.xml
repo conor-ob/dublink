@@ -9,29 +9,6 @@
     <color name="colorError">#B00020</color>
     <color name="colorOnError">#FFFFFF</color>
 
-    <color name="primary">#448aff</color>
-    <color name="primary_dark">#005ecb</color>
-    <!--<color name="primary">#1976d2</color>-->
-    <!--<color name="primary_dark">#004ba0</color>-->
-    <color name="accent">#FFD740</color>
-    <color name="white">#FFFFFF</color>
-    <color name="white_90">#e6ffffff</color>
-    <color name="indigo">#4768fd</color>
-    <color name="indigo_dark">#3c54fe</color>
-
-    <color name="status_bar">@color/white</color>
-    <color name="text_primary">@color/grey_900</color>
-    <color name="text_secondary">@color/grey_600</color>
-    <color name="text_color_tertiary">#dadce0</color>
-    <color name="text_light">@color/grey_400</color>
-
-    <color name="slackPrimary">#4E394C</color>
-    <color name="slackPrimaryDark">#3D2D3C</color>
-
-    <color name="favouritesPrimary">#7056A5</color>
-    <color name="favouritesPrimaryDark">#5F498D</color>
-    <color name="favouritesAccent">#4286F5</color>
-
     <color name="aircoachOrange">#EF7B0A</color>
     <color name="aircoachOrangeDark">#B35E0C</color>
     <color name="aircoachBlue">#1E9AD0</color>
@@ -58,13 +35,6 @@
     <color name="commuterBlue">#1565C0</color>
     <color name="intercityYellow">#FBBF01</color>
 
-    <color name="searchPrimary">#4286F5</color>
-    <color name="searchPrimaryDark">#346AC2</color>
-
-    <color name="search_status_bar">#bdbdbd</color>
-
-    <color name="blahGrey">#D2D2D2</color>
-
     <color name="grey_50">#fafafa</color>
     <color name="grey_100">#f5f5f5</color>
     <color name="grey_200">#eeeeee</color>
@@ -78,21 +48,6 @@
     <color name="grey_900">#212121</color>
 
     <color name="window_background">#ffffff</color>
-
-    <color name="DublinMapper_slate_200">#81A9B3</color>
-    <color name="DublinMapper_slate_600">#4A6572</color>
-    <color name="DublinMapper_slate_700">#344955</color>
-    <color name="DublinMapper_slate_800">#232F34</color>
-
-    <color name="DublinMapper_slate_200_10pc_over_surface">#16191A</color>
-
-    <color name="tv_test_grey">#c0c0c0</color>
-    <color name="tv_test_yellow">#bdc200</color>
-    <color name="tv_test_cyan">#00c6c2</color>
-    <color name="tv_test_green">#00c800</color>
-    <color name="tv_test_magenta">#e400cb</color>
-    <color name="tv_test_red">#e10000</color>
-    <color name="tv_test_blue">#2400cd</color>
 
     <color name="launcher_icon_background">#333333</color>
 
@@ -111,7 +66,7 @@
 
 
 
-    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorPrimaryVariant">#FFFFFF</color>
     <color name="colorSecondaryVariant">#C78522</color>
     <color name="colorBackground">@color/grey_50</color>
     <color name="colorSurface">#FFFFFF</color>
@@ -119,6 +74,7 @@
     <color name="colorOnPrimary">#FFFFFF</color>
     <color name="colorOnBackground">#000000</color>
     <color name="colorOnSurface">#000000</color>
+    <color name="test">#3700B3</color>
 
     <color name="scrimBackground">@color/luasGreen</color>
 

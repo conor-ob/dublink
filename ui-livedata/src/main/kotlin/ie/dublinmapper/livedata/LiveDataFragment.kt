@@ -14,6 +14,7 @@ import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.isFavourite
+import ie.dublinmapper.util.ChipFactory
 import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
@@ -139,28 +140,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             && state.serviceLocationResponse.serviceLocation is StopLocation
             && state.serviceLocationResponse.serviceLocation.routeGroups.size != routes.childCount //TODO check this
         ) {
-            val dip = 4f
-            val px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dip,
-                resources.displayMetrics
-            )
             routes.removeAllViewsInLayout()
             val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups
                 .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                 .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
             for (route in sortedRouteGroups) {
-//            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
-                val chip = Chip(requireContext())
-                chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
-                val (textColour, backgroundColour) = mapColour(route.first, route.second)
-                chip.text = " ${route.second} "
-                chip.setTextAppearanceResource(R.style.SmallerText)
-                chip.setTextColor(ColorStateList.valueOf(resources.getColor(textColour)))
-                chip.setChipBackgroundColorResource(backgroundColour)
-                chip.elevation = px
-//            chip.chipMinHeight = 0f
-                routes.addView(chip)
+                routes.addView(ChipFactory.newRouteChip(requireContext(), route))
             }
             routes.visibility = View.VISIBLE
         }
@@ -173,26 +158,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     override fun onDestroyView() {
         super.onDestroyView()
         adapter = null
-    }
-
-    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
-        return when (operator) {
-            Operator.AIRCOACH -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.aircoachOrange)
-            Operator.BUS_EIREANN -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.busEireannRed)
-            Operator.COMMUTER -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.commuterBlue)
-            Operator.DART -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dartGreen)
-            Operator.DUBLIN_BIKES -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dublinBikesTeal)
-            Operator.DUBLIN_BUS -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.dublinBusYellow)
-            Operator.GO_AHEAD -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.goAheadBlue)
-            Operator.INTERCITY -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.intercityYellow)
-            Operator.LUAS -> {
-                when (route) {
-                    "Green", "Green Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasGreen)
-                    "Red", "Red Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasRed)
-                    else -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasPurple)
-                }
-            }
-        }
     }
 
     companion object {
