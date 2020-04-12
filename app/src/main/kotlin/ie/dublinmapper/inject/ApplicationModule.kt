@@ -63,15 +63,18 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun locationProvider(context: Context): LocationProvider = GpsLocationProvider(context)
-
-    @Provides
-    @Singleton
     fun permissionChecker(context: Context): PermissionChecker = UserPermissionsChecker(context)
 
     @Provides
     @Singleton
     fun schedulers(): RxScheduler = RxScheduler(Schedulers.io(), AndroidSchedulers.mainThread())
+
+    @Provides
+    @Singleton
+    fun locationProvider(
+        context: Context,
+        preferenceStore: PreferenceStore
+    ): LocationProvider = GpsLocationProvider(preferenceStore, context)
 
     @Provides
     @Singleton

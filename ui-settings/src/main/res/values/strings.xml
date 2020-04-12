@@ -11,6 +11,9 @@
     <string name="preference_value_dark_theme" translatable="false">dark</string>
     <string name="preference_value_battery_saver_theme" translatable="false">battery</string>
 
+    <string name="preference_key_last_known_location_latitude">last_known_location_latitude</string>
+    <string name="preference_key_last_known_location_longitude">last_known_location_longitude</string>
+
     <string name="preference_name_preferred_home_screen">Home Screen</string>
     <string name="preference_key_preferred_home_screen">preferred_home_screen</string>
 

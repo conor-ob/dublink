@@ -4,6 +4,7 @@ import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationRequest
 import ie.dublinmapper.domain.service.LocationProvider
+import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate
@@ -11,7 +12,10 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import timber.log.Timber
 import javax.inject.Inject
 
-class GpsLocationProvider @Inject constructor(context: Context) : LocationProvider {
+class GpsLocationProvider @Inject constructor(
+    private val preferenceStore: PreferenceStore,
+    context: Context
+) : LocationProvider {
 
     private var lastKnownLocation: Location? = null
 
@@ -19,6 +23,7 @@ class GpsLocationProvider @Inject constructor(context: Context) : LocationProvid
 
     override fun getLocationUpdates(thresholdDistance: Double): Observable<Coordinate> {
         return Observable.concat(
+            Observable.just(preferenceStore.getLastKnownLocation()),
             getLastKnownLocation(),
             getLocationUpdates()
         )
@@ -28,14 +33,19 @@ class GpsLocationProvider @Inject constructor(context: Context) : LocationProvid
     private fun getLastKnownLocation(): Observable<Coordinate> {
         return locationProvider.lastKnownLocation
                 .filter { isBetterLocation(it) }
-                .doOnNext { lastKnownLocation = it }
+                .doOnNext { saveLocation(it) }
                 .map { Coordinate(it.latitude, it.longitude) }
+    }
+
+    private fun saveLocation(location: Location) {
+        lastKnownLocation = location
+        preferenceStore.setLastKnownLocation(Coordinate(location.latitude, location.longitude))
     }
 
     private fun getLocationUpdates(): Observable<Coordinate> {
         return locationProvider.getUpdatedLocation(newRequest())
             .filter { isBetterLocation(it) }
-            .doOnNext { lastKnownLocation = it }
+            .doOnNext { saveLocation(it) }
             .map { Coordinate(it.latitude, it.longitude) }
     }
 
