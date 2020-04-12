@@ -33,10 +33,6 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    init {
-        bindActions()
-    }
-
     fun bindActions() {
         val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
             .switchMap { action ->
