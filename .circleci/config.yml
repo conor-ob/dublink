@@ -46,10 +46,6 @@ jobs:
 #      - store_test_results:
 #          path: ui-livedata/build/test-results
 #      - store_test_results:
-#          path: ui-nearby/build/test-results
-#      - store_test_results:
-#          path: ui-news/build/test-results
-#      - store_test_results:
 #          path: ui-search/build/test-results
       - store_artifacts:
           path: ui-settings/build/reports

@@ -98,10 +98,6 @@ object Libraries {
         const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.12.1" //
     }
 
-    object Orika {
-        const val orikaCore = "ma.glasnost.orika:orika-core:1.5.4" // https://mvnrepository.com/artifact/ma.glasnost.orika/orika-core
-    }
-
     object Roxie {
         const val roxie = "com.ww:roxie:0.4.0" // https://mvnrepository.com/artifact/com.ww/roxie
     }

@@ -41,8 +41,6 @@ import io.rtpi.client.RtpiClient
 import io.rtpi.client.RtpiClientConfiguration
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import ma.glasnost.orika.MapperFacade
-import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
 
 @Module(
@@ -155,17 +153,4 @@ class ApplicationModule {
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .build()
-
-    @Provides
-    @Singleton
-    fun mapperFacade(
-        stringProvider: StringProvider
-    ): MapperFacade {
-        val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
-        mapperFactory.converterFactory.apply {
-//            registerConverter(FavouritesResponseMapper(stringProvider))
-//            registerConverter(SearchResponseMapper)
-        }
-        return mapperFactory.mapperFacade
-    }
 }

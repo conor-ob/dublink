@@ -96,8 +96,6 @@ dependencies {
     implementation(project(":ui-app"))
     implementation(project(":ui-favourites"))
     implementation(project(":ui-livedata"))
-    implementation(project(":ui-nearby"))
-    implementation(project(":ui-news"))
     implementation(project(":ui-search"))
     implementation(project(":ui-settings"))
 
