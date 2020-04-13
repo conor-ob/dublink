@@ -20,7 +20,10 @@ allprojects {
         jcenter()
         maven(url = "https://jitpack.io") {
             credentials {
-                username = properties["authToken"] as String?
+                username = properties.getOrDefault(
+                    "authToken",
+                    loadProperties("release.properties").getProperty("authToken")
+                ) as String
             }
         }
     }
