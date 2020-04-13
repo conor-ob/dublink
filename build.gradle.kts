@@ -20,7 +20,7 @@ allprojects {
         jcenter()
         maven(url = "https://jitpack.io") {
             credentials {
-                username = loadProperties("gradle.properties").getProperty("authToken")
+                username = properties["authToken"] as String?
             }
         }
     }
