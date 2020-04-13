@@ -35,7 +35,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         loader.setColorSchemeResources(R.color.color_on_surface)
         loader.setProgressBackgroundColorSchemeResource(R.color.color_surface)
 
-        toolbar.setNavigationOnClickListener { activity?.onBackPressed() } //TODO
+        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
         if (args.serviceLocationIsFavourite) {
             val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
             favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
@@ -93,6 +93,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     override fun onResume() {
         super.onResume()
+        viewModel.bindActions()
         viewModel.dispatch(
             Action.GetServiceLocation(
                 serviceLocationId = args.serviceLocationId,
@@ -106,6 +107,11 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 serviceLocationService = args.serviceLocationService
             )
         )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.unbindActions()
     }
 
     private fun getSubtitle() = when (val service = args.serviceLocationService) {
@@ -131,7 +137,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         if (state.serviceLocationResponse != null
             && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
             && state.serviceLocationResponse.serviceLocation is StopLocation
-            && state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount //TODO check this
+            && state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount
         ) {
             routes.removeAllViewsInLayout()
             val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups

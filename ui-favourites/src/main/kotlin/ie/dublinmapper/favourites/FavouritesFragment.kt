@@ -61,14 +61,13 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
                 state?.let { renderState(state) }
             }
         )
-        viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.bindActions()
-        Timber.d("firstLoad=$showLoading")
         viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading))
+        viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onPause() {
