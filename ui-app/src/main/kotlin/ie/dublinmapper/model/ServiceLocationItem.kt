@@ -1,6 +1,7 @@
 package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -49,8 +50,10 @@ class ServiceLocationItem(
 
     private fun bindIcon(viewHolder: GroupieViewHolder) {
         viewHolder.serviceIconContainer.setImageResource(icon)
+        viewHolder.serviceIconContainer.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, android.R.color.white))
         viewHolder.serviceIconContainer.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.colorIconBackground))
+            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_700))
     }
 
     private fun bindTitle(viewHolder: GroupieViewHolder) {
