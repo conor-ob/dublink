@@ -2,12 +2,12 @@ package ie.dublinmapper.livedata
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
-import com.xwray.groupie.Group
 import ie.dublinmapper.domain.service.RxScheduler
-import ie.dublinmapper.model.LiveDataItem
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
-import io.rtpi.util.RouteComparator
+import io.rtpi.api.PredictionLiveData
+import io.rtpi.api.StopLocation
+import io.rtpi.util.AlphaNumericComparator
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -16,50 +16,62 @@ class LiveDataViewModel @Inject constructor(
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
-    override val initialState = State()
+    override val initialState = State(isLoading = true)
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.GetServiceLocation -> state.copy(
-                serviceLocationResponse = change.serviceLocationResponse
+                serviceLocationResponse = change.serviceLocationResponse,
+                isFavourite = null
 //                isFavourite = change.serviceLocationResponse.isFavourite()
             )
             is Change.GetLiveData -> {
-//                val serviceLocation = state.serviceLocationResponse
-//                if (serviceLocation != null && serviceLocation is ServiceLocationRoutes) {
-//                    try {
-//                        val routes = serviceLocation.routes.toSortedSet(RouteComparator)
-//                        val itemCount = change.liveDataResponse.itemCount
-//                        val currentRoutes = mutableSetOf<Route>()
-//                        for (i in 0 until itemCount) {
-//                            val item = change.liveDataResponse.getItem(i)
-//                            if (item is LiveDataItem) {
-//                                currentRoutes.add(Route(item.liveData.route, item.liveData.operator))
-//                            }
-//                        }
-//                        val sorted = currentRoutes.toSortedSet(RouteComparator)
-//                        Timber.d(routes.toString())
-//                        Timber.d(sorted.toString())
-//                        // TODO
-//                        // if (there is a route in sorted that is not in routes) {
-//                        //     Timber.e(log this)
-//                        // }
-//                    } catch (e: Exception) {
-//                        Timber.e(e, "Failed while calculating route discrepancies")
-//                    }
-//                }
+                try {
+                    val serviceLocationResponse = state.serviceLocationResponse
+                    val liveDataResponse = change.liveDataResponse
+                    if (liveDataResponse is LiveDataPresentationResponse.Data &&
+                        serviceLocationResponse is ServiceLocationPresentationResponse.Data
+                    ) {
+                        val serviceLocation = serviceLocationResponse.serviceLocation
+                        val liveData = liveDataResponse.liveData
+                        if (serviceLocation is StopLocation &&
+                            liveData.all { it is PredictionLiveData }
+                        ) {
+                            val knownRoutes = serviceLocation.routeGroups
+                                .flatMap { it.routes }
+                                .toSortedSet(AlphaNumericComparator)
+                            val routes = liveData.filterIsInstance<PredictionLiveData>()
+                                .map { it.routeInfo.route }
+                                .toSortedSet(AlphaNumericComparator)
+                            val discrepancies = routes.minus(knownRoutes)
+                            if (discrepancies.isNotEmpty()) {
+                                // TODO log to firebase
+                                Timber.d(
+                                    "Unknown route(s) %s found at %s(service=%s, id=%s, name=%s)",
+                                    discrepancies, serviceLocation.javaClass.simpleName,
+                                    serviceLocation.service, serviceLocation.id,
+                                    serviceLocation.name
+                                )
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e, "Failed while calculating route discrepancies")
+                }
                 state.copy(
 //                    isLoading = false,
-                    liveDataResponse = change.liveDataResponse
+                    liveDataResponse = change.liveDataResponse,
+                    isFavourite = null,
+                    isLoading = false
 //                    isError = false
                 )
             }
             is Change.FavouriteSaved -> state.copy(
-//                isFavourite = true,
+                isFavourite = true
 //                isError = false
             )
             is Change.FavouriteRemoved -> state.copy(
-//                isFavourite = false,
+                isFavourite = false
 //                isError = false
             )
         }
@@ -127,7 +139,12 @@ class LiveDataViewModel @Inject constructor(
 //                    .onErrorReturn { Change.GetLiveDataError(it) }
             }
 
-        val allActions = Observable.merge(getServiceLocationChange, getLiveDataChange, saveFavouriteChange, removeFavouriteChange)
+        val allActions = Observable.merge(
+            getServiceLocationChange,
+            getLiveDataChange,
+            saveFavouriteChange,
+            removeFavouriteChange
+        )
 
         disposables += allActions
             .scan(initialState, reducer)

@@ -1,13 +1,10 @@
 package ie.dublinmapper.livedata
 
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
@@ -16,14 +13,12 @@ import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.util.ChipFactory
 import ie.dublinmapper.viewModelProvider
-import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import timber.log.Timber
-
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -37,10 +32,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
         args = fromBundle(requireArguments())
 
-//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
-//        toolbar.inflateMenu(R.menu.menu_live_data)
-
-        loader.setColorSchemeColors(resources.getColor(R.color.color_on_surface, null))
+        loader.setColorSchemeResources(R.color.color_on_surface)
         loader.setProgressBackgroundColorSchemeResource(R.color.color_surface)
 
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() } //TODO
@@ -78,7 +70,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         }
         toolbar.title = args.serviceLocationName
         toolbar.subtitle = getSubtitle()
-//        serviceLocationName.text = args.serviceLocationName
 
         loader.isEnabled = false
 
@@ -124,21 +115,23 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderState(state: State) {
-//        loader.isRefreshing = state.isLoading
-//        if (state.isFavourite) {
-//            args = args.copy(serviceLocationIsFavourite = true)
-//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
-//        } else {
-//            args = args.copy(serviceLocationIsFavourite = false)
-//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
-//        }
+        loader.isRefreshing = state.isLoading
+        if (state.isFavourite != null && state.isFavourite) {
+            args = args.copy(serviceLocationIsFavourite = true)
+            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
+            Toast.makeText(requireContext(), "Saved to Favourites", Toast.LENGTH_SHORT).show()
+        } else if (state.isFavourite != null && !state.isFavourite) {
+            args = args.copy(serviceLocationIsFavourite = false)
+            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
+            Toast.makeText(requireContext(), "Removed from Favourites", Toast.LENGTH_SHORT).show()
+        }
 
         if (state.serviceLocationResponse != null
             && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
             && state.serviceLocationResponse.serviceLocation is StopLocation
-            && state.serviceLocationResponse.serviceLocation.routeGroups.size != routes.childCount //TODO check this
+            && state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount //TODO check this
         ) {
             routes.removeAllViewsInLayout()
             val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups
