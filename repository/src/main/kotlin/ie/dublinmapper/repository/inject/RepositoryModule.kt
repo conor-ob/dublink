@@ -5,8 +5,8 @@ import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.impl.StalePolicy
 import com.nytimes.android.external.store3.base.impl.StoreBuilder
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import dagger.Module
 import dagger.Provides
+import dagger.Module
 import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.domain.datamodel.RecentServiceLocationSearchLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
