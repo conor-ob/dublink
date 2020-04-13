@@ -13,5 +13,9 @@ jobs:
             yes | sdkmanager --licenses || true
             sdkmanager "platform-tools" "platforms;android-29"
       - checkout
-      - restore_cache:
-          key: gradle-{{ checksum "dependencies.gradle" }}
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
+      - run:
+          name: Run unit tests
+          command: ./gradlew test
