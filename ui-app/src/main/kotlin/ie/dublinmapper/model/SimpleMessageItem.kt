@@ -3,7 +3,7 @@ package ie.dublinmapper.model
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.ui.R
-import kotlinx.android.synthetic.main.list_item_simple_message.*
+import kotlinx.android.synthetic.main.list_item_simple_message.message
 
 class SimpleMessageItem(private val message: String, private val index: Int) : Item() {
 

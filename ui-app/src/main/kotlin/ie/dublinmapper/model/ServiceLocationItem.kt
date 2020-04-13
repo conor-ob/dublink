@@ -1,22 +1,32 @@
 package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
-import android.graphics.PorterDuff
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.ui.R
-import kotlinx.android.synthetic.main.list_item_service_location.*
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
+import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.domain.model.getName
+import ie.dublinmapper.ui.R
 import ie.dublinmapper.util.ChipFactory
-import io.rtpi.api.*
+import io.rtpi.api.DockLocation
+import io.rtpi.api.RouteGroup
+import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
+import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
-import java.util.Comparator
 import kotlin.math.round
+import kotlinx.android.synthetic.main.list_item_service_location.bikes
+import kotlinx.android.synthetic.main.list_item_service_location.bikesCount
+import kotlinx.android.synthetic.main.list_item_service_location.docks
+import kotlinx.android.synthetic.main.list_item_service_location.docksCount
+import kotlinx.android.synthetic.main.list_item_service_location.rootViewBikes
+import kotlinx.android.synthetic.main.list_item_service_location.routes
+import kotlinx.android.synthetic.main.list_item_service_location.routesDivider
+import kotlinx.android.synthetic.main.list_item_service_location.serviceIconContainer
+import kotlinx.android.synthetic.main.list_item_service_location.subtitle
+import kotlinx.android.synthetic.main.list_item_service_location.title
+import kotlinx.android.synthetic.main.list_item_service_location.walkTime
 
 private const val serviceLocationKey = "key_service_location"
 private const val searchCandidateKey = "key_service_candidate"
@@ -103,12 +113,12 @@ class ServiceLocationItem(
                 viewHolder.routesDivider.visibility = View.VISIBLE
                 viewHolder.rootViewBikes.visibility = View.VISIBLE
                 viewHolder.bikesCount.text = if (serviceLocation.availableBikes == 0) " No " else " ${serviceLocation.availableBikes} "
-                viewHolder.bikes.text = if (serviceLocation.availableBikes == 1) "Bike" else "Bikes" //TODO plurals
+                viewHolder.bikes.text = if (serviceLocation.availableBikes == 1) "Bike" else "Bikes" // TODO plurals
                 viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
                 viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableBikes))
 
                 viewHolder.docksCount.text = if (serviceLocation.availableDocks == 0) " No " else " ${serviceLocation.availableDocks} "
-                viewHolder.docks.text = if (serviceLocation.availableDocks == 1) "Dock" else "Docks" //TODO plurals
+                viewHolder.docks.text = if (serviceLocation.availableDocks == 1) "Dock" else "Docks" // TODO plurals
                 viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
                 viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableDocks))
             }
@@ -137,8 +147,8 @@ class ServiceLocationItem(
 
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
         if (other is ServiceLocationItem) {
-            return getServiceLocation().id == other.getServiceLocation().id
-                    && getServiceLocation().service == other.getServiceLocation().service
+            return getServiceLocation().id == other.getServiceLocation().id &&
+                    getServiceLocation().service == other.getServiceLocation().service
         }
         return false
     }
@@ -153,7 +163,6 @@ class ServiceLocationItem(
     override fun hashCode(): Int {
         return getServiceLocation().hashCode()
     }
-
 }
 
 fun com.xwray.groupie.Item<com.xwray.groupie.GroupieViewHolder>.extractServiceLocation(): ServiceLocation? {

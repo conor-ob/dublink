@@ -5,11 +5,11 @@ import ie.dublinmapper.domain.service.InternetManager
 import ie.dublinmapper.util.getConnectivityManager
 import ie.dublinmapper.util.getWifiManager
 import ie.dublinmapper.util.isConnected
-import timber.log.Timber
 import java.io.IOException
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
+import timber.log.Timber
 
 class DeviceInternetManager(private val context: Context) : InternetManager {
 

@@ -1,7 +1,7 @@
 package ie.dublinmapper.model
 
-import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.ui.R
 
 class DividerItem(private val index: Int) : Item() {

@@ -6,7 +6,13 @@ import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
 import ie.dublinmapper.domain.model.setFavourite
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import io.rtpi.api.*
+import io.rtpi.api.Coordinate
+import io.rtpi.api.DockLocation
+import io.rtpi.api.Operator
+import io.rtpi.api.RouteGroup
+import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
+import io.rtpi.api.StopLocation
 
 class SqlDelightServiceLocationLocalResource(
     private val database: Database
@@ -71,14 +77,12 @@ class SqlDelightServiceLocationLocalResource(
             .asObservable()
             .mapToList()
 
-
         val favouritesObservable = database.favouriteLocationQueries
             .selectAllByService(service) { _, _, locationId, _ ->
                 toFavouriteEntity(locationId)
             }
             .asObservable()
             .mapToList()
-
 
         return Observable.zip(
             locationsObservable,
@@ -175,7 +179,7 @@ class SqlDelightServiceLocationLocalResource(
         availableBikes: Int,
         availableDocks: Int,
         totalDocks: Int
-    ): ServiceEntity  = DockServiceEntity(
+    ): ServiceEntity = DockServiceEntity(
         locationId, availableDocks, availableBikes, totalDocks
     )
 
@@ -184,8 +188,8 @@ class SqlDelightServiceLocationLocalResource(
         route: String,
         operator: Operator
     ): ServiceEntity = StopServiceEntity(
-       locationId, route, operator
-   )
+        locationId, route, operator
+    )
 
     private fun toLocationEntity(
         id: String,

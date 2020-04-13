@@ -1,9 +1,9 @@
 package ie.dublinmapper.repository.location
 
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
-import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.service.EnabledServiceManager
 import io.reactivex.Observable
 import io.rtpi.api.Service

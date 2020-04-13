@@ -51,7 +51,6 @@ abstract class ViewModelModule {
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
 }
 
 @Suppress("DEPRECATED_JAVA_ANNOTATION")

@@ -1,13 +1,13 @@
-//package ie.dublinmapper.util
+package ie.dublinmapper.util
 //
-//import android.content.Context
-//import android.graphics.Bitmap
-//import android.graphics.Canvas
-////import com.google.android.gms.maps.model.BitmapDescriptor
-////import com.google.android.gms.maps.model.BitmapDescriptorFactory
-//import timber.log.Timber
+// import android.content.Context
+// import android.graphics.Bitmap
+// import android.graphics.Canvas
+// import com.google.android.gms.maps.model.BitmapDescriptor
+// import com.google.android.gms.maps.model.BitmapDescriptorFactory
+// import timber.log.Timber
 //
-//object ImageUtils {
+// object ImageUtils {
 //
 //    private val bitmapCache = HashMap<Int, BitmapDescriptor>()
 //
@@ -27,4 +27,4 @@
 //        return bitmapDescriptor
 //    }
 //
-//}
+// }

@@ -134,10 +134,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             Toast.makeText(requireContext(), "Removed from Favourites", Toast.LENGTH_SHORT).show()
         }
 
-        if (state.serviceLocationResponse != null
-            && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
-            && state.serviceLocationResponse.serviceLocation is StopLocation
-            && state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount
+        if (state.serviceLocationResponse != null &&
+            state.serviceLocationResponse is ServiceLocationPresentationResponse.Data &&
+            state.serviceLocationResponse.serviceLocation is StopLocation &&
+            state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount
         ) {
             routes.removeAllViewsInLayout()
             val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups

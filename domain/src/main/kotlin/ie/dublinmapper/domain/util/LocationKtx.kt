@@ -1,7 +1,11 @@
 package ie.dublinmapper.domain.util
 
 import io.rtpi.api.Coordinate
-import kotlin.math.*
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 private const val EARTH_RADIUS = 6371001
 

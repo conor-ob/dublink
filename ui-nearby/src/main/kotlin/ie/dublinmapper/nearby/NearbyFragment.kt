@@ -10,12 +10,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.extractServiceLocation
-import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_nearby.*
-import kotlinx.android.synthetic.main.fragment_nearby.view.*
+import kotlinx.android.synthetic.main.fragment_nearby.toolbar
+import kotlinx.android.synthetic.main.fragment_nearby.view.nearbyLocations
 
 private const val locationRequestCode = 42069
 
@@ -56,8 +56,8 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
 //        )
 
         if (ContextCompat.checkSelfPermission(requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             viewModel.dispatch(Action.GetNearbyServiceLocations)
         } else {
@@ -86,7 +86,7 @@ class NearbyFragment : DublinMapperFragment(R.layout.fragment_nearby) {
         grantResults: IntArray
     ) {
         if (requestCode == locationRequestCode) {
-            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED } ) {
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 viewModel.dispatch(Action.GetNearbyServiceLocations)
             } else {
                 findNavController().navigateUp()

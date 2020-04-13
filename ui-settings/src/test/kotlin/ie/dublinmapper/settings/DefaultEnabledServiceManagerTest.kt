@@ -74,5 +74,4 @@ class DefaultEnabledServiceManagerTest {
             Service.LUAS
         )
     }
-
 }

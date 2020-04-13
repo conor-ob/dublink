@@ -11,9 +11,10 @@ import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.util.haversine
 import ie.dublinmapper.domain.util.truncateHead
 import io.reactivex.Observable
-import io.rtpi.api.*
+import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 import java.time.Instant
-import java.util.*
+import java.util.SortedMap
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(

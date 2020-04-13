@@ -45,5 +45,4 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     }
 
     override fun androidInjector() = androidInjector
-
 }

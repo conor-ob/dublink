@@ -3,8 +3,8 @@ package ie.dublinmapper.startup
 import android.app.Application
 import com.ww.roxie.Roxie
 import ie.dublinmapper.BuildConfig
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class TimberStartupWorker @Inject constructor() : StartupWorker {
 
