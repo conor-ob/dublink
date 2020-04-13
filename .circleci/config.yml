@@ -13,12 +13,46 @@ jobs:
             yes | sdkmanager --licenses || true
             sdkmanager "platform-tools" "platforms;android-29"
       - checkout
+      - restore_cache:
+          key: gradle-{{ checksum "buildSrc/src/main/kotlin/Dependencies.kt" }}
       - run:
           name: Download dependencies
           command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "buildSrc/src/main/kotlin/Dependencies.kt" }}
       - run:
           name: Run ktlint
           command: ./gradlew ktlint
       - run:
           name: Run unit tests
           command: ./gradlew test
+#      - store_test_results:
+#          path: app/build/test-results
+#      - store_test_results:
+#          path: app/database/test-results
+      - store_artifacts:
+          path: domain/build/reports
+          destination: domain/reports
+      - store_test_results:
+          path: domain/build/test-results
+#      - store_test_results:
+#          path: repository/build/test-results
+#      - store_test_results:
+#          path: ui-app/build/test-results
+#      - store_test_results:
+#          path: ui-favourites/build/test-results
+#      - store_test_results:
+#          path: ui-livedata/build/test-results
+#      - store_test_results:
+#          path: ui-nearby/build/test-results
+#      - store_test_results:
+#          path: ui-news/build/test-results
+#      - store_test_results:
+#          path: ui-search/build/test-results
+      - store_artifacts:
+          path: ui-settings/build/reports
+          destination: ui-settings/reports
+      - store_test_results:
+          path: ui-settings/build/test-results
