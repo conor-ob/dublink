@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.loadProperties
+
 buildscript {
     repositories {
         google()
@@ -16,9 +18,11 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven {
-            url "https://jitpack.io"
-            credentials { username authToken }
+        maven(url = "https://jitpack.io") {
+            credentials {
+                username = username
+                password = loadProperties("gradle.properties").getProperty("authToken")
+            }
         }
     }
     apply(from = "$rootDir/ktlint.gradle.kts")
