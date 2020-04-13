@@ -100,14 +100,15 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
     override fun onResume() {
         super.onResume()
+        viewModel.bindActions()
         viewModel.dispatch(Action.GetNearbyLocations)
         viewModel.dispatch(Action.GetRecentSearches)
     }
 
     override fun onPause() {
         super.onPause()
-
         hideKeyboard(search_input)
+        viewModel.unbindActions()
     }
 
     private fun renderState(state: State) {
