@@ -13,9 +13,15 @@ jobs:
             yes | sdkmanager --licenses || true
             sdkmanager "platform-tools" "platforms;android-29"
       - checkout
+      - restore_cache:
+          key: gradle-{{ checksum "buildSrc/src/main/kotlin/Dependencies.kt" }}
       - run:
           name: Download dependencies
           command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "buildSrc/src/main/kotlin/Dependencies.kt" }}
       - run:
           name: Run ktlint
           command: ./gradlew ktlint
