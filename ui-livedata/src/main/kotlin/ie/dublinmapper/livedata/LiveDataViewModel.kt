@@ -8,8 +8,8 @@ import io.reactivex.rxkotlin.plusAssign
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class LiveDataViewModel @Inject constructor(
     private val liveDataUseCase: LiveDataUseCase,

@@ -4,7 +4,6 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.LiveDataItem
 import ie.dublinmapper.model.NoLiveDataItem
-import ie.dublinmapper.model.SimpleMessageItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 

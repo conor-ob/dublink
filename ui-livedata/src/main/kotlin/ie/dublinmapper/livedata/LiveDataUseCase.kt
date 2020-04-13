@@ -1,9 +1,17 @@
 package ie.dublinmapper.livedata
 
-import ie.dublinmapper.domain.repository.*
+import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.FavouriteRepository
+import ie.dublinmapper.domain.repository.LiveDataKey
+import ie.dublinmapper.domain.repository.LiveDataRepository
+import ie.dublinmapper.domain.repository.LiveDataResponse
+import ie.dublinmapper.domain.repository.ServiceLocationKey
+import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.PreferenceStore
 import io.reactivex.Observable
-import io.rtpi.api.*
+import io.rtpi.api.LiveData
+import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

@@ -1,6 +1,7 @@
 package ie.dublinmapper.domain.util
 
-import java.util.*
+import java.util.SortedMap
+import java.util.TreeMap
 
 fun <K, V> SortedMap<K, V>.truncateHead(limit: Int): SortedMap<K, V> {
     var count = 0

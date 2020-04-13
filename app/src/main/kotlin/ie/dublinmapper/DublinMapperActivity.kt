@@ -1,21 +1,18 @@
 package ie.dublinmapper
 
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.livedata.LiveDataFragment
 import io.rtpi.api.ServiceLocation
-import kotlinx.android.synthetic.main.activity_root.*
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_root.activity_root
 
 class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNavigator {
 

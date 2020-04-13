@@ -11,7 +11,12 @@ import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
 import ie.dublinmapper.domain.datamodel.RecentServiceLocationSearchLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
-import ie.dublinmapper.domain.repository.*
+import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.FavouriteRepository
+import ie.dublinmapper.domain.repository.LiveDataKey
+import ie.dublinmapper.domain.repository.LiveDataRepository
+import ie.dublinmapper.domain.repository.RecentServiceLocationSearchRepository
+import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.EnabledServiceManager
 import ie.dublinmapper.domain.service.InternetManager
 import ie.dublinmapper.repository.favourite.FavouriteServiceLocationRepository

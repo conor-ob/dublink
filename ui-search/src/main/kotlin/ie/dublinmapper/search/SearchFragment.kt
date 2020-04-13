@@ -13,14 +13,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.DublinMapperNavigator
-import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.ServiceLocationItem
+import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.model.isSearchCandidate
-import ie.dublinmapper.viewModelProvider
 import ie.dublinmapper.util.hideKeyboard
-import kotlinx.android.synthetic.main.fragment_search.*
+import ie.dublinmapper.viewModelProvider
+import kotlinx.android.synthetic.main.fragment_search.search_input
+import kotlinx.android.synthetic.main.fragment_search.search_list
+import kotlinx.android.synthetic.main.fragment_search.search_toolbar
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
@@ -139,11 +141,11 @@ fun Activity.isKeyboardOpened(): Boolean {
 
     val heightDiff = activityRoot.rootView.height - r.height()
 
-    return heightDiff > visibleThreshold;
+    return heightDiff > visibleThreshold
 }
 
 fun Activity.getActivityRoot(): View {
-    return (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0);
+    return (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0)
 }
 
 fun dip(value: Int): Int {

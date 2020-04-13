@@ -1,7 +1,6 @@
 package ie.dublinmapper.nearby
 
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
-import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.RxScheduler
 import ie.dublinmapper.domain.util.haversine
@@ -9,10 +8,8 @@ import ie.dublinmapper.domain.util.truncateHead
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate
 import io.rtpi.api.ServiceLocation
-import java.util.*
-import java.util.concurrent.TimeUnit
+import java.util.SortedMap
 import javax.inject.Inject
-import javax.inject.Named
 
 class NearbyUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,

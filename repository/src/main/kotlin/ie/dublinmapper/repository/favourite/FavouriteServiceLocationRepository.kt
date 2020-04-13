@@ -15,5 +15,4 @@ class FavouriteServiceLocationRepository(
     override fun removeFavourite(serviceLocationId: String, service: Service) {
         localResource.deleteFavourite(serviceLocationId, service)
     }
-
 }

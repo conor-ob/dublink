@@ -2,15 +2,19 @@ package ie.dublinmapper.favourites
 
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.internet.NetworkUnavailableException
-import ie.dublinmapper.model.*
+import ie.dublinmapper.model.DividerItem
+import ie.dublinmapper.model.DublinBikesLiveDataItem
+import ie.dublinmapper.model.GroupedLiveDataItem
+import ie.dublinmapper.model.ServiceLocationItem
+import ie.dublinmapper.model.SimpleMessageItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
-import timber.log.Timber
 import java.io.IOException
 import java.net.ConnectException
 import java.net.UnknownHostException
+import timber.log.Timber
 
 object FavouritesMapper {
 

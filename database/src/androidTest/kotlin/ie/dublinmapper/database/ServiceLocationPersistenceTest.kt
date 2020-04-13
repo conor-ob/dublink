@@ -1,20 +1,20 @@
 package ie.dublinmapper.database
 
-//import androidx.room.Room
-//import androidx.test.ext.junit.runners.AndroidJUnit4
-//import androidx.test.platform.app.InstrumentationRegistry
-//import ie.dublinmapper.datamodel.test.LocationEntity
-//import ie.dublinmapper.datamodel.test.ServiceEntity
-//import ie.dublinmapper.datamodel.test.ServiceLocationCacheResource
-//import ie.dublinmapper.datamodel.test.ServiceLocationEntity
-//import ie.dublinmapper.test.ServiceLocationCacheResourceImpl
-//import io.reactivex.observers.TestObserver
-//import org.junit.Before
-//import org.junit.Test
-//import org.junit.runner.RunWith
+// import androidx.room.Room
+// import androidx.test.ext.junit.runners.AndroidJUnit4
+// import androidx.test.platform.app.InstrumentationRegistry
+// import ie.dublinmapper.datamodel.test.LocationEntity
+// import ie.dublinmapper.datamodel.test.ServiceEntity
+// import ie.dublinmapper.datamodel.test.ServiceLocationCacheResource
+// import ie.dublinmapper.datamodel.test.ServiceLocationEntity
+// import ie.dublinmapper.test.ServiceLocationCacheResourceImpl
+// import io.reactivex.observers.TestObserver
+// import org.junit.Before
+// import org.junit.Test
+// import org.junit.runner.RunWith
 //
-//@RunWith(AndroidJUnit4::class)
-//class ServiceLocationPersistenceTest {
+// @RunWith(AndroidJUnit4::class)
+// class ServiceLocationPersistenceTest {
 //
 //    lateinit var dublinMapperDatabase: DublinMapperDatabase
 //    lateinit var serviceLocationCacheResource: ServiceLocationCacheResource
@@ -98,4 +98,4 @@ package ie.dublinmapper.database
 //        testObserver.assertResult(serviceLocationEntities)
 //    }
 //
-//}
+// }

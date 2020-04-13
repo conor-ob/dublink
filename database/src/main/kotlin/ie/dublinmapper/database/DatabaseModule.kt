@@ -6,7 +6,10 @@ import com.squareup.sqldelight.EnumColumnAdapter
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
-import ie.dublinmapper.domain.datamodel.*
+import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.domain.datamodel.RecentServiceLocationSearchLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
+import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
 import ie.dublinmapper.domain.service.StringProvider
 import java.time.Instant
 import javax.inject.Singleton
@@ -52,7 +55,6 @@ class DatabaseModule {
                     override fun encode(value: Instant): String {
                         return value.toString()
                     }
-
                 }
             ),
             recentSearchEntityAdapter = RecentSearchEntity.Adapter(

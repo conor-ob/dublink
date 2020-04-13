@@ -1,10 +1,8 @@
 package ie.dublinmapper.util
 
-import android.animation.Animator
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.graphics.drawable.Drawable
-//import com.google.android.gms.maps.model.Marker
 
 object AnimationUtils {
 
@@ -35,5 +33,4 @@ object AnimationUtils {
         colorFade.duration = HALF_SECOND
         colorFade.start()
     }
-
 }

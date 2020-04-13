@@ -9,11 +9,17 @@ import ie.dublinmapper.BuildConfig
 import ie.dublinmapper.DublinMapperApplication
 import ie.dublinmapper.database.DatabaseModule
 import ie.dublinmapper.domain.internet.InternetStatusChangeListener
-import ie.dublinmapper.domain.service.*
+import ie.dublinmapper.domain.service.AppConfig
+import ie.dublinmapper.domain.service.EnabledServiceManager
+import ie.dublinmapper.domain.service.InternetManager
+import ie.dublinmapper.domain.service.LocationProvider
+import ie.dublinmapper.domain.service.PermissionChecker
+import ie.dublinmapper.domain.service.PreferenceStore
+import ie.dublinmapper.domain.service.RxScheduler
+import ie.dublinmapper.domain.service.StringProvider
 import ie.dublinmapper.internet.DeviceInternetManager
 import ie.dublinmapper.internet.NetworkConnectionInterceptor
 import ie.dublinmapper.internet.NetworkStatusChangeListener
-import ie.dublinmapper.startup.*
 import ie.dublinmapper.location.GpsLocationProvider
 import ie.dublinmapper.logging.NetworkLoggingInterceptor
 import ie.dublinmapper.permission.UserPermissionsChecker
@@ -22,15 +28,22 @@ import ie.dublinmapper.resource.StringResourceProvider
 import ie.dublinmapper.settings.DefaultEnabledServiceManager
 import ie.dublinmapper.settings.DefaultPreferenceStore
 import ie.dublinmapper.settings.ThemeRepository
+import ie.dublinmapper.startup.PreferencesStartupWorker
+import ie.dublinmapper.startup.RxStartupWorker
+import ie.dublinmapper.startup.StartupWorkers
+import ie.dublinmapper.startup.StethoStartupWorker
+import ie.dublinmapper.startup.ThemeStartupWorker
+import ie.dublinmapper.startup.TimberStartupWorker
+import ie.dublinmapper.startup.TwitterStartupWorker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.client.RtpiClient
 import io.rtpi.client.RtpiClientConfiguration
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 import ma.glasnost.orika.MapperFacade
 import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
-import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @Module(
     includes = [

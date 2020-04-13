@@ -1,7 +1,11 @@
 package ie.dublinmapper.favourites
 
 import ie.dublinmapper.domain.model.getOrder
-import ie.dublinmapper.domain.repository.*
+import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.LiveDataKey
+import ie.dublinmapper.domain.repository.LiveDataRepository
+import ie.dublinmapper.domain.repository.LiveDataResponse
+import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.PreferenceStore

@@ -19,6 +19,7 @@ allprojects {
         jcenter()
         mavenLocal()
     }
+    apply from: "$rootDir/ktlint.gradle"
 }
 
 tasks.register("clean").configure {

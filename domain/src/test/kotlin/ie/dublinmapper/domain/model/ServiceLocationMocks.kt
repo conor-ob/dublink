@@ -1,6 +1,10 @@
 package ie.dublinmapper.domain.model
 
-import io.rtpi.api.*
+import io.rtpi.api.Coordinate
+import io.rtpi.api.RouteGroup
+import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
+import io.rtpi.api.StopLocation
 
 fun createLuasStop(
     id: String = "LUAS1",

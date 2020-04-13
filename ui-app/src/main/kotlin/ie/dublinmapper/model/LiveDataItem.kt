@@ -3,23 +3,37 @@ package ie.dublinmapper.model
 import android.content.res.ColorStateList
 import android.graphics.Paint.STRIKE_THRU_TEXT_FLAG
 import android.text.format.DateFormat
-import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.domain.model.*
+import com.xwray.groupie.kotlinandroidextensions.Item
+import ie.dublinmapper.domain.model.isDelayed
+import ie.dublinmapper.domain.model.isLate
+import ie.dublinmapper.domain.model.isOnTime
+import ie.dublinmapper.domain.model.minutesDelayed
+import ie.dublinmapper.domain.model.minutesLate
 import ie.dublinmapper.ui.R
 import ie.dublinmapper.util.ChipFactory
-import io.rtpi.api.*
-import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.*
-import kotlinx.android.synthetic.main.list_item_live_data.*
-import kotlinx.android.synthetic.main.list_item_live_data_grouped.*
+import io.rtpi.api.DockLiveData
+import io.rtpi.api.PredictionLiveData
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
+import kotlinx.android.synthetic.main.list_item_live_data.destination
+import kotlinx.android.synthetic.main.list_item_live_data.route
+import kotlinx.android.synthetic.main.list_item_live_data.scheduledTime
+import kotlinx.android.synthetic.main.list_item_live_data.status
+import kotlinx.android.synthetic.main.list_item_live_data.waitTimeMinutes
+import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.bikes
+import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.bikesCount
+import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.docks
+import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.docksCount
+import kotlinx.android.synthetic.main.list_item_live_data_grouped.groupedDestination
+import kotlinx.android.synthetic.main.list_item_live_data_grouped.groupedRoute
+import kotlinx.android.synthetic.main.list_item_live_data_grouped.groupedWaitTimeMinutes
 
 private val format24h = DateTimeFormatter.ofPattern("HH:mm")
 private val format12h = DateTimeFormatter.ofPattern("h:mm a")
 
 class LiveDataItem(
-    val liveData: PredictionLiveData //TODO private
+    val liveData: PredictionLiveData // TODO private
 ) : Item() {
 
     override fun getLayout() = R.layout.list_item_live_data
@@ -130,7 +144,6 @@ class LiveDataItem(
     override fun hashCode(): Int {
         return liveData.hashCode()
     }
-
 
     override fun toString(): String {
         return liveData.toString()
@@ -249,7 +262,6 @@ class LiveDataItem(
 //            viewHolder.status.visibility = View.GONE
 //        }
 //    }
-
 }
 
 class GroupedLiveDataItem(
@@ -336,12 +348,12 @@ class DublinBikesLiveDataItem(
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.bikesCount.text = if (liveData.availableBikes == 0) " No " else " ${liveData.availableBikes} "
-        viewHolder.bikes.text = if (liveData.availableBikes == 1) "Bike" else "Bikes" //TODO plurals
+        viewHolder.bikes.text = if (liveData.availableBikes == 1) "Bike" else "Bikes" // TODO plurals
         viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
         viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableBikes))
 
         viewHolder.docksCount.text = if (liveData.availableDocks == 0) " No " else " ${liveData.availableDocks} "
-        viewHolder.docks.text = if (liveData.availableDocks == 1) "Dock" else "Docks" //TODO plurals
+        viewHolder.docks.text = if (liveData.availableDocks == 1) "Dock" else "Docks" // TODO plurals
         viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
         viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableDocks))
     }

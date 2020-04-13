@@ -5,9 +5,9 @@ import com.ww.roxie.Reducer
 import com.xwray.groupie.Group
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.rxkotlin.plusAssign
+import javax.inject.Inject
 import ma.glasnost.orika.MapperFacade
 import timber.log.Timber
-import javax.inject.Inject
 
 class NearbyViewModel @Inject constructor(
     private val useCase: NearbyUseCase,
@@ -57,5 +57,4 @@ class NearbyViewModel @Inject constructor(
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
     }
-
 }

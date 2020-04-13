@@ -6,14 +6,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.DublinMapperNavigator
-import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.internet.InternetStatus
+import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_favourites.*
-import kotlinx.android.synthetic.main.fragment_favourites.view.*
-import timber.log.Timber
+import kotlinx.android.synthetic.main.fragment_favourites.favourites_fab_search
+import kotlinx.android.synthetic.main.fragment_favourites.favourites_toolbar
+import kotlinx.android.synthetic.main.fragment_favourites.view.favourites_list
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
