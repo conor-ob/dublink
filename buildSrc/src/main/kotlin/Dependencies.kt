@@ -106,9 +106,12 @@ object Libraries {
     }
 
     object Rtpi {
-        const val rtpiApi = "io.rtpi:rtpi-api:0.1.0"
-        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.1.0"
-        const val rtpiUtil = "io.rtpi:rtpi-util:0.1.0"
+        const val rtpiApi = "com.github.conor-ob.dublin-rtpi-service:rtpi-api:0.1.0"
+//        const val rtpiApi = "io.rtpi:rtpi-api:0.1.0"
+        const val rtpiClient = "com.github.conor-ob.dublin-rtpi-service:rtpi-client-standalone:0.1.0"
+//        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.1.0"
+        const val rtpiUtil = "com.github.conor-ob.dublin-rtpi-service:rtpi-util:0.1.0"
+//        const val rtpiUtil = "io.rtpi:rtpi-util:0.1.0"
     }
 
     object Rx {
