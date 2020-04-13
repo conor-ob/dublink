@@ -3,45 +3,56 @@ package ie.dublinmapper.location
 import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
 import ie.dublinmapper.domain.service.LocationProvider
+import ie.dublinmapper.domain.service.PreferenceStore
+import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import timber.log.Timber
 import javax.inject.Inject
 
-class GpsLocationProvider @Inject constructor(context: Context) : LocationProvider {
+class GpsLocationProvider @Inject constructor(
+    private val preferenceStore: PreferenceStore,
+    context: Context
+) : LocationProvider {
 
     private var lastKnownLocation: Location? = null
-//    private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context).apply {
-//        lastLocation.addOnSuccessListener { location : Location? ->
-//            Timber.d("Locationpoop=$location")
-//            lastKnownLocation = location
-//        }
-//    }
 
     private val locationProvider = ReactiveLocationProvider(context)
 
+    override fun getLocationUpdates(thresholdDistance: Double): Observable<Coordinate> {
+        return Observable.concat(
+            Observable.just(preferenceStore.getLastKnownLocation()),
+            getLastKnownLocation(),
+            getLocationUpdates()
+        )
+            .distinctUntilChanged { c1, c2 -> c1.haversine(c2) <= thresholdDistance }
+    }
 
-    override fun getLastKnownLocation(): Observable<Coordinate> {
+    private fun getLastKnownLocation(): Observable<Coordinate> {
         return locationProvider.lastKnownLocation
                 .filter { isBetterLocation(it) }
-                .doOnNext { lastKnownLocation = it }
+                .doOnNext { saveLocation(it) }
                 .map { Coordinate(it.latitude, it.longitude) }
     }
 
-    override fun getLocationUpdates(): Observable<Coordinate> {
+    private fun getLocationUpdates(): Observable<Coordinate> {
         return locationProvider.getUpdatedLocation(newRequest())
             .filter { isBetterLocation(it) }
-            .doOnNext { lastKnownLocation = it }
+            .doOnNext { saveLocation(it) }
             .map { Coordinate(it.latitude, it.longitude) }
     }
 
-    private fun newRequest(): LocationRequest {
-        return LocationRequest.create()
-            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(5000L)
+    private fun saveLocation(location: Location) {
+        lastKnownLocation = location
+        preferenceStore.setLastKnownLocation(Coordinate(location.latitude, location.longitude))
+    }
+
+    private fun newRequest() = LocationRequest.create().apply {
+        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        fastestInterval = 5000L
+        interval = 10000L
     }
 
     private fun isBetterLocation(location: Location): Boolean {

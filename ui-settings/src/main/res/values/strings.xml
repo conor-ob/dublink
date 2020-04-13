@@ -11,6 +11,9 @@
     <string name="preference_value_dark_theme" translatable="false">dark</string>
     <string name="preference_value_battery_saver_theme" translatable="false">battery</string>
 
+    <string name="preference_key_last_known_location_latitude">last_known_location_latitude</string>
+    <string name="preference_key_last_known_location_longitude">last_known_location_longitude</string>
+
     <string name="preference_name_preferred_home_screen">Home Screen</string>
     <string name="preference_key_preferred_home_screen">preferred_home_screen</string>
 
@@ -18,7 +21,6 @@
     <string name="preference_summary_services">Choose your favourites</string>
 
     <string name="preference_key_enabled_service_aircoach">aircoach_enabled</string>
-    <string name="preference_summary_enabled_service_aircoach">🚧 Experimental</string>
     <string name="preference_key_enabled_service_bus_eireann">bus_eireann_enabled</string>
     <string name="preference_key_enabled_service_dublin_bikes">dublin_bikes_enabled</string>
     <string name="preference_key_enabled_service_dublin_bus">dublin_bus_enabled</string>

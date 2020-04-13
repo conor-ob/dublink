@@ -10,5 +10,4 @@
     <dimen name="padding_l">20dp</dimen>
     <dimen name="padding_xl">24dp</dimen>
     <dimen name="padding_xxl">32dp</dimen>
-    <item name="text_line_spacing" format="float" type="dimen">1.2</item>
 </resources>

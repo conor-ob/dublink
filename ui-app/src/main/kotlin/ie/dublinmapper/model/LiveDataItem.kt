@@ -7,6 +7,7 @@ import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.domain.model.*
 import ie.dublinmapper.ui.R
+import ie.dublinmapper.util.ChipFactory
 import io.rtpi.api.*
 import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.*
 import kotlinx.android.synthetic.main.list_item_live_data.*
@@ -33,7 +34,7 @@ class LiveDataItem(
 
     private fun bindRoute(viewHolder: GroupieViewHolder) {
         viewHolder.route.text = " ${liveData.routeInfo.route} "
-        val (textColour, backgroundColour) = mapColour(liveData.operator, liveData.routeInfo.route)
+        val (textColour, backgroundColour) = ChipFactory.mapColour(liveData.operator, liveData.routeInfo.route)
         viewHolder.route.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
         viewHolder.route.setChipBackgroundColorResource(backgroundColour)
     }
@@ -249,26 +250,6 @@ class LiveDataItem(
 //        }
 //    }
 
-    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
-        return when (operator) {
-            Operator.AIRCOACH -> Pair(R.color.white, R.color.aircoachOrange)
-            Operator.BUS_EIREANN -> Pair(R.color.white, R.color.busEireannRed)
-            Operator.COMMUTER -> Pair(R.color.white, R.color.commuterBlue)
-            Operator.DART -> Pair(R.color.white, R.color.dartGreen)
-            Operator.DUBLIN_BIKES -> Pair(R.color.white, R.color.dublinBikesTeal)
-            Operator.DUBLIN_BUS -> Pair(R.color.text_primary, R.color.dublinBusYellow)
-            Operator.GO_AHEAD -> Pair(R.color.white, R.color.goAheadBlue)
-            Operator.INTERCITY -> Pair(R.color.text_primary, R.color.intercityYellow)
-            Operator.LUAS -> {
-                when (route) {
-                    "Green", "Green Line" -> Pair(R.color.white, R.color.luasGreen)
-                    "Red", "Red Line" -> Pair(R.color.white, R.color.luasRed)
-                    else -> Pair(R.color.white, R.color.luasPurple)
-                }
-            }
-        }
-    }
-
 }
 
 class GroupedLiveDataItem(
@@ -285,7 +266,7 @@ class GroupedLiveDataItem(
 
     private fun bindRoute(viewHolder: GroupieViewHolder) {
         viewHolder.groupedRoute.text = " ${liveData.first().routeInfo.route} "
-        val (textColour, backgroundColour) = mapColour(liveData.first().operator, liveData.first().routeInfo.route)
+        val (textColour, backgroundColour) = ChipFactory.mapColour(liveData.first().operator, liveData.first().routeInfo.route)
         viewHolder.groupedRoute.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
         viewHolder.groupedRoute.setChipBackgroundColorResource(backgroundColour)
     }
@@ -316,26 +297,6 @@ class GroupedLiveDataItem(
                     minutes
                 }
             }.joinToString(", ")} min"
-        }
-    }
-
-    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
-        return when (operator) {
-            Operator.AIRCOACH -> Pair(R.color.white, R.color.aircoachOrange)
-            Operator.BUS_EIREANN -> Pair(R.color.white, R.color.busEireannRed)
-            Operator.COMMUTER -> Pair(R.color.white, R.color.commuterBlue)
-            Operator.DART -> Pair(R.color.white, R.color.dartGreen)
-            Operator.DUBLIN_BIKES -> Pair(R.color.white, R.color.dublinBikesTeal)
-            Operator.DUBLIN_BUS -> Pair(R.color.text_primary, R.color.dublinBusYellow)
-            Operator.GO_AHEAD -> Pair(R.color.white, R.color.goAheadBlue)
-            Operator.INTERCITY -> Pair(R.color.text_primary, R.color.intercityYellow)
-            Operator.LUAS -> {
-                when (route) {
-                    "Green", "Green Line" -> Pair(R.color.white, R.color.luasGreen)
-                    "Red", "Red Line" -> Pair(R.color.white, R.color.luasRed)
-                    else -> Pair(R.color.white, R.color.luasPurple)
-                }
-            }
         }
     }
 
@@ -376,12 +337,12 @@ class DublinBikesLiveDataItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.bikesCount.text = if (liveData.availableBikes == 0) " No " else " ${liveData.availableBikes} "
         viewHolder.bikes.text = if (liveData.availableBikes == 1) "Bike" else "Bikes" //TODO plurals
-        viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+        viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
         viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableBikes))
 
         viewHolder.docksCount.text = if (liveData.availableDocks == 0) " No " else " ${liveData.availableDocks} "
         viewHolder.docks.text = if (liveData.availableDocks == 1) "Dock" else "Docks" //TODO plurals
-        viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+        viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
         viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableDocks))
     }
 

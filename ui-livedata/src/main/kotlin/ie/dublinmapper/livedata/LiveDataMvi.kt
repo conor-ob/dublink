@@ -37,6 +37,8 @@ sealed class Change {
 }
 
 data class State(
+    val isLoading: Boolean,
     val serviceLocationResponse: ServiceLocationPresentationResponse? = null,
-    val liveDataResponse: LiveDataPresentationResponse? = null
+    val liveDataResponse: LiveDataPresentationResponse? = null,
+    val isFavourite: Boolean? = null
 ) : BaseState

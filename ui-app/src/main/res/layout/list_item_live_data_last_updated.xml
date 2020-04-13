@@ -6,7 +6,6 @@
 
     <TextView
             android:id="@+id/lastUpdated"
-        android:alpha="0.5"
         android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

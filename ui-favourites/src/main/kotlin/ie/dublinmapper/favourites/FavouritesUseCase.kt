@@ -1,7 +1,11 @@
 package ie.dublinmapper.favourites
 
+import ie.dublinmapper.domain.model.getOrder
 import ie.dublinmapper.domain.repository.*
+import ie.dublinmapper.domain.service.LocationProvider
+import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.PreferenceStore
+import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
 import io.rtpi.api.LiveData
 import io.rtpi.api.ServiceLocation
@@ -12,10 +16,39 @@ import javax.inject.Inject
 class FavouritesUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val liveDataRepository: LiveDataRepository,
+    private val permissionChecker: PermissionChecker,
+    private val locationProvider: LocationProvider,
     private val preferenceStore: PreferenceStore
 ) {
 
-    fun getFavouritesWithLiveData(): Observable<List<LiveDataPresentationResponse>> {
+    fun getFavouritesWithLiveData(
+        showLoading: Boolean
+    ): Observable<List<LiveDataPresentationResponse>> {
+        if (preferenceStore.isFavouritesSortByLocation() &&
+            permissionChecker.isLocationPermissionGranted()
+        ) {
+            return locationProvider.getLocationUpdates(thresholdDistance = 25.0)
+                .flatMap { coordinate ->
+                    getFavouritesWithLiveData(
+                        showLoading = showLoading,
+                        comparator = Comparator { s1, s2 ->
+                            s1.coordinate.haversine(coordinate)
+                                .compareTo(s2.coordinate.haversine(coordinate))
+                        }
+                    )
+                }
+        } else {
+            return getFavouritesWithLiveData(
+                showLoading = showLoading,
+                comparator = Comparator { s1, s2 -> s1.getOrder().compareTo(s2.getOrder()) }
+            )
+        }
+    }
+
+    private fun getFavouritesWithLiveData(
+        showLoading: Boolean,
+        comparator: Comparator<ServiceLocation>
+    ): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()
         return serviceLocationRepository.getFavourites()
             .flatMap { responses ->
@@ -23,15 +56,19 @@ class FavouritesUseCase @Inject constructor(
                     responses
                         .filterIsInstance<ServiceLocationResponse.Data>()
                         .flatMap { it.serviceLocations }
-//                    .sortedBy { it.id }
+                        .sortedWith(comparator)
                         .mapIndexed { index: Int, serviceLocation: ServiceLocation ->
                             if (index < limit) {
-                                getGroupedLiveData(serviceLocation)
-                                    .startWith(
-                                        LiveDataPresentationResponse.Loading(
-                                            serviceLocation = serviceLocation
+                                if (showLoading) {
+                                    getGroupedLiveData(serviceLocation)
+                                        .startWith(
+                                            LiveDataPresentationResponse.Loading(
+                                                serviceLocation = serviceLocation
+                                            )
                                         )
-                                    )
+                                } else {
+                                    getGroupedLiveData(serviceLocation)
+                                }
                             } else {
                                 Observable.just(
                                     LiveDataPresentationResponse.Skipped(

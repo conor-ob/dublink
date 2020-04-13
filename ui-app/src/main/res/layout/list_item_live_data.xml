@@ -25,7 +25,7 @@
                 android:id="@+id/route"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ThinnerChip" />
+                style="@style/Widget.DublinMapper.RouteChip" />
 
             <View
                 android:layout_width="8dp"
@@ -41,7 +41,7 @@
                 android:marqueeRepeatLimit="1"
                 android:scrollHorizontally="true"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Body1"/>
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle"/>
 
         </LinearLayout>
 
@@ -58,22 +58,20 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"/>
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" · "
                 android:fontFamily="@font/google_sans_bold"
-                android:alpha="0.5" />
+                android:alpha="?attr/emphasisMediumAlpha" />
 
             <TextView
                 android:id="@+id/scheduledTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"/>
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"/>
 
         </LinearLayout>
 
@@ -89,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textAppearance="@style/TextAppearance.DublinMapper.Body1" />
+        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
 
 </LinearLayout>
 
