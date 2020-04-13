@@ -1,5 +1,6 @@
 package ie.dublinmapper.domain.service
 
+import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 
 interface PreferenceStore {
@@ -19,4 +20,8 @@ interface PreferenceStore {
     fun isServiceEnabled(service: Service): Boolean
 
     fun setServiceEnabled(service: Service): Boolean
+
+    fun getLastKnownLocation(): Coordinate
+
+    fun setLastKnownLocation(coordinate: Coordinate)
 }

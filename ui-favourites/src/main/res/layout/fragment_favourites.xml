@@ -10,9 +10,7 @@
         android:id="@+id/favourites_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:background="@drawable/rectangle"
-        android:backgroundTint="@color/colorSurface">
+        android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/favourites_toolbar"

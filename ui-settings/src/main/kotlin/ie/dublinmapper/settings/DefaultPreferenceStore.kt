@@ -3,6 +3,7 @@ package ie.dublinmapper.settings
 import android.content.Context
 import androidx.preference.PreferenceManager
 import ie.dublinmapper.domain.service.PreferenceStore
+import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 import javax.inject.Inject
 
@@ -44,6 +45,30 @@ class DefaultPreferenceStore @Inject constructor(
             context.resources.getString(R.string.preference_key_live_data_refresh_interval),
             context.resources.getInteger(R.integer.preference_default_live_data_refresh_interval)
         ).toLong()
+
+    override fun getLastKnownLocation(): Coordinate {
+        return Coordinate(
+            preferences.getFloat(
+                context.resources.getString(R.string.preference_key_last_known_location_latitude),
+                53.347274f // Dublin latitude
+            ).toDouble(),
+            preferences.getFloat(
+                context.resources.getString(R.string.preference_key_last_known_location_longitude),
+                -6.259159f // Dublin longitude
+            ).toDouble()
+        )
+    }
+
+    override fun setLastKnownLocation(coordinate: Coordinate) {
+        preferences.edit().putFloat(
+            context.resources.getString(R.string.preference_key_last_known_location_latitude),
+            coordinate.latitude.toFloat()
+        ).apply()
+        preferences.edit().putFloat(
+            context.resources.getString(R.string.preference_key_last_known_location_longitude),
+            coordinate.longitude.toFloat()
+        ).apply()
+    }
 
     override fun isServiceEnabled(service: Service): Boolean {
         val key = when (service) {

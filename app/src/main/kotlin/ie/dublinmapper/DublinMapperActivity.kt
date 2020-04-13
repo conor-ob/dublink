@@ -99,9 +99,9 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
 //                if (navigation.visibility == View.VISIBLE) {
 //                    snackBar?.anchorView = navigation
 //                }
-                snackBar?.setActionTextColor(getColor(R.color.colorOnError))
-                snackBar?.setTextColor(getColor(R.color.colorOnError))
-                snackBar?.setBackgroundTint(getColor(R.color.colorSuccess))
+                snackBar?.setActionTextColor(getColor(R.color.color_on_success))
+                snackBar?.setTextColor(getColor(R.color.color_on_success))
+                snackBar?.setBackgroundTint(getColor(R.color.color_success))
                 snackBar?.show()
             }
             InternetStatus.OFFLINE -> {
@@ -112,9 +112,9 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
 //                if (navigation.visibility == View.VISIBLE) {
 //                    snackBar?.anchorView = navigation
 //                }
-                snackBar?.setActionTextColor(getColor(R.color.colorOnError))
-                snackBar?.setTextColor(getColor(R.color.colorOnError))
-                snackBar?.setBackgroundTint(getColor(R.color.colorError))
+                snackBar?.setActionTextColor(getColor(R.color.color_on_error))
+                snackBar?.setTextColor(getColor(R.color.color_on_error))
+                snackBar?.setBackgroundTint(getColor(R.color.color_error))
                 snackBar?.show()
             }
         }

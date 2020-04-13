@@ -1,28 +1,24 @@
 package ie.dublinmapper.livedata
 
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipDrawable
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.isFavourite
+import ie.dublinmapper.util.ChipFactory
 import ie.dublinmapper.viewModelProvider
-import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import timber.log.Timber
-
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -36,13 +32,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
         args = fromBundle(requireArguments())
 
-//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back) //TODO remove?
-//        toolbar.inflateMenu(R.menu.menu_live_data)
+        loader.setColorSchemeResources(R.color.color_on_surface)
+        loader.setProgressBackgroundColorSchemeResource(R.color.color_surface)
 
-        loader.setColorSchemeColors(resources.getColor(R.color.colorOnSurface))
-        loader.setProgressBackgroundColorSchemeResource(R.color.colorSurface)
-
-        toolbar.setNavigationOnClickListener { activity?.onBackPressed() } //TODO
+        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
         if (args.serviceLocationIsFavourite) {
             val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
             favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
@@ -77,7 +70,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         }
         toolbar.title = args.serviceLocationName
         toolbar.subtitle = getSubtitle()
-//        serviceLocationName.text = args.serviceLocationName
 
         loader.isEnabled = false
 
@@ -101,6 +93,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     override fun onResume() {
         super.onResume()
+        viewModel.bindActions()
         viewModel.dispatch(
             Action.GetServiceLocation(
                 serviceLocationId = args.serviceLocationId,
@@ -116,6 +109,11 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         )
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.unbindActions()
+    }
+
     private fun getSubtitle() = when (val service = args.serviceLocationService) {
         Service.BUS_EIREANN,
         Service.DUBLIN_BUS -> "${service.fullName} (${args.serviceLocationId})"
@@ -123,44 +121,30 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderState(state: State) {
-//        loader.isRefreshing = state.isLoading
-//        if (state.isFavourite) {
-//            args = args.copy(serviceLocationIsFavourite = true)
-//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
-//        } else {
-//            args = args.copy(serviceLocationIsFavourite = false)
-//            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
-//            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
-//        }
+        loader.isRefreshing = state.isLoading
+        if (state.isFavourite != null && state.isFavourite) {
+            args = args.copy(serviceLocationIsFavourite = true)
+            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+            favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
+            Toast.makeText(requireContext(), "Saved to Favourites", Toast.LENGTH_SHORT).show()
+        } else if (state.isFavourite != null && !state.isFavourite) {
+            args = args.copy(serviceLocationIsFavourite = false)
+            val favouriteMenuItem = toolbar.menu.findItem(R.id.action_favourite)
+            favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
+            Toast.makeText(requireContext(), "Removed from Favourites", Toast.LENGTH_SHORT).show()
+        }
 
         if (state.serviceLocationResponse != null
             && state.serviceLocationResponse is ServiceLocationPresentationResponse.Data
             && state.serviceLocationResponse.serviceLocation is StopLocation
-            && state.serviceLocationResponse.serviceLocation.routeGroups.size != routes.childCount //TODO check this
+            && state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount
         ) {
-            val dip = 4f
-            val px = TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dip,
-                resources.displayMetrics
-            )
             routes.removeAllViewsInLayout()
             val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups
                 .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                 .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
             for (route in sortedRouteGroups) {
-//            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
-                val chip = Chip(requireContext())
-                chip.setChipDrawable(ChipDrawable.createFromAttributes(requireContext(), null, 0, ie.dublinmapper.ui.R.style.ThinnerChip))
-                val (textColour, backgroundColour) = mapColour(route.first, route.second)
-                chip.text = " ${route.second} "
-                chip.setTextAppearanceResource(R.style.SmallerText)
-                chip.setTextColor(ColorStateList.valueOf(resources.getColor(textColour)))
-                chip.setChipBackgroundColorResource(backgroundColour)
-                chip.elevation = px
-//            chip.chipMinHeight = 0f
-                routes.addView(chip)
+                routes.addView(ChipFactory.newRouteChip(requireContext(), route))
             }
             routes.visibility = View.VISIBLE
         }
@@ -173,26 +157,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     override fun onDestroyView() {
         super.onDestroyView()
         adapter = null
-    }
-
-    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
-        return when (operator) {
-            Operator.AIRCOACH -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.aircoachOrange)
-            Operator.BUS_EIREANN -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.busEireannRed)
-            Operator.COMMUTER -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.commuterBlue)
-            Operator.DART -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dartGreen)
-            Operator.DUBLIN_BIKES -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.dublinBikesTeal)
-            Operator.DUBLIN_BUS -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.dublinBusYellow)
-            Operator.GO_AHEAD -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.goAheadBlue)
-            Operator.INTERCITY -> Pair(ie.dublinmapper.ui.R.color.text_primary, ie.dublinmapper.ui.R.color.intercityYellow)
-            Operator.LUAS -> {
-                when (route) {
-                    "Green", "Green Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasGreen)
-                    "Red", "Red Line" -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasRed)
-                    else -> Pair(ie.dublinmapper.ui.R.color.white, ie.dublinmapper.ui.R.color.luasPurple)
-                }
-            }
-        }
     }
 
     companion object {

@@ -8,22 +8,19 @@ import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
-import ie.dublinmapper.domain.service.RxScheduler
 import ie.dublinmapper.domain.util.haversine
 import ie.dublinmapper.domain.util.truncateHead
 import io.reactivex.Observable
 import io.rtpi.api.*
 import java.time.Instant
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val recentSearchRepository: RecentServiceLocationSearchRepository,
     private val permissionChecker: PermissionChecker,
-    private val locationProvider: LocationProvider,
-    private val scheduler: RxScheduler
+    private val locationProvider: LocationProvider
 ) {
 
     private val cache = mutableMapOf<String, SearchResultsResponse>()
@@ -74,27 +71,23 @@ class SearchUseCase @Inject constructor(
 
     fun getNearbyServiceLocations(): Observable<NearbyLocationsResponse> {
         return if (permissionChecker.isLocationPermissionGranted()) {
-            return Observable.concat(
-                locationProvider.getLastKnownLocation(),
-                locationProvider.getLocationUpdates()
-            )
-                .throttleLatest(30, TimeUnit.SECONDS)
+            return locationProvider.getLocationUpdates(thresholdDistance = 25.0)
                 .flatMap { coordinate ->
-                serviceLocationRepository
-                    .get()
-                    .map { responses ->
-                        responses.filterIsInstance<ServiceLocationResponse.Data>()
-                    }
-                    .map { response ->
-                        NearbyLocationsResponse.Data(
-                            serviceLocations = response
-                                .flatMap { it.serviceLocations }
-                                .associateBy { it.coordinate.haversine(coordinate) }
-                                .toSortedMap()
-                                .truncateHead(5)
-                        )
-                    }
-            }
+                    serviceLocationRepository
+                        .get()
+                        .map { responses ->
+                            responses.filterIsInstance<ServiceLocationResponse.Data>()
+                        }
+                        .map { response ->
+                            NearbyLocationsResponse.Data(
+                                serviceLocations = response
+                                    .flatMap { it.serviceLocations }
+                                    .associateBy { it.coordinate.haversine(coordinate) }
+                                    .toSortedMap()
+                                    .truncateHead(5)
+                            )
+                        }
+                }
         } else {
             Observable.just(NearbyLocationsResponse.LocationDisabled)
         }

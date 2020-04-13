@@ -31,11 +31,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    init {
-        bindActions()
-    }
-
-    private fun bindActions() {
+    fun bindActions() {
         val searchResultsChange = actions.ofType(Action.Search::class.java)
             .debounce(400L, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
@@ -76,5 +72,9 @@ class SearchViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+    }
+
+    fun unbindActions() {
+        disposables.clear()
     }
 }

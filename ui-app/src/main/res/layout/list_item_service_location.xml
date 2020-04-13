@@ -48,8 +48,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:textAppearance="@style/TextAppearance.DublinMapper.Body1"
+            android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle"
             tools:text="Greystones" />
 
         <LinearLayout
@@ -61,8 +60,7 @@
                 android:id="@+id/subtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="0.5"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"
                 tools:text="DART" />
 
             <View
@@ -77,7 +75,7 @@
                 android:drawablePadding="2dp"
                 android:drawableTint="@color/goAheadBlue"
                 android:text="5 min"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"
+                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"
                 android:textColor="@color/goAheadBlue"
                 tools:text="5 min walk" />
 
@@ -114,17 +112,17 @@
                     android:id="@+id/bikesCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/ThinnerChip" />
+                    style="@style/Widget.DublinMapper.RouteChip" />
 
                 <View
-                    android:layout_width="4dp"
+                    android:layout_width="8dp"
                     android:layout_height="0dp" />
 
                 <TextView
                     android:id="@+id/bikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.DublinMapper.Body1" />
+                    android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
 
                 <View
                     android:layout_width="12dp"
@@ -134,17 +132,17 @@
                     android:id="@+id/docksCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/ThinnerChip" />
+                    style="@style/Widget.DublinMapper.RouteChip" />
 
                 <View
-                    android:layout_width="4dp"
+                    android:layout_width="8dp"
                     android:layout_height="0dp" />
 
                 <TextView
                     android:id="@+id/docks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.DublinMapper.Body1" />
+                    android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
 
             </LinearLayout>
 

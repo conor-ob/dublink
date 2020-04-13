@@ -1,6 +1,7 @@
 package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -11,6 +12,7 @@ import kotlinx.android.synthetic.main.list_item_service_location.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import ie.dublinmapper.domain.model.getName
+import ie.dublinmapper.util.ChipFactory
 import io.rtpi.api.*
 import io.rtpi.util.AlphaNumericComparator
 import java.util.Comparator
@@ -48,8 +50,10 @@ class ServiceLocationItem(
 
     private fun bindIcon(viewHolder: GroupieViewHolder) {
         viewHolder.serviceIconContainer.setImageResource(icon)
+        viewHolder.serviceIconContainer.imageTintList =
+            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, android.R.color.white))
         viewHolder.serviceIconContainer.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.colorIconBackground))
+            ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, R.color.grey_700))
     }
 
     private fun bindTitle(viewHolder: GroupieViewHolder) {
@@ -85,17 +89,7 @@ class ServiceLocationItem(
                     .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                     .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
                 for (route in sortedRouteGroups) {
-//            val chip = Chip(ContextThemeWrapper(viewHolder.itemView.context, R.style.ThinnerChip), null, 0)
-                    val chip = Chip(viewHolder.itemView.context)
-                    chip.setChipDrawable(ChipDrawable.createFromAttributes(viewHolder.itemView.context, null, 0, R.style.ThinnerChip))
-                    val (textColour, backgroundColour) = mapColour(route.first, route.second)
-                    chip.text = " ${route.second} "
-                    chip.setTextAppearanceResource(R.style.SmallerText)
-                    chip.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(textColour)))
-                    chip.setChipBackgroundColorResource(backgroundColour)
-                    chip.elevation = px
-//            chip.chipMinHeight = 0f
-                    viewHolder.routes.addView(chip)
+                    viewHolder.routes.addView(ChipFactory.newRouteChip(viewHolder.itemView.context, route))
                 }
                 viewHolder.routes.visibility = View.VISIBLE
                 viewHolder.routesDivider.visibility = View.VISIBLE
@@ -110,12 +104,12 @@ class ServiceLocationItem(
                 viewHolder.rootViewBikes.visibility = View.VISIBLE
                 viewHolder.bikesCount.text = if (serviceLocation.availableBikes == 0) " No " else " ${serviceLocation.availableBikes} "
                 viewHolder.bikes.text = if (serviceLocation.availableBikes == 1) "Bike" else "Bikes" //TODO plurals
-                viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+                viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
                 viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableBikes))
 
                 viewHolder.docksCount.text = if (serviceLocation.availableDocks == 0) " No " else " ${serviceLocation.availableDocks} "
                 viewHolder.docks.text = if (serviceLocation.availableDocks == 1) "Dock" else "Docks" //TODO plurals
-                viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(R.color.white)))
+                viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
                 viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableDocks))
             }
         }
@@ -126,26 +120,6 @@ class ServiceLocationItem(
             amount < 3 -> R.color.luasRed
             amount < 6 -> R.color.aircoachOrange
             else -> R.color.dublinBikesTeal
-        }
-    }
-
-    private fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
-        return when (operator) {
-            Operator.AIRCOACH -> Pair(R.color.white, R.color.aircoachOrange)
-            Operator.BUS_EIREANN -> Pair(R.color.white, R.color.busEireannRed)
-            Operator.COMMUTER -> Pair(R.color.white, R.color.commuterBlue)
-            Operator.DART -> Pair(R.color.white, R.color.dartGreen)
-            Operator.DUBLIN_BIKES -> Pair(R.color.white, R.color.dublinBikesTeal)
-            Operator.DUBLIN_BUS -> Pair(R.color.text_primary, R.color.dublinBusYellow)
-            Operator.GO_AHEAD -> Pair(R.color.white, R.color.goAheadBlue)
-            Operator.INTERCITY -> Pair(R.color.text_primary, R.color.intercityYellow)
-            Operator.LUAS -> {
-                when (route) {
-                    "Green", "Green Line" -> Pair(R.color.white, R.color.luasGreen)
-                    "Red", "Red Line" -> Pair(R.color.white, R.color.luasRed)
-                    else -> Pair(R.color.white, R.color.luasPurple)
-                }
-            }
         }
     }
 
