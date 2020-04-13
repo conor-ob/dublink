@@ -67,7 +67,6 @@ class DefaultEnabledServiceManagerTest {
 
         // assert
         assertThat(enabledServices).containsExactly(
-            Service.AIRCOACH,
             Service.DUBLIN_BIKES,
             Service.DUBLIN_BUS,
             Service.IRISH_RAIL,
