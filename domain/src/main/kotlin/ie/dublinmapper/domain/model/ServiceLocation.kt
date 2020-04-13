@@ -22,4 +22,4 @@ fun ServiceLocation.setOrder(order: Int) {
     properties[customOrder] = order
 }
 
-fun ServiceLocation.getOrder(): Int = properties[customOrder] as? Int ?: -1
+fun ServiceLocation.getOrder(): Int = properties[customOrder] as? Int? ?: -1
