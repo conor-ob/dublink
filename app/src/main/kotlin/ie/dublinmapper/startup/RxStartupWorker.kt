@@ -3,9 +3,9 @@ package ie.dublinmapper.startup
 import android.app.Application
 import io.reactivex.exceptions.UndeliverableException
 import io.reactivex.plugins.RxJavaPlugins
-import timber.log.Timber
 import java.io.IOException
 import java.net.SocketException
+import timber.log.Timber
 
 class RxStartupWorker : StartupWorker {
 

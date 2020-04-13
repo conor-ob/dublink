@@ -17,5 +17,8 @@ jobs:
           name: Download dependencies
           command: ./gradlew androidDependencies
       - run:
+          name: Run ktlint
+          command: ./gradlew ktlint
+      - run:
           name: Run unit tests
           command: ./gradlew test

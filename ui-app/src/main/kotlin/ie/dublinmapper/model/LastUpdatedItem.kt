@@ -4,13 +4,13 @@ import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.widget.TextView
-import com.xwray.groupie.kotlinandroidextensions.Item
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
+import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.ui.R
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.list_item_live_data_last_updated.*
 import java.util.concurrent.TimeUnit
+import kotlinx.android.synthetic.main.list_item_live_data_last_updated.lastUpdated
 
 class LastUpdatedItem(private val lastUpdated: Long) : Item() {
 
@@ -40,14 +40,11 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
             }
 
             override fun onAnimationRepeat(animation: Animation?) {
-
             }
-
         })
         delay.setAnimationListener(object : Animation.AnimationListener {
 
             override fun onAnimationStart(animation: Animation?) {
-
             }
 
             override fun onAnimationEnd(animation: Animation?) {
@@ -55,14 +52,11 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
             }
 
             override fun onAnimationRepeat(animation: Animation?) {
-
             }
-
         })
         fadeOut.setAnimationListener(object : Animation.AnimationListener {
 
             override fun onAnimationStart(animation: Animation?) {
-
             }
 
             override fun onAnimationEnd(animation: Animation?) {
@@ -70,9 +64,7 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
             }
 
             override fun onAnimationRepeat(animation: Animation?) {
-
             }
-
         })
 
         subscriptions.add(Observable.interval(0L, 15L, TimeUnit.SECONDS)
@@ -103,7 +95,7 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
         }
     }
 
-    //TODO
+    // TODO
 //    override fun unbind(holder: ViewHolder) {
 //        Timber.d("unbind")
 //        subscriptions.clear()
@@ -128,5 +120,4 @@ class LastUpdatedItem(private val lastUpdated: Long) : Item() {
     override fun hashCode(): Int {
         return id.toInt()
     }
-
 }

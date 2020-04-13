@@ -2,10 +2,12 @@ package ie.dublinmapper.news
 
 import android.os.Bundle
 import android.view.View
-import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.DublinMapperFragment
+import ie.dublinmapper.DublinMapperNavigator
 import io.rtpi.api.Service
-import kotlinx.android.synthetic.main.fragment_news.*
+import kotlinx.android.synthetic.main.fragment_news.tabs
+import kotlinx.android.synthetic.main.fragment_news.toolbar
+import kotlinx.android.synthetic.main.fragment_news.viewpager
 
 class NewsFragment : DublinMapperFragment(R.layout.fragment_news) {
 

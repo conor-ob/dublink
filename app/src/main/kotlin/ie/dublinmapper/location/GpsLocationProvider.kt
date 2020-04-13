@@ -8,9 +8,9 @@ import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
 import io.rtpi.api.Coordinate
+import javax.inject.Inject
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import timber.log.Timber
-import javax.inject.Inject
 
 class GpsLocationProvider @Inject constructor(
     private val preferenceStore: PreferenceStore,

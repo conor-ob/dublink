@@ -1,7 +1,6 @@
 package ie.dublinmapper.logging
 
 import android.util.Log
-//import com.crashlytics.android.Crashlytics
 import timber.log.Timber
 
 class CrashlyticsTree : Timber.Tree() {

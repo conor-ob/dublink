@@ -1,25 +1,25 @@
-//package ie.dublinmapper.mapping
+package ie.dublinmapper.mapping
 //
-//import com.xwray.groupie.Group
-//import com.xwray.groupie.Section
-//import ie.dublinmapper.domain.internet.NetworkUnavailableException
-//import ie.dublinmapper.favourites.FavouritesResponse
-//import ie.dublinmapper.domain.service.StringProvider
-//import ie.dublinmapper.domain.usecase.LiveDataResponse
-//import ie.dublinmapper.model.*
-//import ie.dublinmapper.ui.R
-//import io.rtpi.api.*
-//import ma.glasnost.orika.CustomConverter
-//import ma.glasnost.orika.MappingContext
-//import ma.glasnost.orika.metadata.Type
-//import timber.log.Timber
-//import java.io.IOException
-//import java.net.ConnectException
-//import java.net.UnknownHostException
+// import com.xwray.groupie.Group
+// import com.xwray.groupie.Section
+// import ie.dublinmapper.domain.internet.NetworkUnavailableException
+// import ie.dublinmapper.favourites.FavouritesResponse
+// import ie.dublinmapper.domain.service.StringProvider
+// import ie.dublinmapper.domain.usecase.LiveDataResponse
+// import ie.dublinmapper.model.*
+// import ie.dublinmapper.ui.R
+// import io.rtpi.api.*
+// import ma.glasnost.orika.CustomConverter
+// import ma.glasnost.orika.MappingContext
+// import ma.glasnost.orika.metadata.Type
+// import timber.log.Timber
+// import java.io.IOException
+// import java.net.ConnectException
+// import java.net.UnknownHostException
 //
-//class FavouritesResponseMapper(
+// class FavouritesResponseMapper(
 //    private val stringProvider: StringProvider
-//) : CustomConverter<ie.dublinmapper.favourites.FavouritesResponse, Group>() {
+// ) : CustomConverter<ie.dublinmapper.favourites.FavouritesResponse, Group>() {
 //
 //    override fun convert(
 //        source: ie.dublinmapper.favourites.FavouritesResponse,
@@ -42,8 +42,8 @@
 //    ) = ServiceLocationItem(
 //        serviceLocation = liveDataResponse.serviceLocation,
 //        icon = mapIcon(liveDataResponse.serviceLocation.service),
-////                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
-////                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
+//                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
+//                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
 //        routes = null,
 //        walkDistance = null
 //    )
@@ -112,4 +112,4 @@
 //        Service.IRISH_RAIL -> R.drawable.ic_train
 //        Service.LUAS -> R.drawable.ic_tram
 //    }
-//}
+// }

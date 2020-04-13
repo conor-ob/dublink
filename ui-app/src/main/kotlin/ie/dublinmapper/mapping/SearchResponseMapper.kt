@@ -1,17 +1,6 @@
-//package ie.dublinmapper.mapping
+package ie.dublinmapper.mapping
 //
-//import com.xwray.groupie.Group
-//import com.xwray.groupie.Section
-//import ie.dublinmapper.domain.usecase.NearbyResponse
-//import ie.dublinmapper.search.SearchResponse
-//import ie.dublinmapper.model.ServiceLocationItem
-//import ie.dublinmapper.ui.R
-//import io.rtpi.api.*
-//import ma.glasnost.orika.CustomConverter
-//import ma.glasnost.orika.MappingContext
-//import ma.glasnost.orika.metadata.Type
-//
-//object SearchResponseMapper : CustomConverter<ie.dublinmapper.search.SearchResponse, Group>() {
+// object SearchResponseMapper : CustomConverter<ie.dublinmapper.search.SearchResponse, Group>() {
 //
 //    /**
 //     * Places near me/you
@@ -64,16 +53,16 @@
 //
 //    fun mapNearbyLocations(response: NearbyResponse): Group {
 //        return Section()
-////        return Section(
-////            listOf(
-////                SimpleMessageItem("Places near you", 0)
-////            ).plus(
-////                if (response.serviceLocations.isEmpty()) {
-////                    listOf(SimpleMessageItem("Enable location", 1))
-////                } else {
-////                    Section(NearbyResponseMapper.mapNearbyResponse(response))
-////                }
-////            )
-////        )
+//        return Section(
+//            listOf(
+//                SimpleMessageItem("Places near you", 0)
+//            ).plus(
+//                if (response.serviceLocations.isEmpty()) {
+//                    listOf(SimpleMessageItem("Enable location", 1))
+//                } else {
+//                    Section(NearbyResponseMapper.mapNearbyResponse(response))
+//                }
+//            )
+//        )
 //    }
-//}
+// }

@@ -2,15 +2,13 @@ package ie.dublinmapper.search
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
-import ie.dublinmapper.model.LoadingItem
 import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.model.SimpleMessageItem
 import ie.dublinmapper.model.setSearchCandidate
 import ie.dublinmapper.ui.R
-import io.rtpi.api.*
-import ma.glasnost.orika.CustomConverter
-import ma.glasnost.orika.MappingContext
-import ma.glasnost.orika.metadata.Type
+import io.rtpi.api.DockLocation
+import io.rtpi.api.Service
+import io.rtpi.api.StopLocation
 
 object SearchResponseMapper {
 

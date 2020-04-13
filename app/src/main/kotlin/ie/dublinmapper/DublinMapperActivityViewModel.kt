@@ -8,8 +8,8 @@ import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.domain.internet.InternetStatusChangeListener
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.rxkotlin.plusAssign
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class DublinMapperActivityViewModel @Inject constructor(
     private val internetStatusChangeListener: InternetStatusChangeListener,

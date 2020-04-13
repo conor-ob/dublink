@@ -23,5 +23,4 @@ class DartLiveDataMapperTest {
 //        assertThat(liveData.destination).isEqualTo("Bray")
 //        assertThat(liveData.direction).isEqualTo("Southbound")
 //    }
-
 }

@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="ie.dublinmapper.ui" />
+<manifest package="ie.dublinmapper.ui" />

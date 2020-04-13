@@ -10,7 +10,7 @@ class SqlDelightServiceLocationRecordStateLocalResource(
 
     override fun selectRecordState(service: Service): Instant {
         return database.locationExpirationQueries.selectById(service)
-            .executeAsOne().lastUpdated //TODO check null
+            .executeAsOne().lastUpdated // TODO check null
     }
 
     override fun insertRecordState(service: Service, lastUpdated: Instant) {
