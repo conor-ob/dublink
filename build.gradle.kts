@@ -18,9 +18,17 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenLocal()
         maven(url = "https://jitpack.io") {
             credentials {
-                username = loadProperties("gradle.properties").getProperty("authToken")
+                username = properties.getOrDefault(
+                    "authToken",
+                    if (project.rootProject.file("release.properties").exists()) {
+                        loadProperties("release.properties").getProperty("authToken")
+                    } else {
+                        null
+                    }
+                ) as String?
             }
         }
     }
