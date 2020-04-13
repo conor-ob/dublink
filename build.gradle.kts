@@ -22,7 +22,11 @@ allprojects {
             credentials {
                 username = properties.getOrDefault(
                     "authToken",
-                    loadProperties("release.properties").getProperty("authToken")
+                    if (project.rootProject.file("release.properties").exists()) {
+                        loadProperties("release.properties").getProperty("authToken")
+                    } else {
+                        null
+                    }
                 ) as String
             }
         }
