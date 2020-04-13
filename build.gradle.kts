@@ -27,7 +27,7 @@ allprojects {
                     } else {
                         null
                     }
-                ) as String
+                ) as String?
             }
         }
     }
