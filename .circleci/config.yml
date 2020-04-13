@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/dublin-mapper
+    docker:
+      - image: circleci/android:api-29
+    environment:
+      JVM_OPTS: -Xmx4g
+    steps:
+      - run:
+          name: Update SDK
+          command: |
+            yes | sdkmanager --licenses || true
+            sdkmanager "platform-tools" "platforms;android-29"
+      - checkout
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
+      - run:
+          name: Run unit tests
+          command: ./gradlew test
