@@ -25,11 +25,9 @@ object BuildPlugins {
     const val ktLint = "com.pinterest:ktlint:0.36.0"
     const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:1.2.2" // https://mvnrepository.com/artifact/com.squareup.sqldelight/gradle-plugin
     const val googleServiceGradlePlugin = "com.google.gms:google-services:4.3.3" // https://mvnrepository.com/artifact/com.google.gms/google-services?repo=google
-    const val fabricGradlePlugin = "io.fabric.tools:gradle:1.+" // https://fabric.io/kits/android/crashlytics/install
 
     const val androidApplication = "com.android.application"
     const val androidLibrary = "com.android.library"
-    const val fabric = "io.fabric"
     const val googleServices = "com.google.gms.google-services"
     const val kotlin = "kotlin"
     const val kotlinAndroid = "kotlin-android"
@@ -96,10 +94,6 @@ object Libraries {
     object OkHttp {
         const val okhttp = "com.squareup.okhttp3:okhttp:3.12.1" // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
         const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.12.1" //
-    }
-
-    object Orika {
-        const val orikaCore = "ma.glasnost.orika:orika-core:1.5.4" // https://mvnrepository.com/artifact/ma.glasnost.orika/orika-core
     }
 
     object Roxie {

@@ -10,7 +10,6 @@ buildscript {
         classpath (BuildPlugins.kotlinGradlePlugin)
         classpath (BuildPlugins.sqlDelightGradlePlugin)
 //        classpath (BuildPlugins.googleServiceGradlePlugin)
-//        classpath (BuildPlugins.fabricGradlePlugin)
     }
 }
 

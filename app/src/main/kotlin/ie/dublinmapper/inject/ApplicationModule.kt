@@ -34,15 +34,12 @@ import ie.dublinmapper.startup.StartupWorkers
 import ie.dublinmapper.startup.StethoStartupWorker
 import ie.dublinmapper.startup.ThemeStartupWorker
 import ie.dublinmapper.startup.TimberStartupWorker
-import ie.dublinmapper.startup.TwitterStartupWorker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.client.RtpiClient
 import io.rtpi.client.RtpiClientConfiguration
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import ma.glasnost.orika.MapperFacade
-import ma.glasnost.orika.impl.DefaultMapperFactory
 import okhttp3.OkHttpClient
 
 @Module(
@@ -136,8 +133,7 @@ class ApplicationModule {
             TimberStartupWorker(),
             ThemeStartupWorker(themeRepository),
             RxStartupWorker(),
-            StethoStartupWorker(),
-            TwitterStartupWorker()
+            StethoStartupWorker()
         )
     )
 
@@ -155,17 +151,4 @@ class ApplicationModule {
             .writeTimeout(60, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .build()
-
-    @Provides
-    @Singleton
-    fun mapperFacade(
-        stringProvider: StringProvider
-    ): MapperFacade {
-        val mapperFactory = DefaultMapperFactory.Builder().useBuiltinConverters(false).build()
-        mapperFactory.converterFactory.apply {
-//            registerConverter(FavouritesResponseMapper(stringProvider))
-//            registerConverter(SearchResponseMapper)
-        }
-        return mapperFactory.mapperFacade
-    }
 }
