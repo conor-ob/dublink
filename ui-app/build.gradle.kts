@@ -47,6 +47,5 @@ dependencies {
     api(Libraries.Rx.rxJava)
     api(Libraries.Rx.rxKotlin)
     api(Libraries.Kotlin.stdLib)
-    api(Libraries.Orika.orikaCore)
     api(Libraries.Timber.timber)
 }

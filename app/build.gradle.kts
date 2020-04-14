@@ -51,10 +51,7 @@ android {
         versionCode = BuildConfig.Version.code
         versionName = BuildConfig.Version.name
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = mapOf("googleMapsApiKey" to properties.getProperty("com.google.android.geo.API_KEY"))
-        buildConfigField("String", "JCDECAUX_API_KEY", "\"${properties.getProperty("com.developer.jcdecaux.API_KEY")}\"")
-        buildConfigField("String", "TWITTER_CONSUMER_KEY", "\"${properties.getProperty("com.twitter.sdk.android.CONSUMER_KEY")}\"")
-        buildConfigField("String", "TWITTER_CONSUMER_SECRET", "\"${properties.getProperty("com.twitter.sdk.android.CONSUMER_SECRET")}\"")
+        buildConfigField("String", "JCDECAUX_API_KEY", "\"${properties.getProperty("jcDecauxApiKey")}\"")
     }
 
     buildTypes {
@@ -96,8 +93,6 @@ dependencies {
     implementation(project(":ui-app"))
     implementation(project(":ui-favourites"))
     implementation(project(":ui-livedata"))
-    implementation(project(":ui-nearby"))
-    implementation(project(":ui-news"))
     implementation(project(":ui-search"))
     implementation(project(":ui-settings"))
 
@@ -126,6 +121,5 @@ dependencies {
 if (file("google-services.json").exists()) {
     plugins {
         id(BuildPlugins.googleServices)
-        id(BuildPlugins.fabric)
     }
 }
