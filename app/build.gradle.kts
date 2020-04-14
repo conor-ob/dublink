@@ -51,7 +51,7 @@ android {
         versionCode = BuildConfig.Version.code
         versionName = BuildConfig.Version.name
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "JCDECAUX_API_KEY", "\"${properties.getProperty("com.developer.jcdecaux.API_KEY")}\"")
+        buildConfigField("String", "JCDECAUX_API_KEY", "\"${properties.getProperty("jcDecauxApiKey")}\"")
     }
 
     buildTypes {
