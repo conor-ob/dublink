@@ -34,7 +34,6 @@ import ie.dublinmapper.startup.StartupWorkers
 import ie.dublinmapper.startup.StethoStartupWorker
 import ie.dublinmapper.startup.ThemeStartupWorker
 import ie.dublinmapper.startup.TimberStartupWorker
-import ie.dublinmapper.startup.TwitterStartupWorker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.client.RtpiClient
@@ -134,8 +133,7 @@ class ApplicationModule {
             TimberStartupWorker(),
             ThemeStartupWorker(themeRepository),
             RxStartupWorker(),
-            StethoStartupWorker(),
-            TwitterStartupWorker()
+            StethoStartupWorker()
         )
     )
 
