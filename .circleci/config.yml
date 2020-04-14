@@ -52,3 +52,6 @@ jobs:
           destination: ui-settings/reports
       - store_test_results:
           path: ui-settings/build/test-results
+      - run:
+          name: Send to CodeCov
+          command: bash <(curl -s https://codecov.io/bash) -t ${CODECOV_TOKEN}
