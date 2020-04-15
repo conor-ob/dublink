@@ -1,7 +1,6 @@
 package ie.dublinmapper.search
 
 import ie.dublinmapper.domain.model.RecentServiceLocationSearch
-import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.RecentServiceLocationSearchRepository
 import ie.dublinmapper.domain.repository.ServiceLocationKey
@@ -26,40 +25,17 @@ class SearchUseCase @Inject constructor(
 
     private val searchService = SearchService()
 
-    fun search(query: String): Observable<SearchResultsResponse> {
-        return serviceLocationRepository.get().flatMap { response ->
+    fun search(query: String): Observable<SearchResultsResponse> =
+        serviceLocationRepository.get().flatMap { response ->
             searchService.search(
                 query = query,
                 serviceLocations = response
                     .filterIsInstance<ServiceLocationResponse.Data>()
                     .flatMap { it.serviceLocations }
-            ).map {
-                SearchResultsResponse(
-                    it.take(100)
-                )
+            ).map { searchResults ->
+                SearchResultsResponse(searchResults.take(100))
             }
         }
-    }
-
-    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
-        val adaptedQuery = query.toLowerCase().trim()
-        val searchResults = mutableListOf<ServiceLocation>()
-        for (serviceLocation in serviceLocations) {
-            if (serviceLocation.getName().toLowerCase().contains(adaptedQuery) ||
-                serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
-                serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
-                searchResults.add(serviceLocation)
-            } else {
-                // TODO operators
-//                for (operator in serviceLocation.operators) {
-//                    if (operator.fullName.toLowerCase().contains(adaptedQuery)) {
-//                        searchResults.add(serviceLocation)
-//                    }
-//                }
-            }
-        }
-        return searchResults
-    }
 
     fun getNearbyServiceLocations(): Observable<NearbyLocationsResponse> {
         return if (permissionChecker.isLocationPermissionGranted()) {

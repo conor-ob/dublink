@@ -1,5 +1,6 @@
 package ie.dublinmapper.search
 
+import ie.dublinmapper.domain.model.getCustomName
 import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
@@ -44,19 +45,17 @@ class SearchService {
             serviceLocations = serviceLocations,
             algorithm = algorithm,
             toStringFunction = ToStringFunction<ServiceLocation> {
-                if (it is StopLocation) {
-                    listOf(
-                        it.name,
-                        it.service.fullName
-                    ).plus(
+                listOfNotNull(
+                    it.name,
+                    it.getCustomName(),
+                    it.service.fullName
+                ).plus(
+                    if (it is StopLocation) {
                         it.routeGroups.map { routeGroup -> routeGroup.operator.fullName }
-                    )
-                } else {
-                    listOf(
-                        it.name,
-                        it.service.fullName
-                    )
-                }
+                    } else {
+                        emptyList()
+                    }
+                )
                     .toSet()
                     .joinToString(separator = singleSpace)
             }
