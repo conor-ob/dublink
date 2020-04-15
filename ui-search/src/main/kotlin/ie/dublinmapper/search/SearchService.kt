@@ -4,27 +4,43 @@ import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
+import me.xdrop.fuzzywuzzy.Applicable
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.xdrop.fuzzywuzzy.ToStringFunction
+import me.xdrop.fuzzywuzzy.algorithms.TokenSet
+import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
 
 class SearchService {
 
+    private val searchScoreCutoff = 70
+
     fun search(query: String, serviceLocations: List<ServiceLocation>): Observable<List<ServiceLocation>> {
-        val sanitizedQuery = sanitizeQuery(query)
-        return if (isId(sanitizedQuery)) {
-            idSearch(sanitizedQuery, serviceLocations)
+        val algorithm = getAlgorithm(query)
+        return if (isId(query)) {
+            idSearch(query, algorithm, serviceLocations)
         } else {
-            regularSearch(sanitizedQuery, serviceLocations)
+            regularSearch(query, algorithm, serviceLocations)
+        }
+    }
+
+    private fun getAlgorithm(query: String): Applicable {
+        val tokens = query.split(" ") // TODO split("\\s+")
+        return if (tokens.size > 1) {
+            TokenSet()
+        } else {
+            WeightedRatio()
         }
     }
 
     private fun regularSearch(
         query: String,
+        algorithm: Applicable,
         serviceLocations: List<ServiceLocation>
     ): Observable<List<ServiceLocation>> {
         return search(
             query = query,
             serviceLocations = serviceLocations,
+            algorithm = algorithm,
             toStringFunction = ToStringFunction<ServiceLocation> {
                 if (it is StopLocation) {
                     listOf(
@@ -48,10 +64,12 @@ class SearchService {
 
     private fun idSearch(
         query: String,
+        algorithm: Applicable,
         serviceLocations: List<ServiceLocation>
     ): Observable<List<ServiceLocation>> {
         return search(
             query = query,
+            algorithm = algorithm,
             serviceLocations = serviceLocations.filter {
                 it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN
             },
@@ -61,6 +79,7 @@ class SearchService {
 
     private fun search(
         query: String,
+        algorithm: Applicable,
         serviceLocations: List<ServiceLocation>,
         toStringFunction: ToStringFunction<ServiceLocation>
     ): Observable<List<ServiceLocation>> {
@@ -68,7 +87,9 @@ class SearchService {
             FuzzySearch.extractSorted(
                 query,
                 serviceLocations,
-                toStringFunction
+                toStringFunction,
+                algorithm,
+                searchScoreCutoff
             )
                 .map { it.referent }
         )
@@ -81,9 +102,5 @@ class SearchService {
             return false
         }
         return true
-    }
-
-    private fun sanitizeQuery(query: String): String {
-        return query.trim() // TODO
     }
 }
