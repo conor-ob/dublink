@@ -35,7 +35,7 @@ class SearchUseCase @Inject constructor(
                     .flatMap { it.serviceLocations }
             ).map {
                 SearchResultsResponse(
-                    it.take(50)
+                    it.take(100)
                 )
             }
         }

@@ -15,7 +15,7 @@ class SearchServiceTest {
     fun `test fuzzy`() {
         val serviceLocations = listOf(
             StopLocation(
-                id = "769",
+                id = "Busaras",
                 name = "Busaras",
                 service = Service.DUBLIN_BUS,
                 coordinate = Coordinate(0.0, 0.0),
@@ -29,20 +29,27 @@ class SearchServiceTest {
                 routeGroups = listOf(
                     RouteGroup(
                         operator = Operator.DUBLIN_BUS,
-                        routes = listOf("69")
+                        routes = listOf("382")
+                    ),
+                    RouteGroup(
+                        operator = Operator.GO_AHEAD,
+                        routes = listOf("421")
+                    ),
+                    RouteGroup(
+                        operator = Operator.GO_AHEAD,
+                        routes = listOf("156")
                     )
                 )
             )
         )
 
-        val extractTop = FuzzySearch.extractTop(
+        val extractTop = FuzzySearch.extractSorted(
             "Busáras",
-            serviceLocations,
-            {
-                "${it.id} ${it.name} ${it.service.fullName} ${it.routeGroups}"
-            },
-            50
-        )
+            serviceLocations
+        ) {
+//            "${it.id} ${it.name} ${it.service.fullName} ${it.routeGroups}"
+            "${it.id}${it.name}${it.service.fullName}${it.routeGroups.joinToString(separator = "") { routeGroup -> routeGroup.operator.fullName }}".trim()
+        }
         assertThat(extractTop).isNotNull()
     }
 }

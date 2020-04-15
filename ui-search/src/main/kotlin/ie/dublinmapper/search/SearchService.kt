@@ -12,50 +12,65 @@ class SearchService {
     fun search(query: String, serviceLocations: List<ServiceLocation>): Observable<List<ServiceLocation>> {
         val sanitizedQuery = sanitizeQuery(query)
         return if (isId(sanitizedQuery)) {
-            Observable.concat(
-                regularSearch(sanitizedQuery, serviceLocations),
-                idSearch(sanitizedQuery, serviceLocations)
-            )
+            idSearch(sanitizedQuery, serviceLocations)
         } else {
             regularSearch(sanitizedQuery, serviceLocations)
         }
     }
 
     private fun regularSearch(
-        sanitizedQuery: String,
+        query: String,
         serviceLocations: List<ServiceLocation>
     ): Observable<List<ServiceLocation>> {
-        return Observable.just(
-            FuzzySearch.extractTop(
-                sanitizedQuery,
-                serviceLocations,
-                defaultToStringFunction(),
-                50
-            ).map { it.referent }
+        return search(
+            query = query,
+            serviceLocations = serviceLocations,
+            toStringFunction = ToStringFunction<ServiceLocation> {
+                if (it is StopLocation) {
+                    listOf(
+                        it.name,
+                        it.service.fullName
+                    ).plus(
+                        it.routeGroups.map { routeGroup -> routeGroup.operator.fullName }
+                    )
+                } else {
+                    listOf(
+                        it.name,
+                        it.service.fullName
+                    )
+                }
+                    .toSet()
+                    .joinToString(separator = " ")
+//                    .joinToString(separator = " ") { value -> DefaultStringFunction.subNonAlphaNumeric(value.toLowerCase(), " ") }
+            }
         )
     }
 
-    private fun defaultToStringFunction(): (item: ServiceLocation) -> String =
-        {
-            if (it is StopLocation) {
-                "$${it.name} ${it.service.fullName} ${it.routeGroups.map { routeGroup -> routeGroup.operator }.joinToString(separator = " ")}"
-            } else {
-                "$${it.name} ${it.service.fullName}"
-            }
-        }
-
-
     private fun idSearch(
-        sanitizedQuery: String,
+        query: String,
         serviceLocations: List<ServiceLocation>
     ): Observable<List<ServiceLocation>> {
+        return search(
+            query = query,
+            serviceLocations = serviceLocations.filter {
+                it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN
+            },
+            toStringFunction = ToStringFunction<ServiceLocation> { it.id }
+        )
+    }
+
+    private fun search(
+        query: String,
+        serviceLocations: List<ServiceLocation>,
+        toStringFunction: ToStringFunction<ServiceLocation>
+    ): Observable<List<ServiceLocation>> {
         return Observable.just(
-            FuzzySearch.extractTop(
-                sanitizedQuery,
-                serviceLocations.filter { it.service == Service.DUBLIN_BUS },
-                { it.id },
-                50
-            ).map { it.referent }
+            FuzzySearch.extractSorted(
+                query,
+                serviceLocations,
+                toStringFunction
+            )
+                .map { it.referent }
         )
     }
 
