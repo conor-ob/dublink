@@ -57,6 +57,7 @@ class SearchService {
                         it.service.fullName
                     )
                 }
+                    .toSet()
                     .joinToString(separator = singleSpace)
             }
         )
