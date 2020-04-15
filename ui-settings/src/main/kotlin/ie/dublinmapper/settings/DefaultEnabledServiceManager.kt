@@ -13,5 +13,17 @@ class DefaultEnabledServiceManager @Inject constructor(
 
     override fun isServiceEnabled(service: Service) = preferenceStore.isServiceEnabled(service)
 
-    override fun getEnabledServices() = Service.values().filter { isServiceEnabled(it) }.toSet()
+//    override fun getEnabledServices() = Service.values().filter { isServiceEnabled(it) }.toSet()
+
+    override fun getEnabledServices(): List<Service> {
+        val customOrder = listOf(
+            Service.LUAS,
+            Service.IRISH_RAIL,
+            Service.DUBLIN_BIKES,
+            Service.DUBLIN_BUS,
+            Service.AIRCOACH,
+            Service.BUS_EIREANN
+        )
+        return customOrder.filter { isServiceEnabled(it) }
+    }
 }

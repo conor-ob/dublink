@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -104,6 +105,9 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     override fun onResume() {
         super.onResume()
         viewModel.bindActions()
+        search_input.query?.toString()?.let { query ->
+            viewModel.dispatch(Action.Search(query))
+        }
         viewModel.dispatch(Action.GetNearbyLocations)
         viewModel.dispatch(Action.GetRecentSearches)
     }
@@ -115,7 +119,10 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     }
 
     private fun renderState(state: State) {
-        if (state.loading == true) {
+        if (state. throwable != null) {
+            Toast.makeText(requireContext(), state.throwable.message, Toast.LENGTH_LONG).show()
+        }
+        if (state.loading != null && state.loading == true) {
             search_progress_bar.visibility = View.VISIBLE
         } else {
             search_progress_bar.visibility = View.GONE
