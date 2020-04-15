@@ -121,7 +121,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     }
 
     private fun renderState(state: State) {
-        if (state. throwable != null) {
+        if (state.throwable != null) {
             Toast.makeText(requireContext(), state.throwable.message, Toast.LENGTH_LONG).show()
         }
         if (state.loading != null && state.loading == true) {
@@ -140,7 +140,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         )
         try {
             search_list.scrollToPosition(0)
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             // ignored
         }
     }

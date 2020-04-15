@@ -26,14 +26,18 @@ class SearchUseCase @Inject constructor(
     private val searchService = SearchService()
 
     fun search(query: String): Observable<SearchResultsResponse> =
-        serviceLocationRepository.get().flatMap { response ->
-            searchService.search(
-                query = query,
-                serviceLocations = response
-                    .filterIsInstance<ServiceLocationResponse.Data>()
-                    .flatMap { it.serviceLocations }
-            ).map { searchResults ->
-                SearchResultsResponse(searchResults.take(100))
+        if (query.length < 2) {
+            Observable.just(SearchResultsResponse(emptyList()))
+        } else {
+            serviceLocationRepository.get().flatMap { response ->
+                searchService.search(
+                    query = query,
+                    serviceLocations = response
+                        .filterIsInstance<ServiceLocationResponse.Data>()
+                        .flatMap { it.serviceLocations }
+                ).map { searchResults ->
+                    SearchResultsResponse(searchResults.take(100))
+                }
             }
         }
 

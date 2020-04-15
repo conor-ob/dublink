@@ -95,9 +95,9 @@ class SearchService {
         try {
             value.toInt()
             true
-        } catch (e : NumberFormatException) {
+        } catch (e: NumberFormatException) {
             false
-        } catch (e : Exception) {
+        } catch (e: Exception) {
             false
         }
 }

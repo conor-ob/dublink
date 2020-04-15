@@ -50,7 +50,7 @@ class SearchViewModel @Inject constructor(
 
     fun bindActions() {
         val searchResultsChange = actions.ofType(Action.Search::class.java)
-            .filter { it.query.length > 1 }
+            .filter { it.query.length != 1 }
             .debounce(400L, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .switchMap { action ->
