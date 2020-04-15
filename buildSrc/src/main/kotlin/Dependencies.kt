@@ -74,6 +74,10 @@ object Libraries {
         const val stethoOkhttp = "com.facebook.stetho:stetho-okhttp3:1.5.1" // https://mvnrepository.com/artifact/com.facebook.stetho/stetho-okhttp3
     }
 
+    object FuzzyWuzzy {
+        const val javaWuzzy = "me.xdrop:fuzzywuzzy:1.2.0" // https://mvnrepository.com/artifact/me.xdrop/fuzzywuzzy
+    }
+
     object Groupie {
         const val groupie = "com.xwray:groupie:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie?repo=jcenter
         const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions?repo=jcenter

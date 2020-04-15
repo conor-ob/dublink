@@ -32,6 +32,14 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <ProgressBar
+            android:id="@+id/search_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

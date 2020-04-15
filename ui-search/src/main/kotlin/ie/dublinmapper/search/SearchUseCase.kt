@@ -24,29 +24,20 @@ class SearchUseCase @Inject constructor(
     private val locationProvider: LocationProvider
 ) {
 
-    private val cache = mutableMapOf<String, SearchResultsResponse>()
+    private val searchService = SearchService()
 
     fun search(query: String): Observable<SearchResultsResponse> {
-        if (query.isBlank()) {
-            return Observable.just(
+        return serviceLocationRepository.get().flatMap { response ->
+            searchService.search(
+                query = query,
+                serviceLocations = response
+                    .filterIsInstance<ServiceLocationResponse.Data>()
+                    .flatMap { it.serviceLocations }
+            ).map {
                 SearchResultsResponse(
-                    emptyList()
+                    it.take(50)
                 )
-            )
-        }
-        val cached = cache[query]
-        if (cached != null) {
-            return Observable.just(cached)
-        }
-        return serviceLocationRepository.get().map { response ->
-            val result = search(
-                query,
-                response.filterIsInstance<ServiceLocationResponse.Data>()
-                .flatMap { it.serviceLocations }
-            )
-            return@map SearchResultsResponse(
-                result.take(50)
-            )
+            }
         }
     }
 

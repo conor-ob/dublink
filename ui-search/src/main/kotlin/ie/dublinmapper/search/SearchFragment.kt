@@ -22,6 +22,7 @@ import ie.dublinmapper.util.hideKeyboard
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_search.search_input
 import kotlinx.android.synthetic.main.fragment_search.search_list
+import kotlinx.android.synthetic.main.fragment_search.search_progress_bar
 import kotlinx.android.synthetic.main.fragment_search.search_toolbar
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
@@ -114,6 +115,11 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     }
 
     private fun renderState(state: State) {
+        if (state.loading == true) {
+            search_progress_bar.visibility = View.VISIBLE
+        } else {
+            search_progress_bar.visibility = View.GONE
+        }
         adapter?.update(
             listOf(
                 SearchResponseMapper.map(
@@ -123,6 +129,7 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
                 )
             )
         )
+        search_list.scrollToPosition(0)
     }
 
     override fun onDestroyView() {
