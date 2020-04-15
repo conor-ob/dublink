@@ -138,7 +138,11 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
                 )
             )
         )
-        search_list.scrollToPosition(0)
+        try {
+            search_list.scrollToPosition(0)
+        } catch (e : Exception) {
+            // ignored
+        }
     }
 
     override fun onDestroyView() {
