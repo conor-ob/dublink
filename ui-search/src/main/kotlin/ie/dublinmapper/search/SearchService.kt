@@ -12,32 +12,34 @@ import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
 
 class SearchService {
 
+    private val whiteSpace = "\\s+".toRegex()
+    private val singleSpace = " "
+
     private val searchScoreCutoff = 70
 
-    fun search(query: String, serviceLocations: List<ServiceLocation>): Observable<List<ServiceLocation>> {
-        val algorithm = getAlgorithm(query)
-        return if (isId(query)) {
-            idSearch(query, algorithm, serviceLocations)
+    fun search(
+        query: String,
+        serviceLocations: List<ServiceLocation>
+    ): Observable<List<ServiceLocation>> =
+        if (isInteger(query)) {
+            integerFieldSearch(query, getAlgorithm(query), serviceLocations)
         } else {
-            regularSearch(query, algorithm, serviceLocations)
+            stringFieldSearch(query, getAlgorithm(query), serviceLocations)
         }
-    }
 
-    private fun getAlgorithm(query: String): Applicable {
-        val tokens = query.split(" ") // TODO split("\\s+")
-        return if (tokens.size > 1) {
+    private fun getAlgorithm(query: String): Applicable =
+        if (query.split(whiteSpace).size > 1) {
             TokenSet()
         } else {
             WeightedRatio()
         }
-    }
 
-    private fun regularSearch(
+    private fun stringFieldSearch(
         query: String,
         algorithm: Applicable,
         serviceLocations: List<ServiceLocation>
-    ): Observable<List<ServiceLocation>> {
-        return search(
+    ): Observable<List<ServiceLocation>> =
+        search(
             query = query,
             serviceLocations = serviceLocations,
             algorithm = algorithm,
@@ -55,19 +57,16 @@ class SearchService {
                         it.service.fullName
                     )
                 }
-                    .toSet()
-                    .joinToString(separator = " ")
-//                    .joinToString(separator = " ") { value -> DefaultStringFunction.subNonAlphaNumeric(value.toLowerCase(), " ") }
+                    .joinToString(separator = singleSpace)
             }
         )
-    }
 
-    private fun idSearch(
+    private fun integerFieldSearch(
         query: String,
         algorithm: Applicable,
         serviceLocations: List<ServiceLocation>
-    ): Observable<List<ServiceLocation>> {
-        return search(
+    ): Observable<List<ServiceLocation>> =
+        search(
             query = query,
             algorithm = algorithm,
             serviceLocations = serviceLocations.filter {
@@ -75,32 +74,30 @@ class SearchService {
             },
             toStringFunction = ToStringFunction<ServiceLocation> { it.id }
         )
-    }
 
     private fun search(
         query: String,
         algorithm: Applicable,
         serviceLocations: List<ServiceLocation>,
         toStringFunction: ToStringFunction<ServiceLocation>
-    ): Observable<List<ServiceLocation>> {
-        return Observable.just(
+    ): Observable<List<ServiceLocation>> =
+        Observable.just(
             FuzzySearch.extractSorted(
                 query,
                 serviceLocations,
                 toStringFunction,
                 algorithm,
                 searchScoreCutoff
-            )
-                .map { it.referent }
+            ).map { it.referent }
         )
-    }
 
-    private fun isId(value: String): Boolean {
+    private fun isInteger(value: String): Boolean =
         try {
             value.toInt()
+            true
         } catch (e : NumberFormatException) {
-            return false
+            false
+        } catch (e : Exception) {
+            false
         }
-        return true
-    }
 }

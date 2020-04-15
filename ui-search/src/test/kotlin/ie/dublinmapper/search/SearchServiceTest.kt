@@ -41,7 +41,7 @@ class SearchServiceTest {
                 coordinate = Coordinate(0.0, 0.0),
                 routeGroups = listOf(
                     RouteGroup(
-                        operator = Operator.COMMUTER,
+                        operator = Operator.DUBLIN_BUS,
                         routes = listOf(Operator.COMMUTER.fullName)
                     ),
                     RouteGroup(
@@ -78,7 +78,6 @@ class SearchServiceTest {
                         it.service.fullName
                     )
                 }
-                    .toSet()
                     .joinToString(separator = " ")
                 //                    .joinToString(separator = " ") { value -> DefaultStringFunction.subNonAlphaNumeric(value.toLowerCase(), " ") }
             },
