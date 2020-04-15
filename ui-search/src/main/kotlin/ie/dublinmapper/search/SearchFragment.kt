@@ -105,11 +105,13 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     override fun onResume() {
         super.onResume()
         viewModel.bindActions()
-        search_input.query?.toString()?.let { query ->
+        val query = search_input.query?.toString()
+        if (query != null && query.length > 1) {
             viewModel.dispatch(Action.Search(query))
+        } else {
+            viewModel.dispatch(Action.GetNearbyLocations)
+            viewModel.dispatch(Action.GetRecentSearches)
         }
-        viewModel.dispatch(Action.GetNearbyLocations)
-        viewModel.dispatch(Action.GetRecentSearches)
     }
 
     override fun onPause() {
