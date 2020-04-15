@@ -32,13 +32,27 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <ProgressBar
-            android:id="@+id/search_progress_bar"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+            android:layout_height="4dp"
+            android:background="?attr/colorSurface">
+
+            <ProgressBar
+                android:id="@+id/search_progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:visibility="gone"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal" />
+
+<!--            <ProgressBar-->
+<!--                style="?android:attr/progressBarStyleHorizontal"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="32dp"-->
+<!--                android:layout_gravity="center" />-->
+
+        </FrameLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
