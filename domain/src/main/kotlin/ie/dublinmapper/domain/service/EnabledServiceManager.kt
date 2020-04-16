@@ -8,5 +8,5 @@ interface EnabledServiceManager {
 
     fun isServiceEnabled(service: Service): Boolean
 
-    fun getEnabledServices(): Set<Service>
+    fun getEnabledServices(): List<Service>
 }

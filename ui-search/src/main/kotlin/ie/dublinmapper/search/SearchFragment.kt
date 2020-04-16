@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -22,6 +23,7 @@ import ie.dublinmapper.util.hideKeyboard
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_search.search_input
 import kotlinx.android.synthetic.main.fragment_search.search_list
+import kotlinx.android.synthetic.main.fragment_search.search_progress_bar
 import kotlinx.android.synthetic.main.fragment_search.search_toolbar
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
@@ -103,8 +105,13 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     override fun onResume() {
         super.onResume()
         viewModel.bindActions()
-        viewModel.dispatch(Action.GetNearbyLocations)
-        viewModel.dispatch(Action.GetRecentSearches)
+        val query = search_input.query?.toString()
+        if (query != null && query.length > 1) {
+            viewModel.dispatch(Action.Search(query))
+        } else {
+            viewModel.dispatch(Action.GetNearbyLocations)
+            viewModel.dispatch(Action.GetRecentSearches)
+        }
     }
 
     override fun onPause() {
@@ -114,6 +121,14 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     }
 
     private fun renderState(state: State) {
+        if (state.throwable != null) {
+            Toast.makeText(requireContext(), state.throwable.message, Toast.LENGTH_LONG).show()
+        }
+        if (state.loading != null && state.loading == true) {
+            search_progress_bar.visibility = View.VISIBLE
+        } else {
+            search_progress_bar.visibility = View.GONE
+        }
         adapter?.update(
             listOf(
                 SearchResponseMapper.map(
@@ -123,6 +138,11 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
                 )
             )
         )
+        try {
+            search_list.scrollToPosition(0)
+        } catch (e: Exception) {
+            // ignored
+        }
     }
 
     override fun onDestroyView() {

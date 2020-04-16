@@ -74,6 +74,10 @@ object Libraries {
         const val stethoOkhttp = "com.facebook.stetho:stetho-okhttp3:1.5.1" // https://mvnrepository.com/artifact/com.facebook.stetho/stetho-okhttp3
     }
 
+    object FuzzyWuzzy {
+        const val javaWuzzy = "me.xdrop:fuzzywuzzy:1.2.0" // https://mvnrepository.com/artifact/me.xdrop/fuzzywuzzy
+    }
+
     object Groupie {
         const val groupie = "com.xwray:groupie:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie?repo=jcenter
         const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions?repo=jcenter
@@ -101,12 +105,14 @@ object Libraries {
     }
 
     object Rtpi {
-        const val rtpiApi = "com.github.conor-ob.dublin-rtpi-service:rtpi-api:0.1.0"
+        const val rtpiApi = "com.github.conor-ob.dublin-rtpi-service:rtpi-api:0.2.0"
 //        const val rtpiApi = "io.rtpi:rtpi-api:0.1.0"
-        const val rtpiClient = "com.github.conor-ob.dublin-rtpi-service:rtpi-client-standalone:0.1.0"
+        const val rtpiClient = "com.github.conor-ob.dublin-rtpi-service:rtpi-client-standalone:0.2.0"
 //        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.1.0"
-        const val rtpiUtil = "com.github.conor-ob.dublin-rtpi-service:rtpi-util:0.1.0"
+        const val rtpiUtil = "com.github.conor-ob.dublin-rtpi-service:rtpi-util:0.2.0"
 //        const val rtpiUtil = "io.rtpi:rtpi-util:0.1.0"
+        const val rtpiStaticData = "com.github.conor-ob.dublin-rtpi-service:rtpi-static-data:0.2.0"
+//        const val rtpiStaticData = "io.rtpi:rtpi-static-data:0.1.0"
     }
 
     object Rx {
