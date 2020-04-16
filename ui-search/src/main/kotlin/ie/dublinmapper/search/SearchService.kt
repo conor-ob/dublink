@@ -5,6 +5,7 @@ import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
+import java.text.Normalizer
 import me.xdrop.fuzzywuzzy.Applicable
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.xdrop.fuzzywuzzy.ToStringFunction
@@ -13,9 +14,9 @@ import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
 
 class SearchService {
 
+    private val normalizingRegex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
     private val whiteSpace = "\\s+".toRegex()
     private val singleSpace = " "
-
     private val searchScoreCutoff = 70
 
     fun search(
@@ -57,7 +58,7 @@ class SearchService {
                     }
                 )
                     .toSet()
-                    .joinToString(separator = singleSpace)
+                    .joinToString(separator = singleSpace) { value -> value.normalize() }
             }
         )
 
@@ -100,4 +101,8 @@ class SearchService {
         } catch (e: Exception) {
             false
         }
+
+    private fun CharSequence.normalize(): String {
+        return normalizingRegex.replace(Normalizer.normalize(this, Normalizer.Form.NFD), "")
+    }
 }

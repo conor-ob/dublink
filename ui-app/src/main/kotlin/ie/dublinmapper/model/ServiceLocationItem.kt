@@ -15,6 +15,7 @@ import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
+import java.util.Objects
 import kotlin.math.round
 import kotlinx.android.synthetic.main.list_item_service_location.bikes
 import kotlinx.android.synthetic.main.list_item_service_location.bikesCount
@@ -155,13 +156,14 @@ class ServiceLocationItem(
 
     override fun equals(other: Any?): Boolean {
         if (other is ServiceLocationItem) {
-            return getServiceLocation() == other.getServiceLocation()
+            return getServiceLocation() == other.getServiceLocation() &&
+                walkDistance == other.walkDistance
         }
         return false
     }
 
     override fun hashCode(): Int {
-        return getServiceLocation().hashCode()
+        return Objects.hash(getServiceLocation(), walkDistance)
     }
 }
 

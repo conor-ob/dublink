@@ -34,4 +34,5 @@ dependencies {
     testImplementation(TestLibraries.Junit.junit)
 //    testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)
+    testImplementation(Libraries.Rtpi.rtpiStaticData)
 }

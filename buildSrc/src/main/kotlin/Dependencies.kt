@@ -111,6 +111,8 @@ object Libraries {
         const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.1.0"
 //        const val rtpiUtil = "com.github.conor-ob.dublin-rtpi-service:rtpi-util:0.1.0"
         const val rtpiUtil = "io.rtpi:rtpi-util:0.1.0"
+//        const val rtpiStaticData = "com.github.conor-ob.dublin-rtpi-service:rtpi-static-data:0.1.0"
+        const val rtpiStaticData = "io.rtpi:rtpi-static-data:0.1.0"
     }
 
     object Rx {

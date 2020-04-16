@@ -39,14 +39,20 @@ jobs:
           path: domain/build/test-results
 #      - store_test_results:
 #          path: repository/build/test-results
-#      - store_test_results:
-#          path: ui-app/build/test-results
+      - store_artifacts:
+          path: ui-app/build/reports
+          destination: ui-app/reports
+      - store_test_results:
+          path: ui-app/build/test-results
 #      - store_test_results:
 #          path: ui-favourites/build/test-results
 #      - store_test_results:
 #          path: ui-livedata/build/test-results
-#      - store_test_results:
-#          path: ui-search/build/test-results
+      - store_artifacts:
+          path: ui-search/build/reports
+          destination: ui-search/reports
+      - store_test_results:
+          path: ui-search/build/test-results
       - store_artifacts:
           path: ui-settings/build/reports
           destination: ui-settings/reports
