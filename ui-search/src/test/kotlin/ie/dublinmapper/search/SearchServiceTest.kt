@@ -1,8 +1,10 @@
 package ie.dublinmapper.search
 
 import com.google.common.truth.Truth.assertThat
+import io.reactivex.Single
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.client.RtpiStaticDataClient
 import org.junit.Test
@@ -19,12 +21,17 @@ class SearchServiceTest {
         Service.AIRCOACH,
         Service.BUS_EIREANN
     )
+    private val serviceLocations = Single.zip(
+        services.map { service ->
+            rtpiStaticDataClient.getServiceLocations(service)
+        }
+    ) { serviceLocationStreams -> serviceLocationStreams.flatMap { it as List<ServiceLocation> } }.blockingGet()
 
     @Test
     fun `searching a short term should produce an accurate result if the searchable data is small`() {
         // arrange
         val searchQuery = "da"
-        val luasStops = rtpiStaticDataClient.getServiceLocations(Service.LUAS).blockingGet()
+        val luasStops = serviceLocations.filter { it.service == Service.LUAS }
 
         // act
         val searchResults = searchService.search(
@@ -41,9 +48,6 @@ class SearchServiceTest {
     fun `searching for a location and a service should produce an accurate result`() {
         // arrange
         val searchQuery = "pearse dart"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -60,9 +64,6 @@ class SearchServiceTest {
     fun `searching with slightly misspelled queries should produce accurate results`() {
         // arrange
         val searchQuery = "vlacktock"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -85,9 +86,6 @@ class SearchServiceTest {
     fun `searching for an operator should produce locations services by that operator`() {
         // arrange
         val searchQuery = "go ahead"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -110,9 +108,6 @@ class SearchServiceTest {
     fun `searching for random letters should not produce any results`() {
         // arrange
         val searchQuery = "pqtw"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -128,9 +123,6 @@ class SearchServiceTest {
     fun `searching for a general term should produce relevant results`() {
         // arrange
         val searchQuery = "dock"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -154,9 +146,6 @@ class SearchServiceTest {
     fun `searching for unique locations should produce a few accurate results (1)`() {
         // arrange
         val searchQuery = "busaras"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -177,9 +166,6 @@ class SearchServiceTest {
     fun `searching for unique locations should produce a few accurate results (2)`() {
         // arrange
         val searchQuery = "jervis"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -199,9 +185,6 @@ class SearchServiceTest {
     fun `searching for unique locations should produce a few accurate results (3)`() {
         // arrange
         val searchQuery = "GPO"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -218,9 +201,6 @@ class SearchServiceTest {
     fun `searching for unique locations should produce a few accurate results (4)`() {
         // arrange
         val searchQuery = "UCD"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
@@ -243,9 +223,6 @@ class SearchServiceTest {
     fun `searching for unique locations should produce a few accurate results (5)`() {
         // arrange
         val searchQuery = "trinity"
-        val serviceLocations = services.flatMap { service ->
-            rtpiStaticDataClient.getServiceLocations(service).blockingGet()
-        }
 
         // act
         val searchResults = searchService.search(
