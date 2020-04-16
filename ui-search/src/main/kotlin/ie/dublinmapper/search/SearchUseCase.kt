@@ -1,7 +1,6 @@
 package ie.dublinmapper.search
 
 import ie.dublinmapper.domain.model.RecentServiceLocationSearch
-import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.RecentServiceLocationSearchRepository
 import ie.dublinmapper.domain.repository.ServiceLocationKey
@@ -24,55 +23,27 @@ class SearchUseCase @Inject constructor(
     private val locationProvider: LocationProvider
 ) {
 
-    private val cache = mutableMapOf<String, SearchResultsResponse>()
+    private val searchService = SearchService()
 
-    fun search(query: String): Observable<SearchResultsResponse> {
-        if (query.isBlank()) {
-            return Observable.just(
-                SearchResultsResponse(
-                    emptyList()
-                )
-            )
-        }
-        val cached = cache[query]
-        if (cached != null) {
-            return Observable.just(cached)
-        }
-        return serviceLocationRepository.get().map { response ->
-            val result = search(
-                query,
-                response.filterIsInstance<ServiceLocationResponse.Data>()
-                .flatMap { it.serviceLocations }
-            )
-            return@map SearchResultsResponse(
-                result.take(50)
-            )
-        }
-    }
-
-    private fun search(query: String, serviceLocations: List<ServiceLocation>): List<ServiceLocation> {
-        val adaptedQuery = query.toLowerCase().trim()
-        val searchResults = mutableListOf<ServiceLocation>()
-        for (serviceLocation in serviceLocations) {
-            if (serviceLocation.getName().toLowerCase().contains(adaptedQuery) ||
-                serviceLocation.name.toLowerCase().contains(adaptedQuery) ||
-                serviceLocation.id.toLowerCase().contains(adaptedQuery)) {
-                searchResults.add(serviceLocation)
-            } else {
-                // TODO operators
-//                for (operator in serviceLocation.operators) {
-//                    if (operator.fullName.toLowerCase().contains(adaptedQuery)) {
-//                        searchResults.add(serviceLocation)
-//                    }
-//                }
+    fun search(query: String): Observable<SearchResultsResponse> =
+        if (query.length < 2) {
+            Observable.just(SearchResultsResponse(emptyList()))
+        } else {
+            serviceLocationRepository.get().flatMap { response ->
+                searchService.search(
+                    query = query,
+                    serviceLocations = response
+                        .filterIsInstance<ServiceLocationResponse.Data>()
+                        .flatMap { it.serviceLocations }
+                ).map { searchResults ->
+                    SearchResultsResponse(searchResults.take(100))
+                }
             }
         }
-        return searchResults
-    }
 
     fun getNearbyServiceLocations(): Observable<NearbyLocationsResponse> {
         return if (permissionChecker.isLocationPermissionGranted()) {
-            return locationProvider.getLocationUpdates(thresholdDistance = 25.0)
+            return locationProvider.getLocationUpdates(thresholdDistance = 10.0)
                 .flatMap { coordinate ->
                     serviceLocationRepository
                         .get()

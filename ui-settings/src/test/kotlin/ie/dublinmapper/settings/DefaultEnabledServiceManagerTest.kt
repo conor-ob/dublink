@@ -44,10 +44,10 @@ class DefaultEnabledServiceManagerTest {
 
         // assert
         assertThat(enabledServices).containsExactly(
+            Service.IRISH_RAIL,
             Service.DUBLIN_BIKES,
-            Service.DUBLIN_BUS,
-            Service.IRISH_RAIL
-        )
+            Service.DUBLIN_BUS
+        ).inOrder()
         verify(exactly = Service.values().size) {
             preferenceStore.isServiceEnabled(any())
         }

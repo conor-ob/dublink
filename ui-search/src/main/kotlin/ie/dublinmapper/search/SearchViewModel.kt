@@ -18,21 +18,39 @@ class SearchViewModel @Inject constructor(
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
+            is Change.Loading -> state.copy(
+                loading = true,
+                throwable = null
+            )
+            is Change.Error -> state.copy(
+                loading = false,
+                throwable = change.throwable
+            )
             is Change.NearbyLocations -> state.copy(
-                nearbyLocations = change.nearbyLocations
+                nearbyLocations = change.nearbyLocations,
+                loading = false,
+                throwable = null
             )
             is Change.SearchResults -> state.copy(
-                searchResults = change.searchResults
+                searchResults = change.searchResults,
+                loading = false,
+                throwable = null
             )
             is Change.RecentSearches -> state.copy(
-                recentSearches = change.recentSearches
+                recentSearches = change.recentSearches,
+                loading = false,
+                throwable = null
             )
-            is Change.AddRecentSearch -> state
+            is Change.AddRecentSearch -> state.copy(
+                loading = false,
+                throwable = null
+            )
         }
     }
 
     fun bindActions() {
         val searchResultsChange = actions.ofType(Action.Search::class.java)
+            .filter { it.query.length != 1 }
             .debounce(400L, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .switchMap { action ->
@@ -40,6 +58,8 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.SearchResults(it) }
+                    .onErrorReturn { Change.Error(it) }
+                    .startWith(Change.Loading)
             }
 
         val getNearbyLocationsChange = actions.ofType(Action.GetNearbyLocations::class.java)
@@ -48,6 +68,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.NearbyLocations(it) }
+                    .onErrorReturn { Change.Error(it) }
             }
 
         val getRecentSearchesChange = actions.ofType(Action.GetRecentSearches::class.java)
@@ -56,6 +77,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.RecentSearches(it) }
+                    .onErrorReturn { Change.Error(it) }
             }
 
         val addRecentSearchChange = actions.ofType(Action.AddRecentSearch::class.java)
@@ -64,6 +86,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.AddRecentSearch }
+                    .onErrorReturn { Change.Error(it) }
             }
 
         val allChanges = Observable.merge(searchResultsChange, getNearbyLocationsChange, getRecentSearchesChange, addRecentSearchChange)

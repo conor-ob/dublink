@@ -16,6 +16,8 @@ fun ServiceLocation.setCustomName(name: String) {
     properties[customName] = name
 }
 
+fun ServiceLocation.getCustomName(): String? = properties[customName] as? String?
+
 fun ServiceLocation.getName(): String = properties[customName] as? String? ?: name
 
 fun ServiceLocation.setOrder(order: Int) {
