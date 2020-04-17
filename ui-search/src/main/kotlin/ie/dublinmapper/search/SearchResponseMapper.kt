@@ -33,7 +33,7 @@ object SearchResponseMapper {
                         mapServiceLocation(serviceLocation, null)
                     }
                 )
-                is SearchResultsResponse.NoResults -> Section(NoSearchResultsItem(searchResultsResponse.query))
+                is SearchResultsResponse.NoResults -> Section(NoSearchResultsItem(searchResultsResponse.query, 23421))
                 is SearchResultsResponse.Empty -> Section()
             }
         } else {
@@ -51,13 +51,13 @@ object SearchResponseMapper {
         ) {
             return Section(
                 listOf(
-                    HeaderItem(message = "Recent searches", drawableId = R.drawable.ic_clock, index = 6)
+                    HeaderItem(message = "Recent searches", drawableId = R.drawable.ic_clock, index = 3220023)
                 ).plus(
                     when (recentSearchesResponse) {
                         is RecentSearchesResponse.Data -> recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
                             mapServiceLocation(serviceLocation, null)
                         }
-                        is RecentSearchesResponse.Empty -> listOf(NoRecentSearchesItem())
+                        is RecentSearchesResponse.Empty -> listOf(NoRecentSearchesItem(350033))
                     }
                 )
             )
@@ -76,7 +76,7 @@ object SearchResponseMapper {
         ) {
             return Section(
                 listOf(
-                    HeaderItem(message = "Places near you", drawableId = R.drawable.ic_near_me, index = 3)
+                    HeaderItem(message = "Places near you", drawableId = R.drawable.ic_near_me, index = 94838)
                 ).plus(
                     when (nearbyLocationsResponse) {
                         is NearbyLocationsResponse.Data -> Section(
@@ -85,7 +85,7 @@ object SearchResponseMapper {
                             }
                         )
                         is NearbyLocationsResponse.LocationDisabled -> Section(
-                            NoLocationItem()
+                            NoLocationItem(7748)
                         )
                     }
                 )

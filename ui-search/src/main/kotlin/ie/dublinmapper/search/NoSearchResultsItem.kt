@@ -7,7 +7,10 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.list_item_search_no_results.view.*
 
-class NoSearchResultsItem(private val query: String) : Item() {
+class NoSearchResultsItem(
+    private val query: String,
+    private val index: Int
+) : Item() {
 
     override fun getLayout() = R.layout.list_item_search_no_results
 
@@ -24,5 +27,23 @@ class NoSearchResultsItem(private val query: String) : Item() {
                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE
             )
         }
+    }
+
+    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
+        if (other is NoSearchResultsItem) {
+            return other.index == index
+        }
+        return false
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other is NoSearchResultsItem) {
+            return other.query == query
+        }
+        return false
+    }
+
+    override fun hashCode(): Int {
+        return query.hashCode()
     }
 }

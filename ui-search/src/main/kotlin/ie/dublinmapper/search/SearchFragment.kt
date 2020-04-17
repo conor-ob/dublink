@@ -70,11 +70,23 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
             object : SearchView.OnQueryTextListener {
 
                 override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        if (it.isEmpty()) {
+                            viewModel.dispatch(Action.GetRecentSearches)
+                            viewModel.dispatch(Action.GetNearbyLocations)
+                        }
+                    }
                     viewModel.dispatch(Action.Search(query.toString()))
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        if (it.isEmpty()) {
+                            viewModel.dispatch(Action.GetRecentSearches)
+                            viewModel.dispatch(Action.GetNearbyLocations)
+                        }
+                    }
                     viewModel.dispatch(Action.Search(newText.toString()))
                     return true
                 }
@@ -108,9 +120,10 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         val query = search_input.query?.toString()
         if (query != null && query.length > 1) {
             viewModel.dispatch(Action.Search(query))
+        } else {
+            viewModel.dispatch(Action.GetRecentSearches)
+            viewModel.dispatch(Action.GetNearbyLocations)
         }
-        viewModel.dispatch(Action.GetNearbyLocations)
-        viewModel.dispatch(Action.GetRecentSearches)
     }
 
     override fun onPause() {

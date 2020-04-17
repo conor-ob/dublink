@@ -3,7 +3,7 @@ package ie.dublinmapper.search
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 
-class NoLocationItem : Item() {
+class NoLocationItem(private val index: Int) : Item() {
 
     override fun getLayout() = R.layout.list_item_no_location
 
@@ -12,14 +12,17 @@ class NoLocationItem : Item() {
     }
 
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
-        return true
+        if (other is NoLocationItem) {
+            return other.index == index
+        }
+        return false
     }
 
     override fun equals(other: Any?): Boolean {
-        return true
+        return other is NoLocationItem
     }
 
     override fun hashCode(): Int {
-        return 1
+        return NoLocationItem::class.java.simpleName.hashCode()
     }
 }
