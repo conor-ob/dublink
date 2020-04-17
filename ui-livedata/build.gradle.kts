@@ -15,6 +15,9 @@ android {
     sourceSets.getByName("main") {
         java.srcDir("src/main/kotlin")
     }
+    sourceSets.getByName("test") {
+        java.srcDirs("src/test/kotlin", project(":ui-app").file("src/test/kotlin"))
+    }
 
     androidExtensions {
         isExperimental = true
@@ -24,4 +27,8 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":ui-app"))
+
+    testImplementation(TestLibraries.Junit.junit)
+//    testImplementation(TestLibraries.Mockk.mockk)
+    testImplementation(TestLibraries.Truth.truth)
 }

@@ -19,11 +19,11 @@ object SearchResponseMapper {
         recentSearchesResponse: RecentSearchesResponse?,
         nearbyLocationsResponse: NearbyLocationsResponse?,
         onEnableLocationClickedListener: OnEnableLocationClickedListener,
-        onClearRecentSearchesClickedListener: OnClearRecentSearchesClickedListener
+        clearRecentSearchesClickListener: ClearRecentSearchesClickListener
     ) = Section(
         listOfNotNull(
             mapSearchResults(searchResultsResponse),
-            mapRecentSearches(recentSearchesResponse, searchResultsResponse, onClearRecentSearchesClickedListener),
+            mapRecentSearches(recentSearchesResponse, searchResultsResponse, clearRecentSearchesClickListener),
             mapNearbyLocations(nearbyLocationsResponse, searchResultsResponse, onEnableLocationClickedListener)
         )
     )
@@ -36,7 +36,7 @@ object SearchResponseMapper {
                         mapServiceLocation(serviceLocation, null)
                     }
                 )
-                is SearchResultsResponse.NoResults -> Section(NoSearchResultsItem(searchResultsResponse.query, 23421))
+                is SearchResultsResponse.NoResults -> Section(NoSearchResultsItem(id = 23421L, query = searchResultsResponse.query))
                 is SearchResultsResponse.Empty -> Section()
             }
         } else {
@@ -47,7 +47,7 @@ object SearchResponseMapper {
     private fun mapRecentSearches(
         recentSearchesResponse: RecentSearchesResponse?,
         searchResultsResponse: SearchResultsResponse?,
-        onClearRecentSearchesClickedListener: OnClearRecentSearchesClickedListener
+        clearRecentSearchesClickListener: ClearRecentSearchesClickListener
     ): Group? {
         return if (
             recentSearchesResponse != null &&
@@ -62,13 +62,13 @@ object SearchResponseMapper {
                             mapServiceLocation(serviceLocation, null)
                         }.plus(
                             listOf(
-                                ClearRecentSearchesItem(onClearRecentSearchesClickedListener = onClearRecentSearchesClickedListener, index = 9001),
-                                DividerItem(index = 9247)
+                                ClearRecentSearchesItem(id = 9001L, clickListener = clearRecentSearchesClickListener),
+                                DividerItem(id = 9247L)
                             )
                         )
                         is RecentSearchesResponse.Empty -> listOf(
-                            NoRecentSearchesItem(350033),
-                            DividerItem(index = 9247)
+                            NoRecentSearchesItem(id = 350033L),
+                            DividerItem(id = 9247L)
                         )
                     }
                 )
@@ -98,7 +98,7 @@ object SearchResponseMapper {
                             }
                         )
                         is NearbyLocationsResponse.LocationDisabled -> Section(
-                            NoLocationItem(onEnableLocationClickedListener, 7748)
+                            NoLocationItem(id = 7748L, clickListener = onEnableLocationClickedListener)
                         )
                     }
                 )
