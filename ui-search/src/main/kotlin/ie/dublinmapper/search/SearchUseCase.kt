@@ -7,6 +7,7 @@ import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.LocationProvider
 import ie.dublinmapper.domain.service.PermissionChecker
+import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.util.haversine
 import ie.dublinmapper.domain.util.truncateHead
 import io.reactivex.Observable
@@ -24,7 +25,8 @@ class SearchUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val recentSearchRepository: RecentServiceLocationSearchRepository,
     private val permissionChecker: PermissionChecker,
-    private val locationProvider: LocationProvider
+    private val locationProvider: LocationProvider,
+    private val preferenceStore: PreferenceStore
 ) {
 
     private val searchService = SearchService()
@@ -50,43 +52,53 @@ class SearchUseCase @Inject constructor(
         }
 
     fun getNearbyServiceLocations(): Observable<NearbyLocationsResponse> {
-        return if (permissionChecker.isLocationPermissionGranted()) {
-            return locationProvider.getLocationUpdates(thresholdDistance = 10.0)
-                .flatMap { coordinate ->
-                    serviceLocationRepository
-                        .get()
-                        .map { responses ->
-                            responses.filterIsInstance<ServiceLocationResponse.Data>()
-                        }
-                        .map { response ->
-                            NearbyLocationsResponse.Data(
-                                serviceLocations = response
-                                    .flatMap { it.serviceLocations }
-                                    .associateBy { it.coordinate.haversine(coordinate) }
-                                    .toSortedMap()
-                                    .truncateHead(maxNearbyLocations)
-                            )
-                        }
-                }
-        } else {
-            Observable.just(NearbyLocationsResponse.LocationDisabled)
+        return when {
+            !preferenceStore.isShowNearbyPlacesEnabled() -> {
+                Observable.just(NearbyLocationsResponse.Hidden)
+            }
+            permissionChecker.isLocationPermissionGranted() -> {
+                locationProvider.getLocationUpdates(thresholdDistance = 10.0)
+                    .flatMap<NearbyLocationsResponse> { coordinate ->
+                        serviceLocationRepository
+                            .get()
+                            .map { responses ->
+                                responses.filterIsInstance<ServiceLocationResponse.Data>()
+                            }
+                            .map { response ->
+                                NearbyLocationsResponse.Data(
+                                    serviceLocations = response
+                                        .flatMap { it.serviceLocations }
+                                        .associateBy { it.coordinate.haversine(coordinate) }
+                                        .toSortedMap()
+                                        .truncateHead(maxNearbyLocations)
+                                )
+                            }
+                    }
+            }
+            else -> {
+                Observable.just(NearbyLocationsResponse.LocationDisabled)
+            }
         }
     }
 
     fun getRecentSearches(): Observable<RecentSearchesResponse> {
-        return recentSearchRepository
-            .getRecentSearches()
-            .map { recentSearches ->
-                if (recentSearches.isEmpty()) {
-                    RecentSearchesResponse.Empty
-                } else {
-                    RecentSearchesResponse.Data(
-                        recentSearches.mapNotNull { recentSearch ->
-                            getServiceLocation(recentSearch.service, recentSearch.locationId).blockingFirst().second
-                        }.take(maxRecentSearches)
-                    )
+        return if (preferenceStore.isShowRecentSearchesEnabled()) {
+            recentSearchRepository
+                .getRecentSearches()
+                .map { recentSearches ->
+                    if (recentSearches.isEmpty()) {
+                        RecentSearchesResponse.Empty
+                    } else {
+                        RecentSearchesResponse.Data(
+                            recentSearches.mapNotNull { recentSearch ->
+                                getServiceLocation(recentSearch.service, recentSearch.locationId).blockingFirst().second
+                            }.take(maxRecentSearches)
+                        )
+                    }
                 }
-            }
+        } else {
+            Observable.just(RecentSearchesResponse.Hidden)
+        }
     }
 
     private fun getServiceLocation(
@@ -155,6 +167,8 @@ sealed class NearbyLocationsResponse {
     ) : NearbyLocationsResponse()
 
     object LocationDisabled : NearbyLocationsResponse()
+
+    object Hidden : NearbyLocationsResponse()
 }
 
 sealed class RecentSearchesResponse {
@@ -164,4 +178,6 @@ sealed class RecentSearchesResponse {
     ) : RecentSearchesResponse()
 
     object Empty : RecentSearchesResponse()
+
+    object Hidden : RecentSearchesResponse()
 }

@@ -106,14 +106,16 @@
         android:title="@string/preference_category_search">
 
         <SwitchPreference
-            android:defaultValue="@bool/preference_default_search_show_nearby"
-            android:key="@string/preference_key_search_show_nearby"
-            android:title="@string/preference_name_search_show_nearby" />
-
-        <SwitchPreference
             android:defaultValue="@bool/preference_default_search_show_recents"
             android:key="@string/preference_key_search_show_recents"
+            android:icon="@drawable/ic_history"
             android:title="@string/preference_name_search_show_recents" />
+
+        <SwitchPreference
+            android:defaultValue="@bool/preference_default_search_show_nearby"
+            android:key="@string/preference_key_search_show_nearby"
+            android:icon="@drawable/ic_near_me"
+            android:title="@string/preference_name_search_show_nearby" />
 
     </PreferenceCategory>
 
