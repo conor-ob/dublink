@@ -1,8 +1,9 @@
 # Dublinmapper
 
 [![CircleCI](https://circleci.com/gh/conor-ob/dublin-mapper.svg?style=shield&circle-token=42b2b34fb35d24d7e4aeb4bcfd6bc5c82c9cf0ea)](https://circleci.com/gh/conor-ob/dublin-mapper)
-[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
+[![minSdk:26](https://img.shields.io/badge/minSDK-26-brightgreen.svg)
 [![CodeFactor](https://www.codefactor.io/repository/github/conor-ob/dublin-mapper/badge?s=6e0e7443d6d60600f8647fe4f22d5fafcebc385b)](https://www.codefactor.io/repository/github/conor-ob/dublin-mapper)
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 Dublin Mapper is a **work-in-progress** Android app for getting real time data for Dublin Bus :trolleybus: Irish Rail :railway_car: Luas :tram: Bus Éireann :bus: Dublin Bikes :bike: Aircoach :airplane:
 
