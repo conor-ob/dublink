@@ -8,4 +8,6 @@ interface RecentServiceLocationSearchRepository {
     fun getRecentSearches(): Observable<List<RecentServiceLocationSearch>>
 
     fun saveRecentSearch(recentSearch: RecentServiceLocationSearch)
+
+    fun clearRecentSearches()
 }

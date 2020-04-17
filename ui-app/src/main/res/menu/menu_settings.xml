@@ -21,8 +21,9 @@
             <!--app:showAsAction="never"/>-->
 
     <item
-            android:id="@+id/action_settings"
-            android:title="@string/feature_name_settings"
-            app:showAsAction="never"/>
+        android:id="@+id/action_settings"
+        android:title="@string/feature_name_settings"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="always"/>
 
 </menu>

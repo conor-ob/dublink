@@ -8,4 +8,6 @@ interface RecentServiceLocationSearchLocalResource {
     fun selectRecentSearches(): Observable<List<RecentServiceLocationSearch>>
 
     fun insertRecentSearch(recentSearch: RecentServiceLocationSearch)
+
+    fun deleteRecentSearches()
 }

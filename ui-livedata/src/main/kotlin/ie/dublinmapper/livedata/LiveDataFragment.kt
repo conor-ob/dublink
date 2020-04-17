@@ -18,7 +18,6 @@ import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
-import timber.log.Timber
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -77,9 +76,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         liveDataList.adapter = adapter
         liveDataList.setHasFixedSize(true)
         liveDataList.layoutManager = LinearLayoutManager(requireContext())
-        adapter?.setOnItemClickListener { item, view ->
-            Timber.d("clicked")
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

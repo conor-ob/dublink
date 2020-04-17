@@ -64,7 +64,7 @@
                 tools:text="DART" />
 
             <View
-                android:layout_width="2dp"
+                android:layout_width="4dp"
                 android:layout_height="0dp" />
 
             <TextView
@@ -73,10 +73,11 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_walk"
                 android:drawablePadding="2dp"
-                android:drawableTint="@color/goAheadBlue"
+                android:drawableTint="?attr/colorPrimary"
                 android:text="5 min"
                 android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"
-                android:textColor="@color/goAheadBlue"
+                android:textColor="?attr/colorPrimary"
+                android:gravity="center_vertical"
                 tools:text="5 min walk" />
 
         </LinearLayout>
