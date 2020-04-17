@@ -2,13 +2,14 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_xl">
+    android:paddingBottom="@dimen/padding_xs">
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/search_button_enable_location"
+        android:id="@+id/search_button_clear_recent_searches"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="Enable your location"/>
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:text="Clear"/>
 
 </FrameLayout>

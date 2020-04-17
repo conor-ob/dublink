@@ -1,6 +1,8 @@
 package ie.dublinmapper.search
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +28,9 @@ import kotlinx.android.synthetic.main.fragment_search.search_input
 import kotlinx.android.synthetic.main.fragment_search.search_list
 import kotlinx.android.synthetic.main.fragment_search.search_progress_bar
 import kotlinx.android.synthetic.main.fragment_search.search_toolbar
+import timber.log.Timber
+
+private const val locationRequestCode = 42069
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
@@ -146,7 +152,17 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
                 SearchResponseMapper.map(
                     state.searchResults,
                     state.recentSearches,
-                    state.nearbyLocations
+                    state.nearbyLocations,
+                    object : OnEnableLocationClickedListener {
+                        override fun onEnableLocationClicked() {
+                            enableLocation()
+                        }
+                    },
+                    object : OnClearRecentSearchesClickedListener {
+                        override fun onClearRecentSearchesClicked() {
+                            viewModel.dispatch(Action.ClearRecentSearches)
+                        }
+                    }
                 )
             )
         )
@@ -155,6 +171,35 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
                 search_list.scrollToPosition(0)
             } catch (e: Exception) {
                 // ignored
+            }
+        }
+    }
+
+    private fun enableLocation() {
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//            viewModel.dispatch(Action.GetNearbyLocations)
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                locationRequestCode
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == locationRequestCode) {
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                viewModel.dispatch(Action.GetNearbyLocations)
             }
         }
     }

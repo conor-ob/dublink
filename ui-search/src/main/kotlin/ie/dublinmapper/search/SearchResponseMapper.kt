@@ -2,6 +2,7 @@ package ie.dublinmapper.search
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
+import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.model.setSearchCandidate
@@ -16,12 +17,14 @@ object SearchResponseMapper {
     fun map(
         searchResultsResponse: SearchResultsResponse?,
         recentSearchesResponse: RecentSearchesResponse?,
-        nearbyLocationsResponse: NearbyLocationsResponse?
+        nearbyLocationsResponse: NearbyLocationsResponse?,
+        onEnableLocationClickedListener: OnEnableLocationClickedListener,
+        onClearRecentSearchesClickedListener: OnClearRecentSearchesClickedListener
     ) = Section(
         listOfNotNull(
             mapSearchResults(searchResultsResponse),
-            mapRecentSearches(recentSearchesResponse, searchResultsResponse),
-            mapNearbyLocations(nearbyLocationsResponse, searchResultsResponse)
+            mapRecentSearches(recentSearchesResponse, searchResultsResponse, onClearRecentSearchesClickedListener),
+            mapNearbyLocations(nearbyLocationsResponse, searchResultsResponse, onEnableLocationClickedListener)
         )
     )
 
@@ -43,7 +46,8 @@ object SearchResponseMapper {
 
     private fun mapRecentSearches(
         recentSearchesResponse: RecentSearchesResponse?,
-        searchResultsResponse: SearchResultsResponse?
+        searchResultsResponse: SearchResultsResponse?,
+        onClearRecentSearchesClickedListener: OnClearRecentSearchesClickedListener
     ): Group? {
         return if (
             recentSearchesResponse != null &&
@@ -56,8 +60,16 @@ object SearchResponseMapper {
                     when (recentSearchesResponse) {
                         is RecentSearchesResponse.Data -> recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
                             mapServiceLocation(serviceLocation, null)
-                        }
-                        is RecentSearchesResponse.Empty -> listOf(NoRecentSearchesItem(350033))
+                        }.plus(
+                            listOf(
+                                ClearRecentSearchesItem(onClearRecentSearchesClickedListener = onClearRecentSearchesClickedListener, index = 9001),
+                                DividerItem(index = 9247)
+                            )
+                        )
+                        is RecentSearchesResponse.Empty -> listOf(
+                            NoRecentSearchesItem(350033),
+                            DividerItem(index = 9247)
+                        )
                     }
                 )
             )
@@ -68,7 +80,8 @@ object SearchResponseMapper {
 
     private fun mapNearbyLocations(
         nearbyLocationsResponse: NearbyLocationsResponse?,
-        searchResultsResponse: SearchResultsResponse?
+        searchResultsResponse: SearchResultsResponse?,
+        onEnableLocationClickedListener: OnEnableLocationClickedListener
     ): Group? {
         return if (
             nearbyLocationsResponse != null &&
@@ -85,7 +98,7 @@ object SearchResponseMapper {
                             }
                         )
                         is NearbyLocationsResponse.LocationDisabled -> Section(
-                            NoLocationItem(7748)
+                            NoLocationItem(onEnableLocationClickedListener, 7748)
                         )
                     }
                 )

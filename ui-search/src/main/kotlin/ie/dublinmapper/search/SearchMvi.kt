@@ -8,6 +8,7 @@ sealed class Action : BaseAction {
     data class Search(val query: String) : Action()
     object GetNearbyLocations : Action()
     object GetRecentSearches : Action()
+    object ClearRecentSearches : Action()
     data class AddRecentSearch(val service: Service, val locationId: String) : Action()
 }
 
@@ -18,6 +19,7 @@ sealed class Change {
     data class SearchResults(val searchResults: SearchResultsResponse) : Change()
     data class RecentSearches(val recentSearches: RecentSearchesResponse) : Change()
     object AddRecentSearch : Change()
+    object ClearRecentSearches : Change()
 }
 
 data class State(

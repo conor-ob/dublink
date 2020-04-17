@@ -51,6 +51,11 @@ class SearchViewModel @Inject constructor(
                 scrollToTop = false,
                 throwable = null
             )
+            is Change.ClearRecentSearches -> state.copy(
+                loading = false,
+                scrollToTop = false,
+                throwable = null
+            )
         }
     }
 
@@ -94,7 +99,24 @@ class SearchViewModel @Inject constructor(
                     .onErrorReturn { Change.Error(it) }
             }
 
-        val allChanges = Observable.merge(searchResultsChange, getNearbyLocationsChange, getRecentSearchesChange, addRecentSearchChange)
+        val clearRecentSearchesChange = actions.ofType(Action.ClearRecentSearches::class.java)
+            .switchMap { _ ->
+                searchUseCase.clearRecentSearches()
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Change> { Change.ClearRecentSearches }
+                    .onErrorReturn { Change.Error(it) }
+            }
+
+        val allChanges = Observable.merge(
+            listOf(
+                searchResultsChange,
+                getNearbyLocationsChange,
+                getRecentSearchesChange,
+                addRecentSearchChange,
+                clearRecentSearchesChange
+            )
+        )
 
         disposables += allChanges
             .scan(initialState, reducer)

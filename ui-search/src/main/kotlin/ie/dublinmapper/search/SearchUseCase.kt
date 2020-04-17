@@ -126,6 +126,13 @@ class SearchUseCase @Inject constructor(
             return@fromCallable true
         }
     }
+
+    fun clearRecentSearches(): Observable<Boolean> {
+        return Observable.fromCallable {
+            recentSearchRepository.clearRecentSearches()
+            return@fromCallable true
+        }
+    }
 }
 
 sealed class SearchResultsResponse {
