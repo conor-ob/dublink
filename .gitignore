@@ -53,6 +53,9 @@ captures/
 .idea/runConfigurations.xml
 .idea/vcs.xml
 .idea/kotlinScripting.xml
+.idea/assetWizardSettings.xml
+.idea/jarRepositories.xml
+.idea/inspectionProfiles/Project_Default.xml
 
 # Keystore files
 *.jks

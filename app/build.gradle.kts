@@ -3,6 +3,7 @@ import java.io.BufferedReader
 import java.time.format.DateTimeFormatter
 import java.time.ZonedDateTime
 import java.time.ZoneId
+import java.util.Properties
 
 plugins {
     id(BuildPlugins.androidApplication)
@@ -11,35 +12,14 @@ plugins {
     id(BuildPlugins.kotlinKapt)
 }
 
+val gitBranch = executeGitCommand("git rev-parse --abbrev-ref HEAD")
+val gitCommitHash = executeGitCommand("git rev-parse --short HEAD")
+val apkBuildDateTime: String = ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE)
 val properties = if (project.rootProject.file("release.properties").exists()) {
     loadProperties("release.properties")
 } else {
-    loadProperties("debug.properties")
+    Properties()
 }
-
-val gitBranch = Runtime
-    .getRuntime()
-    .exec("git rev-parse --abbrev-ref HEAD")
-    .let<Process, String> { process ->
-        process.waitFor()
-        val output = process.inputStream.use {
-            it.bufferedReader().use(BufferedReader::readText)
-        }
-        process.destroy()
-        output.trim()
-    }
-val apkBuildDateTime: String = ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE)
-val gitCommitHash = Runtime
-    .getRuntime()
-    .exec("git rev-parse --short HEAD")
-    .let<Process, String> { process ->
-        process.waitFor()
-        val output = process.inputStream.use {
-            it.bufferedReader().use(BufferedReader::readText)
-        }
-        process.destroy()
-        output.trim()
-    }
 
 android {
     compileSdkVersion(AndroidSdk.compile)
@@ -117,6 +97,19 @@ dependencies {
     kapt(Libraries.Dagger.daggerCompiler)
     kapt(Libraries.Dagger.daggerAndroidProcessor)
 }
+
+fun executeGitCommand(command: String): String =
+    Runtime
+        .getRuntime()
+        .exec(command)
+        .let<Process, String> { process ->
+            process.waitFor()
+            val output = process.inputStream.use {
+                it.bufferedReader().use(BufferedReader::readText)
+            }
+            process.destroy()
+            output.trim()
+        }
 
 if (file("google-services.json").exists()) {
     plugins {

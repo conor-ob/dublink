@@ -4,7 +4,7 @@ import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 import io.rtpi.api.StopLocation
 
-class ServiceLocationItemTest : AbstractItemTest<ServiceLocationItem>() {
+class ServiceLocationItemTest : AbstractUniqueItemTest<ServiceLocationItem>() {
 
     override val controlItem: ServiceLocationItem
         get() = ServiceLocationItem(

@@ -1,6 +1,8 @@
 package ie.dublinmapper.search
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Rect
 import android.os.Bundle
@@ -9,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +28,8 @@ import kotlinx.android.synthetic.main.fragment_search.search_input
 import kotlinx.android.synthetic.main.fragment_search.search_list
 import kotlinx.android.synthetic.main.fragment_search.search_progress_bar
 import kotlinx.android.synthetic.main.fragment_search.search_toolbar
+
+private const val locationRequestCode = 42069
 
 class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
@@ -70,11 +75,23 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
             object : SearchView.OnQueryTextListener {
 
                 override fun onQueryTextSubmit(query: String?): Boolean {
+                    query?.let {
+                        if (it.isEmpty()) {
+                            viewModel.dispatch(Action.GetRecentSearches)
+                            viewModel.dispatch(Action.GetNearbyLocations)
+                        }
+                    }
                     viewModel.dispatch(Action.Search(query.toString()))
                     return true
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    newText?.let {
+                        if (it.isEmpty()) {
+                            viewModel.dispatch(Action.GetRecentSearches)
+                            viewModel.dispatch(Action.GetNearbyLocations)
+                        }
+                    }
                     viewModel.dispatch(Action.Search(newText.toString()))
                     return true
                 }
@@ -109,8 +126,8 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         if (query != null && query.length > 1) {
             viewModel.dispatch(Action.Search(query))
         } else {
-            viewModel.dispatch(Action.GetNearbyLocations)
             viewModel.dispatch(Action.GetRecentSearches)
+            viewModel.dispatch(Action.GetNearbyLocations)
         }
     }
 
@@ -132,22 +149,68 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         adapter?.update(
             listOf(
                 SearchResponseMapper.map(
-                    state.nearbyLocations,
                     state.searchResults,
-                    state.recentSearches
+                    state.recentSearches,
+                    state.nearbyLocations,
+                    object : OnEnableLocationClickedListener {
+                        override fun onEnableLocationClicked() {
+                            enableLocation()
+                        }
+                    },
+                    object : ClearRecentSearchesClickListener {
+                        override fun onClearRecentSearchesClicked() {
+                            viewModel.dispatch(Action.ClearRecentSearches)
+                        }
+                    }
                 )
             )
         )
-        try {
-            search_list.scrollToPosition(0)
-        } catch (e: Exception) {
-            // ignored
+        if (state.scrollToTop != null && state.scrollToTop == true) {
+            try {
+                search_list.scrollToPosition(0)
+            } catch (e: Exception) {
+                // ignored
+            }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         adapter = null
+    }
+
+    private fun enableLocation() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+//            viewModel.dispatch(Action.GetNearbyLocations)
+        } else {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                locationRequestCode
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == locationRequestCode) {
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                viewModel.dispatch(Action.GetNearbyLocations)
+            }
+        }
     }
 }
 

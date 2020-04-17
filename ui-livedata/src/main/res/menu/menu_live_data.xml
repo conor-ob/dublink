@@ -7,7 +7,7 @@
             android:id="@+id/action_favourite"
             android:title="@string/action_save_favourite"
             android:icon="@drawable/ic_favourite_unselected"
-            app:showAsAction="ifRoom"/>
+            app:showAsAction="always"/>
 
     <!--<item-->
             <!--android:serviceId="@+serviceId/action_refresh"-->
@@ -21,8 +21,9 @@
             <!--app:showAsAction="never"/>-->
 
     <item
-            android:id="@+id/action_settings"
-            android:title="@string/feature_name_settings"
-            app:showAsAction="never"/>
+        android:id="@+id/action_settings"
+        android:title="@string/feature_name_settings"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="ifRoom"/>
 
 </menu>

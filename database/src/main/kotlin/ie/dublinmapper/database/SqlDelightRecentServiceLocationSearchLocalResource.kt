@@ -60,4 +60,8 @@ class SqlDelightRecentServiceLocationSearchLocalResource(
             timestamp = recentSearch.timestamp
         )
     }
+
+    override fun deleteRecentSearches() {
+        database.recentSearchQueries.deleteAll()
+    }
 }

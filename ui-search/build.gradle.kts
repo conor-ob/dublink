@@ -16,7 +16,7 @@ android {
         java.srcDir("src/main/kotlin")
     }
     sourceSets.getByName("test") {
-        java.srcDir("src/test/kotlin")
+        java.srcDirs("src/test/kotlin", project(":ui-app").file("src/test/kotlin"))
     }
 
     androidExtensions {
@@ -32,7 +32,7 @@ dependencies {
     implementation(Libraries.Rx.rxAndroid)
 
     testImplementation(TestLibraries.Junit.junit)
-//    testImplementation(TestLibraries.Mockk.mockk)
+    testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)
     testImplementation(Libraries.Rtpi.rtpiStaticData)
 }

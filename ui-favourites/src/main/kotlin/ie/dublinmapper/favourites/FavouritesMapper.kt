@@ -96,7 +96,7 @@ object FavouritesMapper {
         return "No scheduled $mode"
     }
 
-    private fun mapDivider(items: Int, index: Int) = if (index < items - 1) DividerItem(index) else null
+    private fun mapDivider(items: Int, index: Int) = if (index < items - 1) DividerItem(index.toLong()) else null
 
     private fun mapIcon(service: Service): Int = when (service) {
         Service.AIRCOACH,

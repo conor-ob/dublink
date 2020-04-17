@@ -18,4 +18,8 @@ class DefaultRecentServiceLocationSearchRepository(
     override fun saveRecentSearch(recentSearch: RecentServiceLocationSearch) {
         recentServiceLocationSearchLocalResource.insertRecentSearch(recentSearch)
     }
+
+    override fun clearRecentSearches() {
+        recentServiceLocationSearchLocalResource.deleteRecentSearches()
+    }
 }
