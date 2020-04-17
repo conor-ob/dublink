@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/message_search_hint"
-        android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2" />
+        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemBody" />
 
 </FrameLayout>

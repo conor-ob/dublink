@@ -1,18 +1,24 @@
 package ie.dublinmapper.search
 
-import ie.dublinmapper.model.AbstractCommonItemTest
+import ie.dublinmapper.model.AbstractUniqueItemTest
 
-class NoSearchResultsItemTest : AbstractCommonItemTest<NoSearchResultsItem>() {
+class NoSearchResultsItemTest : AbstractUniqueItemTest<NoSearchResultsItem>() {
 
-    override val item1: NoSearchResultsItem
+    override val controlItem: NoSearchResultsItem
         get() = NoSearchResultsItem(
             id = 1L,
-            query = "search"
+            query = "query1"
         )
 
-    override val item2: NoSearchResultsItem
+    override val sameItemNotEqual: NoSearchResultsItem
         get() = NoSearchResultsItem(
             id = 2L,
-            query = "search"
+            query = "query2"
+        )
+
+    override val equalItem: NoSearchResultsItem
+        get() = NoSearchResultsItem(
+            id = 1L,
+            query = "query1"
         )
 }

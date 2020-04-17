@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/padding_xxl">
+    android:padding="@dimen/padding_xxxl">
 
     <ImageView
         android:layout_width="48dp"
@@ -22,6 +22,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/message_search_no_results"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
+        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemBody" />
 
 </LinearLayout>

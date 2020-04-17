@@ -2,4 +2,5 @@
     <string name="app_name">Search</string>
     <string name="message_search_hint">Search for places, stops, stations,\nroutes, services</string>
     <string name="message_search_no_results">Hmm, couldn\'t find anything for\n\"%s\"</string>
+    <string name="search_message_enable_location">Allow location access</string>
 </resources>

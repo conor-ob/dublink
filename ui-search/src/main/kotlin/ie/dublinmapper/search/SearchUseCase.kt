@@ -17,8 +17,8 @@ import java.util.SortedMap
 import javax.inject.Inject
 
 private const val maxSearchResults = 100
-private const val maxRecentSearches = 25
-private const val maxNearbyLocations = 25
+private const val maxRecentSearches = 50
+private const val maxNearbyLocations = 50
 
 class SearchUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,

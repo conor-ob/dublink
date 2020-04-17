@@ -4,13 +4,13 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
-import ie.dublinmapper.model.AbstractCommonItem
+import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.list_item_search_no_results.view.*
 
 class NoSearchResultsItem(
     id: Long,
     private val query: String
-) : AbstractCommonItem(id) {
+) : Item(id) {
 
     override fun getLayout() = R.layout.list_item_search_no_results
 
@@ -28,4 +28,13 @@ class NoSearchResultsItem(
             )
         }
     }
+
+    override fun equals(other: Any?) =
+        if (other is NoSearchResultsItem) {
+            query == other.query
+        } else {
+            false
+        }
+
+    override fun hashCode() = query.hashCode()
 }
