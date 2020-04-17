@@ -11,10 +11,13 @@ import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.xdrop.fuzzywuzzy.ToStringFunction
 import me.xdrop.fuzzywuzzy.algorithms.TokenSet
 import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
+import java.util.Locale
 
 class SearchService {
 
     private val normalizingRegex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
+    private val identifierRegex1 = "^\\d{0,4}[a-zA-Z]?\\z".toRegex()
+    private val identifierRegex2 = "^[a-zA-Z]\\d{0,4}\\z".toRegex()
     private val whiteSpace = "\\s+".toRegex()
     private val singleSpace = " "
     private val searchScoreCutoff = 70
@@ -23,8 +26,8 @@ class SearchService {
         query: String,
         serviceLocations: List<ServiceLocation>
     ): Observable<List<ServiceLocation>> =
-        if (isInteger(query)) {
-            integerFieldSearch(query, getAlgorithm(query), serviceLocations)
+        if (isIdentifier(query)) {
+            identifierFieldSearch(query, getAlgorithm(query), serviceLocations)
         } else {
             stringFieldSearch(query, getAlgorithm(query), serviceLocations)
         }
@@ -62,7 +65,7 @@ class SearchService {
             }
         )
 
-    private fun integerFieldSearch(
+    private fun identifierFieldSearch(
         query: String,
         algorithm: Applicable,
         serviceLocations: List<ServiceLocation>
@@ -71,9 +74,22 @@ class SearchService {
             query = query,
             algorithm = algorithm,
             serviceLocations = serviceLocations.filter {
-                it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN
+                it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN ||
+                    it.service == Service.LUAS || it.service == Service.AIRCOACH
             },
-            toStringFunction = ToStringFunction<ServiceLocation> { it.id }
+            toStringFunction = ToStringFunction<ServiceLocation> {
+                listOfNotNull(
+                    it.id
+                ).plus(
+                    if (it is StopLocation) {
+                        it.routeGroups.flatMap { routeGroup -> routeGroup.routes }
+                    } else {
+                        emptyList()
+                    }
+                )
+                    .toSet()
+                    .joinToString(separator = singleSpace) { value -> value.normalize() }
+            }
         )
 
     private fun search(
@@ -92,15 +108,21 @@ class SearchService {
             ).map { it.referent }
         )
 
-    private fun isInteger(value: String): Boolean =
+    private fun isIdentifier(value: String): Boolean {
         try {
             value.toInt()
-            true
+            return true
         } catch (e: NumberFormatException) {
-            false
+            // ignore
         } catch (e: Exception) {
-            false
+            // ignore
         }
+        val sanitizedQuery = value.toLowerCase(Locale.getDefault()).trim()
+        return identifierRegex1.matches(value) ||
+            identifierRegex2.matches(value) ||
+            sanitizedQuery.contains("green") ||
+            sanitizedQuery.contains("red")
+    }
 
     private fun CharSequence.normalize(): String {
         return normalizingRegex.replace(Normalizer.normalize(this, Normalizer.Form.NFD), "")

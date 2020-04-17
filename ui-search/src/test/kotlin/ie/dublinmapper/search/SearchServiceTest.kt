@@ -240,4 +240,96 @@ class SearchServiceTest {
             "Wexford (Trinity Street Centra)"
         ).inOrder()
     }
+
+    @Test
+    fun `searching for a route should produce accurate results (1)`() {
+        // arrange
+        val searchQuery = "46a"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isNotEmpty()
+        assertThat(
+            searchResults
+                .take(25)
+                .filterIsInstance<StopLocation>()
+                .map { stopLocation ->
+                    stopLocation.routeGroups.flatMap { routeGroup ->
+                        routeGroup.routes
+                    }
+                }
+                .all { routes -> routes.contains("46A") }
+        ).isTrue()
+    }
+
+    @Test
+    fun `searching for a route should produce accurate results (2)`() {
+        // arrange
+        val searchQuery = "100X"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isNotEmpty()
+        assertThat(searchResults.all { it.service == Service.BUS_EIREANN }).isTrue()
+    }
+
+    @Test
+    fun `searching for a route should produce accurate results (3)`() {
+        // arrange
+        val searchQuery = "x2"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assertx2
+        assertThat(searchResults).isNotEmpty()
+        assertThat(searchResults.all { it.service == Service.BUS_EIREANN }).isTrue()
+    }
+
+    @Test
+    fun `searching for a luas route should produce accurate results (1)`() {
+        // arrange
+        val searchQuery = "green"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isNotEmpty()
+        assertThat(
+            searchResults.all { it.service == Service.LUAS }
+        ).isTrue()
+    }
+
+    @Test
+    fun `searching for a luas route should produce accurate results (2)`() {
+        // arrange
+        val searchQuery = "red"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isNotEmpty()
+        assertThat(searchResults.all { it.service == Service.LUAS }).isTrue()
+    }
 }
