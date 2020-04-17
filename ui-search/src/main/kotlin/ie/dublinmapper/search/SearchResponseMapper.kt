@@ -2,60 +2,64 @@ package ie.dublinmapper.search
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
+import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.ServiceLocationItem
-import ie.dublinmapper.model.SimpleMessageItem
 import ie.dublinmapper.model.setSearchCandidate
 import ie.dublinmapper.ui.R
 import io.rtpi.api.DockLocation
 import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 
 object SearchResponseMapper {
 
     fun map(
-        nearbyLocationsResponse: NearbyLocationsResponse?,
         searchResultsResponse: SearchResultsResponse?,
-        recentSearchesResponse: RecentSearchesResponse?
+        recentSearchesResponse: RecentSearchesResponse?,
+        nearbyLocationsResponse: NearbyLocationsResponse?
     ) = Section(
         listOfNotNull(
+            mapSearchResults(searchResultsResponse),
             mapRecentSearches(recentSearchesResponse, searchResultsResponse),
-            mapNearbyLocations(nearbyLocationsResponse, searchResultsResponse),
-            mapSearchResults(searchResultsResponse)
+            mapNearbyLocations(nearbyLocationsResponse, searchResultsResponse)
         )
     )
+
+    private fun mapSearchResults(searchResultsResponse: SearchResultsResponse?): Group? {
+        return if (searchResultsResponse != null) {
+            when (searchResultsResponse) {
+                is SearchResultsResponse.Data -> Section(
+                    searchResultsResponse.serviceLocations.flatMap { serviceLocation ->
+                        mapServiceLocation(serviceLocation, null)
+                    }
+                )
+                is SearchResultsResponse.NoResults -> Section(NoSearchResultsItem(searchResultsResponse.query))
+                is SearchResultsResponse.Empty -> Section()
+            }
+        } else {
+            null
+        }
+    }
 
     private fun mapRecentSearches(
         recentSearchesResponse: RecentSearchesResponse?,
         searchResultsResponse: SearchResultsResponse?
     ): Group? {
-        return if (recentSearchesResponse != null && (searchResultsResponse == null || searchResultsResponse.serviceLocations.isNullOrEmpty())) {
+        return if (
+            recentSearchesResponse != null &&
+            (searchResultsResponse == null || searchResultsResponse is SearchResultsResponse.Empty)
+        ) {
             return Section(
-                SimpleMessageItem("Recent searches", 6),
-                recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
-                    when (serviceLocation) {
-                        is StopLocation -> listOf(
-                            ServiceLocationItem(
-                                serviceLocation = serviceLocation,
-                                icon = mapIcon(serviceLocation.service),
-                                routeGroups = serviceLocation.routeGroups,
-                                walkDistance = null
-                            ).apply {
-                                setSearchCandidate()
-                            }
-                        )
-                        is DockLocation -> listOf(
-                            ServiceLocationItem(
-                                serviceLocation = serviceLocation,
-                                icon = mapIcon(serviceLocation.service),
-                                routeGroups = emptyList(),
-                                walkDistance = null
-                            ).apply {
-                                setSearchCandidate()
-                            }
-                        )
-                        else -> emptyList()
+                listOf(
+                    HeaderItem(message = "Recent searches", drawableId = R.drawable.ic_clock, index = 6)
+                ).plus(
+                    when (recentSearchesResponse) {
+                        is RecentSearchesResponse.Data -> recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
+                            mapServiceLocation(serviceLocation, null)
+                        }
+                        is RecentSearchesResponse.Empty -> listOf(NoRecentSearchesItem())
                     }
-                }
+                )
             )
         } else {
             null
@@ -66,77 +70,57 @@ object SearchResponseMapper {
         nearbyLocationsResponse: NearbyLocationsResponse?,
         searchResultsResponse: SearchResultsResponse?
     ): Group? {
-        return if (nearbyLocationsResponse != null && (searchResultsResponse == null || searchResultsResponse.serviceLocations.isNullOrEmpty())) {
-            when (nearbyLocationsResponse) {
-                is NearbyLocationsResponse.Data -> Section(
-                    SimpleMessageItem("Places near you", 1),
-//                    LoadingItem(),
-                    nearbyLocationsResponse.serviceLocations.entries.flatMap { entry ->
-                        when (val serviceLocation = entry.value) {
-                            is StopLocation -> listOf(
-                                ServiceLocationItem(
-                                    serviceLocation = serviceLocation,
-                                    icon = mapIcon(serviceLocation.service),
-                                    routeGroups = serviceLocation.routeGroups,
-                                    walkDistance = entry.key
-                                ).apply {
-                                    setSearchCandidate()
-                                }
-                            )
-                            is DockLocation -> listOf(
-                                ServiceLocationItem(
-                                    serviceLocation = serviceLocation,
-                                    icon = mapIcon(serviceLocation.service),
-                                    routeGroups = emptyList(),
-                                    walkDistance = entry.key
-                                ).apply {
-                                    setSearchCandidate()
-                                }
-                            )
-                            else -> emptyList()
-                        }
+        return if (
+            nearbyLocationsResponse != null &&
+            (searchResultsResponse == null || searchResultsResponse is SearchResultsResponse.Empty)
+        ) {
+            return Section(
+                listOf(
+                    HeaderItem(message = "Places near you", drawableId = R.drawable.ic_near_me, index = 3)
+                ).plus(
+                    when (nearbyLocationsResponse) {
+                        is NearbyLocationsResponse.Data -> Section(
+                            nearbyLocationsResponse.serviceLocations.entries.flatMap { entry ->
+                                mapServiceLocation(entry.value, entry.key)
+                            }
+                        )
+                        is NearbyLocationsResponse.LocationDisabled -> Section(
+                            NoLocationItem()
+                        )
                     }
                 )
-                is NearbyLocationsResponse.LocationDisabled -> Section(
-                    SimpleMessageItem("Enable your location", 3)
-                )
-            }
+            )
         } else {
             null
         }
     }
 
-    private fun mapSearchResults(searchResultsResponse: SearchResultsResponse?): Group? {
-        if (searchResultsResponse != null && searchResultsResponse.serviceLocations.isNotEmpty()) {
-            return Section(
-                searchResultsResponse.serviceLocations.flatMap { serviceLocation ->
-                    when (serviceLocation) {
-                        is StopLocation -> listOf(
-                            ServiceLocationItem(
-                                serviceLocation = serviceLocation,
-                                icon = mapIcon(serviceLocation.service),
-                                routeGroups = serviceLocation.routeGroups,
-                                walkDistance = null
-                            ).apply {
-                                setSearchCandidate()
-                            }
-                        )
-                        is DockLocation -> listOf(
-                            ServiceLocationItem(
-                                serviceLocation = serviceLocation,
-                                icon = mapIcon(serviceLocation.service),
-                                routeGroups = emptyList(),
-                                walkDistance = null
-                            ).apply {
-                                setSearchCandidate()
-                            }
-                        )
-                        else -> emptyList()
-                    }
+    private fun mapServiceLocation(
+        serviceLocation: ServiceLocation,
+        walkDistance: Double?
+    ): List<ServiceLocationItem> {
+        return when (serviceLocation) {
+            is StopLocation -> listOf(
+                ServiceLocationItem(
+                    serviceLocation = serviceLocation,
+                    icon = mapIcon(serviceLocation.service),
+                    routeGroups = serviceLocation.routeGroups,
+                    walkDistance = walkDistance
+                ).apply {
+                    setSearchCandidate()
                 }
             )
-        } else {
-            return null
+            is DockLocation -> listOf(
+                ServiceLocationItem(
+                    serviceLocation = serviceLocation,
+                    icon = mapIcon(serviceLocation.service),
+                    routeGroups = emptyList(),
+                    walkDistance = walkDistance
+                ).apply {
+                    setSearchCandidate()
+                }
+            )
+            else -> emptyList()
         }
     }
 

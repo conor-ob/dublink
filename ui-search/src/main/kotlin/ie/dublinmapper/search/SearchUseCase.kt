@@ -16,6 +16,10 @@ import java.time.Instant
 import java.util.SortedMap
 import javax.inject.Inject
 
+private const val maxSearchResults = 100
+private const val maxRecentSearches = 25
+private const val maxNearbyLocations = 25
+
 class SearchUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val recentSearchRepository: RecentServiceLocationSearchRepository,
@@ -26,8 +30,8 @@ class SearchUseCase @Inject constructor(
     private val searchService = SearchService()
 
     fun search(query: String): Observable<SearchResultsResponse> =
-        if (query.length < 2) {
-            Observable.just(SearchResultsResponse(emptyList()))
+        if (query.isEmpty()) {
+            Observable.just(SearchResultsResponse.Empty)
         } else {
             serviceLocationRepository.get().flatMap { response ->
                 searchService.search(
@@ -36,7 +40,11 @@ class SearchUseCase @Inject constructor(
                         .filterIsInstance<ServiceLocationResponse.Data>()
                         .flatMap { it.serviceLocations }
                 ).map { searchResults ->
-                    SearchResultsResponse(searchResults.take(100))
+                    if (searchResults.isEmpty()) {
+                        SearchResultsResponse.NoResults(query)
+                    } else {
+                        SearchResultsResponse.Data(searchResults.take(maxSearchResults))
+                    }
                 }
             }
         }
@@ -56,7 +64,7 @@ class SearchUseCase @Inject constructor(
                                     .flatMap { it.serviceLocations }
                                     .associateBy { it.coordinate.haversine(coordinate) }
                                     .toSortedMap()
-                                    .truncateHead(5)
+                                    .truncateHead(maxNearbyLocations)
                             )
                         }
                 }
@@ -69,11 +77,15 @@ class SearchUseCase @Inject constructor(
         return recentSearchRepository
             .getRecentSearches()
             .map { recentSearches ->
-                RecentSearchesResponse(
-                    recentSearches.mapNotNull { recentSearch ->
-                        getServiceLocation(recentSearch.service, recentSearch.locationId).blockingFirst().second
-                    }
-                )
+                if (recentSearches.isEmpty()) {
+                    RecentSearchesResponse.Empty
+                } else {
+                    RecentSearchesResponse.Data(
+                        recentSearches.mapNotNull { recentSearch ->
+                            getServiceLocation(recentSearch.service, recentSearch.locationId).blockingFirst().second
+                        }.take(maxRecentSearches)
+                    )
+                }
             }
     }
 
@@ -116,9 +128,18 @@ class SearchUseCase @Inject constructor(
     }
 }
 
-data class SearchResultsResponse(
-    val serviceLocations: List<ServiceLocation>
-)
+sealed class SearchResultsResponse {
+
+    data class Data(
+        val serviceLocations: List<ServiceLocation>
+    ) : SearchResultsResponse()
+
+    data class NoResults(
+        val query: String
+    ) : SearchResultsResponse()
+
+    object Empty : SearchResultsResponse()
+}
 
 sealed class NearbyLocationsResponse {
 
@@ -129,6 +150,11 @@ sealed class NearbyLocationsResponse {
     object LocationDisabled : NearbyLocationsResponse()
 }
 
-data class RecentSearchesResponse(
-    val serviceLocations: List<ServiceLocation>
-)
+sealed class RecentSearchesResponse {
+
+    data class Data(
+        val serviceLocations: List<ServiceLocation>
+    ) : RecentSearchesResponse()
+
+    object Empty : RecentSearchesResponse()
+}

@@ -22,6 +22,7 @@ sealed class Change {
 
 data class State(
     val loading: Boolean? = null,
+    val scrollToTop: Boolean? = null,
     val throwable: Throwable? = null,
     val nearbyLocations: NearbyLocationsResponse? = null,
     val searchResults: SearchResultsResponse? = null,

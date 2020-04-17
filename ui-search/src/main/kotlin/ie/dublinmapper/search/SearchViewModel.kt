@@ -20,29 +20,35 @@ class SearchViewModel @Inject constructor(
         when (change) {
             is Change.Loading -> state.copy(
                 loading = true,
+                scrollToTop = false,
                 throwable = null
             )
             is Change.Error -> state.copy(
                 loading = false,
+                scrollToTop = false,
                 throwable = change.throwable
             )
             is Change.NearbyLocations -> state.copy(
                 nearbyLocations = change.nearbyLocations,
                 loading = false,
+                scrollToTop = false,
                 throwable = null
             )
             is Change.SearchResults -> state.copy(
                 searchResults = change.searchResults,
                 loading = false,
+                scrollToTop = true,
                 throwable = null
             )
             is Change.RecentSearches -> state.copy(
                 recentSearches = change.recentSearches,
                 loading = false,
+                scrollToTop = false,
                 throwable = null
             )
             is Change.AddRecentSearch -> state.copy(
                 loading = false,
+                scrollToTop = false,
                 throwable = null
             )
         }
@@ -50,8 +56,7 @@ class SearchViewModel @Inject constructor(
 
     fun bindActions() {
         val searchResultsChange = actions.ofType(Action.Search::class.java)
-            .filter { it.query.length != 1 }
-            .debounce(400L, TimeUnit.MILLISECONDS)
+            .debounce(500L, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .switchMap { action ->
                 searchUseCase.search(action.query)

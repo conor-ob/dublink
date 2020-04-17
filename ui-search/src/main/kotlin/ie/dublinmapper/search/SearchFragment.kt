@@ -108,10 +108,9 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         val query = search_input.query?.toString()
         if (query != null && query.length > 1) {
             viewModel.dispatch(Action.Search(query))
-        } else {
-            viewModel.dispatch(Action.GetNearbyLocations)
-            viewModel.dispatch(Action.GetRecentSearches)
         }
+        viewModel.dispatch(Action.GetNearbyLocations)
+        viewModel.dispatch(Action.GetRecentSearches)
     }
 
     override fun onPause() {
@@ -132,16 +131,18 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
         adapter?.update(
             listOf(
                 SearchResponseMapper.map(
-                    state.nearbyLocations,
                     state.searchResults,
-                    state.recentSearches
+                    state.recentSearches,
+                    state.nearbyLocations
                 )
             )
         )
-        try {
-            search_list.scrollToPosition(0)
-        } catch (e: Exception) {
-            // ignored
+        if (state.scrollToTop != null && state.scrollToTop == true) {
+            try {
+                search_list.scrollToPosition(0)
+            } catch (e: Exception) {
+                // ignored
+            }
         }
     }
 
