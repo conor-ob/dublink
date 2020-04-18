@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 
 fun Fragment.showKeyboard(view: View) {
     val inputManager = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    inputManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    inputManager.showSoftInput(view, InputMethodManager.SHOW_FORCED)
 }
 
 fun Fragment.hideKeyboard(view: View) {
