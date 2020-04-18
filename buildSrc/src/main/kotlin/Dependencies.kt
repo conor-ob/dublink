@@ -20,7 +20,7 @@ object AndroidSdk {
 }
 
 object BuildPlugins {
-    const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.1" // https://mvnrepository.com/artifact/com.android.tools.build/gradle?repo=google
+    const val androidGradlePlugin = "com.android.tools.build:gradle:4.1.0-alpha06" // https://mvnrepository.com/artifact/com.android.tools.build/gradle?repo=google
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion" // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-gradle-plugin
     const val ktLint = "com.pinterest:ktlint:0.36.0"
     const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:1.2.2" // https://mvnrepository.com/artifact/com.squareup.sqldelight/gradle-plugin
