@@ -48,10 +48,12 @@
     <string name="preference_category_search">Search</string>
 
     <string name="preference_key_search_show_nearby">search_show_nearby</string>
-    <string name="preference_name_search_show_nearby">Show Nearby Places</string>
+    <string name="preference_name_search_show_nearby">Nearby Places</string>
+    <string name="preference_summary_search_show_nearby">Show places closest to you</string>
 
     <string name="preference_key_search_show_recents">search_show_recents</string>
-    <string name="preference_name_search_show_recents">Show Recent Search Results</string>
+    <string name="preference_name_search_show_recents">Recent Searches</string>
+    <string name="preference_summary_search_show_recents">Show places you recently searched for</string>
 
     <string name="preference_category_about">About</string>
 
