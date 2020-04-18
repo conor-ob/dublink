@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      TERM: dumb:
+      TERM: dumb
       ORG_GRADLE_PROJECT_authToken: ${{ secrets.ORG_GRADLE_PROJECT_authToken }}
 
     steps:
