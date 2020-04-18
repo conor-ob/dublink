@@ -24,4 +24,8 @@ interface PreferenceStore {
     fun getLastKnownLocation(): Coordinate
 
     fun setLastKnownLocation(coordinate: Coordinate)
+
+    fun isShowNearbyPlacesEnabled(): Boolean
+
+    fun isShowRecentSearchesEnabled(): Boolean
 }

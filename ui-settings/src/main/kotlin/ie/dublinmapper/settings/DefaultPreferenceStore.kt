@@ -119,4 +119,18 @@ class DefaultPreferenceStore @Inject constructor(
         }
         return preferences.edit().putBoolean(key, true).commit()
     }
+
+    override fun isShowNearbyPlacesEnabled(): Boolean {
+        return preferences.getBoolean(
+            context.resources.getString(R.string.preference_key_search_show_nearby),
+            context.resources.getBoolean(R.bool.preference_default_search_show_nearby)
+        )
+    }
+
+    override fun isShowRecentSearchesEnabled(): Boolean {
+        return preferences.getBoolean(
+            context.resources.getString(R.string.preference_key_search_show_recents),
+            context.resources.getBoolean(R.bool.preference_default_search_show_recents)
+        )
+    }
 }
