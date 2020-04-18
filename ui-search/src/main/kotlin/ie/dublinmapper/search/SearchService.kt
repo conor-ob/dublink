@@ -6,12 +6,12 @@ import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import java.text.Normalizer
+import java.util.Locale
 import me.xdrop.fuzzywuzzy.Applicable
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.xdrop.fuzzywuzzy.ToStringFunction
 import me.xdrop.fuzzywuzzy.algorithms.TokenSet
 import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
-import java.util.Locale
 
 class SearchService {
 
