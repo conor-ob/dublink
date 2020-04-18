@@ -121,7 +121,6 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.bindActions()
         val query = search_input.query?.toString()
         if (query != null && query.length > 1) {
             viewModel.dispatch(Action.Search(query))
@@ -134,7 +133,6 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     override fun onPause() {
         super.onPause()
         hideKeyboard(search_input)
-        viewModel.unbindActions()
     }
 
     private fun renderState(state: State) {
