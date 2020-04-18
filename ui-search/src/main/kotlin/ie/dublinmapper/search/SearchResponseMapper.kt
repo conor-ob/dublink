@@ -116,7 +116,10 @@ object SearchResponseMapper {
                         )
                 )
                 is NearbyLocationsResponse.LocationDisabled -> Section(
-                    NoLocationItem(id = 7748L, clickListener = onEnableLocationClickedListener)
+                    listOf(
+                        HeaderItem(message = "Places near you", drawableId = R.drawable.ic_near_me, index = 94838),
+                        NoLocationItem(id = 7748L, clickListener = onEnableLocationClickedListener)
+                    )
                 )
                 is NearbyLocationsResponse.Hidden -> null
             }
