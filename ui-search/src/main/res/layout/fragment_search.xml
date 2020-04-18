@@ -28,7 +28,6 @@
                 android:id="@+id/search_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:iconifiedByDefault="false"
                 app:queryHint="@string/feature_name_search" />
 
         </androidx.appcompat.widget.Toolbar>

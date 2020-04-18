@@ -23,11 +23,13 @@ import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.model.extractServiceLocation
 import ie.dublinmapper.model.isSearchCandidate
 import ie.dublinmapper.util.hideKeyboard
+import ie.dublinmapper.util.showKeyboard
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_search.search_input
 import kotlinx.android.synthetic.main.fragment_search.search_list
 import kotlinx.android.synthetic.main.fragment_search.search_progress_bar
 import kotlinx.android.synthetic.main.fragment_search.search_toolbar
+import timber.log.Timber
 
 private const val locationRequestCode = 42069
 
@@ -36,6 +38,8 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as SearchViewModel }
 
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
+
+    private var keyboardHasFocus = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,11 +56,6 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
             return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
         }
 
-        search_input.setIconifiedByDefault(true)
-        search_input.focusable = View.FOCUSABLE
-        search_input.isIconified = false
-        search_input.requestFocus()
-
         adapter = GroupAdapter()
         search_list.adapter = adapter
         search_list.setHasFixedSize(true)
@@ -71,32 +70,49 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
             }
         }
 
-        search_input.setOnQueryTextListener(
-            object : SearchView.OnQueryTextListener {
+        search_input.apply {
+            setOnQueryTextListener(
+                object : SearchView.OnQueryTextListener {
 
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    query?.let {
-                        if (it.isEmpty()) {
-                            viewModel.dispatch(Action.GetRecentSearches)
-                            viewModel.dispatch(Action.GetNearbyLocations)
-                        }
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+    //                    query?.let {
+    //                        if (it.isEmpty()) {
+    //                            viewModel.dispatch(Action.GetRecentSearches)
+    //                            viewModel.dispatch(Action.GetNearbyLocations)
+    //                        }
+    //                    }
+    //                    viewModel.dispatch(Action.Search(query.toString()))
+                        hideKeyboard(search_input)
+                        return true
                     }
-                    viewModel.dispatch(Action.Search(query.toString()))
-                    return true
-                }
 
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    newText?.let {
-                        if (it.isEmpty()) {
-                            viewModel.dispatch(Action.GetRecentSearches)
-                            viewModel.dispatch(Action.GetNearbyLocations)
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        newText?.let {
+                            if (it.isEmpty()) {
+                                viewModel.dispatch(Action.GetRecentSearches)
+                                viewModel.dispatch(Action.GetNearbyLocations)
+                            }
                         }
+                        viewModel.dispatch(Action.Search(newText.toString()))
+                        return true
                     }
-                    viewModel.dispatch(Action.Search(newText.toString()))
-                    return true
                 }
+            )
+
+            setOnQueryTextFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    showKeyboard(view.findFocus())
+                }
+                keyboardHasFocus = hasFocus
             }
-        )
+
+            if (keyboardHasFocus) {
+                setIconifiedByDefault(true)
+                focusable = View.FOCUSABLE
+                isIconified = false
+                requestFocus()
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -121,7 +137,6 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.bindActions()
         val query = search_input.query?.toString()
         if (query != null && query.length > 1) {
             viewModel.dispatch(Action.Search(query))
@@ -129,12 +144,14 @@ class SearchFragment : DublinMapperFragment(R.layout.fragment_search) {
             viewModel.dispatch(Action.GetRecentSearches)
             viewModel.dispatch(Action.GetNearbyLocations)
         }
+        if (!keyboardHasFocus) {
+            hideKeyboard(search_input)
+        }
     }
 
     override fun onPause() {
         super.onPause()
         hideKeyboard(search_input)
-        viewModel.unbindActions()
     }
 
     private fun renderState(state: State) {
