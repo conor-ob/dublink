@@ -1,5 +1,6 @@
 # Dublinmapper
 
+![Android CI](https://github.com/conor-ob/dublin-mapper/workflows/Android%20CI/badge.svg)
 [![CircleCI](https://circleci.com/gh/conor-ob/dublin-mapper.svg?style=shield&circle-token=42b2b34fb35d24d7e4aeb4bcfd6bc5c82c9cf0ea)](https://circleci.com/gh/conor-ob/dublin-mapper)
 [![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=26)
 [![CodeFactor](https://www.codefactor.io/repository/github/conor-ob/dublin-mapper/badge?s=6e0e7443d6d60600f8647fe4f22d5fafcebc385b)](https://www.codefactor.io/repository/github/conor-ob/dublin-mapper)
