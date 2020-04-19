@@ -2,6 +2,7 @@ package ie.dublinmapper.livedata
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var args: LiveDataArgs
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,14 +81,19 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         liveDataList.setHasFixedSize(true)
         liveDataList.layoutManager = LinearLayoutManager(requireContext())
 
-        val bottomSheetBehavior: BottomSheetBehavior<View> = BottomSheetBehavior.from(view.findViewById(R.id.routeFilterBottomSheet))
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.routeFilterBottomSheet))
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         routeFilterFab.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        collapseRouteFilters.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+//        collapseRouteFilters.setOnClickListener {
+//            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+//        }
+
+        val cont = container
+        container.viewTreeObserver.addOnGlobalLayoutListener {
+            bottomSheetBehavior.peekHeight = cont.measuredHeight
         }
     }
 
@@ -161,7 +168,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 }
                 routeFilters.addView(routeFilterChip)
             }
-//            routes.visibility = View.VISIBLE
+
             routeFilters.visibility = View.VISIBLE
         }
 
