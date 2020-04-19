@@ -5,7 +5,6 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.ServiceLocationItem
-import ie.dublinmapper.model.SimpleMessageItem
 import ie.dublinmapper.model.setSearchCandidate
 import ie.dublinmapper.ui.R
 import io.rtpi.api.DockLocation
