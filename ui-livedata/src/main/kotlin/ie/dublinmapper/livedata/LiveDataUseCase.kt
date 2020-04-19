@@ -112,6 +112,10 @@ class LiveDataUseCase @Inject constructor(
     private fun clearServiceLocationCache(service: Service) {
         serviceLocationRepository.clearCache(service)
     }
+
+    fun clearRouteFilters(): Observable<Boolean> {
+        return Observable.just(true)
+    }
 }
 
 sealed class ServiceLocationPresentationResponse {

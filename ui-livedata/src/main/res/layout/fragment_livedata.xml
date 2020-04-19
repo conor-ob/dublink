@@ -22,25 +22,25 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rectangle"
-            android:backgroundTint="?attr/colorSurface">
+<!--        <FrameLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/rectangle"-->
+<!--            android:backgroundTint="?attr/colorSurface">-->
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/routes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginStart="@dimen/padding_l"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                app:chipSpacingHorizontal="5dp"
-                app:chipSpacingVertical="5dp"
-                app:singleLine="false" />
+<!--            <com.google.android.material.chip.ChipGroup-->
+<!--                android:id="@+id/routes"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:visibility="gone"-->
+<!--                android:layout_marginStart="@dimen/padding_l"-->
+<!--                android:layout_marginTop="12dp"-->
+<!--                android:layout_marginBottom="12dp"-->
+<!--                app:chipSpacingHorizontal="5dp"-->
+<!--                app:chipSpacingVertical="5dp"-->
+<!--                app:singleLine="false" />-->
 
-        </FrameLayout>
+<!--        </FrameLayout>-->
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -65,20 +65,84 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/margin_normal"
+        android:visibility="gone"
         app:hoveredFocusedTranslationZ="0dp"
         app:pressedTranslationZ="0dp"
         app:srcCompat="@drawable/ic_filter" />
 
-    <fragment
+    <LinearLayout
         android:id="@+id/routeFilterBottomSheet"
         android:name="ie.dublinmapper.livedata.RouteFilterFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_gravity="bottom"
         android:layout_marginBottom="4dp"
+        android:background="@drawable/route_filters_background"
+        android:backgroundTint="?attr/colorSurface"
+        android:clickable="true"
+        android:elevation="8dp"
+        android:focusable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="128dp"
-        tools:layout="@layout/bottom_sheet_route_filters" />
+        app:behavior_peekHeight="48dp"
+        app:behavior_skipCollapsed="true"
+        tools:layout="@layout/bottom_sheet_route_filters">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding_xs"
+            android:paddingBottom="@dimen/padding_xs"
+            android:paddingStart="@dimen/padding_xs"
+            android:paddingEnd="@dimen/padding_xl">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clearRouteFilters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reset"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="30"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.DublinMapper.Headline6"
+                android:text="Filters"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="50" />
+
+            <ImageButton
+                android:id="@+id/collapseRouteFilters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_collapse"/>
+
+        </LinearLayout>
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/routeFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/padding_l"
+            android:layout_marginBottom="12dp"
+            app:chipSpacingHorizontal="5dp"
+            app:chipSpacingVertical="5dp"
+            app:singleLine="false" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

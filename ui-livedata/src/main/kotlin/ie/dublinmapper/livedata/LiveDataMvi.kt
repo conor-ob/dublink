@@ -27,6 +27,9 @@ sealed class Action : BaseAction {
         val serviceLocationId: String,
         val serviceLocationService: Service
     ) : Action()
+
+    object ClearRouteFilters : Action()
+    object CollapseRouteFilters : Action()
 }
 
 sealed class Change {
@@ -34,6 +37,7 @@ sealed class Change {
     data class GetLiveData(val liveDataResponse: LiveDataPresentationResponse) : Change()
     object FavouriteSaved : Change()
     object FavouriteRemoved : Change()
+    object RouteFiltersCleared : Change()
 }
 
 data class State(

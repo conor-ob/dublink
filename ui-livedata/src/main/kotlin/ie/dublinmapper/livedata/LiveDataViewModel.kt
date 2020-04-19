@@ -38,10 +38,18 @@ class LiveDataViewModel @Inject constructor(
             is Change.FavouriteRemoved -> state.copy(
                 isFavourite = false
             )
+            is Change.RouteFiltersCleared -> state.copy(
+                isLoading = false,
+                liveDataResponse = null
+            )
         }
     }
 
-    fun bindActions() {
+    init {
+        bindActions()
+    }
+
+    private fun bindActions() {
         val getServiceLocationChange = actions.ofType(Action.GetServiceLocation::class.java)
             .switchMap { action ->
                 liveDataUseCase.getServiceLocation(
@@ -87,21 +95,28 @@ class LiveDataViewModel @Inject constructor(
                     .map<Change> { Change.FavouriteRemoved }
             }
 
+        val clearRouteFiltersChange = actions.ofType(Action.ClearRouteFilters::class.java)
+            .switchMap { action ->
+                liveDataUseCase.clearRouteFilters()
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Change> { Change.RouteFiltersCleared }
+            }
+
         val allActions = Observable.merge(
-            getServiceLocationChange,
-            getLiveDataChange,
-            saveFavouriteChange,
-            removeFavouriteChange
+            listOf(
+                getServiceLocationChange,
+                getLiveDataChange,
+                saveFavouriteChange,
+                removeFavouriteChange,
+                clearRouteFiltersChange
+            )
         )
 
         disposables += allActions
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
-    }
-
-    fun unbindActions() {
-        disposables.clear()
     }
 
     private fun tryLogRouteDiscrepancies(

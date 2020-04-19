@@ -2,7 +2,6 @@ package ie.dublinmapper.livedata
 
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +18,6 @@ import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
-import kotlinx.android.synthetic.main.bottom_sheet_route_filters.*
 import kotlinx.android.synthetic.main.fragment_livedata.*
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
@@ -83,7 +81,11 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         val bottomSheetBehavior: BottomSheetBehavior<View> = BottomSheetBehavior.from(view.findViewById(R.id.routeFilterBottomSheet))
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         routeFilterFab.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
+        collapseRouteFilters.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
 
@@ -98,7 +100,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.bindActions()
         viewModel.dispatch(
             Action.GetServiceLocation(
                 serviceLocationId = args.serviceLocationId,
@@ -112,11 +113,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 serviceLocationService = args.serviceLocationService
             )
         )
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.unbindActions()
     }
 
     private fun getSubtitle() = when (val service = args.serviceLocationService) {
@@ -142,16 +138,22 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         if (state.serviceLocationResponse != null &&
             state.serviceLocationResponse is ServiceLocationPresentationResponse.Data &&
             state.serviceLocationResponse.serviceLocation is StopLocation &&
-            state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount
+            state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routeFilters.childCount
         ) {
-            routes.removeAllViewsInLayout()
+            if (state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size > 1) {
+                routeFilterFab.visibility = View.VISIBLE
+            }
+//            routes.removeAllViewsInLayout()
+            routeFilters.removeAllViewsInLayout()
             val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups
                 .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                 .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
             for (route in sortedRouteGroups) {
-                routes.addView(ChipFactory.newRouteChip(requireContext(), route))
+//                routes.addView(ChipFactory.newRouteChip(requireContext(), route))
+                routeFilters.addView(ChipFactory.newRouteChip(requireContext(), route))
             }
-            routes.visibility = View.VISIBLE
+//            routes.visibility = View.VISIBLE
+            routeFilters.visibility = View.VISIBLE
         }
 
         if (state.liveDataResponse != null) {
