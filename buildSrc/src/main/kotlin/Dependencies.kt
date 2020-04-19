@@ -40,6 +40,7 @@ object Libraries {
 
     object Android {
         const val material = "com.google.android.material:material:1.2.0-alpha02" // https://mvnrepository.com/artifact/com.google.android.material/material
+        const val flexBox = "com.google.android:flexbox:2.0.1" // https://mvnrepository.com/artifact/com.google.android/flexbox?repo=bt-google-flexbox-layout
         const val playServicesLocation = "com.google.android.gms:play-services-location:17.0.0" // https://mvnrepository.com/artifact/com.google.android.gms/play-services-location?repo=google
     }
 

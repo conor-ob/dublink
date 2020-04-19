@@ -1,8 +1,10 @@
 package ie.dublinmapper.livedata
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,12 +17,15 @@ import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.util.ChipFactory
 import ie.dublinmapper.viewModelProvider
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -87,9 +92,13 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-//        collapseRouteFilters.setOnClickListener {
-//            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-//        }
+        collapseRouteFilters.setOnClickListener {
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -101,7 +110,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         )
     }
 
-    private val listener = ViewTreeObserver.OnGlobalLayoutListener { bottomSheetBehavior.peekHeight = container.measuredHeight }
+    private val listener = ViewTreeObserver.OnGlobalLayoutListener {
+        bottomSheetBehavior.setPeekHeight(container.measuredHeight, true)
+    }
 
     override fun onResume() {
         super.onResume()
@@ -162,6 +173,13 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             for (route in sortedRouteGroups) {
                 val routeFilterChip = ChipFactory.newRouteFilterChip(requireContext(), route)
                 routeFilterChip.setOnCheckedChangeListener { buttonView, isChecked ->
+                    val checkedChipIds = routeFilters.checkedChipIds
+                    if (checkedChipIds.isNullOrEmpty()) {
+                        clearRouteFilters.visibility = View.INVISIBLE
+                    } else {
+                        clearRouteFilters.visibility = View.VISIBLE
+                    }
+
                     viewModel.dispatch(
                         Action.RouteFilterToggled(
                             route = buttonView.text.toString(),

@@ -106,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Clear"
-                    android:textAllCaps="false"
+                    android:visibility="invisible"
                     style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
                 <View
@@ -136,16 +136,29 @@
 
             </LinearLayout>
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/routeFilters"
-                android:layout_width="wrap_content"
+            <com.google.android.flexbox.FlexboxLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_marginStart="@dimen/padding_l"
-                android:layout_marginBottom="32dp"
-                app:chipSpacingHorizontal="8dp"
-                app:chipSpacingVertical="12dp"
-                app:singleLine="false" />
+                android:gravity="center"
+                app:flexWrap="wrap"
+                app:alignItems="stretch"
+                app:alignContent="stretch"
+                app:justifyContent="center">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/routeFilters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/padding_xl"
+                    android:paddingEnd="@dimen/padding_xl"
+                    android:paddingTop="@dimen/padding_xxs"
+                    android:paddingBottom="@dimen/padding_xxl"
+                    android:visibility="gone"
+                    app:chipSpacingHorizontal="8dp"
+                    app:chipSpacingVertical="12dp"
+                    app:singleLine="false" />
+
+            </com.google.android.flexbox.FlexboxLayout>
 
         </LinearLayout>
 
