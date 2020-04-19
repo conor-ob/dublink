@@ -1,10 +1,8 @@
 package ie.dublinmapper.livedata
 
-import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,15 +15,11 @@ import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.util.ChipFactory
 import ie.dublinmapper.viewModelProvider
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 

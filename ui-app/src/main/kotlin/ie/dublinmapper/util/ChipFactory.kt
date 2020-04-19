@@ -2,7 +2,6 @@ package ie.dublinmapper.util
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.util.TypedValue
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import ie.dublinmapper.ui.R

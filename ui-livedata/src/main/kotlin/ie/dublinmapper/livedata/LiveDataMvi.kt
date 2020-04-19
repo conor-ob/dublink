@@ -36,7 +36,7 @@ sealed class Action : BaseAction {
 
 sealed class RouteFilterChangeType {
     data class Add(val route: String) : RouteFilterChangeType()
-    data class Remove(val route: String): RouteFilterChangeType()
+    data class Remove(val route: String) : RouteFilterChangeType()
     object Clear : RouteFilterChangeType()
     object NoChange : RouteFilterChangeType()
 }
