@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/routeFilterBottomSheet"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/route_filters_background"
+    android:backgroundTint="?attr/colorSurface"
+    android:clickable="true"
+    android:elevation="8dp"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!--            <com.google.android.material.button.MaterialButton-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content" />-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textAppearance="@style/TextAppearance.DublinMapper.Headline6"
+            android:text="Route Filters"/>
+
+        <!--            <ImageButton-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content" />-->
+
+    </LinearLayout>
+
+</LinearLayout>

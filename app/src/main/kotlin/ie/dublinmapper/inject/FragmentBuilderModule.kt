@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import ie.dublinmapper.favourites.FavouritesFragment
 import ie.dublinmapper.livedata.LiveDataFragment
+import ie.dublinmapper.livedata.RouteFilterFragment
 import ie.dublinmapper.search.SearchFragment
 import ie.dublinmapper.settings.PreferencesFragment
 import ie.dublinmapper.settings.SettingsFragment
@@ -16,6 +17,9 @@ abstract class FragmentBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun contributeLiveDataFragmentInjector(): LiveDataFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeRouteFIlterFragmentInjector(): RouteFilterFragment
 
     @ContributesAndroidInjector
     abstract fun contributeSearchFragmentInjector(): SearchFragment

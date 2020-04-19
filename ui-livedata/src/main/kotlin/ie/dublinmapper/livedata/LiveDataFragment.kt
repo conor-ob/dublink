@@ -2,9 +2,11 @@ package ie.dublinmapper.livedata
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
@@ -17,6 +19,7 @@ import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
+import kotlinx.android.synthetic.main.bottom_sheet_route_filters.*
 import kotlinx.android.synthetic.main.fragment_livedata.*
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
@@ -76,6 +79,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         liveDataList.adapter = adapter
         liveDataList.setHasFixedSize(true)
         liveDataList.layoutManager = LinearLayoutManager(requireContext())
+
+        val bottomSheetBehavior: BottomSheetBehavior<View> = BottomSheetBehavior.from(view.findViewById(R.id.routeFilterBottomSheet))
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        routeFilterFab.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
