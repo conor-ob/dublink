@@ -121,6 +121,7 @@ object SearchResponseMapper {
                         NoLocationItem(id = 7748L, clickListener = onEnableLocationClickedListener)
                     )
                 )
+                is NearbyLocationsResponse.Loading -> LoadingItem(id = 67683L)
                 is NearbyLocationsResponse.Hidden -> null
             }
         } else {

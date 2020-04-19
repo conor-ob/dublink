@@ -2,9 +2,11 @@ package ie.dublinmapper.livedata
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
@@ -25,6 +27,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var args: LiveDataArgs
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,6 +79,25 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         liveDataList.adapter = adapter
         liveDataList.setHasFixedSize(true)
         liveDataList.layoutManager = LinearLayoutManager(requireContext())
+
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.routeFilterBottomSheet))
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        routeFilterFab.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        collapseRouteFilters.setOnClickListener {
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            } else {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            }
+        }
+
+        clearRouteFilters.setOnClickListener {
+            viewModel.dispatch(Action.RouteFilterIntent(RouteFilterChangeType.Clear))
+            routeFilters.clearCheck()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -87,9 +109,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         )
     }
 
+    private val listener = ViewTreeObserver.OnGlobalLayoutListener {
+        bottomSheetBehavior.setPeekHeight(container.measuredHeight, true)
+    }
+
     override fun onResume() {
         super.onResume()
-        viewModel.bindActions()
         viewModel.dispatch(
             Action.GetServiceLocation(
                 serviceLocationId = args.serviceLocationId,
@@ -103,11 +128,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 serviceLocationService = args.serviceLocationService
             )
         )
+        container.viewTreeObserver.addOnGlobalLayoutListener(listener)
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.unbindActions()
+        container.viewTreeObserver.removeOnGlobalLayoutListener(listener)
     }
 
     private fun getSubtitle() = when (val service = args.serviceLocationService) {
@@ -130,23 +156,60 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             Toast.makeText(requireContext(), "Removed from Favourites", Toast.LENGTH_SHORT).show()
         }
 
+        if (state.routeFilters.isEmpty()) {
+            clearRouteFilters.visibility = View.INVISIBLE
+        } else {
+            clearRouteFilters.visibility = View.VISIBLE
+        }
+
         if (state.serviceLocationResponse != null &&
             state.serviceLocationResponse is ServiceLocationPresentationResponse.Data &&
             state.serviceLocationResponse.serviceLocation is StopLocation &&
-            state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routes.childCount
+            state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size != routeFilters.childCount
         ) {
-            routes.removeAllViewsInLayout()
+            if (state.serviceLocationResponse.serviceLocation.routeGroups.flatMap { it.routes }.size > 1) {
+                routeFilterFab.visibility = View.VISIBLE
+            }
+//            routes.removeAllViewsInLayout()
+            routeFilters.removeAllViewsInLayout()
             val sortedRouteGroups = state.serviceLocationResponse.serviceLocation.routeGroups
                 .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                 .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
             for (route in sortedRouteGroups) {
-                routes.addView(ChipFactory.newRouteChip(requireContext(), route))
+                val routeFilterChip = ChipFactory.newRouteFilterChip(requireContext(), route)
+
+                routeFilterChip.isChecked = state.routeFilters.contains(route.second)
+
+                routeFilterChip.setOnCheckedChangeListener { buttonView, isChecked ->
+                    val checkedChipIds = routeFilters.checkedChipIds
+                    if (checkedChipIds.isNullOrEmpty()) {
+                        clearRouteFilters.visibility = View.INVISIBLE
+                    } else {
+                        clearRouteFilters.visibility = View.VISIBLE
+                    }
+
+                    if (isChecked) {
+                        viewModel.dispatch(
+                            Action.RouteFilterIntent(
+                                RouteFilterChangeType.Add(buttonView.text.toString())
+                            )
+                        )
+                    } else {
+                        viewModel.dispatch(
+                            Action.RouteFilterIntent(
+                                RouteFilterChangeType.Remove(buttonView.text.toString())
+                            )
+                        )
+                    }
+                }
+                routeFilters.addView(routeFilterChip)
             }
-            routes.visibility = View.VISIBLE
+
+            routeFilters.visibility = View.VISIBLE
         }
 
-        if (state.liveDataResponse != null) {
-            adapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse)))
+        if (state.filteredLiveDataResponse != null) {
+            adapter?.update(listOf(LiveDataMapper.map(state.filteredLiveDataResponse)))
         }
     }
 

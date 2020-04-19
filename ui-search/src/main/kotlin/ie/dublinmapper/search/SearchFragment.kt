@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.fragment_search.search_input
 import kotlinx.android.synthetic.main.fragment_search.search_list
 import kotlinx.android.synthetic.main.fragment_search.search_progress_bar
 import kotlinx.android.synthetic.main.fragment_search.search_toolbar
-import timber.log.Timber
 
 private const val locationRequestCode = 42069
 

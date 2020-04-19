@@ -30,4 +30,13 @@
         <item name="android:clickable">false</item>
     </style>
 
+    <style name="Widget.DublinMapper.RouteFilterChip" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipStartPadding">12dp</item>
+        <item name="chipEndPadding">12dp</item>
+        <item name="chipCornerRadius">8dp</item>
+        <item name="chipMinHeight">28dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.DublinMapper.Button.RouteFilter</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
 </resources>

@@ -74,6 +74,7 @@ class SearchUseCase @Inject constructor(
                                 )
                             }
                     }
+                    .startWith(NearbyLocationsResponse.Loading)
             }
             else -> {
                 Observable.just(NearbyLocationsResponse.LocationDisabled)
@@ -167,6 +168,8 @@ sealed class NearbyLocationsResponse {
     ) : NearbyLocationsResponse()
 
     object LocationDisabled : NearbyLocationsResponse()
+
+    object Loading : NearbyLocationsResponse()
 
     object Hidden : NearbyLocationsResponse()
 }

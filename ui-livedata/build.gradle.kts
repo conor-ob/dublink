@@ -28,6 +28,8 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":ui-app"))
 
+    implementation(Libraries.Android.flexBox)
+
     testImplementation(TestLibraries.Junit.junit)
 //    testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)
