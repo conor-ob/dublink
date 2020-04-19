@@ -19,6 +19,7 @@ import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import kotlinx.android.synthetic.main.fragment_livedata.*
+import timber.log.Timber
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -149,15 +150,23 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
                 .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
             for (route in sortedRouteGroups) {
-//                routes.addView(ChipFactory.newRouteChip(requireContext(), route))
-                routeFilters.addView(ChipFactory.newRouteChip(requireContext(), route))
+                val routeFilterChip = ChipFactory.newRouteFilterChip(requireContext(), route)
+                routeFilterChip.setOnCheckedChangeListener { buttonView, isChecked ->
+                    viewModel.dispatch(
+                        Action.RouteFilterToggled(
+                            route = buttonView.text.toString(),
+                            enabled = isChecked
+                        )
+                    )
+                }
+                routeFilters.addView(routeFilterChip)
             }
 //            routes.visibility = View.VISIBLE
             routeFilters.visibility = View.VISIBLE
         }
 
-        if (state.liveDataResponse != null) {
-            adapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse)))
+        if (state.filteredLiveDataResponse != null) {
+            adapter?.update(listOf(LiveDataMapper.map(state.filteredLiveDataResponse)))
         }
     }
 

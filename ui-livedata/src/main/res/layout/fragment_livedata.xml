@@ -102,7 +102,8 @@
                 android:id="@+id/clearRouteFilters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reset"
+                android:text="Clear"
+                android:textAllCaps="false"
                 style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             <View
@@ -139,8 +140,8 @@
             android:visibility="gone"
             android:layout_marginStart="@dimen/padding_l"
             android:layout_marginBottom="12dp"
-            app:chipSpacingHorizontal="5dp"
-            app:chipSpacingVertical="5dp"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="12dp"
             app:singleLine="false" />
 
     </LinearLayout>

@@ -2,6 +2,7 @@ package ie.dublinmapper.util
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.TypedValue
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import ie.dublinmapper.ui.R
@@ -20,6 +21,20 @@ object ChipFactory {
             text = " $route "
             isAllCaps = false
             isClickable = false
+            elevation = 4f.dipToPx(context)
+        }
+    }
+
+    fun newRouteFilterChip(context: Context, pair: Pair<Operator, String>): Chip {
+        val (operator, route) = pair
+        val (textColour, backgroundColour) = mapColour(operator, route)
+        return Chip(context).apply {
+            setChipDrawable(ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_DublinMapper_RouteFilterChip))
+            setChipBackgroundColorResource(backgroundColour)
+            setTextAppearanceResource(R.style.TextAppearance_DublinMapper_Button_RouteFilter)
+            setTextColor(ColorStateList.valueOf(context.resources.getColor(textColour)))
+            text = route
+            isAllCaps = false
             elevation = 4f.dipToPx(context)
         }
     }

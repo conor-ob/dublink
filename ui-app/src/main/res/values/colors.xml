@@ -39,5 +39,6 @@
     <color name="grey_800">#424242</color>
     <color name="grey_850">#323232</color>
     <color name="grey_900">#212121</color>
+    <color name="grey_950">#191919</color>
 
 </resources>

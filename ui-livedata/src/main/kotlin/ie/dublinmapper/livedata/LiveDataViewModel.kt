@@ -25,11 +25,12 @@ class LiveDataViewModel @Inject constructor(
                 isFavourite = null
             )
             is Change.GetLiveData -> {
-                tryLogRouteDiscrepancies(state, change)
                 state.copy(
                     liveDataResponse = change.liveDataResponse,
+                    filteredLiveDataResponse = filterLiveDataResponse(state, change.liveDataResponse),
                     isFavourite = null,
-                    isLoading = false
+                    isLoading = false,
+                    routeDiscrepancyState = tryLogRouteDiscrepancies(state, change)
                 )
             }
             is Change.FavouriteSaved -> state.copy(
@@ -38,11 +39,61 @@ class LiveDataViewModel @Inject constructor(
             is Change.FavouriteRemoved -> state.copy(
                 isFavourite = false
             )
-            is Change.RouteFiltersCleared -> state.copy(
-                isLoading = false,
-                liveDataResponse = null
+            is Change.RouteFiltersCleared -> state.copy()
+            is Change.RouteFilterChanged -> filterLiveDataResponse(state, change.route, change.enabled)
+        }
+    }
+
+    private fun filterLiveDataResponse(
+        state: State,
+        liveDataPresentationResponse: LiveDataPresentationResponse
+    ): LiveDataPresentationResponse {
+        return if (liveDataPresentationResponse is LiveDataPresentationResponse.Data &&
+            liveDataPresentationResponse.liveData.all { it is PredictionLiveData } &&
+            state.routeFilters.isNotEmpty()
+        ) {
+            val filtered = liveDataPresentationResponse
+                .liveData
+                .filterIsInstance<PredictionLiveData>()
+                .filter { state.routeFilters.contains(it.routeInfo.route) }
+            return liveDataPresentationResponse.copy(liveData = filtered)
+        } else {
+            liveDataPresentationResponse
+        }
+    }
+
+    private fun filterLiveDataResponse(
+        state: State,
+        route: String,
+        enabled: Boolean
+    ): State {
+        val amendedRouteFilters = state.routeFilters.toMutableSet()
+        if (enabled) {
+            amendedRouteFilters.add(route)
+        } else {
+            amendedRouteFilters.remove(route)
+        }
+        // TODO what happens when we retoggle a disabled filter? we will need to re fetch
+        if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
+            state.liveDataResponse.liveData.all { it is PredictionLiveData }
+        ) {
+            if (amendedRouteFilters.isEmpty()) {
+                return state.copy(
+                    filteredLiveDataResponse = state.liveDataResponse,
+                    routeFilters = amendedRouteFilters
+                )
+            }
+            val filtered = state.liveDataResponse.liveData
+                .filterIsInstance<PredictionLiveData>()
+                .filter { amendedRouteFilters.contains(it.routeInfo.route) }
+            return state.copy(
+                filteredLiveDataResponse = LiveDataPresentationResponse.Data(liveData = filtered),
+                routeFilters = amendedRouteFilters
             )
         }
+        return state.copy(
+            routeFilters = amendedRouteFilters
+        )
     }
 
     init {
@@ -95,6 +146,12 @@ class LiveDataViewModel @Inject constructor(
                     .map<Change> { Change.FavouriteRemoved }
             }
 
+        val routeFilterChanges = actions.ofType(Action.RouteFilterToggled::class.java)
+            .switchMap { action ->
+                Observable.just(true)
+                    .map { Change.RouteFilterChanged(action.route, action.enabled) }
+            }
+
         val clearRouteFiltersChange = actions.ofType(Action.ClearRouteFilters::class.java)
             .switchMap { action ->
                 liveDataUseCase.clearRouteFilters()
@@ -109,7 +166,8 @@ class LiveDataViewModel @Inject constructor(
                 getLiveDataChange,
                 saveFavouriteChange,
                 removeFavouriteChange,
-                clearRouteFiltersChange
+                clearRouteFiltersChange,
+                routeFilterChanges
             )
         )
 
@@ -122,7 +180,7 @@ class LiveDataViewModel @Inject constructor(
     private fun tryLogRouteDiscrepancies(
         state: State,
         change: Change.GetLiveData
-    ) {
+    ): RouteDiscrepancyState? {
         try {
             val serviceLocationResponse = state.serviceLocationResponse
             val liveDataResponse = change.liveDataResponse
@@ -140,8 +198,20 @@ class LiveDataViewModel @Inject constructor(
                     val routes = liveData.filterIsInstance<PredictionLiveData>()
                         .map { it.routeInfo.route }
                         .toSortedSet(AlphaNumericComparator)
-                    val discrepancies = routes.minus(knownRoutes)
-                    if (discrepancies.isNotEmpty()) {
+
+                    val routeDiscrepancyState = state.routeDiscrepancyState?.copy(
+                        knownRoutes = state.routeDiscrepancyState.knownRoutes.plus(knownRoutes).toSortedSet(),
+                        routes = state.routeDiscrepancyState.routes.plus(routes).toSortedSet()
+                    ) ?: RouteDiscrepancyState(
+                        knownRoutes = knownRoutes,
+                        routes = routes,
+                        loggedDiscrepancies = sortedSetOf()
+                    )
+
+                    val discrepancies = routeDiscrepancyState.routes
+                        .minus(routeDiscrepancyState.knownRoutes)
+                        .minus(routeDiscrepancyState.loggedDiscrepancies)
+                    return if (discrepancies.isNotEmpty()) {
                         // TODO log to firebase
                         Timber.d(
                             "Unknown route(s) %s found at %s(service=%s, id=%s, name=%s)",
@@ -149,11 +219,17 @@ class LiveDataViewModel @Inject constructor(
                             serviceLocation.service, serviceLocation.id,
                             serviceLocation.name
                         )
+                        routeDiscrepancyState.copy(
+                            loggedDiscrepancies = routeDiscrepancyState.loggedDiscrepancies.plus(discrepancies).toSortedSet()
+                        )
+                    } else {
+                        routeDiscrepancyState
                     }
                 }
             }
         } catch (e: Exception) {
             Timber.e(e, "Failed while logging route discrepancies")
         }
+        return state.routeDiscrepancyState
     }
 }

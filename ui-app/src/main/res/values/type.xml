@@ -27,6 +27,14 @@
         <item name="android:letterSpacing">0.0025</item>
     </style>
 
+    <style name="TextAppearance.DublinMapper.Button.RouteFilter" parent="TextAppearance.DublinMapper.Button">
+        <item name="fontFamily">@font/barlow_bold</item>
+        <item name="android:fontFamily">@font/barlow_bold</item>
+        <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
+        <item name="android:textSize">16.71sp</item>
+        <item name="android:letterSpacing">0.0125</item>
+    </style>
+
     <style name="TextAppearance.DublinMapper.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">@font/barlow_light</item>
         <item name="android:fontFamily">@font/barlow_light</item>
