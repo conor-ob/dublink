@@ -25,12 +25,13 @@ class LiveDataViewModel @Inject constructor(
                 isFavourite = null
             )
             is Change.GetLiveData -> {
-                tryLogRouteDiscrepancies(state, change)
-                state.copy(
+                val newState = state.copy(
                     liveDataResponse = change.liveDataResponse,
                     isFavourite = null,
-                    isLoading = false
+                    isLoading = false,
+                    routeDiscrepancyState = tryLogRouteDiscrepancies(state, change)
                 )
+                filterRoutes(newState, Change.RouteFilterChange(RouteFilterChangeType.NoChange))
             }
             is Change.FavouriteSaved -> state.copy(
                 isFavourite = true
@@ -38,10 +39,49 @@ class LiveDataViewModel @Inject constructor(
             is Change.FavouriteRemoved -> state.copy(
                 isFavourite = false
             )
+            is Change.RouteFilterChange -> filterRoutes(state, change)
         }
     }
 
-    fun bindActions() {
+    private fun filterRoutes(
+        state: State,
+        change: Change.RouteFilterChange
+    ): State {
+        val adjustedRouteFilters = state.routeFilters.toMutableSet()
+        when (change.type) {
+            is RouteFilterChangeType.Add -> adjustedRouteFilters.add(change.type.route)
+            is RouteFilterChangeType.Remove -> adjustedRouteFilters.remove(change.type.route)
+            is RouteFilterChangeType.Clear -> adjustedRouteFilters.clear()
+            is RouteFilterChangeType.NoChange -> { /* do nothing */ }
+        }
+        return if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
+            state.liveDataResponse.liveData.all { it is PredictionLiveData }
+        ) {
+            if (adjustedRouteFilters.isEmpty()) {
+                state.copy(
+                    filteredLiveDataResponse = state.liveDataResponse,
+                    routeFilters = adjustedRouteFilters
+                )
+            } else {
+                state.copy(
+                    filteredLiveDataResponse = LiveDataPresentationResponse.Data(
+                        liveData = state.liveDataResponse.liveData
+                            .filterIsInstance<PredictionLiveData>()
+                            .filter { adjustedRouteFilters.contains(it.routeInfo.route) }
+                    ),
+                    routeFilters = adjustedRouteFilters
+                )
+            }
+        } else {
+            state.copy(routeFilters = adjustedRouteFilters)
+        }
+    }
+
+    init {
+        bindActions()
+    }
+
+    private fun bindActions() {
         val getServiceLocationChange = actions.ofType(Action.GetServiceLocation::class.java)
             .switchMap { action ->
                 liveDataUseCase.getServiceLocation(
@@ -87,11 +127,20 @@ class LiveDataViewModel @Inject constructor(
                     .map<Change> { Change.FavouriteRemoved }
             }
 
+        val routeFilterIntents = actions
+            .ofType(Action.RouteFilterIntent::class.java)
+            .switchMap { intent ->
+                Observable.just(Change.RouteFilterChange(intent.type))
+            }
+
         val allActions = Observable.merge(
-            getServiceLocationChange,
-            getLiveDataChange,
-            saveFavouriteChange,
-            removeFavouriteChange
+            listOf(
+                getServiceLocationChange,
+                getLiveDataChange,
+                saveFavouriteChange,
+                removeFavouriteChange,
+                routeFilterIntents
+            )
         )
 
         disposables += allActions
@@ -100,14 +149,10 @@ class LiveDataViewModel @Inject constructor(
             .subscribe(state::postValue, Timber::e)
     }
 
-    fun unbindActions() {
-        disposables.clear()
-    }
-
     private fun tryLogRouteDiscrepancies(
         state: State,
         change: Change.GetLiveData
-    ) {
+    ): RouteDiscrepancyState? {
         try {
             val serviceLocationResponse = state.serviceLocationResponse
             val liveDataResponse = change.liveDataResponse
@@ -125,8 +170,20 @@ class LiveDataViewModel @Inject constructor(
                     val routes = liveData.filterIsInstance<PredictionLiveData>()
                         .map { it.routeInfo.route }
                         .toSortedSet(AlphaNumericComparator)
-                    val discrepancies = routes.minus(knownRoutes)
-                    if (discrepancies.isNotEmpty()) {
+
+                    val routeDiscrepancyState = state.routeDiscrepancyState?.copy(
+                        knownRoutes = state.routeDiscrepancyState.knownRoutes.plus(knownRoutes).toSortedSet(),
+                        routes = state.routeDiscrepancyState.routes.plus(routes).toSortedSet()
+                    ) ?: RouteDiscrepancyState(
+                        knownRoutes = knownRoutes,
+                        routes = routes,
+                        loggedDiscrepancies = sortedSetOf()
+                    )
+
+                    val discrepancies = routeDiscrepancyState.routes
+                        .minus(routeDiscrepancyState.knownRoutes)
+                        .minus(routeDiscrepancyState.loggedDiscrepancies)
+                    return if (discrepancies.isNotEmpty()) {
                         // TODO log to firebase
                         Timber.d(
                             "Unknown route(s) %s found at %s(service=%s, id=%s, name=%s)",
@@ -134,11 +191,17 @@ class LiveDataViewModel @Inject constructor(
                             serviceLocation.service, serviceLocation.id,
                             serviceLocation.name
                         )
+                        routeDiscrepancyState.copy(
+                            loggedDiscrepancies = routeDiscrepancyState.loggedDiscrepancies.plus(discrepancies).toSortedSet()
+                        )
+                    } else {
+                        routeDiscrepancyState
                     }
                 }
             }
         } catch (e: Exception) {
             Timber.e(e, "Failed while logging route discrepancies")
         }
+        return state.routeDiscrepancyState
     }
 }

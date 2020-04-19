@@ -52,24 +52,6 @@ class LiveDataUseCase @Inject constructor(
             .flatMap { getLiveData(service, locationId) }
     }
 
-//    fun getGroupedLiveDataStream(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
-//        return Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-//            .flatMap { getGroupedLiveData(serviceLocation) }
-//    }
-//
-//    private fun getGroupedLiveData(serviceLocation: ServiceLocation): Observable<LiveDataResponse> {
-//        return getLiveData(serviceLocation).map { liveDataResponse ->
-//            if (liveDataResponse is LiveDataResponse.Complete) {
-//                LiveDataResponse.Grouped(
-//                    serviceLocation,
-//                    LiveDataGrouper.groupLiveData(liveDataResponse.liveData)
-//                )
-//            } else {
-//                liveDataResponse
-//            }
-//        }
-//    }
-
     private fun getLiveData(
         service: Service,
         locationId: String

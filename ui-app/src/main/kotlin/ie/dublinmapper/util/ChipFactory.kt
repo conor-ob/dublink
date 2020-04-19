@@ -24,6 +24,20 @@ object ChipFactory {
         }
     }
 
+    fun newRouteFilterChip(context: Context, pair: Pair<Operator, String>): Chip {
+        val (operator, route) = pair
+        val (textColour, backgroundColour) = mapColour(operator, route)
+        return Chip(context).apply {
+            setChipDrawable(ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_DublinMapper_RouteFilterChip))
+            setChipBackgroundColorResource(backgroundColour)
+            setTextAppearanceResource(R.style.TextAppearance_DublinMapper_Button_RouteFilter)
+            setTextColor(ColorStateList.valueOf(context.resources.getColor(textColour)))
+            text = route
+            isAllCaps = false
+            elevation = 4f.dipToPx(context)
+        }
+    }
+
     fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
         return when (operator) {
             Operator.AIRCOACH -> Pair(android.R.color.white, R.color.aircoachOrange)

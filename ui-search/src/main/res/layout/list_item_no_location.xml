@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/search_message_enable_location"
+        android:textAllCaps="false"
         style="@style/Widget.MaterialComponents.Button.TextButton" />
 
 </FrameLayout>

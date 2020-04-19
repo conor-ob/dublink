@@ -26,9 +26,9 @@
         <item name="colorSecondaryVariant">@color/dublin_mapper_blue_saturated</item>
         <item name="colorOnSecondary">@color/grey_900</item>
 
-        <item name="android:colorBackground">@color/grey_900</item>
+        <item name="android:colorBackground">@color/grey_950</item>
         <item name="colorOnBackground">@android:color/white</item>
-        <item name="colorSurface">@color/grey_850</item>
+        <item name="colorSurface">@color/grey_900</item>
         <item name="colorOnSurface">@android:color/white</item>
         <item name="android:statusBarColor">?colorSurface</item>
 
