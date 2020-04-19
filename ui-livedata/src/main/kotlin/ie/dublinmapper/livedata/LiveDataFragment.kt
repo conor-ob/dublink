@@ -177,6 +177,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
             for (route in sortedRouteGroups) {
                 val routeFilterChip = ChipFactory.newRouteFilterChip(requireContext(), route)
+
+                routeFilterChip.isChecked = state.routeFilters.contains(route.second)
+
                 routeFilterChip.setOnCheckedChangeListener { buttonView, isChecked ->
                     val checkedChipIds = routeFilters.checkedChipIds
                     if (checkedChipIds.isNullOrEmpty()) {
