@@ -25,13 +25,13 @@ class LiveDataViewModel @Inject constructor(
                 isFavourite = null
             )
             is Change.GetLiveData -> {
-                state.copy(
+                val newState = state.copy(
                     liveDataResponse = change.liveDataResponse,
-                    filteredLiveDataResponse = filterLiveDataResponse(state, change.liveDataResponse),
                     isFavourite = null,
                     isLoading = false,
                     routeDiscrepancyState = tryLogRouteDiscrepancies(state, change)
                 )
+                filterRoutes(newState, Change.RouteFilterChange(RouteFilterChangeType.NoChange))
             }
             is Change.FavouriteSaved -> state.copy(
                 isFavourite = true
@@ -39,61 +39,42 @@ class LiveDataViewModel @Inject constructor(
             is Change.FavouriteRemoved -> state.copy(
                 isFavourite = false
             )
-            is Change.RouteFiltersCleared -> state.copy()
-            is Change.RouteFilterChanged -> filterLiveDataResponse(state, change.route, change.enabled)
+            is Change.RouteFilterChange -> filterRoutes(state, change)
         }
     }
 
-    private fun filterLiveDataResponse(
+    private fun filterRoutes(
         state: State,
-        liveDataPresentationResponse: LiveDataPresentationResponse
-    ): LiveDataPresentationResponse {
-        return if (liveDataPresentationResponse is LiveDataPresentationResponse.Data &&
-            liveDataPresentationResponse.liveData.all { it is PredictionLiveData } &&
-            state.routeFilters.isNotEmpty()
-        ) {
-            val filtered = liveDataPresentationResponse
-                .liveData
-                .filterIsInstance<PredictionLiveData>()
-                .filter { state.routeFilters.contains(it.routeInfo.route) }
-            return liveDataPresentationResponse.copy(liveData = filtered)
-        } else {
-            liveDataPresentationResponse
-        }
-    }
-
-    private fun filterLiveDataResponse(
-        state: State,
-        route: String,
-        enabled: Boolean
+        change: Change.RouteFilterChange
     ): State {
-        val amendedRouteFilters = state.routeFilters.toMutableSet()
-        if (enabled) {
-            amendedRouteFilters.add(route)
-        } else {
-            amendedRouteFilters.remove(route)
+        val adjustedRouteFilters = state.routeFilters.toMutableSet()
+        when (change.type) {
+            is RouteFilterChangeType.Add -> adjustedRouteFilters.add(change.type.route)
+            is RouteFilterChangeType.Remove -> adjustedRouteFilters.remove(change.type.route)
+            is RouteFilterChangeType.Clear -> adjustedRouteFilters.clear()
+            is RouteFilterChangeType.NoChange -> { /* do nothing */ }
         }
-        // TODO what happens when we retoggle a disabled filter? we will need to re fetch
-        if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
+        return if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
             state.liveDataResponse.liveData.all { it is PredictionLiveData }
         ) {
-            if (amendedRouteFilters.isEmpty()) {
-                return state.copy(
+            if (adjustedRouteFilters.isEmpty()) {
+                state.copy(
                     filteredLiveDataResponse = state.liveDataResponse,
-                    routeFilters = amendedRouteFilters
+                    routeFilters = adjustedRouteFilters
+                )
+            } else {
+                state.copy(
+                    filteredLiveDataResponse = LiveDataPresentationResponse.Data(
+                        liveData = state.liveDataResponse.liveData
+                            .filterIsInstance<PredictionLiveData>()
+                            .filter { adjustedRouteFilters.contains(it.routeInfo.route) }
+                    ),
+                    routeFilters = adjustedRouteFilters
                 )
             }
-            val filtered = state.liveDataResponse.liveData
-                .filterIsInstance<PredictionLiveData>()
-                .filter { amendedRouteFilters.contains(it.routeInfo.route) }
-            return state.copy(
-                filteredLiveDataResponse = LiveDataPresentationResponse.Data(liveData = filtered),
-                routeFilters = amendedRouteFilters
-            )
+        } else {
+            state.copy(routeFilters = adjustedRouteFilters)
         }
-        return state.copy(
-            routeFilters = amendedRouteFilters
-        )
     }
 
     init {
@@ -146,18 +127,10 @@ class LiveDataViewModel @Inject constructor(
                     .map<Change> { Change.FavouriteRemoved }
             }
 
-        val routeFilterChanges = actions.ofType(Action.RouteFilterToggled::class.java)
-            .switchMap { action ->
-                Observable.just(true)
-                    .map { Change.RouteFilterChanged(action.route, action.enabled) }
-            }
-
-        val clearRouteFiltersChange = actions.ofType(Action.ClearRouteFilters::class.java)
-            .switchMap { action ->
-                liveDataUseCase.clearRouteFilters()
-                    .subscribeOn(scheduler.io)
-                    .observeOn(scheduler.ui)
-                    .map<Change> { Change.RouteFiltersCleared }
+        val routeFilterIntents = actions
+            .ofType(Action.RouteFilterIntent::class.java)
+            .switchMap { intent ->
+                Observable.just(Change.RouteFilterChange(intent.type))
             }
 
         val allActions = Observable.merge(
@@ -166,8 +139,7 @@ class LiveDataViewModel @Inject constructor(
                 getLiveDataChange,
                 saveFavouriteChange,
                 removeFavouriteChange,
-                clearRouteFiltersChange,
-                routeFilterChanges
+                routeFilterIntents
             )
         )
 

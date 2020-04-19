@@ -29,23 +29,28 @@ sealed class Action : BaseAction {
         val serviceLocationService: Service
     ) : Action()
 
-    data class RouteFilterToggled(
-        val route: String,
-        val enabled: Boolean
+    data class RouteFilterIntent(
+        val type: RouteFilterChangeType
     ) : Action()
+}
 
-    object ClearRouteFilters : Action()
-    object CollapseRouteFilters : Action()
+sealed class RouteFilterChangeType {
+    data class Add(val route: String) : RouteFilterChangeType()
+    data class Remove(val route: String): RouteFilterChangeType()
+    object Clear : RouteFilterChangeType()
+    object NoChange : RouteFilterChangeType()
 }
 
 sealed class Change {
     data class GetServiceLocation(val serviceLocationResponse: ServiceLocationPresentationResponse) : Change()
     data class GetLiveData(val liveDataResponse: LiveDataPresentationResponse) : Change()
-    data class RouteFilterChanged(val route: String, val enabled: Boolean) : Change()
 
     object FavouriteSaved : Change()
     object FavouriteRemoved : Change()
-    object RouteFiltersCleared : Change()
+
+    data class RouteFilterChange(
+        val type: RouteFilterChangeType
+    ) : Change()
 }
 
 data class State(

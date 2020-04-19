@@ -99,6 +99,11 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
         }
+
+        clearRouteFilters.setOnClickListener {
+            viewModel.dispatch(Action.RouteFilterIntent(RouteFilterChangeType.Clear))
+            routeFilters.clearCheck()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -180,12 +185,19 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                         clearRouteFilters.visibility = View.VISIBLE
                     }
 
-                    viewModel.dispatch(
-                        Action.RouteFilterToggled(
-                            route = buttonView.text.toString(),
-                            enabled = isChecked
+                    if (isChecked) {
+                        viewModel.dispatch(
+                            Action.RouteFilterIntent(
+                                RouteFilterChangeType.Add(buttonView.text.toString())
+                            )
                         )
-                    )
+                    } else {
+                        viewModel.dispatch(
+                            Action.RouteFilterIntent(
+                                RouteFilterChangeType.Remove(buttonView.text.toString())
+                            )
+                        )
+                    }
                 }
                 routeFilters.addView(routeFilterChip)
             }
