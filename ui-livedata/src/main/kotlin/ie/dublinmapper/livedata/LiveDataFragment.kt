@@ -162,6 +162,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             Toast.makeText(requireContext(), "Removed from Favourites", Toast.LENGTH_SHORT).show()
         }
 
+        if (state.routeFilters.isEmpty()) {
+            clearRouteFilters.visibility = View.INVISIBLE
+        } else {
+            clearRouteFilters.visibility = View.VISIBLE
+        }
+
         if (state.serviceLocationResponse != null &&
             state.serviceLocationResponse is ServiceLocationPresentationResponse.Data &&
             state.serviceLocationResponse.serviceLocation is StopLocation &&
