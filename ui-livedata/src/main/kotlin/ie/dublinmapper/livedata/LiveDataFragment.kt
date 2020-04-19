@@ -90,11 +90,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 //        collapseRouteFilters.setOnClickListener {
 //            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 //        }
-
-        val cont = container
-        container.viewTreeObserver.addOnGlobalLayoutListener {
-            bottomSheetBehavior.peekHeight = cont.measuredHeight
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -105,6 +100,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             }
         )
     }
+
+    private val listener = ViewTreeObserver.OnGlobalLayoutListener { bottomSheetBehavior.peekHeight = container.measuredHeight }
 
     override fun onResume() {
         super.onResume()
@@ -121,6 +118,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 serviceLocationService = args.serviceLocationService
             )
         )
+        container.viewTreeObserver.addOnGlobalLayoutListener(listener)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        container.viewTreeObserver.removeOnGlobalLayoutListener(listener)
     }
 
     private fun getSubtitle() = when (val service = args.serviceLocationService) {

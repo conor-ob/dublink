@@ -142,7 +142,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:layout_marginStart="@dimen/padding_l"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="32dp"
                 app:chipSpacingHorizontal="8dp"
                 app:chipSpacingVertical="12dp"
                 app:singleLine="false" />
