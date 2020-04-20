@@ -1,7 +1,6 @@
 package ie.dublinmapper.model
 
 import android.content.res.ColorStateList
-import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
