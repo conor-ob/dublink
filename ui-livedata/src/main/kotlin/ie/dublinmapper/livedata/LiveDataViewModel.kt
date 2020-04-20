@@ -47,7 +47,7 @@ class LiveDataViewModel @Inject constructor(
         state: State,
         change: Change.RouteFilterChange
     ): State {
-        val adjustedRouteFilters = state.routeFilters.toMutableSet()
+        val adjustedRouteFilters = state.activeRouteFilters.toMutableSet()
         when (change.type) {
             is RouteFilterChangeType.Add -> adjustedRouteFilters.add(change.type.route)
             is RouteFilterChangeType.Remove -> adjustedRouteFilters.remove(change.type.route)
@@ -60,7 +60,7 @@ class LiveDataViewModel @Inject constructor(
             if (adjustedRouteFilters.isEmpty()) {
                 state.copy(
                     filteredLiveDataResponse = state.liveDataResponse,
-                    routeFilters = adjustedRouteFilters
+                    activeRouteFilters = adjustedRouteFilters
                 )
             } else {
                 state.copy(
@@ -69,11 +69,11 @@ class LiveDataViewModel @Inject constructor(
                             .filterIsInstance<PredictionLiveData>()
                             .filter { adjustedRouteFilters.contains(it.routeInfo.route) }
                     ),
-                    routeFilters = adjustedRouteFilters
+                    activeRouteFilters = adjustedRouteFilters
                 )
             }
         } else {
-            state.copy(routeFilters = adjustedRouteFilters)
+            state.copy(activeRouteFilters = adjustedRouteFilters)
         }
     }
 

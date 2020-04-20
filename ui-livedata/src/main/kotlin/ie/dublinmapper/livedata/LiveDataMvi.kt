@@ -58,7 +58,7 @@ data class State(
     val serviceLocationResponse: ServiceLocationPresentationResponse? = null,
     val liveDataResponse: LiveDataPresentationResponse? = null,
     val filteredLiveDataResponse: LiveDataPresentationResponse? = null,
-    val routeFilters: Set<String> = emptySet(),
+    val activeRouteFilters: Set<String> = emptySet(),
     val isFavourite: Boolean? = null,
     val routeDiscrepancyState: RouteDiscrepancyState? = null
 ) : BaseState

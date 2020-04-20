@@ -32,9 +32,11 @@ object ChipFactory {
             setChipBackgroundColorResource(backgroundColour)
             setTextAppearanceResource(R.style.TextAppearance_DublinMapper_Button_RouteFilter)
             setTextColor(ColorStateList.valueOf(context.resources.getColor(textColour)))
+            setChipStrokeColorResource(android.R.color.white)
             text = route
             isAllCaps = false
             elevation = 4f.dipToPx(context)
+            isCheckedIconVisible = false
         }
     }
 

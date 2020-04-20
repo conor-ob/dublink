@@ -1,6 +1,9 @@
 package ie.dublinmapper.domain.model
 
+import io.rtpi.api.Operator
 import io.rtpi.api.ServiceLocation
+import io.rtpi.api.StopLocation
+import io.rtpi.util.AlphaNumericComparator
 
 private const val favourite = "key_favourite"
 private const val customName = "key_custom_name"
@@ -25,3 +28,14 @@ fun ServiceLocation.setOrder(order: Int) {
 }
 
 fun ServiceLocation.getOrder(): Int = properties[customOrder] as? Int? ?: -1
+
+fun StopLocation.getSortedRoutes(): List<Pair<Operator, String>> =
+    routeGroups.flatMap { routeGroup ->
+        routeGroup.routes.map { route ->
+            routeGroup.operator to route
+        }
+    }.sortedWith(
+        Comparator { o1, o2 ->
+            AlphaNumericComparator.compare(o1.second, o2.second)
+        }
+    )

@@ -6,12 +6,12 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
+        android:id="@+id/live_data_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/live_data_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:contentInsetLeft="0dp"
@@ -45,13 +45,13 @@
     </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/loader"
+            android:id="@+id/live_data_loader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/liveDataList"
+            android:id="@+id/live_data_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
@@ -60,7 +60,7 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/routeFilterFab"
+        android:id="@+id/live_data_button_expand_route_filters"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -71,7 +71,7 @@
         app:srcCompat="@drawable/ic_filter" />
 
     <FrameLayout
-        android:id="@+id/routeFilterBottomSheet"
+        android:id="@+id/live_data_bottom_sheet_route_filters"
         android:name="ie.dublinmapper.livedata.RouteFilterFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -83,11 +83,10 @@
         android:elevation="8dp"
         android:focusable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        app:behavior_hideable="true"
-        tools:layout="@layout/bottom_sheet_route_filters">
+        app:behavior_hideable="true">
 
         <LinearLayout
-            android:id="@+id/container"
+            android:id="@+id/live_data_bottom_sheet_view_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -102,7 +101,7 @@
                 android:paddingEnd="@dimen/padding_xl">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/clearRouteFilters"
+                    android:id="@+id/live_data_button_clear_route_filters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Clear"
@@ -127,7 +126,7 @@
                     android:layout_weight="50" />
 
                 <ImageButton
-                    android:id="@+id/collapseRouteFilters"
+                    android:id="@+id/live_data_button_collapse_route_filters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="?selectableItemBackgroundBorderless"
@@ -146,7 +145,7 @@
                 app:justifyContent="center">
 
                 <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/routeFilters"
+                    android:id="@+id/live_data_chip_group_route_filters"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="@dimen/padding_xl"
