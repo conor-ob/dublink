@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/live_data_bottom_sheet_route_filters"
+    android:name="ie.dublinmapper.livedata.RouteFilterFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/route_filters_background"
+    android:backgroundTint="?attr/colorSurface"
+    android:clickable="true"
+    android:elevation="8dp"
+    android:focusable="true">
+
+    <LinearLayout
+        android:id="@+id/live_data_bottom_sheet_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/padding_xs"
+            android:paddingBottom="@dimen/padding_xs"
+            android:paddingStart="@dimen/padding_xs"
+            android:paddingEnd="@dimen/padding_xl">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/live_data_button_clear_route_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                android:visibility="invisible"
+                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="30"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="@style/TextAppearance.DublinMapper.Headline6"
+                android:text="Filters"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="50" />
+
+            <ImageButton
+                android:id="@+id/live_data_button_collapse_route_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?selectableItemBackgroundBorderless"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_collapse"/>
+
+        </LinearLayout>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:flexWrap="wrap"
+            app:alignItems="stretch"
+            app:alignContent="stretch"
+            app:justifyContent="center">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/live_data_chip_group_route_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/padding_xl"
+                android:paddingEnd="@dimen/padding_xl"
+                android:paddingTop="@dimen/padding_xxs"
+                android:paddingBottom="@dimen/padding_xxl"
+                android:visibility="gone"
+                app:chipSpacingHorizontal="8dp"
+                app:chipSpacingVertical="12dp"
+                app:singleLine="false" />
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

@@ -18,12 +18,12 @@ import ie.dublinmapper.domain.model.getSortedRoutes
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.setVisibility
 import ie.dublinmapper.util.ChipFactory
-import ie.dublinmapper.util.dipToPx
 import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import kotlinx.android.synthetic.main.fragment_livedata.*
+import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
