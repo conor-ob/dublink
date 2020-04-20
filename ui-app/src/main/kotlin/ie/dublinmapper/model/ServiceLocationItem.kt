@@ -89,12 +89,6 @@ class ServiceLocationItem(
                 viewHolder.routes.visibility = View.GONE
                 viewHolder.routesDivider.visibility = View.GONE
             } else {
-                val dip = 4f
-                val px = TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    dip,
-                    viewHolder.itemView.resources.displayMetrics
-                )
                 viewHolder.routes.removeAllViewsInLayout()
                 val sortedRouteGroups = routeGroups
                     .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
