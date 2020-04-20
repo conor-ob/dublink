@@ -32,6 +32,10 @@ sealed class Action : BaseAction {
     data class RouteFilterIntent(
         val type: RouteFilterChangeType
     ) : Action()
+
+    data class RouteFilterSheetMoved(
+        val state: Int
+    ) : Action()
 }
 
 sealed class RouteFilterChangeType {
@@ -51,6 +55,10 @@ sealed class Change {
     data class RouteFilterChange(
         val type: RouteFilterChangeType
     ) : Change()
+
+    class RouteFilterSheetMoved(
+        val state: Int?
+    ) : Change()
 }
 
 data class State(
@@ -60,7 +68,8 @@ data class State(
     val filteredLiveDataResponse: LiveDataPresentationResponse? = null,
     val activeRouteFilters: Set<String> = emptySet(),
     val isFavourite: Boolean? = null,
-    val routeDiscrepancyState: RouteDiscrepancyState? = null
+    val routeDiscrepancyState: RouteDiscrepancyState? = null,
+    val routeFilterState: Int? = null
 ) : BaseState
 
 data class RouteDiscrepancyState(

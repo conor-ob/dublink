@@ -40,6 +40,9 @@ class LiveDataViewModel @Inject constructor(
                 isFavourite = false
             )
             is Change.RouteFilterChange -> filterRoutes(state, change)
+            is Change.RouteFilterSheetMoved -> state.copy(
+                routeFilterState = change.state
+            )
         }
     }
 
@@ -129,9 +132,11 @@ class LiveDataViewModel @Inject constructor(
 
         val routeFilterIntents = actions
             .ofType(Action.RouteFilterIntent::class.java)
-            .switchMap { intent ->
-                Observable.just(Change.RouteFilterChange(intent.type))
-            }
+            .switchMap { intent -> Observable.just(Change.RouteFilterChange(intent.type)) }
+
+        val bottomSheetIntents = actions
+            .ofType(Action.RouteFilterSheetMoved::class.java)
+            .switchMap { intent -> Observable.just(Change.RouteFilterSheetMoved(intent.state)) }
 
         val allActions = Observable.merge(
             listOf(
@@ -139,7 +144,8 @@ class LiveDataViewModel @Inject constructor(
                 getLiveDataChange,
                 saveFavouriteChange,
                 removeFavouriteChange,
-                routeFilterIntents
+                routeFilterIntents,
+                bottomSheetIntents
             )
         )
 

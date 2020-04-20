@@ -149,7 +149,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private fun createRouteFilterView(view: View) {
         bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.live_data_bottom_sheet_route_filters))
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+            addBottomSheetCallback(bottomSheetCallback)
+        }
         live_data_button_expand_route_filters.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
@@ -165,7 +168,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             live_data_chip_group_route_filters.clearCheck()
         }
         routeFilterBottomSheetLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
-            bottomSheetBehavior.setPeekHeight(live_data_bottom_sheet_view_container.measuredHeight, true)
+            bottomSheetBehavior.setPeekHeight(live_data_bottom_sheet_view_container.measuredHeight)
         }
     }
 
@@ -212,10 +215,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                         .newRouteFilterChip(requireContext(), operator to route)
                         .apply {
                             isChecked = state.activeRouteFilters.contains(route)
-                            chipStrokeWidth = if (state.activeRouteFilters.contains(route)) {
-                                3f.dipToPx(requireContext())
+                            alpha = if (state.activeRouteFilters.contains(route)) {
+                                1.0f
                             } else {
-                                0f
+                                0.4f
                             }
                             setOnCheckedChangeListener(routeFilterClickedListener)
                         }
@@ -224,14 +227,17 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                 live_data_chip_group_route_filters.visibility = View.VISIBLE
             }
         }
+        if (state.routeFilterState != null) {
+            bottomSheetBehavior.state = state.routeFilterState
+        }
     }
 
     private val routeFilterClickedListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
         (buttonView as Chip).apply {
-            chipStrokeWidth = if (isChecked) {
-                3f.dipToPx(requireContext())
+            alpha = if (isChecked) {
+                1.0f
             } else {
-                0f
+                0.33f
             }
         }
 
@@ -254,6 +260,22 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                     RouteFilterChangeType.Remove(buttonView.text.toString())
                 )
             )
+        }
+    }
+
+    private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
+
+        override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            // nothing
+        }
+
+        override fun onStateChanged(bottomSheet: View, newState: Int) {
+            when (newState) {
+                BottomSheetBehavior.STATE_HIDDEN -> viewModel.dispatch(Action.RouteFilterSheetMoved(BottomSheetBehavior.STATE_HIDDEN))
+                BottomSheetBehavior.STATE_COLLAPSED -> viewModel.dispatch(Action.RouteFilterSheetMoved(BottomSheetBehavior.STATE_COLLAPSED))
+                BottomSheetBehavior.STATE_EXPANDED -> viewModel.dispatch(Action.RouteFilterSheetMoved(BottomSheetBehavior.STATE_EXPANDED))
+                else -> {}
+            }
         }
     }
 
