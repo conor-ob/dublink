@@ -3,7 +3,9 @@ package ie.dublinmapper.database
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
+import ie.dublinmapper.domain.model.setCustomName
 import ie.dublinmapper.domain.model.setFavourite
+import ie.dublinmapper.domain.model.setSortIndex
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.rtpi.api.Coordinate
@@ -78,8 +80,8 @@ class SqlDelightServiceLocationLocalResource(
             .mapToList()
 
         val favouritesObservable = database.favouriteLocationQueries
-            .selectAllByService(service) { _, _, locationId, _ ->
-                toFavouriteEntity(locationId)
+            .selectAllByService(service) { _, _, locationId, name, sortIndex ->
+                toFavouriteEntity(locationId, name, sortIndex)
             }
             .asObservable()
             .mapToList()
@@ -162,17 +164,21 @@ class SqlDelightServiceLocationLocalResource(
         }.associateBy { it.id }
 
         favouriteEntities.forEach {
-            serviceLocations[it.locationId]?.setFavourite()
+            serviceLocations[it.locationId]?.let { serviceLocation ->
+                serviceLocation.setFavourite()
+//                serviceLocation.setCustomName(it.name)
+                serviceLocation.setSortIndex(it.sortIndex)
+            }
         }
 
         return serviceLocations.values.toList()
     }
 
     private fun toFavouriteEntity(
-        locationId: String
-    ) = FavouriteEntity(
-        locationId
-    )
+        locationId: String,
+        name: String,
+        sortIndex: Long
+    ) = FavouriteEntity(locationId, name, sortIndex)
 
     private fun toServiceEntity(
         locationId: String,
@@ -370,9 +376,9 @@ data class LocationEntity(
 )
 
 data class FavouriteEntity(
-    val locationId: String
-//    val name: String,
-//    val service: Service
+    val locationId: String,
+    val name: String,
+    val sortIndex: Long
 )
 
 interface ServiceEntity {

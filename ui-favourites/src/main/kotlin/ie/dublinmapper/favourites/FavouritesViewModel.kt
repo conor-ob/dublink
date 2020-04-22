@@ -2,10 +2,12 @@ package ie.dublinmapper.favourites
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.domain.internet.InternetStatusChangeListener
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import io.rtpi.api.ServiceLocation
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
@@ -33,7 +35,28 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    fun bindActions() {
+    private fun reorder(
+        favouritesWithLiveData: List<LiveDataPresentationResponse>?,
+        serviceLocation: ServiceLocation
+    ): List<LiveDataPresentationResponse>? {
+        if (favouritesWithLiveData == null) {
+            return favouritesWithLiveData
+        } else {
+            val thing = favouritesWithLiveData.indexOfFirst { it.serviceLocation == serviceLocation }
+
+            val copy = favouritesWithLiveData.toMutableList()
+
+            val removed = copy.removeAt(thing)
+
+            return listOf(removed).plus(copy)
+        }
+    }
+
+    init {
+        bindActions()
+    }
+
+    private fun bindActions() {
         val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
             .switchMap { action ->
                 useCase.getFavouritesWithLiveData(action.showLoading)
@@ -55,8 +78,19 @@ class FavouritesViewModel @Inject constructor(
                     .map<Change> { Change.InternetStatusChange(it) }
             }
 
+        val favouriteMovedToTopActions = actions.ofType(Action.FavouriteMovedToTop::class.java)
+            .switchMap { action ->
+                useCase.nameToBeDetermined(action.serviceLocation)
+                    .flatMap { useCase.getFavouritesWithLiveData(showLoading = false) }
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Change> { Change.FavouritesWithLiveData(it) }
+                    .throttleLatest(500L, TimeUnit.MILLISECONDS)
+            }
+
         val allActions = Observable.merge(
             getFavouritesWithLiveDataChange,
+            favouriteMovedToTopActions,
             getInternetStatusChange
         )
 
@@ -64,9 +98,5 @@ class FavouritesViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
-    }
-
-    fun unbindActions() {
-        disposables.clear()
     }
 }

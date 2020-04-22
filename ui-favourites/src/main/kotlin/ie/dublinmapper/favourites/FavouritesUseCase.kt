@@ -1,7 +1,8 @@
 package ie.dublinmapper.favourites
 
-import ie.dublinmapper.domain.model.getOrder
+import ie.dublinmapper.domain.model.getSortIndex
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LiveDataResponse
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
+    private val favouriteRepository: FavouriteRepository,
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val liveDataRepository: LiveDataRepository,
     private val permissionChecker: PermissionChecker,
@@ -36,15 +38,16 @@ class FavouritesUseCase @Inject constructor(
                     getFavouritesWithLiveData(
                         showLoading = showLoading,
                         comparator = Comparator { s1, s2 ->
-                            s1.coordinate.haversine(coordinate)
-                                .compareTo(s2.coordinate.haversine(coordinate))
+                            s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
                         }
                     )
                 }
         } else {
             return getFavouritesWithLiveData(
                 showLoading = showLoading,
-                comparator = Comparator { s1, s2 -> s1.getOrder().compareTo(s2.getOrder()) }
+                comparator = Comparator { s1, s2 ->
+                    s1.getSortIndex().compareTo(s2.getSortIndex())
+                }
             )
         }
     }
@@ -63,6 +66,7 @@ class FavouritesUseCase @Inject constructor(
                         .sortedWith(comparator)
                         .mapIndexed { index: Int, serviceLocation: ServiceLocation ->
                             if (index < limit) {
+                                // TODO this may temporarily cause blank screen when navigating back to favourites
                                 if (showLoading) {
                                     getGroupedLiveData(serviceLocation)
                                         .startWith(
@@ -109,6 +113,14 @@ class FavouritesUseCase @Inject constructor(
                     }
                 }
             }
+    }
+
+    fun nameToBeDetermined(serviceLocation: ServiceLocation): Observable<Boolean> {
+        return Observable.fromCallable {
+            favouriteRepository.nameToBeDetermined(serviceLocation)
+            serviceLocationRepository.clearAllCaches()
+            return@fromCallable true
+        }
     }
 }
 

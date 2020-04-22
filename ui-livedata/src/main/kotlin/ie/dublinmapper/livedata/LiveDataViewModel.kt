@@ -5,6 +5,7 @@ import com.ww.roxie.Reducer
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
@@ -75,6 +76,12 @@ class LiveDataViewModel @Inject constructor(
                     activeRouteFilters = adjustedRouteFilters
                 )
             }
+        } else if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
+            state.liveDataResponse.liveData.all { it is DockLiveData }) {
+            state.copy(
+                filteredLiveDataResponse = state.liveDataResponse,
+                activeRouteFilters = adjustedRouteFilters
+            )
         } else {
             state.copy(activeRouteFilters = adjustedRouteFilters)
         }

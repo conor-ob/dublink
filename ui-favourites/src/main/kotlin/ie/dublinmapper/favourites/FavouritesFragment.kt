@@ -2,6 +2,7 @@ package ie.dublinmapper.favourites
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
@@ -49,6 +50,24 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
                 (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
+//        adapter?.setOnItemLongClickListener { item, itemView ->
+//            val serviceLocation = item.extractServiceLocation()
+//            if (serviceLocation != null) {
+//                val popup = PopupMenu(requireContext(), itemView)
+//                popup.inflate(R.menu.favourite_quick_edit_menu)
+//                popup.setOnMenuItemClickListener { menuItem ->
+//                    if (menuItem.itemId == R.id.move_to_top) {
+//                        popup.dismiss()
+//                        viewModel.dispatch(Action.FavouriteMovedToTop(serviceLocation))
+//                        return@setOnMenuItemClickListener true
+//                    }
+//                    return@setOnMenuItemClickListener false
+//                }
+//                popup.show()
+//                return@setOnItemLongClickListener true
+//            }
+//            return@setOnItemLongClickListener false
+//        }
         view.favourites_list.adapter = adapter
         view.favourites_list.setHasFixedSize(true)
         view.favourites_list.layoutManager = LinearLayoutManager(requireContext())
@@ -65,14 +84,13 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.bindActions()
-        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading))
+        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.unbindActions()
+        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
     }
 
     private fun renderState(state: State) {

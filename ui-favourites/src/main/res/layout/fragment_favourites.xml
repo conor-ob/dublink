@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/favourites_toolbar_title"
-            app:menu="@menu/menu_settings"/>
+            app:menu="@menu/menu_favourites"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

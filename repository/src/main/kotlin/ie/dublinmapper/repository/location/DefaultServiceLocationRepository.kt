@@ -9,9 +9,9 @@ import io.reactivex.Observable
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 
-class DefaultServiceLocationRepository<T : ServiceLocation>(
+class DefaultServiceLocationRepository(
     private val service: Service,
-    private val serviceLocationStore: StoreRoom<List<T>, Service>
+    private val serviceLocationStore: StoreRoom<List<ServiceLocation>, Service>
 ) : ServiceLocationRepository {
 
     override fun get(): Observable<ServiceLocationResponse> {

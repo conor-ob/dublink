@@ -7,7 +7,7 @@ import io.rtpi.util.AlphaNumericComparator
 
 private const val favourite = "key_favourite"
 private const val customName = "key_custom_name"
-private const val customOrder = "key_custom_order"
+private const val customSortIndex = "key_custom_sort_index"
 
 fun ServiceLocation.isFavourite(): Boolean = properties[favourite] as? Boolean? ?: false
 
@@ -23,11 +23,11 @@ fun ServiceLocation.getCustomName(): String? = properties[customName] as? String
 
 fun ServiceLocation.getName(): String = properties[customName] as? String? ?: name
 
-fun ServiceLocation.setOrder(order: Int) {
-    properties[customOrder] = order
+fun ServiceLocation.setSortIndex(sortIndex: Long) {
+    properties[customSortIndex] = sortIndex
 }
 
-fun ServiceLocation.getOrder(): Int = properties[customOrder] as? Int? ?: -1
+fun ServiceLocation.getSortIndex(): Long = properties[customSortIndex] as? Long? ?: -1L
 
 fun StopLocation.getSortedRoutes(): List<Pair<Operator, String>> =
     routeGroups.flatMap { routeGroup ->
