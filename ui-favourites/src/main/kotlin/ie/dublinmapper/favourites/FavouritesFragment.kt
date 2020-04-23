@@ -2,7 +2,6 @@ package ie.dublinmapper.favourites
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.xwray.groupie.GroupAdapter
@@ -28,6 +27,10 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
         favourites_toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.action_edit -> {
+                    (activity as DublinMapperNavigator).navigateToEditFavourites()
+                    return@setOnMenuItemClickListener true
+                }
                 R.id.action_settings -> {
                     (activity as DublinMapperNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true

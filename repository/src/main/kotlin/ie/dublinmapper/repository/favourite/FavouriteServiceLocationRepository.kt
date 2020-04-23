@@ -20,4 +20,8 @@ class FavouriteServiceLocationRepository(
     override fun nameToBeDetermined(serviceLocation: ServiceLocation) {
         localResource.nameToBeDetermined(serviceLocation)
     }
+
+    override fun saveChanges(serviceLocations: List<ServiceLocation>) {
+        localResource.saveChanges(serviceLocations)
+    }
 }

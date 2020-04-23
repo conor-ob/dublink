@@ -10,4 +10,6 @@ interface FavouriteRepository {
     fun removeFavourite(serviceLocationId: String, service: Service)
 
     fun nameToBeDetermined(serviceLocation: ServiceLocation)
+
+    fun saveChanges(serviceLocations: List<ServiceLocation>)
 }

@@ -80,8 +80,8 @@ object Libraries {
     }
 
     object Groupie {
-        const val groupie = "com.xwray:groupie:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie?repo=jcenter
-        const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions?repo=jcenter
+        const val groupie = "com.xwray:groupie:2.8.0" // https://mvnrepository.com/artifact/com.xwray/groupie?repo=jcenter
+        const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.8.0" // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions?repo=jcenter
     }
 
     object Kotlin {

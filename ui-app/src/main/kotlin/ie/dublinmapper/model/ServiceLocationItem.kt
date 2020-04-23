@@ -3,6 +3,7 @@ package ie.dublinmapper.model
 import android.content.res.ColorStateList
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import ie.dublinmapper.domain.model.getName
@@ -56,6 +57,10 @@ class ServiceLocationItem(
         bindTitle(viewHolder)
         bindIcon(viewHolder)
         bindRoutes(viewHolder)
+    }
+
+    override fun getDragDirs(): Int {
+        return ItemTouchHelper.UP or ItemTouchHelper.DOWN
     }
 
     private fun bindIcon(viewHolder: GroupieViewHolder) {
@@ -161,6 +166,10 @@ class ServiceLocationItem(
 }
 
 fun com.xwray.groupie.Item<com.xwray.groupie.GroupieViewHolder>.extractServiceLocation(): ServiceLocation? {
+    return extras[serviceLocationKey] as? ServiceLocation
+}
+
+fun ServiceLocationItem.extractServiceLocation(): ServiceLocation? {
     return extras[serviceLocationKey] as? ServiceLocation
 }
 

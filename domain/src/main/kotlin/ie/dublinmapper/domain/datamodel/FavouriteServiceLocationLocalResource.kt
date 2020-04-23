@@ -10,4 +10,6 @@ interface FavouriteServiceLocationLocalResource {
     fun deleteFavourite(serviceLocationId: String, service: Service)
 
     fun nameToBeDetermined(serviceLocation: ServiceLocation)
+
+    fun saveChanges(serviceLocations: List<ServiceLocation>)
 }

@@ -50,4 +50,18 @@ class SqlDelightFavouriteServiceLocationLocalResource(
             }
         }
     }
+
+    override fun saveChanges(serviceLocations: List<ServiceLocation>) {
+        database.transaction {
+            database.favouriteLocationQueries.deleteAll()
+            serviceLocations.forEachIndexed { index, serviceLocation ->
+                database.favouriteLocationQueries.insertOrReplace(
+                    service = serviceLocation.service,
+                    locationId = serviceLocation.id,
+                    name = serviceLocation.name,
+                    sortIndex = index.toLong()
+                )
+            }
+        }
+    }
 }
