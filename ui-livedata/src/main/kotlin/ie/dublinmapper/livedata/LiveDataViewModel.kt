@@ -11,6 +11,7 @@ import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import javax.inject.Inject
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 class LiveDataViewModel @Inject constructor(
     private val liveDataUseCase: LiveDataUseCase,
@@ -18,6 +19,8 @@ class LiveDataViewModel @Inject constructor(
 ) : BaseViewModel<Action, State>() {
 
     override val initialState = State(isLoading = true)
+
+    private val streamOpen = AtomicBoolean(true)
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
@@ -108,6 +111,7 @@ class LiveDataViewModel @Inject constructor(
                 liveDataUseCase.getLiveDataStream(
                     action.serviceLocationService,
                     action.serviceLocationId
+//                    streamOpen
                 )
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
@@ -216,5 +220,13 @@ class LiveDataViewModel @Inject constructor(
             Timber.e(e, "Failed while logging route discrepancies")
         }
         return state.routeDiscrepancyState
+    }
+
+    fun onResume() {
+        streamOpen.set(true)
+    }
+
+    fun onPause() {
+        streamOpen.set(false)
     }
 }

@@ -11,6 +11,7 @@ import io.rtpi.api.ServiceLocation
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 class FavouritesViewModel @Inject constructor(
     private val useCase: FavouritesUseCase,
@@ -22,6 +23,8 @@ class FavouritesViewModel @Inject constructor(
         favouritesWithLiveData = null,
         internetStatusChange = null
     )
+
+//    private val streamOpen = AtomicBoolean(true)
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
@@ -60,6 +63,7 @@ class FavouritesViewModel @Inject constructor(
         val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
             .switchMap { action ->
                 useCase.getFavouritesWithLiveData(action.showLoading)
+//                useCase.getFavouritesWithLiveData(action.showLoading, streamOpen)
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.FavouritesWithLiveData(it) }
@@ -82,6 +86,7 @@ class FavouritesViewModel @Inject constructor(
             .switchMap { action ->
                 useCase.nameToBeDetermined(action.serviceLocation)
                     .flatMap { useCase.getFavouritesWithLiveData(showLoading = false) }
+//                    .flatMap { useCase.getFavouritesWithLiveData(showLoading = false, streamOpen = streamOpen) }
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.FavouritesWithLiveData(it) }
@@ -98,5 +103,13 @@ class FavouritesViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+    }
+
+    fun onResume() {
+//        streamOpen.set(true)
+    }
+
+    fun onPause() {
+//        streamOpen.set(false)
     }
 }

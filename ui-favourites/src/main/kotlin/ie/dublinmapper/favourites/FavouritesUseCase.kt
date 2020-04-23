@@ -16,6 +16,7 @@ import io.rtpi.api.LiveData
 import io.rtpi.api.ServiceLocation
 import io.rtpi.util.LiveDataGrouper
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
@@ -29,6 +30,7 @@ class FavouritesUseCase @Inject constructor(
 
     fun getFavouritesWithLiveData(
         showLoading: Boolean
+//        streamOpen: AtomicBoolean
     ): Observable<List<LiveDataPresentationResponse>> {
         if (preferenceStore.isFavouritesSortByLocation() &&
             permissionChecker.isLocationPermissionGranted()
@@ -40,6 +42,7 @@ class FavouritesUseCase @Inject constructor(
                         comparator = Comparator { s1, s2 ->
                             s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
                         }
+//                        streamOpen = streamOpen
                     )
                 }
         } else {
@@ -48,6 +51,7 @@ class FavouritesUseCase @Inject constructor(
                 comparator = Comparator { s1, s2 ->
                     s1.getSortIndex().compareTo(s2.getSortIndex())
                 }
+//                streamOpen = streamOpen
             )
         }
     }
@@ -55,6 +59,7 @@ class FavouritesUseCase @Inject constructor(
     private fun getFavouritesWithLiveData(
         showLoading: Boolean,
         comparator: Comparator<ServiceLocation>
+//        streamOpen: AtomicBoolean
     ): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()
         return serviceLocationRepository.getFavourites()
@@ -69,6 +74,7 @@ class FavouritesUseCase @Inject constructor(
                                 // TODO this may temporarily cause blank screen when navigating back to favourites
                                 if (showLoading) {
                                     getGroupedLiveData(serviceLocation)
+//                                    getGroupedLiveData(serviceLocation, streamOpen)
                                         .startWith(
                                             LiveDataPresentationResponse.Loading(
                                                 serviceLocation = serviceLocation
@@ -76,6 +82,7 @@ class FavouritesUseCase @Inject constructor(
                                         )
                                 } else {
                                     getGroupedLiveData(serviceLocation)
+//                                    getGroupedLiveData(serviceLocation, streamOpen)
                                 }
                             } else {
                                 Observable.just(
@@ -91,9 +98,11 @@ class FavouritesUseCase @Inject constructor(
 
     private fun getGroupedLiveData(
         serviceLocation: ServiceLocation
+//        streamOpen: AtomicBoolean
     ): Observable<LiveDataPresentationResponse> {
         return Observable
             .interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+//            .filter { streamOpen.get() }
             .flatMap {
                 liveDataRepository.get(
                     LiveDataKey(

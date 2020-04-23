@@ -58,6 +58,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     override fun onResume() {
         super.onResume()
+//        viewModel.onResume()
         viewModel.dispatch(
             Action.GetServiceLocation(
                 serviceLocationId = args.serviceLocationId,
@@ -77,6 +78,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     override fun onPause() {
         super.onPause()
+//        viewModel.onPause()
         live_data_bottom_sheet_view_container.viewTreeObserver
             .removeOnGlobalLayoutListener(routeFilterBottomSheetLayoutListener)
     }

@@ -13,6 +13,7 @@ import io.rtpi.api.LiveData
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
@@ -46,9 +47,11 @@ class LiveDataUseCase @Inject constructor(
     fun getLiveDataStream(
         service: Service,
         locationId: String
+//        streamOpen: AtomicBoolean
     ): Observable<LiveDataPresentationResponse> {
         return Observable
             .interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+//            .filter { streamOpen.get() }
             .flatMap { getLiveData(service, locationId) }
     }
 
