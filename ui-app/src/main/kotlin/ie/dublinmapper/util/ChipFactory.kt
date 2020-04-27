@@ -33,6 +33,7 @@ object ChipFactory {
             setTextAppearanceResource(R.style.TextAppearance_DublinMapper_Button_RouteFilter)
             setTextColor(ColorStateList.valueOf(context.resources.getColor(textColour)))
             text = route
+            tag = operator
             isAllCaps = false
             elevation = 4f.dipToPx(context)
             isCheckedIconVisible = false

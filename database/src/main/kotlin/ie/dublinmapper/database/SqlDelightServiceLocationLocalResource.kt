@@ -161,13 +161,17 @@ class SqlDelightServiceLocationLocalResource(
                     totalDocks = (serviceEntity as? DockServiceEntity)?.totalDocks ?: 0
                 )
             }
-        }.associateBy { it.id }
+        }
+            .associateBy { it.id }
+            .toMutableMap()
 
         favouriteEntities.forEach {
-            serviceLocations[it.locationId]?.let { serviceLocation ->
-                serviceLocation.setFavourite()
-//                serviceLocation.setCustomName(it.name)
-                serviceLocation.setSortIndex(it.sortIndex)
+            val favourite = serviceLocations[it.locationId]
+            if (favourite != null) {
+                var updated: ServiceLocation = favourite
+                updated = updated.setFavourite()
+                updated = updated.setSortIndex(it.sortIndex)
+                serviceLocations[it.locationId] = updated
             }
         }
 

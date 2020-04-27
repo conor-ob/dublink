@@ -66,4 +66,49 @@ class ServiceLocationTest {
         assertThat(dublinBusStop1).isEqualTo(dublinBusStop2)
         assertThat(dublinBusStop1.hashCode()).isEqualTo(dublinBusStop2.hashCode())
     }
+
+    @Test
+    fun `test custom routes`() {
+        val dublinBusStop = createDublinBusStop(
+            id = "444",
+            name = "Kilmacud Road",
+            coordinate = Coordinate(53.463, -6.22123),
+            routeGroups = listOf(
+                RouteGroup(
+                    operator = Operator.DUBLIN_BUS,
+                    routes = listOf("11", "47", "116")
+                ),
+                RouteGroup(
+                    operator = Operator.GO_AHEAD,
+                    routes = listOf("75", "75A")
+                )
+            )
+        )
+
+        dublinBusStop.addCustomRoute(Operator.GO_AHEAD, "75")
+        dublinBusStop.addCustomRoute(Operator.DUBLIN_BUS, "47")
+    }
+
+    @Test
+    fun `test immutability`() {
+        val dublinBusStop = createDublinBusStop(
+            id = "444",
+            name = "Kilmacud Road",
+            coordinate = Coordinate(53.463, -6.22123),
+            routeGroups = listOf(
+                RouteGroup(
+                    operator = Operator.DUBLIN_BUS,
+                    routes = listOf("11", "47", "116")
+                ),
+                RouteGroup(
+                    operator = Operator.GO_AHEAD,
+                    routes = listOf("75", "75A")
+                )
+            )
+        )
+
+        val favourite = dublinBusStop.setFavourite()
+
+        assertThat(dublinBusStop).isNotEqualTo(favourite)
+    }
 }

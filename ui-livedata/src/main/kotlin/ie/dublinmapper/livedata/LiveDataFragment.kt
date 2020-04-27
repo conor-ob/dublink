@@ -13,6 +13,8 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
+import ie.dublinmapper.dialog.CustomizeFavouriteDialogFactory
+import ie.dublinmapper.dialog.OnFavouriteSavedListener
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.getSortedRoutes
 import ie.dublinmapper.domain.model.isFavourite
@@ -29,6 +31,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as LiveDataViewModel }
     private lateinit var args: LiveDataArgs
+    private lateinit var serviceLocation: ServiceLocation
 
     private var liveDataAdapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -115,6 +118,17 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                                 )
                             )
                         } else {
+                            CustomizeFavouriteDialogFactory.newDialog(
+                                context = requireContext(),
+                                activity = requireActivity(),
+                                serviceLocation = serviceLocation,
+                                onFavouriteSavedListener = object :
+                                    OnFavouriteSavedListener {
+                                    override fun onSave(serviceLocation: ServiceLocation) {
+//                                        viewModel.dispatch(Action.EditFavourite(serviceLocation))
+                                    }
+                                }
+                            ).show()
                             viewModel.dispatch(
                                 Action.SaveFavourite(
                                     serviceLocationId = args.serviceLocationId,
@@ -181,6 +195,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderServiceLocationState(state: State) {
+        if (state.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
+            serviceLocation = state.serviceLocationResponse.serviceLocation
+        }
         if (state.isFavourite != null) {
             args = args.copy(serviceLocationIsFavourite = state.isFavourite)
             val favouriteMenuItem = live_data_toolbar.menu.findItem(R.id.action_favourite)
@@ -220,7 +237,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                             alpha = if (state.activeRouteFilters.contains(route)) {
                                 1.0f
                             } else {
-                                0.4f
+                                0.33f
                             }
                             setOnCheckedChangeListener(routeFilterClickedListener)
                         }
