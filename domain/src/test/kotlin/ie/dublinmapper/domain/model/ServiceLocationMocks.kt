@@ -18,3 +18,16 @@ fun createLuasStop(
     coordinate = coordinate,
     routeGroups = routeGroups
 )
+
+fun createDublinBusStop(
+    id: String,
+    name: String,
+    coordinate: Coordinate,
+    routeGroups: List<RouteGroup>
+) = StopLocation(
+    id = id,
+    name = name,
+    service = Service.DUBLIN_BUS,
+    coordinate = coordinate,
+    routeGroups = routeGroups
+)

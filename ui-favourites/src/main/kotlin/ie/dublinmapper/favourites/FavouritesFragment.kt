@@ -27,6 +27,10 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
         favourites_toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.action_edit -> {
+                    (activity as DublinMapperNavigator).navigateToEditFavourites()
+                    return@setOnMenuItemClickListener true
+                }
                 R.id.action_settings -> {
                     (activity as DublinMapperNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true
@@ -65,14 +69,15 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     override fun onResume() {
         super.onResume()
-        viewModel.bindActions()
-        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading))
+        viewModel.onResume()
+        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.unbindActions()
+        viewModel.onPause()
+        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
     }
 
     private fun renderState(state: State) {

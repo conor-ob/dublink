@@ -34,6 +34,10 @@ class DefaultAggregatedServiceLocationRepository(
     }
 
     override fun clearCache(service: Service) {
-        return serviceLocationRepositories.getValue(service).clearCache(service)
+        serviceLocationRepositories.getValue(service).clearCache(service)
+    }
+
+    override fun clearAllCaches() {
+        serviceLocationRepositories.forEach { it.value.clearCache(it.key) }
     }
 }

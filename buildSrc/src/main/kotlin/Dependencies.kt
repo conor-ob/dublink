@@ -80,8 +80,8 @@ object Libraries {
     }
 
     object Groupie {
-        const val groupie = "com.xwray:groupie:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie?repo=jcenter
-        const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.7.2" // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions?repo=jcenter
+        const val groupie = "com.xwray:groupie:2.8.0" // https://mvnrepository.com/artifact/com.xwray/groupie?repo=jcenter
+        const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.8.0" // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions?repo=jcenter
     }
 
     object Kotlin {
@@ -106,14 +106,14 @@ object Libraries {
     }
 
     object Rtpi {
-        const val rtpiApi = "com.github.conor-ob.dublin-rtpi-service:rtpi-api:0.3.0"
-//        const val rtpiApi = "io.rtpi:rtpi-api:0.3.0"
-        const val rtpiClient = "com.github.conor-ob.dublin-rtpi-service:rtpi-client-standalone:0.3.0"
-//        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.3.0"
-        const val rtpiUtil = "com.github.conor-ob.dublin-rtpi-service:rtpi-util:0.3.0"
-//        const val rtpiUtil = "io.rtpi:rtpi-util:0.3.0"
-        const val rtpiStaticData = "com.github.conor-ob.dublin-rtpi-service:rtpi-static-data:0.3.0"
-//        const val rtpiStaticData = "io.rtpi:rtpi-static-data:0.3.0"
+        const val rtpiApi = "com.github.conor-ob.dublin-rtpi-service:rtpi-api:0.4.0"
+//        const val rtpiApi = "io.rtpi:rtpi-api:0.4.0"
+        const val rtpiClient = "com.github.conor-ob.dublin-rtpi-service:rtpi-client-standalone:0.4.0"
+//        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.4.0"
+        const val rtpiUtil = "com.github.conor-ob.dublin-rtpi-service:rtpi-util:0.4.0"
+//        const val rtpiUtil = "io.rtpi:rtpi-util:0.4.0"
+        const val rtpiStaticData = "com.github.conor-ob.dublin-rtpi-service:rtpi-static-data:0.4.0"
+//        const val rtpiStaticData = "io.rtpi:rtpi-static-data:0.4.0"
     }
 
     object Rx {

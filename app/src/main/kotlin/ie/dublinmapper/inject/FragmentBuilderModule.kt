@@ -3,6 +3,7 @@ package ie.dublinmapper.inject
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import ie.dublinmapper.favourites.FavouritesFragment
+import ie.dublinmapper.favourites.edit.EditFavouritesFragment
 import ie.dublinmapper.livedata.LiveDataFragment
 import ie.dublinmapper.search.SearchFragment
 import ie.dublinmapper.settings.PreferencesFragment
@@ -13,6 +14,9 @@ abstract class FragmentBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun contributeFavouritesFragmentInjector(): FavouritesFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeEditFavouritesFragmentInjector(): EditFavouritesFragment
 
     @ContributesAndroidInjector
     abstract fun contributeLiveDataFragmentInjector(): LiveDataFragment

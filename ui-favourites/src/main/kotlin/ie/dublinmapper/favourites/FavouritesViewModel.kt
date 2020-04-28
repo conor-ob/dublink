@@ -1,8 +1,9 @@
 package ie.dublinmapper.favourites
 
-import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import ie.dublinmapper.LifecycleAwareViewModel
 import ie.dublinmapper.domain.internet.InternetStatusChangeListener
+import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
@@ -13,8 +14,9 @@ import timber.log.Timber
 class FavouritesViewModel @Inject constructor(
     private val useCase: FavouritesUseCase,
     private val internetStatusChangeListener: InternetStatusChangeListener,
+    private val preferenceStore: PreferenceStore,
     private val scheduler: RxScheduler
-) : BaseViewModel<Action, State>() {
+) : LifecycleAwareViewModel<Action, State>() {
 
     override val initialState = State(
         favouritesWithLiveData = null,
@@ -33,10 +35,16 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    fun bindActions() {
+    init {
+        bindActions()
+    }
+
+    private fun bindActions() {
         val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
             .switchMap { action ->
-                useCase.getFavouritesWithLiveData(action.showLoading)
+                Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+                    .filter { isActive() }
+                    .flatMap { useCase.getFavouritesWithLiveData(action.showLoading) }
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.FavouritesWithLiveData(it) }
@@ -64,9 +72,5 @@ class FavouritesViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
-    }
-
-    fun unbindActions() {
-        disposables.clear()
     }
 }

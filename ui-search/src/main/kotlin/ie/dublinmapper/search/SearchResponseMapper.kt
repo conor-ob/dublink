@@ -2,6 +2,8 @@ package ie.dublinmapper.search
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
+import ie.dublinmapper.domain.model.getCustomRoutes
+import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.ServiceLocationItem
@@ -138,7 +140,11 @@ object SearchResponseMapper {
                 ServiceLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
-                    routeGroups = serviceLocation.routeGroups,
+                    routeGroups = if (serviceLocation.isFavourite()) {
+                        serviceLocation.getCustomRoutes()
+                    } else {
+                        serviceLocation.routeGroups
+                    },
                     walkDistance = walkDistance
                 ).apply {
                     setSearchCandidate()

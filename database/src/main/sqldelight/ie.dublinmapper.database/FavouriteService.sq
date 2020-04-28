@@ -1,0 +1,28 @@
+import io.rtpi.api.Operator;
+import io.rtpi.api.Service;
+
+CREATE TABLE favouriteServiceEntity (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    service TEXT AS Service NOT NULL,
+    locationId TEXT NOT NULL,
+    route TEXT NOT NULL,
+    operator TEXT AS Operator NOT NULL
+);
+
+selectAllByService:
+SELECT * FROM favouriteServiceEntity WHERE service = ?;
+
+insertOrReplace:
+INSERT OR REPLACE INTO favouriteServiceEntity(
+  service,
+  locationId,
+  route,
+  operator
+)
+VALUES (?, ?, ?, ?);
+
+delete:
+DELETE FROM favouriteServiceEntity WHERE service = ? AND locationId = ?;
+
+deleteAll:
+DELETE FROM favouriteServiceEntity;

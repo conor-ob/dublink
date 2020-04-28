@@ -1,6 +1,7 @@
 package ie.dublinmapper.favourites
 
-import ie.dublinmapper.domain.model.getOrder
+import ie.dublinmapper.domain.model.getSortIndex
+import ie.dublinmapper.domain.model.hasCustomRoute
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
@@ -11,10 +12,11 @@ import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.LiveData
+import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.ServiceLocation
 import io.rtpi.util.LiveDataGrouper
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
@@ -36,15 +38,16 @@ class FavouritesUseCase @Inject constructor(
                     getFavouritesWithLiveData(
                         showLoading = showLoading,
                         comparator = Comparator { s1, s2 ->
-                            s1.coordinate.haversine(coordinate)
-                                .compareTo(s2.coordinate.haversine(coordinate))
+                            s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
                         }
                     )
                 }
         } else {
             return getFavouritesWithLiveData(
                 showLoading = showLoading,
-                comparator = Comparator { s1, s2 -> s1.getOrder().compareTo(s2.getOrder()) }
+                comparator = Comparator { s1, s2 ->
+                    s1.getSortIndex().compareTo(s2.getSortIndex())
+                }
             )
         }
     }
@@ -63,6 +66,7 @@ class FavouritesUseCase @Inject constructor(
                         .sortedWith(comparator)
                         .mapIndexed { index: Int, serviceLocation: ServiceLocation ->
                             if (index < limit) {
+                                // TODO this may temporarily cause blank screen when navigating back to favourites
                                 if (showLoading) {
                                     getGroupedLiveData(serviceLocation)
                                         .startWith(
@@ -70,6 +74,7 @@ class FavouritesUseCase @Inject constructor(
                                                 serviceLocation = serviceLocation
                                             )
                                         )
+                                        .subscribeOn(Schedulers.newThread())
                                 } else {
                                     getGroupedLiveData(serviceLocation)
                                 }
@@ -87,28 +92,36 @@ class FavouritesUseCase @Inject constructor(
 
     private fun getGroupedLiveData(
         serviceLocation: ServiceLocation
-    ): Observable<LiveDataPresentationResponse> {
-        return Observable
-            .interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-            .flatMap {
-                liveDataRepository.get(
-                    LiveDataKey(
-                        service = serviceLocation.service,
-                        locationId = serviceLocation.id
-                    )
-                ).map { response ->
-                    when (response) {
-                        is LiveDataResponse.Data -> LiveDataPresentationResponse.Data(
-                            serviceLocation = serviceLocation,
-                            liveData = LiveDataGrouper.groupLiveData(response.liveData)
-                        )
-                        is LiveDataResponse.Error -> LiveDataPresentationResponse.Error(
-                            serviceLocation = serviceLocation,
-                            throwable = response.throwable
-                        )
-                    }
-                }
+    ): Observable<LiveDataPresentationResponse> =
+        liveDataRepository.get(
+            LiveDataKey(
+                service = serviceLocation.service,
+                locationId = serviceLocation.id
+            )
+        ).map { response ->
+            when (response) {
+                is LiveDataResponse.Data -> LiveDataPresentationResponse.Data(
+                    serviceLocation = serviceLocation,
+                    liveData = LiveDataGrouper.groupLiveData(filterLiveData(serviceLocation, response.liveData))
+                )
+                is LiveDataResponse.Error -> LiveDataPresentationResponse.Error(
+                    serviceLocation = serviceLocation,
+                    throwable = response.throwable
+                )
             }
+        }
+
+    private fun filterLiveData(serviceLocation: ServiceLocation, liveData: List<LiveData>): List<LiveData> {
+        return liveData.filter {
+            if (it is PredictionLiveData) {
+                serviceLocation.hasCustomRoute(
+                    operator = it.operator,
+                    route = it.routeInfo.route
+                )
+            } else {
+                true
+            }
+        }
     }
 }
 

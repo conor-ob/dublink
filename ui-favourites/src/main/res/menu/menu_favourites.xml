@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<!--    <item-->
+<!--            android:id="@+id/action_favourite"-->
+<!--            android:title="@string/action_save_favourite"-->
+<!--            android:icon="@drawable/ic_favourite_unselected"-->
+<!--            app:showAsAction="ifRoom"/>-->
+
+    <!--<item-->
+            <!--android:serviceId="@+serviceId/action_refresh"-->
+            <!--android:title="map"-->
+            <!--android:icon="@drawable/pick_from_map"-->
+            <!--app:showAsAction="ifRoom"/>-->
+
+    <!--<item-->
+            <!--android:serviceId="@+serviceId/action_show_map"-->
+            <!--android:title="@string/action_show_map"-->
+            <!--app:showAsAction="never"/>-->
+
+    <item
+        android:id="@+id/action_edit"
+        android:title="Edit"
+        android:icon="@drawable/ic_edit"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/feature_name_settings"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="always"/>
+
+</menu>

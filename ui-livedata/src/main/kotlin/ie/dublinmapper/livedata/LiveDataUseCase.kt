@@ -7,19 +7,16 @@ import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LiveDataResponse
 import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
-import ie.dublinmapper.domain.service.PreferenceStore
 import io.reactivex.Observable
 import io.rtpi.api.LiveData
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val liveDataRepository: LiveDataRepository,
-    private val favouriteRepository: FavouriteRepository,
-    private val preferenceStore: PreferenceStore
+    private val favouriteRepository: FavouriteRepository
 ) {
 
     fun getServiceLocation(
@@ -43,16 +40,7 @@ class LiveDataUseCase @Inject constructor(
         }
     }
 
-    fun getLiveDataStream(
-        service: Service,
-        locationId: String
-    ): Observable<LiveDataPresentationResponse> {
-        return Observable
-            .interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-            .flatMap { getLiveData(service, locationId) }
-    }
-
-    private fun getLiveData(
+    fun getLiveData(
         service: Service,
         locationId: String
     ): Observable<LiveDataPresentationResponse> {
@@ -75,10 +63,10 @@ class LiveDataUseCase @Inject constructor(
         }
     }
 
-    fun saveFavourite(service: Service, serviceLocationId: String, serviceLocationName: String): Observable<Boolean> {
+    fun saveFavourite(serviceLocation: ServiceLocation): Observable<Boolean> {
         return Observable.fromCallable {
-            clearServiceLocationCache(service)
-            favouriteRepository.saveFavourite(serviceLocationId, serviceLocationName, service)
+            clearServiceLocationCache(serviceLocation.service)
+            favouriteRepository.saveFavourite(serviceLocation)
             return@fromCallable true
         }
     }

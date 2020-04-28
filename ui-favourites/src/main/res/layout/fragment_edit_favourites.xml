@@ -2,38 +2,44 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/favourites_layout_root"
+    android:id="@+id/edit_favourites_layout_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/favourites_app_bar"
+        android:id="@+id/edit_favourites_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/favourites_toolbar"
+            android:id="@+id/edit_favourites_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="@string/favourites_toolbar_title"
-            app:menu="@menu/menu_favourites"/>
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="Edit Favourites"
+            app:menu="@menu/menu_settings"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favourites_list"
+        android:id="@+id/edit_favourites_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/favourites_fab_search"
+        android:id="@+id/edit_favourites_save_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/favourites_fab_search_label"
-        app:icon="@drawable/ic_search"
+        android:text="Save changes"
+        android:visibility="gone"
+        app:icon="@drawable/ic_save"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         style="@style/Widget.DublinMapper.ExtendedFloatingActionButton" />
 

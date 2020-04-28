@@ -1,20 +1,25 @@
 package ie.dublinmapper.livedata
 
-import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import ie.dublinmapper.LifecycleAwareViewModel
+import ie.dublinmapper.domain.model.getCustomRoutes
+import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
 
 class LiveDataViewModel @Inject constructor(
     private val liveDataUseCase: LiveDataUseCase,
+    private val preferenceStore: PreferenceStore,
     private val scheduler: RxScheduler
-) : BaseViewModel<Action, State>() {
+) : LifecycleAwareViewModel<Action, State>() {
 
     override val initialState = State(isLoading = true)
 
@@ -22,7 +27,12 @@ class LiveDataViewModel @Inject constructor(
         when (change) {
             is Change.GetServiceLocation -> state.copy(
                 serviceLocationResponse = change.serviceLocationResponse,
-                isFavourite = null
+                isFavourite = null,
+                activeRouteFilters = if (change.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
+                    change.serviceLocationResponse.serviceLocation.getCustomRoutes().flatMap { it.routes }.toSet()
+                } else {
+                    emptySet()
+                }
             )
             is Change.GetLiveData -> {
                 val newState = state.copy(
@@ -40,6 +50,9 @@ class LiveDataViewModel @Inject constructor(
                 isFavourite = false
             )
             is Change.RouteFilterChange -> filterRoutes(state, change)
+            is Change.RouteFilterSheetMoved -> state.copy(
+                routeFilterState = change.state
+            )
         }
     }
 
@@ -47,7 +60,7 @@ class LiveDataViewModel @Inject constructor(
         state: State,
         change: Change.RouteFilterChange
     ): State {
-        val adjustedRouteFilters = state.routeFilters.toMutableSet()
+        val adjustedRouteFilters = state.activeRouteFilters.toMutableSet()
         when (change.type) {
             is RouteFilterChangeType.Add -> adjustedRouteFilters.add(change.type.route)
             is RouteFilterChangeType.Remove -> adjustedRouteFilters.remove(change.type.route)
@@ -60,7 +73,7 @@ class LiveDataViewModel @Inject constructor(
             if (adjustedRouteFilters.isEmpty()) {
                 state.copy(
                     filteredLiveDataResponse = state.liveDataResponse,
-                    routeFilters = adjustedRouteFilters
+                    activeRouteFilters = adjustedRouteFilters
                 )
             } else {
                 state.copy(
@@ -69,11 +82,17 @@ class LiveDataViewModel @Inject constructor(
                             .filterIsInstance<PredictionLiveData>()
                             .filter { adjustedRouteFilters.contains(it.routeInfo.route) }
                     ),
-                    routeFilters = adjustedRouteFilters
+                    activeRouteFilters = adjustedRouteFilters
                 )
             }
+        } else if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
+            state.liveDataResponse.liveData.all { it is DockLiveData }) {
+            state.copy(
+                filteredLiveDataResponse = state.liveDataResponse,
+                activeRouteFilters = adjustedRouteFilters
+            )
         } else {
-            state.copy(routeFilters = adjustedRouteFilters)
+            state.copy(activeRouteFilters = adjustedRouteFilters)
         }
     }
 
@@ -95,10 +114,14 @@ class LiveDataViewModel @Inject constructor(
 
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
             .switchMap { action ->
-                liveDataUseCase.getLiveDataStream(
-                    action.serviceLocationService,
-                    action.serviceLocationId
-                )
+                Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+                    .filter { isActive() }
+                    .flatMap {
+                        liveDataUseCase.getLiveData(
+                            action.serviceLocationService,
+                            action.serviceLocationId
+                        )
+                    }
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.GetLiveData(it) }
@@ -106,11 +129,7 @@ class LiveDataViewModel @Inject constructor(
 
         val saveFavouriteChange = actions.ofType(Action.SaveFavourite::class.java)
             .switchMap { action ->
-                liveDataUseCase.saveFavourite(
-                    action.serviceLocationService,
-                    action.serviceLocationId,
-                    action.serviceLocationName
-                )
+                liveDataUseCase.saveFavourite(action.serviceLocation)
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.FavouriteSaved }
@@ -129,9 +148,11 @@ class LiveDataViewModel @Inject constructor(
 
         val routeFilterIntents = actions
             .ofType(Action.RouteFilterIntent::class.java)
-            .switchMap { intent ->
-                Observable.just(Change.RouteFilterChange(intent.type))
-            }
+            .switchMap { intent -> Observable.just(Change.RouteFilterChange(intent.type)) }
+
+        val bottomSheetIntents = actions
+            .ofType(Action.RouteFilterSheetMoved::class.java)
+            .switchMap { intent -> Observable.just(Change.RouteFilterSheetMoved(intent.state)) }
 
         val allActions = Observable.merge(
             listOf(
@@ -139,7 +160,8 @@ class LiveDataViewModel @Inject constructor(
                 getLiveDataChange,
                 saveFavouriteChange,
                 removeFavouriteChange,
-                routeFilterIntents
+                routeFilterIntents,
+                bottomSheetIntents
             )
         )
 

@@ -9,4 +9,6 @@ interface DublinMapperNavigator {
     fun navigateToSearch()
 
     fun navigateToSettings()
+
+    fun navigateToEditFavourites()
 }

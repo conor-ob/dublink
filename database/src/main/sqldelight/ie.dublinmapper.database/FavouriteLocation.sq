@@ -4,7 +4,8 @@ CREATE TABLE favouriteLocationEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     service TEXT AS Service NOT NULL,
     locationId TEXT NOT NULL,
-    name TEXT NOT NULL
+    name TEXT,
+    sortIndex INTEGER NOT NULL
 );
 
 selectAll:
@@ -13,13 +14,20 @@ SELECT * FROM favouriteLocationEntity;
 selectAllByService:
 SELECT * FROM favouriteLocationEntity WHERE service = ?;
 
+count:
+SELECT COUNT(*) FROM favouriteLocationEntity;
+
 insertOrReplace:
 INSERT OR REPLACE INTO favouriteLocationEntity(
   service,
   locationId,
-  name
+  name,
+  sortIndex
 )
-VALUES (?, ?, ?);
+VALUES (?, ?, ?, ?);
 
 delete:
 DELETE FROM favouriteLocationEntity WHERE service = ? AND locationId = ?;
+
+deleteAll:
+DELETE FROM favouriteLocationEntity;

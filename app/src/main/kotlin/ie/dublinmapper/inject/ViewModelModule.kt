@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ie.dublinmapper.DublinMapperActivityViewModel
 import ie.dublinmapper.favourites.FavouritesViewModel
+import ie.dublinmapper.favourites.edit.EditFavouritesViewModel
 import ie.dublinmapper.livedata.LiveDataViewModel
 import ie.dublinmapper.search.SearchViewModel
 import java.lang.annotation.Documented
@@ -32,6 +33,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(FavouritesViewModel::class)
     internal abstract fun bindFavouritesViewModel(favouritesViewModel: FavouritesViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EditFavouritesViewModel::class)
+    internal abstract fun bindEditFavouritesViewModel(editFavouritesViewModel: EditFavouritesViewModel): ViewModel
 
     @Binds
     @IntoMap

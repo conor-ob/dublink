@@ -89,6 +89,19 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
         )
     }
 
+    override fun navigateToEditFavourites() {
+        navigationController.navigate(
+            R.id.editFavouritesFragment,
+            Bundle.EMPTY,
+            NavOptions.Builder()
+                .setEnterAnim(R.anim.nav_default_enter_anim)
+                .setExitAnim(R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                .build()
+        )
+    }
+
     private fun renderState(state: State) {
         when (state.internetStatusChange) {
             InternetStatus.ONLINE -> {
