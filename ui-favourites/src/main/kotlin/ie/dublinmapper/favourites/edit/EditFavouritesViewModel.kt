@@ -6,8 +6,8 @@ import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.rtpi.api.ServiceLocation
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class EditFavouritesViewModel @Inject constructor(
     private val editFavouritesUseCase: EditFavouritesUseCase,

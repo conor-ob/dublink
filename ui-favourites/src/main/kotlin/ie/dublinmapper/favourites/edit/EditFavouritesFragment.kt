@@ -63,7 +63,7 @@ class EditFavouritesFragment : DublinMapperFragment(R.layout.fragment_edit_favou
                     onFavouriteSavedListener = object : OnFavouriteSavedListener {
 
                         override fun onSave(serviceLocation: ServiceLocation) {
-                             viewModel.dispatch(Action.EditFavourite(serviceLocation))
+                            viewModel.dispatch(Action.EditFavourite(serviceLocation))
                         }
                     }
                 ).show()

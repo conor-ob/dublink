@@ -3,7 +3,6 @@ package ie.dublinmapper.livedata
 import com.ww.roxie.Reducer
 import ie.dublinmapper.LifecycleAwareViewModel
 import ie.dublinmapper.domain.model.getCustomRoutes
-import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
@@ -12,9 +11,9 @@ import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class LiveDataViewModel @Inject constructor(
     private val liveDataUseCase: LiveDataUseCase,

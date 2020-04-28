@@ -8,7 +8,6 @@ import ie.dublinmapper.domain.model.setCustomName
 import ie.dublinmapper.domain.model.setFavourite
 import ie.dublinmapper.domain.model.setSortIndex
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function4
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DockLocation
