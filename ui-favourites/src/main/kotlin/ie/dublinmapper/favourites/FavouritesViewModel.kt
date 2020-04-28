@@ -7,7 +7,6 @@ import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
-import io.rtpi.api.ServiceLocation
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
@@ -33,23 +32,6 @@ class FavouritesViewModel @Inject constructor(
             is Change.InternetStatusChange -> state.copy(
                 internetStatusChange = change.internetStatusChange
             )
-        }
-    }
-
-    private fun reorder(
-        favouritesWithLiveData: List<LiveDataPresentationResponse>?,
-        serviceLocation: ServiceLocation
-    ): List<LiveDataPresentationResponse>? {
-        if (favouritesWithLiveData == null) {
-            return favouritesWithLiveData
-        } else {
-            val thing = favouritesWithLiveData.indexOfFirst { it.serviceLocation == serviceLocation }
-
-            val copy = favouritesWithLiveData.toMutableList()
-
-            val removed = copy.removeAt(thing)
-
-            return listOf(removed).plus(copy)
         }
     }
 

@@ -10,15 +10,15 @@ class ServiceLocationTest {
 
     @Test
     fun `test the thing`() {
-        val luasStop = createLuasStop()
+        var luasStop = createLuasStop()
         assertThat(luasStop.isFavourite()).isFalse()
         assertThat(luasStop.getName()).isEqualTo("St. Stephen's Green")
 
-        luasStop.setFavourite()
+        luasStop = luasStop.setFavourite()
         assertThat(luasStop.isFavourite()).isTrue()
         assertThat(luasStop.getName()).isEqualTo("St. Stephen's Green")
 
-        luasStop.setCustomName("My Favourite Luas Stop")
+        luasStop = luasStop.setCustomName("My Favourite Luas Stop")
         assertThat(luasStop.isFavourite()).isTrue()
         assertThat(luasStop.getName()).isEqualTo("My Favourite Luas Stop")
     }

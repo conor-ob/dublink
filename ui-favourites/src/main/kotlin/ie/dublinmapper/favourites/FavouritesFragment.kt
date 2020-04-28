@@ -53,24 +53,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
                 (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
             }
         }
-//        adapter?.setOnItemLongClickListener { item, itemView ->
-//            val serviceLocation = item.extractServiceLocation()
-//            if (serviceLocation != null) {
-//                val popup = PopupMenu(requireContext(), itemView)
-//                popup.inflate(R.menu.favourite_quick_edit_menu)
-//                popup.setOnMenuItemClickListener { menuItem ->
-//                    if (menuItem.itemId == R.id.move_to_top) {
-//                        popup.dismiss()
-//                        viewModel.dispatch(Action.FavouriteMovedToTop(serviceLocation))
-//                        return@setOnMenuItemClickListener true
-//                    }
-//                    return@setOnMenuItemClickListener false
-//                }
-//                popup.show()
-//                return@setOnItemLongClickListener true
-//            }
-//            return@setOnItemLongClickListener false
-//        }
         view.favourites_list.adapter = adapter
         view.favourites_list.setHasFixedSize(true)
         view.favourites_list.layoutManager = LinearLayoutManager(requireContext())

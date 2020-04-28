@@ -1,6 +1,8 @@
 package ie.dublinmapper.favourites.edit
 
 import com.xwray.groupie.Section
+import ie.dublinmapper.domain.model.getCustomRoutes
+import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.favourites.R
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.ServiceLocationItem
@@ -38,7 +40,11 @@ object EditFavouritesMapper {
                 ServiceLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
-                    routeGroups = serviceLocation.routeGroups,
+                    routeGroups = if (serviceLocation.isFavourite()) {
+                        serviceLocation.getCustomRoutes()
+                    } else {
+                        serviceLocation.routeGroups
+                    },
                     walkDistance = null
                 )
             )
