@@ -9,16 +9,12 @@ class FavouriteServiceLocationRepository(
     private val localResource: FavouriteServiceLocationLocalResource
 ) : FavouriteRepository {
 
-    override fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service) {
-        localResource.insertFavourite(serviceLocationId, serviceLocationName, service)
+    override fun saveFavourite(serviceLocation: ServiceLocation) {
+        localResource.insertFavourite(serviceLocation)
     }
 
     override fun removeFavourite(serviceLocationId: String, service: Service) {
         localResource.deleteFavourite(serviceLocationId, service)
-    }
-
-    override fun nameToBeDetermined(serviceLocation: ServiceLocation) {
-        localResource.nameToBeDetermined(serviceLocation)
     }
 
     override fun saveChanges(serviceLocations: List<ServiceLocation>) {

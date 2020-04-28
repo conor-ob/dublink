@@ -26,6 +26,7 @@ import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
+import timber.log.Timber
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -61,7 +62,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     override fun onResume() {
         super.onResume()
-//        viewModel.onResume()
+        viewModel.onResume()
         viewModel.dispatch(
             Action.GetServiceLocation(
                 serviceLocationId = args.serviceLocationId,
@@ -81,7 +82,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     override fun onPause() {
         super.onPause()
-//        viewModel.onPause()
+        viewModel.onPause()
         live_data_bottom_sheet_view_container.viewTreeObserver
             .removeOnGlobalLayoutListener(routeFilterBottomSheetLayoutListener)
     }
@@ -122,20 +123,14 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                                 context = requireContext(),
                                 activity = requireActivity(),
                                 serviceLocation = serviceLocation,
-                                onFavouriteSavedListener = object :
-                                    OnFavouriteSavedListener {
+                                onFavouriteSavedListener = object : OnFavouriteSavedListener {
+
                                     override fun onSave(serviceLocation: ServiceLocation) {
-//                                        viewModel.dispatch(Action.EditFavourite(serviceLocation))
+                                        Timber.d(serviceLocation.toString())
+                                        viewModel.dispatch(Action.SaveFavourite(serviceLocation))
                                     }
                                 }
                             ).show()
-                            viewModel.dispatch(
-                                Action.SaveFavourite(
-                                    serviceLocationId = args.serviceLocationId,
-                                    serviceLocationName = args.serviceLocationName,
-                                    serviceLocationService = args.serviceLocationService
-                                )
-                            )
                         }
                         return@setOnMenuItemClickListener true
                     }

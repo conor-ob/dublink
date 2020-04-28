@@ -1,6 +1,7 @@
 package ie.dublinmapper.database
 
 import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.domain.model.getCustomName
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 
@@ -8,12 +9,12 @@ class SqlDelightFavouriteServiceLocationLocalResource(
     private val database: Database
 ) : FavouriteServiceLocationLocalResource {
 
-    override fun insertFavourite(serviceLocationId: String, serviceLocationName: String, service: Service) {
+    override fun insertFavourite(serviceLocation: ServiceLocation) {
         val count = database.favouriteLocationQueries.count().executeAsOne()
         database.favouriteLocationQueries.insertOrReplace(
-            service = service,
-            locationId = serviceLocationId,
-            name = serviceLocationName,
+            service = serviceLocation.service,
+            locationId = serviceLocation.id,
+            name = serviceLocation.getCustomName(),
             sortIndex = count
         )
     }
@@ -25,32 +26,6 @@ class SqlDelightFavouriteServiceLocationLocalResource(
         )
     }
 
-    override fun nameToBeDetermined(serviceLocation: ServiceLocation) {
-        val entities = database.favouriteLocationQueries
-            .selectAll()
-            .executeAsList()
-
-        val matchingIndex = entities
-            .indexOfFirst { it.service == serviceLocation.service && it.locationId == serviceLocation.id }
-
-        val copy = entities.toMutableList()
-
-        val entity = copy.removeAt(matchingIndex)
-
-        val newSortOrder = listOf(entity).plus(copy)
-        database.transaction {
-            database.favouriteLocationQueries.deleteAll()
-            newSortOrder.forEachIndexed { index, favouriteLocationEntity ->
-                database.favouriteLocationQueries.insertOrReplace(
-                    service = favouriteLocationEntity.service,
-                    locationId = favouriteLocationEntity.locationId,
-                    name = favouriteLocationEntity.name,
-                    sortIndex = index.toLong()
-                )
-            }
-        }
-    }
-
     override fun saveChanges(serviceLocations: List<ServiceLocation>) {
         database.transaction {
             database.favouriteLocationQueries.deleteAll()
@@ -58,7 +33,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                 database.favouriteLocationQueries.insertOrReplace(
                     service = serviceLocation.service,
                     locationId = serviceLocation.id,
-                    name = serviceLocation.name,
+                    name = serviceLocation.getCustomName(),
                     sortIndex = index.toLong()
                 )
             }

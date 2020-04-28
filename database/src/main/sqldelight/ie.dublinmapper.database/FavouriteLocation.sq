@@ -4,7 +4,7 @@ CREATE TABLE favouriteLocationEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     service TEXT AS Service NOT NULL,
     locationId TEXT NOT NULL,
-    name TEXT NOT NULL,
+    name TEXT,
     sortIndex INTEGER NOT NULL
 );
 

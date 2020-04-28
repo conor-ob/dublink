@@ -5,11 +5,9 @@ import io.rtpi.api.ServiceLocation
 
 interface FavouriteServiceLocationLocalResource {
 
-    fun insertFavourite(serviceLocationId: String, serviceLocationName: String, service: Service)
+    fun insertFavourite(serviceLocation: ServiceLocation)
 
     fun deleteFavourite(serviceLocationId: String, service: Service)
-
-    fun nameToBeDetermined(serviceLocation: ServiceLocation)
 
     fun saveChanges(serviceLocations: List<ServiceLocation>)
 }

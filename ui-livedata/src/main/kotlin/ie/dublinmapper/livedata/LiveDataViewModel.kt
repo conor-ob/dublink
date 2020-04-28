@@ -1,7 +1,8 @@
 package ie.dublinmapper.livedata
 
-import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import ie.dublinmapper.LifecycleAwareViewModel
+import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
@@ -11,16 +12,15 @@ import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import javax.inject.Inject
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.TimeUnit
 
 class LiveDataViewModel @Inject constructor(
     private val liveDataUseCase: LiveDataUseCase,
+    private val preferenceStore: PreferenceStore,
     private val scheduler: RxScheduler
-) : BaseViewModel<Action, State>() {
+) : LifecycleAwareViewModel<Action, State>() {
 
     override val initialState = State(isLoading = true)
-
-    private val streamOpen = AtomicBoolean(true)
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
@@ -108,11 +108,14 @@ class LiveDataViewModel @Inject constructor(
 
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
             .switchMap { action ->
-                liveDataUseCase.getLiveDataStream(
-                    action.serviceLocationService,
-                    action.serviceLocationId
-//                    streamOpen
-                )
+                Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+                    .filter { isActive() }
+                    .flatMap {
+                        liveDataUseCase.getLiveData(
+                            action.serviceLocationService,
+                            action.serviceLocationId
+                        )
+                    }
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.GetLiveData(it) }
@@ -120,11 +123,7 @@ class LiveDataViewModel @Inject constructor(
 
         val saveFavouriteChange = actions.ofType(Action.SaveFavourite::class.java)
             .switchMap { action ->
-                liveDataUseCase.saveFavourite(
-                    action.serviceLocationService,
-                    action.serviceLocationId,
-                    action.serviceLocationName
-                )
+                liveDataUseCase.saveFavourite(action.serviceLocation)
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.FavouriteSaved }
@@ -220,13 +219,5 @@ class LiveDataViewModel @Inject constructor(
             Timber.e(e, "Failed while logging route discrepancies")
         }
         return state.routeDiscrepancyState
-    }
-
-    fun onResume() {
-        streamOpen.set(true)
-    }
-
-    fun onPause() {
-        streamOpen.set(false)
     }
 }

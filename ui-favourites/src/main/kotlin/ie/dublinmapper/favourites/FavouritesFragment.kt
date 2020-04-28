@@ -87,14 +87,14 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
     override fun onResume() {
         super.onResume()
-//        viewModel.onResume()
+        viewModel.onResume()
         viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onPause() {
         super.onPause()
-//        viewModel.onPause()
+        viewModel.onPause()
         viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
     }
 

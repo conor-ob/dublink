@@ -3,6 +3,7 @@ package ie.dublinmapper.livedata
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
 import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 import java.util.SortedSet
 
 sealed class Action : BaseAction {
@@ -19,9 +20,7 @@ sealed class Action : BaseAction {
     ) : Action()
 
     data class SaveFavourite(
-        val serviceLocationId: String,
-        val serviceLocationName: String,
-        val serviceLocationService: Service
+        val serviceLocation: ServiceLocation
     ) : Action()
 
     data class RemoveFavourite(

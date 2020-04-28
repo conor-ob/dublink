@@ -44,7 +44,7 @@ fun ServiceLocation.setFavourite(): ServiceLocation {
 
 fun ServiceLocation.isFavourite(): Boolean = getCustomProperties().favouriteMetadata.isFavourite
 
-fun ServiceLocation.setCustomName(name: String): ServiceLocation {
+fun ServiceLocation.setCustomName(name: String?): ServiceLocation {
     val customProperties = getCustomProperties()
     return setCustomProperties(
         newCustomProperties = customProperties.copy(
@@ -80,9 +80,9 @@ fun StopLocation.getSortedRoutes(): List<Pair<Operator, String>> =
         }
     )
 
-fun StopLocation.getCustomRoutes(): List<RouteGroup> = getCustomProperties().favouriteMetadata.customRouteGroups
+fun ServiceLocation.getCustomRoutes(): List<RouteGroup> = getCustomProperties().favouriteMetadata.customRouteGroups
 
-fun StopLocation.addCustomRoute(operator: Operator, route: String): ServiceLocation {
+fun ServiceLocation.addCustomRoute(operator: Operator, route: String): ServiceLocation {
     val customProperties = getCustomProperties()
     val metadata = customProperties.favouriteMetadata
     val operatorsToRoutes = metadata.customRouteGroups.associate { it.operator to it.routes }.toSortedMap()
@@ -107,7 +107,7 @@ fun StopLocation.addCustomRoute(operator: Operator, route: String): ServiceLocat
     )
 }
 
-fun StopLocation.removeCustomRoute(operator: Operator, route: String): ServiceLocation {
+fun ServiceLocation.removeCustomRoute(operator: Operator, route: String): ServiceLocation {
     val customProperties = getCustomProperties()
     val metadata = customProperties.favouriteMetadata
     val operatorsToRoutes = metadata.customRouteGroups.associate { it.operator to it.routes }.toSortedMap()
@@ -139,7 +139,7 @@ fun StopLocation.removeCustomRoute(operator: Operator, route: String): ServiceLo
     )
 }
 
-fun StopLocation.hasCustomRoute(operator: Operator, route: String): Boolean {
+fun ServiceLocation.hasCustomRoute(operator: Operator, route: String): Boolean {
     val routeGroup = getCustomProperties().favouriteMetadata.customRouteGroups.find { it.operator == operator }
     return routeGroup?.routes?.contains(route) ?: false
 }

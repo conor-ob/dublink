@@ -171,6 +171,7 @@ class SqlDelightServiceLocationLocalResource(
                 var updated: ServiceLocation = favourite
                 updated = updated.setFavourite()
                 updated = updated.setSortIndex(it.sortIndex)
+                updated = updated.setCustomName(it.name)
                 serviceLocations[it.locationId] = updated
             }
         }
@@ -180,7 +181,7 @@ class SqlDelightServiceLocationLocalResource(
 
     private fun toFavouriteEntity(
         locationId: String,
-        name: String,
+        name: String?,
         sortIndex: Long
     ) = FavouriteEntity(locationId, name, sortIndex)
 
@@ -381,7 +382,7 @@ data class LocationEntity(
 
 data class FavouriteEntity(
     val locationId: String,
-    val name: String,
+    val name: String?,
     val sortIndex: Long
 )
 

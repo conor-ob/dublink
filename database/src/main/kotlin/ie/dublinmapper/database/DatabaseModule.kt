@@ -17,6 +17,17 @@ import javax.inject.Singleton
 @Module
 class DatabaseModule {
 
+    private val instantColumnAdapter = object : ColumnAdapter<Instant, String> {
+
+        override fun decode(databaseValue: String): Instant {
+            return Instant.parse(databaseValue)
+        }
+
+        override fun encode(value: Instant): String {
+            return value.toString()
+        }
+    }
+
     @Provides
     @Singleton
     fun provideDatabase(context: Context, stringProvider: StringProvider): Database {
@@ -46,29 +57,11 @@ class DatabaseModule {
             ),
             locationExpirationEntityAdapter = LocationExpirationEntity.Adapter(
                 serviceAdapter = EnumColumnAdapter(),
-                lastUpdatedAdapter = object : ColumnAdapter<Instant, String> {
-
-                    override fun decode(databaseValue: String): Instant {
-                        return Instant.parse(databaseValue)
-                    }
-
-                    override fun encode(value: Instant): String {
-                        return value.toString()
-                    }
-                }
+                lastUpdatedAdapter = instantColumnAdapter
             ),
             recentSearchEntityAdapter = RecentSearchEntity.Adapter(
                 serviceAdapter = EnumColumnAdapter(),
-                timestampAdapter = object : ColumnAdapter<Instant, String> {
-
-                    override fun decode(databaseValue: String): Instant {
-                        return Instant.parse(databaseValue)
-                    }
-
-                    override fun encode(value: Instant): String {
-                        return value.toString()
-                    }
-                }
+                timestampAdapter = instantColumnAdapter
             )
         )
     }

@@ -2,7 +2,6 @@ package ie.dublinmapper.favourites
 
 import ie.dublinmapper.domain.model.getSortIndex
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
-import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LiveDataResponse
@@ -12,15 +11,13 @@ import ie.dublinmapper.domain.service.PermissionChecker
 import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.LiveData
 import io.rtpi.api.ServiceLocation
 import io.rtpi.util.LiveDataGrouper
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
-    private val favouriteRepository: FavouriteRepository,
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val liveDataRepository: LiveDataRepository,
     private val permissionChecker: PermissionChecker,
@@ -30,7 +27,6 @@ class FavouritesUseCase @Inject constructor(
 
     fun getFavouritesWithLiveData(
         showLoading: Boolean
-//        streamOpen: AtomicBoolean
     ): Observable<List<LiveDataPresentationResponse>> {
         if (preferenceStore.isFavouritesSortByLocation() &&
             permissionChecker.isLocationPermissionGranted()
@@ -42,7 +38,6 @@ class FavouritesUseCase @Inject constructor(
                         comparator = Comparator { s1, s2 ->
                             s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
                         }
-//                        streamOpen = streamOpen
                     )
                 }
         } else {
@@ -51,7 +46,6 @@ class FavouritesUseCase @Inject constructor(
                 comparator = Comparator { s1, s2 ->
                     s1.getSortIndex().compareTo(s2.getSortIndex())
                 }
-//                streamOpen = streamOpen
             )
         }
     }
@@ -59,7 +53,6 @@ class FavouritesUseCase @Inject constructor(
     private fun getFavouritesWithLiveData(
         showLoading: Boolean,
         comparator: Comparator<ServiceLocation>
-//        streamOpen: AtomicBoolean
     ): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()
         return serviceLocationRepository.getFavourites()
@@ -74,15 +67,14 @@ class FavouritesUseCase @Inject constructor(
                                 // TODO this may temporarily cause blank screen when navigating back to favourites
                                 if (showLoading) {
                                     getGroupedLiveData(serviceLocation)
-//                                    getGroupedLiveData(serviceLocation, streamOpen)
                                         .startWith(
                                             LiveDataPresentationResponse.Loading(
                                                 serviceLocation = serviceLocation
                                             )
                                         )
+                                        .subscribeOn(Schedulers.newThread())
                                 } else {
                                     getGroupedLiveData(serviceLocation)
-//                                    getGroupedLiveData(serviceLocation, streamOpen)
                                 }
                             } else {
                                 Observable.just(
@@ -98,39 +90,24 @@ class FavouritesUseCase @Inject constructor(
 
     private fun getGroupedLiveData(
         serviceLocation: ServiceLocation
-//        streamOpen: AtomicBoolean
-    ): Observable<LiveDataPresentationResponse> {
-        return Observable
-            .interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-//            .filter { streamOpen.get() }
-            .flatMap {
-                liveDataRepository.get(
-                    LiveDataKey(
-                        service = serviceLocation.service,
-                        locationId = serviceLocation.id
-                    )
-                ).map { response ->
-                    when (response) {
-                        is LiveDataResponse.Data -> LiveDataPresentationResponse.Data(
-                            serviceLocation = serviceLocation,
-                            liveData = LiveDataGrouper.groupLiveData(response.liveData)
-                        )
-                        is LiveDataResponse.Error -> LiveDataPresentationResponse.Error(
-                            serviceLocation = serviceLocation,
-                            throwable = response.throwable
-                        )
-                    }
-                }
+    ): Observable<LiveDataPresentationResponse> =
+        liveDataRepository.get(
+            LiveDataKey(
+                service = serviceLocation.service,
+                locationId = serviceLocation.id
+            )
+        ).map { response ->
+            when (response) {
+                is LiveDataResponse.Data -> LiveDataPresentationResponse.Data(
+                    serviceLocation = serviceLocation,
+                    liveData = LiveDataGrouper.groupLiveData(response.liveData)
+                )
+                is LiveDataResponse.Error -> LiveDataPresentationResponse.Error(
+                    serviceLocation = serviceLocation,
+                    throwable = response.throwable
+                )
             }
-    }
-
-    fun nameToBeDetermined(serviceLocation: ServiceLocation): Observable<Boolean> {
-        return Observable.fromCallable {
-            favouriteRepository.nameToBeDetermined(serviceLocation)
-            serviceLocationRepository.clearAllCaches()
-            return@fromCallable true
         }
-    }
 }
 
 sealed class LiveDataPresentationResponse {

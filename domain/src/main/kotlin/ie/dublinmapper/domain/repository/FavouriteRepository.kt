@@ -5,11 +5,9 @@ import io.rtpi.api.ServiceLocation
 
 interface FavouriteRepository {
 
-    fun saveFavourite(serviceLocationId: String, serviceLocationName: String, service: Service)
+    fun saveFavourite(serviceLocation: ServiceLocation)
 
     fun removeFavourite(serviceLocationId: String, service: Service)
-
-    fun nameToBeDetermined(serviceLocation: ServiceLocation)
 
     fun saveChanges(serviceLocations: List<ServiceLocation>)
 }
