@@ -2,6 +2,8 @@ package ie.dublinmapper.livedata
 
 import com.ww.roxie.Reducer
 import ie.dublinmapper.LifecycleAwareViewModel
+import ie.dublinmapper.domain.model.getCustomRoutes
+import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
@@ -26,7 +28,12 @@ class LiveDataViewModel @Inject constructor(
         when (change) {
             is Change.GetServiceLocation -> state.copy(
                 serviceLocationResponse = change.serviceLocationResponse,
-                isFavourite = null
+                isFavourite = null,
+                activeRouteFilters = if (change.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
+                    change.serviceLocationResponse.serviceLocation.getCustomRoutes().flatMap { it.routes }.toSet()
+                } else {
+                    emptySet()
+                }
             )
             is Change.GetLiveData -> {
                 val newState = state.copy(

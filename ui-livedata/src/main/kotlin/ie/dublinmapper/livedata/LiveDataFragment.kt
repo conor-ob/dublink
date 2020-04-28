@@ -128,6 +128,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                                     override fun onSave(serviceLocation: ServiceLocation) {
                                         Timber.d(serviceLocation.toString())
                                         viewModel.dispatch(Action.SaveFavourite(serviceLocation))
+                                        viewModel.dispatch(
+                                            Action.GetServiceLocation(
+                                                serviceLocationService = serviceLocation.service,
+                                                serviceLocationId = serviceLocation.id
+                                            )
+                                        )
                                     }
                                 }
                             ).show()

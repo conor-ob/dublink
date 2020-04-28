@@ -1,6 +1,7 @@
 package ie.dublinmapper.favourites
 
 import ie.dublinmapper.domain.model.getSortIndex
+import ie.dublinmapper.domain.model.hasCustomRoute
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
@@ -13,6 +14,7 @@ import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.LiveData
+import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.ServiceLocation
 import io.rtpi.util.LiveDataGrouper
 import javax.inject.Inject
@@ -100,7 +102,7 @@ class FavouritesUseCase @Inject constructor(
             when (response) {
                 is LiveDataResponse.Data -> LiveDataPresentationResponse.Data(
                     serviceLocation = serviceLocation,
-                    liveData = LiveDataGrouper.groupLiveData(response.liveData)
+                    liveData = LiveDataGrouper.groupLiveData(filterLiveData(serviceLocation, response.liveData))
                 )
                 is LiveDataResponse.Error -> LiveDataPresentationResponse.Error(
                     serviceLocation = serviceLocation,
@@ -108,6 +110,19 @@ class FavouritesUseCase @Inject constructor(
                 )
             }
         }
+
+    private fun filterLiveData(serviceLocation: ServiceLocation, liveData: List<LiveData>): List<LiveData> {
+        return liveData.filter {
+            if (it is PredictionLiveData) {
+                serviceLocation.hasCustomRoute(
+                    operator = it.operator,
+                    route = it.routeInfo.route
+                )
+            } else {
+                true
+            }
+        }
+    }
 }
 
 sealed class LiveDataPresentationResponse {
