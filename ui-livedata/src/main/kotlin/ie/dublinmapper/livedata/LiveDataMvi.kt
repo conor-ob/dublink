@@ -38,8 +38,10 @@ sealed class Action : BaseAction {
 }
 
 sealed class RouteFilterChangeType {
-    data class Add(val route: String) : RouteFilterChangeType()
-    data class Remove(val route: String) : RouteFilterChangeType()
+    data class AddRoute(val route: String) : RouteFilterChangeType()
+    data class AddDirection(val direction: String) : RouteFilterChangeType()
+    data class RemoveRoute(val route: String) : RouteFilterChangeType()
+    data class RemoveDirection(val direction: String) : RouteFilterChangeType()
     object Clear : RouteFilterChangeType()
     object NoChange : RouteFilterChangeType()
 }
@@ -66,6 +68,7 @@ data class State(
     val liveDataResponse: LiveDataPresentationResponse? = null,
     val filteredLiveDataResponse: LiveDataPresentationResponse? = null,
     val activeRouteFilters: Set<String> = emptySet(),
+    val activeDirectionFilters: Set<String> = emptySet(),
     val isFavourite: Boolean? = null,
     val routeDiscrepancyState: RouteDiscrepancyState? = null,
     val routeFilterState: Int? = null

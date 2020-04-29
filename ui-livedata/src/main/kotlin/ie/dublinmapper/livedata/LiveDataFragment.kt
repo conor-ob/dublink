@@ -17,16 +17,17 @@ import ie.dublinmapper.dialog.CustomizeFavouriteDialogFactory
 import ie.dublinmapper.dialog.OnFavouriteSavedListener
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.getSortedRoutes
+import ie.dublinmapper.domain.model.hasCustomDirection
 import ie.dublinmapper.domain.model.isFavourite
 import ie.dublinmapper.setVisibility
 import ie.dublinmapper.util.ChipFactory
 import ie.dublinmapper.viewModelProvider
+import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
-import timber.log.Timber
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
@@ -126,7 +127,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                                 onFavouriteSavedListener = object : OnFavouriteSavedListener {
 
                                     override fun onSave(serviceLocation: ServiceLocation) {
-                                        Timber.d(serviceLocation.toString())
                                         viewModel.dispatch(Action.SaveFavourite(serviceLocation))
                                         viewModel.dispatch(
                                             Action.GetServiceLocation(
@@ -220,7 +220,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderRouteFilterState(state: State) {
-        live_data_button_clear_route_filters.setVisibility(isVisible = state.activeRouteFilters.isNotEmpty())
+        live_data_button_clear_route_filters.setVisibility(
+            isVisible = state.activeRouteFilters.isNotEmpty() || state.activeDirectionFilters.isNotEmpty()
+        )
         if (state.serviceLocationResponse is ServiceLocationPresentationResponse.Data &&
             state.serviceLocationResponse.serviceLocation is StopLocation
         ) {
@@ -228,7 +230,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             if (sortedRoutes.size > 1) {
                 live_data_button_expand_route_filters.visibility = View.VISIBLE
             }
-            if (sortedRoutes.size != live_data_chip_group_route_filters.childCount) {
+//            if (sortedRoutes.size != live_data_chip_group_route_filters.childCount) {
+            if (0 == live_data_chip_group_route_filters.childCount) {
                 live_data_chip_group_route_filters.removeAllViewsInLayout()
                 for ((operator, route) in sortedRoutes) {
                     val routeFilterChip = ChipFactory
@@ -243,6 +246,25 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                             setOnCheckedChangeListener(routeFilterClickedListener)
                         }
                     live_data_chip_group_route_filters.addView(routeFilterChip)
+                }
+                if (state.serviceLocationResponse.serviceLocation.routeGroups.map { it.operator }.contains(Operator.DART)) {
+                    listOf(
+                        "Northbound",
+                        "Southbound"
+                    ).forEach { direction ->
+                        val directionFilterChip =  ChipFactory
+                            .newDirectionFilterChip(requireContext(), direction)
+                            .apply {
+                                isChecked = serviceLocation.hasCustomDirection(direction)
+                                alpha = if (serviceLocation.hasCustomDirection(direction)) {
+                                    1.0f
+                                } else {
+                                    0.33f
+                                }
+                                setOnCheckedChangeListener(directionFilterClickedListener)
+                            }
+                        live_data_chip_group_route_filters.addView(directionFilterChip)
+                    }
                 }
                 live_data_chip_group_route_filters.visibility = View.VISIBLE
             }
@@ -271,13 +293,44 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         if (isChecked) {
             viewModel.dispatch(
                 Action.RouteFilterIntent(
-                    RouteFilterChangeType.Add(buttonView.text.toString())
+                    RouteFilterChangeType.AddRoute(buttonView.text.toString())
                 )
             )
         } else {
             viewModel.dispatch(
                 Action.RouteFilterIntent(
-                    RouteFilterChangeType.Remove(buttonView.text.toString())
+                    RouteFilterChangeType.RemoveRoute(buttonView.text.toString())
+                )
+            )
+        }
+    }
+
+    private val directionFilterClickedListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        (buttonView as Chip).apply {
+            alpha = if (isChecked) {
+                1.0f
+            } else {
+                0.33f
+            }
+        }
+
+        val checkedChipIds = live_data_chip_group_route_filters.checkedChipIds
+        if (checkedChipIds.isNullOrEmpty()) {
+            live_data_button_clear_route_filters.visibility = View.INVISIBLE
+        } else {
+            live_data_button_clear_route_filters.visibility = View.VISIBLE
+        }
+
+        if (isChecked) {
+            viewModel.dispatch(
+                Action.RouteFilterIntent(
+                    RouteFilterChangeType.AddDirection(buttonView.text.toString())
+                )
+            )
+        } else {
+            viewModel.dispatch(
+                Action.RouteFilterIntent(
+                    RouteFilterChangeType.RemoveDirection(buttonView.text.toString())
                 )
             )
         }

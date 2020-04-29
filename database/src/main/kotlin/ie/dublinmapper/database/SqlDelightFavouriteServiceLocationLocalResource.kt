@@ -1,6 +1,7 @@
 package ie.dublinmapper.database
 
 import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
+import ie.dublinmapper.domain.model.getCustomDirections
 import ie.dublinmapper.domain.model.getCustomName
 import ie.dublinmapper.domain.model.getCustomRoutes
 import io.rtpi.api.Service
@@ -29,6 +30,13 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                     )
                 }
             }
+            for (direction in serviceLocation.getCustomDirections()) {
+                database.favouriteDirectionQueries.insertOrReplace(
+                    service = serviceLocation.service,
+                    locationId = serviceLocation.id,
+                    direction = direction
+                )
+            }
         }
     }
 
@@ -42,6 +50,10 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                 service = service,
                 locationId = serviceLocationId
             )
+            database.favouriteDirectionQueries.delete(
+                service = service,
+                locationId = serviceLocationId
+            )
         }
     }
 
@@ -49,6 +61,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
         database.transaction {
             database.favouriteLocationQueries.deleteAll()
             database.favouriteServiceQueries.deleteAll()
+            database.favouriteDirectionQueries.deleteAll()
             serviceLocations.forEachIndexed { index, serviceLocation ->
                 database.favouriteLocationQueries.insertOrReplace(
                     service = serviceLocation.service,
@@ -67,6 +80,13 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                             operator = routeGroup.operator
                         )
                     }
+                }
+                for (direction in serviceLocation.getCustomDirections()) {
+                    database.favouriteDirectionQueries.insertOrReplace(
+                        service = serviceLocation.service,
+                        locationId = serviceLocation.id,
+                        direction = direction
+                    )
                 }
             }
         }

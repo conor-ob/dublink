@@ -24,6 +24,19 @@ object ChipFactory {
         }
     }
 
+    fun newDirectionChip(context: Context, direction: String): Chip {
+        return Chip(context).apply {
+            setChipDrawable(ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_DublinMapper_RouteChip))
+            setChipBackgroundColorResource(android.R.color.black)
+            setTextAppearanceResource(R.style.TextAppearance_DublinMapper_Button)
+            setTextColor(ColorStateList.valueOf(context.resources.getColor(android.R.color.white)))
+            text = " $direction "
+            isAllCaps = false
+            isClickable = false
+            elevation = 4f.dipToPx(context)
+        }
+    }
+
     fun newRouteFilterChip(context: Context, pair: Pair<Operator, String>): Chip {
         val (operator, route) = pair
         val (textColour, backgroundColour) = mapColour(operator, route)
@@ -34,6 +47,20 @@ object ChipFactory {
             setTextColor(ColorStateList.valueOf(context.resources.getColor(textColour)))
             text = route
             tag = operator
+            isAllCaps = false
+            elevation = 4f.dipToPx(context)
+            isCheckedIconVisible = false
+            setRippleColorResource(android.R.color.white)
+        }
+    }
+
+    fun newDirectionFilterChip(context: Context, direction: String): Chip {
+        return Chip(context).apply {
+            setChipDrawable(ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_DublinMapper_RouteFilterChip))
+            setChipBackgroundColorResource(android.R.color.black)
+            setTextAppearanceResource(R.style.TextAppearance_DublinMapper_Button_RouteFilter)
+            setTextColor(ColorStateList.valueOf(context.resources.getColor(android.R.color.white)))
+            text = direction
             isAllCaps = false
             elevation = 4f.dipToPx(context)
             isCheckedIconVisible = false

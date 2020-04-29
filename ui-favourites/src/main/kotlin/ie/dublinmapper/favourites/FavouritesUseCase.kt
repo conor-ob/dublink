@@ -1,6 +1,9 @@
 package ie.dublinmapper.favourites
 
+import ie.dublinmapper.domain.model.getCustomDirections
+import ie.dublinmapper.domain.model.getCustomRoutes
 import ie.dublinmapper.domain.model.getSortIndex
+import ie.dublinmapper.domain.model.hasCustomDirection
 import ie.dublinmapper.domain.model.hasCustomRoute
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
@@ -114,10 +117,20 @@ class FavouritesUseCase @Inject constructor(
     private fun filterLiveData(serviceLocation: ServiceLocation, liveData: List<LiveData>): List<LiveData> {
         return liveData.filter {
             if (it is PredictionLiveData) {
-                serviceLocation.hasCustomRoute(
-                    operator = it.operator,
-                    route = it.routeInfo.route
-                )
+                if (serviceLocation.getCustomRoutes().isNullOrEmpty()) {
+                    true
+                } else {
+                    serviceLocation.hasCustomRoute(
+                        operator = it.operator,
+                        route = it.routeInfo.route
+                    )
+                } && if (serviceLocation.getCustomDirections().isNullOrEmpty()) {
+                    true
+                } else {
+                    serviceLocation.hasCustomDirection(
+                        direction = it.routeInfo.direction
+                    )
+                }
             } else {
                 true
             }

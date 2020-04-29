@@ -2,6 +2,7 @@ package ie.dublinmapper.livedata
 
 import com.ww.roxie.Reducer
 import ie.dublinmapper.LifecycleAwareViewModel
+import ie.dublinmapper.domain.model.getCustomDirections
 import ie.dublinmapper.domain.model.getCustomRoutes
 import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
@@ -30,6 +31,11 @@ class LiveDataViewModel @Inject constructor(
                 isFavourite = null,
                 activeRouteFilters = if (change.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
                     change.serviceLocationResponse.serviceLocation.getCustomRoutes().flatMap { it.routes }.toSet()
+                } else {
+                    emptySet()
+                },
+                activeDirectionFilters = if (change.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
+                    change.serviceLocationResponse.serviceLocation.getCustomDirections().toSet()
                 } else {
                     emptySet()
                 }
@@ -61,28 +67,43 @@ class LiveDataViewModel @Inject constructor(
         change: Change.RouteFilterChange
     ): State {
         val adjustedRouteFilters = state.activeRouteFilters.toMutableSet()
+        val adjustedDirectionFilters = state.activeDirectionFilters.toMutableSet()
         when (change.type) {
-            is RouteFilterChangeType.Add -> adjustedRouteFilters.add(change.type.route)
-            is RouteFilterChangeType.Remove -> adjustedRouteFilters.remove(change.type.route)
+            is RouteFilterChangeType.AddRoute -> adjustedRouteFilters.add(change.type.route)
+            is RouteFilterChangeType.RemoveRoute -> adjustedRouteFilters.remove(change.type.route)
+            is RouteFilterChangeType.AddDirection -> adjustedDirectionFilters.add(change.type.direction)
+            is RouteFilterChangeType.RemoveDirection -> adjustedDirectionFilters.remove(change.type.direction)
             is RouteFilterChangeType.Clear -> adjustedRouteFilters.clear()
             is RouteFilterChangeType.NoChange -> { /* do nothing */ }
         }
         return if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
             state.liveDataResponse.liveData.all { it is PredictionLiveData }
         ) {
-            if (adjustedRouteFilters.isEmpty()) {
+            if (adjustedRouteFilters.isEmpty() && adjustedDirectionFilters.isEmpty()) {
                 state.copy(
                     filteredLiveDataResponse = state.liveDataResponse,
-                    activeRouteFilters = adjustedRouteFilters
+                    activeRouteFilters = adjustedRouteFilters,
+                    activeDirectionFilters = adjustedDirectionFilters
                 )
             } else {
                 state.copy(
                     filteredLiveDataResponse = LiveDataPresentationResponse.Data(
                         liveData = state.liveDataResponse.liveData
                             .filterIsInstance<PredictionLiveData>()
-                            .filter { adjustedRouteFilters.contains(it.routeInfo.route) }
+                            .filter {
+                                if (adjustedRouteFilters.isEmpty()) {
+                                    true
+                                } else {
+                                    adjustedRouteFilters.contains(it.routeInfo.route)
+                                } && if (adjustedDirectionFilters.isEmpty()) {
+                                    true
+                                } else {
+                                    adjustedDirectionFilters.contains(it.routeInfo.direction)
+                                }
+                            }
                     ),
-                    activeRouteFilters = adjustedRouteFilters
+                    activeRouteFilters = adjustedRouteFilters,
+                    activeDirectionFilters = adjustedDirectionFilters
                 )
             }
         } else if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
@@ -92,7 +113,10 @@ class LiveDataViewModel @Inject constructor(
                 activeRouteFilters = adjustedRouteFilters
             )
         } else {
-            state.copy(activeRouteFilters = adjustedRouteFilters)
+            state.copy(
+                activeRouteFilters = adjustedRouteFilters,
+                activeDirectionFilters = adjustedDirectionFilters
+            )
         }
     }
 

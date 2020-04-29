@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
+import ie.dublinmapper.domain.model.getCustomDirections
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.ui.R
 import ie.dublinmapper.util.ChipFactory
@@ -99,6 +100,9 @@ class ServiceLocationItem(
                     .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
                 for (route in sortedRouteGroups) {
                     viewHolder.routes.addView(ChipFactory.newRouteChip(viewHolder.itemView.context, route))
+                }
+                for (direction in serviceLocation.getCustomDirections()) {
+                    viewHolder.routes.addView(ChipFactory.newDirectionChip(viewHolder.itemView.context, direction))
                 }
                 viewHolder.routes.visibility = View.VISIBLE
                 viewHolder.routesDivider.visibility = View.VISIBLE

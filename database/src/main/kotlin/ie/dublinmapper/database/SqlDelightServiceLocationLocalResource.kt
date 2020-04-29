@@ -3,12 +3,13 @@ package ie.dublinmapper.database
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
+import ie.dublinmapper.domain.model.addCustomDirection
 import ie.dublinmapper.domain.model.addCustomRoute
 import ie.dublinmapper.domain.model.setCustomName
 import ie.dublinmapper.domain.model.setFavourite
 import ie.dublinmapper.domain.model.setSortIndex
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
+import io.reactivex.functions.Function5
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DockLocation
 import io.rtpi.api.Operator
@@ -88,8 +89,15 @@ class SqlDelightServiceLocationLocalResource(
             .mapToList()
 
         val favouriteServicesObservable = database.favouriteServiceQueries
-            .selectAllByService(service) { _, service, locationId, route, operator ->
-                toFavouriteServiceEntity(service, locationId, route, operator)
+            .selectAllByService(service) { _, service1, locationId, route, operator ->
+                toFavouriteServiceEntity(service1, locationId, route, operator)
+            }
+            .asObservable()
+            .mapToList()
+
+        val favouriteDirectionsObservable = database.favouriteDirectionQueries
+            .selectAllByService(service) { _, service1, locationId, direction ->
+                toFavouriteDirectionEntity(service1, locationId, direction)
             }
             .asObservable()
             .mapToList()
@@ -99,8 +107,9 @@ class SqlDelightServiceLocationLocalResource(
             servicesObservable,
             favouritesObservable,
             favouriteServicesObservable,
-            Function4 { locationEntities, serviceEntities, favouriteEntities, favouriteServices ->
-                resolve(service, locationEntities, serviceEntities, favouriteEntities, favouriteServices)
+            favouriteDirectionsObservable,
+            Function5 { locationEntities, serviceEntities, favouriteEntities, favouriteServices, favouriteDirectionEntities ->
+                resolve(service, locationEntities, serviceEntities, favouriteEntities, favouriteServices, favouriteDirectionEntities)
             }
         )
     }
@@ -110,11 +119,14 @@ class SqlDelightServiceLocationLocalResource(
         locationEntities: List<LocationEntity>,
         serviceEntities: List<ServiceEntity>,
         favouriteEntities: List<FavouriteEntity>,
-        favouriteServiceEntities: List<FavouriteServiceEntityTemp>
+        favouriteServiceEntities: List<FavouriteServiceEntityTemp>,
+        favouriteDirectionEntities: List<FavouriteDirectionEntityTemp>
     ): List<ServiceLocation> {
         val serviceEntitiesByLocation = serviceEntities.groupBy { it.locationId }
 
         val favouriteServiceEntitiesByLocation = favouriteServiceEntities.groupBy { it.locationId }
+
+        val favouriteDirectionEntitiesByLocation = favouriteDirectionEntities.groupBy { it.locationId }
 
         val serviceLocations = when (service) {
             Service.AIRCOACH,
@@ -192,6 +204,13 @@ class SqlDelightServiceLocationLocalResource(
                     }
                 }
 
+                val favouriteDirections = favouriteDirectionEntitiesByLocation[it.locationId]
+                if (favouriteDirections != null) {
+                    for (favouriteDirection in favouriteDirections) {
+                        updated = updated.addCustomDirection(favouriteDirection.direction)
+                    }
+                }
+
                 serviceLocations[it.locationId] = updated
             }
         }
@@ -211,6 +230,12 @@ class SqlDelightServiceLocationLocalResource(
         route: String,
         operator: Operator
     ) = FavouriteServiceEntityTemp(service, locationId, route, operator)
+
+    private fun toFavouriteDirectionEntity(
+        service: Service,
+        locationId: String,
+        direction: String
+    ) = FavouriteDirectionEntityTemp(service, locationId, direction)
 
     private fun toServiceEntity(
         locationId: String,
@@ -418,6 +443,12 @@ data class FavouriteServiceEntityTemp(
     val locationId: String,
     val route: String,
     val operator: Operator
+)
+
+data class FavouriteDirectionEntityTemp(
+    val service: Service,
+    val locationId: String,
+    val direction: String
 )
 
 interface ServiceEntity {

@@ -6,12 +6,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.chip.Chip
+import ie.dublinmapper.domain.model.addCustomDirection
 import ie.dublinmapper.domain.model.addCustomRoute
 import ie.dublinmapper.domain.model.getCustomName
 import ie.dublinmapper.domain.model.getCustomRoutes
 import ie.dublinmapper.domain.model.getName
 import ie.dublinmapper.domain.model.getSortedRoutes
+import ie.dublinmapper.domain.model.hasCustomDirection
 import ie.dublinmapper.domain.model.hasCustomRoute
+import ie.dublinmapper.domain.model.removeCustomDirection
 import ie.dublinmapper.domain.model.removeCustomRoute
 import ie.dublinmapper.domain.model.setCustomName
 import ie.dublinmapper.ui.R
@@ -45,11 +48,6 @@ object CustomizeFavouriteDialogFactory {
                 customizeFavouriteView.favourite_edit_routes.visibility = View.GONE
             }
             is StopLocation -> {
-//                if (serviceLocation.routeGroups.map { it.operator }.contains(Operator.DART)) {
-//                    "dart"
-//                } else {
-//                    "stop"
-//                }
                 customizeFavouriteView.favourite_edit_routes.visibility = View.VISIBLE
                 val sortedRoutes = serviceLocation.getSortedRoutes()
                 for ((operator, route) in sortedRoutes) {
@@ -74,16 +72,53 @@ object CustomizeFavouriteDialogFactory {
                                     editedStopLocation.addCustomRoute(
                                         buttonView.tag as Operator,
                                         buttonView.text.toString()
-                                    ) as StopLocation
+                                    )
                                 } else {
                                     editedStopLocation.removeCustomRoute(
                                         buttonView.tag as Operator,
                                         buttonView.text.toString()
-                                    ) as StopLocation
+                                    )
                                 }
                             }
                         }
                     customizeFavouriteView.favourite_edit_routes.addView(routeFilterChip)
+                }
+                if (serviceLocation.routeGroups.map { it.operator }.contains(Operator.DART)) {
+                    listOf(
+                        "Northbound",
+                        "Southbound"
+                    )
+                        .forEach { direction ->
+                            val directionFilterChip =  ChipFactory
+                                .newDirectionFilterChip(context, direction)
+                                .apply {
+                                    isChecked = serviceLocation.hasCustomDirection(direction)
+                                    alpha = if (serviceLocation.hasCustomDirection(direction)) {
+                                        1.0f
+                                    } else {
+                                        0.33f
+                                    }
+                                    setOnCheckedChangeListener { buttonView, isChecked ->
+                                        (buttonView as Chip).apply {
+                                            alpha = if (isChecked) {
+                                                1.0f
+                                            } else {
+                                                0.33f
+                                            }
+                                        }
+                                        editedStopLocation = if (isChecked) {
+                                            editedStopLocation.addCustomDirection(
+                                                buttonView.text.toString()
+                                            )
+                                        } else {
+                                            editedStopLocation.removeCustomDirection(
+                                                buttonView.text.toString()
+                                            )
+                                        }
+                                    }
+                                }
+                            customizeFavouriteView.favourite_edit_routes.addView(directionFilterChip)
+                        }
                 }
                 builder.setNeutralButton("Select All", null)
             }

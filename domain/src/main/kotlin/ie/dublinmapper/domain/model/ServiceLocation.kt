@@ -17,6 +17,7 @@ private fun ServiceLocation.getCustomProperties(): CustomProperties {
                 isFavourite = false,
                 customName = null,
                 customRouteGroups = emptyList(),
+                customDirections = emptyList(),
                 customSortIndex = -1
             )
         )
@@ -82,6 +83,8 @@ fun StopLocation.getSortedRoutes(): List<Pair<Operator, String>> =
 
 fun ServiceLocation.getCustomRoutes(): List<RouteGroup> = getCustomProperties().favouriteMetadata.customRouteGroups
 
+fun ServiceLocation.getCustomDirections(): List<String> = getCustomProperties().favouriteMetadata.customDirections
+
 fun ServiceLocation.addCustomRoute(operator: Operator, route: String): ServiceLocation {
     val customProperties = getCustomProperties()
     val metadata = customProperties.favouriteMetadata
@@ -139,9 +142,37 @@ fun ServiceLocation.removeCustomRoute(operator: Operator, route: String): Servic
     )
 }
 
+fun ServiceLocation.addCustomDirection(direction: String): ServiceLocation {
+    val customProperties = getCustomProperties()
+    return setCustomProperties(
+        newCustomProperties = customProperties.copy(
+            favouriteMetadata = customProperties.favouriteMetadata.copy(
+                customDirections = customProperties.favouriteMetadata.customDirections.plus(direction).toSet().toList()
+            )
+        )
+    )
+}
+
+fun ServiceLocation.removeCustomDirection(direction: String): ServiceLocation {
+    val customProperties = getCustomProperties()
+    val copy = customProperties.favouriteMetadata.customDirections.toMutableList()
+    copy.remove(direction)
+    return setCustomProperties(
+        newCustomProperties = customProperties.copy(
+            favouriteMetadata = customProperties.favouriteMetadata.copy(
+                customDirections = copy
+            )
+        )
+    )
+}
+
 fun ServiceLocation.hasCustomRoute(operator: Operator, route: String): Boolean {
     val routeGroup = getCustomProperties().favouriteMetadata.customRouteGroups.find { it.operator == operator }
     return routeGroup?.routes?.contains(route) ?: false
+}
+
+fun ServiceLocation.hasCustomDirection(direction: String): Boolean {
+    return getCustomProperties().favouriteMetadata.customDirections.contains(direction)
 }
 
 data class CustomProperties(
@@ -152,5 +183,6 @@ data class FavouriteMetadata(
     val isFavourite: Boolean,
     val customName: String?,
     val customRouteGroups: List<RouteGroup>,
+    val customDirections: List<String>,
     val customSortIndex: Int
 )
