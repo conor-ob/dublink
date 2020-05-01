@@ -22,32 +22,66 @@ class LiveDataViewModel @Inject constructor(
     private val scheduler: RxScheduler
 ) : LifecycleAwareViewModel<Action, State>() {
 
-    override val initialState = State(isLoading = true)
+    override val initialState = State(
+        isLoading = true,
+        toastMessage = null,
+        serviceLocation = null,
+        liveDataResponse = null,
+        filteredLiveDataResponse = null,
+        activeRouteFilters = emptySet(),
+        activeDirectionFilters = emptySet(),
+        routeDiscrepancyState = null,
+        routeFilterState = null
+    )
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
-            is Change.GetServiceLocation -> state.copy(
+            is Change.GetServiceLocation -> State(
                 serviceLocation = change.serviceLocation,
-                isFavourite = null,
                 activeRouteFilters = change.serviceLocation.getCustomRoutes().flatMap { it.routes }.toSet(),
-                activeDirectionFilters = change.serviceLocation.getCustomDirections().toSet()
+                activeDirectionFilters = change.serviceLocation.getCustomDirections().toSet(),
+                liveDataResponse = state.liveDataResponse,
+                filteredLiveDataResponse = state.filteredLiveDataResponse,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                routeFilterState = state.routeFilterState,
+                isLoading = state.isLoading,
+                toastMessage = null
             )
             is Change.GetLiveData -> {
-                val newState = state.copy(
+                val newState = State(
                     liveDataResponse = change.liveDataResponse,
-                    isFavourite = null,
+                    serviceLocation = state.serviceLocation,
+                    activeRouteFilters = state.activeRouteFilters,
+                    activeDirectionFilters = state.activeDirectionFilters,
+                    filteredLiveDataResponse = state.filteredLiveDataResponse,
+                    routeFilterState = state.routeFilterState,
                     isLoading = false,
+                    toastMessage = null,
                     routeDiscrepancyState = tryLogRouteDiscrepancies(state, change)
                 )
                 filterRoutes(newState, Change.RouteFilterChange(RouteFilterChangeType.NoChange))
             }
             is Change.FavouriteSaved -> state.copy(
-                isFavourite = true,
-                serviceLocation = change.serviceLocation
+                serviceLocation = change.serviceLocation,
+                toastMessage = "Saved to Favourites",
+                liveDataResponse = state.liveDataResponse,
+                filteredLiveDataResponse = state.filteredLiveDataResponse,
+                activeRouteFilters = state.activeRouteFilters,
+                activeDirectionFilters = state.activeDirectionFilters,
+                routeFilterState = state.routeFilterState,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                isLoading = state.isLoading
             )
             is Change.FavouriteRemoved -> state.copy(
-                isFavourite = false,
-                serviceLocation = change.serviceLocation
+                serviceLocation = change.serviceLocation,
+                toastMessage = "Removed from Favourites",
+                liveDataResponse = state.liveDataResponse,
+                filteredLiveDataResponse = state.filteredLiveDataResponse,
+                activeRouteFilters = state.activeRouteFilters,
+                activeDirectionFilters = state.activeDirectionFilters,
+                routeFilterState = state.routeFilterState,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                isLoading = state.isLoading
             )
             is Change.RouteFilterChange -> filterRoutes(state, change)
             is Change.RouteFilterSheetMoved -> state.copy(
@@ -156,7 +190,12 @@ class LiveDataViewModel @Inject constructor(
                 liveDataUseCase.saveFavourite(action.serviceLocation)
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.FavouriteSaved(action.serviceLocation) }
+                    .map<Change> { response ->
+                        when (response) {
+                            is ServiceLocationPresentationResponse.Data -> Change.FavouriteSaved(response.serviceLocation)
+                            is ServiceLocationPresentationResponse.Error -> Change.Error(response.throwable)
+                        }
+                    }
             }
 
         val removeFavouriteChange = actions.ofType(Action.RemoveFavourite::class.java)

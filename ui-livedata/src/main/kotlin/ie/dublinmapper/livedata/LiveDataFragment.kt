@@ -98,17 +98,17 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     private fun createServiceLocationView() {
         live_data_toolbar.apply {
             setNavigationOnClickListener { activity?.onBackPressed() }
-            menu.findItem(R.id.action_favourite).setIcon(
-                if (args.serviceLocationIsFavourite) {
-                    R.drawable.ic_favourite_selected
-                } else {
-                    R.drawable.ic_favourite_unselected
-                }
-            )
+//            menu.findItem(R.id.action_favourite).setIcon(
+//                if (args.serviceLocationIsFavourite) {
+//                    R.drawable.ic_favourite_selected
+//                } else {
+//                    R.drawable.ic_favourite_unselected
+//                }
+//            )
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_favourite -> {
-                        if (args.serviceLocationIsFavourite) {
+                        if (serviceLocation.isFavourite()) {
                             viewModel.dispatch(
                                 Action.RemoveFavourite(
                                     serviceLocationId = args.serviceLocationId,
@@ -124,12 +124,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
                                     override fun onSave(serviceLocation: ServiceLocation) {
                                         viewModel.dispatch(Action.SaveFavourite(serviceLocation))
-                                        viewModel.dispatch(
-                                            Action.GetServiceLocation(
-                                                serviceLocationService = serviceLocation.service,
-                                                serviceLocationId = serviceLocation.id
-                                            )
-                                        )
                                     }
                                 }
                             ).show()
@@ -186,6 +180,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderState(state: State) {
+        if (state.toastMessage != null) {
+            Toast.makeText(requireContext(), state.toastMessage, Toast.LENGTH_SHORT).show()
+        }
         renderServiceLocationState(state)
         renderLiveDataState(state)
         renderRouteFilterState(state)
@@ -203,17 +200,13 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                         else -> service.fullName
                     }
                 )
-            }
-        }
-        if (state.isFavourite != null) {
-            args = args.copy(serviceLocationIsFavourite = state.isFavourite)
-            val favouriteMenuItem = live_data_toolbar.menu.findItem(R.id.action_favourite)
-            if (state.isFavourite) {
-                favouriteMenuItem.setIcon(R.drawable.ic_favourite_selected)
-                Toast.makeText(requireContext(), "Saved to Favourites", Toast.LENGTH_SHORT).show()
-            } else {
-                favouriteMenuItem.setIcon(R.drawable.ic_favourite_unselected)
-                Toast.makeText(requireContext(), "Removed from Favourites", Toast.LENGTH_SHORT).show()
+                menu.findItem(R.id.action_favourite).apply {
+                    if (serviceLocation.isFavourite()) {
+                        setIcon(R.drawable.ic_favourite_selected)
+                    } else {
+                        setIcon(R.drawable.ic_favourite_unselected)
+                    }
+                }
             }
         }
     }

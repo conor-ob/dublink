@@ -66,14 +66,14 @@ sealed class Change {
 
 data class State(
     val isLoading: Boolean,
-    val serviceLocation: ServiceLocation? = null,
-    val liveDataResponse: LiveDataPresentationResponse? = null,
-    val filteredLiveDataResponse: LiveDataPresentationResponse? = null,
-    val activeRouteFilters: Set<String> = emptySet(),
-    val activeDirectionFilters: Set<String> = emptySet(),
-    val isFavourite: Boolean? = null,
-    val routeDiscrepancyState: RouteDiscrepancyState? = null,
-    val routeFilterState: Int? = null
+    val toastMessage: String?,
+    val serviceLocation: ServiceLocation?,
+    val liveDataResponse: LiveDataPresentationResponse?,
+    val filteredLiveDataResponse: LiveDataPresentationResponse?,
+    val activeRouteFilters: Set<String>,
+    val activeDirectionFilters: Set<String>,
+    val routeDiscrepancyState: RouteDiscrepancyState?,
+    val routeFilterState: Int?
 ) : BaseState
 
 data class RouteDiscrepancyState(
