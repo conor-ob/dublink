@@ -63,20 +63,16 @@ class LiveDataUseCase @Inject constructor(
         }
     }
 
-    fun saveFavourite(serviceLocation: ServiceLocation): Observable<Boolean> {
-        return Observable.fromCallable {
-            clearServiceLocationCache(serviceLocation.service)
-            favouriteRepository.saveFavourite(serviceLocation)
-            return@fromCallable true
-        }
+    fun saveFavourite(serviceLocation: ServiceLocation): Observable<ServiceLocationPresentationResponse> {
+        clearServiceLocationCache(serviceLocation.service)
+        favouriteRepository.saveFavourite(serviceLocation)
+        return getServiceLocation(serviceLocation.service, serviceLocation.id)
     }
 
-    fun removeFavourite(service: Service, serviceLocationId: String): Observable<Boolean> {
-        return Observable.fromCallable {
-            clearServiceLocationCache(service)
-            favouriteRepository.removeFavourite(serviceLocationId, service)
-            return@fromCallable true
-        }
+    fun removeFavourite(service: Service, serviceLocationId: String): Observable<ServiceLocationPresentationResponse> {
+        clearServiceLocationCache(service)
+        favouriteRepository.removeFavourite(serviceLocationId, service)
+        return getServiceLocation(service, serviceLocationId)
     }
 
     private fun clearServiceLocationCache(service: Service) {

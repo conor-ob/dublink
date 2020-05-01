@@ -47,11 +47,13 @@ sealed class RouteFilterChangeType {
 }
 
 sealed class Change {
-    data class GetServiceLocation(val serviceLocationResponse: ServiceLocationPresentationResponse) : Change()
+    data class GetServiceLocation(val serviceLocation: ServiceLocation) : Change()
     data class GetLiveData(val liveDataResponse: LiveDataPresentationResponse) : Change()
 
-    object FavouriteSaved : Change()
-    object FavouriteRemoved : Change()
+    data class Error(val throwable: Throwable) : Change()
+
+    data class FavouriteSaved(val serviceLocation: ServiceLocation) : Change()
+    data class FavouriteRemoved(val serviceLocation: ServiceLocation) : Change()
 
     data class RouteFilterChange(
         val type: RouteFilterChangeType
@@ -64,7 +66,7 @@ sealed class Change {
 
 data class State(
     val isLoading: Boolean,
-    val serviceLocationResponse: ServiceLocationPresentationResponse? = null,
+    val serviceLocation: ServiceLocation? = null,
     val liveDataResponse: LiveDataPresentationResponse? = null,
     val filteredLiveDataResponse: LiveDataPresentationResponse? = null,
     val activeRouteFilters: Set<String> = emptySet(),

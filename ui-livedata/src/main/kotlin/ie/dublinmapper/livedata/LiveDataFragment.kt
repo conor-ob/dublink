@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.appcompat.widget.updateSubtitle
+import androidx.appcompat.widget.updateTitle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -95,12 +97,6 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private fun createServiceLocationView() {
         live_data_toolbar.apply {
-            title = args.serviceLocationName
-            subtitle = when (val service = args.serviceLocationService) {
-                Service.BUS_EIREANN,
-                Service.DUBLIN_BUS -> "${service.fullName} (${args.serviceLocationId})"
-                else -> service.fullName
-            }
             setNavigationOnClickListener { activity?.onBackPressed() }
             menu.findItem(R.id.action_favourite).setIcon(
                 if (args.serviceLocationIsFavourite) {
@@ -196,8 +192,18 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderServiceLocationState(state: State) {
-        if (state.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
-            serviceLocation = state.serviceLocationResponse.serviceLocation
+        if (state.serviceLocation != null) {
+            serviceLocation = state.serviceLocation
+            live_data_toolbar.apply {
+                updateTitle(newText = serviceLocation.getName())
+                updateSubtitle(
+                    newText = when (val service = args.serviceLocationService) {
+                        Service.BUS_EIREANN,
+                        Service.DUBLIN_BUS -> "${service.fullName} (${args.serviceLocationId})"
+                        else -> service.fullName
+                    }
+                )
+            }
         }
         if (state.isFavourite != null) {
             args = args.copy(serviceLocationIsFavourite = state.isFavourite)
@@ -223,10 +229,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         live_data_button_clear_route_filters.setVisibility(
             isVisible = state.activeRouteFilters.isNotEmpty() || state.activeDirectionFilters.isNotEmpty()
         )
-        if (state.serviceLocationResponse is ServiceLocationPresentationResponse.Data &&
-            state.serviceLocationResponse.serviceLocation is StopLocation
-        ) {
-            val sortedRoutes = state.serviceLocationResponse.serviceLocation.getSortedRoutes()
+        if (state.serviceLocation != null && state.serviceLocation is StopLocation) {
+            val sortedRoutes = state.serviceLocation.getSortedRoutes()
             if (sortedRoutes.size > 1) {
                 live_data_button_expand_route_filters.visibility = View.VISIBLE
             }
@@ -247,7 +251,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                         }
                     live_data_chip_group_route_filters.addView(routeFilterChip)
                 }
-                if (state.serviceLocationResponse.serviceLocation.routeGroups.map { it.operator }.contains(Operator.DART)) {
+                if (state.serviceLocation.routeGroups.map { it.operator }.contains(Operator.DART)) {
                     listOf(
                         "Northbound",
                         "Southbound"

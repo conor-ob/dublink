@@ -27,18 +27,10 @@ class LiveDataViewModel @Inject constructor(
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.GetServiceLocation -> state.copy(
-                serviceLocationResponse = change.serviceLocationResponse,
+                serviceLocation = change.serviceLocation,
                 isFavourite = null,
-                activeRouteFilters = if (change.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
-                    change.serviceLocationResponse.serviceLocation.getCustomRoutes().flatMap { it.routes }.toSet()
-                } else {
-                    emptySet()
-                },
-                activeDirectionFilters = if (change.serviceLocationResponse is ServiceLocationPresentationResponse.Data) {
-                    change.serviceLocationResponse.serviceLocation.getCustomDirections().toSet()
-                } else {
-                    emptySet()
-                }
+                activeRouteFilters = change.serviceLocation.getCustomRoutes().flatMap { it.routes }.toSet(),
+                activeDirectionFilters = change.serviceLocation.getCustomDirections().toSet()
             )
             is Change.GetLiveData -> {
                 val newState = state.copy(
@@ -50,15 +42,18 @@ class LiveDataViewModel @Inject constructor(
                 filterRoutes(newState, Change.RouteFilterChange(RouteFilterChangeType.NoChange))
             }
             is Change.FavouriteSaved -> state.copy(
-                isFavourite = true
+                isFavourite = true,
+                serviceLocation = change.serviceLocation
             )
             is Change.FavouriteRemoved -> state.copy(
-                isFavourite = false
+                isFavourite = false,
+                serviceLocation = change.serviceLocation
             )
             is Change.RouteFilterChange -> filterRoutes(state, change)
             is Change.RouteFilterSheetMoved -> state.copy(
                 routeFilterState = change.state
             )
+            is Change.Error -> state // TODO
         }
     }
 
@@ -133,7 +128,12 @@ class LiveDataViewModel @Inject constructor(
                 )
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.GetServiceLocation(it) }
+                    .map<Change> { response ->
+                        when (response) {
+                            is ServiceLocationPresentationResponse.Data -> Change.GetServiceLocation(response.serviceLocation)
+                            is ServiceLocationPresentationResponse.Error -> Change.Error(response.throwable)
+                        }
+                    }
             }
 
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
@@ -156,7 +156,7 @@ class LiveDataViewModel @Inject constructor(
                 liveDataUseCase.saveFavourite(action.serviceLocation)
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.FavouriteSaved }
+                    .map<Change> { Change.FavouriteSaved(action.serviceLocation) }
             }
 
         val removeFavouriteChange = actions.ofType(Action.RemoveFavourite::class.java)
@@ -167,7 +167,12 @@ class LiveDataViewModel @Inject constructor(
                 )
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.FavouriteRemoved }
+                    .map<Change> { response ->
+                        when (response) {
+                            is ServiceLocationPresentationResponse.Data -> Change.FavouriteRemoved(response.serviceLocation)
+                            is ServiceLocationPresentationResponse.Error -> Change.Error(response.throwable)
+                        }
+                    }
             }
 
         val routeFilterIntents = actions
@@ -200,12 +205,9 @@ class LiveDataViewModel @Inject constructor(
         change: Change.GetLiveData
     ): RouteDiscrepancyState? {
         try {
-            val serviceLocationResponse = state.serviceLocationResponse
             val liveDataResponse = change.liveDataResponse
-            if (liveDataResponse is LiveDataPresentationResponse.Data &&
-                serviceLocationResponse is ServiceLocationPresentationResponse.Data
-            ) {
-                val serviceLocation = serviceLocationResponse.serviceLocation
+            if (liveDataResponse is LiveDataPresentationResponse.Data && state.serviceLocation != null) {
+                val serviceLocation = state.serviceLocation
                 val liveData = liveDataResponse.liveData
                 if (serviceLocation is StopLocation &&
                     liveData.all { it is PredictionLiveData }
