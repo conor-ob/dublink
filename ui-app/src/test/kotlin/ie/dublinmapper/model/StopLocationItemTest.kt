@@ -5,10 +5,10 @@ import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 import io.rtpi.api.StopLocation
 
-class ServiceLocationItemTest : AbstractUniqueItemTest<ServiceLocationItem>() {
+class StopLocationItemTest : AbstractUniqueItemTest<StopLocationItem>() {
 
-    override val controlItem: ServiceLocationItem
-        get() = ServiceLocationItem(
+    override val controlItem: StopLocationItem
+        get() = StopLocationItem(
             serviceLocation = DubLinkStopLocation(
                     StopLocation(
                     id = "3421",
@@ -23,8 +23,8 @@ class ServiceLocationItemTest : AbstractUniqueItemTest<ServiceLocationItem>() {
 
         )
 
-    override val sameItemNotEqual: ServiceLocationItem
-        get() = ServiceLocationItem(
+    override val sameItemNotEqual: StopLocationItem
+        get() = StopLocationItem(
             serviceLocation = DubLinkStopLocation(
                 StopLocation(
                     id = "3421",
@@ -38,8 +38,8 @@ class ServiceLocationItemTest : AbstractUniqueItemTest<ServiceLocationItem>() {
             icon = 0
         )
 
-    override val equalItem: ServiceLocationItem
-        get() = ServiceLocationItem(
+    override val equalItem: StopLocationItem
+        get() = StopLocationItem(
             serviceLocation = DubLinkStopLocation(
                 StopLocation(
                     id = "3421",

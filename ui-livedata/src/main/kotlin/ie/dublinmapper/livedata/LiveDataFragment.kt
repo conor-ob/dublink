@@ -64,15 +64,14 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         viewModel.onResume()
         viewModel.dispatch(
             Action.GetServiceLocation(
-                serviceLocationId = args.serviceLocationId,
-                serviceLocationService = args.serviceLocationService
+                serviceLocationId = args.locationId,
+                serviceLocationService = args.service
             )
         )
         viewModel.dispatch(
             Action.GetLiveData(
-                serviceLocationId = args.serviceLocationId,
-                serviceLocationName = args.serviceLocationName,
-                serviceLocationService = args.serviceLocationService
+                serviceLocationId = args.locationId,
+                serviceLocationService = args.service
             )
         )
         live_data_bottom_sheet_view_container.viewTreeObserver
@@ -107,8 +106,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                         if (serviceLocation.isFavourite) {
                             viewModel.dispatch(
                                 Action.RemoveFavourite(
-                                    serviceLocationId = args.serviceLocationId,
-                                    serviceLocationService = args.serviceLocationService
+                                    serviceLocationId = args.locationId,
+                                    serviceLocationService = args.service
                                 )
                             )
                         } else {
@@ -190,9 +189,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             live_data_toolbar.apply {
                 updateTitle(newText = serviceLocation.name)
                 updateSubtitle(
-                    newText = when (val service = args.serviceLocationService) {
+                    newText = when (val service = args.service) {
                         Service.BUS_EIREANN,
-                        Service.DUBLIN_BUS -> "${service.fullName} (${args.serviceLocationId})"
+                        Service.DUBLIN_BUS -> "${service.fullName} (${args.locationId})"
                         else -> service.fullName
                     }
                 )
@@ -298,34 +297,33 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     companion object {
 
-        private const val id = "serviceLocationId"
-        private const val name = "serviceLocationName"
-        private const val service = "serviceLocationService"
-        private const val isFavourite = "serviceLocationIsFavourite"
+        private const val serviceKey = "serviceKey"
+        private const val locationIdKey = "locationIdKey"
 
         data class LiveDataArgs(
-            val serviceLocationId: String,
-            val serviceLocationName: String,
-            val serviceLocationService: Service,
-            val serviceLocationIsFavourite: Boolean
+            val service: Service,
+            val locationId: String
         )
 
         fun toBundle(
             serviceLocation: DubLinkServiceLocation
         ) = Bundle().apply {
-            putString(id, serviceLocation.id)
-            putString(name, serviceLocation.name)
-            putSerializable(service, serviceLocation.service)
-            putBoolean(isFavourite, serviceLocation.isFavourite)
+            putSerializable(serviceKey, serviceLocation.service)
+            putString(locationIdKey, serviceLocation.id)
+        }
+
+        fun toBundle(
+            service: Service, locationId: String
+        ) = Bundle().apply {
+            putSerializable(serviceKey, service)
+            putString(locationIdKey, locationId)
         }
 
         private fun fromBundle(
             bundle: Bundle
         ) = LiveDataArgs(
-            serviceLocationId = requireNotNull(bundle.getString(id)),
-            serviceLocationName = requireNotNull(bundle.getString(name)),
-            serviceLocationService = bundle.getSerializable(service) as Service,
-            serviceLocationIsFavourite = bundle.getBoolean(isFavourite)
+            service = bundle.getSerializable(serviceKey) as Service,
+            locationId = requireNotNull(bundle.getString(locationIdKey))
         )
     }
 }

@@ -5,9 +5,11 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.domain.model.DubLinkDockLocation
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.model.DubLinkStopLocation
+import ie.dublinmapper.model.AbstractServiceLocationItem
 import ie.dublinmapper.model.DividerItem
+import ie.dublinmapper.model.DockLocationItem
 import ie.dublinmapper.model.HeaderItem
-import ie.dublinmapper.model.ServiceLocationItem
+import ie.dublinmapper.model.StopLocationItem
 import ie.dublinmapper.model.setSearchCandidate
 import ie.dublinmapper.ui.R
 import io.rtpi.api.Service
@@ -132,10 +134,10 @@ object SearchResponseMapper {
     private fun mapServiceLocation(
         serviceLocation: DubLinkServiceLocation,
         walkDistance: Double?
-    ): List<ServiceLocationItem> {
+    ): List<AbstractServiceLocationItem> {
         return when (serviceLocation) {
             is DubLinkStopLocation -> listOf(
-                ServiceLocationItem(
+                StopLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
                     walkDistance = walkDistance
@@ -144,12 +146,12 @@ object SearchResponseMapper {
                 }
             )
             is DubLinkDockLocation -> listOf(
-                ServiceLocationItem(
+                DockLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
                     walkDistance = walkDistance
                 ).apply {
-                    setSearchCandidate()
+//                    setSearchCandidate() // TODO
                 }
             )
             else -> emptyList()

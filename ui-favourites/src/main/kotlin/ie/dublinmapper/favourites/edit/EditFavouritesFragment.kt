@@ -14,7 +14,8 @@ import ie.dublinmapper.dialog.CustomizeFavouriteDialogFactory
 import ie.dublinmapper.dialog.OnFavouriteSavedListener
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.favourites.R
-import ie.dublinmapper.model.extractServiceLocation
+import ie.dublinmapper.model.AbstractServiceLocationItem
+import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_edit_favourites.*
 import kotlinx.android.synthetic.main.fragment_edit_favourites.view.*
@@ -51,11 +52,8 @@ class EditFavouritesFragment : DublinMapperFragment(R.layout.fragment_edit_favou
 
         adapter = EditFavouritesAdapter()
         adapter?.setOnItemClickListener { item, view ->
-            val serviceLocation = item.extractServiceLocation()
-            if (serviceLocation != null) {
-                if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
-                    enabledServiceManager.enableService(serviceLocation.service)
-                }
+            if (item is AbstractServiceLocationItem) {
+                val serviceLocation = item.getServiceLocation()
                 CustomizeFavouriteDialogFactory.newDialog(
                     context = requireContext(),
                     activity = requireActivity(),

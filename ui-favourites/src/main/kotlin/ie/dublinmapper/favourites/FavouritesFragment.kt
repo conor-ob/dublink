@@ -9,7 +9,9 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.internet.InternetStatus
-import ie.dublinmapper.model.extractServiceLocation
+import ie.dublinmapper.model.AbstractServiceLocationItem
+import ie.dublinmapper.model.getLocationId
+import ie.dublinmapper.model.getService
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.favourites_fab_search
 import kotlinx.android.synthetic.main.fragment_favourites.favourites_toolbar
@@ -45,12 +47,11 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
         adapter = GroupAdapter()
         adapter?.setOnItemClickListener { item, _ ->
-            val serviceLocation = item.extractServiceLocation()
-            if (serviceLocation != null) {
-                if (!enabledServiceManager.isServiceEnabled(serviceLocation.service)) {
-                    enabledServiceManager.enableService(serviceLocation.service)
-                }
-                (activity as DublinMapperNavigator).navigateToLiveData(serviceLocation)
+            if (item is AbstractServiceLocationItem) {
+                (activity as DublinMapperNavigator).navigateToLiveData(
+                    service = item.getService(),
+                    locationId = item.getLocationId()
+                )
             }
         }
         view.favourites_list.adapter = adapter

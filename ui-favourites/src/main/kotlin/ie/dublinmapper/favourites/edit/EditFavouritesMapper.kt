@@ -6,8 +6,8 @@ import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.model.DubLinkStopLocation
 import ie.dublinmapper.favourites.R
 import ie.dublinmapper.model.DividerItem
-import ie.dublinmapper.model.ServiceLocationItem
-import ie.dublinmapper.model.setSearchCandidate
+import ie.dublinmapper.model.DockLocationItem
+import ie.dublinmapper.model.StopLocationItem
 import io.rtpi.api.Service
 
 object EditFavouritesMapper {
@@ -35,20 +35,18 @@ object EditFavouritesMapper {
     ) = Section(
         when (serviceLocation) {
             is DubLinkStopLocation -> listOf(
-                ServiceLocationItem(
+                StopLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
                     walkDistance = null
                 )
             )
             is DubLinkDockLocation -> listOf(
-                ServiceLocationItem(
+                DockLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
                     walkDistance = null
-                ).apply {
-                    setSearchCandidate()
-                }
+                )
             )
             else -> emptyList()
         }

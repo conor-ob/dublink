@@ -16,7 +16,6 @@ sealed class Action : BaseAction {
 
     data class GetLiveData(
         val serviceLocationId: String,
-        val serviceLocationName: String,
         val serviceLocationService: Service
     ) : Action()
 

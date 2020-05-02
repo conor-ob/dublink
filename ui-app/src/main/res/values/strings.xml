@@ -23,8 +23,15 @@
     <string name="favourite_saved">Saved to Favourites</string>
     <string name="favourite_removed">Removed from Favourites</string>
 
-    <plurals name="live_data_last_updated_minutes">
-        <item quantity="one">Updated %d minute ago</item>
-        <item quantity="other">Updated %d minutes ago</item>
+    <string name="no">No</string>
+
+    <plurals name="number_of_bikes">
+        <item quantity="one">Bike</item>
+        <item quantity="other">Bikes</item>
+    </plurals>
+
+    <plurals name="number_of_docks">
+        <item quantity="one">Dock</item>
+        <item quantity="other">Docks</item>
     </plurals>
 </resources>

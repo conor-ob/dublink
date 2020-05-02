@@ -6,8 +6,8 @@ import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.GroupedLiveDataItem
-import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.model.SimpleMessageItem
+import ie.dublinmapper.model.SimpleServiceLocationItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.Service
@@ -75,7 +75,7 @@ object FavouritesMapper {
 
     private fun mapServiceLocation(
         serviceLocation: DubLinkServiceLocation
-    ) = ServiceLocationItem(
+    ) = SimpleServiceLocationItem(
         serviceLocation = serviceLocation,
         icon = mapIcon(serviceLocation.service),
 //                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
