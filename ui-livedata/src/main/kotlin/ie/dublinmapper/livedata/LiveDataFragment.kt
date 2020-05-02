@@ -15,7 +15,9 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
-import ie.dublinmapper.dialog.CustomizeFavouriteDialogFactory
+import ie.dublinmapper.dialog.FavouriteDialogFactory
+import ie.dublinmapper.dialog.OnFavouriteEditListener
+import ie.dublinmapper.dialog.OnFavouriteRemovedListener
 import ie.dublinmapper.dialog.OnFavouriteSavedListener
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.model.DubLinkStopLocation
@@ -26,17 +28,15 @@ import ie.dublinmapper.viewModelProvider
 import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
+import timber.log.Timber
 
 class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as LiveDataViewModel }
     private lateinit var args: LiveDataArgs
-    private lateinit var serviceLocation: DubLinkServiceLocation
-
-    private var liveDataAdapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-
     private lateinit var routeFilterBottomSheetLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
+    private var liveDataAdapter: GroupAdapter<GroupieViewHolder>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,36 +93,10 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     private fun createServiceLocationView() {
         live_data_toolbar.apply {
             setNavigationOnClickListener { activity?.onBackPressed() }
-//            menu.findItem(R.id.action_favourite).setIcon(
-//                if (args.serviceLocationIsFavourite) {
-//                    R.drawable.ic_favourite_selected
-//                } else {
-//                    R.drawable.ic_favourite_unselected
-//                }
-//            )
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_favourite -> {
-                        if (serviceLocation.isFavourite) {
-                            viewModel.dispatch(
-                                Action.RemoveFavourite(
-                                    serviceLocationId = args.locationId,
-                                    serviceLocationService = args.service
-                                )
-                            )
-                        } else {
-                            CustomizeFavouriteDialogFactory.newDialog(
-                                context = requireContext(),
-                                activity = requireActivity(),
-                                serviceLocation = serviceLocation,
-                                onFavouriteSavedListener = object : OnFavouriteSavedListener {
-
-                                    override fun onSave(serviceLocation: DubLinkServiceLocation) {
-                                        viewModel.dispatch(Action.SaveFavourite(serviceLocation))
-                                    }
-                                }
-                            ).show()
-                        }
+                        viewModel.dispatch(Action.AddOrRemoveFavourite)
                         return@setOnMenuItemClickListener true
                     }
                     R.id.action_settings -> {
@@ -175,19 +149,23 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderState(state: State) {
-        if (state.toastMessage != null) {
-            Toast.makeText(requireContext(), state.toastMessage, Toast.LENGTH_SHORT).show()
-        }
+        renderMessage(state)
         renderServiceLocationState(state)
         renderLiveDataState(state)
         renderRouteFilterState(state)
+        renderFavouriteDialogState(state)
+    }
+
+    private fun renderMessage(state: State) {
+        if (state.toastMessage != null) {
+            Toast.makeText(requireContext(), state.toastMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun renderServiceLocationState(state: State) {
         if (state.serviceLocation != null) {
-            serviceLocation = state.serviceLocation
             live_data_toolbar.apply {
-                updateTitle(newText = serviceLocation.name)
+                updateTitle(newText = state.serviceLocation.name)
                 updateSubtitle(
                     newText = when (val service = args.service) {
                         Service.BUS_EIREANN,
@@ -196,7 +174,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                     }
                 )
                 menu.findItem(R.id.action_favourite).apply {
-                    if (serviceLocation.isFavourite) {
+                    if (state.serviceLocation.isFavourite) {
                         setIcon(R.drawable.ic_favourite_selected)
                     } else {
                         setIcon(R.drawable.ic_favourite_unselected)
@@ -245,6 +223,58 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         }
         if (state.routeFilterState != null) {
             bottomSheetBehavior.state = state.routeFilterState
+        }
+    }
+
+    private fun renderFavouriteDialogState(state: State) {
+        Timber.d("FAVS1 ${state.favouriteDialog}")
+        Timber.d("FAVS2 ${state.serviceLocation}")
+        if (state.favouriteDialog != null && state.serviceLocation != null) {
+            when (state.favouriteDialog) {
+                is FavouriteDialog.Add -> {
+                    FavouriteDialogFactory.newCustomizationDialog(
+                        context = requireContext(),
+                        activity = requireActivity(),
+                        serviceLocation = state.serviceLocation,
+                        onFavouriteSavedListener = object : OnFavouriteSavedListener {
+
+                            override fun onSave(serviceLocation: DubLinkServiceLocation) {
+                                viewModel.dispatch(Action.SaveFavourite(serviceLocation))
+                            }
+                        }
+                    ).show()
+                }
+                is FavouriteDialog.Remove -> {
+                    FavouriteDialogFactory.newEditDialog(
+                        context = requireContext(),
+                        onFavouriteEditListener = object : OnFavouriteEditListener {
+                            override fun onEdit() {
+                                FavouriteDialogFactory.newCustomizationDialog(
+                                    context = requireContext(),
+                                    activity = requireActivity(),
+                                    serviceLocation = state.serviceLocation,
+                                    onFavouriteSavedListener = object : OnFavouriteSavedListener {
+
+                                        override fun onSave(serviceLocation: DubLinkServiceLocation) {
+                                            viewModel.dispatch(Action.SaveFavourite(serviceLocation))
+                                        }
+                                    }
+                                ).show()
+                            }
+                        },
+                        onFavouriteRemovedListener = object : OnFavouriteRemovedListener {
+                            override fun onRemove() {
+                                viewModel.dispatch(
+                                    Action.RemoveFavourite(
+                                        serviceLocationId = args.locationId,
+                                        serviceLocationService = args.service
+                                    )
+                                )
+                            }
+                        }
+                    ).show()
+                }
+            }
         }
     }
 
@@ -306,14 +336,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         )
 
         fun toBundle(
-            serviceLocation: DubLinkServiceLocation
-        ) = Bundle().apply {
-            putSerializable(serviceKey, serviceLocation.service)
-            putString(locationIdKey, serviceLocation.id)
-        }
-
-        fun toBundle(
-            service: Service, locationId: String
+            service: Service,
+            locationId: String
         ) = Bundle().apply {
             putSerializable(serviceKey, service)
             putString(locationIdKey, locationId)

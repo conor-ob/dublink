@@ -6,6 +6,7 @@ import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.model.Filter
 import io.rtpi.api.Service
 import java.util.SortedSet
+import kotlin.random.Random
 
 sealed class Action : BaseAction {
 
@@ -22,6 +23,8 @@ sealed class Action : BaseAction {
     data class SaveFavourite(
         val serviceLocation: DubLinkServiceLocation
     ) : Action()
+
+    object AddOrRemoveFavourite : Action()
 
     data class RemoveFavourite(
         val serviceLocationId: String,
@@ -59,6 +62,8 @@ sealed class Change {
     class RouteFilterSheetMoved(
         val state: Int?
     ) : Change()
+
+    object AddOrRemoveFavourite : Change()
 }
 
 data class State(
@@ -66,9 +71,18 @@ data class State(
     val toastMessage: String?,
     val serviceLocation: DubLinkServiceLocation?,
     val liveDataResponse: LiveDataPresentationResponse?,
-    val routeDiscrepancyState: RouteDiscrepancyState?,
-    val routeFilterState: Int?
+    val routeFilterState: Int?,
+    val favouriteDialog: FavouriteDialog?,
+    val routeDiscrepancyState: RouteDiscrepancyState?
 ) : BaseState
+
+sealed class FavouriteDialog {
+
+    abstract val serviceLocation: DubLinkServiceLocation
+
+    data class Add(override val serviceLocation: DubLinkServiceLocation, val random: Int = Random.nextInt()) : FavouriteDialog()
+    data class Remove(override val serviceLocation: DubLinkServiceLocation, val random: Int = Random.nextInt()) : FavouriteDialog()
+}
 
 data class RouteDiscrepancyState(
     val knownRoutes: SortedSet<String>,

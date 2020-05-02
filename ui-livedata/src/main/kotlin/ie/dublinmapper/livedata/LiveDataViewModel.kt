@@ -28,7 +28,8 @@ class LiveDataViewModel @Inject constructor(
         serviceLocation = null,
         liveDataResponse = null,
         routeDiscrepancyState = null,
-        routeFilterState = null
+        routeFilterState = null,
+        favouriteDialog = null
     )
 
     private val reducer: Reducer<State, Change> = { state, change ->
@@ -39,25 +40,26 @@ class LiveDataViewModel @Inject constructor(
                 routeDiscrepancyState = state.routeDiscrepancyState,
                 routeFilterState = state.routeFilterState,
                 isLoading = state.isLoading,
-                toastMessage = null
+                toastMessage = null,
+                favouriteDialog = null
             )
-            is Change.GetLiveData -> {
-                State(
-                    liveDataResponse = change.liveDataResponse,
-                    serviceLocation = state.serviceLocation,
-                    routeFilterState = state.routeFilterState,
-                    isLoading = false,
-                    toastMessage = null,
-                    routeDiscrepancyState = tryLogRouteDiscrepancies(state, change)
-                )
-            }
+            is Change.GetLiveData -> State(
+                liveDataResponse = change.liveDataResponse,
+                serviceLocation = state.serviceLocation,
+                routeFilterState = state.routeFilterState,
+                isLoading = false,
+                toastMessage = null,
+                routeDiscrepancyState = tryLogRouteDiscrepancies(state, change),
+                favouriteDialog = null
+            )
             is Change.FavouriteSaved -> State(
                 serviceLocation = change.serviceLocation,
                 toastMessage = "Saved to Favourites",
                 liveDataResponse = state.liveDataResponse,
                 routeFilterState = state.routeFilterState,
                 routeDiscrepancyState = state.routeDiscrepancyState,
-                isLoading = state.isLoading
+                isLoading = state.isLoading,
+                favouriteDialog = null
             )
             is Change.FavouriteRemoved -> State(
                 serviceLocation = change.serviceLocation,
@@ -65,7 +67,8 @@ class LiveDataViewModel @Inject constructor(
                 liveDataResponse = state.liveDataResponse,
                 routeFilterState = state.routeFilterState,
                 routeDiscrepancyState = state.routeDiscrepancyState,
-                isLoading = state.isLoading
+                isLoading = state.isLoading,
+                favouriteDialog = null
             )
             is Change.RouteFilterChange -> State(
                 serviceLocation = if (state.serviceLocation is DubLinkStopLocation) {
@@ -81,12 +84,44 @@ class LiveDataViewModel @Inject constructor(
                 liveDataResponse = state.liveDataResponse,
                 routeFilterState = state.routeFilterState,
                 routeDiscrepancyState = state.routeDiscrepancyState,
-                isLoading = state.isLoading
+                isLoading = state.isLoading,
+                favouriteDialog = null
             )
-            is Change.RouteFilterSheetMoved -> state.copy(
-                routeFilterState = change.state
+            is Change.RouteFilterSheetMoved -> State(
+                serviceLocation = state.serviceLocation,
+                liveDataResponse = state.liveDataResponse,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                isLoading = state.isLoading,
+                toastMessage = null,
+                routeFilterState = change.state,
+                favouriteDialog = null
             )
-            is Change.Error -> state // TODO
+            is Change.Error -> State(
+                toastMessage = change.throwable.message,
+                serviceLocation = state.serviceLocation,
+                liveDataResponse = state.liveDataResponse,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                isLoading = false,
+                routeFilterState = state.routeFilterState,
+                favouriteDialog = null
+            )
+            is Change.AddOrRemoveFavourite -> State(
+                favouriteDialog = if (state.serviceLocation != null) {
+                    if (state.serviceLocation.isFavourite) {
+                        FavouriteDialog.Remove(state.serviceLocation)
+                    } else {
+                        FavouriteDialog.Add(state.serviceLocation)
+                    }
+                } else {
+                    null
+                },
+                serviceLocation = state.serviceLocation,
+                liveDataResponse = state.liveDataResponse,
+                routeFilterState = state.routeFilterState,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                isLoading = state.isLoading,
+                toastMessage = null
+            )
         }
     }
 
@@ -125,6 +160,9 @@ class LiveDataViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.GetLiveData(it) }
             }
+
+        val addOrRemoveFavouriteChange = actions.ofType(Action.AddOrRemoveFavourite::class.java)
+            .switchMap { Observable.just(Change.AddOrRemoveFavourite) }
 
         val saveFavouriteChange = actions.ofType(Action.SaveFavourite::class.java)
             .switchMap { action ->
@@ -170,7 +208,8 @@ class LiveDataViewModel @Inject constructor(
                 saveFavouriteChange,
                 removeFavouriteChange,
                 routeFilterIntents,
-                bottomSheetIntents
+                bottomSheetIntents,
+                addOrRemoveFavouriteChange
             )
         )
 

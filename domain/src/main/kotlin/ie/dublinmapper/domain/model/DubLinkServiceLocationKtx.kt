@@ -34,35 +34,55 @@ fun DubLinkServiceLocation.setCustomName(name: String?): DubLinkServiceLocation 
 
 fun DubLinkStopLocation.addFilter(filter: Filter): DubLinkServiceLocation {
     return when (filter) {
-        is Filter.RouteFilter -> withFavouriteMetadata(
-            favouriteMetadata = favouriteMetadata?.copy(
-                routes = favouriteMetadata.routes.plus(filter.route)
-            ) ?: FavouriteMetadata(
-                routes = listOf(filter.route)
+        is Filter.RouteFilter -> {
+            val adjustedRoutes = favouriteMetadata?.routes?.toMutableList() ?: mutableListOf()
+            if (!adjustedRoutes.contains(filter.route)) {
+                adjustedRoutes.add(filter.route)
+            }
+            withFavouriteMetadata(
+                favouriteMetadata = favouriteMetadata?.copy(
+                    routes = adjustedRoutes
+                ) ?: FavouriteMetadata(
+                    routes = listOf(filter.route)
+                )
             )
-        )
-        is Filter.DirectionFilter -> withFavouriteMetadata(
-            favouriteMetadata = favouriteMetadata?.copy(
-                directions = favouriteMetadata.directions.plus(filter.direction)
-            ) ?: FavouriteMetadata(
-                directions = listOf(filter.direction)
+        }
+        is Filter.DirectionFilter -> {
+            val adjustedDirections = favouriteMetadata?.directions?.toMutableList() ?: mutableListOf()
+            if (!adjustedDirections.contains(filter.direction)) {
+                adjustedDirections.add(filter.direction)
+            }
+            withFavouriteMetadata(
+                favouriteMetadata = favouriteMetadata?.copy(
+                    directions = adjustedDirections
+                ) ?: FavouriteMetadata(
+                    directions = listOf(filter.direction)
+                )
             )
-        )
+        }
     }
 }
 
 fun DubLinkStopLocation.removeFilter(filter: Filter): DubLinkServiceLocation {
     return when (filter) {
-        is Filter.RouteFilter -> withFavouriteMetadata(
-            favouriteMetadata = favouriteMetadata?.copy(
-                routes = favouriteMetadata.routes.minus(filter.route)
-            ) ?: FavouriteMetadata()
-        )
-        is Filter.DirectionFilter -> withFavouriteMetadata(
-            favouriteMetadata = favouriteMetadata?.copy(
-                directions = favouriteMetadata.directions.minus(filter.direction)
-            ) ?: FavouriteMetadata()
-        )
+        is Filter.RouteFilter -> {
+            val adjustedRoutes = favouriteMetadata?.routes?.toMutableList() ?: mutableListOf()
+            adjustedRoutes.remove(filter.route)
+            withFavouriteMetadata(
+                favouriteMetadata = favouriteMetadata?.copy(
+                    routes = adjustedRoutes
+                ) ?: FavouriteMetadata()
+            )
+        }
+        is Filter.DirectionFilter -> {
+            val adjustedDirections = favouriteMetadata?.directions?.toMutableList() ?: mutableListOf()
+            adjustedDirections.remove(filter.direction)
+            withFavouriteMetadata(
+                favouriteMetadata = favouriteMetadata?.copy(
+                    directions = adjustedDirections
+                ) ?: FavouriteMetadata()
+            )
+        }
     }
 }
 

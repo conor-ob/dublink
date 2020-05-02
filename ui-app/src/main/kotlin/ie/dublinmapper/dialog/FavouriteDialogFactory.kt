@@ -17,9 +17,9 @@ import ie.dublinmapper.ui.R
 import ie.dublinmapper.util.ChipFactory
 import kotlinx.android.synthetic.main.dialog_customize_favourite.view.*
 
-object CustomizeFavouriteDialogFactory {
+object FavouriteDialogFactory {
 
-    fun newDialog(
+    fun newCustomizationDialog(
         context: Context,
         activity: FragmentActivity,
         serviceLocation: DubLinkServiceLocation,
@@ -110,8 +110,44 @@ object CustomizeFavouriteDialogFactory {
         }
         return dialog
     }
+
+    fun newEditDialog(
+        context: Context,
+        onFavouriteEditListener: OnFavouriteEditListener,
+        onFavouriteRemovedListener: OnFavouriteRemovedListener
+    ): AlertDialog {
+        val dialog = AlertDialog.Builder(context)
+            .setTitle("Edit")
+            .setMessage("Would you like to edit or remove this?")
+            .setPositiveButton("Remove", null)
+            .setNegativeButton("Edit", null)
+            .setNeutralButton("Cancel", null)
+            .create()
+        dialog.setOnShowListener {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                onFavouriteRemovedListener.onRemove()
+                dialog.dismiss()
+            }
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener {
+                onFavouriteEditListener.onEdit()
+                dialog.dismiss()
+            }
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+        return dialog
+    }
 }
 
 interface OnFavouriteSavedListener {
     fun onSave(serviceLocation: DubLinkServiceLocation)
+}
+
+interface OnFavouriteRemovedListener {
+    fun onRemove()
+}
+
+interface OnFavouriteEditListener {
+    fun onEdit()
 }

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.TouchCallback
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
-import ie.dublinmapper.dialog.CustomizeFavouriteDialogFactory
+import ie.dublinmapper.dialog.FavouriteDialogFactory
 import ie.dublinmapper.dialog.OnFavouriteSavedListener
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.favourites.R
@@ -54,7 +54,7 @@ class EditFavouritesFragment : DublinMapperFragment(R.layout.fragment_edit_favou
         adapter?.setOnItemClickListener { item, view ->
             if (item is AbstractServiceLocationItem) {
                 val serviceLocation = item.getServiceLocation()
-                CustomizeFavouriteDialogFactory.newDialog(
+                FavouriteDialogFactory.newCustomizationDialog(
                     context = requireContext(),
                     activity = requireActivity(),
                     serviceLocation = serviceLocation,

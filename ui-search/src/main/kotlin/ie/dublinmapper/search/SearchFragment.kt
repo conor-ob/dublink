@@ -20,7 +20,6 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.model.AbstractServiceLocationItem
-import ie.dublinmapper.model.SimpleServiceLocationItem
 import ie.dublinmapper.model.getLocationId
 import ie.dublinmapper.model.getService
 import ie.dublinmapper.model.isSearchCandidate

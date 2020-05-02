@@ -12,6 +12,9 @@ class SqlDelightFavouriteServiceLocationLocalResource(
 
     override fun insertFavourite(serviceLocation: DubLinkServiceLocation) {
         database.transaction {
+            database.favouriteLocationQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
+            database.favouriteServiceQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
+            database.favouriteDirectionQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
             val count = database.favouriteLocationQueries.count().executeAsOne()
             database.favouriteLocationQueries.insertOrReplace(
                 service = serviceLocation.service,

@@ -9,7 +9,6 @@ import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import ie.dublinmapper.domain.internet.InternetStatus
-import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.livedata.LiveDataFragment
 import io.rtpi.api.Service
 import javax.inject.Inject
@@ -68,19 +67,6 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
         navigationController.navigate(
             R.id.searchFragment,
             Bundle.EMPTY,
-            NavOptions.Builder()
-                .setEnterAnim(R.anim.nav_default_enter_anim)
-                .setExitAnim(R.anim.nav_default_exit_anim)
-                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-                .build()
-        )
-    }
-
-    override fun navigateToLiveData(serviceLocation: DubLinkServiceLocation) {
-        navigationController.navigate(
-            R.id.liveDataFragment,
-            LiveDataFragment.toBundle(serviceLocation),
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)
                 .setExitAnim(R.anim.nav_default_exit_anim)
