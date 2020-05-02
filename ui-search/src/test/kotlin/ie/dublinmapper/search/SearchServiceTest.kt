@@ -1,7 +1,10 @@
 package ie.dublinmapper.search
 
 import com.google.common.truth.Truth.assertThat
+import ie.dublinmapper.domain.model.DubLinkDockLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
 import io.reactivex.Single
+import io.rtpi.api.DockLocation
 import io.rtpi.api.Operator
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
@@ -25,7 +28,16 @@ class SearchServiceTest {
         services.map { service ->
             rtpiStaticDataClient.getServiceLocations(service)
         }
-    ) { serviceLocationStreams -> serviceLocationStreams.flatMap { it as List<ServiceLocation> } }.blockingGet()
+    ) { serviceLocationStreams -> serviceLocationStreams
+        .flatMap { it as List<ServiceLocation> }
+        .map {
+            when (it) {
+                is DockLocation -> DubLinkDockLocation(it)
+                is StopLocation -> DubLinkStopLocation(it)
+                else -> throw IllegalStateException()
+            }
+        }
+    }.blockingGet()
 
     @Test
     fun `searching a short term should produce an accurate result if the searchable data is small`() {

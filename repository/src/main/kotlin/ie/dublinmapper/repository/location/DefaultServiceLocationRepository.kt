@@ -1,17 +1,16 @@
 package ie.dublinmapper.repository.location
 
 import com.nytimes.android.external.store3.base.impl.room.StoreRoom
-import ie.dublinmapper.domain.model.isFavourite
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.repository.ServiceLocationKey
 import ie.dublinmapper.domain.repository.ServiceLocationRepository
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import io.reactivex.Observable
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 
 class DefaultServiceLocationRepository(
     private val service: Service,
-    private val serviceLocationStore: StoreRoom<List<ServiceLocation>, Service>
+    private val serviceLocationStore: StoreRoom<List<DubLinkServiceLocation>, Service>
 ) : ServiceLocationRepository {
 
     override fun get(): Observable<ServiceLocationResponse> {
@@ -36,7 +35,7 @@ class DefaultServiceLocationRepository(
             .map { response ->
                 when (response) {
                     is ServiceLocationResponse.Data -> response.copy(
-                        serviceLocations = response.serviceLocations.filter { it.isFavourite() }
+                        serviceLocations = response.serviceLocations.filter { it.isFavourite }
                     )
                     is ServiceLocationResponse.Error -> response
                 }

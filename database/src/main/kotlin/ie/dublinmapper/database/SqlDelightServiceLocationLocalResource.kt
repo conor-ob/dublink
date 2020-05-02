@@ -3,12 +3,14 @@ package ie.dublinmapper.database
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
-import ie.dublinmapper.domain.model.addCustomRoute
-import ie.dublinmapper.domain.model.setCustomName
-import ie.dublinmapper.domain.model.setFavourite
-import ie.dublinmapper.domain.model.setSortIndex
+import ie.dublinmapper.domain.model.DubLinkDockLocation
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
+import ie.dublinmapper.domain.model.FavouriteMetadata
+import ie.dublinmapper.domain.model.Route
+import ie.dublinmapper.domain.model.withFavouriteMetadata
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
+import io.reactivex.functions.Function5
 import io.rtpi.api.Coordinate
 import io.rtpi.api.DockLocation
 import io.rtpi.api.Operator
@@ -21,7 +23,7 @@ class SqlDelightServiceLocationLocalResource(
     private val database: Database
 ) : ServiceLocationLocalResource {
 
-    override fun selectServiceLocations(service: Service): Observable<List<ServiceLocation>> {
+    override fun selectServiceLocations(service: Service): Observable<List<DubLinkServiceLocation>> {
         val locationsObservable = when (service) {
             Service.AIRCOACH -> database.aircoachLocationQueries
                 .selectAll { id, name, latitude, longitude ->
@@ -88,8 +90,15 @@ class SqlDelightServiceLocationLocalResource(
             .mapToList()
 
         val favouriteServicesObservable = database.favouriteServiceQueries
-            .selectAllByService(service) { _, service, locationId, route, operator ->
-                toFavouriteServiceEntity(service, locationId, route, operator)
+            .selectAllByService(service) { _, service1, locationId, route, operator ->
+                toFavouriteServiceEntity(service1, locationId, route, operator)
+            }
+            .asObservable()
+            .mapToList()
+
+        val favouriteDirectionsObservable = database.favouriteDirectionQueries
+            .selectAllByService(service) { _, service1, locationId, direction ->
+                toFavouriteDirectionEntity(service1, locationId, direction)
             }
             .asObservable()
             .mapToList()
@@ -99,8 +108,9 @@ class SqlDelightServiceLocationLocalResource(
             servicesObservable,
             favouritesObservable,
             favouriteServicesObservable,
-            Function4 { locationEntities, serviceEntities, favouriteEntities, favouriteServices ->
-                resolve(service, locationEntities, serviceEntities, favouriteEntities, favouriteServices)
+            favouriteDirectionsObservable,
+            Function5 { locationEntities, serviceEntities, favouriteEntities, favouriteServices, favouriteDirectionEntities ->
+                resolve(service, locationEntities, serviceEntities, favouriteEntities, favouriteServices, favouriteDirectionEntities)
             }
         )
     }
@@ -110,13 +120,16 @@ class SqlDelightServiceLocationLocalResource(
         locationEntities: List<LocationEntity>,
         serviceEntities: List<ServiceEntity>,
         favouriteEntities: List<FavouriteEntity>,
-        favouriteServiceEntities: List<FavouriteServiceEntityTemp>
-    ): List<ServiceLocation> {
+        favouriteServiceEntities: List<FavouriteServiceEntityTemp>,
+        favouriteDirectionEntities: List<FavouriteDirectionEntityTemp>
+    ): List<DubLinkServiceLocation> {
         val serviceEntitiesByLocation = serviceEntities.groupBy { it.locationId }
 
         val favouriteServiceEntitiesByLocation = favouriteServiceEntities.groupBy { it.locationId }
 
-        val serviceLocations = when (service) {
+        val favouriteDirectionEntitiesByLocation = favouriteDirectionEntities.groupBy { it.locationId }
+
+        val serviceLocations: MutableMap<String, DubLinkServiceLocation> = when (service) {
             Service.AIRCOACH,
             Service.BUS_EIREANN,
             Service.DUBLIN_BUS,
@@ -143,12 +156,14 @@ class SqlDelightServiceLocationLocalResource(
                 } else {
                     emptyList()
                 }
-                StopLocation(
-                    id = it.id,
-                    name = it.name,
-                    service = service,
-                    coordinate = it.coordinate,
-                    routeGroups = routeGroups
+                DubLinkStopLocation(
+                    stopLocation = StopLocation(
+                        id = it.id,
+                        name = it.name,
+                        service = service,
+                        coordinate = it.coordinate,
+                        routeGroups = routeGroups
+                    )
                 )
             }
             Service.DUBLIN_BIKES -> locationEntities.map {
@@ -163,14 +178,16 @@ class SqlDelightServiceLocationLocalResource(
                 } else {
                     null
                 }
-                DockLocation(
-                    id = it.id,
-                    name = it.name,
-                    service = service,
-                    coordinate = it.coordinate,
-                    availableBikes = (serviceEntity as? DockServiceEntity)?.availableBikes ?: 0,
-                    availableDocks = (serviceEntity as? DockServiceEntity)?.availableDocks ?: 0,
-                    totalDocks = (serviceEntity as? DockServiceEntity)?.totalDocks ?: 0
+                DubLinkDockLocation(
+                    dockLocation = DockLocation(
+                        id = it.id,
+                        name = it.name,
+                        service = service,
+                        coordinate = it.coordinate,
+                        availableBikes = (serviceEntity as? DockServiceEntity)?.availableBikes ?: 0,
+                        availableDocks = (serviceEntity as? DockServiceEntity)?.availableDocks ?: 0,
+                        totalDocks = (serviceEntity as? DockServiceEntity)?.totalDocks ?: 0
+                    )
                 )
             }
         }
@@ -180,19 +197,18 @@ class SqlDelightServiceLocationLocalResource(
         favouriteEntities.forEach {
             val favourite = serviceLocations[it.locationId]
             if (favourite != null) {
-                var updated: ServiceLocation = favourite
-                updated = updated.setFavourite()
-                updated = updated.setSortIndex(it.sortIndex)
-                updated = updated.setCustomName(it.name)
-
-                val favouriteServices = favouriteServiceEntitiesByLocation[it.locationId]
-                if (favouriteServices != null) {
-                    for (favouriteService in favouriteServices) {
-                        updated = updated.addCustomRoute(favouriteService.operator, favouriteService.route)
-                    }
-                }
-
-                serviceLocations[it.locationId] = updated
+                serviceLocations[it.locationId] = favourite.withFavouriteMetadata(
+                    favouriteMetadata = FavouriteMetadata(
+                        name = it.name,
+                        routes = favouriteServiceEntitiesByLocation[it.locationId]?.map { entity ->
+                            Route(operator = entity.operator, id = entity.route)
+                        } ?: emptyList(),
+                        directions = favouriteDirectionEntitiesByLocation[it.locationId]?.map { entity ->
+                            entity.direction
+                        } ?: emptyList(),
+                        sortIndex = it.sortIndex.toInt()
+                    )
+                )
             }
         }
 
@@ -211,6 +227,12 @@ class SqlDelightServiceLocationLocalResource(
         route: String,
         operator: Operator
     ) = FavouriteServiceEntityTemp(service, locationId, route, operator)
+
+    private fun toFavouriteDirectionEntity(
+        service: Service,
+        locationId: String,
+        direction: String
+    ) = FavouriteDirectionEntityTemp(service, locationId, direction)
 
     private fun toServiceEntity(
         locationId: String,
@@ -418,6 +440,12 @@ data class FavouriteServiceEntityTemp(
     val locationId: String,
     val route: String,
     val operator: Operator
+)
+
+data class FavouriteDirectionEntityTemp(
+    val service: Service,
+    val locationId: String,
+    val direction: String
 )
 
 interface ServiceEntity {

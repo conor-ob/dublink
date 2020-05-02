@@ -2,9 +2,11 @@ package ie.dublinmapper.livedata
 
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.Filter
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 import java.util.SortedSet
+import kotlin.random.Random
 
 sealed class Action : BaseAction {
 
@@ -15,21 +17,22 @@ sealed class Action : BaseAction {
 
     data class GetLiveData(
         val serviceLocationId: String,
-        val serviceLocationName: String,
         val serviceLocationService: Service
     ) : Action()
 
     data class SaveFavourite(
-        val serviceLocation: ServiceLocation
+        val serviceLocation: DubLinkServiceLocation
     ) : Action()
+
+    object AddOrRemoveFavourite : Action()
 
     data class RemoveFavourite(
         val serviceLocationId: String,
         val serviceLocationService: Service
     ) : Action()
 
-    data class RouteFilterIntent(
-        val type: RouteFilterChangeType
+    data class FilterIntent(
+        val type: FilterChangeType
     ) : Action()
 
     data class RouteFilterSheetMoved(
@@ -37,39 +40,49 @@ sealed class Action : BaseAction {
     ) : Action()
 }
 
-sealed class RouteFilterChangeType {
-    data class Add(val route: String) : RouteFilterChangeType()
-    data class Remove(val route: String) : RouteFilterChangeType()
-    object Clear : RouteFilterChangeType()
-    object NoChange : RouteFilterChangeType()
+sealed class FilterChangeType {
+    data class Add(val filter: Filter) : FilterChangeType()
+    data class Remove(val filter: Filter) : FilterChangeType()
+    object Clear : FilterChangeType()
 }
 
 sealed class Change {
-    data class GetServiceLocation(val serviceLocationResponse: ServiceLocationPresentationResponse) : Change()
+    data class GetServiceLocation(val serviceLocation: DubLinkServiceLocation) : Change()
     data class GetLiveData(val liveDataResponse: LiveDataPresentationResponse) : Change()
 
-    object FavouriteSaved : Change()
-    object FavouriteRemoved : Change()
+    data class Error(val throwable: Throwable) : Change()
+
+    data class FavouriteSaved(val serviceLocation: DubLinkServiceLocation) : Change()
+    data class FavouriteRemoved(val serviceLocation: DubLinkServiceLocation) : Change()
 
     data class RouteFilterChange(
-        val type: RouteFilterChangeType
+        val type: FilterChangeType
     ) : Change()
 
     class RouteFilterSheetMoved(
         val state: Int?
     ) : Change()
+
+    object AddOrRemoveFavourite : Change()
 }
 
 data class State(
     val isLoading: Boolean,
-    val serviceLocationResponse: ServiceLocationPresentationResponse? = null,
-    val liveDataResponse: LiveDataPresentationResponse? = null,
-    val filteredLiveDataResponse: LiveDataPresentationResponse? = null,
-    val activeRouteFilters: Set<String> = emptySet(),
-    val isFavourite: Boolean? = null,
-    val routeDiscrepancyState: RouteDiscrepancyState? = null,
-    val routeFilterState: Int? = null
+    val toastMessage: String?,
+    val serviceLocation: DubLinkServiceLocation?,
+    val liveDataResponse: LiveDataPresentationResponse?,
+    val routeFilterState: Int?,
+    val favouriteDialog: FavouriteDialog?,
+    val routeDiscrepancyState: RouteDiscrepancyState?
 ) : BaseState
+
+sealed class FavouriteDialog {
+
+    abstract val serviceLocation: DubLinkServiceLocation
+
+    data class Add(override val serviceLocation: DubLinkServiceLocation, val random: Int = Random.nextInt()) : FavouriteDialog()
+    data class Remove(override val serviceLocation: DubLinkServiceLocation, val random: Int = Random.nextInt()) : FavouriteDialog()
+}
 
 data class RouteDiscrepancyState(
     val knownRoutes: SortedSet<String>,

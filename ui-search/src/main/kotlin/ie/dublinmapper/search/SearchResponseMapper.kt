@@ -2,17 +2,17 @@ package ie.dublinmapper.search
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
-import ie.dublinmapper.domain.model.getCustomRoutes
-import ie.dublinmapper.domain.model.isFavourite
+import ie.dublinmapper.domain.model.DubLinkDockLocation
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
+import ie.dublinmapper.model.AbstractServiceLocationItem
 import ie.dublinmapper.model.DividerItem
+import ie.dublinmapper.model.DockLocationItem
 import ie.dublinmapper.model.HeaderItem
-import ie.dublinmapper.model.ServiceLocationItem
+import ie.dublinmapper.model.StopLocationItem
 import ie.dublinmapper.model.setSearchCandidate
 import ie.dublinmapper.ui.R
-import io.rtpi.api.DockLocation
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
-import io.rtpi.api.StopLocation
 
 object SearchResponseMapper {
 
@@ -132,32 +132,26 @@ object SearchResponseMapper {
     }
 
     private fun mapServiceLocation(
-        serviceLocation: ServiceLocation,
+        serviceLocation: DubLinkServiceLocation,
         walkDistance: Double?
-    ): List<ServiceLocationItem> {
+    ): List<AbstractServiceLocationItem> {
         return when (serviceLocation) {
-            is StopLocation -> listOf(
-                ServiceLocationItem(
+            is DubLinkStopLocation -> listOf(
+                StopLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
-                    routeGroups = if (serviceLocation.isFavourite()) {
-                        serviceLocation.getCustomRoutes()
-                    } else {
-                        serviceLocation.routeGroups
-                    },
                     walkDistance = walkDistance
                 ).apply {
                     setSearchCandidate()
                 }
             )
-            is DockLocation -> listOf(
-                ServiceLocationItem(
+            is DubLinkDockLocation -> listOf(
+                DockLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
-                    routeGroups = emptyList(),
                     walkDistance = walkDistance
                 ).apply {
-                    setSearchCandidate()
+//                    setSearchCandidate() // TODO
                 }
             )
             else -> emptyList()

@@ -10,7 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.livedata.LiveDataFragment
-import io.rtpi.api.ServiceLocation
+import io.rtpi.api.Service
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_root.activity_root
 
@@ -76,10 +76,10 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
         )
     }
 
-    override fun navigateToLiveData(serviceLocation: ServiceLocation) {
+    override fun navigateToLiveData(service: Service, locationId: String) {
         navigationController.navigate(
             R.id.liveDataFragment,
-            LiveDataFragment.toBundle(serviceLocation),
+            LiveDataFragment.toBundle(service, locationId),
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)
                 .setExitAnim(R.anim.nav_default_exit_anim)

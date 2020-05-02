@@ -7,7 +7,7 @@
     <string name="live_data_due_times">and in %s min</string>
     <string name="title_favourites">Favourites</string>
 
-    <string name="database_name">dublinmapper1.db</string>
+    <string name="database_name">dublinmapper2.db</string>
 
     <string name="service_name_aircoach">Aircoach</string>
     <string name="service_name_bus_eireann">Bus Éireann</string>
@@ -23,8 +23,15 @@
     <string name="favourite_saved">Saved to Favourites</string>
     <string name="favourite_removed">Removed from Favourites</string>
 
-    <plurals name="live_data_last_updated_minutes">
-        <item quantity="one">Updated %d minute ago</item>
-        <item quantity="other">Updated %d minutes ago</item>
+    <string name="no">No</string>
+
+    <plurals name="number_of_bikes">
+        <item quantity="one">Bike</item>
+        <item quantity="other">Bikes</item>
+    </plurals>
+
+    <plurals name="number_of_docks">
+        <item quantity="one">Dock</item>
+        <item quantity="other">Docks</item>
     </plurals>
 </resources>

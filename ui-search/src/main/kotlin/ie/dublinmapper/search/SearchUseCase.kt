@@ -1,5 +1,6 @@
 package ie.dublinmapper.search
 
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.model.RecentServiceLocationSearch
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.RecentServiceLocationSearchRepository
@@ -105,13 +106,13 @@ class SearchUseCase @Inject constructor(
     private fun getServiceLocation(
         service: Service,
         locationId: String
-    ): Observable<Pair<Set<Service>, ServiceLocation?>> {
+    ): Observable<Pair<Set<Service>, DubLinkServiceLocation?>> {
         return serviceLocationRepository.get(
             ServiceLocationKey(
                 service = service,
                 locationId = locationId
             )
-        ).map<Pair<Set<Service>, ServiceLocation?>> { response ->
+        ).map<Pair<Set<Service>, DubLinkServiceLocation?>> { response ->
             when (response) {
                 is ServiceLocationResponse.Data -> Pair(emptySet(), response.serviceLocations.first())
                 is ServiceLocationResponse.Error -> Pair(setOf(response.service), null) // TODO exception ignored
@@ -151,7 +152,7 @@ class SearchUseCase @Inject constructor(
 sealed class SearchResultsResponse {
 
     data class Data(
-        val serviceLocations: List<ServiceLocation>
+        val serviceLocations: List<DubLinkServiceLocation>
     ) : SearchResultsResponse()
 
     data class NoResults(
@@ -164,7 +165,7 @@ sealed class SearchResultsResponse {
 sealed class NearbyLocationsResponse {
 
     data class Data(
-        val serviceLocations: SortedMap<Double, ServiceLocation>
+        val serviceLocations: SortedMap<Double, DubLinkServiceLocation>
     ) : NearbyLocationsResponse()
 
     object LocationDisabled : NearbyLocationsResponse()
@@ -177,7 +178,7 @@ sealed class NearbyLocationsResponse {
 sealed class RecentSearchesResponse {
 
     data class Data(
-        val serviceLocations: List<ServiceLocation>
+        val serviceLocations: List<DubLinkServiceLocation>
     ) : RecentSearchesResponse()
 
     object Empty : RecentSearchesResponse()

@@ -2,10 +2,10 @@ package ie.dublinmapper.favourites.edit
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
-import io.rtpi.api.ServiceLocation
 import javax.inject.Inject
 import timber.log.Timber
 
@@ -34,7 +34,7 @@ class EditFavouritesViewModel @Inject constructor(
         }
     }
 
-    private fun merge(serviceLocation: ServiceLocation, editing: List<ServiceLocation>?): List<ServiceLocation>? {
+    private fun merge(serviceLocation: DubLinkServiceLocation, editing: List<DubLinkServiceLocation>?): List<DubLinkServiceLocation>? {
         return if (editing.isNullOrEmpty()) {
             listOf(serviceLocation) // TODO shouldn't happen
         } else {

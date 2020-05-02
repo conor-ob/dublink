@@ -29,17 +29,4 @@
             app:chipSpacingVertical="12dp"
             app:singleLine="false" />
 
-<!--        <com.google.android.material.chip.ChipGroup-->
-<!--            android:id="@+id/favourite_edit_directions"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:paddingStart="@dimen/padding_l"-->
-<!--            android:paddingTop="@dimen/padding_l"-->
-<!--            android:paddingEnd="@dimen/padding_l"-->
-<!--            android:paddingBottom="@dimen/padding_xxxl"-->
-<!--            android:visibility="gone"-->
-<!--            app:chipSpacingHorizontal="8dp"-->
-<!--            app:chipSpacingVertical="12dp"-->
-<!--            app:singleLine="false" />-->
-
 </LinearLayout>

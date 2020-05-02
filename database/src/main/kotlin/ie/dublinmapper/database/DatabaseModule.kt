@@ -59,6 +59,9 @@ class DatabaseModule {
                 serviceAdapter = EnumColumnAdapter(),
                 operatorAdapter = EnumColumnAdapter()
             ),
+            favouriteDirectionEntityAdapter = FavouriteDirectionEntity.Adapter(
+                serviceAdapter = EnumColumnAdapter()
+            ),
             locationExpirationEntityAdapter = LocationExpirationEntity.Adapter(
                 serviceAdapter = EnumColumnAdapter(),
                 lastUpdatedAdapter = instantColumnAdapter

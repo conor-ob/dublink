@@ -2,24 +2,24 @@ package ie.dublinmapper.favourites.edit
 
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
-import io.rtpi.api.ServiceLocation
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 
 sealed class Action : BaseAction {
     object GetFavourites : Action()
-    data class EditFavourite(val serviceLocation: ServiceLocation) : Action()
-    data class FavouritesReordered(val serviceLocations: List<ServiceLocation>) : Action()
-    data class SaveChanges(val serviceLocations: List<ServiceLocation>) : Action()
+    data class EditFavourite(val serviceLocation: DubLinkServiceLocation) : Action()
+    data class FavouritesReordered(val serviceLocations: List<DubLinkServiceLocation>) : Action()
+    data class SaveChanges(val serviceLocations: List<DubLinkServiceLocation>) : Action()
 }
 
 sealed class Result {
-    data class FavouritesReceived(val serviceLocations: List<ServiceLocation>) : Result()
-    data class FavouriteEdited(val serviceLocation: ServiceLocation) : Result()
-    data class FavouritesReordered(val serviceLocations: List<ServiceLocation>) : Result()
+    data class FavouritesReceived(val serviceLocations: List<DubLinkServiceLocation>) : Result()
+    data class FavouriteEdited(val serviceLocation: DubLinkServiceLocation) : Result()
+    data class FavouritesReordered(val serviceLocations: List<DubLinkServiceLocation>) : Result()
     object FavouritesSaved : Result()
 }
 
 data class State(
-    val original: List<ServiceLocation>? = null,
-    val editing: List<ServiceLocation>? = null,
+    val original: List<DubLinkServiceLocation>? = null,
+    val editing: List<DubLinkServiceLocation>? = null,
     val isFinished: Boolean? = null
 ) : BaseState

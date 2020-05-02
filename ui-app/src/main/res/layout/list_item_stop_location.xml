@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:paddingStart="@dimen/padding_l"
+    android:paddingTop="@dimen/padding_s"
+    android:paddingEnd="@dimen/padding_l"
+    android:paddingBottom="@dimen/padding_s">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="4dp" />
+
+        <include
+            layout="@layout/layout_service_location_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="8dp"
+        android:layout_height="0dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/layout_service_location_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="8dp" />
+
+        <include
+            layout="@layout/layout_stop_location_routes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/routesLayout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/title">-->
+
+<!--        <View-->
+<!--            android:id="@+id/routesDivider"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="8dp" />-->
+
+<!--        <com.google.android.material.chip.ChipGroup-->
+<!--            android:id="@+id/routes"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:visibility="gone"-->
+<!--            app:chipSpacingHorizontal="5dp"-->
+<!--            app:chipSpacingVertical="5dp"-->
+<!--            app:singleLine="false" />-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/rootViewBikes"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:visibility="gone">-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/bikesCount"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                style="@style/Widget.DublinMapper.RouteChip" />-->
+
+<!--            <View-->
+<!--                android:layout_width="8dp"-->
+<!--                android:layout_height="0dp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/bikes"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />-->
+
+<!--            <View-->
+<!--                android:layout_width="12dp"-->
+<!--                android:layout_height="0dp" />-->
+
+<!--            <com.google.android.material.chip.Chip-->
+<!--                android:id="@+id/docksCount"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                style="@style/Widget.DublinMapper.RouteChip" />-->
+
+<!--            <View-->
+<!--                android:layout_width="8dp"-->
+<!--                android:layout_height="0dp" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/docks"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />-->
+
+<!--        </LinearLayout>-->
+
+<!--    </LinearLayout>-->
+
+</LinearLayout>

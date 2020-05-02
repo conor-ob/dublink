@@ -6,6 +6,7 @@ import com.nytimes.android.external.store3.base.impl.MemoryPolicy
 import com.nytimes.android.external.store3.base.room.RoomPersister
 import ie.dublinmapper.domain.datamodel.ServiceLocationLocalResource
 import ie.dublinmapper.domain.datamodel.ServiceLocationRecordStateLocalResource
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.service.InternetManager
 import io.reactivex.Observable
 import io.rtpi.api.Service
@@ -18,11 +19,11 @@ class ServiceLocationPersister(
     private val serviceLocationLocalResource: ServiceLocationLocalResource,
     private val serviceLocationRecordStateLocalResource: ServiceLocationRecordStateLocalResource,
     private val internetManager: InternetManager
-) : RoomPersister<List<ServiceLocation>, List<ServiceLocation>, Service>, RecordProvider<Service> {
+) : RoomPersister<List<ServiceLocation>, List<DubLinkServiceLocation>, Service>, RecordProvider<Service> {
 
     private val lifespan: Long by lazy { memoryPolicy.expireAfterTimeUnit.toSeconds(memoryPolicy.expireAfterWrite) }
 
-    override fun read(key: Service): Observable<List<ServiceLocation>> {
+    override fun read(key: Service): Observable<List<DubLinkServiceLocation>> {
         return serviceLocationLocalResource.selectServiceLocations(key)
     }
 
