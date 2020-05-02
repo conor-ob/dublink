@@ -1,10 +1,10 @@
 package ie.dublinmapper
 
-import io.rtpi.api.ServiceLocation
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 
 interface DublinMapperNavigator {
 
-    fun navigateToLiveData(serviceLocation: ServiceLocation)
+    fun navigateToLiveData(serviceLocation: DubLinkServiceLocation)
 
     fun navigateToSearch()
 

@@ -1,41 +1,44 @@
 package ie.dublinmapper.database
 
 import ie.dublinmapper.domain.datamodel.FavouriteServiceLocationLocalResource
-import ie.dublinmapper.domain.model.getCustomDirections
-import ie.dublinmapper.domain.model.getCustomName
-import ie.dublinmapper.domain.model.getCustomRoutes
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
+import ie.dublinmapper.domain.model.Filter
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 
 class SqlDelightFavouriteServiceLocationLocalResource(
     private val database: Database
 ) : FavouriteServiceLocationLocalResource {
 
-    override fun insertFavourite(serviceLocation: ServiceLocation) {
+    override fun insertFavourite(serviceLocation: DubLinkServiceLocation) {
         database.transaction {
             val count = database.favouriteLocationQueries.count().executeAsOne()
             database.favouriteLocationQueries.insertOrReplace(
                 service = serviceLocation.service,
                 locationId = serviceLocation.id,
-                name = serviceLocation.getCustomName(),
+                name = serviceLocation.name,
                 sortIndex = count
             )
-            for (routeGroup in serviceLocation.getCustomRoutes()) {
-                for (route in routeGroup.routes) {
-                    database.favouriteServiceQueries.insertOrReplace(
-                        service = serviceLocation.service,
-                        locationId = serviceLocation.id,
-                        route = route,
-                        operator = routeGroup.operator
-                    )
+            if (serviceLocation is DubLinkStopLocation) {
+                for (filter in serviceLocation.filters.filter { it.isActive }) {
+                    when (filter) {
+                        is Filter.RouteFilter -> {
+                            database.favouriteServiceQueries.insertOrReplace(
+                                service = serviceLocation.service,
+                                locationId = serviceLocation.id,
+                                route = filter.route.id,
+                                operator = filter.route.operator
+                            )
+                        }
+                        is Filter.DirectionFilter -> {
+                            database.favouriteDirectionQueries.insertOrReplace(
+                                service = serviceLocation.service,
+                                locationId = serviceLocation.id,
+                                direction = filter.direction
+                            )
+                        }
+                    }
                 }
-            }
-            for (direction in serviceLocation.getCustomDirections()) {
-                database.favouriteDirectionQueries.insertOrReplace(
-                    service = serviceLocation.service,
-                    locationId = serviceLocation.id,
-                    direction = direction
-                )
             }
         }
     }
@@ -57,7 +60,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
         }
     }
 
-    override fun saveChanges(serviceLocations: List<ServiceLocation>) {
+    override fun saveChanges(serviceLocations: List<DubLinkServiceLocation>) {
         database.transaction {
             database.favouriteLocationQueries.deleteAll()
             database.favouriteServiceQueries.deleteAll()
@@ -66,27 +69,31 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                 database.favouriteLocationQueries.insertOrReplace(
                     service = serviceLocation.service,
                     locationId = serviceLocation.id,
-                    name = serviceLocation.getCustomName(),
+                    name = serviceLocation.name,
                     sortIndex = index.toLong()
                 )
             }
             for (serviceLocation in serviceLocations) {
-                for (routeGroup in serviceLocation.getCustomRoutes()) {
-                    for (route in routeGroup.routes) {
-                        database.favouriteServiceQueries.insertOrReplace(
-                            service = serviceLocation.service,
-                            locationId = serviceLocation.id,
-                            route = route,
-                            operator = routeGroup.operator
-                        )
+                if (serviceLocation is DubLinkStopLocation) {
+                    for (filter in serviceLocation.filters.filter { it.isActive }) {
+                        when (filter) {
+                            is Filter.RouteFilter -> {
+                                database.favouriteServiceQueries.insertOrReplace(
+                                    service = serviceLocation.service,
+                                    locationId = serviceLocation.id,
+                                    route = filter.route.id,
+                                    operator = filter.route.operator
+                                )
+                            }
+                            is Filter.DirectionFilter -> {
+                                database.favouriteDirectionQueries.insertOrReplace(
+                                    service = serviceLocation.service,
+                                    locationId = serviceLocation.id,
+                                    direction = filter.direction
+                                )
+                            }
+                        }
                     }
-                }
-                for (direction in serviceLocation.getCustomDirections()) {
-                    database.favouriteDirectionQueries.insertOrReplace(
-                        service = serviceLocation.service,
-                        locationId = serviceLocation.id,
-                        direction = direction
-                    )
                 }
             }
         }

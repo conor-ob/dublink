@@ -1,10 +1,9 @@
 package ie.dublinmapper.search
 
-import ie.dublinmapper.domain.model.getCustomName
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
 import io.reactivex.Observable
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
-import io.rtpi.api.StopLocation
 import java.text.Normalizer
 import java.util.Locale
 import me.xdrop.fuzzywuzzy.Applicable
@@ -24,8 +23,8 @@ class SearchService {
 
     fun search(
         query: String,
-        serviceLocations: List<ServiceLocation>
-    ): Observable<List<ServiceLocation>> =
+        serviceLocations: List<DubLinkServiceLocation>
+    ): Observable<List<DubLinkServiceLocation>> =
         if (isIdentifier(query)) {
             identifierFieldSearch(query, getAlgorithm(query), serviceLocations)
         } else {
@@ -42,20 +41,20 @@ class SearchService {
     private fun stringFieldSearch(
         query: String,
         algorithm: Applicable,
-        serviceLocations: List<ServiceLocation>
-    ): Observable<List<ServiceLocation>> =
+        serviceLocations: List<DubLinkServiceLocation>
+    ): Observable<List<DubLinkServiceLocation>> =
         search(
             query = query,
             serviceLocations = serviceLocations,
             algorithm = algorithm,
-            toStringFunction = ToStringFunction<ServiceLocation> {
+            toStringFunction = ToStringFunction<DubLinkServiceLocation> {
                 listOfNotNull(
                     it.name,
-                    it.getCustomName(),
+                    it.defaultName,
                     it.service.fullName
                 ).plus(
-                    if (it is StopLocation) {
-                        it.routeGroups.map { routeGroup -> routeGroup.operator.fullName }
+                    if (it is DubLinkStopLocation) {
+                        it.stopLocation.routeGroups.map { routeGroup -> routeGroup.operator.fullName }
                     } else {
                         emptyList()
                     }
@@ -68,8 +67,8 @@ class SearchService {
     private fun identifierFieldSearch(
         query: String,
         algorithm: Applicable,
-        serviceLocations: List<ServiceLocation>
-    ): Observable<List<ServiceLocation>> =
+        serviceLocations: List<DubLinkServiceLocation>
+    ): Observable<List<DubLinkServiceLocation>> =
         search(
             query = query,
             algorithm = algorithm,
@@ -77,12 +76,12 @@ class SearchService {
                 it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN ||
                     it.service == Service.LUAS || it.service == Service.AIRCOACH
             },
-            toStringFunction = ToStringFunction<ServiceLocation> {
+            toStringFunction = ToStringFunction<DubLinkServiceLocation> {
                 listOfNotNull(
                     it.id
                 ).plus(
-                    if (it is StopLocation) {
-                        it.routeGroups.flatMap { routeGroup -> routeGroup.routes }
+                    if (it is DubLinkStopLocation) {
+                        it.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }
                     } else {
                         emptyList()
                     }
@@ -95,9 +94,9 @@ class SearchService {
     private fun search(
         query: String,
         algorithm: Applicable,
-        serviceLocations: List<ServiceLocation>,
-        toStringFunction: ToStringFunction<ServiceLocation>
-    ): Observable<List<ServiceLocation>> =
+        serviceLocations: List<DubLinkServiceLocation>,
+        toStringFunction: ToStringFunction<DubLinkServiceLocation>
+    ): Observable<List<DubLinkServiceLocation>> =
         Observable.just(
             FuzzySearch.extractSorted(
                 query,

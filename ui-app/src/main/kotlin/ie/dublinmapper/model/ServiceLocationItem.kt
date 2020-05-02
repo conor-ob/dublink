@@ -6,16 +6,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import ie.dublinmapper.domain.model.getCustomDirections
-import ie.dublinmapper.domain.model.getName
+import ie.dublinmapper.domain.model.DubLinkDockLocation
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
 import ie.dublinmapper.ui.R
 import ie.dublinmapper.util.ChipFactory
-import io.rtpi.api.DockLocation
-import io.rtpi.api.RouteGroup
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
-import io.rtpi.api.StopLocation
-import io.rtpi.util.AlphaNumericComparator
 import java.util.Objects
 import kotlin.math.round
 import kotlinx.android.synthetic.main.list_item_service_location.bikes
@@ -42,9 +38,8 @@ fun ServiceLocationItem.isSearchCandidate(): Boolean {
 }
 
 class ServiceLocationItem(
-    private val serviceLocation: ServiceLocation,
+    private val serviceLocation: DubLinkServiceLocation,
     private val icon: Int,
-    private val routeGroups: List<RouteGroup>?,
     private val walkDistance: Double?
 ) : Item() {
 
@@ -73,7 +68,7 @@ class ServiceLocationItem(
     }
 
     private fun bindTitle(viewHolder: GroupieViewHolder) {
-        viewHolder.title.text = getServiceLocation().getName()
+        viewHolder.title.text = getServiceLocation().name
         viewHolder.subtitle.text = when (val service = serviceLocation.service) {
             Service.BUS_EIREANN,
             Service.DUBLIN_BUS -> "${service.fullName} (${serviceLocation.id})"
@@ -88,43 +83,32 @@ class ServiceLocationItem(
     }
 
     private fun bindRoutes(viewHolder: GroupieViewHolder) {
-        if (serviceLocation is StopLocation) {
+        if (serviceLocation is DubLinkStopLocation) {
             viewHolder.rootViewBikes.visibility = View.GONE
-            if (routeGroups.isNullOrEmpty()) {
-                viewHolder.routes.visibility = View.GONE
-                viewHolder.routesDivider.visibility = View.GONE
+            viewHolder.routes.removeAllViewsInLayout()
+            val activeFilters = if (serviceLocation.isFavourite) {
+                serviceLocation.filters.filter { it.isActive }
             } else {
-                viewHolder.routes.removeAllViewsInLayout()
-                val sortedRouteGroups = routeGroups
-                    .flatMap { routeGroup -> routeGroup.routes.map { routeGroup.operator to it } }
-                    .sortedWith(Comparator { o1, o2 -> AlphaNumericComparator.compare(o1.second, o2.second) })
-                for (route in sortedRouteGroups) {
-                    viewHolder.routes.addView(ChipFactory.newRouteChip(viewHolder.itemView.context, route))
-                }
-                for (direction in serviceLocation.getCustomDirections()) {
-                    viewHolder.routes.addView(ChipFactory.newDirectionChip(viewHolder.itemView.context, direction))
-                }
-                viewHolder.routes.visibility = View.VISIBLE
-                viewHolder.routesDivider.visibility = View.VISIBLE
+                serviceLocation.filters
             }
-        } else if (serviceLocation is DockLocation) {
+            for (filter in activeFilters) {
+                viewHolder.routes.addView(ChipFactory.newChip(viewHolder.itemView.context, filter))
+            }
+            viewHolder.routes.visibility = View.VISIBLE
+            viewHolder.routesDivider.visibility = View.VISIBLE
+        } else if (serviceLocation is DubLinkDockLocation) {
             viewHolder.routes.visibility = View.GONE
-            if (routeGroups == null) {
-                viewHolder.routesDivider.visibility = View.GONE
-                viewHolder.rootViewBikes.visibility = View.GONE
-            } else {
-                viewHolder.routesDivider.visibility = View.VISIBLE
-                viewHolder.rootViewBikes.visibility = View.VISIBLE
-                viewHolder.bikesCount.text = if (serviceLocation.availableBikes == 0) " No " else " ${serviceLocation.availableBikes} "
-                viewHolder.bikes.text = if (serviceLocation.availableBikes == 1) "Bike" else "Bikes" // TODO plurals
-                viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
-                viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableBikes))
+            viewHolder.routesDivider.visibility = View.VISIBLE
+            viewHolder.rootViewBikes.visibility = View.VISIBLE
+            viewHolder.bikesCount.text = if (serviceLocation.availableBikes == 0) " No " else " ${serviceLocation.availableBikes} "
+            viewHolder.bikes.text = if (serviceLocation.availableBikes == 1) "Bike" else "Bikes" // TODO plurals
+            viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
+            viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableBikes))
 
-                viewHolder.docksCount.text = if (serviceLocation.availableDocks == 0) " No " else " ${serviceLocation.availableDocks} "
-                viewHolder.docks.text = if (serviceLocation.availableDocks == 1) "Dock" else "Docks" // TODO plurals
-                viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
-                viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableDocks))
-            }
+            viewHolder.docksCount.text = if (serviceLocation.availableDocks == 0) " No " else " ${serviceLocation.availableDocks} "
+            viewHolder.docks.text = if (serviceLocation.availableDocks == 1) "Dock" else "Docks" // TODO plurals
+            viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
+            viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableDocks))
         }
     }
 
@@ -136,12 +120,12 @@ class ServiceLocationItem(
         }
     }
 
-    private fun setServiceLocation(serviceLocation: ServiceLocation) {
+    private fun setServiceLocation(serviceLocation: DubLinkServiceLocation) {
         extras[serviceLocationKey] = serviceLocation
     }
 
-    protected fun getServiceLocation(): ServiceLocation {
-        return extras[serviceLocationKey] as ServiceLocation
+    protected fun getServiceLocation(): DubLinkServiceLocation {
+        return extras[serviceLocationKey] as DubLinkServiceLocation
     }
 
 //    override fun isSameAs(other: com.xwray.groupie.Item<*>?): Boolean {
@@ -169,12 +153,12 @@ class ServiceLocationItem(
     }
 }
 
-fun com.xwray.groupie.Item<com.xwray.groupie.GroupieViewHolder>.extractServiceLocation(): ServiceLocation? {
-    return extras[serviceLocationKey] as? ServiceLocation
+fun com.xwray.groupie.Item<com.xwray.groupie.GroupieViewHolder>.extractServiceLocation(): DubLinkServiceLocation? {
+    return extras[serviceLocationKey] as? DubLinkServiceLocation
 }
 
-fun ServiceLocationItem.extractServiceLocation(): ServiceLocation? {
-    return extras[serviceLocationKey] as? ServiceLocation
+fun ServiceLocationItem.extractServiceLocation(): DubLinkServiceLocation? {
+    return extras[serviceLocationKey] as? DubLinkServiceLocation
 }
 
 private fun Double.formatDistance(): String {

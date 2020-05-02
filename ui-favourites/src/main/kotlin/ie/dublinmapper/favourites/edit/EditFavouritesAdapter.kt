@@ -2,13 +2,13 @@ package ie.dublinmapper.favourites.edit
 
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
-import io.rtpi.api.ServiceLocation
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 
 class EditFavouritesAdapter<VH : GroupieViewHolder> : GroupAdapter<VH>() {
 
-    private val serviceLocations = mutableListOf<ServiceLocation>()
+    private val serviceLocations = mutableListOf<DubLinkServiceLocation>()
 
-    fun update(newServiceLocations: List<ServiceLocation>) {
+    fun update(newServiceLocations: List<DubLinkServiceLocation>) {
         if (serviceLocations != newServiceLocations) {
             serviceLocations.clear()
             serviceLocations.addAll(newServiceLocations)
@@ -16,7 +16,7 @@ class EditFavouritesAdapter<VH : GroupieViewHolder> : GroupAdapter<VH>() {
         }
     }
 
-    fun getServiceLocations(): List<ServiceLocation> = serviceLocations
+    fun getServiceLocations(): List<DubLinkServiceLocation> = serviceLocations
 
-    fun getServiceLocation(position: Int): ServiceLocation = serviceLocations[position]
+    fun getServiceLocation(position: Int): DubLinkServiceLocation = serviceLocations[position]
 }

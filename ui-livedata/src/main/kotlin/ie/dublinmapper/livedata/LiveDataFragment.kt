@@ -17,17 +17,13 @@ import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.dialog.CustomizeFavouriteDialogFactory
 import ie.dublinmapper.dialog.OnFavouriteSavedListener
-import ie.dublinmapper.domain.model.getName
-import ie.dublinmapper.domain.model.getSortedRoutes
-import ie.dublinmapper.domain.model.hasCustomDirection
-import ie.dublinmapper.domain.model.isFavourite
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
+import ie.dublinmapper.domain.model.Filter
 import ie.dublinmapper.setVisibility
 import ie.dublinmapper.util.ChipFactory
 import ie.dublinmapper.viewModelProvider
-import io.rtpi.api.Operator
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
-import io.rtpi.api.StopLocation
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
 
@@ -35,7 +31,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as LiveDataViewModel }
     private lateinit var args: LiveDataArgs
-    private lateinit var serviceLocation: ServiceLocation
+    private lateinit var serviceLocation: DubLinkServiceLocation
 
     private var liveDataAdapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
@@ -108,7 +104,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_favourite -> {
-                        if (serviceLocation.isFavourite()) {
+                        if (serviceLocation.isFavourite) {
                             viewModel.dispatch(
                                 Action.RemoveFavourite(
                                     serviceLocationId = args.serviceLocationId,
@@ -122,7 +118,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                                 serviceLocation = serviceLocation,
                                 onFavouriteSavedListener = object : OnFavouriteSavedListener {
 
-                                    override fun onSave(serviceLocation: ServiceLocation) {
+                                    override fun onSave(serviceLocation: DubLinkServiceLocation) {
                                         viewModel.dispatch(Action.SaveFavourite(serviceLocation))
                                     }
                                 }
@@ -171,7 +167,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             }
         }
         live_data_button_clear_route_filters.setOnClickListener {
-            viewModel.dispatch(Action.RouteFilterIntent(RouteFilterChangeType.Clear))
+            viewModel.dispatch(Action.FilterIntent(FilterChangeType.Clear))
             live_data_chip_group_route_filters.clearCheck()
         }
         routeFilterBottomSheetLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
@@ -192,7 +188,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         if (state.serviceLocation != null) {
             serviceLocation = state.serviceLocation
             live_data_toolbar.apply {
-                updateTitle(newText = serviceLocation.getName())
+                updateTitle(newText = serviceLocation.name)
                 updateSubtitle(
                     newText = when (val service = args.serviceLocationService) {
                         Service.BUS_EIREANN,
@@ -201,7 +197,7 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
                     }
                 )
                 menu.findItem(R.id.action_favourite).apply {
-                    if (serviceLocation.isFavourite()) {
+                    if (serviceLocation.isFavourite) {
                         setIcon(R.drawable.ic_favourite_selected)
                     } else {
                         setIcon(R.drawable.ic_favourite_unselected)
@@ -213,55 +209,37 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private fun renderLiveDataState(state: State) {
         live_data_loader.isRefreshing = state.isLoading
-        if (state.filteredLiveDataResponse != null) {
-            liveDataAdapter?.update(listOf(LiveDataMapper.map(state.filteredLiveDataResponse)))
+        if (state.liveDataResponse != null) {
+            liveDataAdapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse, state.serviceLocation)))
         }
     }
 
     private fun renderRouteFilterState(state: State) {
         live_data_button_clear_route_filters.setVisibility(
-            isVisible = state.activeRouteFilters.isNotEmpty() || state.activeDirectionFilters.isNotEmpty()
+            isVisible = if (state.serviceLocation is DubLinkStopLocation) {
+                state.serviceLocation.filters.any { it.isActive }
+            } else {
+                false
+            }
         )
-        if (state.serviceLocation != null && state.serviceLocation is StopLocation) {
-            val sortedRoutes = state.serviceLocation.getSortedRoutes()
-            if (sortedRoutes.size > 1) {
+        if (state.serviceLocation != null && state.serviceLocation is DubLinkStopLocation) {
+            val filters = state.serviceLocation.filters
+            if (filters.size > 1) {
                 live_data_button_expand_route_filters.visibility = View.VISIBLE
             }
-//            if (sortedRoutes.size != live_data_chip_group_route_filters.childCount) {
             if (0 == live_data_chip_group_route_filters.childCount) {
                 live_data_chip_group_route_filters.removeAllViewsInLayout()
-                for ((operator, route) in sortedRoutes) {
-                    val routeFilterChip = ChipFactory
-                        .newRouteFilterChip(requireContext(), operator to route)
-                        .apply {
-                            isChecked = state.activeRouteFilters.contains(route)
-                            alpha = if (state.activeRouteFilters.contains(route)) {
-                                1.0f
-                            } else {
-                                0.33f
-                            }
-                            setOnCheckedChangeListener(routeFilterClickedListener)
+                for (filter in filters) {
+                    val filterChip = ChipFactory.newFilterChip(requireContext(), filter).apply {
+                        isChecked = filter.isActive
+                        alpha = if (filter.isActive) {
+                            1.0f
+                        } else {
+                            0.33f
                         }
-                    live_data_chip_group_route_filters.addView(routeFilterChip)
-                }
-                if (state.serviceLocation.routeGroups.map { it.operator }.contains(Operator.DART)) {
-                    listOf(
-                        "Northbound",
-                        "Southbound"
-                    ).forEach { direction ->
-                        val directionFilterChip =  ChipFactory
-                            .newDirectionFilterChip(requireContext(), direction)
-                            .apply {
-                                isChecked = serviceLocation.hasCustomDirection(direction)
-                                alpha = if (serviceLocation.hasCustomDirection(direction)) {
-                                    1.0f
-                                } else {
-                                    0.33f
-                                }
-                                setOnCheckedChangeListener(directionFilterClickedListener)
-                            }
-                        live_data_chip_group_route_filters.addView(directionFilterChip)
+                        setOnCheckedChangeListener(routeFilterClickedListener)
                     }
+                    live_data_chip_group_route_filters.addView(filterChip)
                 }
                 live_data_chip_group_route_filters.visibility = View.VISIBLE
             }
@@ -289,45 +267,14 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
         if (isChecked) {
             viewModel.dispatch(
-                Action.RouteFilterIntent(
-                    RouteFilterChangeType.AddRoute(buttonView.text.toString())
+                Action.FilterIntent(
+                    FilterChangeType.Add(buttonView.tag as Filter)
                 )
             )
         } else {
             viewModel.dispatch(
-                Action.RouteFilterIntent(
-                    RouteFilterChangeType.RemoveRoute(buttonView.text.toString())
-                )
-            )
-        }
-    }
-
-    private val directionFilterClickedListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
-        (buttonView as Chip).apply {
-            alpha = if (isChecked) {
-                1.0f
-            } else {
-                0.33f
-            }
-        }
-
-        val checkedChipIds = live_data_chip_group_route_filters.checkedChipIds
-        if (checkedChipIds.isNullOrEmpty()) {
-            live_data_button_clear_route_filters.visibility = View.INVISIBLE
-        } else {
-            live_data_button_clear_route_filters.visibility = View.VISIBLE
-        }
-
-        if (isChecked) {
-            viewModel.dispatch(
-                Action.RouteFilterIntent(
-                    RouteFilterChangeType.AddDirection(buttonView.text.toString())
-                )
-            )
-        } else {
-            viewModel.dispatch(
-                Action.RouteFilterIntent(
-                    RouteFilterChangeType.RemoveDirection(buttonView.text.toString())
+                Action.FilterIntent(
+                    FilterChangeType.Remove(buttonView.tag as Filter)
                 )
             )
         }
@@ -364,12 +311,12 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         )
 
         fun toBundle(
-            serviceLocation: ServiceLocation
+            serviceLocation: DubLinkServiceLocation
         ) = Bundle().apply {
             putString(id, serviceLocation.id)
-            putString(name, serviceLocation.getName())
+            putString(name, serviceLocation.name)
             putSerializable(service, serviceLocation.service)
-            putBoolean(isFavourite, serviceLocation.isFavourite())
+            putBoolean(isFavourite, serviceLocation.isFavourite)
         }
 
         private fun fromBundle(

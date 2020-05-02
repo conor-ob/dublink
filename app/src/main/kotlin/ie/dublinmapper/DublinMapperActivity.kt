@@ -9,8 +9,8 @@ import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import ie.dublinmapper.domain.internet.InternetStatus
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.livedata.LiveDataFragment
-import io.rtpi.api.ServiceLocation
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_root.activity_root
 
@@ -76,7 +76,7 @@ class DublinMapperActivity : DaggerAppCompatActivity(), NavHost, DublinMapperNav
         )
     }
 
-    override fun navigateToLiveData(serviceLocation: ServiceLocation) {
+    override fun navigateToLiveData(serviceLocation: DubLinkServiceLocation) {
         navigationController.navigate(
             R.id.liveDataFragment,
             LiveDataFragment.toBundle(serviceLocation),

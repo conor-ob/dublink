@@ -1,21 +1,19 @@
 package ie.dublinmapper.favourites.edit
 
 import com.xwray.groupie.Section
-import ie.dublinmapper.domain.model.getCustomRoutes
-import ie.dublinmapper.domain.model.isFavourite
+import ie.dublinmapper.domain.model.DubLinkDockLocation
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.DubLinkStopLocation
 import ie.dublinmapper.favourites.R
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.ServiceLocationItem
 import ie.dublinmapper.model.setSearchCandidate
-import io.rtpi.api.DockLocation
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
-import io.rtpi.api.StopLocation
 
 object EditFavouritesMapper {
 
     fun map(
-        editing: List<ServiceLocation>
+        editing: List<DubLinkServiceLocation>
     ) = Section(
         editing.map {
             mapServiceLocation(it)
@@ -33,26 +31,20 @@ object EditFavouritesMapper {
 //    }
 
     private fun mapServiceLocation(
-        serviceLocation: ServiceLocation
+        serviceLocation: DubLinkServiceLocation
     ) = Section(
         when (serviceLocation) {
-            is StopLocation -> listOf(
+            is DubLinkStopLocation -> listOf(
                 ServiceLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
-                    routeGroups = if (serviceLocation.isFavourite()) {
-                        serviceLocation.getCustomRoutes()
-                    } else {
-                        serviceLocation.routeGroups
-                    },
                     walkDistance = null
                 )
             )
-            is DockLocation -> listOf(
+            is DubLinkDockLocation -> listOf(
                 ServiceLocationItem(
                     serviceLocation = serviceLocation,
                     icon = mapIcon(serviceLocation.service),
-                    routeGroups = emptyList(),
                     walkDistance = null
                 ).apply {
                     setSearchCandidate()

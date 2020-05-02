@@ -6,6 +6,19 @@ import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 
+fun createIrishRailStation(
+    id: String = "PERSE",
+    name: String = "Pearse",
+    coordinate: Coordinate = Coordinate(53.563, -6.252),
+    routeGroups: List<RouteGroup> = emptyList()
+) = StopLocation(
+    id = id,
+    name = name,
+    service = Service.IRISH_RAIL,
+    coordinate = coordinate,
+    routeGroups = routeGroups
+)
+
 fun createLuasStop(
     id: String = "LUAS1",
     name: String = "St. Stephen's Green",

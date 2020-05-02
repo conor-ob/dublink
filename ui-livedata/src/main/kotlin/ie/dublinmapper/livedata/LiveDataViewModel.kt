@@ -2,15 +2,15 @@ package ie.dublinmapper.livedata
 
 import com.ww.roxie.Reducer
 import ie.dublinmapper.LifecycleAwareViewModel
-import ie.dublinmapper.domain.model.getCustomDirections
-import ie.dublinmapper.domain.model.getCustomRoutes
+import ie.dublinmapper.domain.model.DubLinkStopLocation
+import ie.dublinmapper.domain.model.addFilter
+import ie.dublinmapper.domain.model.clearFilters
+import ie.dublinmapper.domain.model.removeFilter
 import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
-import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
-import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -27,9 +27,6 @@ class LiveDataViewModel @Inject constructor(
         toastMessage = null,
         serviceLocation = null,
         liveDataResponse = null,
-        filteredLiveDataResponse = null,
-        activeRouteFilters = emptySet(),
-        activeDirectionFilters = emptySet(),
         routeDiscrepancyState = null,
         routeFilterState = null
     )
@@ -38,114 +35,58 @@ class LiveDataViewModel @Inject constructor(
         when (change) {
             is Change.GetServiceLocation -> State(
                 serviceLocation = change.serviceLocation,
-                activeRouteFilters = change.serviceLocation.getCustomRoutes().flatMap { it.routes }.toSet(),
-                activeDirectionFilters = change.serviceLocation.getCustomDirections().toSet(),
                 liveDataResponse = state.liveDataResponse,
-                filteredLiveDataResponse = state.filteredLiveDataResponse,
                 routeDiscrepancyState = state.routeDiscrepancyState,
                 routeFilterState = state.routeFilterState,
                 isLoading = state.isLoading,
                 toastMessage = null
             )
             is Change.GetLiveData -> {
-                val newState = State(
+                State(
                     liveDataResponse = change.liveDataResponse,
                     serviceLocation = state.serviceLocation,
-                    activeRouteFilters = state.activeRouteFilters,
-                    activeDirectionFilters = state.activeDirectionFilters,
-                    filteredLiveDataResponse = state.filteredLiveDataResponse,
                     routeFilterState = state.routeFilterState,
                     isLoading = false,
                     toastMessage = null,
                     routeDiscrepancyState = tryLogRouteDiscrepancies(state, change)
                 )
-                filterRoutes(newState, Change.RouteFilterChange(RouteFilterChangeType.NoChange))
             }
-            is Change.FavouriteSaved -> state.copy(
+            is Change.FavouriteSaved -> State(
                 serviceLocation = change.serviceLocation,
                 toastMessage = "Saved to Favourites",
                 liveDataResponse = state.liveDataResponse,
-                filteredLiveDataResponse = state.filteredLiveDataResponse,
-                activeRouteFilters = state.activeRouteFilters,
-                activeDirectionFilters = state.activeDirectionFilters,
                 routeFilterState = state.routeFilterState,
                 routeDiscrepancyState = state.routeDiscrepancyState,
                 isLoading = state.isLoading
             )
-            is Change.FavouriteRemoved -> state.copy(
+            is Change.FavouriteRemoved -> State(
                 serviceLocation = change.serviceLocation,
                 toastMessage = "Removed from Favourites",
                 liveDataResponse = state.liveDataResponse,
-                filteredLiveDataResponse = state.filteredLiveDataResponse,
-                activeRouteFilters = state.activeRouteFilters,
-                activeDirectionFilters = state.activeDirectionFilters,
                 routeFilterState = state.routeFilterState,
                 routeDiscrepancyState = state.routeDiscrepancyState,
                 isLoading = state.isLoading
             )
-            is Change.RouteFilterChange -> filterRoutes(state, change)
+            is Change.RouteFilterChange -> State(
+                serviceLocation = if (state.serviceLocation is DubLinkStopLocation) {
+                    when (change.type) {
+                        is FilterChangeType.Add -> state.serviceLocation.addFilter(change.type.filter)
+                        is FilterChangeType.Remove -> state.serviceLocation.removeFilter(change.type.filter)
+                        is FilterChangeType.Clear -> state.serviceLocation.clearFilters()
+                    }
+                } else {
+                    state.serviceLocation
+                },
+                toastMessage = null,
+                liveDataResponse = state.liveDataResponse,
+                routeFilterState = state.routeFilterState,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                isLoading = state.isLoading
+            )
             is Change.RouteFilterSheetMoved -> state.copy(
                 routeFilterState = change.state
             )
             is Change.Error -> state // TODO
-        }
-    }
-
-    private fun filterRoutes(
-        state: State,
-        change: Change.RouteFilterChange
-    ): State {
-        val adjustedRouteFilters = state.activeRouteFilters.toMutableSet()
-        val adjustedDirectionFilters = state.activeDirectionFilters.toMutableSet()
-        when (change.type) {
-            is RouteFilterChangeType.AddRoute -> adjustedRouteFilters.add(change.type.route)
-            is RouteFilterChangeType.RemoveRoute -> adjustedRouteFilters.remove(change.type.route)
-            is RouteFilterChangeType.AddDirection -> adjustedDirectionFilters.add(change.type.direction)
-            is RouteFilterChangeType.RemoveDirection -> adjustedDirectionFilters.remove(change.type.direction)
-            is RouteFilterChangeType.Clear -> adjustedRouteFilters.clear()
-            is RouteFilterChangeType.NoChange -> { /* do nothing */ }
-        }
-        return if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
-            state.liveDataResponse.liveData.all { it is PredictionLiveData }
-        ) {
-            if (adjustedRouteFilters.isEmpty() && adjustedDirectionFilters.isEmpty()) {
-                state.copy(
-                    filteredLiveDataResponse = state.liveDataResponse,
-                    activeRouteFilters = adjustedRouteFilters,
-                    activeDirectionFilters = adjustedDirectionFilters
-                )
-            } else {
-                state.copy(
-                    filteredLiveDataResponse = LiveDataPresentationResponse.Data(
-                        liveData = state.liveDataResponse.liveData
-                            .filterIsInstance<PredictionLiveData>()
-                            .filter {
-                                if (adjustedRouteFilters.isEmpty()) {
-                                    true
-                                } else {
-                                    adjustedRouteFilters.contains(it.routeInfo.route)
-                                } && if (adjustedDirectionFilters.isEmpty()) {
-                                    true
-                                } else {
-                                    adjustedDirectionFilters.contains(it.routeInfo.direction)
-                                }
-                            }
-                    ),
-                    activeRouteFilters = adjustedRouteFilters,
-                    activeDirectionFilters = adjustedDirectionFilters
-                )
-            }
-        } else if (state.liveDataResponse is LiveDataPresentationResponse.Data &&
-            state.liveDataResponse.liveData.all { it is DockLiveData }) {
-            state.copy(
-                filteredLiveDataResponse = state.liveDataResponse,
-                activeRouteFilters = adjustedRouteFilters
-            )
-        } else {
-            state.copy(
-                activeRouteFilters = adjustedRouteFilters,
-                activeDirectionFilters = adjustedDirectionFilters
-            )
         }
     }
 
@@ -215,7 +156,7 @@ class LiveDataViewModel @Inject constructor(
             }
 
         val routeFilterIntents = actions
-            .ofType(Action.RouteFilterIntent::class.java)
+            .ofType(Action.FilterIntent::class.java)
             .switchMap { intent -> Observable.just(Change.RouteFilterChange(intent.type)) }
 
         val bottomSheetIntents = actions
@@ -248,10 +189,10 @@ class LiveDataViewModel @Inject constructor(
             if (liveDataResponse is LiveDataPresentationResponse.Data && state.serviceLocation != null) {
                 val serviceLocation = state.serviceLocation
                 val liveData = liveDataResponse.liveData
-                if (serviceLocation is StopLocation &&
+                if (serviceLocation is DubLinkStopLocation &&
                     liveData.all { it is PredictionLiveData }
                 ) {
-                    val knownRoutes = serviceLocation.routeGroups
+                    val knownRoutes = serviceLocation.stopLocation.routeGroups
                         .flatMap { it.routes }
                         .toSortedSet(AlphaNumericComparator)
                     val routes = liveData.filterIsInstance<PredictionLiveData>()

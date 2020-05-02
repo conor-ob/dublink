@@ -1,8 +1,8 @@
 package ie.dublinmapper.domain.repository
 
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import io.reactivex.Observable
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 
 interface ServiceLocationRepository {
     fun get(): Observable<ServiceLocationResponse>
@@ -30,7 +30,7 @@ sealed class ServiceLocationResponse {
 
     data class Data(
         override val service: Service,
-        val serviceLocations: List<ServiceLocation>
+        val serviceLocations: List<DubLinkServiceLocation>
     ) : ServiceLocationResponse()
 
     data class Error(

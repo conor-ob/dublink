@@ -2,6 +2,7 @@ package ie.dublinmapper.favourites
 
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.internet.NetworkUnavailableException
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.GroupedLiveDataItem
@@ -10,7 +11,6 @@ import ie.dublinmapper.model.SimpleMessageItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 import java.io.IOException
 import java.net.ConnectException
 import java.net.UnknownHostException
@@ -74,13 +74,12 @@ object FavouritesMapper {
     }
 
     private fun mapServiceLocation(
-        serviceLocation: ServiceLocation
+        serviceLocation: DubLinkServiceLocation
     ) = ServiceLocationItem(
         serviceLocation = serviceLocation,
         icon = mapIcon(serviceLocation.service),
 //                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
 //                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
-        routeGroups = null,
         walkDistance = null
     )
 

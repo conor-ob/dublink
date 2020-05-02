@@ -1,11 +1,10 @@
 package ie.dublinmapper.favourites.edit
 
-import ie.dublinmapper.domain.model.getSortIndex
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import io.reactivex.Observable
-import io.rtpi.api.ServiceLocation
 import javax.inject.Inject
 
 class EditFavouritesUseCase @Inject constructor(
@@ -20,14 +19,14 @@ class EditFavouritesUseCase @Inject constructor(
                     serviceLocations = responses
                         .filterIsInstance<ServiceLocationResponse.Data>()
                         .flatMap { response -> response.serviceLocations }
-                        .sortedBy { serviceLocation -> serviceLocation.getSortIndex() }
+                        .sortedBy { serviceLocation -> serviceLocation.favouriteSortIndex }
                 )
             }
             .onErrorReturn { throwable ->
                 FavouritesResponse.Error(throwable)
             }
 
-    fun saveChanges(serviceLocations: List<ServiceLocation>): Observable<Boolean> {
+    fun saveChanges(serviceLocations: List<DubLinkServiceLocation>): Observable<Boolean> {
         return Observable.fromCallable {
             serviceLocationRepository.clearAllCaches()
             favouriteRepository.saveChanges(serviceLocations)
@@ -39,7 +38,7 @@ class EditFavouritesUseCase @Inject constructor(
 sealed class FavouritesResponse {
 
     data class Data(
-        val serviceLocations: List<ServiceLocation>
+        val serviceLocations: List<DubLinkServiceLocation>
     ) : FavouritesResponse()
 
     data class Error(

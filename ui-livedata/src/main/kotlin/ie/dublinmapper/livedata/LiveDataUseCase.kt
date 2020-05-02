@@ -1,5 +1,6 @@
 package ie.dublinmapper.livedata
 
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
 import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
@@ -10,7 +11,6 @@ import ie.dublinmapper.domain.repository.ServiceLocationResponse
 import io.reactivex.Observable
 import io.rtpi.api.LiveData
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 import javax.inject.Inject
 
 class LiveDataUseCase @Inject constructor(
@@ -63,7 +63,7 @@ class LiveDataUseCase @Inject constructor(
         }
     }
 
-    fun saveFavourite(serviceLocation: ServiceLocation): Observable<ServiceLocationPresentationResponse> {
+    fun saveFavourite(serviceLocation: DubLinkServiceLocation): Observable<ServiceLocationPresentationResponse> {
         clearServiceLocationCache(serviceLocation.service)
         favouriteRepository.saveFavourite(serviceLocation)
         return getServiceLocation(serviceLocation.service, serviceLocation.id)
@@ -82,7 +82,7 @@ class LiveDataUseCase @Inject constructor(
 
 sealed class ServiceLocationPresentationResponse {
 
-    data class Data(val serviceLocation: ServiceLocation) : ServiceLocationPresentationResponse()
+    data class Data(val serviceLocation: DubLinkServiceLocation) : ServiceLocationPresentationResponse()
 
     data class Error(val throwable: Throwable) : ServiceLocationPresentationResponse()
 }

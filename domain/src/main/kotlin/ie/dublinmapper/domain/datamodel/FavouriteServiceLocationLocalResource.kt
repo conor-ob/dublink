@@ -1,13 +1,13 @@
 package ie.dublinmapper.domain.datamodel
 
+import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import io.rtpi.api.Service
-import io.rtpi.api.ServiceLocation
 
 interface FavouriteServiceLocationLocalResource {
 
-    fun insertFavourite(serviceLocation: ServiceLocation)
+    fun insertFavourite(serviceLocation: DubLinkServiceLocation)
 
     fun deleteFavourite(serviceLocationId: String, service: Service)
 
-    fun saveChanges(serviceLocations: List<ServiceLocation>)
+    fun saveChanges(serviceLocations: List<DubLinkServiceLocation>)
 }
