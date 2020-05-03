@@ -1,5 +1,6 @@
 package ie.dublinmapper.favourites
 
+import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.internet.NetworkUnavailableException
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
@@ -19,24 +20,49 @@ import timber.log.Timber
 object FavouritesMapper {
 
     fun map(
-        liveData: List<LiveDataPresentationResponse>
-    ) = Section(
-        liveData.mapIndexed { index: Int, response: LiveDataPresentationResponse ->
+        favourites: List<DubLinkServiceLocation>?,
+        liveData: List<LiveDataPresentationResponse>?
+    ): Group {
+        return if (favourites != null) {
             Section(
-                listOfNotNull(
-                    mapServiceLocation(response.serviceLocation),
-                    mapLiveData(response, index),
-                    mapDivider(liveData.size, index)
-                )
+                favourites.mapIndexed { index, dubLinkServiceLocation ->
+                    Section(
+                        listOfNotNull(
+                            mapServiceLocation(dubLinkServiceLocation),
+                            mapLiveData(dubLinkServiceLocation, liveData, index),
+                            mapDivider(favourites.size, dubLinkServiceLocation, index)
+                        )
+                    )
+                }
             )
+        } else {
+            Section(emptyList())
         }
-    )
+    }
+
+    private fun mapLiveData(
+        serviceLocation: DubLinkServiceLocation,
+        liveData: List<LiveDataPresentationResponse>?,
+        index: Int
+    ): Section {
+        return if (liveData == null) {
+            Timber.d("TEST 1")
+            Section(SimpleMessageItem("Loading...", serviceLocation.hashCode().toLong()))
+        } else {
+            val match = liveData.find { it.serviceLocation == serviceLocation }
+            if (match == null) {
+                Timber.d("TEST 2")
+                Section(SimpleMessageItem("Loading...", serviceLocation.hashCode().toLong()))
+            } else {
+                mapLiveData(match, serviceLocation.hashCode().toLong())
+            }
+        }
+    }
 
     private fun mapLiveData(
         liveDataResponse: LiveDataPresentationResponse,
-        index: Int
+        index: Long
     ) = when (liveDataResponse) {
-        is LiveDataPresentationResponse.Loading -> Section(SimpleMessageItem("Loading...", index))
         is LiveDataPresentationResponse.Skipped -> Section()
         is LiveDataPresentationResponse.Data -> {
             val liveData = liveDataResponse.liveData
@@ -63,9 +89,9 @@ object FavouritesMapper {
                 is UnknownHostException -> "Please check your internet connection"
 
                 // network error
-                is IOException -> "⚠️ We're having trouble reaching ${liveDataResponse.serviceLocation.service.fullName}"
+                is IOException -> "We're having trouble reaching ${liveDataResponse.serviceLocation.service.fullName}"
 
-                else -> "Oops! Something went wrong"
+                else -> "Something went wrong, try refreshing"
             }
             Section(
                 SimpleMessageItem(message, index)
@@ -77,9 +103,6 @@ object FavouritesMapper {
         serviceLocation: DubLinkServiceLocation
     ) = SimpleServiceLocationItem(
         serviceLocation = serviceLocation,
-        icon = mapIcon(serviceLocation.service),
-//                        routes = if (liveData.isNullOrEmpty()) mapRoutes(serviceLocation) else null,
-//                        routes = if (serviceLocation.service == Service.DUBLIN_BIKES) mapRoutes(serviceLocation, liveDataResponse.liveData) else null,
         walkDistance = null
     )
 
@@ -95,14 +118,9 @@ object FavouritesMapper {
         return "No scheduled $mode"
     }
 
-    private fun mapDivider(items: Int, index: Int) = if (index < items - 1) DividerItem(index.toLong()) else null
-
-    private fun mapIcon(service: Service): Int = when (service) {
-        Service.AIRCOACH,
-        Service.BUS_EIREANN,
-        Service.DUBLIN_BUS -> R.drawable.ic_bus
-        Service.DUBLIN_BIKES -> R.drawable.ic_bike
-        Service.IRISH_RAIL -> R.drawable.ic_train
-        Service.LUAS -> R.drawable.ic_tram
-    }
+    private fun mapDivider(
+        items: Int,
+        dubLinkServiceLocation: DubLinkServiceLocation,
+        index: Int
+    ) = if (index < items - 1) DividerItem(dubLinkServiceLocation.hashCode().toLong()) else null
 }

@@ -5,6 +5,7 @@ import com.ww.roxie.BaseState
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.model.Filter
 import io.rtpi.api.Service
+import java.time.Instant
 import java.util.SortedSet
 import kotlin.random.Random
 
@@ -16,6 +17,11 @@ sealed class Action : BaseAction {
     ) : Action()
 
     data class GetLiveData(
+        val serviceLocationId: String,
+        val serviceLocationService: Service
+    ) : Action()
+
+    data class RefreshLiveData(
         val serviceLocationId: String,
         val serviceLocationService: Service
     ) : Action()
@@ -64,6 +70,7 @@ sealed class Change {
     ) : Change()
 
     object AddOrRemoveFavourite : Change()
+    object ClearLiveData : Change()
 }
 
 data class State(

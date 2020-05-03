@@ -10,9 +10,8 @@ import ie.dublinmapper.ui.R
 
 class DockLocationItem(
     private val serviceLocation: DubLinkDockLocation,
-    icon: Int,
     walkDistance: Double?
-) : AbstractServiceLocationItem(serviceLocation, icon, walkDistance) {
+) : AbstractServiceLocationItem(serviceLocation, walkDistance) {
 
     override fun getLayout() = R.layout.list_item_dock_location
 

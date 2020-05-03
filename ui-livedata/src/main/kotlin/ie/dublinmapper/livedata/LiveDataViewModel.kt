@@ -122,6 +122,15 @@ class LiveDataViewModel @Inject constructor(
                 isLoading = state.isLoading,
                 toastMessage = null
             )
+            is Change.ClearLiveData -> State(
+                toastMessage = state.toastMessage,
+                serviceLocation = state.serviceLocation,
+                liveDataResponse = null,
+                routeDiscrepancyState = state.routeDiscrepancyState,
+                isLoading = true,
+                routeFilterState = state.routeFilterState,
+                favouriteDialog = null
+            )
         }
     }
 
@@ -153,12 +162,26 @@ class LiveDataViewModel @Inject constructor(
                     .flatMap {
                         liveDataUseCase.getLiveData(
                             action.serviceLocationService,
-                            action.serviceLocationId
+                            action.serviceLocationId,
+                            false
                         )
                     }
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.GetLiveData(it) }
+            }
+
+        val refreshLiveDataChange = actions.ofType(Action.RefreshLiveData::class.java)
+            .switchMap { action ->
+                liveDataUseCase.getLiveData(
+                    action.serviceLocationService,
+                    action.serviceLocationId,
+                    true
+                )
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Change> { Change.GetLiveData(it) }
+                    .startWith(Change.ClearLiveData)
             }
 
         val addOrRemoveFavouriteChange = actions.ofType(Action.AddOrRemoveFavourite::class.java)
@@ -205,6 +228,7 @@ class LiveDataViewModel @Inject constructor(
             listOf(
                 getServiceLocationChange,
                 getLiveDataChange,
+                refreshLiveDataChange,
                 saveFavouriteChange,
                 removeFavouriteChange,
                 routeFilterIntents,

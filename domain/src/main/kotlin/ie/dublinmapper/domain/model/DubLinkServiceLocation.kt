@@ -41,37 +41,31 @@ data class DubLinkStopLocation(
                 AlphaNumericComparator.compare(r0.id, r1.id)
             }
         )
-        .map { route ->
-            Filter.RouteFilter(isActive = false, route = route)
-        }
 
     private val directions = if (isDartStation()) {
         listOf("Northbound", "Southbound")
     } else {
         emptyList()
     }
-        .map { direction ->
-            Filter.DirectionFilter(isActive = false, direction = direction)
-        }
 
     val filters = routes
         .plus(directions)
-        .map { filter ->
-            if (favouriteMetadata != null) {
-                when (filter) {
-                    is Filter.RouteFilter -> {
-                        if (favouriteMetadata.routes.contains(filter.route)) {
-                            return@map filter.copy(isActive = true)
-                        }
-                    }
-                    is Filter.DirectionFilter -> {
-                        if (favouriteMetadata.directions.contains(filter.direction)) {
-                            return@map filter.copy(isActive = true)
-                        }
-                    }
+        .mapNotNull { type ->
+            when (type) {
+                is Route -> {
+                    Filter.RouteFilter(
+                        isActive = favouriteMetadata?.routes?.contains(type) ?: false,
+                        route = type
+                    )
                 }
+                is String -> {
+                    Filter.DirectionFilter(
+                        isActive = favouriteMetadata?.directions?.contains(type) ?: false,
+                        direction = type
+                    )
+                }
+                else -> null
             }
-            return@map filter
         }
 }
 

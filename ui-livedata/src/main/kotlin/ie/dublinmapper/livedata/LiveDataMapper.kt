@@ -31,7 +31,7 @@ object LiveDataMapper {
                 }
             }
             is LiveDataPresentationResponse.Error -> listOf(
-                SimpleMessageItem(response.throwable.message ?: "error", index = 1)
+                SimpleMessageItem(response.throwable.message ?: "error", 1L)
             )
         }
     )

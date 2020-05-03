@@ -12,16 +12,21 @@ class DefaultLiveDataRepository(
 ) : LiveDataRepository {
 
     override fun get(
-        key: LiveDataKey
-    ): Observable<LiveDataResponse> = liveDataStore
-        .get(key)
-        .toObservable()
-        .map<LiveDataResponse> { liveData ->
-            LiveDataResponse.Data(liveData)
+        key: LiveDataKey,
+        refresh: Boolean
+    ): Observable<LiveDataResponse> =
+        if (refresh) {
+            liveDataStore.fetch(key)
+        } else {
+            liveDataStore.get(key)
         }
-        .onErrorReturn { throwable ->
-            LiveDataResponse.Error(throwable)
-        }
+            .toObservable()
+            .map<LiveDataResponse> { liveData ->
+                LiveDataResponse.Data(liveData)
+            }
+            .onErrorReturn { throwable ->
+                LiveDataResponse.Error(throwable)
+            }
 
 //    override fun get(
 //        key: LiveDataKey

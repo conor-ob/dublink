@@ -5,7 +5,7 @@ import io.rtpi.api.LiveData
 import io.rtpi.api.Service
 
 interface LiveDataRepository {
-    fun get(key: LiveDataKey): Observable<LiveDataResponse>
+    fun get(key: LiveDataKey, refresh: Boolean): Observable<LiveDataResponse>
 }
 
 data class LiveDataKey(

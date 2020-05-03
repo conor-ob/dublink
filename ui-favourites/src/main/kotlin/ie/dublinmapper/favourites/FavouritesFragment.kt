@@ -13,13 +13,11 @@ import ie.dublinmapper.model.AbstractServiceLocationItem
 import ie.dublinmapper.model.getLocationId
 import ie.dublinmapper.model.getService
 import ie.dublinmapper.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_favourites.favourites_fab_search
-import kotlinx.android.synthetic.main.fragment_favourites.favourites_toolbar
+import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.favourites_list
+import timber.log.Timber
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
-
-    private var showLoading = true
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
@@ -57,6 +55,15 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         view.favourites_list.adapter = adapter
         view.favourites_list.setHasFixedSize(true)
         view.favourites_list.layoutManager = LinearLayoutManager(requireContext())
+
+        favourites_swipe_resresh.apply {
+            setColorSchemeResources(R.color.color_on_surface)
+            setProgressBackgroundColorSchemeResource(R.color.color_surface)
+            setOnRefreshListener {
+                viewModel.dispatch(Action.GetFavourites)
+                viewModel.dispatch(Action.RefreshLiveData)
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -71,23 +78,25 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
-        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
+        viewModel.dispatch(Action.GetFavourites)
+        viewModel.dispatch(Action.GetLiveData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onPause() {
         super.onPause()
         viewModel.onPause()
-        viewModel.dispatch(Action.GetFavouritesWithLiveData(showLoading = showLoading))
     }
 
     private fun renderState(state: State) {
-        if (state.favouritesWithLiveData != null) {
-            adapter?.update(listOf(FavouritesMapper.map(state.favouritesWithLiveData)))
-            showLoading = false
+        Timber.d("isLoading=${state.isLoading}")
+        favourites_swipe_resresh.isRefreshing = state.isLoading
+        if (state.favourites != null) {
+            adapter?.update(listOf(FavouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
         }
         if (state.internetStatusChange == InternetStatus.ONLINE) {
-            viewModel.dispatch(Action.GetFavouritesWithLiveData(true))
+            viewModel.dispatch(Action.GetFavourites)
+            viewModel.dispatch(Action.GetLiveData)
         }
     }
 

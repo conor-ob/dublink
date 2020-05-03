@@ -19,53 +19,110 @@ class FavouritesViewModel @Inject constructor(
 ) : LifecycleAwareViewModel<Action, State>() {
 
     override val initialState = State(
+        isLoading = true,
+        favourites = null,
         favouritesWithLiveData = null,
         internetStatusChange = null
     )
 
-    private val reducer: Reducer<State, Change> = { state, change ->
-        when (change) {
-            is Change.FavouritesWithLiveData -> state.copy(
-                favouritesWithLiveData = change.favouritesWithLiveData,
+    private val reducer: Reducer<State, NewState> = { state, newState ->
+        when (newState) {
+            is NewState.Favourites -> State(
+                isLoading = false,
+                favourites = newState.serviceLocations,
+                favouritesWithLiveData = state.favouritesWithLiveData,
                 internetStatusChange = null
             )
-            is Change.InternetStatusChange -> state.copy(
-                internetStatusChange = change.internetStatusChange
+            is NewState.FavouritesWithLiveData -> State(
+                isLoading = false,
+                favourites = state.favourites,
+                favouritesWithLiveData = merge(state.favouritesWithLiveData, newState.favouritesWithLiveData),
+                internetStatusChange = null
+            )
+            is NewState.InternetStatusChange -> State(
+                isLoading = false,
+                favourites = state.favourites,
+                favouritesWithLiveData = state.favouritesWithLiveData,
+                internetStatusChange = newState.internetStatusChange
+            )
+            is NewState.ClearLiveData -> State(
+                isLoading = true,
+                favourites = state.favourites,
+                favouritesWithLiveData = null,
+                internetStatusChange = null
             )
         }
     }
+
+    /**
+     * Due to the reactive way locations are observed, some responses may be "incomplete" and not contain locations from
+     * all services if that particular service was slow due to a network request for example. If this happens then the
+     * previous state is used for that missing location.
+     */
+    private fun merge(
+        previousState: List<LiveDataPresentationResponse>?,
+        newState: List<LiveDataPresentationResponse>
+    ): List<LiveDataPresentationResponse> =
+        if (previousState == null) {
+            newState
+        } else {
+            val mutableNewState = newState.toMutableList()
+            for (liveData in previousState) {
+                val match = newState.find { it.serviceLocation == liveData.serviceLocation }
+                if (match == null) {
+                    mutableNewState.add(liveData)
+                }
+            }
+            mutableNewState
+        }
 
     init {
         bindActions()
     }
 
     private fun bindActions() {
-        val getFavouritesWithLiveDataChange = actions.ofType(Action.GetFavouritesWithLiveData::class.java)
-            .switchMap { action ->
-                Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
-                    .filter { isActive() }
-                    .flatMap { useCase.getFavouritesWithLiveData(action.showLoading) }
+        val getFavouritesAction = actions.ofType(Action.GetFavourites::class.java)
+            .switchMap {
+                useCase.getFavourites()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.FavouritesWithLiveData(it) }
-//                    .onErrorReturn {
-//                        Timber.e(it)
-//                        Change.GetFavouritesError(it)
-//                    }
-                    .throttleLatest(500L, TimeUnit.MILLISECONDS)
+                    .map<NewState> { NewState.Favourites(it) }
+//                    .throttleLatest(100L, TimeUnit.MILLISECONDS)
             }
 
-        val getInternetStatusChange = actions.ofType(Action.SubscribeToInternetStatusChanges::class.java)
+        val getLiveDataAction = actions.ofType(Action.GetLiveData::class.java)
+            .switchMap {
+                Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+                    .filter { isActive() }
+                    .flatMap { useCase.getLiveData(refresh = false) }
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<NewState> { NewState.FavouritesWithLiveData(it) }
+//                    .throttleLatest(250L, TimeUnit.MILLISECONDS)
+            }
+
+        val refreshLiveDataAction = actions.ofType(Action.RefreshLiveData::class.java)
+            .switchMap {
+                useCase.getLiveData(refresh = true)
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<NewState> { NewState.FavouritesWithLiveData(it) }
+                    .startWith(NewState.ClearLiveData)
+            }
+
+        val getInternetStatusChangeAction = actions.ofType(Action.SubscribeToInternetStatusChanges::class.java)
             .switchMap {
                 internetStatusChangeListener.eventStream()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.InternetStatusChange(it) }
+                    .map<NewState> { NewState.InternetStatusChange(it) }
             }
 
         val allActions = Observable.merge(
-            getFavouritesWithLiveDataChange,
-            getInternetStatusChange
+            getFavouritesAction,
+            getLiveDataAction,
+            refreshLiveDataAction,
+            getInternetStatusChangeAction
         )
 
         disposables += allActions

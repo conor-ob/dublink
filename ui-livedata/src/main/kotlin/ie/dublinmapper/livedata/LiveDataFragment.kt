@@ -111,9 +111,16 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private fun createLiveDataView() {
         live_data_loader.apply {
-            isEnabled = false
             setColorSchemeResources(R.color.color_on_surface)
             setProgressBackgroundColorSchemeResource(R.color.color_surface)
+            setOnRefreshListener {
+                viewModel.dispatch(
+                    Action.RefreshLiveData(
+                        serviceLocationId = args.locationId,
+                        serviceLocationService = args.service
+                    )
+                )
+            }
         }
         liveDataAdapter = GroupAdapter()
         live_data_recycler_view.apply {
@@ -188,6 +195,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         live_data_loader.isRefreshing = state.isLoading
         if (state.liveDataResponse != null) {
             liveDataAdapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse, state.serviceLocation)))
+        } else {
+            liveDataAdapter?.clear()
         }
     }
 
