@@ -2,6 +2,7 @@ package ie.dublinmapper.favourites
 
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LiveDataResponse
@@ -17,6 +18,7 @@ import io.rtpi.util.LiveDataGrouper
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
+    private val favouriteRepository: FavouriteRepository,
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val liveDataRepository: LiveDataRepository,
     private val permissionChecker: PermissionChecker,
@@ -25,6 +27,10 @@ class FavouritesUseCase @Inject constructor(
 ) {
 
     fun getFavourites(): Observable<List<DubLinkServiceLocation>> {
+        return favouriteRepository.getFavourites()
+    }
+
+    fun getFavouriteServiceLocations(): Observable<List<DubLinkServiceLocation>> {
         return if (preferenceStore.isFavouritesSortByLocation() &&
             permissionChecker.isLocationPermissionGranted()
         ) {
@@ -59,7 +65,7 @@ class FavouritesUseCase @Inject constructor(
 
     fun getLiveData(refresh: Boolean): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()
-        return getFavourites()
+        return getFavouriteServiceLocations()
             .flatMap { serviceLocations ->
                 Observable.combineLatest(
                     serviceLocations.mapIndexed { index, dubLinkServiceLocation ->

@@ -61,6 +61,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
             setProgressBackgroundColorSchemeResource(R.color.color_surface)
             setOnRefreshListener {
                 viewModel.dispatch(Action.GetFavourites)
+                viewModel.dispatch(Action.GetFavouriteServiceLocations)
                 viewModel.dispatch(Action.RefreshLiveData)
             }
         }
@@ -79,6 +80,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         super.onResume()
         viewModel.onResume()
         viewModel.dispatch(Action.GetFavourites)
+        viewModel.dispatch(Action.GetFavouriteServiceLocations)
         viewModel.dispatch(Action.GetLiveData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
@@ -92,10 +94,15 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         Timber.d("isLoading=${state.isLoading}")
         favourites_swipe_resresh.isRefreshing = state.isLoading
         if (state.favourites != null) {
-            adapter?.update(listOf(FavouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
+            try {
+                adapter?.update(listOf(FavouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
         }
         if (state.internetStatusChange == InternetStatus.ONLINE) {
             viewModel.dispatch(Action.GetFavourites)
+            viewModel.dispatch(Action.GetFavouriteServiceLocations)
             viewModel.dispatch(Action.GetLiveData)
         }
     }

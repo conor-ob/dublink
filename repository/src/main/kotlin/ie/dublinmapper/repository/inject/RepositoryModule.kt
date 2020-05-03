@@ -134,9 +134,10 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideFavouriteRepository(
-        localResource: FavouriteServiceLocationLocalResource
+        localResource: FavouriteServiceLocationLocalResource,
+        enabledServiceManager: EnabledServiceManager
     ): FavouriteRepository {
-        return FavouriteServiceLocationRepository(localResource)
+        return FavouriteServiceLocationRepository(localResource, enabledServiceManager)
     }
 
     @Provides

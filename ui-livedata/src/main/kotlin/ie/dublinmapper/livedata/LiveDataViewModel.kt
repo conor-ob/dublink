@@ -240,6 +240,7 @@ class LiveDataViewModel @Inject constructor(
         disposables += allActions
             .scan(initialState, reducer)
             .distinctUntilChanged()
+            .throttleLatest(300L, TimeUnit.MILLISECONDS)
             .subscribe(state::postValue, Timber::e)
     }
 

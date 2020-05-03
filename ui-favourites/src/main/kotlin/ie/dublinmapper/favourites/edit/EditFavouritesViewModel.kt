@@ -19,8 +19,8 @@ class EditFavouritesViewModel @Inject constructor(
     private val reducer: Reducer<State, Result> = { state, result ->
         when (result) {
             is Result.FavouritesReceived -> state.copy(
-                original = state.original ?: result.serviceLocations,
-                editing = state.editing ?: result.serviceLocations
+                original = merge(state.original, result.serviceLocations),
+                editing = merge(state.editing, result.serviceLocations)
             )
             is Result.FavouriteEdited -> state.copy(
                 editing = merge(result.serviceLocation, state.editing)
@@ -31,6 +31,24 @@ class EditFavouritesViewModel @Inject constructor(
             is Result.FavouritesSaved -> state.copy(
                 isFinished = true
             )
+        }
+    }
+
+    private fun merge(
+        previous: List<DubLinkServiceLocation>?,
+        next: List<DubLinkServiceLocation>
+    ): List<DubLinkServiceLocation> {
+        return if (previous == null) {
+            next
+        } else {
+            val mutablePreviousState = previous.toMutableList()
+            for (location in next) {
+                val match = previous.find { it.id == location.id }
+                if (match == null) {
+                    mutablePreviousState.add(location)
+                }
+            }
+            mutablePreviousState.sortedBy { it.favouriteSortIndex }
         }
     }
 

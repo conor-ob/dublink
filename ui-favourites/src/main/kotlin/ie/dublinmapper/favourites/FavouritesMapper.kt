@@ -41,20 +41,23 @@ object FavouritesMapper {
     }
 
     private fun mapLiveData(
-        serviceLocation: DubLinkServiceLocation,
+        favourite: DubLinkServiceLocation,
         liveData: List<LiveDataPresentationResponse>?,
         index: Int
     ): Section {
         return if (liveData == null) {
             Timber.d("TEST 1")
-            Section(SimpleMessageItem("Loading...", serviceLocation.hashCode().toLong()))
+            Section(SimpleMessageItem("Loading...", favourite.hashCode().toLong()))
         } else {
-            val match = liveData.find { it.serviceLocation == serviceLocation }
+            val match = liveData.find {
+                it.serviceLocation.service == favourite.service &&
+                it.serviceLocation.id == favourite.id
+            }
             if (match == null) {
                 Timber.d("TEST 2")
-                Section(SimpleMessageItem("Loading...", serviceLocation.hashCode().toLong()))
+                Section(SimpleMessageItem("Loading...", favourite.hashCode().toLong()))
             } else {
-                mapLiveData(match, serviceLocation.hashCode().toLong())
+                mapLiveData(match, favourite.hashCode().toLong())
             }
         }
     }
@@ -100,9 +103,9 @@ object FavouritesMapper {
     }
 
     private fun mapServiceLocation(
-        serviceLocation: DubLinkServiceLocation
+        favourite: DubLinkServiceLocation
     ) = SimpleServiceLocationItem(
-        serviceLocation = serviceLocation,
+        serviceLocation = favourite,
         walkDistance = null
     )
 
@@ -120,7 +123,7 @@ object FavouritesMapper {
 
     private fun mapDivider(
         items: Int,
-        dubLinkServiceLocation: DubLinkServiceLocation,
+        favourite: DubLinkServiceLocation,
         index: Int
-    ) = if (index < items - 1) DividerItem(dubLinkServiceLocation.hashCode().toLong()) else null
+    ) = if (index < items - 1) DividerItem(favourite.hashCode().toLong()) else null
 }
