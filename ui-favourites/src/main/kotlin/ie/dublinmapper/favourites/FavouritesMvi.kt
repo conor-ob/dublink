@@ -7,7 +7,6 @@ import ie.dublinmapper.domain.model.DubLinkServiceLocation
 
 sealed class Action : BaseAction {
     object GetFavourites : Action()
-    object GetFavouriteServiceLocations : Action()
     object GetLiveData : Action()
     object RefreshLiveData : Action()
     object SubscribeToInternetStatusChanges : Action()
@@ -15,7 +14,6 @@ sealed class Action : BaseAction {
 
 sealed class NewState {
     data class Favourites(val favourites: List<DubLinkServiceLocation>) : NewState()
-    data class FavouriteServiceLocations(val serviceLocations: List<DubLinkServiceLocation>) : NewState()
     data class FavouritesWithLiveData(val favouritesWithLiveData: List<LiveDataPresentationResponse>) : NewState()
     data class InternetStatusChange(val internetStatusChange: InternetStatus) : NewState()
     object ClearLiveData : NewState()
@@ -24,7 +22,6 @@ sealed class NewState {
 data class State(
     val isLoading: Boolean,
     val favourites: List<DubLinkServiceLocation>?,
-//    val favouriteServiceLocations: List<DubLinkServiceLocation>?,
     val favouritesWithLiveData: List<LiveDataPresentationResponse>?,
     val internetStatusChange: InternetStatus?
 ) : BaseState

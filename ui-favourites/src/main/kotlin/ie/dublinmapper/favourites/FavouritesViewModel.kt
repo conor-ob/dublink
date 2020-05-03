@@ -34,12 +34,6 @@ class FavouritesViewModel @Inject constructor(
                 favouritesWithLiveData = state.favouritesWithLiveData,
                 internetStatusChange = null
             )
-            is NewState.FavouriteServiceLocations -> State(
-                isLoading = state.isLoading,
-                favourites = mergeFavourites(state.favourites, newState.serviceLocations),
-                favouritesWithLiveData = state.favouritesWithLiveData,
-                internetStatusChange = null
-            )
             is NewState.FavouritesWithLiveData -> State(
                 isLoading = false,
                 favourites = state.favourites,
@@ -63,19 +57,19 @@ class FavouritesViewModel @Inject constructor(
 
     private fun mergeFavourites(
         previousState: List<DubLinkServiceLocation>?,
-        newState: List<DubLinkServiceLocation>
+        newState: List<LiveDataPresentationResponse>
     ): List<DubLinkServiceLocation> {
         return if (previousState == null) {
-            newState
+            newState.map { it.serviceLocation }
         } else {
             val map = previousState.associateBy { it }.toMutableMap()
             for (entry in map) {
-                val match = newState.find { it.service == entry.key.service && it.id == entry.key.id }
+                val match = newState.find { it.serviceLocation.service == entry.key.service && it.serviceLocation.id == entry.key.id }
                 if (match != null) {
-                    map[entry.key] = match
+                    map[entry.key] = match.serviceLocation
                 }
             }
-            map.values.toList() // TODO sort
+            map.values.toList()
         }
     }
 
@@ -115,15 +109,6 @@ class FavouritesViewModel @Inject constructor(
 //                    .throttleLatest(250L, TimeUnit.MILLISECONDS)
             }
 
-//        val getFavouriteServiceLocationsAction = actions.ofType(Action.GetFavouriteServiceLocations::class.java)
-//            .switchMap {
-//                useCase.getFavouriteServiceLocations()
-//                    .subscribeOn(scheduler.io)
-//                    .observeOn(scheduler.ui)
-//                    .map<NewState> { NewState.FavouriteServiceLocations(it) }
-//                    .throttleLatest(250L, TimeUnit.MILLISECONDS)
-//            }
-
         val getLiveDataAction = actions.ofType(Action.GetLiveData::class.java)
             .switchMap {
                 Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
@@ -156,7 +141,6 @@ class FavouritesViewModel @Inject constructor(
         val allActions = Observable.merge(
             listOf(
                 getFavouritesAction,
-//                getFavouriteServiceLocationsAction,
                 getLiveDataAction,
                 refreshLiveDataAction,
                 getInternetStatusChangeAction

@@ -1,6 +1,9 @@
 package ie.dublinmapper.domain.model
 
 import io.rtpi.api.Operator
+import java.util.Objects
+
+fun DubLinkServiceLocation.id(): Long = Objects.hash(service, id).toLong()
 
 fun DubLinkStopLocation.isDartStation(): Boolean = stopLocation.routeGroups.map { it.operator }.contains(Operator.DART)
 
@@ -12,7 +15,7 @@ fun DubLinkServiceLocation.withFavouriteMetadata(favouriteMetadata: FavouriteMet
     }
 }
 
-fun DubLinkServiceLocation.setCustomName(name: String?): DubLinkServiceLocation {
+fun DubLinkServiceLocation.setCustomName(name: String): DubLinkServiceLocation {
     return when (this) {
         is DubLinkDockLocation -> withFavouriteMetadata(
             favouriteMetadata = favouriteMetadata?.copy(
@@ -43,6 +46,7 @@ fun DubLinkStopLocation.addFilter(filter: Filter): DubLinkServiceLocation {
                 favouriteMetadata = favouriteMetadata?.copy(
                     routes = adjustedRoutes
                 ) ?: FavouriteMetadata(
+                    name = name,
                     routes = listOf(filter.route)
                 )
             )
@@ -56,6 +60,7 @@ fun DubLinkStopLocation.addFilter(filter: Filter): DubLinkServiceLocation {
                 favouriteMetadata = favouriteMetadata?.copy(
                     directions = adjustedDirections
                 ) ?: FavouriteMetadata(
+                    name = name,
                     directions = listOf(filter.direction)
                 )
             )
@@ -70,8 +75,11 @@ fun DubLinkStopLocation.removeFilter(filter: Filter): DubLinkServiceLocation {
             adjustedRoutes.remove(filter.route)
             withFavouriteMetadata(
                 favouriteMetadata = favouriteMetadata?.copy(
+                    name = name,
                     routes = adjustedRoutes
-                ) ?: FavouriteMetadata()
+                ) ?: FavouriteMetadata(
+                    name = name
+                )
             )
         }
         is Filter.DirectionFilter -> {
@@ -79,8 +87,11 @@ fun DubLinkStopLocation.removeFilter(filter: Filter): DubLinkServiceLocation {
             adjustedDirections.remove(filter.direction)
             withFavouriteMetadata(
                 favouriteMetadata = favouriteMetadata?.copy(
+                    name = name,
                     directions = adjustedDirections
-                ) ?: FavouriteMetadata()
+                ) ?: FavouriteMetadata(
+                    name = name
+                )
             )
         }
     }
@@ -91,6 +102,8 @@ fun DubLinkStopLocation.clearFilters(): DubLinkServiceLocation {
         favouriteMetadata = favouriteMetadata?.copy(
             routes = emptyList(),
             directions = emptyList()
-        ) ?: FavouriteMetadata()
+        ) ?: FavouriteMetadata(
+            name = name
+        )
     )
 }

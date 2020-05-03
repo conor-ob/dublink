@@ -4,6 +4,7 @@ import com.xwray.groupie.Group
 import com.xwray.groupie.Section
 import ie.dublinmapper.domain.internet.NetworkUnavailableException
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
+import ie.dublinmapper.domain.model.id
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.DublinBikesLiveDataItem
 import ie.dublinmapper.model.GroupedLiveDataItem
@@ -47,7 +48,7 @@ object FavouritesMapper {
     ): Section {
         return if (liveData == null) {
             Timber.d("TEST 1")
-            Section(SimpleMessageItem("Loading...", favourite.hashCode().toLong()))
+            Section(SimpleMessageItem("Loading...", favourite.id()))
         } else {
             val match = liveData.find {
                 it.serviceLocation.service == favourite.service &&
@@ -55,9 +56,9 @@ object FavouritesMapper {
             }
             if (match == null) {
                 Timber.d("TEST 2")
-                Section(SimpleMessageItem("Loading...", favourite.hashCode().toLong()))
+                Section(SimpleMessageItem("Loading...", favourite.id()))
             } else {
-                mapLiveData(match, favourite.hashCode().toLong())
+                mapLiveData(match, favourite.id())
             }
         }
     }
@@ -70,7 +71,7 @@ object FavouritesMapper {
         is LiveDataPresentationResponse.Data -> {
             val liveData = liveDataResponse.liveData
             if (liveData.isNullOrEmpty()) {
-                Section(SimpleMessageItem(mapMessage(liveDataResponse.serviceLocation.service), index))
+                Section(SimpleMessageItem(mapMessage(liveDataResponse.serviceLocation.service), liveDataResponse.serviceLocation.id()))
             } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DockLiveData) {
                 Section(DublinBikesLiveDataItem(liveData.first().first() as DockLiveData))
             } else {
@@ -97,7 +98,7 @@ object FavouritesMapper {
                 else -> "Something went wrong, try refreshing"
             }
             Section(
-                SimpleMessageItem(message, index)
+                SimpleMessageItem(message, liveDataResponse.serviceLocation.id())
             )
         }
     }
@@ -125,5 +126,5 @@ object FavouritesMapper {
         items: Int,
         favourite: DubLinkServiceLocation,
         index: Int
-    ) = if (index < items - 1) DividerItem(favourite.hashCode().toLong()) else null
+    ) = if (index < items - 1) DividerItem(favourite.id()) else null
 }

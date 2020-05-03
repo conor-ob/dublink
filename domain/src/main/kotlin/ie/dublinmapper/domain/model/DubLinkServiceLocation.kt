@@ -97,7 +97,7 @@ sealed class Filter {
 data class Route(val operator: Operator, val id: String)
 
 data class FavouriteMetadata(
-    val name: String? = null,
+    val name: String,
     val routes: List<Route> = emptyList(),
     val directions: List<String> = emptyList(),
     val sortIndex: Int = -1

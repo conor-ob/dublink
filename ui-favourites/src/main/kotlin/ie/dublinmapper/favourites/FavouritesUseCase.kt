@@ -26,21 +26,15 @@ class FavouritesUseCase @Inject constructor(
     private val preferenceStore: PreferenceStore
 ) {
 
-    fun getFavourites(): Observable<List<DubLinkServiceLocation>> {
-        return favouriteRepository.getFavourites()
-    }
-
-    fun getFavouriteServiceLocations(): Observable<List<DubLinkServiceLocation>> {
-        return if (preferenceStore.isFavouritesSortByLocation() &&
+    fun getFavourites(): Observable<List<DubLinkServiceLocation>> =
+        if (preferenceStore.isFavouritesSortByLocation() &&
             permissionChecker.isLocationPermissionGranted()
         ) {
             locationProvider.getLocationUpdates(thresholdDistance = 25.0)
                 .flatMap { coordinate ->
-                    serviceLocationRepository.getFavourites()
+                    favouriteRepository.getFavourites()
                         .map { responses ->
                             responses
-                                .filterIsInstance<ServiceLocationResponse.Data>()
-                                .flatMap { it.serviceLocations }
                                 .sortedWith(
                                     Comparator { s1, s2 ->
                                         s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
@@ -49,11 +43,9 @@ class FavouritesUseCase @Inject constructor(
                         }
                 }
         } else {
-            serviceLocationRepository.getFavourites()
+            favouriteRepository.getFavourites()
                 .map { responses ->
                     responses
-                        .filterIsInstance<ServiceLocationResponse.Data>()
-                        .flatMap { it.serviceLocations }
                         .sortedWith(
                             Comparator { s1, s2 ->
                                 s1.favouriteSortIndex.compareTo(s2.favouriteSortIndex)
@@ -61,7 +53,14 @@ class FavouritesUseCase @Inject constructor(
                         )
                 }
         }
-    }
+
+    private fun getFavouriteServiceLocations(): Observable<List<DubLinkServiceLocation>> =
+        serviceLocationRepository.getFavourites()
+            .map { responses ->
+                responses
+                    .filterIsInstance<ServiceLocationResponse.Data>()
+                    .flatMap { it.serviceLocations }
+            }
 
     fun getLiveData(refresh: Boolean): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()

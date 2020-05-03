@@ -79,7 +79,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                             id = entity.locationId,
                             name = entity.name,
                             service = entity.service,
-                            coordinate = Coordinate(0.0, 0.0),
+                            coordinate = Coordinate(entity.latitude, entity.longitude),
                             routeGroups = routeGroups
                         )
                     ).withFavouriteMetadata(
@@ -102,7 +102,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                         id = entity.locationId,
                         name = entity.name,
                         service = entity.service,
-                        coordinate = Coordinate(0.0, 0.0),
+                        coordinate = Coordinate(entity.latitude, entity.longitude),
                         availableBikes = -1,
                         availableDocks = -1,
                         totalDocks = -1
@@ -127,6 +127,8 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                 service = serviceLocation.service,
                 locationId = serviceLocation.id,
                 name = serviceLocation.name,
+                latitude = serviceLocation.coordinate.latitude,
+                longitude = serviceLocation.coordinate.longitude,
                 sortIndex = count
             )
             if (serviceLocation is DubLinkStopLocation) {
@@ -180,6 +182,8 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                     service = serviceLocation.service,
                     locationId = serviceLocation.id,
                     name = serviceLocation.name,
+                    latitude = serviceLocation.coordinate.latitude,
+                    longitude = serviceLocation.coordinate.longitude,
                     sortIndex = index.toLong()
                 )
             }

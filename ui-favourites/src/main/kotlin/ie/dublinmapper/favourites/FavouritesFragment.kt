@@ -61,7 +61,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
             setProgressBackgroundColorSchemeResource(R.color.color_surface)
             setOnRefreshListener {
                 viewModel.dispatch(Action.GetFavourites)
-                viewModel.dispatch(Action.GetFavouriteServiceLocations)
                 viewModel.dispatch(Action.RefreshLiveData)
             }
         }
@@ -80,7 +79,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         super.onResume()
         viewModel.onResume()
         viewModel.dispatch(Action.GetFavourites)
-        viewModel.dispatch(Action.GetFavouriteServiceLocations)
         viewModel.dispatch(Action.GetLiveData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
@@ -102,7 +100,6 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         }
         if (state.internetStatusChange == InternetStatus.ONLINE) {
             viewModel.dispatch(Action.GetFavourites)
-            viewModel.dispatch(Action.GetFavouriteServiceLocations)
             viewModel.dispatch(Action.GetLiveData)
         }
     }
