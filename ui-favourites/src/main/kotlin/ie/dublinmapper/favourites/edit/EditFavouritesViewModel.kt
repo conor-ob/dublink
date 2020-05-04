@@ -24,15 +24,8 @@ class EditFavouritesViewModel @Inject constructor(
         when (result) {
             is Result.FavouritesReceived -> State(
                 isFinished = false,
-                original = merge(state.original, result.favourites),
-                editing = merge(state.editing, result.favourites)
-            )
-            is Result.FavouriteServiceLocationsReceived -> State(
-                isFinished = false,
-                original = state.original,
-                editing = state.editing
-//                original = merge(state.original, result.serviceLocations),
-//                editing = merge(state.editing, result.serviceLocations)
+                original = state.original ?: result.favourites,
+                editing = state.editing ?: result.favourites
             )
             is Result.FavouriteEdited -> State(
                 isFinished = false,
@@ -111,18 +104,10 @@ class EditFavouritesViewModel @Inject constructor(
                 editFavouritesUseCase.getFavourites()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Result> { Result.FavouritesReceived(it) }
-            }
-
-        val getFavouriteServiceLocationsAction = actions.ofType(Action.GetFavouriteServiceLocations::class.java)
-            .switchMap {
-                editFavouritesUseCase.getFavouriteServiceLocations()
-                    .subscribeOn(scheduler.io)
-                    .observeOn(scheduler.ui)
                     .map<Result> { response ->
                         when (response) {
-                            is FavouritesResponse.Data -> Result.FavouriteServiceLocationsReceived(response.serviceLocations)
-                            is FavouritesResponse.Error -> Result.FavouriteServiceLocationsReceived(emptyList()) // TODO
+                            is FavouritesResponse.Data -> Result.FavouritesReceived(response.serviceLocations)
+                            is FavouritesResponse.Error -> Result.FavouritesReceived(emptyList()) // TODO
                         }
                     }
             }
@@ -150,7 +135,6 @@ class EditFavouritesViewModel @Inject constructor(
         val allActions = Observable.merge(
             listOf(
                 getFavouritesActions,
-                getFavouriteServiceLocationsAction,
                 editServiceLocationAction,
                 favouritesReorderedActions,
                 saveChangesActions

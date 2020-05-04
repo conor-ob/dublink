@@ -6,8 +6,6 @@ import ie.dublinmapper.domain.model.DubLinkServiceLocation
 
 sealed class Action : BaseAction {
     object GetFavourites : Action()
-    object GetFavouriteServiceLocations : Action()
-
     data class EditFavourite(val serviceLocation: DubLinkServiceLocation) : Action()
     data class FavouritesReordered(val serviceLocations: List<DubLinkServiceLocation>) : Action()
     data class SaveChanges(val serviceLocations: List<DubLinkServiceLocation>) : Action()
@@ -15,7 +13,6 @@ sealed class Action : BaseAction {
 
 sealed class Result {
     data class FavouritesReceived(val favourites: List<DubLinkServiceLocation>) : Result()
-    data class FavouriteServiceLocationsReceived(val serviceLocations: List<DubLinkServiceLocation>) : Result()
     data class FavouriteEdited(val serviceLocation: DubLinkServiceLocation) : Result()
     data class FavouritesReordered(val serviceLocations: List<DubLinkServiceLocation>) : Result()
     object FavouritesSaved : Result()

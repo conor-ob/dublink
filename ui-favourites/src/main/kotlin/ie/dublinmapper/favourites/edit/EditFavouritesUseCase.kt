@@ -12,16 +12,7 @@ class EditFavouritesUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository
 ) {
 
-    fun getFavourites(): Observable<List<DubLinkServiceLocation>> =
-        serviceLocationRepository.getFavourites()
-                .map<List<DubLinkServiceLocation>> { responses ->
-                    responses
-                        .filterIsInstance<ServiceLocationResponse.Data>()
-                        .flatMap { response -> response.serviceLocations }
-                        .sortedBy { serviceLocation -> serviceLocation.favouriteSortIndex }
-                }
-
-    fun getFavouriteServiceLocations(): Observable<FavouritesResponse> =
+    fun getFavourites(): Observable<FavouritesResponse> =
         serviceLocationRepository.getFavourites()
             .map<FavouritesResponse> { responses ->
                 FavouritesResponse.Data(
