@@ -84,6 +84,7 @@ class EditFavouritesFragment : DublinMapperFragment(R.layout.fragment_edit_favou
     override fun onResume() {
         super.onResume()
         viewModel.dispatch(Action.GetFavourites)
+        viewModel.dispatch(Action.GetFavouriteServiceLocations)
     }
 
     private fun renderState(state: State) {

@@ -14,22 +14,40 @@ class EditFavouritesViewModel @Inject constructor(
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
-    override val initialState = State(original = null, editing = null)
+    override val initialState = State(
+        isFinished = false,
+        original = null,
+        editing = null
+    )
 
     private val reducer: Reducer<State, Result> = { state, result ->
         when (result) {
-            is Result.FavouritesReceived -> state.copy(
-                original = merge(state.original, result.serviceLocations),
-                editing = merge(state.editing, result.serviceLocations)
+            is Result.FavouritesReceived -> State(
+                isFinished = false,
+                original = merge(state.original, result.favourites),
+                editing = merge(state.editing, result.favourites)
             )
-            is Result.FavouriteEdited -> state.copy(
+            is Result.FavouriteServiceLocationsReceived -> State(
+                isFinished = false,
+                original = state.original,
+                editing = state.editing
+//                original = merge(state.original, result.serviceLocations),
+//                editing = merge(state.editing, result.serviceLocations)
+            )
+            is Result.FavouriteEdited -> State(
+                isFinished = false,
+                original = state.original,
                 editing = merge(result.serviceLocation, state.editing)
             )
-            is Result.FavouritesReordered -> state.copy(
+            is Result.FavouritesReordered -> State(
+                isFinished = false,
+                original = state.original,
                 editing = result.serviceLocations
             )
-            is Result.FavouritesSaved -> state.copy(
-                isFinished = true
+            is Result.FavouritesSaved -> State(
+                isFinished = true,
+                original = state.original,
+                editing = state.editing
             )
         }
     }
@@ -41,16 +59,34 @@ class EditFavouritesViewModel @Inject constructor(
         return if (previous == null) {
             next
         } else {
-            val mutablePreviousState = previous.toMutableList()
-            for (location in next) {
-                val match = previous.find { it.id == location.id }
-                if (match == null) {
-                    mutablePreviousState.add(location)
+            val mutablePreviousState = previous.associateBy { it }.toMutableMap()
+            for (location in previous) {
+                val match = next.find { it.id == location.id }
+                if (match != null) {
+                    mutablePreviousState[location] = match
                 }
             }
-            mutablePreviousState.sortedBy { it.favouriteSortIndex }
+            mutablePreviousState.values.toList().sortedBy { it.favouriteSortIndex }
         }
     }
+
+//    private fun merge(
+//        previous: List<DubLinkServiceLocation>?,
+//        next: List<DubLinkServiceLocation>
+//    ): List<DubLinkServiceLocation> {
+//        return if (previous == null) {
+//            next
+//        } else {
+//            val mutablePreviousState = previous.toMutableList()
+//            for (location in next) {
+//                val match = previous.find { it.id == location.id }
+//                if (match == null) {
+//                    mutablePreviousState.add(location)
+//                }
+//            }
+//            mutablePreviousState.sortedBy { it.favouriteSortIndex }
+//        }
+//    }
 
     private fun merge(serviceLocation: DubLinkServiceLocation, editing: List<DubLinkServiceLocation>?): List<DubLinkServiceLocation>? {
         return if (editing.isNullOrEmpty()) {
@@ -72,13 +108,21 @@ class EditFavouritesViewModel @Inject constructor(
     private fun bindActions() {
         val getFavouritesActions = actions.ofType(Action.GetFavourites::class.java)
             .switchMap {
-                editFavouritesUseCase.getFavouriteLocations()
+                editFavouritesUseCase.getFavourites()
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Result> { Result.FavouritesReceived(it) }
+            }
+
+        val getFavouriteServiceLocationsAction = actions.ofType(Action.GetFavouriteServiceLocations::class.java)
+            .switchMap {
+                editFavouritesUseCase.getFavouriteServiceLocations()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Result> { response ->
                         when (response) {
-                            is FavouritesResponse.Data -> Result.FavouritesReceived(response.serviceLocations)
-                            is FavouritesResponse.Error -> Result.FavouritesReceived(emptyList()) // TODO
+                            is FavouritesResponse.Data -> Result.FavouriteServiceLocationsReceived(response.serviceLocations)
+                            is FavouritesResponse.Error -> Result.FavouriteServiceLocationsReceived(emptyList()) // TODO
                         }
                     }
             }
@@ -104,10 +148,13 @@ class EditFavouritesViewModel @Inject constructor(
             }
 
         val allActions = Observable.merge(
-            getFavouritesActions,
-            editServiceLocationAction,
-            favouritesReorderedActions,
-            saveChangesActions
+            listOf(
+                getFavouritesActions,
+                getFavouriteServiceLocationsAction,
+                editServiceLocationAction,
+                favouritesReorderedActions,
+                saveChangesActions
+            )
         )
 
         disposables += allActions

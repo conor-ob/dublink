@@ -103,9 +103,9 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                         name = entity.name,
                         service = entity.service,
                         coordinate = Coordinate(entity.latitude, entity.longitude),
-                        availableBikes = -1,
-                        availableDocks = -1,
-                        totalDocks = -1
+                        availableBikes = 0,
+                        availableDocks = 0,
+                        totalDocks = 0
                     )
                 ).withFavouriteMetadata(
                     favouriteMetadata = FavouriteMetadata(

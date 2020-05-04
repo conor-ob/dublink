@@ -55,7 +55,7 @@ class FavouritesUseCase @Inject constructor(
         }
 
     private fun getFavouriteServiceLocations(): Observable<List<DubLinkServiceLocation>> =
-        serviceLocationRepository.getFavourites()
+        serviceLocationRepository.streamFavourites()
             .map { responses ->
                 responses
                     .filterIsInstance<ServiceLocationResponse.Data>()
