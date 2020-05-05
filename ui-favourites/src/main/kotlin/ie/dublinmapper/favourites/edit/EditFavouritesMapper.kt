@@ -4,11 +4,9 @@ import com.xwray.groupie.Section
 import ie.dublinmapper.domain.model.DubLinkDockLocation
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.model.DubLinkStopLocation
-import ie.dublinmapper.favourites.R
 import ie.dublinmapper.model.DividerItem
 import ie.dublinmapper.model.DockLocationItem
 import ie.dublinmapper.model.StopLocationItem
-import io.rtpi.api.Service
 
 object EditFavouritesMapper {
 

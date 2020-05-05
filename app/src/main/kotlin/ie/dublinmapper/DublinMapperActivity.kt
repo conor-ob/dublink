@@ -11,7 +11,6 @@ import dagger.android.support.DaggerAppCompatActivity
 import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.livedata.LiveDataFragment
-import io.rtpi.api.Service
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_root.activity_root
 

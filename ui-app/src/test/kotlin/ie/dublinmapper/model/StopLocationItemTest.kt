@@ -18,9 +18,7 @@ class StopLocationItemTest : AbstractUniqueItemTest<StopLocationItem>() {
                     routeGroups = emptyList()
                 )
             ),
-            walkDistance = 386.12,
-            icon = 0
-
+            walkDistance = 386.12
         )
 
     override val sameItemNotEqual: StopLocationItem
@@ -34,8 +32,7 @@ class StopLocationItemTest : AbstractUniqueItemTest<StopLocationItem>() {
                     routeGroups = emptyList()
                 )
             ),
-            walkDistance = 193.776,
-            icon = 0
+            walkDistance = 193.776
         )
 
     override val equalItem: StopLocationItem
@@ -49,7 +46,6 @@ class StopLocationItemTest : AbstractUniqueItemTest<StopLocationItem>() {
                     routeGroups = emptyList()
                 )
             ),
-            walkDistance = 386.12,
-            icon = 0
+            walkDistance = 386.12
         )
 }

@@ -36,7 +36,7 @@ object FavouritesMapper {
                     )
                 }
             )
-        } else if (favourites != null && favourites.isEmpty()){
+        } else if (favourites != null && favourites.isEmpty()) {
             Section(NoFavouritesItem(1L))
         } else {
             Section(emptyList())
@@ -49,7 +49,6 @@ object FavouritesMapper {
         index: Int
     ): Section {
         return if (liveData == null) {
-            Timber.d("TEST 1")
             Section(SimpleMessageItem("Loading...", favourite.id()))
         } else {
             val match = liveData.find {
@@ -57,7 +56,6 @@ object FavouritesMapper {
                 it.serviceLocation.id == favourite.id
             }
             if (match == null) {
-                Timber.d("TEST 2")
                 Section(SimpleMessageItem("Loading...", favourite.id()))
             } else {
                 mapLiveData(match, favourite.id())
