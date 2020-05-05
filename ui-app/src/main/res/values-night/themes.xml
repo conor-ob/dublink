@@ -18,12 +18,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--Top level DayNight theme to be used in AndroidManifest.xml-->
-    <style name="Theme.DublinMapper.DayNight" parent="Theme.DublinMapper">
-        <item name="colorPrimary">@color/dublin_mapper_blue_saturated</item>
-        <item name="colorPrimaryVariant">@color/dublin_mapper_blue_saturated</item>
+    <style name="Theme.DubLink.DayNight" parent="Theme.DubLink">
+        <item name="colorPrimary">@color/dublink_blue_saturated</item>
+        <item name="colorPrimaryVariant">@color/dublink_blue_saturated</item>
         <item name="colorOnPrimary">@color/grey_900</item>
-        <item name="colorSecondary">@color/dublin_mapper_blue_saturated</item>
-        <item name="colorSecondaryVariant">@color/dublin_mapper_blue_saturated</item>
+        <item name="colorSecondary">@color/dublink_blue_saturated</item>
+        <item name="colorSecondaryVariant">@color/dublink_blue_saturated</item>
         <item name="colorOnSecondary">@color/grey_900</item>
 
         <item name="android:colorBackground">@color/grey_950</item>

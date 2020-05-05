@@ -12,6 +12,6 @@
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle" />
+        android:textAppearance="@style/TextAppearance.DubLink.ListItemSubtitle" />
 
 </FrameLayout>

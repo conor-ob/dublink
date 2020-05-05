@@ -48,6 +48,6 @@
         android:visibility="gone"
         app:icon="@drawable/ic_save"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        style="@style/Widget.DublinMapper.ExtendedFloatingActionButton" />
+        style="@style/Widget.DubLink.ExtendedFloatingActionButton" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

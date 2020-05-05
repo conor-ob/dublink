@@ -5,23 +5,23 @@
     app:startDestination="@id/favouritesFragment">
 
     <fragment android:id="@+id/favouritesFragment"
-        android:name="ie.dublinmapper.favourites.FavouritesFragment"
+        android:name="io.dublink.favourites.FavouritesFragment"
         android:label="FavouritesFragment" />
 
     <fragment android:id="@+id/editFavouritesFragment"
-        android:name="ie.dublinmapper.favourites.edit.EditFavouritesFragment"
+        android:name="io.dublink.favourites.edit.EditFavouritesFragment"
         android:label="EditFavouritesFragment" />
 
     <fragment android:id="@+id/searchFragment"
-        android:name="ie.dublinmapper.search.SearchFragment"
+        android:name="io.dublink.search.SearchFragment"
         android:label="SearchFragment" />
 
     <fragment android:id="@+id/liveDataFragment"
-        android:name="ie.dublinmapper.livedata.LiveDataFragment"
+        android:name="io.dublink.livedata.LiveDataFragment"
         android:label="LiveDataFragment" />
 
     <fragment android:id="@+id/settingsFragment"
-        android:name="ie.dublinmapper.settings.SettingsFragment"
+        android:name="io.dublink.settings.SettingsFragment"
         android:label="SettingsFragment" />
 
 </navigation>

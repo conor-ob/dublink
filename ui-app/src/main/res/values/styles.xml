@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.DublinMapper.AppBar" parent="Widget.MaterialComponents.AppBarLayout.Surface" />
+    <style name="Widget.DubLink.AppBar" parent="Widget.MaterialComponents.AppBarLayout.Surface" />
 
-    <style name="Widget.DublinMapper.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
-        <item name="titleTextAppearance">@style/TextAppearance.DublinMapper.Headline6</item>
+    <style name="Widget.DubLink.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface">
+        <item name="titleTextAppearance">@style/TextAppearance.DubLink.Headline6</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
-    <style name="Widget.DublinMapper.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
+    <style name="Widget.DubLink.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
             <item name="android:layout_gravity">bottom|center</item>
             <item name="android:layout_margin">@dimen/padding_xl</item>
     </style>
 
-    <style name="Widget.DublinMapper.RouteChip" parent="Widget.MaterialComponents.Chip.Action">
+    <style name="Widget.DubLink.RouteChip" parent="Widget.MaterialComponents.Chip.Action">
         <item name="chipCornerRadius">5dp</item>
         <item name="chipStartPadding">5dp</item>
         <item name="chipEndPadding">5dp</item>
@@ -25,17 +25,17 @@
         <item name="textEndPadding">0dp</item>
         <item name="closeIconStartPadding">0dp</item>
         <item name="closeIconEndPadding">0dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.DublinMapper.Button</item>
+        <item name="android:textAppearance">@style/TextAppearance.DubLink.Button</item>
         <item name="android:elevation">4dp</item>
         <item name="android:clickable">false</item>
     </style>
 
-    <style name="Widget.DublinMapper.RouteFilterChip" parent="Widget.MaterialComponents.Chip.Filter">
+    <style name="Widget.DubLink.RouteFilterChip" parent="Widget.MaterialComponents.Chip.Filter">
         <item name="chipStartPadding">12dp</item>
         <item name="chipEndPadding">12dp</item>
         <item name="chipCornerRadius">8dp</item>
         <item name="chipMinHeight">28dp</item>
-        <item name="android:textAppearance">@style/TextAppearance.DublinMapper.Button.RouteFilter</item>
+        <item name="android:textAppearance">@style/TextAppearance.DubLink.Button.RouteFilter</item>
         <item name="android:elevation">4dp</item>
     </style>
 

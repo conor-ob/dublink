@@ -1,7 +1,7 @@
 private const val kotlinVersion = "1.3.71"
 
 object BuildConfig {
-    const val applicationId = "ie.dublinmapper"
+    const val applicationId = "io.dublink"
 
     object Version {
         private const val major = 0

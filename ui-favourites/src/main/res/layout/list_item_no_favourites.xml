@@ -25,7 +25,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Headline5"
+                android:textAppearance="@style/TextAppearance.DubLink.Headline5"
                 android:text="@string/no_favourites_message_prompt" />
 
             <View
@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DublinMapper.Subtitle2"
+                android:textAppearance="@style/TextAppearance.DubLink.Subtitle2"
                 android:text="@string/no_favourites_message_detail" />
 
         </LinearLayout>
