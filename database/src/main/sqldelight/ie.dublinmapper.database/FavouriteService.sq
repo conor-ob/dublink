@@ -9,6 +9,9 @@ CREATE TABLE favouriteServiceEntity (
     operator TEXT AS Operator NOT NULL
 );
 
+selectAll:
+SELECT * FROM favouriteServiceEntity;
+
 selectAllByService:
 SELECT * FROM favouriteServiceEntity WHERE service = ?;
 

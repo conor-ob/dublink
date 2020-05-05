@@ -12,7 +12,6 @@ import ie.dublinmapper.model.HeaderItem
 import ie.dublinmapper.model.StopLocationItem
 import ie.dublinmapper.model.setSearchCandidate
 import ie.dublinmapper.ui.R
-import io.rtpi.api.Service
 
 object SearchResponseMapper {
 
@@ -139,7 +138,6 @@ object SearchResponseMapper {
             is DubLinkStopLocation -> listOf(
                 StopLocationItem(
                     serviceLocation = serviceLocation,
-                    icon = mapIcon(serviceLocation.service),
                     walkDistance = walkDistance
                 ).apply {
                     setSearchCandidate()
@@ -148,7 +146,6 @@ object SearchResponseMapper {
             is DubLinkDockLocation -> listOf(
                 DockLocationItem(
                     serviceLocation = serviceLocation,
-                    icon = mapIcon(serviceLocation.service),
                     walkDistance = walkDistance
                 ).apply {
 //                    setSearchCandidate() // TODO
@@ -156,14 +153,5 @@ object SearchResponseMapper {
             )
             else -> emptyList()
         }
-    }
-
-    private fun mapIcon(service: Service): Int = when (service) {
-        Service.AIRCOACH,
-        Service.BUS_EIREANN,
-        Service.DUBLIN_BUS -> R.drawable.ic_bus
-        Service.DUBLIN_BIKES -> R.drawable.ic_bike
-        Service.IRISH_RAIL -> R.drawable.ic_train
-        Service.LUAS -> R.drawable.ic_tram
     }
 }

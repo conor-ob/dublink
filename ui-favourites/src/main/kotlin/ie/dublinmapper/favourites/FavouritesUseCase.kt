@@ -2,6 +2,7 @@ package ie.dublinmapper.favourites
 
 import ie.dublinmapper.domain.model.DubLinkServiceLocation
 import ie.dublinmapper.domain.repository.AggregatedServiceLocationRepository
+import ie.dublinmapper.domain.repository.FavouriteRepository
 import ie.dublinmapper.domain.repository.LiveDataKey
 import ie.dublinmapper.domain.repository.LiveDataRepository
 import ie.dublinmapper.domain.repository.LiveDataResponse
@@ -12,12 +13,12 @@ import ie.dublinmapper.domain.service.PreferenceStore
 import ie.dublinmapper.domain.util.LiveDataFilter
 import ie.dublinmapper.domain.util.haversine
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.LiveData
 import io.rtpi.util.LiveDataGrouper
 import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
+    private val favouriteRepository: FavouriteRepository,
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val liveDataRepository: LiveDataRepository,
     private val permissionChecker: PermissionChecker,
@@ -25,77 +26,96 @@ class FavouritesUseCase @Inject constructor(
     private val preferenceStore: PreferenceStore
 ) {
 
-    fun getFavouritesWithLiveData(
-        showLoading: Boolean
-    ): Observable<List<LiveDataPresentationResponse>> {
+    fun getFavourites(): Observable<List<DubLinkServiceLocation>> =
         if (preferenceStore.isFavouritesSortByLocation() &&
             permissionChecker.isLocationPermissionGranted()
         ) {
-            return locationProvider.getLocationUpdates(thresholdDistance = 25.0)
+            locationProvider.getLocationUpdates(thresholdDistance = 25.0)
                 .flatMap { coordinate ->
-                    getFavouritesWithLiveData(
-                        showLoading = showLoading,
-                        comparator = Comparator { s1, s2 ->
-                            s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
+                    favouriteRepository.getFavourites()
+                        .map { responses ->
+                            responses
+                                .sortedWith(
+                                    Comparator { s1, s2 ->
+                                        s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
+                                    }
+                                )
                         }
-                    )
                 }
         } else {
-            return getFavouritesWithLiveData(
-                showLoading = showLoading,
-                comparator = Comparator { s1, s2 ->
-                    s1.favouriteSortIndex.compareTo(s2.favouriteSortIndex)
+            favouriteRepository.getFavourites()
+                .map { responses ->
+                    responses
+                        .sortedWith(
+                            Comparator { s1, s2 ->
+                                s1.favouriteSortIndex.compareTo(s2.favouriteSortIndex)
+                            }
+                        )
                 }
-            )
         }
-    }
 
-    private fun getFavouritesWithLiveData(
-        showLoading: Boolean,
-        comparator: Comparator<DubLinkServiceLocation>
-    ): Observable<List<LiveDataPresentationResponse>> {
-        val limit = preferenceStore.getFavouritesLiveDataLimit()
-        return serviceLocationRepository.getFavourites()
-            .flatMap { responses ->
-                Observable.combineLatest(
+    private fun getFavouriteServiceLocations(): Observable<List<DubLinkServiceLocation>> =
+        if (preferenceStore.isFavouritesSortByLocation() &&
+            permissionChecker.isLocationPermissionGranted()
+        ) {
+            locationProvider.getLocationUpdates(thresholdDistance = 25.0)
+                .flatMap { coordinate ->
+                    serviceLocationRepository.streamFavourites()
+                        .map { responses ->
+                            responses
+                                .filterIsInstance<ServiceLocationResponse.Data>()
+                                .flatMap { it.serviceLocations }
+                                .sortedWith(
+                                    Comparator { s1, s2 ->
+                                        s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
+                                    }
+                                )
+                        }
+                }
+        } else {
+            serviceLocationRepository.streamFavourites()
+                .map { responses ->
                     responses
                         .filterIsInstance<ServiceLocationResponse.Data>()
                         .flatMap { it.serviceLocations }
-                        .sortedWith(comparator)
-                        .mapIndexed { index: Int, serviceLocation: DubLinkServiceLocation ->
-                            if (index < limit) {
-                                // TODO this may temporarily cause blank screen when navigating back to favourites
-                                if (showLoading) {
-                                    getGroupedLiveData(serviceLocation)
-                                        .startWith(
-                                            LiveDataPresentationResponse.Loading(
-                                                serviceLocation = serviceLocation
-                                            )
-                                        )
-                                        .subscribeOn(Schedulers.newThread())
-                                } else {
-                                    getGroupedLiveData(serviceLocation)
-                                }
-                            } else {
-                                Observable.just(
-                                    LiveDataPresentationResponse.Skipped(
-                                        serviceLocation = serviceLocation
-                                    )
-                                )
+                        .sortedWith(
+                            Comparator { s1, s2 ->
+                                s1.favouriteSortIndex.compareTo(s2.favouriteSortIndex)
                             }
+                        )
+                }
+        }
+
+    fun getLiveData(refresh: Boolean): Observable<List<LiveDataPresentationResponse>> {
+        val limit = preferenceStore.getFavouritesLiveDataLimit()
+        return getFavouriteServiceLocations()
+            .flatMap { serviceLocations ->
+                Observable.combineLatest(
+                    serviceLocations.mapIndexed { index, dubLinkServiceLocation ->
+                        if (index < limit) {
+                            getGroupedLiveData(dubLinkServiceLocation, refresh)
+                        } else {
+                            Observable.just(
+                                LiveDataPresentationResponse.Skipped(
+                                    serviceLocation = dubLinkServiceLocation
+                                )
+                            )
                         }
+                    }
                 ) { streams -> streams.map { it as LiveDataPresentationResponse } }
             }
     }
 
     private fun getGroupedLiveData(
-        serviceLocation: DubLinkServiceLocation
+        serviceLocation: DubLinkServiceLocation,
+        refresh: Boolean
     ): Observable<LiveDataPresentationResponse> =
         liveDataRepository.get(
             LiveDataKey(
                 service = serviceLocation.service,
                 locationId = serviceLocation.id
-            )
+            ),
+            refresh
         ).map { response ->
             when (response) {
                 is LiveDataResponse.Data -> LiveDataPresentationResponse.Data(
@@ -113,10 +133,6 @@ class FavouritesUseCase @Inject constructor(
 sealed class LiveDataPresentationResponse {
 
     abstract val serviceLocation: DubLinkServiceLocation
-
-    data class Loading(
-        override val serviceLocation: DubLinkServiceLocation
-    ) : LiveDataPresentationResponse()
 
     data class Skipped(
         override val serviceLocation: DubLinkServiceLocation

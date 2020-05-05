@@ -79,6 +79,12 @@ class EditFavouritesFragment : DublinMapperFragment(R.layout.fragment_edit_favou
                 viewModel.dispatch(Action.SaveChanges(it))
             }
         }
+
+        edit_favourites_swipe_resresh.apply {
+            isEnabled = false
+            setColorSchemeResources(R.color.color_on_surface)
+            setProgressBackgroundColorSchemeResource(R.color.color_surface)
+        }
     }
 
     override fun onResume() {
@@ -92,7 +98,8 @@ class EditFavouritesFragment : DublinMapperFragment(R.layout.fragment_edit_favou
     }
 
     private fun renderSaveButtonState(state: State) {
-        if (state.isFinished == true) {
+        edit_favourites_swipe_resresh.isRefreshing = state.original == null
+        if (state.isFinished) {
             activity?.onBackPressed()
         }
         if (state.original != null && state.editing != null && state.original != state.editing) {

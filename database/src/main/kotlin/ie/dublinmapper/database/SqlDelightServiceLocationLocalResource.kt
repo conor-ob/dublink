@@ -83,7 +83,7 @@ class SqlDelightServiceLocationLocalResource(
             .mapToList()
 
         val favouritesObservable = database.favouriteLocationQueries
-            .selectAllByService(service) { _, _, locationId, name, sortIndex ->
+            .selectAllByService(service) { _, _, locationId, name, _, _, sortIndex ->
                 toFavouriteEntity(locationId, name, sortIndex)
             }
             .asObservable()
@@ -217,7 +217,7 @@ class SqlDelightServiceLocationLocalResource(
 
     private fun toFavouriteEntity(
         locationId: String,
-        name: String?,
+        name: String,
         sortIndex: Long
     ) = FavouriteEntity(locationId, name, sortIndex)
 
@@ -431,7 +431,7 @@ data class LocationEntity(
 
 data class FavouriteEntity(
     val locationId: String,
-    val name: String?,
+    val name: String,
     val sortIndex: Long
 )
 

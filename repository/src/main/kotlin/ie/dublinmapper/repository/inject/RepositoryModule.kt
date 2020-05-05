@@ -102,7 +102,7 @@ class RepositoryModule {
     }
 
     private fun shortTermMemoryPolicy(): MemoryPolicy {
-        return newMemoryPolicy(15, TimeUnit.SECONDS)
+        return newMemoryPolicy(1, TimeUnit.SECONDS)
     }
 
     private fun mediumTermMemoryPolicy(): MemoryPolicy {
@@ -134,9 +134,10 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideFavouriteRepository(
-        localResource: FavouriteServiceLocationLocalResource
+        localResource: FavouriteServiceLocationLocalResource,
+        enabledServiceManager: EnabledServiceManager
     ): FavouriteRepository {
-        return FavouriteServiceLocationRepository(localResource)
+        return FavouriteServiceLocationRepository(localResource, enabledServiceManager)
     }
 
     @Provides

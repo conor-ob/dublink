@@ -42,13 +42,15 @@ class LiveDataUseCase @Inject constructor(
 
     fun getLiveData(
         service: Service,
-        locationId: String
+        locationId: String,
+        refresh: Boolean
     ): Observable<LiveDataPresentationResponse> {
         return liveDataRepository.get(
             LiveDataKey(
                 service = service,
                 locationId = locationId
-            )
+            ),
+            refresh = refresh
         ).map { response ->
             when (response) {
                 is LiveDataResponse.Data -> LiveDataPresentationResponse.Data(

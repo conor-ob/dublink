@@ -36,7 +36,7 @@ class SearchUseCase @Inject constructor(
         if (query.isEmpty()) {
             Observable.just(SearchResultsResponse.Empty)
         } else {
-            serviceLocationRepository.get().flatMap { response ->
+            serviceLocationRepository.stream().flatMap { response ->
                 searchService.search(
                     query = query,
                     serviceLocations = response
@@ -61,7 +61,7 @@ class SearchUseCase @Inject constructor(
                 locationProvider.getLocationUpdates(thresholdDistance = 10.0)
                     .flatMap<NearbyLocationsResponse> { coordinate ->
                         serviceLocationRepository
-                            .get()
+                            .stream()
                             .map { responses ->
                                 responses.filterIsInstance<ServiceLocationResponse.Data>()
                             }
@@ -121,7 +121,7 @@ class SearchUseCase @Inject constructor(
     }
 
     private fun getServiceLocations(): Observable<Pair<Set<Service>, List<ServiceLocation>>> {
-        return serviceLocationRepository.get()
+        return serviceLocationRepository.stream()
             .map { responses ->
                 val okResponses = responses.filterIsInstance<ServiceLocationResponse.Data>()
                 val badResponses = responses.filterIsInstance<ServiceLocationResponse.Error>()

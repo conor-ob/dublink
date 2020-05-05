@@ -4,6 +4,8 @@ import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.updateText
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
@@ -15,13 +17,10 @@ import java.util.Objects
 
 abstract class AbstractServiceLocationItem(
     private val serviceLocation: DubLinkServiceLocation,
-    private val icon: Int,
     private val walkDistance: Double?
 ) : Item() {
 
     init {
-        extras[serviceKey] = serviceLocation.service
-        extras[locationIdKey] = serviceLocation.id
         extras[serviceLocationKey] = serviceLocation
     }
 
@@ -32,7 +31,7 @@ abstract class AbstractServiceLocationItem(
 
     private fun bindIcon(viewHolder: GroupieViewHolder) {
         viewHolder.itemView.findViewById<ImageView>(R.id.serviceIconContainer).apply {
-            setImageResource(icon)
+            setImageResource(getIcon())
             imageTintList =
                 ColorStateList.valueOf(ContextCompat.getColor(viewHolder.itemView.context, android.R.color.white))
             backgroundTintList =
@@ -40,20 +39,33 @@ abstract class AbstractServiceLocationItem(
         }
     }
 
+    @DrawableRes
+    private fun getIcon(): Int =
+        when (serviceLocation.service) {
+            Service.AIRCOACH,
+            Service.BUS_EIREANN,
+            Service.DUBLIN_BUS -> R.drawable.ic_bus
+            Service.DUBLIN_BIKES -> R.drawable.ic_bike
+            Service.IRISH_RAIL -> R.drawable.ic_train
+            Service.LUAS -> R.drawable.ic_tram
+        }
+
     private fun bindTitle(viewHolder: GroupieViewHolder) {
         viewHolder.itemView.findViewById<TextView>(R.id.title).apply {
-            text = serviceLocation.name
+            updateText(serviceLocation.name)
         }
         viewHolder.itemView.findViewById<TextView>(R.id.subtitle).apply {
-            text = when (val service = serviceLocation.service) {
-                Service.BUS_EIREANN,
-                Service.DUBLIN_BUS -> "${service.fullName} (${serviceLocation.id})"
-                else -> service.fullName
-            }
+            updateText(
+                newText = when (val service = serviceLocation.service) {
+                    Service.BUS_EIREANN,
+                    Service.DUBLIN_BUS -> "${service.fullName} (${serviceLocation.id})"
+                    else -> service.fullName
+                }
+            )
         }
         if (walkDistance != null) {
             viewHolder.itemView.findViewById<TextView>(R.id.walkTime).apply {
-                text = walkDistance.formatDistance()
+                updateText(walkDistance.formatDistance())
                 visibility = View.VISIBLE
             }
         } else {
@@ -84,13 +96,9 @@ abstract class AbstractServiceLocationItem(
     }
 }
 
-private const val serviceKey = "service"
-private const val locationIdKey = "locationId"
 private const val serviceLocationKey = "serviceLocation"
 private const val searchCandidateKey = "searchCandidate"
 
-fun AbstractServiceLocationItem.getService(): Service = extras[serviceKey] as Service
-fun AbstractServiceLocationItem.getLocationId(): String = extras[locationIdKey] as String
 fun AbstractServiceLocationItem.getServiceLocation(): DubLinkServiceLocation = extras[serviceLocationKey] as DubLinkServiceLocation
 
 fun AbstractServiceLocationItem.setSearchCandidate() {

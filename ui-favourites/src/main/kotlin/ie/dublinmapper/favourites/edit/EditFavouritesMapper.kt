@@ -37,14 +37,12 @@ object EditFavouritesMapper {
             is DubLinkStopLocation -> listOf(
                 StopLocationItem(
                     serviceLocation = serviceLocation,
-                    icon = mapIcon(serviceLocation.service),
                     walkDistance = null
                 )
             )
             is DubLinkDockLocation -> listOf(
                 DockLocationItem(
                     serviceLocation = serviceLocation,
-                    icon = mapIcon(serviceLocation.service),
                     walkDistance = null
                 )
             )
@@ -53,13 +51,4 @@ object EditFavouritesMapper {
     )
 
     private fun mapDivider(items: Int, index: Int) = if (index < items - 1) DividerItem(index.toLong()) else null
-
-    private fun mapIcon(service: Service): Int = when (service) {
-        Service.AIRCOACH,
-        Service.BUS_EIREANN,
-        Service.DUBLIN_BUS -> R.drawable.ic_bus
-        Service.DUBLIN_BIKES -> R.drawable.ic_bike
-        Service.IRISH_RAIL -> R.drawable.ic_train
-        Service.LUAS -> R.drawable.ic_tram
-    }
 }

@@ -4,7 +4,9 @@ CREATE TABLE favouriteLocationEntity (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     service TEXT AS Service NOT NULL,
     locationId TEXT NOT NULL,
-    name TEXT,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL,
     sortIndex INTEGER NOT NULL
 );
 
@@ -22,9 +24,11 @@ INSERT OR REPLACE INTO favouriteLocationEntity(
   service,
   locationId,
   name,
+  latitude,
+  longitude,
   sortIndex
 )
-VALUES (?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?);
 
 delete:
 DELETE FROM favouriteLocationEntity WHERE service = ? AND locationId = ?;

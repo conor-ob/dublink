@@ -12,7 +12,7 @@ sealed class Action : BaseAction {
 }
 
 sealed class Result {
-    data class FavouritesReceived(val serviceLocations: List<DubLinkServiceLocation>) : Result()
+    data class FavouritesReceived(val favourites: List<DubLinkServiceLocation>) : Result()
     data class FavouriteEdited(val serviceLocation: DubLinkServiceLocation) : Result()
     data class FavouritesReordered(val serviceLocations: List<DubLinkServiceLocation>) : Result()
     object FavouritesSaved : Result()
@@ -21,5 +21,5 @@ sealed class Result {
 data class State(
     val original: List<DubLinkServiceLocation>? = null,
     val editing: List<DubLinkServiceLocation>? = null,
-    val isFinished: Boolean? = null
+    val isFinished: Boolean
 ) : BaseState

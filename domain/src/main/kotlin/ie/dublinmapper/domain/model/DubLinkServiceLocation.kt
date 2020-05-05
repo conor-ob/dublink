@@ -21,7 +21,6 @@ abstract class AbstractDubLinkServiceLocation(
     override val name = favouriteMetadata?.name ?: serviceLocation.name
     override val service = serviceLocation.service
     override val coordinate = serviceLocation.coordinate
-    override val properties = serviceLocation.properties
 
     override val defaultName = serviceLocation.name
     override val isFavourite = favouriteMetadata != null
@@ -41,37 +40,31 @@ data class DubLinkStopLocation(
                 AlphaNumericComparator.compare(r0.id, r1.id)
             }
         )
-        .map { route ->
-            Filter.RouteFilter(isActive = false, route = route)
-        }
 
-    private val directions = if (isDartStation()) {
-        listOf("Northbound", "Southbound")
-    } else {
-        emptyList()
+    private val directions = when {
+        isDartStation() -> listOf("Northbound", "Southbound")
+        isLuasStop() -> listOf("Inbound", "Outbound")
+        else -> emptyList()
     }
-        .map { direction ->
-            Filter.DirectionFilter(isActive = false, direction = direction)
-        }
 
     val filters = routes
         .plus(directions)
-        .map { filter ->
-            if (favouriteMetadata != null) {
-                when (filter) {
-                    is Filter.RouteFilter -> {
-                        if (favouriteMetadata.routes.contains(filter.route)) {
-                            return@map filter.copy(isActive = true)
-                        }
-                    }
-                    is Filter.DirectionFilter -> {
-                        if (favouriteMetadata.directions.contains(filter.direction)) {
-                            return@map filter.copy(isActive = true)
-                        }
-                    }
+        .mapNotNull { type ->
+            when (type) {
+                is Route -> {
+                    Filter.RouteFilter(
+                        isActive = favouriteMetadata?.routes?.contains(type) ?: false,
+                        route = type
+                    )
                 }
+                is String -> {
+                    Filter.DirectionFilter(
+                        isActive = favouriteMetadata?.directions?.contains(type) ?: false,
+                        direction = type
+                    )
+                }
+                else -> null
             }
-            return@map filter
         }
 }
 
@@ -103,7 +96,7 @@ sealed class Filter {
 data class Route(val operator: Operator, val id: String)
 
 data class FavouriteMetadata(
-    val name: String? = null,
+    val name: String,
     val routes: List<Route> = emptyList(),
     val directions: List<String> = emptyList(),
     val sortIndex: Int = -1

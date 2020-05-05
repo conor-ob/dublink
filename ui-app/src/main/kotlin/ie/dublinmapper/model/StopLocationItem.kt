@@ -10,9 +10,8 @@ import ie.dublinmapper.util.ChipFactory
 
 class StopLocationItem(
     private val serviceLocation: DubLinkStopLocation,
-    icon: Int,
     walkDistance: Double?
-) : AbstractServiceLocationItem(serviceLocation, icon, walkDistance) {
+) : AbstractServiceLocationItem(serviceLocation, walkDistance) {
 
     override fun getLayout() = R.layout.list_item_stop_location
 

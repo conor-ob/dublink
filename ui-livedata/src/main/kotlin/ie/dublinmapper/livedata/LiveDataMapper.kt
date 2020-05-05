@@ -25,13 +25,13 @@ object LiveDataMapper {
                     }
                 }
                 if (items.isNullOrEmpty()) {
-                    listOf(NoLiveDataItem(id = 1L))
+                    listOf(NoLiveDataItem(service = serviceLocation?.service, id = 1L))
                 } else {
                     items
                 }
             }
             is LiveDataPresentationResponse.Error -> listOf(
-                SimpleMessageItem(response.throwable.message ?: "error", index = 1)
+                SimpleMessageItem(response.throwable.message ?: "error", 1L)
             )
         }
     )

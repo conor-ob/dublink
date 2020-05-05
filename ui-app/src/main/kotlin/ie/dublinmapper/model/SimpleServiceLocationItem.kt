@@ -5,9 +5,8 @@ import ie.dublinmapper.ui.R
 
 class SimpleServiceLocationItem(
     serviceLocation: DubLinkServiceLocation,
-    icon: Int,
     walkDistance: Double?
-) : AbstractServiceLocationItem(serviceLocation, icon, walkDistance) {
+) : AbstractServiceLocationItem(serviceLocation, walkDistance) {
 
     override fun getLayout() = R.layout.list_item_simple_service_location
 }

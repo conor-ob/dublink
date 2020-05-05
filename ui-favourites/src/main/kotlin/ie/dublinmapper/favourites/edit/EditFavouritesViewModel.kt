@@ -14,25 +14,72 @@ class EditFavouritesViewModel @Inject constructor(
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
-    override val initialState = State(original = null, editing = null)
+    override val initialState = State(
+        isFinished = false,
+        original = null,
+        editing = null
+    )
 
     private val reducer: Reducer<State, Result> = { state, result ->
         when (result) {
-            is Result.FavouritesReceived -> state.copy(
-                original = state.original ?: result.serviceLocations,
-                editing = state.editing ?: result.serviceLocations
+            is Result.FavouritesReceived -> State(
+                isFinished = false,
+                original = state.original ?: result.favourites,
+                editing = state.editing ?: result.favourites
             )
-            is Result.FavouriteEdited -> state.copy(
+            is Result.FavouriteEdited -> State(
+                isFinished = false,
+                original = state.original,
                 editing = merge(result.serviceLocation, state.editing)
             )
-            is Result.FavouritesReordered -> state.copy(
+            is Result.FavouritesReordered -> State(
+                isFinished = false,
+                original = state.original,
                 editing = result.serviceLocations
             )
-            is Result.FavouritesSaved -> state.copy(
-                isFinished = true
+            is Result.FavouritesSaved -> State(
+                isFinished = true,
+                original = state.original,
+                editing = state.editing
             )
         }
     }
+
+    private fun merge(
+        previous: List<DubLinkServiceLocation>?,
+        next: List<DubLinkServiceLocation>
+    ): List<DubLinkServiceLocation> {
+        return if (previous == null) {
+            next
+        } else {
+            val mutablePreviousState = previous.associateBy { it }.toMutableMap()
+            for (location in previous) {
+                val match = next.find { it.id == location.id }
+                if (match != null) {
+                    mutablePreviousState[location] = match
+                }
+            }
+            mutablePreviousState.values.toList().sortedBy { it.favouriteSortIndex }
+        }
+    }
+
+//    private fun merge(
+//        previous: List<DubLinkServiceLocation>?,
+//        next: List<DubLinkServiceLocation>
+//    ): List<DubLinkServiceLocation> {
+//        return if (previous == null) {
+//            next
+//        } else {
+//            val mutablePreviousState = previous.toMutableList()
+//            for (location in next) {
+//                val match = previous.find { it.id == location.id }
+//                if (match == null) {
+//                    mutablePreviousState.add(location)
+//                }
+//            }
+//            mutablePreviousState.sortedBy { it.favouriteSortIndex }
+//        }
+//    }
 
     private fun merge(serviceLocation: DubLinkServiceLocation, editing: List<DubLinkServiceLocation>?): List<DubLinkServiceLocation>? {
         return if (editing.isNullOrEmpty()) {
@@ -54,7 +101,7 @@ class EditFavouritesViewModel @Inject constructor(
     private fun bindActions() {
         val getFavouritesActions = actions.ofType(Action.GetFavourites::class.java)
             .switchMap {
-                editFavouritesUseCase.getFavouriteLocations()
+                editFavouritesUseCase.getFavourites()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Result> { response ->
@@ -86,10 +133,12 @@ class EditFavouritesViewModel @Inject constructor(
             }
 
         val allActions = Observable.merge(
-            getFavouritesActions,
-            editServiceLocationAction,
-            favouritesReorderedActions,
-            saveChangesActions
+            listOf(
+                getFavouritesActions,
+                editServiceLocationAction,
+                favouritesReorderedActions,
+                saveChangesActions
+            )
         )
 
         disposables += allActions

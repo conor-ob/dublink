@@ -12,7 +12,7 @@ class EditFavouritesUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository
 ) {
 
-    fun getFavouriteLocations(): Observable<FavouritesResponse> =
+    fun getFavourites(): Observable<FavouritesResponse> =
         serviceLocationRepository.getFavourites()
             .map<FavouritesResponse> { responses ->
                 FavouritesResponse.Data(

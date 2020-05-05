@@ -92,6 +92,21 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private fun createServiceLocationView() {
         live_data_toolbar.apply {
+            updateTitle(newText = args.name)
+            updateSubtitle(
+                newText = when (val service = args.service) {
+                    Service.BUS_EIREANN,
+                    Service.DUBLIN_BUS -> "${service.fullName} (${args.locationId})"
+                    else -> service.fullName
+                }
+            )
+            menu.findItem(R.id.action_favourite).apply {
+                if (args.isFavourite) {
+                    setIcon(R.drawable.ic_favourite_selected)
+                } else {
+                    setIcon(R.drawable.ic_favourite_unselected)
+                }
+            }
             setNavigationOnClickListener { activity?.onBackPressed() }
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
@@ -111,9 +126,16 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     private fun createLiveDataView() {
         live_data_loader.apply {
-            isEnabled = false
             setColorSchemeResources(R.color.color_on_surface)
             setProgressBackgroundColorSchemeResource(R.color.color_surface)
+            setOnRefreshListener {
+                viewModel.dispatch(
+                    Action.RefreshLiveData(
+                        serviceLocationId = args.locationId,
+                        serviceLocationService = args.service
+                    )
+                )
+            }
         }
         liveDataAdapter = GroupAdapter()
         live_data_recycler_view.apply {
@@ -167,9 +189,9 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
             live_data_toolbar.apply {
                 updateTitle(newText = state.serviceLocation.name)
                 updateSubtitle(
-                    newText = when (val service = args.service) {
+                    newText = when (val service = state.serviceLocation.service) {
                         Service.BUS_EIREANN,
-                        Service.DUBLIN_BUS -> "${service.fullName} (${args.locationId})"
+                        Service.DUBLIN_BUS -> "${service.fullName} (${state.serviceLocation.id})"
                         else -> service.fullName
                     }
                 )
@@ -188,6 +210,8 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
         live_data_loader.isRefreshing = state.isLoading
         if (state.liveDataResponse != null) {
             liveDataAdapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse, state.serviceLocation)))
+        } else {
+            liveDataAdapter?.clear()
         }
     }
 
@@ -327,27 +351,34 @@ class LiveDataFragment : DublinMapperFragment(R.layout.fragment_livedata) {
 
     companion object {
 
-        private const val serviceKey = "serviceKey"
-        private const val locationIdKey = "locationIdKey"
+        private const val serviceKey = "service"
+        private const val locationIdKey = "locationId"
+        private const val nameKey = "name"
+        private const val isFavouriteKey = "isFavourite"
 
         data class LiveDataArgs(
             val service: Service,
-            val locationId: String
+            val locationId: String,
+            val name: String,
+            val isFavourite: Boolean
         )
 
         fun toBundle(
-            service: Service,
-            locationId: String
+            serviceLocation: DubLinkServiceLocation
         ) = Bundle().apply {
-            putSerializable(serviceKey, service)
-            putString(locationIdKey, locationId)
+            putSerializable(serviceKey, serviceLocation.service)
+            putString(locationIdKey, serviceLocation.id)
+            putString(nameKey, serviceLocation.name)
+            putBoolean(isFavouriteKey, serviceLocation.isFavourite)
         }
 
         private fun fromBundle(
             bundle: Bundle
         ) = LiveDataArgs(
             service = bundle.getSerializable(serviceKey) as Service,
-            locationId = requireNotNull(bundle.getString(locationIdKey))
+            locationId = requireNotNull(bundle.getString(locationIdKey)),
+            name = requireNotNull(bundle.getString(nameKey)),
+            isFavourite = requireNotNull(bundle.getBoolean(isFavouriteKey))
         )
     }
 }

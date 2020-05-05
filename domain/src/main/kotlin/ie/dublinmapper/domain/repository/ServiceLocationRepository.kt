@@ -13,7 +13,9 @@ interface ServiceLocationRepository {
 
 interface AggregatedServiceLocationRepository {
     fun get(): Observable<List<ServiceLocationResponse>>
+    fun stream(): Observable<List<ServiceLocationResponse>>
     fun getFavourites(): Observable<List<ServiceLocationResponse>>
+    fun streamFavourites(): Observable<List<ServiceLocationResponse>>
     fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse>
     fun clearCache(service: Service)
     fun clearAllCaches()
