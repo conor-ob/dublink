@@ -1,0 +1,21 @@
+CREATE TABLE busEireannLocationEntity (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    latitude REAL NOT NULL,
+    longitude REAL NOT NULL
+);
+
+selectAll:
+SELECT * FROM busEireannLocationEntity;
+
+insertOrReplace:
+INSERT OR REPLACE INTO busEireannLocationEntity(
+  id,
+  name,
+  latitude,
+  longitude
+)
+VALUES (?, ?, ?, ?);
+
+deleteAll:
+DELETE FROM busEireannLocationEntity;
