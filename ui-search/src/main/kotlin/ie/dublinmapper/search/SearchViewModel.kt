@@ -72,6 +72,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.SearchResults(it) }
+                    .throttleLatest(250L, TimeUnit.MILLISECONDS)
                     .onErrorReturn { Change.Error(it) }
                     .startWith(Change.Loading)
             }
@@ -82,6 +83,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.NearbyLocations(it) }
+//                    .throttleLatest(500L, TimeUnit.MILLISECONDS)
                     .onErrorReturn { Change.Error(it) }
             }
 

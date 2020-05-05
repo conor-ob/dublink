@@ -21,7 +21,6 @@ abstract class AbstractDubLinkServiceLocation(
     override val name = favouriteMetadata?.name ?: serviceLocation.name
     override val service = serviceLocation.service
     override val coordinate = serviceLocation.coordinate
-    override val properties = serviceLocation.properties
 
     override val defaultName = serviceLocation.name
     override val isFavourite = favouriteMetadata != null
@@ -42,10 +41,10 @@ data class DubLinkStopLocation(
             }
         )
 
-    private val directions = if (isDartStation()) {
-        listOf("Northbound", "Southbound")
-    } else {
-        emptyList()
+    private val directions = when {
+        isDartStation() -> listOf("Northbound", "Southbound")
+        isLuasStop() -> listOf("Inbound", "Outbound")
+        else -> emptyList()
     }
 
     val filters = routes
