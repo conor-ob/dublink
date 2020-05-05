@@ -248,7 +248,7 @@ fun Activity.isKeyboardOpened(): Boolean {
 }
 
 fun Activity.getActivityRoot(): View {
-    return (findViewById<ViewGroup>(android.R.id.content)).getChildAt(0)
+    return findViewById<ViewGroup>(android.R.id.content).getChildAt(0)
 }
 
 fun dip(value: Int): Int {
