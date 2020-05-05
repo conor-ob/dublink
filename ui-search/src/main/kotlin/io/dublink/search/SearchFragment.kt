@@ -19,7 +19,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.DubLinkNavigator
-import io.dublink.search.R
 import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
 import io.dublink.model.isSearchCandidate

@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import io.dublink.domain.service.PreferenceStore
-import io.dublink.settings.R
 import javax.inject.Inject
 
 class ThemeRepository @Inject constructor(

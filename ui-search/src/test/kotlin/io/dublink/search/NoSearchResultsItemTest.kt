@@ -1,7 +1,6 @@
 package io.dublink.search
 
 import io.dublink.model.AbstractUniqueItemTest
-import io.dublink.search.NoSearchResultsItem
 
 class NoSearchResultsItemTest : AbstractUniqueItemTest<NoSearchResultsItem>() {
 

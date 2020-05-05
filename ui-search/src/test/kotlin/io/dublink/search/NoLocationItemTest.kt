@@ -1,7 +1,6 @@
 package io.dublink.search
 
 import io.dublink.model.AbstractCommonItemTest
-import io.dublink.search.NoLocationItem
 import io.mockk.mockk
 
 class NoLocationItemTest : AbstractCommonItemTest<NoLocationItem>() {

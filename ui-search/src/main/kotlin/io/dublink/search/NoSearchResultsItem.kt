@@ -5,7 +5,6 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
-import io.dublink.search.R
 import kotlinx.android.synthetic.main.list_item_search_no_results.view.*
 
 class NoSearchResultsItem(

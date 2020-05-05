@@ -22,7 +22,6 @@ import io.dublink.dialog.OnFavouriteSavedListener
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.model.Filter
-import io.dublink.livedata.R
 import io.dublink.setVisibility
 import io.dublink.util.ChipFactory
 import io.dublink.viewModelProvider

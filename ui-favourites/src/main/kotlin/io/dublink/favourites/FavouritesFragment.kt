@@ -9,7 +9,6 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.DubLinkNavigator
 import io.dublink.domain.internet.InternetStatus
-import io.dublink.favourites.R
 import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
 import io.dublink.viewModelProvider

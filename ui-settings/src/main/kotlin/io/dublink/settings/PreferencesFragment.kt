@@ -13,7 +13,6 @@ import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import io.dublink.domain.service.AppConfig
 import io.dublink.domain.service.PermissionChecker
-import io.dublink.settings.R
 import javax.inject.Inject
 
 private const val sortByLocationRequestCode = 42069

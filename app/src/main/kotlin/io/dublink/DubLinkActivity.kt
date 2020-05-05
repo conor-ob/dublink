@@ -10,7 +10,6 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.model.DubLinkServiceLocation
-import io.dublink.R
 import io.dublink.livedata.LiveDataFragment
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_root.activity_root

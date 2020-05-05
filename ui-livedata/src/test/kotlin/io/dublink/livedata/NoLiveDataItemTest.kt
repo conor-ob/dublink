@@ -1,8 +1,6 @@
 package io.dublink.livedata
 
 import io.dublink.model.AbstractCommonItemTest
-import io.dublink.livedata.NoLiveDataItem
-import io.dublink.model.AbstractCommonItemTest
 import io.rtpi.api.Service
 
 class NoLiveDataItemTest : AbstractCommonItemTest<NoLiveDataItem>() {

@@ -2,7 +2,6 @@ package io.dublink.search
 
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.model.AbstractCommonItem
-import io.dublink.search.R
 import kotlinx.android.synthetic.main.list_item_no_location.view.*
 
 class NoLocationItem(

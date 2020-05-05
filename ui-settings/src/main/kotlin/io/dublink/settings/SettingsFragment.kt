@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.commitNow
 import androidx.navigation.fragment.findNavController
 import io.dublink.DubLinkFragment
-import io.dublink.settings.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsFragment : DubLinkFragment(R.layout.fragment_settings) {

@@ -3,7 +3,6 @@ package io.dublink.settings
 import android.content.Context
 import androidx.preference.PreferenceManager
 import io.dublink.domain.service.PreferenceStore
-import io.dublink.settings.R
 import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 import javax.inject.Inject

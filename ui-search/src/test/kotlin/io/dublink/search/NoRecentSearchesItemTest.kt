@@ -1,7 +1,6 @@
 package io.dublink.search
 
 import io.dublink.model.AbstractCommonItemTest
-import io.dublink.search.NoRecentSearchesItem
 
 class NoRecentSearchesItemTest : AbstractCommonItemTest<NoRecentSearchesItem>() {
 
