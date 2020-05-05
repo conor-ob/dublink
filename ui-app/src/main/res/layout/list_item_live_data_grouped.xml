@@ -15,7 +15,7 @@
         android:id="@+id/groupedRoute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.DublinMapper.RouteChip" />
+        style="@style/Widget.DubLink.RouteChip" />
 
     <View
         android:layout_width="8dp"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="60"
         android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
+        android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
     <TextView
         android:id="@+id/groupedWaitTimeMinutes"
@@ -36,6 +36,6 @@
         android:layout_weight="35"
         android:singleLine="true"
         android:gravity="end"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
+        android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
 </LinearLayout>

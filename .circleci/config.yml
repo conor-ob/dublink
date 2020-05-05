@@ -4,7 +4,7 @@ jobs:
     branches:
       only:
         - master
-    working_directory: ~/dublin-mapper
+    working_directory: ~/dublink
     docker:
       - image: circleci/android:api-29
     environment:

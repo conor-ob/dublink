@@ -1,12 +1,11 @@
-# Dublinmapper
+# DubLink
 
-![Android CI](https://github.com/conor-ob/dublin-mapper/workflows/Android%20CI/badge.svg)
-[![CircleCI](https://circleci.com/gh/conor-ob/dublin-mapper.svg?style=shield&circle-token=42b2b34fb35d24d7e4aeb4bcfd6bc5c82c9cf0ea)](https://circleci.com/gh/conor-ob/dublin-mapper)
+![Android CI](https://github.com/conor-ob/dublink/workflows/Android%20CI/badge.svg)
 [![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=26)
-[![CodeFactor](https://www.codefactor.io/repository/github/conor-ob/dublin-mapper/badge?s=6e0e7443d6d60600f8647fe4f22d5fafcebc385b)](https://www.codefactor.io/repository/github/conor-ob/dublin-mapper)
+[![CodeFactor](https://www.codefactor.io/repository/github/conor-ob/dublink/badge?s=66c1e5f0fb73952065284d1cb9670c47dec63de1)](https://www.codefactor.io/repository/github/conor-ob/dublink)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
-Dublin Mapper is a **work-in-progress** Android app for getting real time data for Dublin Bus :trolleybus: Irish Rail :railway_car: Luas :tram: Bus Éireann :bus: Dublin Bikes :bike: Aircoach :airplane:
+DubLink is a **work-in-progress** Android app for getting real time data for Dublin Bus :trolleybus: Irish Rail :railway_car: Luas :tram: Bus Éireann :bus: Dublin Bikes :bike: Aircoach :airplane:
 
 | Favourites | Search |
 | ------ | ----- |
@@ -18,7 +17,7 @@ Dublin Mapper is a **work-in-progress** Android app for getting real time data f
 
 ## Android development
 
-Dublin Mapper makes use of the latest Android libraries and best practices
+DubLink makes use of the latest Android libraries and best practices
 * Written in [Kotlin](https://kotlinlang.org/)
 * [Retrofit](https://square.github.io/retrofit/)/[OkHttp](https://square.github.io/okhttp/) for networking. The networking is fully contained in a separate library dublin-rtpi-service
 * [SQLDelight](https://github.com/cashapp/sqldelight) for local storage

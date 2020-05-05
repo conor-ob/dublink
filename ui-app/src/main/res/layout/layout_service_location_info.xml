@@ -10,7 +10,7 @@
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle"
+        android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle"
         tools:text="Greystones" />
 
     <LinearLayout
@@ -22,7 +22,7 @@
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"
+            android:textAppearance="@style/TextAppearance.DubLink.ListItemSubtitle"
             tools:text="DART" />
 
         <View
@@ -37,7 +37,7 @@
             android:drawablePadding="2dp"
             android:drawableTint="?attr/colorPrimary"
             android:text="5 min"
-            android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"
+            android:textAppearance="@style/TextAppearance.DubLink.ListItemSubtitle"
             android:textColor="?attr/colorPrimary"
             android:gravity="center_vertical"
             tools:text="5 min walk" />

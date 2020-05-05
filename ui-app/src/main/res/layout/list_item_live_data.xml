@@ -26,7 +26,7 @@
                 android:id="@+id/route"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/Widget.DublinMapper.RouteChip" />
+                style="@style/Widget.DubLink.RouteChip" />
 
             <View
                 android:layout_width="8dp"
@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle"/>
+                android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle"/>
 
         </LinearLayout>
 
@@ -54,7 +54,7 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"/>
+                android:textAppearance="@style/TextAppearance.DubLink.ListItemSubtitle"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
                 android:id="@+id/scheduledTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DublinMapper.ListItemSubtitle"/>
+                android:textAppearance="@style/TextAppearance.DubLink.ListItemSubtitle"/>
 
         </LinearLayout>
 
@@ -80,6 +80,6 @@
         android:layout_weight="25"
         android:singleLine="true"
         android:gravity="end"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
+        android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
 </LinearLayout>

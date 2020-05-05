@@ -14,7 +14,7 @@
         android:id="@+id/bikesCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.DublinMapper.RouteChip" />
+        style="@style/Widget.DubLink.RouteChip" />
 
     <View
         android:layout_width="8dp"
@@ -24,7 +24,7 @@
         android:id="@+id/bikes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
+        android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
     <View
         android:layout_width="12dp"
@@ -34,7 +34,7 @@
         android:id="@+id/docksCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.DublinMapper.RouteChip" />
+        style="@style/Widget.DubLink.RouteChip" />
 
     <View
         android:layout_width="8dp"
@@ -44,6 +44,6 @@
         android:id="@+id/docks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.DublinMapper.ListItemTitle" />
+        android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
 </LinearLayout>

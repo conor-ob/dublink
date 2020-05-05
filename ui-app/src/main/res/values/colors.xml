@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Light Theme -->
-    <color name="dublin_mapper_blue">#3375e2</color>
+    <color name="dublink_blue">#3375e2</color>
     <color name="success_green">#438e50</color>
     <color name="error_red">#b00020</color>
 
@@ -23,7 +23,7 @@
     <color name="intercityYellow">#fbbf01</color>
 
     <!-- Dark Theme -->
-    <color name="dublin_mapper_blue_saturated">#91b4f2</color>
+    <color name="dublink_blue_saturated">#91b4f2</color>
     <color name="success_green_saturated">#5a9e66</color>
     <color name="error_red_saturated">#cf6679</color>
 
