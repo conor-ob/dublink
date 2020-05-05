@@ -21,8 +21,6 @@ abstract class AbstractServiceLocationItem(
 ) : Item() {
 
     init {
-        extras[serviceKey] = serviceLocation.service
-        extras[locationIdKey] = serviceLocation.id
         extras[serviceLocationKey] = serviceLocation
     }
 
@@ -98,13 +96,9 @@ abstract class AbstractServiceLocationItem(
     }
 }
 
-private const val serviceKey = "service"
-private const val locationIdKey = "locationId"
 private const val serviceLocationKey = "serviceLocation"
 private const val searchCandidateKey = "searchCandidate"
 
-fun AbstractServiceLocationItem.getService(): Service = extras[serviceKey] as Service
-fun AbstractServiceLocationItem.getLocationId(): String = extras[locationIdKey] as String
 fun AbstractServiceLocationItem.getServiceLocation(): DubLinkServiceLocation = extras[serviceLocationKey] as DubLinkServiceLocation
 
 fun AbstractServiceLocationItem.setSearchCandidate() {

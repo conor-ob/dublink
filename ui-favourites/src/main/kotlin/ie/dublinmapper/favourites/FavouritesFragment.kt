@@ -10,12 +10,10 @@ import ie.dublinmapper.DublinMapperFragment
 import ie.dublinmapper.DublinMapperNavigator
 import ie.dublinmapper.domain.internet.InternetStatus
 import ie.dublinmapper.model.AbstractServiceLocationItem
-import ie.dublinmapper.model.getLocationId
-import ie.dublinmapper.model.getService
+import ie.dublinmapper.model.getServiceLocation
 import ie.dublinmapper.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.favourites_list
-import timber.log.Timber
 
 class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
 
@@ -47,8 +45,7 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         adapter?.setOnItemClickListener { item, _ ->
             if (item is AbstractServiceLocationItem) {
                 (activity as DublinMapperNavigator).navigateToLiveData(
-                    service = item.getService(),
-                    locationId = item.getLocationId()
+                    serviceLocation = item.getServiceLocation()
                 )
             }
         }
@@ -88,24 +85,17 @@ class FavouritesFragment : DublinMapperFragment(R.layout.fragment_favourites) {
         viewModel.onPause()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        adapter = null
+    }
+
     private fun renderState(state: State) {
-        Timber.d("isLoading=${state.isLoading}")
-        favourites_swipe_resresh.isRefreshing = state.isLoading
-        if (state.favourites != null) {
-            try {
-                adapter?.update(listOf(FavouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
-        }
+        favourites_swipe_resresh.isRefreshing = state.favourites == null
+        adapter?.update(listOf(FavouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
         if (state.internetStatusChange == InternetStatus.ONLINE) {
             viewModel.dispatch(Action.GetFavourites)
             viewModel.dispatch(Action.GetLiveData)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        adapter = null
     }
 }

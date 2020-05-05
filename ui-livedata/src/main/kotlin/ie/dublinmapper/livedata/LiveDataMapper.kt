@@ -25,7 +25,7 @@ object LiveDataMapper {
                     }
                 }
                 if (items.isNullOrEmpty()) {
-                    listOf(NoLiveDataItem(id = 1L))
+                    listOf(NoLiveDataItem(service = serviceLocation?.service, id = 1L))
                 } else {
                     items
                 }

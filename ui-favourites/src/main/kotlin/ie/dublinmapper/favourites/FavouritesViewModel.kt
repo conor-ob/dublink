@@ -29,7 +29,7 @@ class FavouritesViewModel @Inject constructor(
     private val reducer: Reducer<State, NewState> = { state, newState ->
         when (newState) {
             is NewState.Favourites -> State(
-                isLoading = state.isLoading,
+                isLoading = false,
                 favourites = newState.favourites,
                 favouritesWithLiveData = state.favouritesWithLiveData,
                 internetStatusChange = null

@@ -1,4 +1,7 @@
 <resources>
     <string name="favourites_fab_search_label">@string/feature_name_search</string>
     <string name="favourites_toolbar_title">@string/feature_name_favourites</string>
+
+    <string name="no_favourites_message_prompt">You haven\'t saved any favourites yet</string>
+    <string name="no_favourites_message_detail">When you do they\'ll appear here</string>
 </resources>

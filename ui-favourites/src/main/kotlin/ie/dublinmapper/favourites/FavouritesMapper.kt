@@ -24,7 +24,7 @@ object FavouritesMapper {
         favourites: List<DubLinkServiceLocation>?,
         liveData: List<LiveDataPresentationResponse>?
     ): Group {
-        return if (favourites != null) {
+        return if (favourites != null && favourites.isNotEmpty()) {
             Section(
                 favourites.mapIndexed { index, dubLinkServiceLocation ->
                     Section(
@@ -36,6 +36,8 @@ object FavouritesMapper {
                     )
                 }
             )
+        } else if (favourites != null && favourites.isEmpty()){
+            Section(NoFavouritesItem(1L))
         } else {
             Section(emptyList())
         }

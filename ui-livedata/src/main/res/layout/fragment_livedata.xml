@@ -53,6 +53,7 @@
     <include
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="4dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_hideable="true"
         layout="@layout/layout_live_data_route_filter_bottom_sheet" />
