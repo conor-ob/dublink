@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":ui-app"))
 
     implementation(Libraries.AndroidX.preferenceKtx)
+    implementation(Libraries.Nodes.logViewer)
 
     testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.Mockk.mockk)

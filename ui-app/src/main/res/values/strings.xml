@@ -23,6 +23,12 @@
     <string name="favourite_saved">Saved to Favourites</string>
     <string name="favourite_removed">Removed from Favourites</string>
 
+    <string name="live_data_no_scheduled_arrivals">No scheduled %s</string>
+    <string name="live_data_no_scheduled_arrivals_mode_default">arrivals</string>
+    <string name="live_data_no_scheduled_arrivals_mode_bus">buses</string>
+    <string name="live_data_no_scheduled_arrivals_mode_train">trains</string>
+    <string name="live_data_no_scheduled_arrivals_mode_tram">trams</string>
+
     <string name="no">No</string>
 
     <plurals name="number_of_bikes">
