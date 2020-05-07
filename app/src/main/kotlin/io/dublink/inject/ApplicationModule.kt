@@ -27,11 +27,11 @@ import io.dublink.resource.StringResourceProvider
 import io.dublink.settings.DefaultEnabledServiceManager
 import io.dublink.settings.DefaultPreferenceStore
 import io.dublink.settings.ThemeRepository
+import io.dublink.startup.LoggingStartupWorker
 import io.dublink.startup.PreferencesStartupWorker
 import io.dublink.startup.RxStartupWorker
 import io.dublink.startup.StartupWorkers
 import io.dublink.startup.ThemeStartupWorker
-import io.dublink.startup.LoggingStartupWorker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.client.RtpiClient

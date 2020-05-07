@@ -16,8 +16,8 @@ import io.rtpi.api.PredictionLiveData
 import java.io.IOException
 import java.net.ConnectException
 import java.net.UnknownHostException
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class FavouritesMapper @Inject constructor(
     private val stringProvider: StringProvider

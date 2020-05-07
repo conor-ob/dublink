@@ -12,9 +12,9 @@ import io.dublink.domain.internet.InternetStatus
 import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
 import io.dublink.viewModelProvider
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.favourites_list
-import javax.inject.Inject
 
 class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
 

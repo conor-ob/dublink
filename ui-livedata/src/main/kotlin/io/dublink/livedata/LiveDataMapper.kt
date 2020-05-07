@@ -9,8 +9,8 @@ import io.dublink.model.LiveDataItem
 import io.dublink.model.SimpleMessageItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class LiveDataMapper @Inject constructor(
     private val stringProvider: StringProvider

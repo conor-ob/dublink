@@ -1,12 +1,12 @@
 package io.dublink.startup
 
 import android.app.Application
+import com.nodesagency.logviewer.Logger
 import com.ww.roxie.Roxie
 import io.dublink.BuildConfig
 import io.dublink.logging.DebugLogger
 import javax.inject.Inject
 import timber.log.Timber
-import com.nodesagency.logviewer.Logger
 
 class LoggingStartupWorker @Inject constructor() : StartupWorker {
 

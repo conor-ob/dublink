@@ -26,10 +26,10 @@ import io.dublink.setVisibility
 import io.dublink.util.ChipFactory
 import io.dublink.viewModelProvider
 import io.rtpi.api.Service
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
 import timber.log.Timber
-import javax.inject.Inject
 
 class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
 
