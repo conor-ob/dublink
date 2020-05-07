@@ -2,7 +2,6 @@ package io.dublink.inject
 
 import android.content.Context
 import android.content.res.Resources
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import dagger.Module
 import dagger.Provides
 import io.dublink.BuildConfig
@@ -31,9 +30,8 @@ import io.dublink.settings.ThemeRepository
 import io.dublink.startup.PreferencesStartupWorker
 import io.dublink.startup.RxStartupWorker
 import io.dublink.startup.StartupWorkers
-import io.dublink.startup.StethoStartupWorker
 import io.dublink.startup.ThemeStartupWorker
-import io.dublink.startup.TimberStartupWorker
+import io.dublink.startup.LoggingStartupWorker
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.client.RtpiClient
@@ -133,10 +131,9 @@ class ApplicationModule {
         StartupWorkers(
             listOf(
                 PreferencesStartupWorker(),
-                TimberStartupWorker(),
+                LoggingStartupWorker(),
                 ThemeStartupWorker(themeRepository),
-                RxStartupWorker(),
-                StethoStartupWorker()
+                RxStartupWorker()
             )
         )
 
@@ -148,7 +145,6 @@ class ApplicationModule {
         OkHttpClient.Builder()
             .addNetworkInterceptor(NetworkConnectionInterceptor(internetManager))
             .addNetworkInterceptor(NetworkLoggingInterceptor())
-            .addNetworkInterceptor(StethoInterceptor())
             .retryOnConnectionFailure(true)
             .connectTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)

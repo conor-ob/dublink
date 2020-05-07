@@ -5,10 +5,9 @@ import android.widget.updateText
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.model.AbstractCommonItem
 import io.dublink.ui.R
-import io.rtpi.api.Service
 
 class NoLiveDataItem(
-    private val service: Service?,
+    private val message: String,
     id: Long
 ) : AbstractCommonItem(id) {
 
@@ -16,19 +15,7 @@ class NoLiveDataItem(
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.no_live_data_message).apply {
-            updateText(newText = mapMessage(service))
+            updateText(newText = message)
         }
-    }
-
-    private fun mapMessage(service: Service?): String {
-        val mode = when (service) {
-            Service.AIRCOACH,
-            Service.BUS_EIREANN,
-            Service.DUBLIN_BUS -> "buses"
-            Service.IRISH_RAIL -> "trains"
-            Service.LUAS -> "trams"
-            else -> "arrivals"
-        }
-        return "No scheduled $mode"
     }
 }

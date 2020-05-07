@@ -5,6 +5,7 @@ import com.xwray.groupie.Section
 import io.dublink.domain.internet.NetworkUnavailableException
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.id
+import io.dublink.domain.service.StringProvider
 import io.dublink.model.DividerItem
 import io.dublink.model.DublinBikesLiveDataItem
 import io.dublink.model.GroupedLiveDataItem
@@ -12,13 +13,15 @@ import io.dublink.model.SimpleMessageItem
 import io.dublink.model.SimpleServiceLocationItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
-import io.rtpi.api.Service
 import java.io.IOException
 import java.net.ConnectException
 import java.net.UnknownHostException
 import timber.log.Timber
+import javax.inject.Inject
 
-object FavouritesMapper {
+class FavouritesMapper @Inject constructor(
+    private val stringProvider: StringProvider
+) {
 
     fun map(
         favourites: List<DubLinkServiceLocation>?,
@@ -83,7 +86,7 @@ object FavouritesMapper {
             if (liveData.isNullOrEmpty()) {
                 Section(
                     SimpleMessageItem(
-                        mapMessage(liveDataResponse.serviceLocation.service),
+                        stringProvider.noArrivalsMessage(liveDataResponse.serviceLocation.service),
                         liveDataResponse.serviceLocation.id()
                     )
                 )
@@ -102,7 +105,7 @@ object FavouritesMapper {
             }
         }
         is LiveDataPresentationResponse.Error -> {
-            Timber.e(liveDataResponse.throwable, "Error getting live data")
+            Timber.e(liveDataResponse.throwable, "Error getting favourites live data")
             val message = when (liveDataResponse.throwable) {
                 // service is down
                 is ConnectException -> "${liveDataResponse.serviceLocation.service.fullName} service is down"
@@ -128,18 +131,6 @@ object FavouritesMapper {
         serviceLocation = favourite,
         walkDistance = null
     )
-
-    private fun mapMessage(service: Service): String {
-        val mode = when (service) {
-            Service.AIRCOACH,
-            Service.BUS_EIREANN,
-            Service.DUBLIN_BUS -> "buses"
-            Service.IRISH_RAIL -> "trains"
-            Service.LUAS -> "trams"
-            else -> "arrivals"
-        }
-        return "No scheduled $mode"
-    }
 
     private fun mapDivider(
         items: Int,

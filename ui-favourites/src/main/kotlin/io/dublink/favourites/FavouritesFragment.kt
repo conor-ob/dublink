@@ -14,11 +14,15 @@ import io.dublink.model.getServiceLocation
 import io.dublink.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_favourites.*
 import kotlinx.android.synthetic.main.fragment_favourites.view.favourites_list
+import javax.inject.Inject
 
 class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as FavouritesViewModel }
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
+
+    @Inject
+    lateinit var favouritesMapper: FavouritesMapper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,7 +96,7 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
 
     private fun renderState(state: State) {
         favourites_swipe_resresh.isRefreshing = state.favourites == null
-        adapter?.update(listOf(FavouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
+        adapter?.update(listOf(favouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
         if (state.internetStatusChange == InternetStatus.ONLINE) {
             viewModel.dispatch(Action.GetFavourites)
             viewModel.dispatch(Action.GetLiveData)

@@ -102,7 +102,7 @@ class RepositoryModule {
     }
 
     private fun shortTermMemoryPolicy(): MemoryPolicy {
-        return newMemoryPolicy(1, TimeUnit.SECONDS)
+        return newMemoryPolicy(15, TimeUnit.SECONDS)
     }
 
     private fun mediumTermMemoryPolicy(): MemoryPolicy {

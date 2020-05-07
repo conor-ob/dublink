@@ -106,7 +106,6 @@ class FavouritesViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<NewState> { NewState.Favourites(it) }
-//                    .throttleLatest(250L, TimeUnit.MILLISECONDS)
             }
 
         val getLiveDataAction = actions.ofType(Action.GetLiveData::class.java)
@@ -117,7 +116,6 @@ class FavouritesViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<NewState> { NewState.FavouritesWithLiveData(it) }
-                    .throttleLatest(250L, TimeUnit.MILLISECONDS)
             }
 
         val refreshLiveDataAction = actions.ofType(Action.RefreshLiveData::class.java)
@@ -127,7 +125,6 @@ class FavouritesViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<NewState> { NewState.FavouritesWithLiveData(it) }
                     .startWith(NewState.ClearLiveData)
-                    .throttleLatest(250L, TimeUnit.MILLISECONDS)
             }
 
         val getInternetStatusChangeAction = actions.ofType(Action.SubscribeToInternetStatusChanges::class.java)
@@ -150,6 +147,7 @@ class FavouritesViewModel @Inject constructor(
         disposables += allActions
             .scan(initialState, reducer)
             .distinctUntilChanged()
+            .throttleLatest(500L, TimeUnit.MILLISECONDS)
             .subscribe(state::postValue, Timber::e)
     }
 }
