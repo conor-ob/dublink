@@ -70,11 +70,6 @@ object Libraries {
         const val daggerCompiler =  "com.google.dagger:dagger-compiler:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger-compiler
     }
 
-    object Stetho {
-        const val stetho = "com.facebook.stetho:stetho:1.5.1" // https://mvnrepository.com/artifact/com.facebook.stetho/stetho
-        const val stethoOkhttp = "com.facebook.stetho:stetho-okhttp3:1.5.1" // https://mvnrepository.com/artifact/com.facebook.stetho/stetho-okhttp3
-    }
-
     object FuzzyWuzzy {
         const val javaWuzzy = "me.xdrop:fuzzywuzzy:1.2.0" // https://mvnrepository.com/artifact/me.xdrop/fuzzywuzzy
     }
@@ -94,6 +89,10 @@ object Libraries {
 
     object Location {
         const val reactiveLocation = "pl.charmas.android:android-reactive-location2:2.1@aar" // https://mvnrepository.com/artifact/pl.charmas.android/android-reactive-location2
+    }
+
+    object Nodes {
+        const val logViewer = "com.github.nodes-android:lib-log-viewer:develop-SNAPSHOT"
     }
 
     object OkHttp {

@@ -26,6 +26,7 @@ import io.dublink.setVisibility
 import io.dublink.util.ChipFactory
 import io.dublink.viewModelProvider
 import io.rtpi.api.Service
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
 import timber.log.Timber
@@ -37,6 +38,9 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var routeFilterBottomSheetLayoutListener: ViewTreeObserver.OnGlobalLayoutListener
     private var liveDataAdapter: GroupAdapter<GroupieViewHolder>? = null
+
+    @Inject
+    lateinit var liveDataMapper: LiveDataMapper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -209,7 +213,7 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
     private fun renderLiveDataState(state: State) {
         live_data_loader.isRefreshing = state.isLoading
         if (state.liveDataResponse != null) {
-            liveDataAdapter?.update(listOf(LiveDataMapper.map(state.liveDataResponse, state.serviceLocation)))
+            liveDataAdapter?.update(listOf(liveDataMapper.map(state.liveDataResponse, state.serviceLocation)))
         } else {
             liveDataAdapter?.clear()
         }

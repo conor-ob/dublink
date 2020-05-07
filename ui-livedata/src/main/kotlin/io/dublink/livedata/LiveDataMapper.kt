@@ -2,14 +2,19 @@ package io.dublink.livedata
 
 import com.xwray.groupie.Section
 import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.domain.service.StringProvider
 import io.dublink.domain.util.LiveDataFilter
 import io.dublink.model.DublinBikesLiveDataItem
 import io.dublink.model.LiveDataItem
 import io.dublink.model.SimpleMessageItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
+import javax.inject.Inject
+import timber.log.Timber
 
-object LiveDataMapper {
+class LiveDataMapper @Inject constructor(
+    private val stringProvider: StringProvider
+) {
 
     fun map(
         response: LiveDataPresentationResponse,
@@ -27,7 +32,7 @@ object LiveDataMapper {
                 if (items.isNullOrEmpty()) {
                     listOf(
                         NoLiveDataItem(
-                            service = serviceLocation?.service,
+                            message = stringProvider.noArrivalsMessage(serviceLocation?.service),
                             id = 1L
                         )
                     )
@@ -35,9 +40,12 @@ object LiveDataMapper {
                     items
                 }
             }
-            is LiveDataPresentationResponse.Error -> listOf(
-                SimpleMessageItem(response.throwable.message ?: "error", 1L)
-            )
+            is LiveDataPresentationResponse.Error -> {
+                Timber.e(response.throwable, "Error getting live data")
+                listOf(
+                    SimpleMessageItem(response.throwable.message ?: "error", 1L)
+                )
+            }
         }
     )
 }
