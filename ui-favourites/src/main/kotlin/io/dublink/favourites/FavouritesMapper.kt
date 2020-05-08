@@ -80,6 +80,9 @@ class FavouritesMapper @Inject constructor(
         liveDataResponse: LiveDataPresentationResponse,
         index: Long
     ) = when (liveDataResponse) {
+        is LiveDataPresentationResponse.Loading -> Section(
+            Section(SimpleMessageItem("Loading...", liveDataResponse.serviceLocation.id()))
+        )
         is LiveDataPresentationResponse.Skipped -> Section()
         is LiveDataPresentationResponse.Data -> {
             val liveData = liveDataResponse.liveData

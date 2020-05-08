@@ -1,15 +1,14 @@
 package io.dublink.favourites
 
 import io.dublink.domain.model.DubLinkServiceLocation
-import io.dublink.domain.repository.AggregatedServiceLocationRepository
 import io.dublink.domain.repository.FavouriteRepository
 import io.dublink.domain.repository.LiveDataKey
 import io.dublink.domain.repository.LiveDataRepository
 import io.dublink.domain.repository.LiveDataResponse
-import io.dublink.domain.repository.ServiceLocationResponse
 import io.dublink.domain.service.LocationProvider
 import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
+import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.util.LiveDataFilter
 import io.dublink.domain.util.haversine
 import io.reactivex.Observable
@@ -19,11 +18,11 @@ import javax.inject.Inject
 
 class FavouritesUseCase @Inject constructor(
     private val favouriteRepository: FavouriteRepository,
-    private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val liveDataRepository: LiveDataRepository,
     private val permissionChecker: PermissionChecker,
     private val locationProvider: LocationProvider,
-    private val preferenceStore: PreferenceStore
+    private val preferenceStore: PreferenceStore,
+    private val scheduler: RxScheduler
 ) {
 
     fun getFavourites(): Observable<List<DubLinkServiceLocation>> =
@@ -54,46 +53,18 @@ class FavouritesUseCase @Inject constructor(
                 }
         }
 
-    private fun getFavouriteServiceLocations(): Observable<List<DubLinkServiceLocation>> =
-        if (preferenceStore.isFavouritesSortByLocation() &&
-            permissionChecker.isLocationPermissionGranted()
-        ) {
-            locationProvider.getLocationUpdates(thresholdDistance = 25.0)
-                .flatMap { coordinate ->
-                    serviceLocationRepository.streamFavourites()
-                        .map { responses ->
-                            responses
-                                .filterIsInstance<ServiceLocationResponse.Data>()
-                                .flatMap { it.serviceLocations }
-                                .sortedWith(
-                                    Comparator { s1, s2 ->
-                                        s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
-                                    }
-                                )
-                        }
-                }
-        } else {
-            serviceLocationRepository.streamFavourites()
-                .map { responses ->
-                    responses
-                        .filterIsInstance<ServiceLocationResponse.Data>()
-                        .flatMap { it.serviceLocations }
-                        .sortedWith(
-                            Comparator { s1, s2 ->
-                                s1.favouriteSortIndex.compareTo(s2.favouriteSortIndex)
-                            }
-                        )
-                }
-        }
-
     fun getLiveData(refresh: Boolean): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()
-        return getFavouriteServiceLocations()
+        return getFavourites()
             .flatMap { serviceLocations ->
                 Observable.combineLatest(
                     serviceLocations.mapIndexed { index, dubLinkServiceLocation ->
                         if (index < limit) {
                             getGroupedLiveData(dubLinkServiceLocation, refresh)
+                                .startWith(
+                                    LiveDataPresentationResponse.Loading(dubLinkServiceLocation)
+                                )
+                                .subscribeOn(scheduler.io)
                         } else {
                             Observable.just(
                                 LiveDataPresentationResponse.Skipped(
@@ -138,6 +109,10 @@ class FavouritesUseCase @Inject constructor(
 sealed class LiveDataPresentationResponse {
 
     abstract val serviceLocation: DubLinkServiceLocation
+
+    data class Loading(
+        override val serviceLocation: DubLinkServiceLocation
+    ) : LiveDataPresentationResponse()
 
     data class Skipped(
         override val serviceLocation: DubLinkServiceLocation
