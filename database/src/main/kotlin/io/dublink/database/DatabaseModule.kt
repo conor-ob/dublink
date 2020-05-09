@@ -9,7 +9,6 @@ import io.dublink.domain.datamodel.FavouriteServiceLocationLocalResource
 import io.dublink.domain.datamodel.RecentServiceLocationSearchLocalResource
 import io.dublink.domain.datamodel.ServiceLocationLocalResource
 import io.dublink.domain.datamodel.ServiceLocationRecordStateLocalResource
-import io.dublink.domain.service.StringProvider
 import javax.inject.Singleton
 
 @Module
@@ -17,12 +16,12 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(context: Context, stringProvider: StringProvider): Database {
+    fun provideDatabase(context: Context): Database {
         return Database(
             driver = AndroidSqliteDriver(
                 schema = Database.Schema,
                 context = context,
-                name = stringProvider.databaseName()
+                name = context.getString(R.string.database_name) // TODO change name
             ),
             aircoachServiceEntityAdapter = AircoachServiceEntity.Adapter(
                 operatorAdapter = EnumColumnAdapter()

@@ -7,8 +7,6 @@
     <string name="live_data_due_times">and in %s min</string>
     <string name="title_favourites">Favourites</string>
 
-    <string name="database_name">dublinkdebug.db</string>
-
     <string name="service_name_aircoach">Aircoach</string>
     <string name="service_name_bus_eireann">Bus Éireann</string>
     <string name="service_name_dublin_bikes">Dublin Bikes</string>
