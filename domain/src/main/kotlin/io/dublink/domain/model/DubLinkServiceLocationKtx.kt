@@ -1,13 +1,8 @@
 package io.dublink.domain.model
 
-import io.rtpi.api.Operator
 import java.util.Objects
 
 fun DubLinkServiceLocation.id(): Long = Objects.hash(service, id).toLong()
-
-fun DubLinkStopLocation.isDartStation(): Boolean = stopLocation.routeGroups.map { it.operator }.contains(Operator.DART)
-
-fun DubLinkStopLocation.isLuasStop(): Boolean = stopLocation.routeGroups.map { it.operator }.contains(Operator.LUAS)
 
 fun DubLinkServiceLocation.withFavouriteMetadata(favouriteMetadata: FavouriteMetadata): DubLinkServiceLocation {
     return when (this) {

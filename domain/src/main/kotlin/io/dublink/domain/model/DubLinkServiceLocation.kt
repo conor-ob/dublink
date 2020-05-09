@@ -5,6 +5,7 @@ import io.rtpi.api.Operator
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.util.AlphaNumericComparator
+import io.rtpi.util.directions
 
 interface DubLinkServiceLocation : ServiceLocation {
     val defaultName: String
@@ -41,14 +42,8 @@ data class DubLinkStopLocation(
             }
         )
 
-    private val directions = when {
-        isDartStation() -> listOf("Northbound", "Southbound")
-        isLuasStop() -> listOf("Inbound", "Outbound")
-        else -> emptyList()
-    }
-
     val filters = routes
-        .plus(directions)
+        .plus(stopLocation.directions())
         .mapNotNull { type ->
             when (type) {
                 is Route -> {
