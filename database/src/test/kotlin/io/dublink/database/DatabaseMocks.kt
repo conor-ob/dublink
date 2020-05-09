@@ -35,11 +35,11 @@ private fun createDatabase() =
         ),
         locationExpirationEntityAdapter = LocationExpirationEntity.Adapter(
             serviceAdapter = EnumColumnAdapter(),
-            lastUpdatedAdapter = InstantColumnAdapter
+            lastUpdatedAdapter = InstantColumnAdapter()
         ),
         recentSearchEntityAdapter = RecentSearchEntity.Adapter(
             serviceAdapter = EnumColumnAdapter(),
-            timestampAdapter = InstantColumnAdapter
+            timestampAdapter = InstantColumnAdapter()
         )
     )
 
