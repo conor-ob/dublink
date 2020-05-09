@@ -102,7 +102,7 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
     }
 
     private fun renderSaveButtonState(state: State) {
-        edit_favourites_swipe_resresh.isRefreshing = state.original == null
+        edit_favourites_swipe_resresh.isRefreshing = state.original.isNullOrEmpty()
         if (state.isFinished) {
             activity?.onBackPressed()
         }

@@ -3,6 +3,7 @@ package io.dublink.search
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import io.dublink.domain.service.RxScheduler
+import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import java.util.concurrent.TimeUnit
@@ -65,7 +66,7 @@ class SearchViewModel @Inject constructor(
 
     private fun bindActions() {
         val searchResultsChange = actions.ofType(Action.Search::class.java)
-            .debounce(500L, TimeUnit.MILLISECONDS)
+            .debounce(AppConstants.searchQueryInputThrottling.toMillis(), TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .switchMap { action ->
                 searchUseCase.search(action.query)

@@ -68,7 +68,7 @@ class DeviceInternetManager(private val context: Context) : InternetManager {
             urlConnection?.disconnect()
         }
         Timber.d("Failed to ping $server")
-        return true
+        return false
     }
 
     override fun isNetworkAvailable() = context.getConnectivityManager()?.isConnected() ?: false

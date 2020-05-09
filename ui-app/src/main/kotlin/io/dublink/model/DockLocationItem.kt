@@ -31,8 +31,9 @@ class DockLocationItem(
             } else {
                 " ${serviceLocation.availableBikes} "
             }
-            setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white, null)))
-            setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableBikes))
+            val (bikesBackgroundColour, bikesTextColour) = mapColour(serviceLocation.availableBikes)
+            setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(bikesTextColour, null)))
+            setChipBackgroundColorResource(bikesBackgroundColour)
         }
         viewHolder.itemView.findViewById<TextView>(R.id.bikes).apply {
             text = viewHolder.itemView.context.resources
@@ -45,8 +46,9 @@ class DockLocationItem(
             } else {
                 " ${serviceLocation.availableDocks} "
             }
-            setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white, null)))
-            setChipBackgroundColorResource(getBackgroundColour(serviceLocation.availableDocks))
+            val (docksBackgroundColour, docksTextColour) = mapColour(serviceLocation.availableDocks)
+            setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(docksTextColour, null)))
+            setChipBackgroundColorResource(docksBackgroundColour)
         }
         viewHolder.itemView.findViewById<TextView>(R.id.docks).apply {
             text = viewHolder.itemView.context.resources
@@ -54,11 +56,10 @@ class DockLocationItem(
         }
     }
 
-    private fun getBackgroundColour(amount: Int): Int {
-        return when {
-            amount < 2 -> R.color.luasRed
-            amount < 5 -> R.color.aircoachOrange
-            else -> R.color.dublinBikesTeal
+    private fun mapColour(amount: Int): Pair<Int, Int> =
+        if (amount == 0) {
+            R.color.error_red to R.color.dublin_bikes_brand_text
+        } else {
+            R.color.dublin_bikes_brand to R.color.dublin_bikes_brand_text
         }
-    }
 }

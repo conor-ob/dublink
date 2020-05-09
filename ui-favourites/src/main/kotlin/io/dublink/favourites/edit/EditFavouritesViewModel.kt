@@ -24,8 +24,8 @@ class EditFavouritesViewModel @Inject constructor(
         when (result) {
             is Result.FavouritesReceived -> State(
                 isFinished = false,
-                original = state.original ?: result.favourites,
-                editing = state.editing ?: result.favourites
+                original = if (state.original.isNullOrEmpty()) result.favourites else state.original,
+                editing = if (state.editing.isNullOrEmpty()) result.favourites else state.editing
             )
             is Result.FavouriteEdited -> State(
                 isFinished = false,
