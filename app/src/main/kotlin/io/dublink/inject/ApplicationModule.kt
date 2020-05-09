@@ -17,7 +17,6 @@ import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.service.StringProvider
 import io.dublink.internet.DeviceInternetManager
-import io.dublink.internet.NetworkConnectionInterceptor
 import io.dublink.internet.NetworkStatusChangeListener
 import io.dublink.location.GpsLocationProvider
 import io.dublink.logging.NetworkLoggingInterceptor
@@ -36,7 +35,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.client.RtpiClient
 import io.rtpi.client.RtpiClientConfiguration
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 import javax.inject.Singleton
 import okhttp3.OkHttpClient
 
@@ -143,11 +142,11 @@ class ApplicationModule {
         internetManager: InternetManager
     ): OkHttpClient =
         OkHttpClient.Builder()
-            .addNetworkInterceptor(NetworkConnectionInterceptor(internetManager))
+//            .addNetworkInterceptor(NetworkConnectionInterceptor(internetManager))
             .addNetworkInterceptor(NetworkLoggingInterceptor())
-            .retryOnConnectionFailure(true)
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
+//            .retryOnConnectionFailure(true)
+            .connectTimeout(Duration.ofSeconds(30L))
+//            .writeTimeout(Duration.ofSeconds(30L))
+            .readTimeout(Duration.ofSeconds(30L))
             .build()
 }
