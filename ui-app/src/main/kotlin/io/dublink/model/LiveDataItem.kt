@@ -351,24 +351,25 @@ class DublinBikesLiveDataItem(
     override fun getLayout() = R.layout.list_item_live_data_dublin_bikes
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        val (bikesBackgroundColour, bikesTextColour) = mapColour(liveData.availableBikes)
         viewHolder.bikesCount.text = if (liveData.availableBikes == 0) " No " else " ${liveData.availableBikes} "
         viewHolder.bikes.text = if (liveData.availableBikes == 1) "Bike" else "Bikes" // TODO plurals
-        viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
-        viewHolder.bikesCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableBikes))
+        viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(bikesTextColour, null)))
+        viewHolder.bikesCount.setChipBackgroundColorResource(bikesBackgroundColour)
 
+        val (docksBackgroundColour, docksTextColour) = mapColour(liveData.availableDocks)
         viewHolder.docksCount.text = if (liveData.availableDocks == 0) " No " else " ${liveData.availableDocks} "
         viewHolder.docks.text = if (liveData.availableDocks == 1) "Dock" else "Docks" // TODO plurals
-        viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(android.R.color.white)))
-        viewHolder.docksCount.setChipBackgroundColorResource(getBackgroundColour(liveData.availableDocks))
+        viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(docksTextColour, null)))
+        viewHolder.docksCount.setChipBackgroundColorResource(docksBackgroundColour)
     }
 
-    private fun getBackgroundColour(amount: Int): Int {
-        return when {
-            amount < 3 -> R.color.luasRed
-            amount < 6 -> R.color.aircoachOrange
-            else -> R.color.dublinBikesTeal
+    private fun mapColour(amount: Int): Pair<Int, Int> =
+        if (amount == 0) {
+            R.color.error_red to R.color.dublin_bikes_brand_text
+        } else {
+            R.color.dublin_bikes_brand to R.color.dublin_bikes_brand_text
         }
-    }
 
     override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
         return equals(other)

@@ -17,6 +17,7 @@ sealed class NewState {
     data class FavouritesWithLiveData(val favouritesWithLiveData: List<LiveDataPresentationResponse>) : NewState()
     data class InternetStatusChange(val internetStatusChange: InternetStatus) : NewState()
     object ClearLiveData : NewState()
+    object RefreshIfStale : NewState()
 }
 
 data class State(

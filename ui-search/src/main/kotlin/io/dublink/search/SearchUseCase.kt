@@ -9,6 +9,7 @@ import io.dublink.domain.repository.ServiceLocationResponse
 import io.dublink.domain.service.LocationProvider
 import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
+import io.dublink.domain.util.AppConstants
 import io.dublink.domain.util.haversine
 import io.dublink.domain.util.truncateHead
 import io.reactivex.Observable
@@ -17,10 +18,6 @@ import io.rtpi.api.ServiceLocation
 import java.time.Instant
 import java.util.SortedMap
 import javax.inject.Inject
-
-private const val maxSearchResults = 100
-private const val maxRecentSearches = 50
-private const val maxNearbyLocations = 50
 
 class SearchUseCase @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
@@ -48,7 +45,7 @@ class SearchUseCase @Inject constructor(
                     } else {
                         SearchResultsResponse.Data(
                             searchResults.take(
-                                maxSearchResults
+                                AppConstants.maxSearchResults
                             )
                         )
                     }
@@ -75,7 +72,7 @@ class SearchUseCase @Inject constructor(
                                         .flatMap { it.serviceLocations }
                                         .associateBy { it.coordinate.haversine(coordinate) }
                                         .toSortedMap()
-                                        .truncateHead(maxNearbyLocations)
+                                        .truncateHead(AppConstants.maxNearbyLocations)
                                 )
                             }
                     }
@@ -98,7 +95,7 @@ class SearchUseCase @Inject constructor(
                         RecentSearchesResponse.Data(
                             recentSearches.mapNotNull { recentSearch ->
                                 getServiceLocation(recentSearch.service, recentSearch.locationId).blockingFirst().second
-                            }.take(maxRecentSearches)
+                            }.take(AppConstants.maxRecentSearches)
                         )
                     }
                 }
