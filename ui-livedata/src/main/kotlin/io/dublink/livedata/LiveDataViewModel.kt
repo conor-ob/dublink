@@ -12,6 +12,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.util.AlphaNumericComparator
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
@@ -161,7 +162,7 @@ class LiveDataViewModel @Inject constructor(
 
         val getLiveDataChange = actions.ofType(Action.GetLiveData::class.java)
             .switchMap { action ->
-                Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+                Observable.interval(Duration.ZERO.seconds, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
                     .filter { isActive() }
                     .flatMap {
                         liveDataUseCase.getLiveData(

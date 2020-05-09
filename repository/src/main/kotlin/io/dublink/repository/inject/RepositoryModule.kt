@@ -19,6 +19,7 @@ import io.dublink.domain.repository.RecentServiceLocationSearchRepository
 import io.dublink.domain.repository.ServiceLocationRepository
 import io.dublink.domain.service.EnabledServiceManager
 import io.dublink.domain.service.InternetManager
+import io.dublink.domain.util.AppConstants
 import io.dublink.repository.favourite.FavouriteServiceLocationRepository
 import io.dublink.repository.livedata.DefaultLiveDataRepository
 import io.dublink.repository.location.DefaultAggregatedServiceLocationRepository
@@ -102,15 +103,15 @@ class RepositoryModule {
     }
 
     private fun shortTermMemoryPolicy(): MemoryPolicy {
-        return newMemoryPolicy(15, TimeUnit.SECONDS)
+        return newMemoryPolicy(AppConstants.liveDataCacheExpiry.seconds, TimeUnit.SECONDS)
     }
 
     private fun mediumTermMemoryPolicy(): MemoryPolicy {
-        return newMemoryPolicy(90, TimeUnit.SECONDS)
+        return newMemoryPolicy(AppConstants.dockLocationCacheExpiry.seconds, TimeUnit.SECONDS)
     }
 
     private fun longTermMemoryPolicy(): MemoryPolicy {
-        return newMemoryPolicy(1, TimeUnit.DAYS)
+        return newMemoryPolicy(AppConstants.stopLocationCacheExpiry.toDays(), TimeUnit.DAYS)
     }
 
     private fun newServiceLocationMemoryPolicy(service: Service): MemoryPolicy {

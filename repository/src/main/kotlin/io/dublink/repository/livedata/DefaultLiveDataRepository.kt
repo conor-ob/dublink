@@ -16,8 +16,7 @@ class DefaultLiveDataRepository(
         refresh: Boolean
     ): Observable<LiveDataResponse> =
         if (refresh) {
-//            liveDataStore.fetch(key) // TODO
-            liveDataStore.get(key)
+            liveDataStore.fetch(key)
         } else {
             liveDataStore.get(key)
         }

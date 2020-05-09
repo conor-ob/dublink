@@ -6,6 +6,7 @@ import io.dublink.domain.internet.NetworkUnavailableException
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.id
 import io.dublink.domain.service.StringProvider
+import io.dublink.domain.util.AppConstants
 import io.dublink.model.DividerItem
 import io.dublink.model.DublinBikesLiveDataItem
 import io.dublink.model.GroupedLiveDataItem
@@ -80,6 +81,9 @@ class FavouritesMapper @Inject constructor(
         liveDataResponse: LiveDataPresentationResponse,
         index: Long
     ) = when (liveDataResponse) {
+        is LiveDataPresentationResponse.Loading -> Section(
+            Section(SimpleMessageItem("Loading...", liveDataResponse.serviceLocation.id()))
+        )
         is LiveDataPresentationResponse.Skipped -> Section()
         is LiveDataPresentationResponse.Data -> {
             val liveData = liveDataResponse.liveData
@@ -98,8 +102,8 @@ class FavouritesMapper @Inject constructor(
                 )
             } else {
                 val items = mutableListOf<GroupedLiveDataItem>()
-                for (thing in liveData.take(3)) {
-                    items.add(GroupedLiveDataItem(thing.take(3) as List<PredictionLiveData>))
+                for (thing in liveData.take(AppConstants.favouritesLiveDataLimit)) {
+                    items.add(GroupedLiveDataItem(thing.take(AppConstants.favouritesGroupedLiveDataLimit) as List<PredictionLiveData>))
                 }
                 Section(items)
             }

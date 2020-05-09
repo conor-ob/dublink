@@ -2,6 +2,7 @@ package io.dublink.search
 
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
+import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.rtpi.api.Service
 import java.text.Normalizer
@@ -19,7 +20,6 @@ class SearchService {
     private val identifierRegex2 = "^[a-zA-Z]\\d{0,4}\\z".toRegex()
     private val whiteSpace = "\\s+".toRegex()
     private val singleSpace = " "
-    private val searchScoreCutoff = 70
 
     fun search(
         query: String,
@@ -103,7 +103,7 @@ class SearchService {
                 serviceLocations,
                 toStringFunction,
                 algorithm,
-                searchScoreCutoff
+                AppConstants.searchAccuracyScoreCutoff
             ).map { it.referent }
         )
 

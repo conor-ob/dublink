@@ -78,19 +78,19 @@ object ChipFactory {
 
     fun mapColour(operator: Operator, route: String): Pair<Int, Int> {
         return when (operator) {
-            Operator.AIRCOACH -> Pair(android.R.color.white, R.color.aircoachOrange)
-            Operator.BUS_EIREANN -> Pair(android.R.color.white, R.color.busEireannRed)
-            Operator.COMMUTER -> Pair(android.R.color.white, R.color.commuterBlue)
-            Operator.DART -> Pair(android.R.color.white, R.color.dartGreen)
-            Operator.DUBLIN_BIKES -> Pair(android.R.color.white, R.color.dublinBikesTeal)
-            Operator.DUBLIN_BUS -> Pair(android.R.color.black, R.color.dublinBusYellow)
-            Operator.GO_AHEAD -> Pair(android.R.color.white, R.color.goAheadBlue)
-            Operator.INTERCITY -> Pair(android.R.color.black, R.color.intercityYellow)
+            Operator.AIRCOACH -> Pair(R.color.aircoach_brand_text, R.color.aircoach_brand)
+            Operator.BUS_EIREANN -> Pair(R.color.bus_eireann_brand_text, R.color.bus_eireann_brand)
+            Operator.COMMUTER -> Pair(R.color.commuter_brand_text, R.color.commuter_brand)
+            Operator.DART -> Pair(R.color.dart_brand_text, R.color.dart_brand)
+            Operator.DUBLIN_BIKES -> Pair(R.color.dublin_bikes_brand_text, R.color.dublin_bikes_brand)
+            Operator.DUBLIN_BUS -> Pair(R.color.dublin_bus_brand_text, R.color.dublin_bus_brand)
+            Operator.GO_AHEAD -> Pair(R.color.go_ahead_brand_text, R.color.go_ahead_brand)
+            Operator.INTERCITY -> Pair(R.color.intercity_brand_text, R.color.intercity_brand)
             Operator.LUAS -> {
                 when (route) {
-                    "Green", "Green Line" -> Pair(android.R.color.white, R.color.luasGreen)
-                    "Red", "Red Line" -> Pair(android.R.color.white, R.color.luasRed)
-                    else -> Pair(android.R.color.white, R.color.luasPurple)
+                    "Green", "Green Line" -> Pair(R.color.luas_green_brand_text, R.color.luas_green_brand)
+                    "Red", "Red Line" -> Pair(R.color.luas_red_brand_text, R.color.luas_red_brand)
+                    else -> Pair(android.R.color.white, android.R.color.black)
                 }
             }
         }

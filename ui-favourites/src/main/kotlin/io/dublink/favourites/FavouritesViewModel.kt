@@ -3,11 +3,14 @@ package io.dublink.favourites
 import com.ww.roxie.Reducer
 import io.dublink.LifecycleAwareViewModel
 import io.dublink.domain.internet.InternetStatusChangeListener
-import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
+import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import io.rtpi.api.PredictionLiveData
+import java.time.Duration
+import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
@@ -52,24 +55,32 @@ class FavouritesViewModel @Inject constructor(
                 favouritesWithLiveData = null,
                 internetStatusChange = null
             )
+            is NewState.RefreshIfStale -> State(
+                isLoading = state.isLoading,
+                favourites = state.favourites,
+                favouritesWithLiveData = checkForStaleData(state.favouritesWithLiveData),
+                internetStatusChange = state.internetStatusChange
+            )
         }
     }
 
-    private fun mergeFavourites(
-        previousState: List<DubLinkServiceLocation>?,
-        newState: List<LiveDataPresentationResponse>
-    ): List<DubLinkServiceLocation> {
-        return if (previousState == null) {
-            newState.map { it.serviceLocation }
+    private fun checkForStaleData(
+        favouritesWithLiveData: List<LiveDataPresentationResponse>?
+    ): List<LiveDataPresentationResponse>? {
+        return if (favouritesWithLiveData == null) {
+            favouritesWithLiveData
         } else {
-            val map = previousState.associateBy { it }.toMutableMap()
-            for (entry in map) {
-                val match = newState.find { it.serviceLocation.service == entry.key.service && it.serviceLocation.id == entry.key.id }
-                if (match != null) {
-                    map[entry.key] = match.serviceLocation
-                }
+            val isStale = favouritesWithLiveData
+                .filterIsInstance<LiveDataPresentationResponse.Data>()
+                .flatMap { it.liveData.flatten() }
+                .filterIsInstance<PredictionLiveData>()
+                .any { Duration.between(it.prediction.currentDateTime, ZonedDateTime.now()) > AppConstants.liveDataTimeToLive }
+            Timber.d("stale_check=$isStale")
+            if (isStale) {
+                null
+            } else {
+                favouritesWithLiveData
             }
-            map.values.toList()
         }
     }
 
@@ -85,14 +96,24 @@ class FavouritesViewModel @Inject constructor(
         if (previousState == null) {
             newState
         } else {
-            val mutableNewState = newState.toMutableList()
-            for (liveData in previousState) {
-                val match = newState.find { it.serviceLocation == liveData.serviceLocation }
-                if (match == null) {
-                    mutableNewState.add(liveData)
+            val mutablePreviousState = previousState.toMutableList()
+            mutablePreviousState.mapIndexed { index, liveDataPresentationResponse ->
+                val match = newState[index]
+                return@mapIndexed if (match is LiveDataPresentationResponse.Loading) {
+                    liveDataPresentationResponse
+                } else {
+                    match
                 }
             }
-            mutableNewState
+
+//            val mutableNewState = newState.toMutableList()
+//            for (liveData in previousState) {
+//                val match = newState.find { it.serviceLocation == liveData.serviceLocation }
+//                if (match == null) {
+//                    mutableNewState.add(liveData)
+//                }
+//            }
+//            mutableNewState
         }
 
     init {
@@ -110,12 +131,13 @@ class FavouritesViewModel @Inject constructor(
 
         val getLiveDataAction = actions.ofType(Action.GetLiveData::class.java)
             .switchMap {
-                Observable.interval(0L, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
+                Observable.interval(Duration.ZERO.seconds, preferenceStore.getLiveDataRefreshInterval(), TimeUnit.SECONDS)
                     .filter { isActive() }
                     .flatMap { useCase.getLiveData(refresh = false) }
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<NewState> { NewState.FavouritesWithLiveData(it) }
+                    .startWith(NewState.RefreshIfStale)
             }
 
         val refreshLiveDataAction = actions.ofType(Action.RefreshLiveData::class.java)
@@ -147,7 +169,7 @@ class FavouritesViewModel @Inject constructor(
         disposables += allActions
             .scan(initialState, reducer)
             .distinctUntilChanged()
-            .throttleLatest(500L, TimeUnit.MILLISECONDS)
+            .throttleLatest(AppConstants.favouritesUiEventThrottling.toMillis(), TimeUnit.MILLISECONDS)
             .subscribe(state::postValue, Timber::e)
     }
 }
