@@ -2,9 +2,6 @@ package io.dublink.database
 
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
-import ie.dublink.database.FavouriteDirectionEntity
-import ie.dublink.database.FavouriteLocationEntity
-import ie.dublink.database.FavouriteServiceEntity
 import io.dublink.domain.datamodel.FavouriteServiceLocationLocalResource
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkServiceLocation
@@ -120,77 +117,25 @@ class SqlDelightFavouriteServiceLocationLocalResource(
         }
     }
 
-    override fun insertFavourite(serviceLocation: DubLinkServiceLocation) {
+    override fun saveFavourites(serviceLocations: List<DubLinkServiceLocation>) {
         database.transaction {
-            database.favouriteLocationQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
-            database.favouriteServiceQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
-            database.favouriteDirectionQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
-            val count = database.favouriteLocationQueries.count().executeAsOne()
-            database.favouriteLocationQueries.insertOrReplace(
-                service = serviceLocation.service,
-                locationId = serviceLocation.id,
-                name = serviceLocation.name,
-                latitude = serviceLocation.coordinate.latitude,
-                longitude = serviceLocation.coordinate.longitude,
-                sortIndex = count
-            )
-            if (serviceLocation is DubLinkStopLocation) {
-                for (filter in serviceLocation.filters.filter { it.isActive }) {
-                    when (filter) {
-                        is Filter.RouteFilter -> {
-                            database.favouriteServiceQueries.insertOrReplace(
-                                service = serviceLocation.service,
-                                locationId = serviceLocation.id,
-                                route = filter.route.id,
-                                operator = filter.route.operator
-                            )
-                        }
-                        is Filter.DirectionFilter -> {
-                            database.favouriteDirectionQueries.insertOrReplace(
-                                service = serviceLocation.service,
-                                locationId = serviceLocation.id,
-                                direction = filter.direction
-                            )
-                        }
-                    }
+            serviceLocations.forEach { serviceLocation ->
+                database.favouriteLocationQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
+                database.favouriteServiceQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
+                database.favouriteDirectionQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
+                val newSortIndex: Long = if (serviceLocation.favouriteSortIndex == -1) {
+                    database.favouriteLocationQueries.count().executeAsOne()
+                } else {
+                    serviceLocation.favouriteSortIndex.toLong()
                 }
-            }
-        }
-    }
-
-    override fun deleteFavourite(serviceLocationId: String, service: Service) {
-        database.transaction {
-            database.favouriteLocationQueries.delete(
-                service = service,
-                locationId = serviceLocationId
-            )
-            database.favouriteServiceQueries.delete(
-                service = service,
-                locationId = serviceLocationId
-            )
-            database.favouriteDirectionQueries.delete(
-                service = service,
-                locationId = serviceLocationId
-            )
-        }
-    }
-
-    override fun saveChanges(serviceLocations: List<DubLinkServiceLocation>) {
-        database.transaction {
-            database.favouriteLocationQueries.deleteAll()
-            database.favouriteServiceQueries.deleteAll()
-            database.favouriteDirectionQueries.deleteAll()
-            serviceLocations.forEachIndexed { index, serviceLocation ->
                 database.favouriteLocationQueries.insertOrReplace(
                     service = serviceLocation.service,
                     locationId = serviceLocation.id,
                     name = serviceLocation.name,
                     latitude = serviceLocation.coordinate.latitude,
                     longitude = serviceLocation.coordinate.longitude,
-                    sortIndex = index.toLong()
+                    sortIndex = newSortIndex
                 )
-            }
-            for (serviceLocation in serviceLocations) {
                 if (serviceLocation is DubLinkStopLocation) {
                     for (filter in serviceLocation.filters.filter { it.isActive }) {
                         when (filter) {
@@ -213,6 +158,23 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                     }
                 }
             }
+        }
+    }
+
+    override fun deleteFavourite(serviceLocationId: String, service: Service) {
+        database.transaction {
+            database.favouriteLocationQueries.delete(
+                service = service,
+                locationId = serviceLocationId
+            )
+            database.favouriteServiceQueries.delete(
+                service = service,
+                locationId = serviceLocationId
+            )
+            database.favouriteDirectionQueries.delete(
+                service = service,
+                locationId = serviceLocationId
+            )
         }
     }
 }

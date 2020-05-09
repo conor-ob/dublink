@@ -134,11 +134,7 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                 serviceLocations.remove(item)
                 serviceLocations.add(targetIndex, item)
                 adapter?.update(serviceLocations)
-                viewModel.dispatch(
-                    Action.FavouritesReordered(
-                        serviceLocations
-                    )
-                )
+                viewModel.dispatch(Action.FavouritesReordered(serviceLocations))
                 return true
             }
             return false

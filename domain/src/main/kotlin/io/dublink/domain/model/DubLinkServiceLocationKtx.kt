@@ -37,6 +37,28 @@ fun DubLinkServiceLocation.setCustomName(name: String): DubLinkServiceLocation {
     }
 }
 
+fun DubLinkServiceLocation.setCustomSortIndex(sortIndex: Int): DubLinkServiceLocation {
+    return when (this) {
+        is DubLinkDockLocation -> withFavouriteMetadata(
+            favouriteMetadata = favouriteMetadata?.copy(
+                sortIndex = sortIndex
+            ) ?: FavouriteMetadata(
+                name = name,
+                sortIndex = sortIndex
+            )
+        )
+        is DubLinkStopLocation -> withFavouriteMetadata(
+            favouriteMetadata = favouriteMetadata?.copy(
+                sortIndex = sortIndex
+            ) ?: FavouriteMetadata(
+                name = name,
+                sortIndex = sortIndex
+            )
+        )
+        else -> throw IllegalStateException("Unknown type: $this")
+    }
+}
+
 fun DubLinkStopLocation.addFilter(filter: Filter): DubLinkServiceLocation {
     return when (filter) {
         is Filter.RouteFilter -> {

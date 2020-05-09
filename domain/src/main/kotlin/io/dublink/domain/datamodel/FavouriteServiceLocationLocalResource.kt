@@ -8,9 +8,7 @@ interface FavouriteServiceLocationLocalResource {
 
     fun getFavourites(): Observable<List<DubLinkServiceLocation>>
 
-    fun insertFavourite(serviceLocation: DubLinkServiceLocation)
+    fun saveFavourites(serviceLocations: List<DubLinkServiceLocation>)
 
     fun deleteFavourite(serviceLocationId: String, service: Service)
-
-    fun saveChanges(serviceLocations: List<DubLinkServiceLocation>)
 }

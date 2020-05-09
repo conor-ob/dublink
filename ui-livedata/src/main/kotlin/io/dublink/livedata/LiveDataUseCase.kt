@@ -67,7 +67,7 @@ class LiveDataUseCase @Inject constructor(
 
     fun saveFavourite(serviceLocation: DubLinkServiceLocation): Observable<ServiceLocationPresentationResponse> {
         clearServiceLocationCache(serviceLocation.service)
-        favouriteRepository.saveFavourite(serviceLocation)
+        favouriteRepository.saveFavourites(listOf(serviceLocation))
         return getServiceLocation(serviceLocation.service, serviceLocation.id)
     }
 
