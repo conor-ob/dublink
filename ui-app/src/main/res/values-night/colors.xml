@@ -5,25 +5,25 @@
     <color name="success_green">#5a9e66</color>
     <color name="error_red">#cf6679</color>
 
-    <color name="aircoach_brand">#FFBD5B</color>
-    <color name="aircoach_brand_text">@color/grey_900</color>
-    <color name="bus_eireann_brand">#E15685</color>
-    <color name="bus_eireann_brand_text">@color/grey_900</color>
-    <color name="commuter_brand">#4F9DCF</color>
-    <color name="commuter_brand_text">@color/grey_900</color>
-    <color name="dart_brand">#6AB78A</color>
-    <color name="dart_brand_text">@color/grey_900</color>
-    <color name="dublin_bikes_brand">#247366</color>
-    <color name="dublin_bikes_brand_text">@color/grey_900</color>
-    <color name="dublin_bus_brand">#F8CC55</color>
-    <color name="dublin_bus_brand_text">@color/grey_900</color>
-    <color name="go_ahead_brand">#60ADF9</color>
-    <color name="go_ahead_brand_text">@color/grey_900</color>
-    <color name="intercity_brand">#DDBD56</color>
-    <color name="intercity_brand_text">@color/grey_900</color>
-    <color name="luas_green_brand">#88C157</color>
-    <color name="luas_green_brand_text">@color/grey_900</color>
-    <color name="luas_red_brand">#D66561</color>
-    <color name="luas_red_brand_text">@color/grey_900</color>
+    <color name="aircoach_brand">#E8984A</color>
+    <color name="aircoach_brand_text">@color/grey_950</color>
+    <color name="bus_eireann_brand">#AE4148</color>
+    <color name="bus_eireann_brand_text">@color/grey_950</color>
+    <color name="commuter_brand">#407DC3</color>
+    <color name="commuter_brand_text">@color/grey_950</color>
+    <color name="dart_brand">#499556</color>
+    <color name="dart_brand_text">@color/grey_950</color>
+    <color name="dublin_bikes_brand">#337A6E</color>
+    <color name="dublin_bikes_brand_text">@color/grey_950</color>
+    <color name="dublin_bus_brand">#DCB333</color>
+    <color name="dublin_bus_brand_text">@color/grey_950</color>
+    <color name="go_ahead_brand">#5083D6</color>
+    <color name="go_ahead_brand_text">@color/grey_950</color>
+    <color name="intercity_brand">#DFB737</color>
+    <color name="intercity_brand_text">@color/grey_950</color>
+    <color name="luas_green_brand">#75A54C</color>
+    <color name="luas_green_brand_text">@color/grey_950</color>
+    <color name="luas_red_brand">#EC5956</color>
+    <color name="luas_red_brand_text">@color/grey_950</color>
 
 </resources>
