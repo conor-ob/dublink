@@ -281,8 +281,7 @@ class LiveDataViewModel @Inject constructor(
                         .minus(routeDiscrepancyState.knownRoutes)
                         .minus(routeDiscrepancyState.loggedDiscrepancies)
                     return if (discrepancies.isNotEmpty()) {
-                        // TODO log to firebase
-                        Timber.d(
+                        Timber.w(
                             "Unknown route(s) %s found at %s(service=%s, id=%s, name=%s)",
                             discrepancies, serviceLocation.javaClass.simpleName,
                             serviceLocation.service, serviceLocation.id,

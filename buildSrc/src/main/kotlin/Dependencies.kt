@@ -25,9 +25,11 @@ object BuildPlugins {
     const val ktLint = "com.pinterest:ktlint:0.36.0"
     const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:1.2.2" // https://mvnrepository.com/artifact/com.squareup.sqldelight/gradle-plugin
     const val googleServiceGradlePlugin = "com.google.gms:google-services:4.3.3" // https://mvnrepository.com/artifact/com.google.gms/google-services?repo=google
+    const val firebaseCrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.1.0"
 
     const val androidApplication = "com.android.application"
     const val androidLibrary = "com.android.library"
+    const val firebaseCrashlytics = "com.google.firebase.crashlytics"
     const val googleServices = "com.google.gms.google-services"
     const val kotlin = "kotlin"
     const val kotlinAndroid = "kotlin-android"
@@ -68,6 +70,11 @@ object Libraries {
         const val daggerAndroidProcessor =  "com.google.dagger:dagger-android-processor:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger-android-processor
         const val daggerAndroidSupport = "com.google.dagger:dagger-android-support:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger-android-support
         const val daggerCompiler =  "com.google.dagger:dagger-compiler:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger-compiler
+    }
+
+    object Firebase {
+        const val analytics = "com.google.firebase:firebase-analytics:17.4.1" // https://mvnrepository.com/artifact/com.google.firebase/firebase-analytics
+        const val crashlytics = "com.google.firebase:firebase-crashlytics:17.0.0" // https://mvnrepository.com/artifact/com.google.firebase/firebase-crashlytics
     }
 
     object FuzzyWuzzy {
