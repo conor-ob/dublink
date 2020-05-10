@@ -19,3 +19,29 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# SimpleXml
+-keep public class org.simpleframework.** { *; }
+-keep class org.simpleframework.xml.** { *; }
+-keep class org.simpleframework.xml.core.** { *; }
+-keep class org.simpleframework.xml.util.** { *; }
+
+-keepattributes ElementList, Root
+
+-keepclassmembers class * {
+    @org.simpleframework.xml.* *;
+}
+
+# Jsoup
+-keep public class org.jsoup.** {
+public *;
+}
+-keeppackagenames org.jsoup.nodes
+
+# Mozila Rhino
+-dontwarn sun.**
+-dontwarn org.mozilla.javascript.**
+-keep class org.mozilla.javascript.** { *; }
+-keep class javax.script.** { *; }
+-keep class com.sun.script.javascript.** { *; }
+-keep class org.mozilla.javascript.* { *; }
