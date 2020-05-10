@@ -2,7 +2,10 @@ package io.dublink.favourites.edit
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -91,9 +94,20 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        // TODO add viewLifecycleOwner owner as param?
+        activity?.onBackPressedDispatcher?.addCallback(onBackPressedCallback)
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.dispatch(Action.GetFavourites)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onBackPressedCallback.remove()
     }
 
     private fun renderState(state: State) {
@@ -104,6 +118,7 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
     private fun renderSaveButtonState(state: State) {
         edit_favourites_swipe_resresh.isRefreshing = state.original.isNullOrEmpty()
         if (state.isFinished) {
+            edit_favourites_save_fab.visibility = View.GONE
             activity?.onBackPressed()
         }
         if (state.original != null && state.editing != null && state.original != state.editing) {
@@ -138,6 +153,23 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                 return true
             }
             return false
+        }
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            if (edit_favourites_save_fab.visibility == View.VISIBLE) {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Unsaved changes")
+                    .setMessage("Are you sure you want to exit?")
+                    .setPositiveButton("Yes") { _, _ -> findNavController().navigateUp() }
+                    .setNegativeButton("No", null)
+                    .create()
+                    .show()
+            } else {
+                findNavController().navigateUp()
+            }
         }
     }
 }
