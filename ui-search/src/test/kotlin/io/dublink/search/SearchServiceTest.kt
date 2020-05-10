@@ -155,6 +155,23 @@ class SearchServiceTest {
     }
 
     @Test
+    fun `searching for a stop id should produce an accurate result`() {
+        // arrange
+        val searchQuery = "769"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assertx2
+        assertThat(searchResults).isNotEmpty()
+        assertThat(searchResults.first().id).isEqualTo("769")
+        assertThat(searchResults.first().service).isEqualTo(Service.DUBLIN_BUS)
+    }
+
+    @Test
     fun `searching for unique locations should produce a few accurate results (1)`() {
         // arrange
         val searchQuery = "busaras"
@@ -292,7 +309,12 @@ class SearchServiceTest {
 
         // assert
         assertThat(searchResults).isNotEmpty()
-        assertThat(searchResults.all { it.service == Service.BUS_EIREANN }).isTrue()
+        assertThat(
+            searchResults.take(10)
+                .map { it.service }
+                .filter { it == Service.BUS_EIREANN }
+                .size
+        ).isGreaterThan(5)
     }
 
     @Test
@@ -308,7 +330,12 @@ class SearchServiceTest {
 
         // assertx2
         assertThat(searchResults).isNotEmpty()
-        assertThat(searchResults.all { it.service == Service.BUS_EIREANN }).isTrue()
+        assertThat(
+            searchResults.take(10)
+                .map { it.service }
+                .filter { it == Service.BUS_EIREANN }
+                .size
+        ).isGreaterThan(5)
     }
 
     @Test
