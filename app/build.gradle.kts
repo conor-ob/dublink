@@ -10,6 +10,8 @@ plugins {
     id(BuildPlugins.kotlinAndroid)
     id(BuildPlugins.kotlinAndroidExtensions)
     id(BuildPlugins.kotlinKapt)
+    id(BuildPlugins.googleServices)
+    id(BuildPlugins.firebaseCrashlytics)
 }
 
 val gitBranch = executeGitCommand("git rev-parse --abbrev-ref HEAD")
@@ -34,18 +36,28 @@ android {
         buildConfigField("String", "JCDECAUX_API_KEY", "\"${properties.getProperty("jcDecauxApiKey")}\"")
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias(properties.getProperty("keyAlias"))
+            keyPassword(properties.getProperty("keyPassword"))
+            storePassword(properties.getProperty("storePassword"))
+            storeFile(file(properties.getProperty("storeFile")))
+            isV2SigningEnabled = true
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
         getByName("debug") {
             isDebuggable = true
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-$gitBranch-$apkBuildDateTime-$gitCommitHash"
-//            ext.enableCrashlytics = false
         }
     }
 
@@ -81,6 +93,8 @@ dependencies {
     implementation(Libraries.AndroidX.preferenceKtx)
     implementation(Libraries.Dagger.dagger)
     implementation(Libraries.Dagger.daggerAndroid)
+    implementation(Libraries.Firebase.analytics)
+    implementation(Libraries.Firebase.crashlytics)
     implementation(Libraries.Location.reactiveLocation)
     implementation(Libraries.Nodes.logViewer)
     implementation(Libraries.OkHttp.okhttp)
@@ -107,9 +121,3 @@ fun executeGitCommand(command: String): String =
             process.destroy()
             output.trim()
         }
-
-if (file("google-services.json").exists()) {
-    plugins {
-        id(BuildPlugins.googleServices)
-    }
-}
