@@ -11,11 +11,11 @@ abstract class LifecycleAwareViewModel<A : BaseAction, S : BaseState> : BaseView
 
     protected fun isActive(): Boolean = isActive.get()
 
-    fun onResume() {
+    open fun onResume() {
         isActive.set(true)
     }
 
-    fun onPause() {
+    open fun onPause() {
         isActive.set(false)
     }
 }

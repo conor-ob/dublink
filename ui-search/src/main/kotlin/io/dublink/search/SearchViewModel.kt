@@ -2,9 +2,13 @@ package io.dublink.search
 
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import io.dublink.domain.service.LocationProvider
+import io.dublink.domain.service.PermissionChecker
+import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -12,6 +16,9 @@ import timber.log.Timber
 
 class SearchViewModel @Inject constructor(
     private val searchUseCase: SearchUseCase,
+    private val permissionChecker: PermissionChecker,
+    private val locationProvider: LocationProvider,
+    private val preferenceStore: PreferenceStore,
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
@@ -62,6 +69,20 @@ class SearchViewModel @Inject constructor(
 
     init {
         bindActions()
+    }
+
+    private val locationSubscription = CompositeDisposable()
+
+    fun onResume() {
+        if (preferenceStore.isShowNearbyPlacesEnabled() && permissionChecker.isLocationPermissionGranted()) {
+            locationSubscription.add(
+                locationProvider.subscribeToLocationUpdates().subscribe()
+            )
+        }
+    }
+
+    fun onPause() {
+        locationSubscription.clear()
     }
 
     private fun bindActions() {
