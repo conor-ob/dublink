@@ -87,12 +87,11 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun rtpiClient(
-        okHttpClient: OkHttpClient,
-        stringProvider: StringProvider
+        okHttpClient: OkHttpClient
     ): RtpiClient = RtpiClient(
         RtpiClientConfiguration(
             okHttpClient,
-            stringProvider.jcDecauxApiKey()
+            BuildConfig.JCDECAUX_API_KEY
         )
     )
 

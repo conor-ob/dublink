@@ -2,7 +2,6 @@ package io.dublink.database
 
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
-import ie.dublink.database.RecentSearchEntity
 import io.dublink.domain.datamodel.RecentServiceLocationSearchLocalResource
 import io.dublink.domain.model.RecentServiceLocationSearch
 import io.reactivex.Observable

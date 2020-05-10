@@ -41,5 +41,6 @@ dependencies {
     kapt(Libraries.Dagger.daggerCompiler)
 
     testImplementation(TestLibraries.Junit.junit)
+    testImplementation(TestLibraries.Truth.truth)
     testImplementation(TestLibraries.SqlDelight.sqliteDriver)
 }

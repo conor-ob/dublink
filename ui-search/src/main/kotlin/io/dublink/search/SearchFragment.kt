@@ -125,17 +125,12 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
                 state?.let { renderState(state) }
             }
         )
-        activity?.onBackPressedDispatcher?.addCallback(
-            viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if (activity?.isKeyboardOpened() == true) {
-                        hideKeyboard(search_input)
-                    } else {
-                        findNavController().navigateUp()
-                    }
-                }
-            }
-        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // TODO add viewLifecycleOwner owner as param?
+        activity?.onBackPressedDispatcher?.addCallback(onBackPressedCallback)
     }
 
     override fun onResume() {
@@ -155,6 +150,11 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
     override fun onPause() {
         super.onPause()
         hideKeyboard(search_input)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onBackPressedCallback.remove()
     }
 
     private fun renderState(state: State) {
@@ -229,6 +229,17 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
         if (requestCode == locationRequestCode) {
             if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 viewModel.dispatch(Action.GetNearbyLocations)
+            }
+        }
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+            if (activity?.isKeyboardOpened() == true) {
+                hideKeyboard(search_input)
+            } else {
+                findNavController().navigateUp()
             }
         }
     }

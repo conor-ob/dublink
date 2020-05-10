@@ -1,6 +1,7 @@
 package io.dublink.favourites.edit
 
 import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.domain.model.setCustomSortIndex
 import io.dublink.domain.repository.AggregatedServiceLocationRepository
 import io.dublink.domain.repository.FavouriteRepository
 import io.dublink.domain.repository.ServiceLocationResponse
@@ -29,7 +30,11 @@ class EditFavouritesUseCase @Inject constructor(
     fun saveChanges(serviceLocations: List<DubLinkServiceLocation>): Observable<Boolean> {
         return Observable.fromCallable {
             serviceLocationRepository.clearAllCaches()
-            favouriteRepository.saveChanges(serviceLocations)
+            favouriteRepository.saveFavourites(
+                serviceLocations.mapIndexed { index, serviceLocation ->
+                    serviceLocation.setCustomSortIndex(index)
+                }
+            )
             true
         }
     }

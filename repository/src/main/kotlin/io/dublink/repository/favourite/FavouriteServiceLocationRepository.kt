@@ -21,15 +21,11 @@ class FavouriteServiceLocationRepository(
             }
     }
 
-    override fun saveFavourite(serviceLocation: DubLinkServiceLocation) {
-        localResource.insertFavourite(serviceLocation)
+    override fun saveFavourites(serviceLocations: List<DubLinkServiceLocation>) {
+        localResource.saveFavourites(serviceLocations)
     }
 
     override fun removeFavourite(serviceLocationId: String, service: Service) {
         localResource.deleteFavourite(serviceLocationId, service)
-    }
-
-    override fun saveChanges(serviceLocations: List<DubLinkServiceLocation>) {
-        localResource.saveChanges(serviceLocations)
     }
 }
