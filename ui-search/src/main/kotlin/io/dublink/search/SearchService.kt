@@ -4,6 +4,7 @@ import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.rtpi.api.Service
 import java.text.Normalizer
 import java.util.Locale
@@ -12,6 +13,7 @@ import me.xdrop.fuzzywuzzy.FuzzySearch
 import me.xdrop.fuzzywuzzy.ToStringFunction
 import me.xdrop.fuzzywuzzy.algorithms.TokenSet
 import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
+import me.xdrop.fuzzywuzzy.model.BoundExtractedResult
 
 class SearchService {
 
@@ -62,32 +64,45 @@ class SearchService {
                     .toSet()
                     .joinToString(separator = singleSpace) { value -> value.normalize() }
             }
-        )
+        ).map { results ->
+            results.sortedByDescending { it.score }
+                .map { it.referent }
+        }
 
     private fun identifierFieldSearch(
         query: String,
         algorithm: Applicable,
         serviceLocations: List<DubLinkServiceLocation>
     ): Observable<List<DubLinkServiceLocation>> =
-        search(
-            query = query,
-            algorithm = algorithm,
-            serviceLocations = serviceLocations.filter {
-                it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN ||
-                    it.service == Service.LUAS || it.service == Service.AIRCOACH
-            },
-            toStringFunction = ToStringFunction<DubLinkServiceLocation> {
-                listOfNotNull(
-                    it.id
-                ).plus(
+        Observable.zip(
+            search(
+                query = query,
+                algorithm = algorithm,
+                serviceLocations = serviceLocations.filter {
+                    it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN
+                },
+                toStringFunction = ToStringFunction<DubLinkServiceLocation> { it.id }
+            ),
+            search(
+                query = query,
+                algorithm = algorithm,
+                serviceLocations = serviceLocations.filter {
+                    it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN ||
+                        it.service == Service.LUAS || it.service == Service.AIRCOACH
+                },
+                toStringFunction = ToStringFunction<DubLinkServiceLocation> {
                     if (it is DubLinkStopLocation) {
                         it.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }
                     } else {
                         emptyList()
                     }
-                )
-                    .toSet()
-                    .joinToString(separator = singleSpace) { value -> value.normalize() }
+                        .toSet()
+                        .joinToString(separator = singleSpace) { value -> value.normalize() }
+                }
+            ),
+            BiFunction { t1, t2 ->
+                t1.plus(t2).sortedByDescending { it.score }
+                    .map { it.referent } // TODO remove duplicates?
             }
         )
 
@@ -96,7 +111,7 @@ class SearchService {
         algorithm: Applicable,
         serviceLocations: List<DubLinkServiceLocation>,
         toStringFunction: ToStringFunction<DubLinkServiceLocation>
-    ): Observable<List<DubLinkServiceLocation>> =
+    ): Observable<List<BoundExtractedResult<DubLinkServiceLocation>>> =
         Observable.just(
             FuzzySearch.extractSorted(
                 query,
@@ -104,7 +119,7 @@ class SearchService {
                 toStringFunction,
                 algorithm,
                 AppConstants.searchAccuracyScoreCutoff
-            ).map { it.referent }
+            )
         )
 
     private fun isIdentifier(value: String): Boolean {
