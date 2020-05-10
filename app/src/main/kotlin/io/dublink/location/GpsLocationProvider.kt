@@ -7,6 +7,7 @@ import io.dublink.domain.service.LocationProvider
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.util.haversine
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import io.rtpi.api.Coordinate
 import javax.inject.Inject
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
@@ -21,13 +22,20 @@ class GpsLocationProvider @Inject constructor(
 
     private val locationProvider = ReactiveLocationProvider(context)
 
-    override fun getLocationUpdates(thresholdDistance: Double): Observable<Coordinate> {
-        return Observable.concat(
+    private val eventEmitter = PublishSubject.create<Coordinate>()
+
+    override fun getLocationUpdates(thresholdDistance: Double): Observable<Coordinate> =
+        Observable.concat(
             Observable.just(preferenceStore.getLastKnownLocation()),
+            eventEmitter
+        )
+            .distinctUntilChanged { c1, c2 -> c1.haversine(c2) <= thresholdDistance }
+
+    override fun subscribeToLocationUpdates(): Observable<Coordinate> {
+        return Observable.concat(
             getLastKnownLocation(),
             getLocationUpdates()
         )
-            .distinctUntilChanged { c1, c2 -> c1.haversine(c2) <= thresholdDistance }
     }
 
     private fun getLastKnownLocation(): Observable<Coordinate> {
@@ -47,9 +55,11 @@ class GpsLocationProvider @Inject constructor(
     private fun saveLocation(location: Location) {
         lastKnownLocation = location
         preferenceStore.setLastKnownLocation(Coordinate(location.latitude, location.longitude))
+        eventEmitter.onNext(Coordinate(location.latitude, location.longitude))
     }
 
     private fun newRequest() = LocationRequest.create().apply {
+        Timber.d("new request")
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         fastestInterval = 5000L
         interval = 10000L

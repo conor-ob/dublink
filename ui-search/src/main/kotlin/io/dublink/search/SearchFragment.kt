@@ -135,6 +135,7 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
 
     override fun onResume() {
         super.onResume()
+        viewModel.onResume()
         val query = search_input.query?.toString()
         if (query != null && query.length > 1) {
             viewModel.dispatch(Action.Search(query))
@@ -149,6 +150,7 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
 
     override fun onPause() {
         super.onPause()
+        viewModel.onPause()
         hideKeyboard(search_input)
     }
 

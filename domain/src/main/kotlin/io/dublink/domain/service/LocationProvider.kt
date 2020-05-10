@@ -12,4 +12,6 @@ interface LocationProvider {
      * the threshold distance
      */
     fun getLocationUpdates(thresholdDistance: Double): Observable<Coordinate>
+
+    fun subscribeToLocationUpdates(): Observable<Coordinate>
 }
