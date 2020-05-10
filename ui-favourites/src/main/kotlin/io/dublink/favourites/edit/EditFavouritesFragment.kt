@@ -1,6 +1,9 @@
 package io.dublink.favourites.edit
 
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
@@ -21,7 +24,7 @@ import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
 import io.dublink.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_edit_favourites.*
-import kotlinx.android.synthetic.main.fragment_edit_favourites.view.edit_favourites_list
+import kotlinx.android.synthetic.main.fragment_edit_favourites.view.*
 
 class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites) {
 
@@ -46,6 +49,62 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                 when (menuItem.itemId) {
                     R.id.action_settings -> {
                         (activity as DubLinkNavigator).navigateToSettings()
+                        return@setOnMenuItemClickListener true
+                    }
+                    R.id.action_help -> {
+                        val text = "Click an item to start editing\n\n" +
+                            "Long click an item to drag & drop and change its position\n\n" +
+                            "To use this custom sort order turn off the Sort by Location setting\n\n" +
+                            "Click Save Changes when finished"
+                        val test = SpannableString(text).apply {
+                            setSpan(
+                                ForegroundColorSpan(
+                                    resources.getColor(R.color.dublink_blue, null)
+                                ),
+                                text.indexOf("Click"), text.indexOf("Click") + 5,
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                            )
+                            setSpan(
+                                ForegroundColorSpan(
+                                    resources.getColor(R.color.dublink_blue, null)
+                                ),
+                                text.indexOf("Long click"), text.indexOf("Long click") + 10,
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                            )
+                            setSpan(
+                                ForegroundColorSpan(
+                                    resources.getColor(R.color.dublink_blue, null)
+                                ),
+                                text.indexOf("drag & drop"), text.indexOf("drag & drop") + 11,
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                            )
+                            setSpan(
+                                ForegroundColorSpan(
+                                    resources.getColor(R.color.dublink_blue, null)
+                                ),
+                                text.indexOf("Sort by Location"), text.indexOf("Sort by Location") + 16,
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                            )
+                            setSpan(
+                                ForegroundColorSpan(
+                                    resources.getColor(R.color.dublink_blue, null)
+                                ),
+                                text.indexOf("Save Changes"), text.indexOf("Save Changes") + 12,
+                                Spannable.SPAN_EXCLUSIVE_INCLUSIVE
+                            )
+                        }
+
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Info")
+                            .setMessage(test)
+//                            .setMessage(
+//                                "Click an item to start editing\n\n" +
+//                                    "Long click on an item and drag and drop to change its position\n\n" +
+//                                    "Click \"Save Changes\" when finished"
+//                            )
+                            .setPositiveButton("Ok", null)
+                            .create()
+                            .show()
                         return@setOnMenuItemClickListener true
                     }
                     else -> super.onOptionsItemSelected(menuItem)
