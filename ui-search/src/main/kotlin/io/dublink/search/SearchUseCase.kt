@@ -33,12 +33,19 @@ class SearchUseCase @Inject constructor(
         if (query.isEmpty()) {
             Observable.just(SearchResultsResponse.Empty)
         } else {
-            serviceLocationRepository.stream().flatMap { response ->
-                searchService.search(
-                    query = query,
-                    serviceLocations = response
+            serviceLocationRepository.get()
+                .filter { response ->
+                    response
                         .filterIsInstance<ServiceLocationResponse.Data>()
                         .flatMap { it.serviceLocations }
+                        .isNotEmpty()
+                }
+                .flatMap { response ->
+                    searchService.search(
+                        query = query,
+                        serviceLocations = response
+                            .filterIsInstance<ServiceLocationResponse.Data>()
+                            .flatMap { it.serviceLocations }
                 ).map { searchResults ->
                     if (searchResults.isEmpty()) {
                         SearchResultsResponse.NoResults(query)
