@@ -39,8 +39,7 @@ android {
             isDebuggable = false
             isMinifyEnabled = true
             isShrinkResources = true
-            isUseProguard = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
         getByName("debug") {
             isDebuggable = true
@@ -89,7 +88,6 @@ dependencies {
     implementation(Libraries.Rtpi.rtpiClient)
     implementation(Libraries.Rx.rxAndroid)
     implementation(Libraries.Store.store3)
-    implementation(Libraries.Twitter.tweetUi)
 
     debugImplementation(Libraries.LeakCanary.leakCanary)
 
