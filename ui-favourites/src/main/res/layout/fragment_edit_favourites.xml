@@ -22,7 +22,7 @@
             app:contentInsetStartWithNavigation="0dp"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:title="Edit Favourites"
-            app:menu="@menu/menu_settings"/>
+            app:menu="@menu/menu_edit_favourites"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
