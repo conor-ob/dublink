@@ -1,13 +1,8 @@
 package io.dublink.domain.model
 
-import io.rtpi.api.Operator
 import java.util.Objects
 
 fun DubLinkServiceLocation.id(): Long = Objects.hash(service, id).toLong()
-
-fun DubLinkStopLocation.isDartStation(): Boolean = stopLocation.routeGroups.map { it.operator }.contains(Operator.DART)
-
-fun DubLinkStopLocation.isLuasStop(): Boolean = stopLocation.routeGroups.map { it.operator }.contains(Operator.LUAS)
 
 fun DubLinkServiceLocation.withFavouriteMetadata(favouriteMetadata: FavouriteMetadata): DubLinkServiceLocation {
     return when (this) {
@@ -31,6 +26,28 @@ fun DubLinkServiceLocation.setCustomName(name: String): DubLinkServiceLocation {
                 name = name
             ) ?: FavouriteMetadata(
                 name = name
+            )
+        )
+        else -> throw IllegalStateException("Unknown type: $this")
+    }
+}
+
+fun DubLinkServiceLocation.setCustomSortIndex(sortIndex: Int): DubLinkServiceLocation {
+    return when (this) {
+        is DubLinkDockLocation -> withFavouriteMetadata(
+            favouriteMetadata = favouriteMetadata?.copy(
+                sortIndex = sortIndex
+            ) ?: FavouriteMetadata(
+                name = name,
+                sortIndex = sortIndex
+            )
+        )
+        is DubLinkStopLocation -> withFavouriteMetadata(
+            favouriteMetadata = favouriteMetadata?.copy(
+                sortIndex = sortIndex
+            ) ?: FavouriteMetadata(
+                name = name,
+                sortIndex = sortIndex
             )
         )
         else -> throw IllegalStateException("Unknown type: $this")
