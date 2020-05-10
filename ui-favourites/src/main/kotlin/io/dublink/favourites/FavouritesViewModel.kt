@@ -3,10 +3,13 @@ package io.dublink.favourites
 import com.ww.roxie.Reducer
 import io.dublink.LifecycleAwareViewModel
 import io.dublink.domain.internet.InternetStatusChangeListener
+import io.dublink.domain.service.LocationProvider
+import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.rtpi.api.PredictionLiveData
 import java.time.Duration
@@ -18,6 +21,8 @@ import timber.log.Timber
 class FavouritesViewModel @Inject constructor(
     private val useCase: FavouritesUseCase,
     private val internetStatusChangeListener: InternetStatusChangeListener,
+    private val permissionChecker: PermissionChecker,
+    private val locationProvider: LocationProvider,
     private val preferenceStore: PreferenceStore,
     private val scheduler: RxScheduler
 ) : LifecycleAwareViewModel<Action, State>() {
@@ -118,6 +123,22 @@ class FavouritesViewModel @Inject constructor(
 
     init {
         bindActions()
+    }
+
+    private val locationSubscription = CompositeDisposable()
+
+    override fun onResume() {
+        super.onResume()
+        if (preferenceStore.isFavouritesSortByLocation() && permissionChecker.isLocationPermissionGranted()) {
+            locationSubscription.add(
+                locationProvider.subscribeToLocationUpdates().subscribe()
+            )
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        locationSubscription.clear()
     }
 
     private fun bindActions() {
