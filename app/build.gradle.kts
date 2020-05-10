@@ -88,7 +88,6 @@ dependencies {
     implementation(Libraries.Rtpi.rtpiClient)
     implementation(Libraries.Rx.rxAndroid)
     implementation(Libraries.Store.store3)
-    implementation(Libraries.Twitter.tweetUi)
 
     debugImplementation(Libraries.LeakCanary.leakCanary)
 
