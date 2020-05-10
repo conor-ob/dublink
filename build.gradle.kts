@@ -9,7 +9,8 @@ buildscript {
         classpath (BuildPlugins.androidGradlePlugin)
         classpath (BuildPlugins.kotlinGradlePlugin)
         classpath (BuildPlugins.sqlDelightGradlePlugin)
-//        classpath (BuildPlugins.googleServiceGradlePlugin)
+        classpath (BuildPlugins.googleServiceGradlePlugin)
+        classpath (BuildPlugins.firebaseCrashlyticsGradlePlugin)
     }
 }
 
