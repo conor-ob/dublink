@@ -55,6 +55,20 @@
     <string name="preference_name_search_show_recents">Recently searched</string>
     <string name="preference_summary_search_show_recents">Show places you recently searched for</string>
 
+    <string name="preference_category_contact">Contact</string>
+
+    <string name="preference_key_contact_send_feedback">contact_send_feedback</string>
+    <string name="preference_name_contact_send_feedback">Send feedback</string>
+    <string name="preference_summary_contact_send_feedback">Help improve the app</string>
+
+    <string name="preference_key_contact_rate">contact_rate</string>
+    <string name="preference_name_contact_rate">Rate</string>
+    <string name="preference_summary_contact_rate">Rate the app on the Play Store</string>
+
+    <string name="preference_key_contact_share">contact_share</string>
+    <string name="preference_name_contact_share">Share</string>
+    <string name="preference_summary_contact_share">Let your friends know about the app</string>
+
     <string name="preference_category_about">About</string>
 
     <string name="preference_key_app_version">app_version</string>
@@ -62,4 +76,7 @@
 
     <string name="preference_key_privacy_policy">privacy_policy</string>
     <string name="preference_name_privacy_policy">Privacy Policy</string>
+
+    <string name="preference_key_terms_of_service">terms_of_service</string>
+    <string name="preference_name_terms_of_service">Terms of Service</string>
 </resources>
