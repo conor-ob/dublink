@@ -141,6 +141,7 @@
 
         <Preference
             android:icon="@drawable/ic_lock"
+            android:key="@string/preference_key_privacy_policy"
             android:title="@string/preference_name_privacy_policy" />
 
     </PreferenceCategory>

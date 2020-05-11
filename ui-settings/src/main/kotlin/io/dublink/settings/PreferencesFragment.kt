@@ -12,6 +12,7 @@ import com.nodesagency.logviewer.LogViewerActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
+import io.dublink.DubLinkNavigator
 import io.dublink.domain.service.AppConfig
 import io.dublink.domain.service.PermissionChecker
 import javax.inject.Inject
@@ -75,6 +76,14 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
                     return@setOnPreferenceClickListener true
                 }
             }
+        }
+        val privacyPolicyPreference = findPreference<Preference>(getString(R.string.preference_key_privacy_policy))
+        privacyPolicyPreference?.setOnPreferenceClickListener {
+            (activity as DubLinkNavigator).navigateToWebView(
+                title = getString(R.string.preference_name_privacy_policy),
+                url = "file:///android_asset/privacy_policy.html"
+            )
+            return@setOnPreferenceClickListener true
         }
     }
 

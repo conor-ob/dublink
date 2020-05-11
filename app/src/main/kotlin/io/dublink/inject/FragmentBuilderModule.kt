@@ -8,6 +8,7 @@ import io.dublink.livedata.LiveDataFragment
 import io.dublink.search.SearchFragment
 import io.dublink.settings.PreferencesFragment
 import io.dublink.settings.SettingsFragment
+import io.dublink.web.WebViewFragment
 
 @Module
 abstract class FragmentBuilderModule {
@@ -29,4 +30,7 @@ abstract class FragmentBuilderModule {
 
     @ContributesAndroidInjector
     abstract fun contributeSettingsFragmentInjector(): SettingsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeWebViewFragmentInjector(): WebViewFragment
 }

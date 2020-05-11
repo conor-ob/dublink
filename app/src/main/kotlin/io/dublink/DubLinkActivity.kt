@@ -11,6 +11,7 @@ import dagger.android.support.DaggerAppCompatActivity
 import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.livedata.LiveDataFragment
+import io.dublink.web.WebViewFragment
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_root.activity_root
 
@@ -93,6 +94,19 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         navigationController.navigate(
             R.id.editFavouritesFragment,
             Bundle.EMPTY,
+            NavOptions.Builder()
+                .setEnterAnim(R.anim.nav_default_enter_anim)
+                .setExitAnim(R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                .build()
+        )
+    }
+
+    override fun navigateToWebView(title: String, url: String) {
+        navigationController.navigate(
+            R.id.webViewFragment,
+            WebViewFragment.toBundle(title, url),
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)
                 .setExitAnim(R.anim.nav_default_exit_anim)
