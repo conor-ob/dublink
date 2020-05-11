@@ -25,32 +25,32 @@ class FavouritesMapper @Inject constructor(
 ) {
 
     fun map(
-        favourites: List<DubLinkServiceLocation>?,
+        locationResponses: List<ServiceLocationPresentationResponse>?,
         liveData: List<LiveDataPresentationResponse>?
     ): Group {
-        return if (favourites != null && favourites.isNotEmpty()) {
+        return if (locationResponses != null && locationResponses.isNotEmpty()) {
             Section(
-                favourites.mapIndexed { index, dubLinkServiceLocation ->
+                locationResponses.mapIndexed { index, locationResponse ->
                     Section(
                         listOfNotNull(
                             mapServiceLocation(
-                                dubLinkServiceLocation
+                                locationResponse
                             ),
                             mapLiveData(
-                                dubLinkServiceLocation,
+                                locationResponse.serviceLocation,
                                 liveData,
                                 index
                             ),
                             mapDivider(
-                                favourites.size,
-                                dubLinkServiceLocation,
+                                locationResponses.size,
+                                locationResponse.serviceLocation,
                                 index
                             )
                         )
                     )
                 }
             )
-        } else if (favourites != null && favourites.isEmpty()) {
+        } else if (locationResponses != null && locationResponses.isEmpty()) {
             Section(NoFavouritesItem(1L))
         } else {
             Section(emptyList())
@@ -130,10 +130,10 @@ class FavouritesMapper @Inject constructor(
     }
 
     private fun mapServiceLocation(
-        favourite: DubLinkServiceLocation
+        locationResponses: ServiceLocationPresentationResponse
     ) = SimpleServiceLocationItem(
-        serviceLocation = favourite,
-        walkDistance = null
+        serviceLocation = locationResponses.serviceLocation,
+        walkDistance = locationResponses.distance
     )
 
     private fun mapDivider(

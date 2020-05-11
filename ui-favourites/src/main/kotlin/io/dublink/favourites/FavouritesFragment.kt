@@ -9,8 +9,11 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.DubLinkNavigator
 import io.dublink.domain.internet.InternetStatus
+import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.domain.util.AppConstants
 import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
+import io.dublink.util.ColourUtils
 import io.dublink.viewModelProvider
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_favourites.*
@@ -63,7 +66,7 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
         view.favourites_list.setHasFixedSize(true)
         view.favourites_list.layoutManager = LinearLayoutManager(requireContext())
 
-        favourites_swipe_resresh.apply {
+        favourites_swipe_refresh.apply {
             setColorSchemeResources(R.color.color_on_surface)
             setProgressBackgroundColorSchemeResource(R.color.color_surface)
             setOnRefreshListener {
@@ -101,9 +104,10 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
     }
 
     private fun renderState(state: State) {
-        favourites_swipe_resresh.isRefreshing = state.favourites == null ||
+        favourites_swipe_refresh.isRefreshing = state.favourites == null ||
             state.favouritesWithLiveData == null ||
             state.favouritesWithLiveData.any { it is LiveDataPresentationResponse.Loading }
+//        favourites_swipe_refresh.setColorSchemeResources(*mapColours(state.favourites?.map { it.serviceLocation }, state.favouritesWithLiveData))
         favourites_toolbar.menu.findItem(R.id.action_edit).apply {
             isVisible = !state.favourites.isNullOrEmpty()
         }
@@ -111,6 +115,32 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
         if (state.internetStatusChange == InternetStatus.ONLINE) {
             viewModel.dispatch(Action.GetFavourites)
             viewModel.dispatch(Action.GetLiveData)
+        }
+    }
+
+    private fun mapColours(
+        favourites: List<DubLinkServiceLocation>?,
+        favouritesWithLiveData: List<LiveDataPresentationResponse>?
+    ): IntArray {
+        val flatMap = favouritesWithLiveData
+            ?.filterIsInstance<LiveDataPresentationResponse.Data>()
+            ?.flatMap { it.liveData.take(AppConstants.favouritesLiveDataLimit).flatten() }
+            ?.map { ColourUtils.mapColour(it) }
+            ?.distinct()
+
+        if (!flatMap.isNullOrEmpty()) {
+            return flatMap.toIntArray()
+        }
+
+        return if (favourites == null) {
+            intArrayOf(R.color.color_on_surface)
+        } else {
+            val colours = favourites.flatMap { ColourUtils.mapColours(it) }.toSet()
+            if (colours.isNullOrEmpty()) {
+                intArrayOf(R.color.color_on_surface)
+            } else {
+                colours.toIntArray()
+            }
         }
     }
 }
