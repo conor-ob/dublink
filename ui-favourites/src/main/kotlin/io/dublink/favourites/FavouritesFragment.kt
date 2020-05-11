@@ -101,7 +101,9 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
     }
 
     private fun renderState(state: State) {
-        favourites_swipe_resresh.isRefreshing = state.favourites == null
+        favourites_swipe_resresh.isRefreshing = state.favourites == null ||
+            state.favouritesWithLiveData == null ||
+            state.favouritesWithLiveData.any { it is LiveDataPresentationResponse.Loading }
         favourites_toolbar.menu.findItem(R.id.action_edit).apply {
             isVisible = !state.favourites.isNullOrEmpty()
         }
