@@ -36,7 +36,7 @@ class LiveDataViewModel @Inject constructor(
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.GetServiceLocation -> State(
-                serviceLocation = change.serviceLocation,
+                serviceLocation = state.serviceLocation ?: change.serviceLocation,
                 liveDataResponse = state.liveDataResponse,
                 routeDiscrepancyState = state.routeDiscrepancyState,
                 routeFilterState = state.routeFilterState,
