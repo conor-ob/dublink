@@ -24,7 +24,6 @@ import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.model.Filter
 import io.dublink.setVisibility
 import io.dublink.util.ChipFactory
-import io.dublink.util.ColourUtils
 import io.dublink.viewModelProvider
 import io.rtpi.api.Service
 import javax.inject.Inject
@@ -190,7 +189,6 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
 
     private fun renderServiceLocationState(state: State) {
         if (state.serviceLocation != null) {
-//            live_data_loader.setColorSchemeResources(*ColourUtils.mapColours(state.serviceLocation).toSet().toIntArray())
             live_data_toolbar.apply {
                 updateTitle(newText = state.serviceLocation.name)
                 updateSubtitle(
@@ -214,21 +212,9 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
     private fun renderLiveDataState(state: State) {
         live_data_loader.isRefreshing = state.isLoading
         if (state.liveDataResponse != null) {
-//            if (state.liveDataResponse is LiveDataPresentationResponse.Data) {
-//                live_data_loader.setColorSchemeResources(*mapColours(state.liveDataResponse))
-//            }
             liveDataAdapter?.update(listOf(liveDataMapper.map(state.liveDataResponse, state.serviceLocation)))
         } else {
             liveDataAdapter?.clear()
-        }
-    }
-
-    private fun mapColours(liveDataResponse: LiveDataPresentationResponse.Data): IntArray {
-        val colours = liveDataResponse.liveData.map { ColourUtils.mapColour(it) }
-        return if (colours.isNullOrEmpty()) {
-            intArrayOf(io.dublink.ui.R.color.color_on_surface)
-        } else {
-            colours.toSet().toIntArray()
         }
     }
 
