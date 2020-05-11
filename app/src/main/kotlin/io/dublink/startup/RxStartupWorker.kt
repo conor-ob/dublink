@@ -27,7 +27,7 @@ class RxStartupWorker : StartupWorker {
                 Thread.currentThread().uncaughtExceptionHandler
                     .uncaughtException(Thread.currentThread(), e)
             } else {
-                Timber.w(e)
+                Timber.e(e)
             }
         }
     }

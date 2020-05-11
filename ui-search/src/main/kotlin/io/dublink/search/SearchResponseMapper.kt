@@ -45,7 +45,8 @@ object SearchResponseMapper {
                     searchResultsResponse.serviceLocations.flatMap { serviceLocation ->
                         mapServiceLocation(
                             serviceLocation,
-                            null
+                            null,
+                            true
                         )
                     }
                 )
@@ -85,7 +86,8 @@ object SearchResponseMapper {
                             recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
                                 mapServiceLocation(
                                     serviceLocation,
-                                    null
+                                    null,
+                                    false
                                 )
                             }
                         )
@@ -146,7 +148,8 @@ object SearchResponseMapper {
                             nearbyLocationsResponse.serviceLocations.entries.flatMap { entry ->
                                 mapServiceLocation(
                                     entry.value,
-                                    entry.key
+                                    entry.key,
+                                    false
                                 )
                             }
                         )
@@ -174,7 +177,8 @@ object SearchResponseMapper {
 
     private fun mapServiceLocation(
         serviceLocation: DubLinkServiceLocation,
-        walkDistance: Double?
+        walkDistance: Double?,
+        searchResult: Boolean
     ): List<AbstractServiceLocationItem> {
         return when (serviceLocation) {
             is DubLinkStopLocation -> listOf(
@@ -182,7 +186,9 @@ object SearchResponseMapper {
                     serviceLocation = serviceLocation,
                     walkDistance = walkDistance
                 ).apply {
-                    setSearchCandidate()
+                    if (searchResult) {
+                        setSearchCandidate()
+                    }
                 }
             )
             is DubLinkDockLocation -> listOf(
@@ -190,7 +196,9 @@ object SearchResponseMapper {
                     serviceLocation = serviceLocation,
                     walkDistance = walkDistance
                 ).apply {
-//                    setSearchCandidate() // TODO
+                    if (searchResult) {
+                        setSearchCandidate()
+                    }
                 }
             )
             else -> emptyList()

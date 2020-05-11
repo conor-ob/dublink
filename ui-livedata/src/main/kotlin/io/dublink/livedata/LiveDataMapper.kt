@@ -43,7 +43,7 @@ class LiveDataMapper @Inject constructor(
             is LiveDataPresentationResponse.Error -> {
                 Timber.e(response.throwable, "Error getting live data")
                 listOf(
-                    SimpleMessageItem(response.throwable.message ?: "error", 1L)
+                    SimpleMessageItem(response.throwable.message ?: "error", 1L) // TODO
                 )
             }
         }

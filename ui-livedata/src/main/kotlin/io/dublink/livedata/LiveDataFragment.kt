@@ -19,17 +19,18 @@ import io.dublink.dialog.FavouriteDialogFactory
 import io.dublink.dialog.OnFavouriteEditListener
 import io.dublink.dialog.OnFavouriteRemovedListener
 import io.dublink.dialog.OnFavouriteSavedListener
+import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.model.Filter
 import io.dublink.setVisibility
 import io.dublink.util.ChipFactory
+import io.dublink.util.ColourUtils
 import io.dublink.viewModelProvider
 import io.rtpi.api.Service
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
-import timber.log.Timber
 
 class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
 
@@ -190,6 +191,7 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
 
     private fun renderServiceLocationState(state: State) {
         if (state.serviceLocation != null) {
+            live_data_loader.setColorSchemeResources(*mapColours(state.serviceLocation))
             live_data_toolbar.apply {
                 updateTitle(newText = state.serviceLocation.name)
                 updateSubtitle(
@@ -213,9 +215,42 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
     private fun renderLiveDataState(state: State) {
         live_data_loader.isRefreshing = state.isLoading
         if (state.liveDataResponse != null) {
+            if (state.liveDataResponse is LiveDataPresentationResponse.Data) {
+                live_data_loader.setColorSchemeResources(*mapColours(state.liveDataResponse))
+            }
             liveDataAdapter?.update(listOf(liveDataMapper.map(state.liveDataResponse, state.serviceLocation)))
         } else {
             liveDataAdapter?.clear()
+        }
+    }
+
+    private fun mapColours(serviceLocation: DubLinkServiceLocation): IntArray {
+        val colours = when (serviceLocation) {
+            is DubLinkStopLocation -> mapColours(serviceLocation)
+            is DubLinkDockLocation -> listOf(ColourUtils.mapColour(serviceLocation.service))
+            else -> listOf(R.color.color_on_surface)
+        }
+        return colours.toSet().toIntArray()
+    }
+
+    private fun mapColours(stopLocation: DubLinkStopLocation): List<Int> {
+        return if (stopLocation.isFavourite && stopLocation.favouriteMetadata != null) {
+            requireNotNull(stopLocation.favouriteMetadata).routes
+                .map { it.operator }
+                .map { ColourUtils.mapColour(it) }
+        } else {
+            stopLocation.stopLocation.routeGroups
+                .map { it.operator }
+                .map { ColourUtils.mapColour(it) }
+        }
+    }
+
+    private fun mapColours(liveDataResponse: LiveDataPresentationResponse.Data): IntArray {
+        val colours = liveDataResponse.liveData.map { ColourUtils.mapColour(it) }
+        return if (colours.isNullOrEmpty()) {
+            intArrayOf(R.color.color_on_surface)
+        } else {
+            colours.toSet().toIntArray()
         }
     }
 
@@ -255,8 +290,6 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderFavouriteDialogState(state: State) {
-        Timber.d("FAVS1 ${state.favouriteDialog}")
-        Timber.d("FAVS2 ${state.serviceLocation}")
         if (state.favouriteDialog != null && state.serviceLocation != null) {
             when (state.favouriteDialog) {
                 is FavouriteDialog.Add -> {

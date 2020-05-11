@@ -27,13 +27,19 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        favourites_toolbar.menu.findItem(R.id.action_edit).apply {
+            isVisible = false
+        }
+
         favourites_toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_edit -> {
+                    // TODO analytics
                     (activity as DubLinkNavigator).navigateToEditFavourites()
                     return@setOnMenuItemClickListener true
                 }
                 R.id.action_settings -> {
+                    // TODO analytics
                     (activity as DubLinkNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true
                 }
@@ -96,6 +102,9 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
 
     private fun renderState(state: State) {
         favourites_swipe_resresh.isRefreshing = state.favourites == null
+        favourites_toolbar.menu.findItem(R.id.action_edit).apply {
+            isVisible = !state.favourites.isNullOrEmpty()
+        }
         adapter?.update(listOf(favouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
         if (state.internetStatusChange == InternetStatus.ONLINE) {
             viewModel.dispatch(Action.GetFavourites)

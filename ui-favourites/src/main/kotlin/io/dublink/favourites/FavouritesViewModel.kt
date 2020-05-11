@@ -80,7 +80,6 @@ class FavouritesViewModel @Inject constructor(
                 .flatMap { it.liveData.flatten() }
                 .filterIsInstance<PredictionLiveData>()
                 .any { Duration.between(it.prediction.currentDateTime, ZonedDateTime.now()) > AppConstants.liveDataTimeToLive }
-            Timber.d("stale_check=$isStale")
             if (isStale) {
                 null
             } else {
@@ -90,9 +89,8 @@ class FavouritesViewModel @Inject constructor(
     }
 
     /**
-     * Due to the reactive way locations are observed, some responses may be "incomplete" and not contain locations from
-     * all services if that particular service was slow due to a network request for example. If this happens then the
-     * previous state is used for that missing location.
+     * A bit of a hack to not collapse every item and show the loading message every time data is refreshed - it should
+     * only be shown when the user triggers a refresh or the data is stale when the app returns from the background.
      */
     private fun mergeLiveData(
         previousState: List<LiveDataPresentationResponse>?,
@@ -101,24 +99,15 @@ class FavouritesViewModel @Inject constructor(
         if (previousState == null) {
             newState
         } else {
-            val mutablePreviousState = previousState.toMutableList()
-            mutablePreviousState.mapIndexed { index, liveDataPresentationResponse ->
-                val match = newState[index]
-                return@mapIndexed if (match is LiveDataPresentationResponse.Loading) {
-                    liveDataPresentationResponse
+            newState.map { state ->
+                if (state is LiveDataPresentationResponse.Loading) {
+                    // If the new state is loading just use the previous state so we don't show too many loading events
+                    previousState.find { it.serviceLocation.service == state.serviceLocation.service &&
+                        it.serviceLocation.id == state.serviceLocation.id } ?: state
                 } else {
-                    match
+                    state
                 }
             }
-
-//            val mutableNewState = newState.toMutableList()
-//            for (liveData in previousState) {
-//                val match = newState.find { it.serviceLocation == liveData.serviceLocation }
-//                if (match == null) {
-//                    mutableNewState.add(liveData)
-//                }
-//            }
-//            mutableNewState
         }
 
     init {

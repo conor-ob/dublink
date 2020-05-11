@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.DubLink.Subtitle2"
+                android:textAppearance="@style/TextAppearance.DubLink.ListItemBody"
                 android:text="@string/no_favourites_message_detail" />
 
         </LinearLayout>
