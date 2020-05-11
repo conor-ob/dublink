@@ -31,32 +31,34 @@
 
     <string name="preference_category_name_favourites">Favourites</string>
 
-    <string name="preference_name_favourites_sort_by_location">Sort by Location</string>
+    <string name="preference_name_favourites_sort_by_location">Sort by location</string>
     <string name="preference_summary_favourites_sort_by_location">Nearby places will be at the top</string>
     <string name="preference_key_favourites_sort_by_location">favourites_sort_by_location</string>
 
     <string name="preference_name_favourites_live_data_limit">Real Time Information</string>
-    <string name="preference_summary_favourites_live_data_limit">How many places will display real time info</string>
+    <string name="preference_summary_favourites_live_data_limit">Number of places displaying real time info</string>
     <string name="preference_key_favourites_live_data_limit">favourites_live_data_limit</string>
 
     <string name="preference_category_live_times">Real Time Information</string>
 
-    <string name="preference_name_live_data_refresh_interval">Refresh Rate (seconds)</string>
+    <string name="preference_name_live_data_refresh_interval">Refresh rate (seconds)</string>
     <string name="preference_summary_live_data_refresh_interval">How often to refresh real time info</string>
     <string name="preference_key_live_data_refresh_interval">live_data_refresh_interval</string>
 
     <string name="preference_category_search">Search</string>
 
     <string name="preference_key_search_show_nearby">search_show_nearby</string>
-    <string name="preference_name_search_show_nearby">Nearby Places</string>
+    <string name="preference_name_search_show_nearby">Nearby places</string>
     <string name="preference_summary_search_show_nearby">Show places closest to you</string>
 
     <string name="preference_key_search_show_recents">search_show_recents</string>
-    <string name="preference_name_search_show_recents">Recent Searches</string>
+    <string name="preference_name_search_show_recents">Recently searched</string>
     <string name="preference_summary_search_show_recents">Show places you recently searched for</string>
 
     <string name="preference_category_about">About</string>
 
     <string name="preference_key_app_version">app_version</string>
     <string name="preference_name_app_version">App version</string>
+
+    <string name="preference_name_privacy_policy">Privacy policy</string>
 </resources>

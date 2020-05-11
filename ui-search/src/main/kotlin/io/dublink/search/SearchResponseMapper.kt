@@ -77,7 +77,7 @@ object SearchResponseMapper {
                 is RecentSearchesResponse.Data -> Section(
                     listOf(
                         HeaderItem(
-                            message = "Recent searches",
+                            message = "Recently searched",
                             drawableId = R.drawable.ic_history,
                             index = 3220023
                         )
@@ -101,7 +101,7 @@ object SearchResponseMapper {
                 is RecentSearchesResponse.Empty -> Section(
                     listOf(
                         HeaderItem(
-                            message = "Recent searches",
+                            message = "Recently searched",
                             drawableId = R.drawable.ic_history,
                             index = 3220023
                         )
