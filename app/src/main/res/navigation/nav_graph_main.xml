@@ -24,4 +24,8 @@
         android:name="io.dublink.settings.SettingsFragment"
         android:label="SettingsFragment" />
 
+    <fragment android:id="@+id/webViewFragment"
+        android:name="io.dublink.web.WebViewFragment"
+        android:label="WebViewFragment" />
+
 </navigation>

@@ -5,6 +5,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -54,8 +55,8 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                     R.id.action_help -> {
                         val text = "Click an item to start editing\n\n" +
                             "Long click an item to drag & drop and change its position\n\n" +
-                            "To use this custom sort order turn off the Sort by Location setting\n\n" +
-                            "Click Save Changes when finished"
+                            "Turn off the Sort by location setting to use your custom sort order\n\n" +
+                            "Click Save changes when finished"
                         val test = SpannableString(text).apply {
                             setSpan(
                                 ForegroundColorSpan(
@@ -82,14 +83,14 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                                 ForegroundColorSpan(
                                     resources.getColor(R.color.dublink_blue, null)
                                 ),
-                                text.indexOf("Sort by Location"), text.indexOf("Sort by Location") + 16,
+                                text.indexOf("Sort by location"), text.indexOf("Sort by location") + 16,
                                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE
                             )
                             setSpan(
                                 ForegroundColorSpan(
                                     resources.getColor(R.color.dublink_blue, null)
                                 ),
-                                text.indexOf("Save Changes"), text.indexOf("Save Changes") + 12,
+                                text.indexOf("Save changes"), text.indexOf("Save changes") + 12,
                                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE
                             )
                         }
@@ -170,8 +171,22 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
     }
 
     private fun renderState(state: State) {
+        renderErrorMessage(state)
         renderSaveButtonState(state)
         renderFavourites(state)
+    }
+
+    private fun renderErrorMessage(state: State) {
+        if (state.toastMessage != null) {
+            Toast.makeText(requireContext(), state.toastMessage, Toast.LENGTH_SHORT).show()
+        } else if (state.servicesInError.isNotEmpty()) {
+            val message = when (state.servicesInError.size) {
+                1 -> "${state.servicesInError.first()} is having problems"
+                2 -> "${state.servicesInError.joinToString(separator = " and ")} are having problems"
+                else -> "${state.servicesInError.take(state.servicesInError.size - 1).joinToString(separator = ", ")} and ${state.servicesInError.last()} are having problems"
+            }
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun renderSaveButtonState(state: State) {

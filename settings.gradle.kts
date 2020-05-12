@@ -7,5 +7,6 @@ include(
     ":ui-favourites",
     ":ui-livedata",
     ":ui-search",
-    ":ui-settings"
+    ":ui-settings",
+    ":ui-web"
 )

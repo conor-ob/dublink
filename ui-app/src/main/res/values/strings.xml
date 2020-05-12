@@ -21,11 +21,18 @@
     <string name="favourite_saved">Saved to Favourites</string>
     <string name="favourite_removed">Removed from Favourites</string>
 
+    <string name="message_loading">Loading...</string>
+
     <string name="live_data_no_scheduled_arrivals">No scheduled %s</string>
     <string name="live_data_no_scheduled_arrivals_mode_default">arrivals</string>
     <string name="live_data_no_scheduled_arrivals_mode_bus">buses</string>
     <string name="live_data_no_scheduled_arrivals_mode_train">trains</string>
     <string name="live_data_no_scheduled_arrivals_mode_tram">trams</string>
+
+    <string name="error_general">Something went wrong, try refreshing</string>
+    <string name="error_service">%s service might be down</string>
+    <string name="error_internet">Check your internet connection</string>
+    <string name="error_io">Problems communicating with %s</string>
 
     <string name="no">No</string>
 

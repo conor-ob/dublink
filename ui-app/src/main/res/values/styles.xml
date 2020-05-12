@@ -39,4 +39,8 @@
         <item name="android:elevation">4dp</item>
     </style>
 
+    <style name="Widget.DubLink.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.DubLink.ListItemTitle</item>
+    </style>
+
 </resources>

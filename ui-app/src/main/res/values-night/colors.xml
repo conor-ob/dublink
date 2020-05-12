@@ -23,7 +23,7 @@
     <color name="intercity_brand_text">@color/grey_950</color>
     <color name="luas_green_brand">#75A54C</color>
     <color name="luas_green_brand_text">@color/grey_950</color>
-    <color name="luas_red_brand">#EC5956</color>
+    <color name="luas_red_brand">#DD6161</color>
     <color name="luas_red_brand_text">@color/grey_950</color>
 
 </resources>

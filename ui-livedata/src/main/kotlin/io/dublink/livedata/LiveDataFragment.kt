@@ -29,7 +29,6 @@ import io.rtpi.api.Service
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_livedata.*
 import kotlinx.android.synthetic.main.layout_live_data_route_filter_bottom_sheet.*
-import timber.log.Timber
 
 class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
 
@@ -255,8 +254,6 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
     }
 
     private fun renderFavouriteDialogState(state: State) {
-        Timber.d("FAVS1 ${state.favouriteDialog}")
-        Timber.d("FAVS2 ${state.serviceLocation}")
         if (state.favouriteDialog != null && state.serviceLocation != null) {
             when (state.favouriteDialog) {
                 is FavouriteDialog.Add -> {

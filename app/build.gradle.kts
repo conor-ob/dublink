@@ -86,6 +86,7 @@ dependencies {
     implementation(project(":ui-livedata"))
     implementation(project(":ui-search"))
     implementation(project(":ui-settings"))
+    implementation(project(":ui-web"))
 
     implementation(Libraries.Android.playServicesLocation)
     implementation(Libraries.AndroidX.constraintLayout)

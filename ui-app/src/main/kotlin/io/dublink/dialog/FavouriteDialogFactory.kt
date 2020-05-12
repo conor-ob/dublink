@@ -28,7 +28,7 @@ object FavouriteDialogFactory {
         var editedStopLocation = serviceLocation
 
         val builder = AlertDialog.Builder(context)
-        builder.setTitle(serviceLocation.name)
+        builder.setTitle(serviceLocation.defaultName)
             .setMessage(serviceLocation.service.fullName)
             .setPositiveButton("Ok", null)
             .setNegativeButton("Cancel", null)
@@ -76,7 +76,7 @@ object FavouriteDialogFactory {
             }
         }
 
-        customizeFavouriteView.favourite_edit_name.hint = serviceLocation.name
+        customizeFavouriteView.favourite_edit_name.hint = serviceLocation.defaultName
         customizeFavouriteView.favourite_edit_name.setText(serviceLocation.name)
 
         val dialog = builder.create()

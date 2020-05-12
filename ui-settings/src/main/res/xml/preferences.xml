@@ -121,6 +121,38 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/preference_category_contact">
+
+        <!-- TODO remove this -->
+        <Preference
+            android:icon="@drawable/ic_check"
+            android:title="Pre-release feedback form"
+            android:summary="Complete a survey to submit your feedback">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://docs.google.com/forms/d/e/1FAIpQLSe2cfSl99qvvFVZD46kgzKtNbkpcr3qIyhRZGogjTD7mKGFSg/viewform?usp=sf_link" />
+
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_feedback"
+            android:key="@string/preference_key_contact_send_feedback"
+            android:summary="@string/preference_summary_contact_send_feedback"
+            android:title="@string/preference_name_contact_send_feedback" />
+
+<!--        <Preference-->
+<!--            android:icon="@drawable/ic_thumb_up"-->
+<!--            android:key="@string/preference_key_contact_rate"-->
+<!--            android:summary="@string/preference_summary_contact_rate"-->
+<!--            android:title="@string/preference_name_contact_rate" />-->
+
+<!--        <Preference-->
+<!--            android:icon="@drawable/ic_share"-->
+<!--            android:key="@string/preference_key_contact_share"-->
+<!--            android:summary="@string/preference_summary_contact_share"-->
+<!--            android:title="@string/preference_name_contact_share" />-->
+
+    </PreferenceCategory>
+
     <PreferenceCategory
         android:title="@string/preference_category_about">
 
@@ -128,6 +160,16 @@
             android:icon="@drawable/ic_info"
             android:key="@string/preference_key_app_version"
             android:title="@string/preference_name_app_version" />
+
+        <Preference
+            android:icon="@drawable/ic_lock"
+            android:key="@string/preference_key_privacy_policy"
+            android:title="@string/preference_name_privacy_policy" />
+
+        <Preference
+            android:icon="@drawable/ic_policy"
+            android:key="@string/preference_key_terms_of_service"
+            android:title="@string/preference_name_terms_of_service" />
 
     </PreferenceCategory>
 

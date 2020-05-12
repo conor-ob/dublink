@@ -25,7 +25,7 @@ class FavouritesUseCase @Inject constructor(
     private val scheduler: RxScheduler
 ) {
 
-    fun getFavourites(): Observable<List<DubLinkServiceLocation>> =
+    fun getFavourites(): Observable<List<ServiceLocationPresentationResponse>> =
         if (preferenceStore.isFavouritesSortByLocation() &&
             permissionChecker.isLocationPermissionGranted()
         ) {
@@ -39,6 +39,12 @@ class FavouritesUseCase @Inject constructor(
                                         s1.coordinate.haversine(coordinate).compareTo(s2.coordinate.haversine(coordinate))
                                     }
                                 )
+                                .map { serviceLocation ->
+                                    ServiceLocationPresentationResponse(
+                                        serviceLocation = serviceLocation,
+                                        distance = coordinate.haversine(serviceLocation.coordinate)
+                                    )
+                                }
                         }
                 }
         } else {
@@ -50,12 +56,19 @@ class FavouritesUseCase @Inject constructor(
                                 s1.favouriteSortIndex.compareTo(s2.favouriteSortIndex)
                             }
                         )
+                        .map { serviceLocation ->
+                            ServiceLocationPresentationResponse(
+                                serviceLocation = serviceLocation,
+                                distance = null
+                            )
+                        }
                 }
         }
 
     fun getLiveData(refresh: Boolean): Observable<List<LiveDataPresentationResponse>> {
         val limit = preferenceStore.getFavouritesLiveDataLimit()
         return getFavourites()
+            .map { favourites -> favourites.map { it.serviceLocation } }
             .flatMap { serviceLocations ->
                 Observable.combineLatest(
                     serviceLocations.mapIndexed { index, dubLinkServiceLocation ->
@@ -105,6 +118,11 @@ class FavouritesUseCase @Inject constructor(
             }
         }
 }
+
+data class ServiceLocationPresentationResponse(
+    val serviceLocation: DubLinkServiceLocation,
+    val distance: Double?
+)
 
 sealed class LiveDataPresentationResponse {
 

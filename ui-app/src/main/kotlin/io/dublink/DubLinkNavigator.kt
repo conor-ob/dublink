@@ -11,4 +11,6 @@ interface DubLinkNavigator {
     fun navigateToSettings()
 
     fun navigateToEditFavourites()
+
+    fun navigateToWebView(title: String, url: String)
 }

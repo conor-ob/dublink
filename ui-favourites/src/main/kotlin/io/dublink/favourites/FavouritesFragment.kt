@@ -27,13 +27,19 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        favourites_toolbar.menu.findItem(R.id.action_edit).apply {
+            isVisible = false
+        }
+
         favourites_toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_edit -> {
+                    // TODO analytics
                     (activity as DubLinkNavigator).navigateToEditFavourites()
                     return@setOnMenuItemClickListener true
                 }
                 R.id.action_settings -> {
+                    // TODO analytics
                     (activity as DubLinkNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true
                 }
@@ -57,7 +63,7 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
         view.favourites_list.setHasFixedSize(true)
         view.favourites_list.layoutManager = LinearLayoutManager(requireContext())
 
-        favourites_swipe_resresh.apply {
+        favourites_swipe_refresh.apply {
             setColorSchemeResources(R.color.color_on_surface)
             setProgressBackgroundColorSchemeResource(R.color.color_surface)
             setOnRefreshListener {
@@ -95,7 +101,16 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
     }
 
     private fun renderState(state: State) {
-        favourites_swipe_resresh.isRefreshing = state.favourites == null
+        if (state.favourites != null && state.favourites.isEmpty()) {
+            favourites_swipe_refresh.isRefreshing = false
+        } else {
+            favourites_swipe_refresh.isRefreshing = state.favourites == null ||
+                state.favouritesWithLiveData == null ||
+                state.favouritesWithLiveData.any { it is LiveDataPresentationResponse.Loading }
+        }
+        favourites_toolbar.menu.findItem(R.id.action_edit).apply {
+            isVisible = !state.favourites.isNullOrEmpty()
+        }
         adapter?.update(listOf(favouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
         if (state.internetStatusChange == InternetStatus.ONLINE) {
             viewModel.dispatch(Action.GetFavourites)
