@@ -88,7 +88,6 @@ class SearchViewModel @Inject constructor(
     private fun bindActions() {
         val searchResultsChange = actions.ofType(Action.Search::class.java)
             .debounce(AppConstants.searchQueryInputThrottling.toMillis(), TimeUnit.MILLISECONDS)
-            .distinctUntilChanged()
             .switchMap { action ->
                 searchUseCase.search(action.query)
                     .subscribeOn(scheduler.io)

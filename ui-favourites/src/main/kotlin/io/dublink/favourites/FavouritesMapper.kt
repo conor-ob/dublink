@@ -108,7 +108,7 @@ class FavouritesMapper @Inject constructor(
             Timber.e(liveDataResponse.throwable, "Error getting favourites live data")
             Section(
                 SimpleMessageItem(
-                    stringProvider.serviceErrorMessage(
+                    stringProvider.errorMessage(
                         liveDataResponse.serviceLocation.service, liveDataResponse.throwable
                     ),
                     liveDataResponse.serviceLocation.id()
