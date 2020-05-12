@@ -71,15 +71,17 @@ class SearchUseCase @Inject constructor(
                         serviceLocationRepository
                             .stream()
                             .map { responses ->
-                                responses.filterIsInstance<ServiceLocationResponse.Data>()
-                            }
-                            .map { response ->
                                 NearbyLocationsResponse.Data(
-                                    serviceLocations = response
+                                    serviceLocations = responses
+                                        .filterIsInstance<ServiceLocationResponse.Data>()
                                         .flatMap { it.serviceLocations }
                                         .associateBy { it.coordinate.haversine(coordinate) }
                                         .toSortedMap()
-                                        .truncateHead(AppConstants.maxNearbyLocations)
+                                        .truncateHead(AppConstants.maxNearbyLocations),
+                                    servicesInError = responses
+                                        .filterIsInstance<ServiceLocationResponse.Error>()
+                                        .map { it.service }
+                                        .toSet()
                                 )
                             }
                     }
@@ -173,7 +175,8 @@ sealed class SearchResultsResponse {
 sealed class NearbyLocationsResponse {
 
     data class Data(
-        val serviceLocations: SortedMap<Double, DubLinkServiceLocation>
+        val serviceLocations: SortedMap<Double, DubLinkServiceLocation>,
+        val servicesInError: Set<Service>
     ) : NearbyLocationsResponse()
 
     object LocationDisabled : NearbyLocationsResponse()

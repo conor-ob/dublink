@@ -2,7 +2,6 @@ package io.dublink.favourites
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
-import io.dublink.domain.internet.NetworkUnavailableException
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.id
 import io.dublink.domain.service.StringProvider
@@ -14,9 +13,6 @@ import io.dublink.model.SimpleMessageItem
 import io.dublink.model.SimpleServiceLocationItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
-import java.io.IOException
-import java.net.ConnectException
-import java.net.UnknownHostException
 import javax.inject.Inject
 import timber.log.Timber
 
@@ -63,14 +59,14 @@ class FavouritesMapper @Inject constructor(
         index: Int
     ): Section {
         return if (liveData == null) {
-            Section(SimpleMessageItem("Loading...", favourite.id()))
+            Section(SimpleMessageItem(stringProvider.loadingMessage(), favourite.id()))
         } else {
             val match = liveData.find {
                 it.serviceLocation.service == favourite.service &&
                 it.serviceLocation.id == favourite.id
             }
             if (match == null) {
-                Section(SimpleMessageItem("Loading...", favourite.id()))
+                Section(SimpleMessageItem(stringProvider.loadingMessage(), favourite.id()))
             } else {
                 mapLiveData(match, favourite.id())
             }
@@ -82,7 +78,7 @@ class FavouritesMapper @Inject constructor(
         index: Long
     ) = when (liveDataResponse) {
         is LiveDataPresentationResponse.Loading -> Section(
-            Section(SimpleMessageItem("Loading...", liveDataResponse.serviceLocation.id()))
+            Section(SimpleMessageItem(stringProvider.loadingMessage(), liveDataResponse.serviceLocation.id()))
         )
         is LiveDataPresentationResponse.Skipped -> Section()
         is LiveDataPresentationResponse.Data -> {
@@ -110,21 +106,13 @@ class FavouritesMapper @Inject constructor(
         }
         is LiveDataPresentationResponse.Error -> {
             Timber.e(liveDataResponse.throwable, "Error getting favourites live data")
-            val message = when (liveDataResponse.throwable) {
-                // service is down
-                is ConnectException -> "${liveDataResponse.serviceLocation.service.fullName} service is down"
-
-                // user has no internet connection
-                is NetworkUnavailableException,
-                is UnknownHostException -> "Please check your internet connection"
-
-                // network error
-                is IOException -> "We're having trouble reaching ${liveDataResponse.serviceLocation.service.fullName}"
-
-                else -> "Something went wrong, try refreshing"
-            }
             Section(
-                SimpleMessageItem(message, liveDataResponse.serviceLocation.id())
+                SimpleMessageItem(
+                    stringProvider.serviceErrorMessage(
+                        liveDataResponse.serviceLocation.service, liveDataResponse.throwable
+                    ),
+                    liveDataResponse.serviceLocation.id()
+                )
             )
         }
     }
@@ -140,5 +128,5 @@ class FavouritesMapper @Inject constructor(
         items: Int,
         favourite: DubLinkServiceLocation,
         index: Int
-    ) = if (index < items - 1) DividerItem(favourite.id()) else null
+    ) = if (index < items - 1) DividerItem(index.toLong()) else null
 }

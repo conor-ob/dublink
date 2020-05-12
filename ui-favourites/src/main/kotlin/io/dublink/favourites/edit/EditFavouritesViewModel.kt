@@ -17,7 +17,9 @@ class EditFavouritesViewModel @Inject constructor(
     override val initialState = State(
         isFinished = false,
         original = null,
-        editing = null
+        editing = null,
+        toastMessage = null,
+        servicesInError = emptySet()
     )
 
     private val reducer: Reducer<State, Result> = { state, result ->
@@ -25,22 +27,37 @@ class EditFavouritesViewModel @Inject constructor(
             is Result.FavouritesReceived -> State(
                 isFinished = false,
                 original = if (state.original.isNullOrEmpty()) result.favourites else state.original,
-                editing = if (state.editing.isNullOrEmpty()) result.favourites else state.editing
+                editing = if (state.editing.isNullOrEmpty()) result.favourites else state.editing,
+                toastMessage = null,
+                servicesInError = result.servicesInError
             )
             is Result.FavouriteEdited -> State(
                 isFinished = false,
                 original = state.original,
-                editing = merge(result.serviceLocation, state.editing)
+                editing = merge(result.serviceLocation, state.editing),
+                toastMessage = null,
+                servicesInError = emptySet()
             )
             is Result.FavouritesReordered -> State(
                 isFinished = false,
                 original = state.original,
-                editing = result.serviceLocations
+                editing = result.serviceLocations,
+                toastMessage = null,
+                servicesInError = emptySet()
             )
             is Result.FavouritesSaved -> State(
                 isFinished = true,
                 original = state.original,
-                editing = state.editing
+                editing = state.editing,
+                toastMessage = null,
+                servicesInError = emptySet()
+            )
+            is Result.Error -> State(
+                isFinished = false,
+                original = state.original,
+                editing = state.editing,
+                toastMessage = "Something went wrong, try refreshing",
+                servicesInError = emptySet()
             )
         }
     }
@@ -106,8 +123,8 @@ class EditFavouritesViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Result> { response ->
                         when (response) {
-                            is FavouritesResponse.Data -> Result.FavouritesReceived(response.serviceLocations)
-                            is FavouritesResponse.Error -> Result.FavouritesReceived(emptyList()) // TODO
+                            is FavouritesResponse.Data -> Result.FavouritesReceived(response.serviceLocations, response.servicesInError)
+                            is FavouritesResponse.Error -> Result.Error(response.throwable)
                         }
                     }
             }

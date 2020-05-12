@@ -6,7 +6,6 @@ import io.dublink.domain.service.StringProvider
 import io.dublink.domain.util.LiveDataFilter
 import io.dublink.model.DublinBikesLiveDataItem
 import io.dublink.model.LiveDataItem
-import io.dublink.model.SimpleMessageItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import javax.inject.Inject
@@ -43,7 +42,12 @@ class LiveDataMapper @Inject constructor(
             is LiveDataPresentationResponse.Error -> {
                 Timber.e(response.throwable, "Error getting live data")
                 listOf(
-                    SimpleMessageItem(response.throwable.message ?: "error", 1L) // TODO
+                    Section(
+                        NoLiveDataItem(
+                            message = stringProvider.serviceErrorMessage(serviceLocation?.service, response.throwable),
+                            id = 1L
+                        )
+                    )
                 )
             }
         }

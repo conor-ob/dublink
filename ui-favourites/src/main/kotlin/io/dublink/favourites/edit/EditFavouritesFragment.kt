@@ -5,6 +5,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -170,8 +171,22 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
     }
 
     private fun renderState(state: State) {
+        renderErrorMessage(state)
         renderSaveButtonState(state)
         renderFavourites(state)
+    }
+
+    private fun renderErrorMessage(state: State) {
+        if (state.toastMessage != null) {
+            Toast.makeText(requireContext(), state.toastMessage, Toast.LENGTH_SHORT).show()
+        } else if (state.servicesInError.isNotEmpty()) {
+            val message = when (state.servicesInError.size) {
+                1 -> "${state.servicesInError.first()} is having problems"
+                2 -> "${state.servicesInError.joinToString(separator = " and ")} are having problems"
+                else -> "${state.servicesInError.take(state.servicesInError.size - 1).joinToString(separator = ", ")} and ${state.servicesInError.last()} are having problems"
+            }
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun renderSaveButtonState(state: State) {

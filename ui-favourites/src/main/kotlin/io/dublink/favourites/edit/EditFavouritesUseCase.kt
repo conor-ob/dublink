@@ -6,6 +6,7 @@ import io.dublink.domain.repository.AggregatedServiceLocationRepository
 import io.dublink.domain.repository.FavouriteRepository
 import io.dublink.domain.repository.ServiceLocationResponse
 import io.reactivex.Observable
+import io.rtpi.api.Service
 import javax.inject.Inject
 
 class EditFavouritesUseCase @Inject constructor(
@@ -20,7 +21,11 @@ class EditFavouritesUseCase @Inject constructor(
                     serviceLocations = responses
                         .filterIsInstance<ServiceLocationResponse.Data>()
                         .flatMap { response -> response.serviceLocations }
-                        .sortedBy { serviceLocation -> serviceLocation.favouriteSortIndex }
+                        .sortedBy { serviceLocation -> serviceLocation.favouriteSortIndex },
+                    servicesInError = responses
+                        .filterIsInstance<ServiceLocationResponse.Error>()
+                        .map { response -> response.service }
+                        .toSet()
                 )
             }
             .onErrorReturn { throwable ->
@@ -43,7 +48,8 @@ class EditFavouritesUseCase @Inject constructor(
 sealed class FavouritesResponse {
 
     data class Data(
-        val serviceLocations: List<DubLinkServiceLocation>
+        val serviceLocations: List<DubLinkServiceLocation>,
+        val servicesInError: Set<Service>
     ) : FavouritesResponse()
 
     data class Error(

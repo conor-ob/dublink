@@ -23,6 +23,16 @@ object SearchResponseMapper {
         clearRecentSearchesClickListener: ClearRecentSearchesClickListener
     ) = Section(
         listOfNotNull(
+            if (nearbyLocationsResponse is NearbyLocationsResponse.Data && nearbyLocationsResponse.servicesInError.isNotEmpty()) {
+                val message = when (nearbyLocationsResponse.servicesInError.size) {
+                    1 -> "${nearbyLocationsResponse.servicesInError.first()} is having problems"
+                    2 -> "${nearbyLocationsResponse.servicesInError.joinToString(separator = " and ")} are having problems"
+                    else -> "${nearbyLocationsResponse.servicesInError.take(nearbyLocationsResponse.servicesInError.size - 1).joinToString(separator = ", ")} and ${nearbyLocationsResponse.servicesInError.last()} are having problems"
+                }
+                HeaderItem(message = message, drawableId = null, index = 352)
+            } else {
+                null
+            },
             mapSearchResults(searchResultsResponse),
             mapRecentSearches(
                 recentSearchesResponse,

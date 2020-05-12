@@ -119,7 +119,8 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     private fun renderState(state: State) {
         when (state.internetStatusChange) {
             InternetStatus.ONLINE -> {
-                snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
+                snackBar = Snackbar.make(activity_root, "Back online!", Snackbar.LENGTH_LONG)
+//                snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
 //                if (navigation.visibility == View.VISIBLE) {
 //                    snackBar?.anchorView = navigation
 //                }
@@ -129,7 +130,8 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
                 snackBar?.show()
             }
             InternetStatus.OFFLINE -> {
-                snackBar = Snackbar.make(activity_root, "Offline \uD83D\uDE14", Snackbar.LENGTH_INDEFINITE)
+                snackBar = Snackbar.make(activity_root, "Offline", Snackbar.LENGTH_INDEFINITE)
+//                snackBar = Snackbar.make(activity_root, "Offline \uD83D\uDE14", Snackbar.LENGTH_INDEFINITE)
                 snackBar?.setAction("Dismiss") {
                     snackBar?.dismiss()
                 }
