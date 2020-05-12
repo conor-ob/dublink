@@ -15,7 +15,7 @@ class HeaderErrorItem(
     private val index: Int
 ) : Item() {
 
-    override fun getLayout() = R.layout.list_item_header
+    override fun getLayout() = R.layout.list_item_header_error
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.message).apply {
