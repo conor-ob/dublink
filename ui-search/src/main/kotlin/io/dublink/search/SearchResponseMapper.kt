@@ -12,6 +12,7 @@ import io.dublink.model.HeaderItem
 import io.dublink.model.StopLocationItem
 import io.dublink.model.setSearchCandidate
 import io.dublink.ui.R
+import io.rtpi.api.Service
 
 object SearchResponseMapper {
 
@@ -33,6 +34,7 @@ object SearchResponseMapper {
             } else {
                 null
             },
+            mapErrorMessage(searchResultsResponse, nearbyLocationsResponse),
             mapSearchResults(searchResultsResponse),
             mapRecentSearches(
                 recentSearchesResponse,
@@ -47,6 +49,32 @@ object SearchResponseMapper {
             )
         )
     )
+
+    private fun mapErrorMessage(
+        searchResultsResponse: SearchResultsResponse?,
+        nearbyLocationsResponse: NearbyLocationsResponse?
+    ): Group? {
+        val servicesInError = mutableSetOf<Service>()
+        if (nearbyLocationsResponse is NearbyLocationsResponse.Data && nearbyLocationsResponse.servicesInError.isNotEmpty()) {
+            servicesInError.addAll(nearbyLocationsResponse.servicesInError)
+        }
+        if (searchResultsResponse is SearchResultsResponse.Data && searchResultsResponse.servicesInError.isNotEmpty()) {
+            servicesInError.addAll(searchResultsResponse.servicesInError)
+        }
+        if (searchResultsResponse is SearchResultsResponse.NoResults && searchResultsResponse.servicesInError.isNotEmpty()) {
+            servicesInError.addAll(searchResultsResponse.servicesInError)
+        }
+        return if (servicesInError.isNotEmpty()) {
+            val message = when (servicesInError.size) {
+                1 -> "${servicesInError.first()} is having problems"
+                2 -> "${servicesInError.joinToString(separator = " and ")} are having problems"
+                else -> "${servicesInError.take(servicesInError.size - 1).joinToString(separator = ", ")} and ${servicesInError.last()} are having problems"
+            }
+            HeaderItem(message = message, drawableId = null, index = 352)
+        } else {
+            null
+        }
+    }
 
     private fun mapSearchResults(searchResultsResponse: SearchResultsResponse?): Group? {
         return if (searchResultsResponse != null) {
