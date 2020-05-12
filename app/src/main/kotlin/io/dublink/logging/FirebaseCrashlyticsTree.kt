@@ -7,7 +7,7 @@ import timber.log.Timber
 object FirebaseCrashlyticsTree : Timber.Tree() {
 
     override fun isLoggable(tag: String?, priority: Int): Boolean {
-        return priority >= Log.DEBUG
+        return priority > Log.INFO
     }
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {

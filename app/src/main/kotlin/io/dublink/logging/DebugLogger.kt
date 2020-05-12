@@ -9,13 +9,17 @@ object DebugLogger : Timber.DebugTree() {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         super.log(priority, tag, message, t)
-        Logger.log(
-            message = message,
-            severityLevel = mapPriority(priority).level,
-            tag = tag,
-            categoryName = mapPriority(priority).level,
-            throwable = t
-        )
+        try {
+            Logger.log(
+                message = message,
+                severityLevel = mapPriority(priority).level,
+                tag = tag,
+                categoryName = mapPriority(priority).level,
+                throwable = t
+            )
+        } catch (e: Exception) {
+            // ignored
+        }
     }
 
     private fun mapPriority(priority: Int): Severity {

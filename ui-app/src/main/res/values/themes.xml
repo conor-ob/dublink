@@ -42,6 +42,7 @@
         <item name="appBarLayoutStyle">@style/Widget.DubLink.AppBar</item>
         <item name="toolbarStyle">@style/Widget.DubLink.Toolbar</item>
         <item name="extendedFloatingActionButtonStyle">@style/Widget.DubLink.ExtendedFloatingActionButton</item>
+        <item name="snackbarTextViewStyle">@style/Widget.DubLink.Snackbar.TextView</item>
 
         <item name="badgeStyle">@style/Widget.MaterialComponents.Badge</item>
         <item name="bottomAppBarStyle">@style/Widget.MaterialComponents.BottomAppBar</item>
@@ -58,7 +59,6 @@
         <item name="sliderStyle">@style/Widget.MaterialComponents.Slider</item>
         <item name="snackbarStyle">@style/Widget.MaterialComponents.Snackbar</item>
         <item name="snackbarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton.Snackbar</item>
-        <item name="snackbarTextViewStyle">@style/Widget.MaterialComponents.Snackbar.TextView</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.FilledBox</item>
 

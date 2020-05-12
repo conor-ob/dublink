@@ -8,6 +8,7 @@ import io.dublink.domain.model.clearFilters
 import io.dublink.domain.model.removeFilter
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
+import io.dublink.domain.service.StringProvider
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import io.rtpi.api.PredictionLiveData
@@ -20,6 +21,7 @@ import timber.log.Timber
 class LiveDataViewModel @Inject constructor(
     private val liveDataUseCase: LiveDataUseCase,
     private val preferenceStore: PreferenceStore,
+    private val stringProvider: StringProvider,
     private val scheduler: RxScheduler
 ) : LifecycleAwareViewModel<Action, State>() {
 
@@ -36,7 +38,7 @@ class LiveDataViewModel @Inject constructor(
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.GetServiceLocation -> State(
-                serviceLocation = change.serviceLocation,
+                serviceLocation = state.serviceLocation ?: change.serviceLocation,
                 liveDataResponse = state.liveDataResponse,
                 routeDiscrepancyState = state.routeDiscrepancyState,
                 routeFilterState = state.routeFilterState,
@@ -102,7 +104,8 @@ class LiveDataViewModel @Inject constructor(
                 favouriteDialog = null
             )
             is Change.Error -> State(
-                toastMessage = change.throwable.message,
+                toastMessage = stringProvider.serviceErrorMessage(state.serviceLocation?.service, change.throwable),
+//                toastMessage = change.throwable.message,
                 serviceLocation = state.serviceLocation,
                 liveDataResponse = state.liveDataResponse,
                 routeDiscrepancyState = state.routeDiscrepancyState,
@@ -281,6 +284,7 @@ class LiveDataViewModel @Inject constructor(
                         .minus(routeDiscrepancyState.knownRoutes)
                         .minus(routeDiscrepancyState.loggedDiscrepancies)
                     return if (discrepancies.isNotEmpty()) {
+                        // TODO log analytics
                         Timber.w(
                             "Unknown route(s) %s found at %s(service=%s, id=%s, name=%s)",
                             discrepancies, serviceLocation.javaClass.simpleName,

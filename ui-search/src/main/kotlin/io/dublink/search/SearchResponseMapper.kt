@@ -12,6 +12,7 @@ import io.dublink.model.HeaderItem
 import io.dublink.model.StopLocationItem
 import io.dublink.model.setSearchCandidate
 import io.dublink.ui.R
+import io.rtpi.api.Service
 
 object SearchResponseMapper {
 
@@ -23,6 +24,17 @@ object SearchResponseMapper {
         clearRecentSearchesClickListener: ClearRecentSearchesClickListener
     ) = Section(
         listOfNotNull(
+            if (nearbyLocationsResponse is NearbyLocationsResponse.Data && nearbyLocationsResponse.servicesInError.isNotEmpty()) {
+                val message = when (nearbyLocationsResponse.servicesInError.size) {
+                    1 -> "${nearbyLocationsResponse.servicesInError.first()} is having problems"
+                    2 -> "${nearbyLocationsResponse.servicesInError.joinToString(separator = " and ")} are having problems"
+                    else -> "${nearbyLocationsResponse.servicesInError.take(nearbyLocationsResponse.servicesInError.size - 1).joinToString(separator = ", ")} and ${nearbyLocationsResponse.servicesInError.last()} are having problems"
+                }
+                HeaderItem(message = message, drawableId = null, index = 352)
+            } else {
+                null
+            },
+            mapErrorMessage(searchResultsResponse, nearbyLocationsResponse),
             mapSearchResults(searchResultsResponse),
             mapRecentSearches(
                 recentSearchesResponse,
@@ -38,6 +50,32 @@ object SearchResponseMapper {
         )
     )
 
+    private fun mapErrorMessage(
+        searchResultsResponse: SearchResultsResponse?,
+        nearbyLocationsResponse: NearbyLocationsResponse?
+    ): Group? {
+        val servicesInError = mutableSetOf<Service>()
+        if (nearbyLocationsResponse is NearbyLocationsResponse.Data && nearbyLocationsResponse.servicesInError.isNotEmpty()) {
+            servicesInError.addAll(nearbyLocationsResponse.servicesInError)
+        }
+        if (searchResultsResponse is SearchResultsResponse.Data && searchResultsResponse.servicesInError.isNotEmpty()) {
+            servicesInError.addAll(searchResultsResponse.servicesInError)
+        }
+        if (searchResultsResponse is SearchResultsResponse.NoResults && searchResultsResponse.servicesInError.isNotEmpty()) {
+            servicesInError.addAll(searchResultsResponse.servicesInError)
+        }
+        return if (servicesInError.isNotEmpty()) {
+            val message = when (servicesInError.size) {
+                1 -> "${servicesInError.first()} is having problems"
+                2 -> "${servicesInError.joinToString(separator = " and ")} are having problems"
+                else -> "${servicesInError.take(servicesInError.size - 1).joinToString(separator = ", ")} and ${servicesInError.last()} are having problems"
+            }
+            HeaderItem(message = message, drawableId = null, index = 352)
+        } else {
+            null
+        }
+    }
+
     private fun mapSearchResults(searchResultsResponse: SearchResultsResponse?): Group? {
         return if (searchResultsResponse != null) {
             when (searchResultsResponse) {
@@ -45,7 +83,8 @@ object SearchResponseMapper {
                     searchResultsResponse.serviceLocations.flatMap { serviceLocation ->
                         mapServiceLocation(
                             serviceLocation,
-                            null
+                            null,
+                            true
                         )
                     }
                 )
@@ -76,7 +115,7 @@ object SearchResponseMapper {
                 is RecentSearchesResponse.Data -> Section(
                     listOf(
                         HeaderItem(
-                            message = "Recent searches",
+                            message = "Recently searched",
                             drawableId = R.drawable.ic_history,
                             index = 3220023
                         )
@@ -85,7 +124,8 @@ object SearchResponseMapper {
                             recentSearchesResponse.serviceLocations.flatMap { serviceLocation ->
                                 mapServiceLocation(
                                     serviceLocation,
-                                    null
+                                    null,
+                                    false
                                 )
                             }
                         )
@@ -99,7 +139,7 @@ object SearchResponseMapper {
                 is RecentSearchesResponse.Empty -> Section(
                     listOf(
                         HeaderItem(
-                            message = "Recent searches",
+                            message = "Recently searched",
                             drawableId = R.drawable.ic_history,
                             index = 3220023
                         )
@@ -146,7 +186,8 @@ object SearchResponseMapper {
                             nearbyLocationsResponse.serviceLocations.entries.flatMap { entry ->
                                 mapServiceLocation(
                                     entry.value,
-                                    entry.key
+                                    entry.key,
+                                    false
                                 )
                             }
                         )
@@ -174,7 +215,8 @@ object SearchResponseMapper {
 
     private fun mapServiceLocation(
         serviceLocation: DubLinkServiceLocation,
-        walkDistance: Double?
+        walkDistance: Double?,
+        searchResult: Boolean
     ): List<AbstractServiceLocationItem> {
         return when (serviceLocation) {
             is DubLinkStopLocation -> listOf(
@@ -182,7 +224,9 @@ object SearchResponseMapper {
                     serviceLocation = serviceLocation,
                     walkDistance = walkDistance
                 ).apply {
-                    setSearchCandidate()
+                    if (searchResult) {
+                        setSearchCandidate()
+                    }
                 }
             )
             is DubLinkDockLocation -> listOf(
@@ -190,7 +234,9 @@ object SearchResponseMapper {
                     serviceLocation = serviceLocation,
                     walkDistance = walkDistance
                 ).apply {
-//                    setSearchCandidate() // TODO
+                    if (searchResult) {
+                        setSearchCandidate()
+                    }
                 }
             )
             else -> emptyList()

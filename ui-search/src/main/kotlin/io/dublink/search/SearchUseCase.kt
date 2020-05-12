@@ -13,6 +13,7 @@ import io.dublink.domain.util.AppConstants
 import io.dublink.domain.util.haversine
 import io.dublink.domain.util.truncateHead
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import java.time.Instant
@@ -41,22 +42,44 @@ class SearchUseCase @Inject constructor(
                         .isNotEmpty()
                 }
                 .flatMap { response ->
-                    searchService.search(
-                        query = query,
-                        serviceLocations = response
-                            .filterIsInstance<ServiceLocationResponse.Data>()
-                            .flatMap { it.serviceLocations }
-                ).map { searchResults ->
-                    if (searchResults.isEmpty()) {
-                        SearchResultsResponse.NoResults(query)
-                    } else {
-                        SearchResultsResponse.Data(
-                            searchResults.take(
-                                AppConstants.maxSearchResults
-                            )
-                        )
-                    }
-                }
+                    Observable.zip(
+                        searchService.search(
+                            query = query,
+                            serviceLocations = response
+                                .filterIsInstance<ServiceLocationResponse.Data>()
+                                .flatMap { it.serviceLocations }
+                        ),
+                        Observable.just(
+                            response
+                                .filterIsInstance<ServiceLocationResponse.Error>()
+                                .map { it.service }
+                                .toSet()
+                        ),
+                        BiFunction { t1: List<DubLinkServiceLocation>, t2: Set<Service> ->
+                            if (t1.isEmpty()) {
+                                SearchResultsResponse.NoResults(query, t2)
+                            } else {
+                                SearchResultsResponse.Data(
+                                    t1.take(
+                                        AppConstants.maxSearchResults
+                                    ),
+                                    t2
+                                )
+                            }
+                        }
+                    )
+
+//                ).map { searchResults ->
+//                    if (searchResults.isEmpty()) {
+//                        SearchResultsResponse.NoResults(query)
+//                    } else {
+//                        SearchResultsResponse.Data(
+//                            searchResults.take(
+//                                AppConstants.maxSearchResults
+//                            )
+//                        )
+//                    }
+//                }
             }
         }
 
@@ -71,15 +94,17 @@ class SearchUseCase @Inject constructor(
                         serviceLocationRepository
                             .stream()
                             .map { responses ->
-                                responses.filterIsInstance<ServiceLocationResponse.Data>()
-                            }
-                            .map { response ->
                                 NearbyLocationsResponse.Data(
-                                    serviceLocations = response
+                                    serviceLocations = responses
+                                        .filterIsInstance<ServiceLocationResponse.Data>()
                                         .flatMap { it.serviceLocations }
                                         .associateBy { it.coordinate.haversine(coordinate) }
                                         .toSortedMap()
-                                        .truncateHead(AppConstants.maxNearbyLocations)
+                                        .truncateHead(AppConstants.maxNearbyLocations),
+                                    servicesInError = responses
+                                        .filterIsInstance<ServiceLocationResponse.Error>()
+                                        .map { it.service }
+                                        .toSet()
                                 )
                             }
                     }
@@ -160,11 +185,13 @@ class SearchUseCase @Inject constructor(
 sealed class SearchResultsResponse {
 
     data class Data(
-        val serviceLocations: List<DubLinkServiceLocation>
+        val serviceLocations: List<DubLinkServiceLocation>,
+        val servicesInError: Set<Service>
     ) : SearchResultsResponse()
 
     data class NoResults(
-        val query: String
+        val query: String,
+        val servicesInError: Set<Service>
     ) : SearchResultsResponse()
 
     object Empty : SearchResultsResponse()
@@ -173,7 +200,8 @@ sealed class SearchResultsResponse {
 sealed class NearbyLocationsResponse {
 
     data class Data(
-        val serviceLocations: SortedMap<Double, DubLinkServiceLocation>
+        val serviceLocations: SortedMap<Double, DubLinkServiceLocation>,
+        val servicesInError: Set<Service>
     ) : NearbyLocationsResponse()
 
     object LocationDisabled : NearbyLocationsResponse()
