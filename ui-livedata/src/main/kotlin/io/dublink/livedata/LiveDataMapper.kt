@@ -44,7 +44,7 @@ class LiveDataMapper @Inject constructor(
                 listOf(
                     Section(
                         NoLiveDataItem(
-                            message = stringProvider.serviceErrorMessage(serviceLocation?.service, response.throwable),
+                            message = stringProvider.errorMessage(serviceLocation?.service, response.throwable),
                             id = 1L
                         )
                     )

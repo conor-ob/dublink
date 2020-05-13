@@ -44,6 +44,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
                 state?.let { renderState(state) }
             }
         )
+        viewModel.dispatch(Action.PreloadData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
@@ -128,6 +129,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
                 snackBar?.setTextColor(getColor(R.color.color_on_success))
                 snackBar?.setBackgroundTint(getColor(R.color.color_success))
                 snackBar?.show()
+                viewModel.dispatch(Action.PreloadData)
             }
             InternetStatus.OFFLINE -> {
                 snackBar = Snackbar.make(activity_root, "Offline", Snackbar.LENGTH_INDEFINITE)

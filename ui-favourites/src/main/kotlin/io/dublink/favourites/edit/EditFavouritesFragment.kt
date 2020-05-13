@@ -20,10 +20,12 @@ import io.dublink.DubLinkNavigator
 import io.dublink.dialog.FavouriteDialogFactory
 import io.dublink.dialog.OnFavouriteSavedListener
 import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.domain.service.StringProvider
 import io.dublink.favourites.R
 import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
 import io.dublink.viewModelProvider
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_edit_favourites.*
 import kotlinx.android.synthetic.main.fragment_edit_favourites.view.*
 
@@ -31,6 +33,9 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as EditFavouritesViewModel }
     private var adapter: EditFavouritesAdapter<GroupieViewHolder>? = null
+
+    @Inject
+    lateinit var stringProvider: StringProvider
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -179,13 +184,8 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
     private fun renderErrorMessage(state: State) {
         if (state.toastMessage != null) {
             Toast.makeText(requireContext(), state.toastMessage, Toast.LENGTH_SHORT).show()
-        } else if (state.servicesInError.isNotEmpty()) {
-            val message = when (state.servicesInError.size) {
-                1 -> "${state.servicesInError.first()} is having problems"
-                2 -> "${state.servicesInError.joinToString(separator = " and ")} are having problems"
-                else -> "${state.servicesInError.take(state.servicesInError.size - 1).joinToString(separator = ", ")} and ${state.servicesInError.last()} are having problems"
-            }
-            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        } else if (state.errorResponses.isNotEmpty()) {
+            Toast.makeText(requireContext(), stringProvider.errorMessage(state.errorResponses), Toast.LENGTH_LONG).show()
         }
     }
 

@@ -104,7 +104,7 @@ class LiveDataViewModel @Inject constructor(
                 favouriteDialog = null
             )
             is Change.Error -> State(
-                toastMessage = stringProvider.serviceErrorMessage(state.serviceLocation?.service, change.throwable),
+                toastMessage = stringProvider.errorMessage(state.serviceLocation?.service, change.throwable),
 //                toastMessage = change.throwable.message,
                 serviceLocation = state.serviceLocation,
                 liveDataResponse = state.liveDataResponse,

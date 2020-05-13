@@ -143,8 +143,7 @@ class SearchServiceTest {
         ).blockingFirst()
 
         // assert
-        assertThat(searchResults).hasSize(6)
-        assertThat(searchResults.map { it.name }).containsExactly(
+        assertThat(searchResults.take(6).map { it.name }).containsExactly(
             "George's Dock",
             "Spencer Dock",
             "Docklands",

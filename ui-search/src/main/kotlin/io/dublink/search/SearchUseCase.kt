@@ -35,51 +35,31 @@ class SearchUseCase @Inject constructor(
             Observable.just(SearchResultsResponse.Empty)
         } else {
             serviceLocationRepository.get()
-                .filter { response ->
-                    response
-                        .filterIsInstance<ServiceLocationResponse.Data>()
-                        .flatMap { it.serviceLocations }
-                        .isNotEmpty()
-                }
+                .filter { response -> response.serviceLocations.isNotEmpty() || response.errorResponses.isNotEmpty() }
                 .flatMap { response ->
                     Observable.zip(
                         searchService.search(
                             query = query,
-                            serviceLocations = response
-                                .filterIsInstance<ServiceLocationResponse.Data>()
-                                .flatMap { it.serviceLocations }
+                            serviceLocations = response.serviceLocations
                         ),
                         Observable.just(
-                            response
-                                .filterIsInstance<ServiceLocationResponse.Error>()
-                                .map { it.service }
-                                .toSet()
+                            response.errorResponses
                         ),
-                        BiFunction { t1: List<DubLinkServiceLocation>, t2: Set<Service> ->
-                            if (t1.isEmpty()) {
-                                SearchResultsResponse.NoResults(query, t2)
+                        BiFunction { searchResults: List<DubLinkServiceLocation>,
+                            errorResponses: List<ServiceLocationResponse.Error> ->
+                            if (searchResults.isEmpty()) {
+                                SearchResultsResponse.NoResults(
+                                    query = query,
+                                    errorResponses = errorResponses
+                                )
                             } else {
                                 SearchResultsResponse.Data(
-                                    t1.take(
-                                        AppConstants.maxSearchResults
-                                    ),
-                                    t2
+                                    serviceLocations = searchResults.take(AppConstants.maxSearchResults),
+                                    errorResponses = errorResponses
                                 )
                             }
                         }
                     )
-
-//                ).map { searchResults ->
-//                    if (searchResults.isEmpty()) {
-//                        SearchResultsResponse.NoResults(query)
-//                    } else {
-//                        SearchResultsResponse.Data(
-//                            searchResults.take(
-//                                AppConstants.maxSearchResults
-//                            )
-//                        )
-//                    }
-//                }
             }
         }
 
@@ -93,18 +73,13 @@ class SearchUseCase @Inject constructor(
                     .flatMap<NearbyLocationsResponse> { coordinate ->
                         serviceLocationRepository
                             .stream()
-                            .map { responses ->
+                            .map { response ->
                                 NearbyLocationsResponse.Data(
-                                    serviceLocations = responses
-                                        .filterIsInstance<ServiceLocationResponse.Data>()
-                                        .flatMap { it.serviceLocations }
+                                    serviceLocations = response.serviceLocations
                                         .associateBy { it.coordinate.haversine(coordinate) }
                                         .toSortedMap()
                                         .truncateHead(AppConstants.maxNearbyLocations),
-                                    servicesInError = responses
-                                        .filterIsInstance<ServiceLocationResponse.Error>()
-                                        .map { it.service }
-                                        .toSet()
+                                    errorResponses = response.errorResponses
                                 )
                             }
                     }
@@ -156,8 +131,8 @@ class SearchUseCase @Inject constructor(
     private fun getServiceLocations(): Observable<Pair<Set<Service>, List<ServiceLocation>>> {
         return serviceLocationRepository.stream()
             .map { responses ->
-                val okResponses = responses.filterIsInstance<ServiceLocationResponse.Data>()
-                val badResponses = responses.filterIsInstance<ServiceLocationResponse.Error>()
+                val okResponses = responses.dataResponses
+                val badResponses = responses.errorResponses
                 Pair(
                     badResponses.map { it.service }.toSet(),
                     okResponses.flatMap { it.serviceLocations }
@@ -186,12 +161,12 @@ sealed class SearchResultsResponse {
 
     data class Data(
         val serviceLocations: List<DubLinkServiceLocation>,
-        val servicesInError: Set<Service>
+        val errorResponses: List<ServiceLocationResponse.Error>
     ) : SearchResultsResponse()
 
     data class NoResults(
         val query: String,
-        val servicesInError: Set<Service>
+        val errorResponses: List<ServiceLocationResponse.Error>
     ) : SearchResultsResponse()
 
     object Empty : SearchResultsResponse()
@@ -201,7 +176,7 @@ sealed class NearbyLocationsResponse {
 
     data class Data(
         val serviceLocations: SortedMap<Double, DubLinkServiceLocation>,
-        val servicesInError: Set<Service>
+        val errorResponses: List<ServiceLocationResponse.Error>
     ) : NearbyLocationsResponse()
 
     object LocationDisabled : NearbyLocationsResponse()
