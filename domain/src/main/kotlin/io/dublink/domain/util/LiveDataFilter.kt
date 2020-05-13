@@ -17,23 +17,43 @@ object LiveDataFilter {
             val activeRouteFilters = serviceLocation.filters
                 .filterIsInstance<Filter.RouteFilter>()
                 .filter { it.isActive }
-            val activeDirectionFilters = serviceLocation.filters
-                .filterIsInstance<Filter.DirectionFilter>()
+            val allDirectionFilters = serviceLocation.filters.filterIsInstance<Filter.DirectionFilter>()
+            val activeDirectionFilters = allDirectionFilters
                 .filter { it.isActive }
             return if (activeRouteFilters.isEmpty() && activeDirectionFilters.isEmpty()) {
                 predictionLiveData
             } else if (activeRouteFilters.isEmpty()) {
                 predictionLiveData.filter {
-                    activeDirectionFilters.map { filter -> filter.direction }.contains(it.routeInfo.direction)
+                    val isExpectedDirection = allDirectionFilters
+                        .map { filter -> filter.direction }
+                        .contains(it.routeInfo.direction)
+                    return@filter if (isExpectedDirection) {
+                        activeDirectionFilters
+                            .map { filter -> filter.direction }
+                            .contains(it.routeInfo.direction)
+                    } else {
+                        true
+                    }
                 }
             } else if (activeDirectionFilters.isEmpty()) {
                 predictionLiveData.filter {
-                    activeRouteFilters.map { filter -> filter.route.id }.contains(it.routeInfo.route)
+                    activeRouteFilters
+                        .map { filter -> filter.route.id }
+                        .contains(it.routeInfo.route)
                 }
             } else {
                 predictionLiveData.filter {
+                    val isExpectedDirection = allDirectionFilters
+                        .map { filter -> filter.direction }
+                        .contains(it.routeInfo.direction)
                     activeRouteFilters.map { filter -> filter.route.id }.contains(it.routeInfo.route) &&
-                        activeDirectionFilters.map { filter -> filter.direction }.contains(it.routeInfo.direction)
+                        if (isExpectedDirection) {
+                            activeDirectionFilters
+                                .map { filter -> filter.direction }
+                                .contains(it.routeInfo.direction)
+                        } else {
+                            true
+                        }
                 }
             }
         } else {
