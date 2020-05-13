@@ -25,6 +25,7 @@ import io.dublink.model.isSearchCandidate
 import io.dublink.util.hideKeyboard
 import io.dublink.util.showKeyboard
 import io.dublink.viewModelProvider
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_search.*
 
 private const val locationRequestCode = 42069
@@ -36,6 +37,9 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
 
     private var keyboardHasFocus = true
+
+    @Inject
+    lateinit var searchMapper: SearchMapper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -116,6 +120,21 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
                 requestFocus()
             }
         }
+
+        search_swipe_refresh.apply {
+            isRefreshing = false
+            setColorSchemeResources(R.color.color_on_surface)
+            setProgressBackgroundColorSchemeResource(R.color.color_surface)
+            setOnRefreshListener {
+                val query = search_input.query?.toString()
+                if (query != null && query.length > 1) {
+                    viewModel.dispatch(Action.Search(query))
+                } else {
+                    viewModel.dispatch(Action.GetRecentSearches)
+                    viewModel.dispatch(Action.GetNearbyLocations)
+                }
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -160,6 +179,7 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
     }
 
     private fun renderState(state: State) {
+        search_swipe_refresh.isRefreshing = false
         if (state.throwable != null) {
             Toast.makeText(requireContext(), state.throwable.message, Toast.LENGTH_LONG).show()
         }
@@ -170,7 +190,7 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
         }
         adapter?.update(
             listOf(
-                SearchResponseMapper.map(
+                searchMapper.map(
                     state.searchResults,
                     state.recentSearches,
                     state.nearbyLocations,

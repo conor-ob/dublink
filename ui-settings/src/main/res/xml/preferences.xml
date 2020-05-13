@@ -2,6 +2,22 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory android:title="@string/preference_category_name_upgrade">
+
+        <Preference
+            android:icon="@drawable/ic_flame"
+            android:key="@string/preference_key_upgrade"
+            android:title="@string/preference_name_upgrade"
+            android:summary="@string/preference_summary_upgrade"/>
+
+        <Preference
+            android:icon="@drawable/ic_hourglass"
+            android:key="@string/preference_key_upgrade"
+            android:title="Free trial"
+            android:summary="Try DubLink Pro for 3 days"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/preference_category_name_customization">
 
         <ListPreference
@@ -167,7 +183,7 @@
             android:title="@string/preference_name_privacy_policy" />
 
         <Preference
-            android:icon="@drawable/ic_policy"
+            android:icon="@drawable/ic_bank"
             android:key="@string/preference_key_terms_of_service"
             android:title="@string/preference_name_terms_of_service" />
 

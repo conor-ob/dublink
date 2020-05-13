@@ -7,6 +7,7 @@ import io.dublink.domain.repository.ServiceLocationRepository
 import io.dublink.domain.repository.ServiceLocationResponse
 import io.reactivex.Observable
 import io.rtpi.api.Service
+import io.rtpi.api.ServiceLocation
 
 class DefaultServiceLocationRepository(
     private val service: Service,
@@ -56,7 +57,11 @@ class DefaultServiceLocationRepository(
                         } else {
                             ServiceLocationResponse.Error(
                                 service = service,
-                                throwable = IllegalStateException("not found")
+                                throwable = IllegalStateException(
+                                    ServiceLocation::class.java.simpleName +
+                                        " not found for ${key.service}" +
+                                        " with location ID ${key.locationId}"
+                                )
                             )
                         }
                     }

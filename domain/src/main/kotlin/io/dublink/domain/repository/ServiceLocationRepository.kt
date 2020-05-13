@@ -12,10 +12,10 @@ interface ServiceLocationRepository {
 }
 
 interface AggregatedServiceLocationRepository {
-    fun get(): Observable<List<ServiceLocationResponse>>
-    fun stream(): Observable<List<ServiceLocationResponse>>
-    fun getFavourites(): Observable<List<ServiceLocationResponse>>
-    fun streamFavourites(): Observable<List<ServiceLocationResponse>>
+    fun get(): Observable<AggregatedServiceLocationResponse>
+    fun stream(): Observable<AggregatedServiceLocationResponse>
+    fun getFavourites(): Observable<AggregatedServiceLocationResponse>
+    fun streamFavourites(): Observable<AggregatedServiceLocationResponse>
     fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse>
     fun clearCache(service: Service)
     fun clearAllCaches()
@@ -39,4 +39,13 @@ sealed class ServiceLocationResponse {
         override val service: Service,
         val throwable: Throwable
     ) : ServiceLocationResponse()
+}
+
+data class AggregatedServiceLocationResponse(
+    val serviceLocationResponses: List<ServiceLocationResponse>
+) {
+
+    val dataResponses = serviceLocationResponses.filterIsInstance<ServiceLocationResponse.Data>()
+    val errorResponses = serviceLocationResponses.filterIsInstance<ServiceLocationResponse.Error>()
+    val serviceLocations = dataResponses.flatMap { response -> response.serviceLocations }
 }
