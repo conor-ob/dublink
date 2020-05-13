@@ -2,8 +2,11 @@ package io.dublink.favourites
 
 import com.xwray.groupie.Group
 import com.xwray.groupie.Section
+import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.model.id
+import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.StringProvider
 import io.dublink.domain.util.AppConstants
 import io.dublink.model.DividerItem
@@ -11,13 +14,15 @@ import io.dublink.model.DublinBikesLiveDataItem
 import io.dublink.model.GroupedLiveDataItem
 import io.dublink.model.SimpleMessageItem
 import io.dublink.model.SimpleServiceLocationItem
+import io.dublink.model.StopLocationItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import javax.inject.Inject
 import timber.log.Timber
 
 class FavouritesMapper @Inject constructor(
-    private val stringProvider: StringProvider
+    private val stringProvider: StringProvider,
+    private val preferenceStore: PreferenceStore
 ) {
 
     fun map(
@@ -25,17 +30,21 @@ class FavouritesMapper @Inject constructor(
         liveData: List<LiveDataPresentationResponse>?
     ): Group {
         return if (locationResponses != null && locationResponses.isNotEmpty()) {
+            val limit = preferenceStore.getFavouritesLiveDataLimit()
             Section(
                 locationResponses.mapIndexed { index, locationResponse ->
                     Section(
                         listOfNotNull(
                             mapServiceLocation(
-                                locationResponse
+                                locationResponse,
+                                index,
+                                limit
                             ),
                             mapLiveData(
                                 locationResponse.serviceLocation,
                                 liveData,
-                                index
+                                index,
+                                limit
                             ),
                             mapDivider(
                                 locationResponses.size,
@@ -56,10 +65,15 @@ class FavouritesMapper @Inject constructor(
     private fun mapLiveData(
         favourite: DubLinkServiceLocation,
         liveData: List<LiveDataPresentationResponse>?,
-        index: Int
+        index: Int,
+        limit: Int
     ): Section {
         return if (liveData == null) {
-            Section(SimpleMessageItem(stringProvider.loadingMessage(), favourite.id()))
+            if (index < limit) {
+                Section(SimpleMessageItem(stringProvider.loadingMessage(), favourite.id()))
+            } else {
+                Section()
+            }
         } else {
             val match = liveData.find {
                 it.serviceLocation.service == favourite.service &&
@@ -118,11 +132,24 @@ class FavouritesMapper @Inject constructor(
     }
 
     private fun mapServiceLocation(
-        locationResponses: ServiceLocationPresentationResponse
-    ) = SimpleServiceLocationItem(
-        serviceLocation = locationResponses.serviceLocation,
-        walkDistance = locationResponses.distance
-    )
+        locationResponses: ServiceLocationPresentationResponse,
+        index: Int,
+        limit: Int
+    ) = if (index < limit || locationResponses.serviceLocation is DubLinkDockLocation) {
+        SimpleServiceLocationItem(
+            serviceLocation = locationResponses.serviceLocation,
+            walkDistance = locationResponses.distance
+        )
+    } else {
+        StopLocationItem(
+            serviceLocation = locationResponses.serviceLocation as DubLinkStopLocation,
+            walkDistance = locationResponses.distance
+        )
+    }
+//    ) = SimpleServiceLocationItem(
+//        serviceLocation = locationResponses.serviceLocation,
+//        walkDistance = locationResponses.distance
+//    )
 
     private fun mapDivider(
         items: Int,
