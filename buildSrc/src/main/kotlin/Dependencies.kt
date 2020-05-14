@@ -6,7 +6,7 @@ object BuildConfig {
     object Version {
         private const val major = 0
         private const val minor = 1
-        private const val patch = 0
+        private const val patch = 1
 
         const val name = "$major.$minor.$patch"
         const val code = major * 100000 + minor * 1000 + patch * 10
@@ -43,6 +43,8 @@ object Libraries {
     object Android {
         const val material = "com.google.android.material:material:1.2.0-alpha02" // https://mvnrepository.com/artifact/com.google.android.material/material
         const val flexBox = "com.google.android:flexbox:2.0.1" // https://mvnrepository.com/artifact/com.google.android/flexbox?repo=bt-google-flexbox-layout
+        const val googlePlayBilling = "com.android.billingclient:billing:2.2.0" // https://mvnrepository.com/artifact/com.android.billingclient/billing
+        const val googlePlayBillingKtx = "com.android.billingclient:billing-ktx:2.2.0" // https://mvnrepository.com/artifact/com.android.billingclient/billing-ktx
         const val playServicesLocation = "com.google.android.gms:play-services-location:17.0.0" // https://mvnrepository.com/artifact/com.google.android.gms/play-services-location?repo=google
     }
 
