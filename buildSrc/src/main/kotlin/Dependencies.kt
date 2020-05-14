@@ -133,6 +133,10 @@ object Libraries {
         const val rxJavaExtensions = "com.squareup.sqldelight:rxjava2-extensions:1.2.0" // https://mvnrepository.com/artifact/com.squareup.sqldelight/rxjava2-extensions
     }
 
+    object Sourceforge {
+        const val javaMl = "net.sourceforge:javaml:0.1.7" // https://mvnrepository.com/artifact/net.sourceforge/javaml?repo=jena-bio-libs-release-oss
+    }
+
     object Store {
         const val store3 = "com.nytimes.android:store3:3.1.1" // https://mvnrepository.com/artifact/com.nytimes.android/store3
         const val store4 = "com.dropbox.mobile.store:store4:4.0.0-alpha03" // https://mvnrepository.com/artifact/com.dropbox.mobile.store/store4

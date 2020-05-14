@@ -72,7 +72,7 @@ class SearchUseCase @Inject constructor(
                 locationProvider.getLocationUpdates(thresholdDistance = 10.0)
                     .flatMap<NearbyLocationsResponse> { coordinate ->
                         serviceLocationRepository
-                            .stream()
+                            .streamNearest(coordinate, limit = AppConstants.maxNearbyLocations)
                             .map { response ->
                                 NearbyLocationsResponse.Data(
                                     serviceLocations = response.serviceLocations
