@@ -53,7 +53,7 @@ object AppConstants {
      * Search results are ranked by their accuracy in relation to the search query. This is a score out of 100 of which
      * search results will be filtered.
      */
-    const val searchAccuracyScoreCutoff: Int = 65
+    const val searchAccuracyScoreCutoff: Int = 50
 
     /**
      * The maximum number of search results to be displayed

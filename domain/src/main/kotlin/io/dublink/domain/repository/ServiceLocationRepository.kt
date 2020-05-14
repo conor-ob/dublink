@@ -2,10 +2,12 @@ package io.dublink.domain.repository
 
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.reactivex.Observable
+import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 
 interface ServiceLocationRepository {
     fun get(): Observable<ServiceLocationResponse>
+    fun getNearest(coordinate: Coordinate, limit: Int): Observable<ServiceLocationResponse>
     fun getFavourites(): Observable<ServiceLocationResponse>
     fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse>
     fun clearCache(service: Service)
@@ -13,9 +15,9 @@ interface ServiceLocationRepository {
 
 interface AggregatedServiceLocationRepository {
     fun get(): Observable<AggregatedServiceLocationResponse>
-    fun stream(): Observable<AggregatedServiceLocationResponse>
     fun getFavourites(): Observable<AggregatedServiceLocationResponse>
-    fun streamFavourites(): Observable<AggregatedServiceLocationResponse>
+    fun stream(): Observable<AggregatedServiceLocationResponse>
+    fun streamNearest(coordinate: Coordinate, limit: Int): Observable<AggregatedServiceLocationResponse>
     fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse>
     fun clearCache(service: Service)
     fun clearAllCaches()
