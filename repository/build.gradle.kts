@@ -11,6 +11,7 @@ dependencies {
     implementation(Libraries.Rtpi.rtpiApi)
     implementation(Libraries.Rtpi.rtpiClient)
     implementation(Libraries.Rx.rxJava)
+    implementation(Libraries.Sourceforge.javaMl)
     implementation(Libraries.Store.store3)
 
     kapt(Libraries.Dagger.daggerCompiler)

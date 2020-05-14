@@ -19,18 +19,8 @@ allprojects {
         google()
         jcenter()
         mavenLocal()
-        maven(url = "https://jitpack.io") {
-            credentials {
-                username = properties.getOrDefault(
-                    "authToken",
-                    if (project.rootProject.file("release.properties").exists()) {
-                        loadProperties("release.properties").getProperty("authToken")
-                    } else {
-                        null
-                    }
-                ) as String?
-            }
-        }
+        maven(url = "https://jitpack.io")
+        maven(url = "http://streamreasoning.org/maven/")
     }
     apply(from = "$rootDir/ktlint.gradle.kts")
 }

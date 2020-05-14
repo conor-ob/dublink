@@ -7,6 +7,7 @@ import io.dublink.domain.repository.ServiceLocationRepository
 import io.dublink.domain.repository.ServiceLocationResponse
 import io.dublink.domain.service.EnabledServiceManager
 import io.reactivex.Observable
+import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 
 class DefaultAggregatedServiceLocationRepository(
@@ -19,11 +20,15 @@ class DefaultAggregatedServiceLocationRepository(
             enabledServiceManager.getEnabledServices().map { enabledService ->
                 serviceLocationRepositories.getValue(enabledService).get()
             }
-        ) { serviceLocationStreams ->
-            AggregatedServiceLocationResponse(
-                serviceLocationResponses = serviceLocationStreams.map { it as ServiceLocationResponse }
-            )
-        }
+        ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }
+    }
+
+    override fun getFavourites(): Observable<AggregatedServiceLocationResponse> {
+        return Observable.zip(
+            enabledServiceManager.getEnabledServices().map { enabledService ->
+                serviceLocationRepositories.getValue(enabledService).getFavourites()
+            }
+        ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }
     }
 
     override fun stream(): Observable<AggregatedServiceLocationResponse> {
@@ -32,36 +37,16 @@ class DefaultAggregatedServiceLocationRepository(
                 serviceLocationRepositories.getValue(enabledService).get()
                     .startWith(ServiceLocationResponse.Data(enabledService, emptyList()))
             }
-        ) { serviceLocationStreams ->
-            AggregatedServiceLocationResponse(
-                serviceLocationResponses = serviceLocationStreams.map { it as ServiceLocationResponse }
-            )
-        }
+        ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }
     }
 
-    override fun getFavourites(): Observable<AggregatedServiceLocationResponse> {
-        return Observable.zip(
-            enabledServiceManager.getEnabledServices().map { enabledService ->
-                serviceLocationRepositories.getValue(enabledService).getFavourites()
-            }
-        ) { serviceLocationStreams ->
-            AggregatedServiceLocationResponse(
-                serviceLocationResponses = serviceLocationStreams.map { it as ServiceLocationResponse }
-            )
-        }
-    }
-
-    override fun streamFavourites(): Observable<AggregatedServiceLocationResponse> {
+    override fun streamNearest(coordinate: Coordinate, limit: Int): Observable<AggregatedServiceLocationResponse> {
         return Observable.combineLatest(
             enabledServiceManager.getEnabledServices().map { enabledService ->
-                serviceLocationRepositories.getValue(enabledService).getFavourites()
+                serviceLocationRepositories.getValue(enabledService).getNearest(coordinate, limit)
                     .startWith(ServiceLocationResponse.Data(enabledService, emptyList()))
             }
-        ) { serviceLocationStreams ->
-            AggregatedServiceLocationResponse(
-                serviceLocationResponses = serviceLocationStreams.map { it as ServiceLocationResponse }
-            )
-        }
+        ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }
     }
 
     override fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse> {
@@ -74,5 +59,11 @@ class DefaultAggregatedServiceLocationRepository(
 
     override fun clearAllCaches() {
         serviceLocationRepositories.forEach { it.value.clearCache(it.key) }
+    }
+
+    private fun aggregate(serviceLocationStreams: Array<out Any>): AggregatedServiceLocationResponse {
+        return AggregatedServiceLocationResponse(
+            serviceLocationResponses = serviceLocationStreams.map { it as ServiceLocationResponse }
+        )
     }
 }
