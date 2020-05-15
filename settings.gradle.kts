@@ -3,6 +3,7 @@ include(
     ":database",
     ":domain",
     ":repository",
+    ":iap",
     ":ui-app",
     ":ui-favourites",
     ":ui-livedata",

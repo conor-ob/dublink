@@ -155,13 +155,13 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
     override fun onResume() {
         super.onResume()
         viewModel.onResume()
-        val query = search_input.query?.toString()
-        if (query != null && query.length > 1) {
-            viewModel.dispatch(Action.Search(query))
-        } else {
+//        val query = search_input.query?.toString()
+//        if (query != null && query.length > 1) {
+//            viewModel.dispatch(Action.Search(query))
+//        } else {
             viewModel.dispatch(Action.GetRecentSearches)
             viewModel.dispatch(Action.GetNearbyLocations)
-        }
+//        }
         if (!keyboardHasFocus) {
             hideKeyboard(search_input)
         }

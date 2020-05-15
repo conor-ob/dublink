@@ -77,6 +77,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
                 val selectorIntent = Intent(Intent.ACTION_SENDTO)
                 selectorIntent.data = Uri.parse("mailto:")
                 val emailBody = """
+                    Type your feedback here
                     
                     
                     -----------------------------
@@ -145,11 +146,11 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
 //                return@setOnPreferenceClickListener true
 //            }
 //        }
-        if (BuildConfig.DEBUG) {
+        if (appConfig.isDebug()) {
             findPreference<Preference>(getString(R.string.preference_key_app_version))?.apply {
                 setOnPreferenceClickListener {
                     LogViewerActivity
-                        .createIntent(activity!!.applicationContext)
+                        .createIntent(requireContext().applicationContext)
                         .let { startActivity(it) }
                     return@setOnPreferenceClickListener true
                 }

@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.iap.InAppPurchaseRepository
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
 import javax.inject.Inject
@@ -21,6 +22,8 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkActivityViewModel }
     private var snackBar: Snackbar? = null
+
+    @Inject lateinit var inAppPurchaseRepository: InAppPurchaseRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,8 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         )
         viewModel.dispatch(Action.PreloadData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
+
+        inAppPurchaseRepository.startBillingDataSourceConnections()
     }
 
     override fun getNavController() = navigationController
