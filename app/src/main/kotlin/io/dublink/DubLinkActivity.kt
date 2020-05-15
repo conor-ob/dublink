@@ -50,7 +50,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         viewModel.dispatch(Action.PreloadData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
 
-        inAppPurchaseRepository.startBillingDataSourceConnections()
+        inAppPurchaseRepository.startBillingDataSourceConnections(this)
     }
 
     override fun getNavController() = navigationController

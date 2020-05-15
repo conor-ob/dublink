@@ -1,20 +1,19 @@
 package io.dublink.iap
 
+import android.app.Activity
 import android.content.Context
 import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import com.github.rholder.retry.RetryerBuilder
-import com.github.rholder.retry.StopStrategies
-import com.github.rholder.retry.WaitStrategies
+import com.gen.rxbilling.client.RxBilling
+import com.gen.rxbilling.client.RxBillingImpl
+import com.gen.rxbilling.connection.BillingClientFactory
 import io.dublink.domain.service.PreferenceStore
+import io.dublink.iap.InAppPurchaseRepository.DubLinkSku.IN_APP_SKUS
+import io.dublink.iap.InAppPurchaseRepository.DubLinkSku.TEST
+import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
-import java.time.LocalTime
-import java.util.HashSet
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class InAppPurchaseRepository @Inject constructor(
@@ -22,105 +21,42 @@ class InAppPurchaseRepository @Inject constructor(
     private val preferenceStore: PreferenceStore
 ) {
 
-    private lateinit var billingClient: BillingClient
-    private var isRunning = false
+    private lateinit var rxBilling: RxBilling
+    private val disposable = CompositeDisposable()
 
-    fun startBillingDataSourceConnections() {
-        isRunning = false
-        billingClient = BillingClient
-        .newBuilder(context)
-        .enablePendingPurchases()
-        .setListener(purchasesUpdatedListener)
-        .build()
+    fun startBillingDataSourceConnections(activity: Activity) {
+        rxBilling = RxBillingImpl(BillingClientFactory(context.applicationContext))
+        disposable.add(
+            rxBilling.observeUpdates()
+                .subscribe({
+                    Timber.d("observeUpdates $it")
+                }, {
+                    Timber.e(it)
+                })
+        )
 
-        val retryPolicy = RetryerBuilder.newBuilder<Boolean>()
-            .retryIfResult { it == true }
-            .withWaitStrategy(WaitStrategies.exponentialWait(100, 5L, TimeUnit.MINUTES))
-            .withStopStrategy(StopStrategies.neverStop())
-            .build()
+        disposable.add(
+            rxBilling.getSkuDetails(
+                SkuDetailsParams.newBuilder().setSkusList(IN_APP_SKUS).setType(BillingClient.SkuType.INAPP).build()
+            )
+                .subscribe({
+                    Timber.d("skudeets $it")
+                }, {
+                    Timber.e(it)
+                })
+        )
 
-        retryPolicy.call {
-            Timber.d("Trying at ${LocalTime.now()}")
-            if (!billingClient.isReady) {
-                billingClient.startConnection(
-                    object : BillingClientStateListener {
 
-                        override fun onBillingSetupFinished(billingResult: BillingResult) {
-                            when (billingResult.responseCode) {
-                                BillingClient.BillingResponseCode.OK -> {
-                                    isRunning = true
-                                    Timber.d("onBillingSetupFinished successfully")
-                                    querySkuDetailsAsync(BillingClient.SkuType.INAPP, DubLinkSku.IN_APP_SKUS)
-                                    queryPurchasesAsync()
-                                }
-                                BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
-                                    //Some apps may choose to make decisions based on this knowledge.
-                                    Timber.d(billingResult.debugMessage)
-                                }
-                                else -> {
-                                    //do nothing. Someone else will connect it through retry policy.
-                                    //May choose to send to server though
-                                    Timber.d(billingResult.debugMessage)
-                                }
-                            }
-                        }
 
-                        override fun onBillingServiceDisconnected() {
-                            startBillingDataSourceConnections()
-                        }
-                    }
-                )
-            }
-            return@call billingClient.isReady
-        }
-    }
-
-    fun endBillingDataSourceConnections() {
-        billingClient.endConnection()
-        isRunning = false
-    }
-
-    private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
-        Timber.d(billingResult.toString())
-        Timber.d(purchases.toString())
-    }
-
-    private fun querySkuDetailsAsync(skuType: String, skuList: List<String>) {
-        val params = SkuDetailsParams.newBuilder()
-            .setSkusList(skuList)
-            .setType(skuType)
-            .build()
-        Timber.d("querySkuDetailsAsync for $skuType")
-        billingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
-            when (billingResult.responseCode) {
-                BillingClient.BillingResponseCode.OK -> {
-                    Timber.d(skuDetailsList.toString())
-//                    if (skuDetailsList.orEmpty().isNotEmpty()) {
-//                        skuDetailsList.forEach {
-//                            CoroutineScope(Job() + Dispatchers.IO).launch {
-//                                localCacheBillingClient.skuDetailsDao().insertOrUpdate(it)
-//                            }
-//                        }
-//                    }
-                }
-                else -> {
-                    Timber.e(billingResult.debugMessage)
-                }
-            }
-        }
-    }
-
-    private fun queryPurchasesAsync() {
-        Timber.d("queryPurchasesAsync called")
-        val purchasesResult = HashSet<Purchase>()
-        val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        Timber.d("queryPurchasesAsync INAPP results: ${result.purchasesList?.size}")
-        result.purchasesList?.apply { purchasesResult.addAll(this) }
-        processPurchases(purchasesResult)
-    }
-
-    private fun processPurchases(purchasesResult: Set<Purchase>) {
-        Timber.d(purchasesResult.toString())
+//        disposable.add(
+//            rxBilling.launchFlow(activity, BillingFlowParams.newBuilder()
+//                .setSkuDetails(SkuDetails("{$TEST}"))
+//                .build())
+//                .subscribe({
+//                    Timber.d("startFlowWithClient")
+//                }, {
+//                    Timber.e(it)
+//                }))
     }
 
     private object DubLinkSku {

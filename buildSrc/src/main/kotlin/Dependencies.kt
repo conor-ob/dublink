@@ -132,6 +132,7 @@ object Libraries {
         const val rxAndroid = "io.reactivex.rxjava2:rxandroid:2.1.1" // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxandroid
         const val rxJava = "io.reactivex.rxjava2:rxjava:2.2.19" // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava
         const val rxKotlin = "io.reactivex.rxjava2:rxkotlin:2.4.0" // https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxkotlin
+        const val rxBilling = "com.betterme:rxbilling:2.2.0"
     }
 
     object SqlDelight {
