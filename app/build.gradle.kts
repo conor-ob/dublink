@@ -89,6 +89,8 @@ dependencies {
     implementation(project(":ui-web"))
 
     implementation(Libraries.Android.playServicesLocation)
+    implementation(Libraries.Android.googlePlayBilling)
+    implementation(Libraries.Android.googlePlayBillingKtx)
     implementation(Libraries.AndroidX.constraintLayout)
     implementation(Libraries.AndroidX.navigationUiKtx)
     implementation(Libraries.AndroidX.preferenceKtx)
