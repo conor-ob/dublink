@@ -7,13 +7,17 @@
 
 DubLink is a **work-in-progress** Android app for getting real time data for Dublin Bus :trolleybus: Irish Rail :railway_car: Luas :tram: Bus Éireann :bus: Dublin Bikes :bike: Aircoach :airplane:
 
-| Favourites | Search |
-| ------ | ----- |
-| ![Favourites](/assets/listing/sc_00_search.png) | ![Search](/assets/listing/sc_01_search.png) |
+| Favourites | Dark Theme Support |
+| ------ | ------ |
+| ![Favourites](/assets/listing/sc_01_favourites.png) | ![Dark Theme](/assets/listing/sc_02_favourites_dark.png) |
 
-| Live Data | Settings |
-| ------ | ----- |
-| ![Live Data](/assets/listing/sc_00_real_time.png) | ![Settings](/assets/listing/sc_00_settings.png) |
+| Search | Live Data |
+| ------ | ------ |
+| ![Search](/assets/listing/sc_04_search.png) | ![Live Data](/assets/listing/sc_03_real_time_info.png) |
+
+| Editor | Settings |
+| ------ | ------ |
+| ![Editor](/assets/listing/sc_06_edit_favourites.png) | ![Settings](/assets/listing/sc_07_settings.png) |
 
 ## Android development
 
