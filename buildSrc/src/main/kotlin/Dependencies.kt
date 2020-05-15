@@ -88,6 +88,10 @@ object Libraries {
         const val groupieKtx = "com.xwray:groupie-kotlin-android-extensions:2.8.0" // https://mvnrepository.com/artifact/com.xwray/groupie-kotlin-android-extensions?repo=jcenter
     }
 
+    object Guava {
+        const val retry = "com.github.rholder:guava-retrying:2.0.0" // https://mvnrepository.com/artifact/com.github.rholder/guava-retrying
+    }
+
     object Kotlin {
         const val stdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion" // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk8
     }

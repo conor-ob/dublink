@@ -7,9 +7,14 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetailsParams
+import com.github.rholder.retry.RetryerBuilder
+import com.github.rholder.retry.StopStrategies
+import com.github.rholder.retry.WaitStrategies
 import io.dublink.domain.service.PreferenceStore
 import timber.log.Timber
+import java.time.LocalTime
 import java.util.HashSet
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class InAppPurchaseRepository @Inject constructor(
@@ -18,52 +23,66 @@ class InAppPurchaseRepository @Inject constructor(
 ) {
 
     private lateinit var billingClient: BillingClient
+    private var isRunning = false
 
     fun startBillingDataSourceConnections() {
+        isRunning = false
         billingClient = BillingClient
         .newBuilder(context)
         .enablePendingPurchases()
         .setListener(purchasesUpdatedListener)
         .build()
 
-        if (!billingClient.isReady) {
-            billingClient.startConnection(billingClientStateListener)
+        val retryPolicy = RetryerBuilder.newBuilder<Boolean>()
+            .retryIfResult { it == true }
+            .withWaitStrategy(WaitStrategies.exponentialWait(100, 5L, TimeUnit.MINUTES))
+            .withStopStrategy(StopStrategies.neverStop())
+            .build()
+
+        retryPolicy.call {
+            Timber.d("Trying at ${LocalTime.now()}")
+            if (!billingClient.isReady) {
+                billingClient.startConnection(
+                    object : BillingClientStateListener {
+
+                        override fun onBillingSetupFinished(billingResult: BillingResult) {
+                            when (billingResult.responseCode) {
+                                BillingClient.BillingResponseCode.OK -> {
+                                    isRunning = true
+                                    Timber.d("onBillingSetupFinished successfully")
+                                    querySkuDetailsAsync(BillingClient.SkuType.INAPP, DubLinkSku.IN_APP_SKUS)
+                                    queryPurchasesAsync()
+                                }
+                                BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
+                                    //Some apps may choose to make decisions based on this knowledge.
+                                    Timber.d(billingResult.debugMessage)
+                                }
+                                else -> {
+                                    //do nothing. Someone else will connect it through retry policy.
+                                    //May choose to send to server though
+                                    Timber.d(billingResult.debugMessage)
+                                }
+                            }
+                        }
+
+                        override fun onBillingServiceDisconnected() {
+                            startBillingDataSourceConnections()
+                        }
+                    }
+                )
+            }
+            return@call billingClient.isReady
         }
     }
 
     fun endBillingDataSourceConnections() {
         billingClient.endConnection()
+        isRunning = false
     }
 
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
         Timber.d(billingResult.toString())
         Timber.d(purchases.toString())
-    }
-
-    private val billingClientStateListener = object : BillingClientStateListener {
-
-        override fun onBillingSetupFinished(billingResult: BillingResult) {
-            when (billingResult.responseCode) {
-                BillingClient.BillingResponseCode.OK -> {
-                    Timber.d("onBillingSetupFinished successfully")
-                    querySkuDetailsAsync(BillingClient.SkuType.INAPP, DubLinkSku.IN_APP_SKUS)
-                    queryPurchasesAsync()
-                }
-                BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
-                    //Some apps may choose to make decisions based on this knowledge.
-                    Timber.d(billingResult.debugMessage)
-                }
-                else -> {
-                    //do nothing. Someone else will connect it through retry policy.
-                    //May choose to send to server though
-                    Timber.d(billingResult.debugMessage)
-                }
-            }
-        }
-
-        override fun onBillingServiceDisconnected() {
-
-        }
     }
 
     private fun querySkuDetailsAsync(skuType: String, skuList: List<String>) {

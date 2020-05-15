@@ -34,6 +34,7 @@ dependencies {
     implementation(Libraries.Android.googlePlayBillingKtx)
 
     implementation(Libraries.Kotlin.stdLib)
+    implementation(Libraries.Guava.retry)
 
     implementation(Libraries.Dagger.dagger)
     implementation(Libraries.Rtpi.rtpiApi)
