@@ -9,11 +9,11 @@ DubLink is a **work-in-progress** Android app for getting real time data for Dub
 
 | Favourites | Search |
 | ------ | ----- |
-| ![Favourites](/assets/screenshots/favourites.jpg) | ![Search](/assets/screenshots/search.jpg) |
+| ![Favourites](/assets/listing/sc_01_favourites.jpg) | ![Search](/assets/listing/sc_03_search.jpg) |
 
 | Live Data | Settings |
 | ------ | ----- |
-| ![Live Data](/assets/screenshots/livedata.jpg) | ![Settings](/assets/screenshots/settings.jpg) |
+| ![Live Data](/assets/listing/sc_02_livedata.jpg) | ![Settings](/assets/listing/settings.jpg) |
 
 ## Android development
 
