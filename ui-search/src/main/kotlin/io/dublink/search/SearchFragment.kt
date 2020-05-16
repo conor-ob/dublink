@@ -88,7 +88,7 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
     //                            viewModel.dispatch(Action.GetNearbyLocations)
     //                        }
     //                    }
-    //                    viewModel.dispatch(Action.Search(query.toString()))
+                        viewModel.dispatch(Action.Search(query.toString(), force = true))
                         hideKeyboard(search_input)
                         return true
                     }
@@ -118,21 +118,6 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
                 focusable = View.FOCUSABLE
                 isIconified = false
                 requestFocus()
-            }
-        }
-
-        search_swipe_refresh.apply {
-            isRefreshing = false
-            setColorSchemeResources(R.color.color_on_surface)
-            setProgressBackgroundColorSchemeResource(R.color.color_surface)
-            setOnRefreshListener {
-                val query = search_input.query?.toString()
-                if (query != null && query.length > 1) {
-                    viewModel.dispatch(Action.Search(query))
-                } else {
-                    viewModel.dispatch(Action.GetRecentSearches)
-                    viewModel.dispatch(Action.GetNearbyLocations)
-                }
             }
         }
     }
@@ -179,7 +164,6 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
     }
 
     private fun renderState(state: State) {
-        search_swipe_refresh.isRefreshing = false
         if (state.throwable != null) {
             Toast.makeText(requireContext(), state.throwable.message, Toast.LENGTH_LONG).show()
         }
@@ -207,7 +191,13 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
                 )
             )
         )
-        if (state.scrollToTop != null && state.scrollToTop == true) {
+        if (state.scrollToTop != null &&
+            state.scrollToTop == true &&
+            state.searchResults is SearchResultsResponse.Data &&
+            state.searchResults.serviceLocations.isNotEmpty() &&
+            adapter?.itemCount ?: 0 > 0 &&
+            search_list.childCount > 0
+        ) {
             try {
                 search_list.scrollToPosition(0)
             } catch (e: Exception) {
