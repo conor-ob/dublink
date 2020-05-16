@@ -5,7 +5,7 @@ import com.ww.roxie.BaseState
 import io.rtpi.api.Service
 
 sealed class Action : BaseAction {
-    data class Search(val query: String) : Action()
+    data class Search(val query: String, val force: Boolean = false) : Action()
     object GetNearbyLocations : Action()
     object GetRecentSearches : Action()
     object ClearRecentSearches : Action()
