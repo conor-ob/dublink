@@ -186,7 +186,7 @@ class InAppPurchaseRepository @Inject constructor(
         CoroutineScope(Job() + Dispatchers.IO).launch {
             when (purchase.sku) {
                 DubLinkSku.DUBLINK_PRO.productId -> {
-                    preferenceStore.setDubLinkProEnabled(true)
+                    preferenceStore.setDubLinkProEnabled(true) // TODO when to set to false?
 //                    val premiumCar = PremiumCar(true)
 //                    insert(premiumCar)
 //                    localCacheBillingClient.skuDetailsDao()
