@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="iap_buy_button">Buy for %s</string>
+</resources>

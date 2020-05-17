@@ -29,18 +29,17 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":ui-app"))
 
     implementation(Libraries.Android.googlePlayBilling)
     implementation(Libraries.Android.googlePlayBillingKtx)
 
     implementation(Libraries.Kotlin.stdLib)
-    implementation(Libraries.Guava.retry)
 
     implementation(Libraries.Dagger.dagger)
     implementation(Libraries.Rtpi.rtpiApi)
     implementation(Libraries.Rtpi.rtpiUtil)
     implementation(Libraries.Rx.rxJava)
-    implementation(Libraries.Rx.rxBilling)
     api(Libraries.Timber.timber)
 
     kapt(Libraries.Dagger.daggerCompiler)

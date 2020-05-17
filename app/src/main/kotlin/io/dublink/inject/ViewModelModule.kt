@@ -9,6 +9,7 @@ import dagger.multibindings.IntoMap
 import io.dublink.DubLinkActivityViewModel
 import io.dublink.favourites.FavouritesViewModel
 import io.dublink.favourites.edit.EditFavouritesViewModel
+import io.dublink.iap.InAppPurchaseViewModel
 import io.dublink.livedata.LiveDataViewModel
 import io.dublink.search.SearchViewModel
 import java.lang.annotation.Documented
@@ -47,7 +48,12 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(SearchViewModel::class)
-    internal abstract fun bindsearchViewModel(searchViewModel: SearchViewModel): ViewModel
+    internal abstract fun bindSearchViewModel(searchViewModel: SearchViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(InAppPurchaseViewModel::class)
+    internal abstract fun bindInAppPurchaseViewModel(inAppPurchaseViewModel: InAppPurchaseViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory

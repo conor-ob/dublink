@@ -28,4 +28,8 @@ interface PreferenceStore {
     fun isShowNearbyPlacesEnabled(): Boolean
 
     fun isShowRecentSearchesEnabled(): Boolean
+
+    fun setDubLinkProEnabled(enabled: Boolean): Boolean
+
+    fun isDubLinkProEnabled(): Boolean
 }

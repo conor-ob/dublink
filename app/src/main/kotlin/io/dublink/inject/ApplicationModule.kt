@@ -16,6 +16,7 @@ import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.service.StringProvider
+import io.dublink.iap.InAppPurchaseModule
 import io.dublink.internet.DeviceInternetManager
 import io.dublink.internet.NetworkStatusChangeListener
 import io.dublink.location.GpsLocationProvider
@@ -43,7 +44,8 @@ import okhttp3.OkHttpClient
     includes = [
         ViewModelModule::class,
         DatabaseModule::class,
-        RepositoryModule::class
+        RepositoryModule::class,
+        InAppPurchaseModule::class
     ]
 )
 class ApplicationModule {
