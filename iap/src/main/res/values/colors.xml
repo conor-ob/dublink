@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="iap_green">#15B965</color>
+    <color name="iap_grey">@color/grey_200</color>
+    <color name="iap_yellow">#F8AA32</color>
 </resources>

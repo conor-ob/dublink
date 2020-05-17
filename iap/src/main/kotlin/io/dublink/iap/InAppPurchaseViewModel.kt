@@ -22,4 +22,12 @@ class InAppPurchaseViewModel @Inject constructor(
         super.onCleared()
         inAppPurchaseRepository.endDataSourceConnections()
     }
+
+    fun registerInAppPurchaseStatusListener(inAppPurchaseStatusListener: InAppPurchaseStatusListener) {
+        inAppPurchaseRepository.registerInAppPurchaseStatusListener(inAppPurchaseStatusListener)
+    }
+
+    fun unregisterInAppPurchaseStatusListener(inAppPurchaseStatusListener: InAppPurchaseStatusListener) {
+        inAppPurchaseRepository.unregisterInAppPurchaseStatusListener(inAppPurchaseStatusListener)
+    }
 }

@@ -33,6 +33,16 @@ class InAppPurchaseRepository @Inject constructor(
     private val skuDetailsCache = mutableMapOf<DubLinkSku, SkuDetails>()
     private val purchasesCache = mutableMapOf<DubLinkSku, Purchase>()
 
+    private val inAppPurchaseStatusListeners = mutableListOf<InAppPurchaseStatusListener>()
+
+    fun registerInAppPurchaseStatusListener(inAppPurchaseStatusListener: InAppPurchaseStatusListener) {
+        inAppPurchaseStatusListeners.add(inAppPurchaseStatusListener)
+    }
+
+    fun unregisterInAppPurchaseStatusListener(inAppPurchaseStatusListener: InAppPurchaseStatusListener) {
+        inAppPurchaseStatusListeners.remove(inAppPurchaseStatusListener)
+    }
+
     fun startDataSourceConnections() {
         Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         playStoreBillingClient = BillingClient.newBuilder(context.applicationContext)
@@ -152,9 +162,9 @@ class InAppPurchaseRepository @Inject constructor(
             Timber.d("processPurchases new content $purchasesResult")
             purchasesResult.forEach { purchase ->
                 if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-//                    if (isSignatureValid(purchase)) { // TODO
-                    validPurchases.add(purchase)
-//                    }
+                    if (isSignatureValid(purchase)) {
+                        validPurchases.add(purchase)
+                    }
                 } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
                     Timber.d("Received a pending purchase of SKU: ${purchase.sku}")
                     // handle pending purchases, e.g. confirm with users about the pending
@@ -188,6 +198,11 @@ class InAppPurchaseRepository @Inject constructor(
         }
     }
 
+    // TODO
+    private fun isSignatureValid(purchase: Purchase): Boolean {
+        return true
+    }
+
     private fun acknowledgeNonConsumablePurchasesAsync(nonConsumables: List<Purchase>) {
         Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         nonConsumables.forEach { purchase ->
@@ -212,12 +227,17 @@ class InAppPurchaseRepository @Inject constructor(
     }
 
     private fun disburseNonConsumableEntitlement(purchase: Purchase) {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
             preferenceStore.setDubLinkProEnabled(true)
+            inAppPurchaseStatusListeners.forEach {
+                it.onPurchaseSuccessful()
+            }
         }
     }
 
     private fun retractNonConsumableEntitlement(purchase: Purchase) {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
             preferenceStore.setDubLinkProEnabled(false)
         }
@@ -226,6 +246,9 @@ class InAppPurchaseRepository @Inject constructor(
     fun launchBillingFlow(activity: Activity) {
         val purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetailsCache[DubLinkSku.DUBLINK_PRO]).build()
         playStoreBillingClient.launchBillingFlow(activity, purchaseParams)
+        inAppPurchaseStatusListeners.forEach {
+            it.onPurchaseStarted()
+        }
     }
 
     enum class DubLinkSku(val productId: String, val isConsumable: Boolean) {
@@ -247,6 +270,7 @@ class InAppPurchaseRepository @Inject constructor(
             playStoreBillingClient.consumeAsync(params) { billingResult, purchaseToken ->
                 when (billingResult.responseCode) {
                     BillingClient.BillingResponseCode.OK -> {
+                        preferenceStore.setDubLinkProEnabled(false)
                         // Update the appropriate tables/databases to grant user the items
 //                        purchaseToken.apply { disburseConsumableEntitlements(it) }
                     }

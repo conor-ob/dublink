@@ -35,6 +35,14 @@
         <item name="android:letterSpacing">0.0125</item>
     </style>
 
+    <style name="TextAppearance.DubLink.FeatureTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/barlow_medium</item>
+        <item name="android:fontFamily">@font/barlow_medium</item>
+        <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
+        <item name="android:textSize">18.76sp</item>
+        <item name="android:letterSpacing">0.0025</item>
+    </style>
+
     <style name="TextAppearance.DubLink.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">@font/barlow_light</item>
         <item name="android:fontFamily">@font/barlow_light</item>

@@ -1,6 +1,7 @@
 plugins {
     id(BuildPlugins.androidLibrary)
     id(BuildPlugins.kotlinAndroid)
+    id(BuildPlugins.kotlinAndroidExtensions)
     id(BuildPlugins.kotlinKapt)
 }
 
@@ -24,6 +25,10 @@ android {
     }
     sourceSets.getByName("test") {
         java.srcDir("src/test/kotlin")
+    }
+
+    androidExtensions {
+        isExperimental = true
     }
 }
 
