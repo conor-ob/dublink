@@ -36,100 +36,95 @@ class InAppPurchaseRepository @Inject constructor(
     private val purchasesCache = mutableMapOf<DubLinkSku, Purchase>()
 
     fun startDataSourceConnections() {
-        Timber.d("startDataSourceConnections")
-        instantiateAndConnectToPlayBillingService()
-    }
-
-    private fun instantiateAndConnectToPlayBillingService() {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         playStoreBillingClient = BillingClient.newBuilder(context.applicationContext)
-            .enablePendingPurchases() // required or app will crash
+            .enablePendingPurchases()
             .setListener(this)
             .build()
         connectToPlayBillingService()
     }
 
-    private fun connectToPlayBillingService(): Boolean {
+    private fun connectToPlayBillingService() {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         if (!playStoreBillingClient.isReady) {
             playStoreBillingClient.startConnection(this)
-            return true
         }
-        return false
     }
 
     fun endDataSourceConnections() {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         playStoreBillingClient.endConnection()
-        // normally you don't worry about closing a DB connection unless you have more than
-        // one DB open. so no need to call 'localCacheBillingClient.close()'
-        Timber.d("endDataSourceConnections")
     }
 
     override fun onBillingSetupFinished(billingResult: BillingResult) {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
-                Timber.d("onBillingSetupFinished successfully")
-                querySkuDetailsAsync(BillingClient.SkuType.INAPP, DubLinkSku.inAppSkus)
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} OK")
+                querySkuDetailsAsync()
                 queryPurchasesAsync()
             }
             BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
-                //Some apps may choose to make decisions based on this knowledge.
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} BILLING_UNAVAILABLE")
+                // TODO alert dialog
                 Timber.d(billingResult.debugMessage)
             }
             else -> {
-                //do nothing. Someone else will connect it through retry policy.
-                //May choose to send to server though
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
+                // TODO retry
                 Timber.d(billingResult.debugMessage)
             }
         }
     }
 
     override fun onBillingServiceDisconnected() {
-        Timber.d("onBillingServiceDisconnected")
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         connectToPlayBillingService()
     }
 
     override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         when (billingResult.responseCode) {
             BillingClient.BillingResponseCode.OK -> {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} OK")
                 // will handle server verification, consumables, and updating the local cache
                 purchases?.apply { processPurchases(this.toSet()) }
             }
             BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} ITEM_ALREADY_OWNED")
                 // item already owned? call queryPurchasesAsync to verify and process all such items
                 Timber.d(billingResult.debugMessage)
                 queryPurchasesAsync()
             }
             BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} SERVICE_DISCONNECTED")
                 connectToPlayBillingService()
             }
             else -> {
-                Timber.i(billingResult.debugMessage)
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
+                Timber.d(billingResult.debugMessage)
             }
         }
     }
 
     fun queryPurchasesAsync() {
-        Timber.d("queryPurchasesAsync called")
-        val purchasesResult = HashSet<Purchase>()
-        var result = playStoreBillingClient.queryPurchases(BillingClient.SkuType.INAPP)
-        Timber.d("queryPurchasesAsync INAPP results: ${result?.purchasesList?.size}")
-        result?.purchasesList?.apply { purchasesResult.addAll(this) }
-//        if (isSubscriptionSupported()) {
-//            result = playStoreBillingClient.queryPurchases(BillingClient.SkuType.SUBS)
-//            result?.purchasesList?.apply { purchasesResult.addAll(this) }
-//            Timber.d("queryPurchasesAsync SUBS results: ${result?.purchasesList?.size}")
-//        }
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
+        val result = playStoreBillingClient.queryPurchases(BillingClient.SkuType.INAPP)
+        Timber.d("${object{}.javaClass.enclosingMethod?.name} ${BillingClient.SkuType.INAPP} results: ${result.purchasesList?.size}")
+        val purchasesResult = mutableSetOf<Purchase>()
+        result.purchasesList?.apply { purchasesResult.addAll(this) }
         processPurchases(purchasesResult)
     }
 
-    private fun processPurchases(purchasesResult: Set<Purchase>) =
+    private fun processPurchases(purchasesResult: Set<Purchase>) {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         CoroutineScope(Job() + Dispatchers.IO).launch {
-            Timber.d("processPurchases called")
             val validPurchases = HashSet<Purchase>(purchasesResult.size)
-            Timber.d("processPurchases newBatch content $purchasesResult")
+            Timber.d("processPurchases new content $purchasesResult")
             purchasesResult.forEach { purchase ->
                 if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
 //                    if (isSignatureValid(purchase)) { // TODO
-                        validPurchases.add(purchase)
+                    validPurchases.add(purchase)
 //                    }
                 } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
                     Timber.d("Received a pending purchase of SKU: ${purchase.sku}")
@@ -137,11 +132,7 @@ class InAppPurchaseRepository @Inject constructor(
                     // purchases, prompt them to complete it, etc.
                 }
             }
-            val (consumables, nonConsumables) = validPurchases.partition {
-                DubLinkSku.consumableSkus.contains(it.sku)
-            }
-            Timber.d("processPurchases consumables content $consumables")
-            Timber.d("processPurchases non-consumables content $nonConsumables")
+            Timber.d("processPurchases valid content $validPurchases")
             /*
               As is being done in this sample, for extra reliability you may store the
               receipts/purchases to a your own remote/local database for until after you
@@ -163,9 +154,10 @@ class InAppPurchaseRepository @Inject constructor(
 
 
             // switch these around to reset
-//            acknowledgeNonConsumablePurchasesAsync(consumables)
-            handleConsumablePurchasesAsync(consumables)
+//            acknowledgeNonConsumablePurchasesAsync(validPurchases.toList())
+            handleConsumablePurchasesAsync(validPurchases.toList())
         }
+    }
 
     private fun acknowledgeNonConsumablePurchasesAsync(nonConsumables: List<Purchase>) {
         nonConsumables.forEach { purchase ->
@@ -216,14 +208,16 @@ class InAppPurchaseRepository @Inject constructor(
         }
     }
 
-    private fun querySkuDetailsAsync(
-        @BillingClient.SkuType skuType: String,
-        skuList: List<String>) {
-        val params = SkuDetailsParams.newBuilder().setSkusList(skuList).setType(skuType).build()
-        Timber.d("querySkuDetailsAsync for $skuType")
+    private fun querySkuDetailsAsync() {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
+        val params = SkuDetailsParams.newBuilder()
+            .setSkusList(DubLinkSku.inAppSkus)
+            .setType(BillingClient.SkuType.INAPP)
+            .build()
         playStoreBillingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
+                    Timber.d("${object{}.javaClass.enclosingMethod?.name} OK $skuDetailsList")
                     if (skuDetailsList.orEmpty().isNotEmpty()) {
                         skuDetailsList.forEach { skuDetails ->
                             val dubLinkSku = DubLinkSku.values()
@@ -235,12 +229,10 @@ class InAppPurchaseRepository @Inject constructor(
                                 skuDetailsCache[DubLinkSku.DUBLINK_PRO] = skuDetails
                             }
                         }
-//                            CoroutineScope(Job() + Dispatchers.IO).launch {
-//                                localCacheBillingClient.skuDetailsDao().insertOrUpdate(it) // TODO
-//                            }
                     }
                 }
                 else -> {
+                    Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
                     Timber.e(billingResult.debugMessage)
                 }
             }
