@@ -68,7 +68,7 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
                 DubLinkProItem(),
                 DividerItem(),
                 FeatureItem(
-                    title = "Digital nomad",
+                    title = "Dublin nomad",
                     summary = "Gain access to real time info for all transport services\n- Irish Rail (DART, Commuter and InterCity)\n- Luas\n- Dublin Bikes\n- Bus Éireann\n- Aircoach"
                 ),
                 FeatureItem(
@@ -80,7 +80,7 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
                     summary = "View real time info for up to 10 places in the favourites screen"
                 ),
                 FeatureItem(
-                    title = "Minimum effort",
+                    title = "Sit back and relax",
                     summary = "Sort favourites by location so that wherever you're going, simply open the app to get the info you need right away"
                 ),
                 FeatureItem(
@@ -93,7 +93,7 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
     }
 
     private fun renderBuyButton(dubLinkProPrice: String) {
-        dubLinkProPriceButton.updateText(newText = "Buy for €2.49")
+        dubLinkProPriceButton.updateText(newText = "Buy for €2.99")
 //        dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, dubLinkProPrice))
         dubLinkProPriceButton.visibility = View.VISIBLE
     }

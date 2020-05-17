@@ -42,38 +42,33 @@
         <SwitchPreference
             android:icon="@drawable/ic_train"
             android:key="@string/preference_key_enabled_service_irish_rail"
-            android:title="@string/preference_name_enabled_service_irish_rail_pro"
+            android:title="@string/preference_name_enabled_service_irish_rail"
             android:summary="@string/preference_summary_enabled_service_irish_rail"
-            android:defaultValue="@bool/preference_default_enabled_service_irish_rail"
-            android:enabled="false" />
+            android:defaultValue="@bool/preference_default_enabled_service_irish_rail" />
 
         <SwitchPreference
             android:icon="@drawable/ic_tram"
             android:key="@string/preference_key_enabled_service_luas"
-            android:title="@string/preference_name_enabled_service_luas_pro"
-            android:defaultValue="@bool/preference_default_enabled_service_luas"
-            android:enabled="false" />
+            android:title="@string/preference_name_enabled_service_luas"
+            android:defaultValue="@bool/preference_default_enabled_service_luas" />
 
         <SwitchPreference
             android:icon="@drawable/ic_bus"
             android:key="@string/preference_key_enabled_service_bus_eireann"
-            android:title="@string/preference_name_enabled_service_bus_eireann_pro"
-            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
-            android:enabled="false" />
+            android:title="@string/preference_name_enabled_service_bus_eireann"
+            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann" />
 
         <SwitchPreference
             android:icon="@drawable/ic_bike"
             android:key="@string/preference_key_enabled_service_dublin_bikes"
-            android:title="@string/preference_name_enabled_service_dublin_bikes_pro"
-            android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes"
-            android:enabled="false" />
+            android:title="@string/preference_name_enabled_service_dublin_bikes"
+            android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes" />
 
         <SwitchPreference
             android:icon="@drawable/ic_bus"
             android:key="@string/preference_key_enabled_service_aircoach"
-            android:title="@string/preference_name_enabled_service_aircoach_pro"
-            android:defaultValue="@bool/preference_default_enabled_service_aircoach"
-            android:enabled="false" />
+            android:title="@string/preference_name_enabled_service_aircoach"
+            android:defaultValue="@bool/preference_default_enabled_service_aircoach" />
 
     </PreferenceCategory>
 

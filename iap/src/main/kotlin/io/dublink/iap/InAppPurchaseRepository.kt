@@ -246,9 +246,6 @@ class InAppPurchaseRepository @Inject constructor(
     fun launchBillingFlow(activity: Activity) {
         val purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetailsCache[DubLinkSku.DUBLINK_PRO]).build()
         playStoreBillingClient.launchBillingFlow(activity, purchaseParams)
-        inAppPurchaseStatusListeners.forEach {
-            it.onPurchaseStarted()
-        }
     }
 
     enum class DubLinkSku(val productId: String, val isConsumable: Boolean) {
