@@ -12,11 +12,39 @@
                 android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/settings_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:navigationIcon="?attr/homeAsUpIndicator"
-                    app:title="Settings" />
+                android:id="@+id/settings_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="?attr/homeAsUpIndicator">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.DubLink.Headline6"
+                        android:text="Settings"/>
+
+                    <View
+                        android:layout_width="8dp"
+                        android:layout_height="0dp"/>
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/dublink_pro_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PRO"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:textColor="?attr/colorOnPrimary"
+                        android:visibility="gone"
+                        style="@style/Widget.DubLink.RouteChip" />
+
+                </LinearLayout>
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -70,18 +70,13 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
             if (upgradePreference != null) {
                 // user has just purchased pro so rebuild the screen
                 onCreatePreferences(null, null)
-                Toast.makeText(requireContext(), "Thank you for supporting DubLink!", Toast.LENGTH_LONG).show()
             }
         }
     }
 
     private fun setAppVersionPreference() {
         val appVersionPreference = findPreference(getString(R.string.preference_key_app_version)) as Preference?
-        appVersionPreference?.summary = if (preferenceStore.isDubLinkProEnabled()) {
-            "DubLink Pro ${appConfig.appVersion()}"
-        } else {
-            "DubLink Free ${appConfig.appVersion()}"
-        }
+        appVersionPreference?.summary = appConfig.appVersion()
     }
 
     private fun bindListeners() {
