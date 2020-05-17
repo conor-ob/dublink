@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -25,6 +26,8 @@ import io.dublink.DubLinkNavigator
 import io.dublink.domain.service.AppConfig
 import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
+import io.dublink.iap.InAppPurchaseViewModel
+import io.dublink.viewModelProvider
 import javax.inject.Inject
 
 private const val sortByLocationRequestCode = 42069
@@ -63,11 +66,10 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     override fun onResume() {
         super.onResume()
         if (preferenceStore.isDubLinkProEnabled()) {
-            val upgradePreference = findPreference<Preference>(getString(R.string.preference_key_upgrade))
+            val upgradePreference = findPreference<Preference>(getString(R.string.preference_key_dublink_pro_upgrade))
             if (upgradePreference != null) {
                 // user has just purchased pro so rebuild the screen
                 onCreatePreferences(null, null)
-                themeRepository.setPreferredThemeOrDefault()
                 Toast.makeText(requireContext(), "Thank you for supporting DubLink!", Toast.LENGTH_LONG).show()
             }
         }
@@ -83,7 +85,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     }
 
     private fun bindListeners() {
-        findPreference<Preference>(getString(R.string.preference_key_upgrade))?.apply {
+        findPreference<Preference>(getString(R.string.preference_key_dublink_pro_upgrade))?.apply {
             setOnPreferenceClickListener {
                 (activity as DubLinkNavigator).navigateToIap()
                 return@setOnPreferenceClickListener true

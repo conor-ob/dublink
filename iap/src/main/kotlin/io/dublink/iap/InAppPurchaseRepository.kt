@@ -2,8 +2,6 @@ package io.dublink.iap
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
@@ -56,6 +54,31 @@ class InAppPurchaseRepository @Inject constructor(
         playStoreBillingClient.endConnection()
     }
 
+    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
+        when (billingResult.responseCode) {
+            BillingClient.BillingResponseCode.OK -> {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} OK")
+                // will handle server verification, consumables, and updating the local cache
+                purchases?.apply { processPurchases(this.toSet()) }
+            }
+            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} ITEM_ALREADY_OWNED")
+                // item already owned? call queryPurchasesAsync to verify and process all such items
+                Timber.d(billingResult.debugMessage)
+                queryPurchasesAsync()
+            }
+            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} SERVICE_DISCONNECTED")
+                connectToPlayBillingService()
+            }
+            else -> {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
+                Timber.d(billingResult.debugMessage)
+            }
+        }
+    }
+
     override fun onBillingSetupFinished(billingResult: BillingResult) {
         Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         when (billingResult.responseCode) {
@@ -82,32 +105,38 @@ class InAppPurchaseRepository @Inject constructor(
         connectToPlayBillingService()
     }
 
-    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
+    private fun querySkuDetailsAsync() {
         Timber.d("${object{}.javaClass.enclosingMethod?.name}")
-        when (billingResult.responseCode) {
-            BillingClient.BillingResponseCode.OK -> {
-                Timber.d("${object{}.javaClass.enclosingMethod?.name} OK")
-                // will handle server verification, consumables, and updating the local cache
-                purchases?.apply { processPurchases(this.toSet()) }
-            }
-            BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
-                Timber.d("${object{}.javaClass.enclosingMethod?.name} ITEM_ALREADY_OWNED")
-                // item already owned? call queryPurchasesAsync to verify and process all such items
-                Timber.d(billingResult.debugMessage)
-                queryPurchasesAsync()
-            }
-            BillingClient.BillingResponseCode.SERVICE_DISCONNECTED -> {
-                Timber.d("${object{}.javaClass.enclosingMethod?.name} SERVICE_DISCONNECTED")
-                connectToPlayBillingService()
-            }
-            else -> {
-                Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
-                Timber.d(billingResult.debugMessage)
+        val params = SkuDetailsParams.newBuilder()
+            .setSkusList(DubLinkSku.inAppSkus)
+            .setType(BillingClient.SkuType.INAPP)
+            .build()
+        playStoreBillingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
+            when (billingResult.responseCode) {
+                BillingClient.BillingResponseCode.OK -> {
+                    Timber.d("${object{}.javaClass.enclosingMethod?.name} OK $skuDetailsList")
+                    if (skuDetailsList.orEmpty().isNotEmpty()) {
+                        skuDetailsList.forEach { skuDetails ->
+                            val dubLinkSku = DubLinkSku.values()
+                                .find { dubLinkSku -> dubLinkSku.productId == skuDetails.sku }
+                            if (dubLinkSku != null) {
+                                if (dubLinkSku == DubLinkSku.DUBLINK_PRO) {
+                                    dubLinkProPriceLiveData.value = skuDetails.price
+                                }
+                                skuDetailsCache[DubLinkSku.DUBLINK_PRO] = skuDetails
+                            }
+                        }
+                    }
+                }
+                else -> {
+                    Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
+                    Timber.e(billingResult.debugMessage)
+                }
             }
         }
     }
 
-    fun queryPurchasesAsync() {
+    private fun queryPurchasesAsync() {
         Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         val result = playStoreBillingClient.queryPurchases(BillingClient.SkuType.INAPP)
         Timber.d("${object{}.javaClass.enclosingMethod?.name} ${BillingClient.SkuType.INAPP} results: ${result.purchasesList?.size}")
@@ -154,39 +183,60 @@ class InAppPurchaseRepository @Inject constructor(
 
 
             // switch these around to reset
-//            acknowledgeNonConsumablePurchasesAsync(validPurchases.toList())
-            handleConsumablePurchasesAsync(validPurchases.toList())
+//            handleConsumablePurchasesAsync(validPurchases.toList())
+            acknowledgeNonConsumablePurchasesAsync(validPurchases.toList())
         }
     }
 
     private fun acknowledgeNonConsumablePurchasesAsync(nonConsumables: List<Purchase>) {
+        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         nonConsumables.forEach { purchase ->
             val params = AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase
                 .purchaseToken).build()
             playStoreBillingClient.acknowledgePurchase(params) { billingResult ->
                 when (billingResult.responseCode) {
                     BillingClient.BillingResponseCode.OK -> {
+                        Timber.d("${object{}.javaClass.enclosingMethod?.name} OK")
                         disburseNonConsumableEntitlement(purchase)
                     }
-                    else -> Timber.d("acknowledgeNonConsumablePurchasesAsync response is ${billingResult.debugMessage}")
+                    BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
+                        Timber.d("${object{}.javaClass.enclosingMethod?.name} ITEM_NOT_OWNED")
+                        retractNonConsumableEntitlement(purchase)
+                    }
+                    else -> {
+                        Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
+                    }
                 }
             }
         }
     }
 
-    private fun disburseNonConsumableEntitlement(purchase: Purchase) =
-        CoroutineScope(Job() + Dispatchers.IO).launch {
-            when (purchase.sku) {
-                DubLinkSku.DUBLINK_PRO.productId -> {
-                    preferenceStore.setDubLinkProEnabled(true) // TODO when to set to false?
-//                    val premiumCar = PremiumCar(true)
-//                    insert(premiumCar)
-//                    localCacheBillingClient.skuDetailsDao()
-//                        .insertOrUpdate(purchase.sku, premiumCar.mayPurchase())
-                }
-//                purchasesCache.remove(DubLinkSku.DUBLINK_PRO)
-            }
+    private fun disburseNonConsumableEntitlement(purchase: Purchase) {
+        if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
+            preferenceStore.setDubLinkProEnabled(true)
         }
+    }
+
+    private fun retractNonConsumableEntitlement(purchase: Purchase) {
+        if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
+            preferenceStore.setDubLinkProEnabled(false)
+        }
+    }
+
+    fun launchBillingFlow(activity: Activity) {
+        val purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetailsCache[DubLinkSku.DUBLINK_PRO]).build()
+        playStoreBillingClient.launchBillingFlow(activity, purchaseParams)
+    }
+
+    enum class DubLinkSku(val productId: String, val isConsumable: Boolean) {
+        DUBLINK_PRO(productId = "android.test.purchased", isConsumable = true);
+//        DUBLINK_PRO_TRIAL(productId = "dublink_pro_trial", isConsumable = false);
+//        DUBLINK_PRO(productId = "dublink_pro", isConsumable = false);
+
+        companion object {
+            val inAppSkus = values().map { sku -> sku.productId }
+        }
+    }
 
     private fun handleConsumablePurchasesAsync(consumables: List<Purchase>) {
         Timber.d("handleConsumablePurchasesAsync called")
@@ -205,53 +255,6 @@ class InAppPurchaseRepository @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    private fun querySkuDetailsAsync() {
-        Timber.d("${object{}.javaClass.enclosingMethod?.name}")
-        val params = SkuDetailsParams.newBuilder()
-            .setSkusList(DubLinkSku.inAppSkus)
-            .setType(BillingClient.SkuType.INAPP)
-            .build()
-        playStoreBillingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
-            when (billingResult.responseCode) {
-                BillingClient.BillingResponseCode.OK -> {
-                    Timber.d("${object{}.javaClass.enclosingMethod?.name} OK $skuDetailsList")
-                    if (skuDetailsList.orEmpty().isNotEmpty()) {
-                        skuDetailsList.forEach { skuDetails ->
-                            val dubLinkSku = DubLinkSku.values()
-                                .find { dubLinkSku -> dubLinkSku.productId == skuDetails.sku }
-                            if (dubLinkSku != null) {
-                                if (dubLinkSku == DubLinkSku.DUBLINK_PRO) {
-                                    dubLinkProPriceLiveData.value = skuDetails.price
-                                }
-                                skuDetailsCache[DubLinkSku.DUBLINK_PRO] = skuDetails
-                            }
-                        }
-                    }
-                }
-                else -> {
-                    Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
-                    Timber.e(billingResult.debugMessage)
-                }
-            }
-        }
-    }
-
-    fun launchBillingFlow(activity: Activity) {
-        val purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetailsCache[DubLinkSku.DUBLINK_PRO]).build()
-        playStoreBillingClient.launchBillingFlow(activity, purchaseParams)
-    }
-
-    enum class DubLinkSku(val productId: String, val isConsumable: Boolean) {
-        DUBLINK_PRO(productId = "android.test.purchased", isConsumable = true);
-//        DUBLINK_PRO_TRIAL(productId = "dublink_pro_trial", isConsumable = false);
-//        DUBLINK_PRO(productId = "dublink_pro", isConsumable = false);
-
-        companion object {
-            val consumableSkus = values().filter { sku -> sku.isConsumable }.map { sku -> sku.productId }
-            val inAppSkus = values().map { sku -> sku.productId }
         }
     }
 }

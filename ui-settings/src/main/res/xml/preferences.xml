@@ -3,87 +3,76 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="@string/preference_category_name_upgrade">
+    <PreferenceCategory
+        android:title="@string/preference_category_name_upgrade">
 
         <Preference
             android:icon="@drawable/ic_flame"
-            android:key="@string/preference_key_upgrade"
-            android:title="@string/preference_name_upgrade"
-            android:summary="@string/preference_summary_upgrade"/>
-
-<!--        <Preference-->
-<!--            android:icon="@drawable/ic_hourglass"-->
-<!--            android:key="@string/preference_key_upgrade"-->
-<!--            android:title="Free trial"-->
-<!--            android:summary="Try DubLink Pro for 3 days"/>-->
-
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="@string/preference_category_name_customization">
-
-        <ListPreference
-            android:entries="@array/theme_names"
-            android:entryValues="@array/theme_values"
-            android:key="@string/preference_key_preferred_theme"
-            android:title="Theme (Pro)"
-            android:icon="@drawable/ic_paint"
-            android:enabled="false"
-            app:useSimpleSummaryProvider="true" />
-
-<!--        <ListPreference-->
-<!--            android:entries="@array/screen_names"-->
-<!--            android:entryValues="@array/screen_values"-->
-<!--            android:key="@string/preference_key_preferred_home_screen"-->
-<!--            android:title="@string/preference_name_preferred_home_screen"-->
-<!--            app:useSimpleSummaryProvider="true" />-->
+            android:key="@string/preference_key_dublink_pro_upgrade"
+            android:title="@string/preference_name_dublink_pro_upgrade"
+            android:summary="@string/preference_summary_dublink_pro_upgrade"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Transport Services"
-        android:summary="Choose your favourites">
+        android:title="@string/preference_category_name_customization">
+
+        <ListPreference
+            android:icon="@drawable/ic_paint"
+            android:key="@string/preference_key_preferred_theme"
+            android:title="@string/preference_name_preferred_theme_pro"
+            android:entries="@array/theme_names"
+            android:entryValues="@array/theme_values"
+            android:enabled="false"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_name_transport_services"
+        android:summary="@string/preference_category_summary_transport_services">
 
         <SwitchPreference
             android:icon="@drawable/ic_bus"
-            android:defaultValue="@bool/preference_default_enabled_service_dublin_bus"
             android:key="@string/preference_key_enabled_service_dublin_bus"
-            android:summary="Dublin Bus and Go Ahead"
-            android:title="@string/service_name_dublin_bus" />
+            android:title="@string/preference_name_enabled_service_dublin_bus"
+            android:summary="@string/preference_summary_enabled_service_dublin_bus"
+            android:defaultValue="@bool/preference_default_enabled_service_dublin_bus" />
 
         <SwitchPreference
             android:icon="@drawable/ic_train"
-            android:defaultValue="@bool/preference_default_enabled_service_irish_rail"
             android:key="@string/preference_key_enabled_service_irish_rail"
+            android:title="@string/preference_name_enabled_service_irish_rail_pro"
             android:summary="@string/preference_summary_enabled_service_irish_rail"
-            android:title="Irish Rail (Pro)"
+            android:defaultValue="@bool/preference_default_enabled_service_irish_rail"
             android:enabled="false" />
 
         <SwitchPreference
             android:icon="@drawable/ic_tram"
-            android:defaultValue="@bool/preference_default_enabled_service_luas"
             android:key="@string/preference_key_enabled_service_luas"
-            android:title="Luas (Pro)"
+            android:title="@string/preference_name_enabled_service_luas_pro"
+            android:defaultValue="@bool/preference_default_enabled_service_luas"
             android:enabled="false" />
 
         <SwitchPreference
             android:icon="@drawable/ic_bus"
-            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
             android:key="@string/preference_key_enabled_service_bus_eireann"
-            android:title="Bus Éireann (Pro)"
+            android:title="@string/preference_name_enabled_service_bus_eireann_pro"
+            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann"
             android:enabled="false" />
 
         <SwitchPreference
             android:icon="@drawable/ic_bike"
-            android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes"
             android:key="@string/preference_key_enabled_service_dublin_bikes"
-            android:title="Dublin Bikes (Pro)"
+            android:title="@string/preference_name_enabled_service_dublin_bikes_pro"
+            android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes"
             android:enabled="false" />
 
         <SwitchPreference
             android:icon="@drawable/ic_bus"
-            android:defaultValue="@bool/preference_default_enabled_service_aircoach"
             android:key="@string/preference_key_enabled_service_aircoach"
-            android:title="Aircoach (Pro)"
+            android:title="@string/preference_name_enabled_service_aircoach_pro"
+            android:defaultValue="@bool/preference_default_enabled_service_aircoach"
             android:enabled="false" />
 
     </PreferenceCategory>
@@ -92,19 +81,19 @@
         android:title="@string/preference_category_name_favourites">
 
         <SwitchPreference
-            android:title="Sort by location (Pro)"
             android:icon="@drawable/ic_sort"
             android:key="@string/preference_key_favourites_sort_by_location"
+            android:title="@string/preference_name_favourites_sort_by_location_pro"
             android:summary="@string/preference_summary_favourites_sort_by_location"
             android:defaultValue="@bool/preference_default_favourites_sort_location"
             android:enabled="false" />
 
         <SeekBarPreference
             android:icon="@drawable/ic_clock"
-            android:title="Real Time Information (Pro)"
             android:key="@string/preference_key_favourites_live_data_limit"
+            android:title="@string/preference_name_favourites_live_data_limit_pro"
             android:summary="@string/preference_summary_favourites_live_data_limit"
-            android:defaultValue="1"
+            android:defaultValue="@integer/preference_default_favourites_live_data_limit"
             android:max="10"
             android:enabled="false"
             app:showSeekBarValue="true" />

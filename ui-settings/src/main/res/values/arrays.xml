@@ -10,16 +10,4 @@
         <item>@string/preference_value_dark_theme</item>
         <item>@string/preference_value_battery_saver_theme</item>
     </string-array>
-    <string-array name="screen_names">
-        <item>News</item>
-        <item>Nearby</item>
-        <item>Favourites</item>
-        <item>Search</item>
-    </string-array>
-    <string-array name="screen_values">
-        <item>news</item>
-        <item>nearby</item>
-        <item>favourites</item>
-        <item>search</item>
-    </string-array>
 </resources>

@@ -30,6 +30,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":iap"))
     implementation(project(":ui-app"))
 
     implementation(Libraries.AndroidX.preferenceKtx)
