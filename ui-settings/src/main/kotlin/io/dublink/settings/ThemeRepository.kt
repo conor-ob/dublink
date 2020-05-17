@@ -29,18 +29,28 @@ class ThemeRepository @Inject constructor(
 
     private fun getPreferredThemeOrDefault(): Theme {
         val defaultTheme = getDefaultTheme()
-        val preferredThemeOrDefault = preferenceStore.getPreferredTheme()
+        val preferredThemeOrDefault = getPreferredTheme()
         return getThemes().find { theme ->
             resources.getString(theme.value) == preferredThemeOrDefault } ?: defaultTheme
     }
 
-    private fun getDefaultTheme(): Theme {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Theme.SYSTEM_DEFAULT
+    private fun getPreferredTheme(): String? =
+        if (preferenceStore.isDubLinkProEnabled()) {
+            preferenceStore.getPreferredTheme()
         } else {
-            Theme.BATTERY_SAVER
+            null
         }
-    }
+
+    private fun getDefaultTheme(): Theme =
+        if (preferenceStore.isDubLinkProEnabled()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Theme.SYSTEM_DEFAULT
+            } else {
+                Theme.BATTERY_SAVER
+            }
+        } else {
+            Theme.LIGHT
+        }
 
     private fun getThemes(): List<Theme> {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

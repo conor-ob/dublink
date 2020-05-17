@@ -55,13 +55,15 @@
             android:defaultValue="@bool/preference_default_enabled_service_irish_rail"
             android:key="@string/preference_key_enabled_service_irish_rail"
             android:summary="@string/preference_summary_enabled_service_irish_rail"
-            android:title="@string/service_name_irish_rail" />
+            android:title="Irish Rail (Pro)"
+            android:enabled="false" />
 
         <SwitchPreference
             android:icon="@drawable/ic_tram"
             android:defaultValue="@bool/preference_default_enabled_service_luas"
             android:key="@string/preference_key_enabled_service_luas"
-            android:title="@string/service_name_luas" />
+            android:title="Luas (Pro)"
+            android:enabled="false" />
 
         <SwitchPreference
             android:icon="@drawable/ic_bus"

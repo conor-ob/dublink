@@ -16,6 +16,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import androidx.preference.SeekBarPreference
 import androidx.preference.SwitchPreference
+import com.google.android.material.snackbar.Snackbar
 import com.nodesagency.logviewer.LogViewerActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -66,13 +67,19 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
             if (upgradePreference != null) {
                 // user has just purchased pro so rebuild the screen
                 onCreatePreferences(null, null)
+                themeRepository.setPreferredThemeOrDefault()
+                Toast.makeText(requireContext(), "Thank you for supporting DubLink!", Toast.LENGTH_LONG).show()
             }
         }
     }
 
     private fun setAppVersionPreference() {
         val appVersionPreference = findPreference(getString(R.string.preference_key_app_version)) as Preference?
-        appVersionPreference?.summary = appConfig.appVersion()
+        appVersionPreference?.summary = if (preferenceStore.isDubLinkProEnabled()) {
+            "DubLink Pro ${appConfig.appVersion()}"
+        } else {
+            "DubLink Free ${appConfig.appVersion()}"
+        }
     }
 
     private fun bindListeners() {

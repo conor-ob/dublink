@@ -163,8 +163,8 @@ class InAppPurchaseRepository @Inject constructor(
 
 
             // switch these around to reset
-            acknowledgeNonConsumablePurchasesAsync(consumables)
-//            handleConsumablePurchasesAsync(consumables)
+//            acknowledgeNonConsumablePurchasesAsync(consumables)
+            handleConsumablePurchasesAsync(consumables)
         }
 
     private fun acknowledgeNonConsumablePurchasesAsync(nonConsumables: List<Purchase>) {

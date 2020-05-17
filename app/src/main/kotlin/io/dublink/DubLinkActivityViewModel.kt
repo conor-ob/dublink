@@ -8,6 +8,7 @@ import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.internet.InternetStatusChangeListener
 import io.dublink.domain.repository.AggregatedServiceLocationRepository
 import io.dublink.domain.service.RxScheduler
+import io.dublink.iap.InAppPurchaseRepository
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
@@ -16,6 +17,7 @@ import timber.log.Timber
 class DubLinkActivityViewModel @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val internetStatusChangeListener: InternetStatusChangeListener,
+    private val inAppPurchaseRepository: InAppPurchaseRepository,
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
@@ -66,6 +68,14 @@ class DubLinkActivityViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+    }
+
+    fun onStart() {
+        inAppPurchaseRepository.startDataSourceConnections()
+    }
+
+    fun onStop() {
+        inAppPurchaseRepository.endDataSourceConnections()
     }
 }
 
