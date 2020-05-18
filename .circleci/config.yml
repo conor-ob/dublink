@@ -1,9 +1,9 @@
 version: 2
 jobs:
   build:
-    branches:
-      only:
-        - master
+#    branches:
+#      only:
+#        - master
     working_directory: ~/dublink
     docker:
       - image: circleci/android:api-29
