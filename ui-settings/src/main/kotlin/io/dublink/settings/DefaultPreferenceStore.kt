@@ -135,13 +135,19 @@ class DefaultPreferenceStore @Inject constructor(
     }
 
     override fun setDubLinkProEnabled(enabled: Boolean): Boolean {
-        return preferences.edit().putBoolean("dublink_pro", true).commit()
+        return preferences
+            .edit()
+            .putBoolean(
+                context.resources.getString(R.string.preference_key_dublink_pro),
+                enabled
+            )
+            .commit()
     }
 
     override fun isDubLinkProEnabled(): Boolean {
         return preferences.getBoolean(
-            "dublink_pro",
-            false
+            context.resources.getString(R.string.preference_key_dublink_pro),
+            context.resources.getBoolean(R.bool.preference_default_dublink_pro)
         )
     }
 }

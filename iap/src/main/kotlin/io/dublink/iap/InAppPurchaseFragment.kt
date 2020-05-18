@@ -93,8 +93,7 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
     }
 
     private fun renderBuyButton(dubLinkProPrice: String) {
-        dubLinkProPriceButton.updateText(newText = "Buy for €2.99")
-//        dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, dubLinkProPrice))
+        dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, dubLinkProPrice))
         dubLinkProPriceButton.visibility = View.VISIBLE
     }
 

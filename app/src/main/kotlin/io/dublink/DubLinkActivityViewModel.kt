@@ -23,13 +23,13 @@ class DubLinkActivityViewModel @Inject constructor(
 
     override val initialState = State(internetStatusChange = null)
 
-    private val reducer: Reducer<State, Change> = { state, change ->
+    private val reducer: Reducer<State, Change> = { _, change ->
         when (change) {
             is Change.InternetStatusChange -> State(
                 internetStatusChange = change.internetStatusChange
             )
             is Change.PreloadChange -> State(
-                internetStatusChange = state.internetStatusChange
+                internetStatusChange = null
             )
         }
     }

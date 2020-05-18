@@ -1,6 +1,7 @@
 <resources>
     <string name="preference_category_name_upgrade">Upgrade</string>
 
+    <string name="preference_key_dublink_pro">dublink_pro</string>
     <string name="preference_key_dublink_pro_upgrade">dublink_pro_upgrade</string>
     <string name="preference_name_dublink_pro_upgrade">Unlock DubLink Pro</string>
     <string name="preference_summary_dublink_pro_upgrade">Get access to exclusive features</string>

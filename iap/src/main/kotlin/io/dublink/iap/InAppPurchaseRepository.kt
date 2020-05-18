@@ -206,15 +206,19 @@ class InAppPurchaseRepository @Inject constructor(
     private fun acknowledgeNonConsumablePurchasesAsync(nonConsumables: List<Purchase>) {
         Timber.d("${object{}.javaClass.enclosingMethod?.name}")
         nonConsumables.forEach { purchase ->
-            val params = AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase
-                .purchaseToken).build()
+            val params = AcknowledgePurchaseParams
+                .newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
             playStoreBillingClient.acknowledgePurchase(params) { billingResult ->
                 when (billingResult.responseCode) {
-                    BillingClient.BillingResponseCode.OK -> {
+                    BillingClient.BillingResponseCode.OK,
+                    BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                         Timber.d("${object{}.javaClass.enclosingMethod?.name} OK")
                         disburseNonConsumableEntitlement(purchase)
                     }
-                    BillingClient.BillingResponseCode.ITEM_NOT_OWNED -> {
+                    BillingClient.BillingResponseCode.ITEM_NOT_OWNED,
+                    BillingClient.BillingResponseCode.ITEM_UNAVAILABLE -> {
                         Timber.d("${object{}.javaClass.enclosingMethod?.name} ITEM_NOT_OWNED")
                         retractNonConsumableEntitlement(purchase)
                     }
@@ -233,6 +237,8 @@ class InAppPurchaseRepository @Inject constructor(
             inAppPurchaseStatusListeners.forEach {
                 it.onPurchaseSuccessful()
             }
+        } else {
+            preferenceStore.setDubLinkProEnabled(false)
         }
     }
 
