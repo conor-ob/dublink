@@ -8,6 +8,5 @@ class DividerItem : Item() {
     override fun getLayout() = R.layout.list_item_divider
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
     }
 }

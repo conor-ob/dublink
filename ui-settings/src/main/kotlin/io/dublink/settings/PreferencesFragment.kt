@@ -9,15 +9,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.preference.ListPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceScreen
-import androidx.preference.SeekBarPreference
 import androidx.preference.SwitchPreference
-import com.google.android.material.snackbar.Snackbar
 import com.nodesagency.logviewer.LogViewerActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
@@ -26,8 +21,6 @@ import io.dublink.DubLinkNavigator
 import io.dublink.domain.service.AppConfig
 import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
-import io.dublink.iap.InAppPurchaseViewModel
-import io.dublink.viewModelProvider
 import javax.inject.Inject
 
 private const val sortByLocationRequestCode = 42069

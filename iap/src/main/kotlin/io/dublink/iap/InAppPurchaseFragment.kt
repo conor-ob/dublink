@@ -108,7 +108,6 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
         }
 
         override fun onPurchaseError() {
-
         }
     }
 }

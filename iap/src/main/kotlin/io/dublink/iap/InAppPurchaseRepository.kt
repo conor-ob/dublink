@@ -14,13 +14,13 @@ import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import io.dublink.domain.service.PreferenceStore
+import java.util.HashSet
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.HashSet
-import javax.inject.Inject
 
 class InAppPurchaseRepository @Inject constructor(
     private val context: Context,
@@ -190,8 +190,6 @@ class InAppPurchaseRepository @Inject constructor(
                 }
             }
 //            localCacheBillingClient.purchaseDao().insert(*validPurchases.toTypedArray())
-
-
             // switch these around to reset
 //            handleConsumablePurchasesAsync(validPurchases.toList())
             acknowledgeNonConsumablePurchasesAsync(validPurchases.toList())
