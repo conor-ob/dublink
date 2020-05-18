@@ -30,7 +30,7 @@ jobs:
           command: ./gradlew ktlint
       - run:
           name: Run unit tests
-          command: ./gradlew test
+          command: ./gradlew testDebugUnitTest
 #      - store_test_results:
 #          path: app/build/test-results
 #      - store_test_results:
