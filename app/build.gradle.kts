@@ -38,10 +38,16 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias(properties.getProperty("keyAlias", ""))
-            keyPassword(properties.getProperty("keyPassword", ""))
-            storePassword(properties.getProperty("storePassword", ""))
-            storeFile(file(properties.getProperty("storeFile", "")))
+            keyAlias(properties.getProperty("keyAlias") ?: null)
+            keyPassword(properties.getProperty("keyPassword") ?: null)
+            storePassword(properties.getProperty("storePassword") ?: null)
+            storeFile(
+                if (properties.getProperty("storeFile") == null) {
+                    null
+                } else {
+                    file(properties.getProperty("storeFile", ""))
+                }
+            )
             isV2SigningEnabled = true
         }
     }
