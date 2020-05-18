@@ -30,8 +30,22 @@ allprojects {
         maven(url = uri("https://maven.pkg.github.com/conor-ob/dublin-rtpi-service")) {
             name = "GitHubPackages"
             credentials {
-                username = githubProperties.getProperty("usr")
-                password = githubProperties.getProperty("key")
+                username = properties.getOrDefault(
+                    "usr",
+                    if (project.rootProject.file("github.properties").exists()) {
+                        loadProperties("github.properties").getProperty("authToken")
+                    } else {
+                        null
+                    }
+                ) as String?
+                password = properties.getOrDefault(
+                    "key",
+                    if (project.rootProject.file("github.properties").exists()) {
+                        loadProperties("github.properties").getProperty("authToken")
+                    } else {
+                        null
+                    }
+                ) as String?
             }
         }
     }
