@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.konan.properties.loadProperties
-import java.util.Properties
 
 buildscript {
     repositories {
@@ -16,12 +15,6 @@ buildscript {
 }
 
 allprojects {
-    val githubProperties = if (project.rootProject.file("github.properties").exists()) {
-        loadProperties("github.properties")
-    } else {
-        Properties()
-    }
-
     repositories {
         google()
         jcenter()
