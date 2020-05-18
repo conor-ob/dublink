@@ -26,6 +26,7 @@ allprojects {
         google()
         jcenter()
         mavenLocal()
+        maven(url = "https://jitpack.io")
         maven(url = "http://streamreasoning.org/maven/")
         maven(url = uri("https://maven.pkg.github.com/conor-ob/dublin-rtpi-service")) {
             name = "GitHubPackages"

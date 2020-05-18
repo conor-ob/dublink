@@ -15,7 +15,8 @@ jobs:
 
     env:
       TERM: dumb
-      ORG_GRADLE_PROJECT_authToken: ${{ secrets.ORG_GRADLE_PROJECT_authToken }}
+      ORG_GRADLE_PROJECT_usr: ${{ secrets.ORG_GRADLE_PROJECT_usr }}
+      ORG_GRADLE_PROJECT_key: ${{ secrets.ORG_GRADLE_PROJECT_key }}
 
     steps:
     - uses: actions/checkout@v2
