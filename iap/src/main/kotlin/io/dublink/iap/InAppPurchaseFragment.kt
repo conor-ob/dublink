@@ -69,11 +69,11 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
                 DividerItem(),
                 FeatureItem(
                     title = "Dublin nomad",
-                    summary = "Gain access to real time info for all transport services\n- Irish Rail (DART, Commuter and InterCity)\n- Luas\n- Dublin Bikes\n- Bus Éireann\n- Aircoach"
+                    summary = "Full access to all services\n- DART\n- Luas\n- Dublin Bikes\n- Bus Éireann\n- Aircoach\n- Commuter & InterCity Rail"
                 ),
                 FeatureItem(
                     title = "Join the dark side",
-                    summary = "Start using the dark theme"
+                    summary = "Start using a dark theme"
                 ),
                 FeatureItem(
                     title = "Everything you need in one place",
@@ -81,11 +81,11 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
                 ),
                 FeatureItem(
                     title = "Sit back and relax",
-                    summary = "Sort favourites by location so that wherever you're going, simply open the app to get the info you need right away"
+                    summary = "Sort favourites by location so that wherever you're going simply open the app to get the info you need right away"
                 ),
                 FeatureItem(
                     title = "VIP",
-                    summary = "As DubLink evolves you'll have exclusive access to all new features"
+                    summary = "As DubLink grows you'll have exclusive access to all new features"
                 ),
                 SpacerItem()
             )
