@@ -23,7 +23,9 @@ class ReactiveBillingClient(
     fun getSkuDetails(): Single<SkuDetailsResponse> {
         return connect()
             .flatMap { billingClient ->
+                Timber.d("${object{}.javaClass.enclosingMethod?.name}")
                 Single.create<SkuDetailsResponse> { emitter ->
+                    Timber.d("${object{}.javaClass.enclosingMethod?.name}")
                     if (emitter.isDisposed) {
                         return@create
                     }

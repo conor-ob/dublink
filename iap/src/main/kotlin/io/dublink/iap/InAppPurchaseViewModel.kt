@@ -18,8 +18,6 @@ class InAppPurchaseViewModel @Inject constructor(
         dubLinkProPrice = null
     )
 
-    private val disp = CompositeDisposable()
-
     private val reducer: Reducer<State, NewState> = { state, newState ->
         when (newState) {
             is NewState.SkuDetails -> {
@@ -61,8 +59,10 @@ class InAppPurchaseViewModel @Inject constructor(
 
         val querySkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
             .switchMapSingle {
+                Timber.d("${object{}.javaClass.enclosingMethod?.name}")
                 reactiveBillingClient.getSkuDetails()
-                    .map<NewState> { response -> NewState.SkuDetails(response) }
+                    .map<NewState> {
+                            response -> NewState.SkuDetails(response) }
             }
 
 //        val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
@@ -79,10 +79,19 @@ class InAppPurchaseViewModel @Inject constructor(
             )
         )
 
-        disp += querySkuDetailsActions
+        disposables += allActions
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+    }
+
+    fun start() {
+        bindActions()
+    }
+
+    fun stop() {
+        disposables.clear()
+        disposables.dispose()
     }
 }
 

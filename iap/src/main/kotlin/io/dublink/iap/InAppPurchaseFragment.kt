@@ -2,30 +2,18 @@ package io.dublink.iap
 
 import android.os.Bundle
 import android.view.View
-import android.widget.updateText
-import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.viewModelProvider
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_iap.*
 
 class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
 
-//    private val viewModel by lazy { viewModelProvider(viewModelFactory) as InAppPurchaseViewModel }
+    private val viewModel by lazy { viewModelProvider(viewModelFactory) as InAppPurchaseViewModel }
 
 //    private var featuresAdapter: GroupAdapter<GroupieViewHolder>? = null
 //    private lateinit var featuresList: RecyclerView
 //    private lateinit var dubLinkProPriceButton: MaterialButton
-
-    private val disposable = CompositeDisposable()
-    private lateinit var reactiveBillingClient: ReactiveBillingClient
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,20 +57,16 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
 
     override fun onResume() {
         super.onResume()
-        reactiveBillingClient =  ReactiveBillingClient(requireContext())
+//        viewModel.start()
 //        viewModel.dispatch(Action.Connect)
-//        viewModel.dispatch(Action.QuerySkuDetails)
+//        viewModel.start()
+        viewModel.dispatch(Action.QuerySkuDetails)
 //        viewModel.dispatch(Action.QueryPurchases)
-
-        disposable.add(
-            reactiveBillingClient.getSkuDetails().subscribe()
-        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        disposable.clear()
-        disposable.dispose()
+//        viewModel.stop()
     }
 
 //    private fun renderFeaturesList() {
