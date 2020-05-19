@@ -9,7 +9,7 @@ import dagger.multibindings.IntoMap
 import io.dublink.DubLinkActivityViewModel
 import io.dublink.favourites.FavouritesViewModel
 import io.dublink.favourites.edit.EditFavouritesViewModel
-import io.dublink.iap.InAppPurchaseViewModel
+import io.dublink.iap.dublinkpro.InAppPurchaseViewModel
 import io.dublink.livedata.LiveDataViewModel
 import io.dublink.search.SearchViewModel
 import java.lang.annotation.Documented

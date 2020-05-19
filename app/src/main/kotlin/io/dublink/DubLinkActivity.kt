@@ -120,7 +120,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 
     override fun navigateToIap() {
         navigationController.navigate(
-            R.id.inAppPurchaseFragment,
+            R.id.dubLinkProFragment,
             Bundle.EMPTY,
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)

@@ -1,4 +1,4 @@
-package io.dublink.iap
+package io.dublink.iap.dublinkpro
 
 import android.os.Bundle
 import android.view.View
@@ -12,10 +12,11 @@ import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
+import io.dublink.iap.R
 import io.dublink.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_iap.*
 
-class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
+class DubLinkProFragment : DubLinkFragment(R.layout.fragment_iap) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as InAppPurchaseViewModel }
 
@@ -71,29 +72,29 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
     private fun renderFeaturesList() {
         featuresAdapter?.update(
             listOf(
-                DubLinkProItem(),
-                DividerItem(),
-                FeatureItem(
+                DubLinkProHeaderItem(),
+                DubLinkProDividerItem(),
+                DubLinkProFeatureItem(
                     title = "Go anywhere",
                     summary = "Full access to every service\n\n- DART\n- Luas\n- Dublin Bikes\n- Bus Éireann\n- Aircoach\n- Commuter & InterCity Rail"
                 ),
-                FeatureItem(
+                DubLinkProFeatureItem(
                     title = "Join the dark side",
                     summary = "Start using a dark theme"
                 ),
-                FeatureItem(
+                DubLinkProFeatureItem(
                     title = "Everything you need in one place",
                     summary = "View real time info for up to 10 places in the favourites screen"
                 ),
-                FeatureItem(
+                DubLinkProFeatureItem(
                     title = "Sit back and relax",
                     summary = "Sort favourites by location so that wherever you're going simply open the app to get the info you need right away"
                 ),
-                FeatureItem(
+                DubLinkProFeatureItem(
                     title = "VIP",
                     summary = "As DubLink grows you'll have exclusive access to all new features"
                 ),
-                SpacerItem()
+                DubLinkProSpacerItem()
             )
         )
     }

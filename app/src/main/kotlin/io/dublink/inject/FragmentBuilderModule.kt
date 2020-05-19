@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import io.dublink.favourites.FavouritesFragment
 import io.dublink.favourites.edit.EditFavouritesFragment
-import io.dublink.iap.InAppPurchaseFragment
+import io.dublink.iap.dublinkpro.DubLinkProFragment
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.search.SearchFragment
 import io.dublink.settings.PreferencesFragment
@@ -33,7 +33,7 @@ abstract class FragmentBuilderModule {
     abstract fun contributeSettingsFragmentInjector(): SettingsFragment
 
     @ContributesAndroidInjector
-    abstract fun contributeInAppPurchaseFragmentInjector(): InAppPurchaseFragment
+    abstract fun contributeInAppPurchaseFragmentInjector(): DubLinkProFragment
 
     @ContributesAndroidInjector
     abstract fun contributeWebViewFragmentInjector(): WebViewFragment

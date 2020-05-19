@@ -5,16 +5,10 @@ import android.util.Log
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import com.android.billingclient.api.SkuDetailsResponseListener
-import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import java.lang.ref.WeakReference
 
 class ReactiveBillingClient(
@@ -27,7 +21,7 @@ class ReactiveBillingClient(
         return connect()
             .flatMap { billingClient ->
                 Single.create<SkuDetailsResponse> { emitter ->
-                    val weakRef = WeakReference<SingleEmitter<SkuDetailsResponse>>(emitter)
+                    val weakReference = WeakReference<SingleEmitter<SkuDetailsResponse>>(emitter)
                     val params = SkuDetailsParams.newBuilder()
                         .setSkusList(listOf("android.test.purchased"))
                         .setType(BillingClient.SkuType.INAPP)
@@ -36,15 +30,13 @@ class ReactiveBillingClient(
                     billingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
                         when (billingResult.responseCode) {
                             BillingClient.BillingResponseCode.OK -> {
-//                                if (emitter.isDisposed) return@querySkuDetailsAsync
-                                val observer = weakRef.get()
+                                val observer = weakReference.get()
                                 if (observer != null && !observer.isDisposed) {
                                     observer.onSuccess(SkuDetailsResponse.Data(skuDetailsList.orEmpty()))
                                 }
                             }
                             else -> {
-//                                if (emitter.isDisposed) return@querySkuDetailsAsync
-                                val observer = weakRef.get()
+                                val observer = weakReference.get()
                                 if (observer != null && !observer.isDisposed) {
                                     observer.onSuccess(SkuDetailsResponse.Error(billingResult.debugMessage))
                                 }
@@ -56,7 +48,7 @@ class ReactiveBillingClient(
     }
 
     private fun connect(): Single<BillingClient> = Single.create { emitter ->
-        val weakRef = WeakReference<SingleEmitter<BillingClient>>(emitter)
+        val weakReference = WeakReference<SingleEmitter<BillingClient>>(emitter)
         if (billingClient == null || billingClient?.isReady == false) {
             val client = BillingClient.newBuilder(context.applicationContext)
                 .enablePendingPurchases()
@@ -71,8 +63,7 @@ class ReactiveBillingClient(
                     override fun onBillingSetupFinished(billingResult: BillingResult) {
                         when (billingResult.responseCode) {
                             BillingClient.BillingResponseCode.OK -> {
-//                                if (emitter.isDisposed) return
-                                val observer = weakRef.get()
+                                val observer = weakReference.get()
                                 if (observer != null && !observer.isDisposed) {
                                     observer.onSuccess(client)
                                 }

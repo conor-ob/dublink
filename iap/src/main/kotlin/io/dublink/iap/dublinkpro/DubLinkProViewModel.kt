@@ -1,18 +1,16 @@
-package io.dublink.iap
+package io.dublink.iap.dublinkpro
 
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import io.dublink.domain.service.RxScheduler
+import io.dublink.iap.ReactiveBillingClient
+import io.dublink.iap.SkuDetailsResponse
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.SingleObserver
-import io.reactivex.SingleSource
-import io.reactivex.rxkotlin.flatMapSequence
 import io.reactivex.rxkotlin.plusAssign
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class InAppPurchaseViewModel @Inject constructor(
     private val reactiveBillingClient: ReactiveBillingClient,
@@ -44,7 +42,11 @@ class InAppPurchaseViewModel @Inject constructor(
                 reactiveBillingClient.getSkuDetails()
 //                    .subscribeOn(rxScheduler.io) // TODO does it need to be ui thread?
 //                    .observeOn(rxScheduler.ui)
-                    .map<NewState> { response -> NewState.SkuDetails(response) }
+                    .map<NewState> { response ->
+                        NewState.SkuDetails(
+                            response
+                        )
+                    }
             }
 
         val allActions = Observable.merge(
