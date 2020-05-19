@@ -7,8 +7,11 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.SkuDetailsResponseListener
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 
 class ReactiveBillingClient(
@@ -17,22 +20,27 @@ class ReactiveBillingClient(
 
     private var billingClient: BillingClient? = null
 
-    fun getSkuDetails(): Observable<SkuDetailsResponse> {
+    fun getSkuDetails(): Single<SkuDetailsResponse> {
         return connect()
             .flatMap { billingClient ->
-                Observable.create<SkuDetailsResponse> { emitter ->
+                Single.create<SkuDetailsResponse> { emitter ->
+                    if (emitter.isDisposed) {
+                        return@create
+                    }
+
                     val params = SkuDetailsParams.newBuilder()
                         .setSkusList(InAppPurchaseRepository.DubLinkSku.inAppSkus)
                         .setType(BillingClient.SkuType.INAPP)
                         .build()
-                    billingClient.querySkuDetailsAsync(params) { billingResult1, skuDetailsList ->
-                        when (billingResult1.responseCode) {
+
+                    billingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
+                        when (billingResult.responseCode) {
                             BillingClient.BillingResponseCode.OK -> {
-                                emitter.onNext(SkuDetailsResponse.Data(skuDetailsList.orEmpty()))
-                                emitter.onComplete()
+                                Timber.d(skuDetailsList.toString())
+                                emitter.onSuccess(SkuDetailsResponse.Data(skuDetailsList.orEmpty()))
                             }
                             else -> {
-                                emitter.onNext(SkuDetailsResponse.Error(billingResult1.responseCode))
+                                emitter.onSuccess(SkuDetailsResponse.Error(billingResult.responseCode))
                             }
                         }
                     }
@@ -40,26 +48,72 @@ class ReactiveBillingClient(
             }
     }
 
-    fun getPurchases(): Observable<PurchasesResponse> {
-        return connect()
-            .flatMap { billingClient ->
-                Observable.create<PurchasesResponse> { emitter ->
-                    val response = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
-                    when (response.billingResult.responseCode) {
-                        BillingClient.BillingResponseCode.OK -> {
-                            emitter.onNext(PurchasesResponse.Data(response.purchasesList.orEmpty()))
-                            emitter.onComplete()
-                        }
-                        else -> {
-                            emitter.onNext(PurchasesResponse.Error(response.billingResult.responseCode))
-                        }
-                    }
-                }
-            }
-    }
 
-    fun connect(): Observable<BillingClient> = Observable.create { emitter ->
-        if (billingClient == null) {
+
+//    fun getSkuDetails(): Observable<SkuDetailsResponse> {
+//        return connect()
+//            .flatMapObservable { billingClient ->
+//                Observable.create<SkuDetailsResponse> { emitter ->
+//                    val params = SkuDetailsParams.newBuilder()
+//                        .setSkusList(InAppPurchaseRepository.DubLinkSku.inAppSkus)
+//                        .setType(BillingClient.SkuType.INAPP)
+//                        .build()
+//
+//                    billingClient.querySkuDetailsAsync(params) { billingResult, skuDetailsList ->
+//                        when (billingResult.responseCode) {
+//                            BillingClient.BillingResponseCode.OK -> {
+//                                emitter.onNext(SkuDetailsResponse.Data(skuDetailsList.orEmpty()))
+//                                emitter.onComplete()
+//                            }
+//                            else -> {
+//                                emitter.onNext(SkuDetailsResponse.Error(billingResult.responseCode))
+//                                emitter.onComplete()
+//                            }
+//                        }
+//                    }
+//                }
+//            }.subscribeOn(Schedulers.io())
+//    }
+//                Observable.create<SkuDetailsResponse> { emitter ->
+//                    val params = SkuDetailsParams.newBuilder()
+//                        .setSkusList(InAppPurchaseRepository.DubLinkSku.inAppSkus)
+//                        .setType(BillingClient.SkuType.INAPP)
+//                        .build()
+//                    billingClient.querySkuDetailsAsync(params) { billingResult1, skuDetailsList ->
+//                        when (billingResult1.responseCode) {
+//                            BillingClient.BillingResponseCode.OK -> {
+//                                emitter.onNext(SkuDetailsResponse.Data(skuDetailsList.orEmpty()))
+//                                emitter.onComplete()
+//                            }
+//                            else -> {
+//                                emitter.onNext(SkuDetailsResponse.Error(billingResult1.responseCode))
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//    }
+
+//    fun getPurchases(): Single<PurchasesResponse> {
+//        return connect()
+//            .flatMap { billingClient ->
+//                Observable.create<PurchasesResponse> { emitter ->
+//                    val response = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+//                    when (response.billingResult.responseCode) {
+//                        BillingClient.BillingResponseCode.OK -> {
+//                            emitter.onNext(PurchasesResponse.Data(response.purchasesList.orEmpty()))
+//                            emitter.onComplete()
+//                        }
+//                        else -> {
+//                            emitter.onNext(PurchasesResponse.Error(response.billingResult.responseCode))
+//                        }
+//                    }
+//                }
+//            }
+//    }
+
+    private fun connect(): Single<BillingClient> = Single.create { emitter ->
+        if (billingClient == null || billingClient?.isReady == false) {
             val client = BillingClient.newBuilder(context.applicationContext)
                 .enablePendingPurchases()
                 .setListener { responseCode, purchases -> Timber.d("howiye") }
@@ -76,8 +130,7 @@ class ReactiveBillingClient(
                         when (billingResult.responseCode) {
                             BillingClient.BillingResponseCode.OK -> {
                                 Timber.d("${object{}.javaClass.enclosingMethod?.name} OK")
-                                emitter.onNext(client)
-                                emitter.onComplete()
+                                emitter.onSuccess(client)
                             }
                             else -> {
                                 Timber.d("${object{}.javaClass.enclosingMethod?.name} UNKNOWN")
@@ -93,7 +146,7 @@ class ReactiveBillingClient(
                 }
             )
         } else {
-            emitter.onNext(requireNotNull(billingClient))
+            emitter.onSuccess(requireNotNull(billingClient))
         }
     }
 

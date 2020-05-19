@@ -5,6 +5,7 @@ import com.ww.roxie.BaseState
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,11 +18,17 @@ class InAppPurchaseViewModel @Inject constructor(
         dubLinkProPrice = null
     )
 
+    private val disp = CompositeDisposable()
+
     private val reducer: Reducer<State, NewState> = { state, newState ->
         when (newState) {
-            is NewState.SkuDetails -> State(
-                dubLinkProPrice = getPrice(newState.skuDetails)
-            )
+            is NewState.SkuDetails -> {
+                val p = getPrice(newState.skuDetails)
+                Timber.d(p)
+                State(
+                    dubLinkProPrice = p
+                )
+            }
             is NewState.Purchases -> State(
                 dubLinkProPrice = state.dubLinkProPrice
             )
@@ -40,39 +47,39 @@ class InAppPurchaseViewModel @Inject constructor(
         bindActions()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        reactiveBillingClient.disconnect()
-    }
+//    override fun onCleared() {
+//        super.onCleared()
+//        reactiveBillingClient.disconnect()
+//    }
 
     private fun bindActions() {
-        val connectActions = actions.ofType(Action.Connect::class.java)
-            .switchMap {
-                reactiveBillingClient.connect()
-                    .map<NewState> { response -> NewState.SkuDetails(SkuDetailsResponse.Data(emptyList())) }
-            }
+//        val connectActions = actions.ofType(Action.Connect::class.java)
+//            .switchMap {
+//                reactiveBillingClient.connect()
+//                    .map<NewState> { response -> NewState.SkuDetails(SkuDetailsResponse.Data(emptyList())) }
+//            }
 
         val querySkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
-            .switchMap {
+            .switchMapSingle {
                 reactiveBillingClient.getSkuDetails()
                     .map<NewState> { response -> NewState.SkuDetails(response) }
             }
 
-        val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
-            .switchMap {
-                reactiveBillingClient.getPurchases()
-                    .map<NewState> { response -> NewState.Purchases(response) }
-            }
+//        val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
+//            .switchMap {
+//                reactiveBillingClient.getPurchases()
+//                    .map<NewState> { response -> NewState.Purchases(response) }
+//            }
 
         val allActions = Observable.merge(
             listOf(
-                connectActions,
-                querySkuDetailsActions,
-                queryPurchasesActions
+//                connectActions
+                querySkuDetailsActions
+//                queryPurchasesActions
             )
         )
 
-        disposables += allActions
+        disp += querySkuDetailsActions
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
