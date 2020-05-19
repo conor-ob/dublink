@@ -25,6 +25,7 @@ class ReactiveBillingClient(
             .flatMap { billingClient ->
                 Timber.d("${object{}.javaClass.enclosingMethod?.name}")
                 Single.create<SkuDetailsResponse> { emitter ->
+                    if (emitter.isDisposed) return@create
                     Timber.d("${object{}.javaClass.enclosingMethod?.name}")
                     if (emitter.isDisposed) {
                         return@create
@@ -115,6 +116,7 @@ class ReactiveBillingClient(
 //    }
 
     private fun connect(): Single<BillingClient> = Single.create { emitter ->
+        if (emitter.isDisposed) return@create
         if (billingClient == null || billingClient?.isReady == false) {
             val client = BillingClient.newBuilder(context.applicationContext)
                 .enablePendingPurchases()

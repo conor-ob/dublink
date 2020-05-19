@@ -71,11 +71,11 @@ class DubLinkActivityViewModel @Inject constructor(
     }
 
     fun onStart() {
-        inAppPurchaseRepository.startDataSourceConnections()
+//        inAppPurchaseRepository.startDataSourceConnections()
     }
 
     fun onStop() {
-        inAppPurchaseRepository.endDataSourceConnections()
+//        inAppPurchaseRepository.endDataSourceConnections()
     }
 }
 
