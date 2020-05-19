@@ -86,10 +86,10 @@ android {
 dependencies {
     implementation(project(":database"))
     implementation(project(":domain"))
-    implementation(project(":iap"))
     implementation(project(":repository"))
     implementation(project(":ui-app"))
     implementation(project(":ui-favourites"))
+    implementation(project(":ui-iap"))
     implementation(project(":ui-livedata"))
     implementation(project(":ui-search"))
     implementation(project(":ui-settings"))
