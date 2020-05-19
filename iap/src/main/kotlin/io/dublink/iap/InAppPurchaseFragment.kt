@@ -48,39 +48,24 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
         renderFeaturesList()
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        viewModel.observableState.observe(
-//            viewLifecycleOwner, Observer { state ->
-//                state?.let { renderState(state) }
-//            }
-//        )
-//    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.observableState.observe(
+            viewLifecycleOwner, Observer { state ->
+                state?.let { renderState(state) }
+            }
+        )
+    }
 
-//    private fun renderState(state: State) {
-//        state.dubLinkProPrice?.let {
-//            renderBuyButton(it)
-//        }
-//    }
+    private fun renderState(state: State) {
+        state.dubLinkProPrice?.let {
+            renderBuyButton(it)
+        }
+    }
 
     override fun onResume() {
         super.onResume()
-        viewModel.dubLinkProPrice.observe(
-            viewLifecycleOwner, Observer { state ->
-                state?.let { renderBuyButton(state) }
-            }
-        )
-
-        viewModel.start()
-//        viewModel.dispatch(Action.Connect)
-//        viewModel.start()
-//        viewModel.dispatch(Action.QuerySkuDetails)
-//        viewModel.dispatch(Action.QueryPurchases)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.stop()
+        viewModel.dispatch(Action.QuerySkuDetails)
     }
 
     private fun renderFeaturesList() {
@@ -89,8 +74,8 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
                 DubLinkProItem(),
                 DividerItem(),
                 FeatureItem(
-                    title = "Dublin nomad",
-                    summary = "Full access to all services\n- DART\n- Luas\n- Dublin Bikes\n- Bus Éireann\n- Aircoach\n- Commuter & InterCity Rail"
+                    title = "Go anywhere",
+                    summary = "Full access to every service\n\n- DART\n- Luas\n- Dublin Bikes\n- Bus Éireann\n- Aircoach\n- Commuter & InterCity Rail"
                 ),
                 FeatureItem(
                     title = "Join the dark side",
