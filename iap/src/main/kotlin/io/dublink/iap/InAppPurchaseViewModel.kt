@@ -42,8 +42,8 @@ class InAppPurchaseViewModel @Inject constructor(
         val getSkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
             .switchMapSingle {
                 reactiveBillingClient.getSkuDetails()
-                    .subscribeOn(rxScheduler.io)
-                    .observeOn(rxScheduler.ui)
+//                    .subscribeOn(rxScheduler.io) // TODO does it need to be ui thread?
+//                    .observeOn(rxScheduler.ui)
                     .map<NewState> { response -> NewState.SkuDetails(response) }
             }
 
