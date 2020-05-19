@@ -13,4 +13,10 @@ class InAppPurchaseModule {
     fun reactiveBillingClient(
         context: Context
     ): ReactiveBillingClient = ReactiveBillingClient(context)
+
+    @Provides
+    @Singleton
+    fun rxBilling(
+        context: Context
+    ): RxBilling = RxBillingImpl(BillingClientFactory(context))
 }

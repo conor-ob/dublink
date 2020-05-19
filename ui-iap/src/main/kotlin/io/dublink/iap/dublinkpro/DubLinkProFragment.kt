@@ -63,6 +63,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
     override fun onResume() {
         super.onResume()
         viewModel.dispatch(Action.QuerySkuDetails)
+        viewModel.dispatch(Action.QueryPurchases)
     }
 
     private fun renderFeaturesList() {

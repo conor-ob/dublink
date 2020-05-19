@@ -1,11 +1,15 @@
 package io.dublink.iap.dublinkpro
 
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetailsParams
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import io.dublink.domain.service.RxScheduler
 import io.dublink.iap.ReactiveBillingClient
+import io.dublink.iap.RxBilling
 import io.dublink.iap.SkuDetailsResponse
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
@@ -13,8 +17,9 @@ import javax.inject.Inject
 import timber.log.Timber
 
 class DubLinkProViewModel @Inject constructor(
-    private val reactiveBillingClient: ReactiveBillingClient,
-    private val rxScheduler: RxScheduler
+    private val rxBilling: RxBilling
+//    private val reactiveBillingClient: ReactiveBillingClient,
+//    private val rxScheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
     override val initialState = State(
@@ -29,6 +34,7 @@ class DubLinkProViewModel @Inject constructor(
                     is SkuDetailsResponse.Error -> null
                 }
             )
+            is NewState.Purchases -> state
         }
     }
 
@@ -39,19 +45,30 @@ class DubLinkProViewModel @Inject constructor(
     private fun bindActions() {
         val getSkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
             .switchMapSingle {
-                reactiveBillingClient.getSkuDetails()
+                rxBilling.getSkuDetails(
+                    SkuDetailsParams.newBuilder()
+                    .setSkusList(listOf("android.test.purchased"))
+                    .setType(BillingClient.SkuType.INAPP)
+                    .build())
 //                    .subscribeOn(rxScheduler.io) // TODO does it need to be ui thread?
 //                    .observeOn(rxScheduler.ui)
                     .map<NewState> { response ->
                         NewState.SkuDetails(
-                            response
+                            SkuDetailsResponse.Data(response)
                         )
                     }
             }
 
+        val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
+            .switchMapSingle {
+                rxBilling.getPurchases(BillingClient.SkuType.INAPP)
+                    .map<NewState> { NewState.Purchases(it) }
+            }
+
         val allActions = Observable.merge(
             listOf(
-                getSkuDetailsActions
+                getSkuDetailsActions,
+                queryPurchasesActions
             )
         )
 
@@ -64,10 +81,12 @@ class DubLinkProViewModel @Inject constructor(
 
 sealed class NewState {
     data class SkuDetails(val response: SkuDetailsResponse) : NewState()
+    data class Purchases(val purchases: List<Purchase>) : NewState()
 }
 
 sealed class Action : BaseAction {
     object QuerySkuDetails : Action()
+    object QueryPurchases : Action()
 }
 
 data class State(
