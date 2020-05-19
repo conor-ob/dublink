@@ -16,9 +16,9 @@ import io.dublink.iap.R
 import io.dublink.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_iap.*
 
-class DubLinkProFragment : DubLinkFragment(R.layout.fragment_iap) {
+class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
-    private val viewModel by lazy { viewModelProvider(viewModelFactory) as InAppPurchaseViewModel }
+    private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkProViewModel }
 
     private var featuresAdapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var featuresList: RecyclerView

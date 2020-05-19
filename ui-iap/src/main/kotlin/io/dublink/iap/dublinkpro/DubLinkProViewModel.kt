@@ -12,7 +12,7 @@ import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 import timber.log.Timber
 
-class InAppPurchaseViewModel @Inject constructor(
+class DubLinkProViewModel @Inject constructor(
     private val reactiveBillingClient: ReactiveBillingClient,
     private val rxScheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {

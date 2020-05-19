@@ -43,7 +43,6 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 //                else -> navigation.visibility = View.GONE
 //            }
 //        }
-        viewModel.onStart()
         viewModel.observableState.observe(
             this, Observer { state ->
                 state?.let { renderState(state) }
@@ -51,11 +50,6 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         )
         viewModel.dispatch(Action.PreloadData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        viewModel.onStop()
     }
 
     override fun getNavController() = navigationController

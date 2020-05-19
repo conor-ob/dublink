@@ -67,14 +67,6 @@ class DubLinkActivityViewModel @Inject constructor(
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
     }
-
-    fun onStart() {
-//        inAppPurchaseRepository.startDataSourceConnections()
-    }
-
-    fun onStop() {
-//        inAppPurchaseRepository.endDataSourceConnections()
-    }
 }
 
 sealed class Action : BaseAction {

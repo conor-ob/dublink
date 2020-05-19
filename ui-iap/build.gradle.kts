@@ -39,14 +39,6 @@ dependencies {
     implementation(Libraries.Android.googlePlayBilling)
     implementation(Libraries.Android.googlePlayBillingKtx)
 
-    implementation(Libraries.Kotlin.stdLib)
-
-    implementation(Libraries.Dagger.dagger)
-    implementation(Libraries.Rtpi.rtpiApi)
-    implementation(Libraries.Rtpi.rtpiUtil)
-    implementation(Libraries.Rx.rxJava)
-    api(Libraries.Timber.timber)
-
     kapt(Libraries.Dagger.daggerCompiler)
 
     testImplementation(TestLibraries.Junit.junit)
