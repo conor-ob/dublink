@@ -15,4 +15,10 @@ class InAppPurchaseModule {
         context: Context,
         preferenceStore: PreferenceStore
     ): InAppPurchaseRepository = InAppPurchaseRepository(context, preferenceStore)
+
+    @Provides
+    @Singleton
+    fun reactiveBillingClient(
+        context: Context
+    ): ReactiveBillingClient = ReactiveBillingClient(context)
 }

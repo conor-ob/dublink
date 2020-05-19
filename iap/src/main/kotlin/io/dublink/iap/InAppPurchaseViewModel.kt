@@ -1,33 +1,96 @@
 package io.dublink.iap
 
-import android.app.Activity
-import androidx.lifecycle.ViewModel
+import com.ww.roxie.BaseAction
+import com.ww.roxie.BaseState
+import com.ww.roxie.BaseViewModel
+import com.ww.roxie.Reducer
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.plusAssign
+import timber.log.Timber
 import javax.inject.Inject
 
 class InAppPurchaseViewModel @Inject constructor(
-    private val inAppPurchaseRepository: InAppPurchaseRepository
-) : ViewModel() {
+    private val reactiveBillingClient: ReactiveBillingClient
+) : BaseViewModel<Action, State>() {
 
-    val dubLinkProPriceLiveData = inAppPurchaseRepository.dubLinkProPriceLiveData
+    override val initialState = State(
+        dubLinkProPrice = null
+    )
 
-    fun start() {
-        inAppPurchaseRepository.startDataSourceConnections()
+    private val reducer: Reducer<State, NewState> = { state, newState ->
+        when (newState) {
+            is NewState.SkuDetails -> State(
+                dubLinkProPrice = getPrice(newState.skuDetails)
+            )
+            is NewState.Purchases -> State(
+                dubLinkProPrice = state.dubLinkProPrice
+            )
+        }
     }
 
-    fun onBuy(activity: Activity) {
-        inAppPurchaseRepository.launchBillingFlow(activity)
+    private fun getPrice(skuDetails: SkuDetailsResponse): String? {
+        return if (skuDetails is SkuDetailsResponse.Data) {
+            skuDetails.skuDetails.find { it.sku == InAppPurchaseRepository.DubLinkSku.DUBLINK_PRO.productId }?.price
+        } else {
+            null
+        }
+    }
+
+    init {
+        bindActions()
     }
 
     override fun onCleared() {
         super.onCleared()
-        inAppPurchaseRepository.endDataSourceConnections()
+        reactiveBillingClient.disconnect()
     }
 
-    fun registerInAppPurchaseStatusListener(inAppPurchaseStatusListener: InAppPurchaseStatusListener) {
-        inAppPurchaseRepository.registerInAppPurchaseStatusListener(inAppPurchaseStatusListener)
-    }
+    private fun bindActions() {
+        val connectActions = actions.ofType(Action.Connect::class.java)
+            .switchMap {
+                reactiveBillingClient.connect()
+                    .map<NewState> { response -> NewState.SkuDetails(SkuDetailsResponse.Data(emptyList())) }
+            }
 
-    fun unregisterInAppPurchaseStatusListener(inAppPurchaseStatusListener: InAppPurchaseStatusListener) {
-        inAppPurchaseRepository.unregisterInAppPurchaseStatusListener(inAppPurchaseStatusListener)
+        val querySkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
+            .switchMap {
+                reactiveBillingClient.getSkuDetails()
+                    .map<NewState> { response -> NewState.SkuDetails(response) }
+            }
+
+        val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
+            .switchMap {
+                reactiveBillingClient.getPurchases()
+                    .map<NewState> { response -> NewState.Purchases(response) }
+            }
+
+        val allActions = Observable.merge(
+            listOf(
+                connectActions,
+                querySkuDetailsActions,
+                queryPurchasesActions
+            )
+        )
+
+        disposables += allActions
+            .scan(initialState, reducer)
+            .distinctUntilChanged()
+            .subscribe(state::postValue, Timber::e)
     }
 }
+
+sealed class NewState {
+
+    data class SkuDetails(val skuDetails: SkuDetailsResponse) : NewState()
+    data class Purchases(val skuDetails: PurchasesResponse) : NewState()
+}
+
+sealed class Action : BaseAction {
+    object Connect : Action()
+    object QuerySkuDetails : Action()
+    object QueryPurchases : Action()
+}
+
+data class State(
+    val dubLinkProPrice: String? = null
+) : BaseState

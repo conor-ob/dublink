@@ -22,11 +22,6 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
     private lateinit var featuresList: RecyclerView
     private lateinit var dubLinkProPriceButton: MaterialButton
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.registerInAppPurchaseStatusListener(inAppPurchaseStatusListener)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<Toolbar>(R.id.iap_toolbar).apply {
@@ -42,7 +37,7 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
         }
         dubLinkProPriceButton = view.findViewById<MaterialButton>(R.id.iap_dublink_pro_buy_button).apply {
             setOnClickListener {
-                viewModel.onBuy(requireActivity())
+//                viewModel.onBuy(requireActivity())
             }
         }
 
@@ -51,15 +46,30 @@ class InAppPurchaseFragment : DubLinkFragment(R.layout.fragment_iap) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.start()
-        viewModel.dubLinkProPriceLiveData.observe(
-            viewLifecycleOwner, Observer { price -> renderBuyButton(price) }
+        viewModel.observableState.observe(
+            viewLifecycleOwner, Observer { state ->
+                state?.let { renderState(state) }
+            }
         )
+    }
+
+    private fun renderState(state: State) {
+        state.dubLinkProPrice?.let {
+            renderBuyButton(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.dispatch(Action.Connect)
+        viewModel.dispatch(Action.QuerySkuDetails)
+        viewModel.dispatch(Action.QueryPurchases)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.unregisterInAppPurchaseStatusListener(inAppPurchaseStatusListener)
+        featuresAdapter = null
+
     }
 
     private fun renderFeaturesList() {
