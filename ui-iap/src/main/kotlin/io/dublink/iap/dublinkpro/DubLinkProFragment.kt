@@ -14,7 +14,6 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.iap.R
 import io.dublink.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_iap.*
 
 class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
@@ -26,10 +25,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        iap_toolbar.setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-        view.findViewById<Toolbar>(R.id.iap_toolbar).apply {
+        view.findViewById<Toolbar>(R.id.dublink_pro_toolbar).apply {
             setNavigationOnClickListener {
                 findNavController().navigateUp()
             }
@@ -40,7 +36,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
         }
-        dubLinkProPriceButton = view.findViewById<MaterialButton>(R.id.iap_dublink_pro_buy_button).apply {
+        dubLinkProPriceButton = view.findViewById<MaterialButton>(R.id.dublink_pro_buy_button).apply {
             setOnClickListener {
 //                viewModel.onBuy(requireActivity())
             }
