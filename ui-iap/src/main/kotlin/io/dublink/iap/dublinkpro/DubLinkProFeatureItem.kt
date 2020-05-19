@@ -1,11 +1,12 @@
-package io.dublink.iap
+package io.dublink.iap.dublinkpro
 
 import android.widget.TextView
 import android.widget.updateText
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
+import io.dublink.iap.R
 
-class FeatureItem(
+class DubLinkProFeatureItem(
     private val title: String,
     private val summary: String
 ) : Item() {
