@@ -38,6 +38,7 @@ dependencies {
 
     implementation(Libraries.Android.googlePlayBilling)
     implementation(Libraries.Android.googlePlayBillingKtx)
+    implementation(Libraries.Rx.rxAndroid)
 
     kapt(Libraries.Dagger.daggerCompiler)
 

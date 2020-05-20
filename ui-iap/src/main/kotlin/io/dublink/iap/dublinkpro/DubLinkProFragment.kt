@@ -12,12 +12,17 @@ import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
+import io.dublink.iap.BillingConnectionManager
 import io.dublink.iap.R
+import io.dublink.iap.RxBilling
 import io.dublink.viewModelProvider
+import javax.inject.Inject
 
 class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkProViewModel }
+
+    @Inject lateinit var rxBilling: RxBilling
 
     private var featuresAdapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var featuresList: RecyclerView
@@ -38,7 +43,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
         }
         dubLinkProPriceButton = view.findViewById<MaterialButton>(R.id.dublink_pro_buy_button).apply {
             setOnClickListener {
-//                viewModel.onBuy(requireActivity())
+                viewModel.dispatch(Action.BuyDubLinkPro(requireActivity()))
             }
         }
 
@@ -47,6 +52,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        lifecycle.addObserver(BillingConnectionManager(rxBilling))
         viewModel.observableState.observe(
             viewLifecycleOwner, Observer { state ->
                 state?.let { renderState(state) }
@@ -55,14 +61,23 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
     }
 
     private fun renderState(state: State) {
-        state.dubLinkProPrice?.let {
-            renderBuyButton(it)
+        renderBuyButton(state)
+    }
+
+    private fun renderBuyButton(state: State) {
+        if (state.dubLinkProPrice != null && state.canPurchaseDubLinkPro == true) {
+            dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, state.dubLinkProPrice))
+            dubLinkProPriceButton.visibility = View.VISIBLE
+        } else {
+            dubLinkProPriceButton.visibility = View.GONE
         }
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.dispatch(Action.ObservePurchaseUpdates)
         viewModel.dispatch(Action.QuerySkuDetails)
+        viewModel.dispatch(Action.QueryPurchases)
     }
 
     private fun renderFeaturesList() {
@@ -93,10 +108,5 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
                 DubLinkProSpacerItem()
             )
         )
-    }
-
-    private fun renderBuyButton(dubLinkProPrice: String) {
-        dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, dubLinkProPrice))
-        dubLinkProPriceButton.visibility = View.VISIBLE
     }
 }
