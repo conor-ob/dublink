@@ -18,6 +18,7 @@ class DubLinkProViewModel @Inject constructor(
 
     override val initialState = State(
         dubLinkProPrice = null,
+        canPurchaseDubLinkPro = null,
         errorMessage = null
     )
 
@@ -27,15 +28,29 @@ class DubLinkProViewModel @Inject constructor(
                 when (newState.skuDetailsResponse) {
                     is SkuDetailsResponse.Data -> State(
                         dubLinkProPrice = newState.skuDetailsResponse.skuDetails.price,
-                        errorMessage = null
+                        errorMessage = null,
+                        canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
                     is SkuDetailsResponse.Error -> State(
                         dubLinkProPrice = state.dubLinkProPrice,
-                        errorMessage = newState.skuDetailsResponse.message
+                        errorMessage = newState.skuDetailsResponse.message,
+                        canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
                 }
             }
-            is NewState.Purchases -> state
+            is NewState.Purchases -> if (newState.purchases.isNullOrEmpty()) {
+                State(
+                    canPurchaseDubLinkPro = true,
+                    dubLinkProPrice = state.dubLinkProPrice,
+                    errorMessage = null
+                )
+            } else {
+                State(
+                    canPurchaseDubLinkPro = false,
+                    dubLinkProPrice = state.dubLinkProPrice,
+                    errorMessage = null
+                )
+            }
             is NewState.PurchaseUpdate -> {
                 Timber.d(newState.purchasesUpdate.toString())
                 state
@@ -106,7 +121,7 @@ sealed class Action : BaseAction {
 }
 
 data class State(
-    val dubLinkProPrice: String? = null,
-    val canPurchaseDubLinkPro: Boolean? = null,
-    val errorMessage: String? = null
+    val dubLinkProPrice: String?,
+    val canPurchaseDubLinkPro: Boolean?,
+    val errorMessage: String?
 ) : BaseState
