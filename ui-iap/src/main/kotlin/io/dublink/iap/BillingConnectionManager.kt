@@ -7,7 +7,7 @@ import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
 class BillingConnectionManager<T>(
-        private val connectable: Connectable<T>
+    private val connectable: Connectable<T>
 ) : LifecycleObserver {
     private var disposable: Disposable? = null
 

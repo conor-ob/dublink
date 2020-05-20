@@ -1,9 +1,12 @@
 package io.dublink.iap.dublinkpro
 
 import android.app.Activity
+import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
+import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import io.dublink.domain.service.PreferenceStore
@@ -12,8 +15,8 @@ import io.dublink.iap.PurchasesUpdate
 import io.dublink.iap.RxBilling
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
+import timber.log.Timber
 import javax.inject.Inject
 
 class DubLinkProUseCase @Inject constructor(
@@ -24,7 +27,11 @@ class DubLinkProUseCase @Inject constructor(
     private val skuDetailsCache = mutableMapOf<DubLinkSku, SkuDetails>()
 
     fun observePurchaseUpdates(): Flowable<PurchasesUpdate> {
-        return rxBilling.observeUpdates()
+        return rxBilling.observeUpdates().doOnNext {
+            if (it is PurchasesUpdate.Success) {
+                processPurchases(it.purchases)
+            }
+        }
     }
 
     fun getDubLinkProSkuDetails(): Single<SkuDetailsResponse> {
@@ -46,16 +53,67 @@ class DubLinkProUseCase @Inject constructor(
     }
 
     fun getPurchases(): Single<List<Purchase>> {
-        return rxBilling.getPurchases(BillingClient.SkuType.INAPP)
+        return rxBilling.getPurchases(BillingClient.SkuType.INAPP).doOnSuccess {
+            processPurchases(it.orEmpty())
+        }
     }
 
-    fun buyDubLinkPro(activity: Activity): Observable<Boolean> {
+    fun getPurchaseHistory(): Single<List<PurchaseHistoryRecord>> {
+        return rxBilling.getPurchaseHistory(BillingClient.SkuType.INAPP).doOnSuccess {
+            Timber.d("CONOR getPurchaseHistory")
+            Timber.d("CONOR $it")
+        }
+    }
+
+    fun buyDubLinkPro(activity: Activity): Completable {
         return rxBilling.launchFlow(
             activity,
             BillingFlowParams.newBuilder()
                 .setSkuDetails(skuDetailsCache.getValue(DubLinkSku.DUBLINK_PRO))
                 .build()
-        ).toObservable()
+        )
+    }
+
+    private fun processPurchases(purchases: List<Purchase>) {
+        for (purchase in purchases) {
+            if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                if (isSignatureValid(purchase)) {
+                    acknowledgePurchase(purchase)
+//                    consumePurchase(purchase)
+                }
+            }
+        }
+    }
+
+    private fun acknowledgePurchase(purchase: Purchase) {
+        rxBilling.acknowledge(
+            AcknowledgePurchaseParams.newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
+        )
+            .doOnComplete {
+                preferenceStore.setDubLinkProEnabled(true)
+            }
+            .doOnError {
+
+            }
+            .subscribe()
+    }
+
+    private fun consumePurchase(purchase: Purchase) {
+        rxBilling.consumeProduct(
+            ConsumeParams.newBuilder()
+                .setPurchaseToken(purchase.purchaseToken)
+                .build()
+        )
+            .doOnComplete {
+                preferenceStore.setDubLinkProEnabled(false)
+            }
+            .subscribe()
+    }
+
+    private fun isSignatureValid(purchase: Purchase): Boolean {
+        return true
     }
 }
 

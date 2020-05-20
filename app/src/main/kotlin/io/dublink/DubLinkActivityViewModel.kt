@@ -8,6 +8,7 @@ import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.internet.InternetStatusChangeListener
 import io.dublink.domain.repository.AggregatedServiceLocationRepository
 import io.dublink.domain.service.RxScheduler
+import io.dublink.iap.dublinkpro.DubLinkProUseCase
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
@@ -16,12 +17,13 @@ import timber.log.Timber
 class DubLinkActivityViewModel @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val internetStatusChangeListener: InternetStatusChangeListener,
+    private val useCase: DubLinkProUseCase,
     private val scheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
     override val initialState = State(internetStatusChange = null)
 
-    private val reducer: Reducer<State, Change> = { _, change ->
+    private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.InternetStatusChange -> State(
                 internetStatusChange = change.internetStatusChange
@@ -29,6 +31,7 @@ class DubLinkActivityViewModel @Inject constructor(
             is Change.PreloadChange -> State(
                 internetStatusChange = null
             )
+            is Change.Ignored -> state
         }
     }
 
@@ -37,6 +40,14 @@ class DubLinkActivityViewModel @Inject constructor(
     }
 
     private fun bindActions() {
+        val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
+            .switchMapSingle {
+                useCase.getPurchases()
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map<Change> { Change.Ignored }
+            }
+
         val preloadDataChanges = actions.ofType(Action.PreloadData::class.java)
             .switchMap {
                 serviceLocationRepository.get()
@@ -57,6 +68,7 @@ class DubLinkActivityViewModel @Inject constructor(
 
         val allChanges = Observable.merge(
             listOf(
+                queryPurchasesActions,
                 preloadDataChanges,
                 getInternetStatusChange
             )
@@ -70,11 +82,13 @@ class DubLinkActivityViewModel @Inject constructor(
 }
 
 sealed class Action : BaseAction {
+    object QueryPurchases : Action()
     object PreloadData : Action()
     object SubscribeToInternetStatusChanges : Action()
 }
 
 sealed class Change {
+    object Ignored : Change()
     object PreloadChange : Change()
     data class InternetStatusChange(val internetStatusChange: InternetStatus) : Change()
 }

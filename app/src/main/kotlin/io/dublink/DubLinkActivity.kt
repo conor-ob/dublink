@@ -11,6 +11,8 @@ import dagger.android.support.DaggerAppCompatActivity
 import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.service.PreferenceStore
+import io.dublink.iap.BillingConnectionManager
+import io.dublink.iap.RxBilling
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
 import io.rtpi.api.Service
@@ -25,6 +27,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     private var snackBar: Snackbar? = null
 
     @Inject lateinit var preferenceStore: PreferenceStore
+    @Inject lateinit var rxBilling: RxBilling
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +46,13 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 //                else -> navigation.visibility = View.GONE
 //            }
 //        }
+        lifecycle.addObserver(BillingConnectionManager(rxBilling))
         viewModel.observableState.observe(
             this, Observer { state ->
                 state?.let { renderState(state) }
             }
         )
+        viewModel.dispatch(Action.QueryPurchases)
         viewModel.dispatch(Action.PreloadData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
@@ -150,6 +155,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
                 snackBar?.setTextColor(getColor(R.color.color_on_success))
                 snackBar?.setBackgroundTint(getColor(R.color.color_success))
                 snackBar?.show()
+                viewModel.dispatch(Action.QueryPurchases)
                 viewModel.dispatch(Action.PreloadData)
             }
             InternetStatus.OFFLINE -> {

@@ -78,6 +78,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
         viewModel.dispatch(Action.ObservePurchaseUpdates)
         viewModel.dispatch(Action.QuerySkuDetails)
         viewModel.dispatch(Action.QueryPurchases)
+        viewModel.dispatch(Action.QueryPurchaseHistory)
     }
 
     private fun renderFeaturesList() {

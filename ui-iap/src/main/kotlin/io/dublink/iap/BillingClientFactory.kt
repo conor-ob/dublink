@@ -9,13 +9,12 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
 import io.reactivex.FlowableTransformer
-import timber.log.Timber
 import java.lang.ref.WeakReference
+import timber.log.Timber
 
 class BillingClientFactory(
-        private val context: Context,
-        private val transformer: FlowableTransformer<BillingClient, BillingClient>
-        = RepeatConnectionTransformer()
+    private val context: Context,
+    private val transformer: FlowableTransformer<BillingClient, BillingClient> = RepeatConnectionTransformer()
 ) {
 
     fun createBillingFlowable(listener: PurchasesUpdatedListener): Flowable<BillingClient> {
@@ -47,12 +46,12 @@ class BillingClientFactory(
                         }
                     } else {
                         if (billingClient.isReady) {
-                            billingClient.endConnection()//release resources if there are no observers
+                            billingClient.endConnection() // release resources if there are no observers
                         }
                     }
                 }
             })
-            //finish connection when no subscribers
+            // finish connection when no subscribers
             val observer = emitter.get()
             if (observer != null) {
                 observer.setCancellable {

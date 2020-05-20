@@ -4,5 +4,5 @@ import io.reactivex.Flowable
 
 interface Connectable<T> {
 
-    fun connect() : Flowable<T>
+    fun connect(): Flowable<T>
 }

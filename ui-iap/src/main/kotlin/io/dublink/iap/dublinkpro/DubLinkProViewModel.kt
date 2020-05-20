@@ -6,14 +6,17 @@ import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
+import io.dublink.domain.service.RxScheduler
 import io.dublink.iap.PurchasesUpdate
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 import timber.log.Timber
 
 class DubLinkProViewModel @Inject constructor(
-    private val useCase: DubLinkProUseCase
+    private val useCase: DubLinkProUseCase,
+    private val rxScheduler: RxScheduler
 ) : BaseViewModel<Action, State>() {
 
     override val initialState = State(
@@ -53,9 +56,13 @@ class DubLinkProViewModel @Inject constructor(
             }
             is NewState.PurchaseUpdate -> {
                 Timber.d(newState.purchasesUpdate.toString())
-                state
+                State(
+                    canPurchaseDubLinkPro = false,
+                    dubLinkProPrice = state.dubLinkProPrice,
+                    errorMessage = null
+                )
             }
-            is NewState.DubLinkProPurchased -> state
+            is NewState.Ignored -> state
         }
     }
 
@@ -66,28 +73,42 @@ class DubLinkProViewModel @Inject constructor(
     private fun bindActions() {
         val observePurchaseUpdatesActions = actions.ofType(Action.ObservePurchaseUpdates::class.java)
             .switchMap {
-                useCase.observePurchaseUpdates().toObservable()
+                useCase.observePurchaseUpdates()
+                    .subscribeOn(rxScheduler.io)
+                    .observeOn(rxScheduler.ui)
+                    .toObservable()
                     .map<NewState> { NewState.PurchaseUpdate(it) }
             }
 
         val getSkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
             .switchMapSingle {
                 useCase.getDubLinkProSkuDetails()
-//                    .subscribeOn(rxScheduler.io) // TODO does it need to be ui thread?
-//                    .observeOn(rxScheduler.ui)
+                    .subscribeOn(rxScheduler.io)
+                    .observeOn(rxScheduler.ui)
                     .map<NewState> { response -> NewState.SkuDetails(response) }
             }
 
         val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
             .switchMapSingle {
                 useCase.getPurchases()
+                    .subscribeOn(rxScheduler.io)
+                    .observeOn(rxScheduler.ui)
                     .map<NewState> { NewState.Purchases(it) }
             }
 
+        val queryPurchaseHistoryActions = actions.ofType(Action.QueryPurchaseHistory::class.java)
+            .switchMapSingle {
+                useCase.getPurchaseHistory()
+                    .subscribeOn(rxScheduler.io)
+                    .observeOn(rxScheduler.ui)
+                    .map<NewState> { NewState.Ignored }
+            }
+
         val buyDubLinkProActions = actions.ofType(Action.BuyDubLinkPro::class.java)
-            .switchMap { action ->
+            .switchMapCompletable { action ->
                 useCase.buyDubLinkPro(action.activity)
-                    .map<NewState> { NewState.DubLinkProPurchased() }
+                    .subscribeOn(rxScheduler.io)
+                    .observeOn(rxScheduler.ui)
             }
 
         val allActions = Observable.merge(
@@ -95,6 +116,12 @@ class DubLinkProViewModel @Inject constructor(
                 observePurchaseUpdatesActions,
                 getSkuDetailsActions,
                 queryPurchasesActions,
+                queryPurchaseHistoryActions
+            )
+        )
+
+        val fireAndForgetActions = Completable.merge(
+            listOf(
                 buyDubLinkProActions
             )
         )
@@ -103,6 +130,9 @@ class DubLinkProViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+
+        disposables += fireAndForgetActions
+            .subscribe({ Timber.d("done") }, { Timber.e(it) })
     }
 }
 
@@ -110,13 +140,14 @@ sealed class NewState {
     data class SkuDetails(val skuDetailsResponse: SkuDetailsResponse) : NewState()
     data class Purchases(val purchases: List<Purchase>) : NewState()
     data class PurchaseUpdate(val purchasesUpdate: PurchasesUpdate) : NewState()
-    data class DubLinkProPurchased(val message: String = "wOO") : NewState()
+    object Ignored : NewState()
 }
 
 sealed class Action : BaseAction {
     object ObservePurchaseUpdates : Action()
     object QuerySkuDetails : Action()
     object QueryPurchases : Action()
+    object QueryPurchaseHistory : Action()
     data class BuyDubLinkPro(val activity: Activity) : Action()
 }
 
