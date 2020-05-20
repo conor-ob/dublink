@@ -34,7 +34,7 @@ interface RxBilling : Connectable<BillingClient> {
 }
 
 class RxBillingImpl(
-        billingFactory: BillingClientFactory
+    billingFactory: BillingClientFactory
 ) : RxBilling {
 
     private val updateSubject = PublishSubject.create<PurchasesUpdate>()
@@ -49,9 +49,9 @@ class RxBillingImpl(
     }
 
     private val connectionFlowable =
-            Completable.complete()
-                    .observeOn(AndroidSchedulers.mainThread()) // just to be sure billing client is called from main thread
-                    .andThen(billingFactory.createBillingFlowable(updatedListener))
+        Completable.complete()
+            .observeOn(AndroidSchedulers.mainThread()) // just to be sure billing client is called from main thread
+            .andThen(billingFactory.createBillingFlowable(updatedListener))
 
     override fun connect(): Flowable<BillingClient> {
         return connectionFlowable
@@ -104,85 +104,85 @@ class RxBillingImpl(
 
     override fun launchFlow(activity: Activity, params: BillingFlowParams): Completable {
         return connectionFlowable
-                .flatMap {
-                    val responseCode = it.launchBillingFlow(activity, params)
-                    return@flatMap Flowable.just(responseCode)
+            .flatMap {
+                val responseCode = it.launchBillingFlow(activity, params)
+                return@flatMap Flowable.just(responseCode)
+            }
+            .firstOrError()
+            .flatMapCompletable {
+                return@flatMapCompletable if (isSuccess(it.responseCode)) {
+                    Completable.complete()
+                } else {
+                    Completable.error(BillingException.fromResult(it))
                 }
-                .firstOrError()
-                .flatMapCompletable {
-                    return@flatMapCompletable if (isSuccess(it.responseCode)) {
-                        Completable.complete()
-                    } else {
-                        Completable.error(BillingException.fromResult(it))
-                    }
-                }
+            }
     }
 
     override fun consumeProduct(params: ConsumeParams): Completable {
         return connectionFlowable
-                .flatMapSingle { client ->
-                    Single.create<Int> {
-                        client.consumeAsync(params) { result, _ ->
-                            if (it.isDisposed) return@consumeAsync
-                            val responseCode = result.responseCode
-                            if (isSuccess(responseCode)) {
-                                it.onSuccess(responseCode)
-                            } else {
-                                it.onError(BillingException.fromResult(result))
-                            }
+            .flatMapSingle { client ->
+                Single.create<Int> {
+                    client.consumeAsync(params) { result, _ ->
+                        if (it.isDisposed) return@consumeAsync
+                        val responseCode = result.responseCode
+                        if (isSuccess(responseCode)) {
+                            it.onSuccess(responseCode)
+                        } else {
+                            it.onError(BillingException.fromResult(result))
                         }
                     }
                 }
-                .firstOrError()
-                .ignoreElement()
+            }
+            .firstOrError()
+            .ignoreElement()
     }
 
     override fun acknowledge(params: AcknowledgePurchaseParams): Completable {
         return connectionFlowable
-                .flatMapSingle { client ->
-                    Single.create<Int> {
-                        client.acknowledgePurchase(params) { result ->
-                            if (it.isDisposed) return@acknowledgePurchase
-                            val responseCode = result.responseCode
-                            if (isSuccess(responseCode)) {
-                                it.onSuccess(responseCode)
-                            } else {
-                                it.onError(BillingException.fromResult(result))
-                            }
+            .flatMapSingle { client ->
+                Single.create<Int> {
+                    client.acknowledgePurchase(params) { result ->
+                        if (it.isDisposed) return@acknowledgePurchase
+                        val responseCode = result.responseCode
+                        if (isSuccess(responseCode)) {
+                            it.onSuccess(responseCode)
+                        } else {
+                            it.onError(BillingException.fromResult(result))
                         }
                     }
                 }
-                .firstOrError()
-                .ignoreElement()
+            }
+            .firstOrError()
+            .ignoreElement()
     }
 
     private fun getBoughtItems(@BillingClient.SkuType type: String): Single<List<Purchase>> {
         return connectionFlowable
-                .flatMapSingle {
-                    val purchasesResult = it.queryPurchases(type)
-                    return@flatMapSingle if (isSuccess(purchasesResult.responseCode)) {
-                        Single.just(purchasesResult.purchasesList.orEmpty())
-                    } else {
-                        Single.error(BillingException.fromResult(purchasesResult.billingResult))
-                    }
-                }.firstOrError()
+            .flatMapSingle {
+                val purchasesResult = it.queryPurchases(type)
+                return@flatMapSingle if (isSuccess(purchasesResult.responseCode)) {
+                    Single.just(purchasesResult.purchasesList.orEmpty())
+                } else {
+                    Single.error(BillingException.fromResult(purchasesResult.billingResult))
+                }
+            }.firstOrError()
     }
 
     private fun getHistory(@BillingClient.SkuType type: String): Single<List<PurchaseHistoryRecord>> {
         return connectionFlowable
-                .flatMapSingle { client ->
-                    Single.create<List<PurchaseHistoryRecord>> {
-                        client.queryPurchaseHistoryAsync(type) { billingResult: BillingResult, list: MutableList<PurchaseHistoryRecord>? ->
-                            if (it.isDisposed) return@queryPurchaseHistoryAsync
-                            val responseCode = billingResult.responseCode
-                            if (isSuccess(responseCode)) {
-                                it.onSuccess(list.orEmpty())
-                            } else {
-                                it.onError(BillingException.fromResult(billingResult))
-                            }
+            .flatMapSingle { client ->
+                Single.create<List<PurchaseHistoryRecord>> {
+                    client.queryPurchaseHistoryAsync(type) { billingResult: BillingResult, list: MutableList<PurchaseHistoryRecord>? ->
+                        if (it.isDisposed) return@queryPurchaseHistoryAsync
+                        val responseCode = billingResult.responseCode
+                        if (isSuccess(responseCode)) {
+                            it.onSuccess(list.orEmpty())
+                        } else {
+                            it.onError(BillingException.fromResult(billingResult))
                         }
                     }
-                }.firstOrError()
+                }
+            }.firstOrError()
     }
 
     private fun isSuccess(responseCode: Int): Boolean {

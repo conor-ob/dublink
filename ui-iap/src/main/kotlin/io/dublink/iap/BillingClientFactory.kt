@@ -53,15 +53,16 @@ class BillingClientFactory(
                 }
             })
             //finish connection when no subscribers
-//            val observer = emitter.get()
-//            if (observer != null) {
-                it.setCancellable {
+            val observer = emitter.get()
+            if (observer != null) {
+                observer.setCancellable {
                     Timber.d("endConnection")
                     if (billingClient.isReady) {
+                        Timber.d("endConnectionReally")
                         billingClient.endConnection()
                     }
                 }
-//            }
+            }
         }, BackpressureStrategy.LATEST)
 
         return flowable.compose(transformer)

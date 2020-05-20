@@ -12,12 +12,17 @@ import com.google.android.material.button.MaterialButton
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
+import io.dublink.iap.BillingConnectionManager
 import io.dublink.iap.R
+import io.dublink.iap.RxBilling
 import io.dublink.viewModelProvider
+import javax.inject.Inject
 
 class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkProViewModel }
+
+    @Inject lateinit var rxBilling: RxBilling
 
     private var featuresAdapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var featuresList: RecyclerView
@@ -47,6 +52,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        lifecycle.addObserver(BillingConnectionManager(rxBilling))
         viewModel.observableState.observe(
             viewLifecycleOwner, Observer { state ->
                 state?.let { renderState(state) }
