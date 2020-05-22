@@ -62,7 +62,7 @@ class DubLinkProUseCase @Inject constructor(
         ).flatMap { purchases ->
             if (purchases.isNullOrEmpty()) {
                 Timber.d("No purchases on record - removing DubLink Pro access")
-                preferenceStore.setDubLinkProEnabled(false)
+//                preferenceStore.setDubLinkProEnabled(false) // TODO add back in when ready for prod
                 Single.just(emptyList())
             } else {
                 Single.zip(
@@ -78,8 +78,8 @@ class DubLinkProUseCase @Inject constructor(
         Timber.d("Processing purchase")
         Timber.d(purchase.toString())
         return if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && isSignatureValid(purchase)) {
-            acknowledgePurchase(purchase)
-//            consumePurchase(purchase)
+//            acknowledgePurchase(purchase)
+            consumePurchase(purchase)
         } else {
             retractPurchase(purchase)
         }
