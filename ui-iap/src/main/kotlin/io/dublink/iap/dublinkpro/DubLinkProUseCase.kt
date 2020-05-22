@@ -16,6 +16,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import javax.inject.Inject
+import timber.log.Timber
 
 class DubLinkProUseCase @Inject constructor(
     private val rxBilling: RxBilling,
@@ -47,6 +48,8 @@ class DubLinkProUseCase @Inject constructor(
         ).map { skuDetails ->
             val result = skuDetails.find { it.sku == DubLinkSku.DUBLINK_PRO.productId }
             if (result != null) {
+                Timber.d("Found DubLink Pro sku details")
+                Timber.d(result.toString())
                 skuDetailsCache[DubLinkSku.DUBLINK_PRO] = result
             }
             skuDetails
@@ -58,6 +61,7 @@ class DubLinkProUseCase @Inject constructor(
             BillingClient.SkuType.INAPP
         ).flatMap { purchases ->
             if (purchases.isNullOrEmpty()) {
+                Timber.d("No purchases on record - removing DubLink Pro access")
                 preferenceStore.setDubLinkProEnabled(false)
                 Single.just(emptyList())
             } else {
@@ -71,6 +75,8 @@ class DubLinkProUseCase @Inject constructor(
     }
 
     private fun processPurchase(purchase: Purchase): Single<Purchase> {
+        Timber.d("Processing purchase")
+        Timber.d(purchase.toString())
         return if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && isSignatureValid(purchase)) {
             acknowledgePurchase(purchase)
 //            consumePurchase(purchase)
@@ -91,15 +97,21 @@ class DubLinkProUseCase @Inject constructor(
     private fun acknowledgePurchase(purchase: Purchase): Single<Purchase> {
         return if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
             if (purchase.isAcknowledged) {
+                Timber.d("Found previously acknowledged DubLink Pro purchase - granting DubLink Pro access")
+                Timber.d(purchase.toString())
                 preferenceStore.setDubLinkProEnabled(true)
                 Single.just(purchase)
             } else {
+                Timber.d("Acknowledging DubLink Pro purchase")
+                Timber.d(purchase.toString())
                 rxBilling.acknowledge(
                     AcknowledgePurchaseParams.newBuilder()
                         .setPurchaseToken(purchase.purchaseToken)
                         .build()
                 )
                     .doOnComplete {
+                        Timber.d("DubLink Pro purchase acknowledged - granting DubLink Pro access")
+                        Timber.d(purchase.toString())
                         preferenceStore.setDubLinkProEnabled(true)
                     }
                     .toSingle { purchase }
@@ -123,7 +135,7 @@ class DubLinkProUseCase @Inject constructor(
                 .build()
         )
             .doOnComplete {
-                preferenceStore.setDubLinkProEnabled(false)
+                preferenceStore.setDubLinkProEnabled(true)
             }
             .toSingle { purchase }
     }
