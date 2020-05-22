@@ -59,6 +59,7 @@ class DubLinkProUseCase @Inject constructor(
             BillingClient.SkuType.INAPP
         ).flatMap { purchases ->
             if (purchases.isNullOrEmpty()) {
+                preferenceStore.setDubLinkProEnabled(false)
                 Single.just(emptyList())
             } else {
                 Single.zip(
@@ -76,13 +77,6 @@ class DubLinkProUseCase @Inject constructor(
 //            consumePurchase(purchase)
         } else {
             retractPurchase(purchase)
-        }
-    }
-
-    fun getPurchaseHistory(): Single<List<PurchaseHistoryRecord>> {
-        return rxBilling.getPurchaseHistory(BillingClient.SkuType.INAPP).doOnSuccess {
-            Timber.d("CONOR getPurchaseHistory")
-            Timber.d("CONOR $it")
         }
     }
 

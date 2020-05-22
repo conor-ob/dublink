@@ -67,7 +67,6 @@ class DubLinkProViewModel @Inject constructor(
                     errorMessage = null
                 )
             }
-            is NewState.Ignored -> state
         }
     }
 
@@ -101,14 +100,6 @@ class DubLinkProViewModel @Inject constructor(
                     .map<NewState> { NewState.Purchases(it) }
             }
 
-        val queryPurchaseHistoryActions = actions.ofType(Action.QueryPurchaseHistory::class.java)
-            .switchMapSingle {
-                useCase.getPurchaseHistory()
-                    .subscribeOn(rxScheduler.io)
-                    .observeOn(rxScheduler.ui)
-                    .map<NewState> { NewState.Ignored }
-            }
-
         val buyDubLinkProActions = actions.ofType(Action.BuyDubLinkPro::class.java)
             .switchMapCompletable { action ->
                 useCase.buyDubLinkPro(action.activity)
@@ -120,8 +111,7 @@ class DubLinkProViewModel @Inject constructor(
             listOf(
                 observePurchaseUpdatesActions,
                 getSkuDetailsActions,
-                queryPurchasesActions,
-                queryPurchaseHistoryActions
+                queryPurchasesActions
             )
         )
 
@@ -145,14 +135,12 @@ sealed class NewState {
     data class SkuDetail(val skuDetails: List<SkuDetails>) : NewState()
     data class Purchases(val purchases: List<Purchase>) : NewState()
     data class PurchaseUpdate(val purchasesUpdate: PurchasesUpdate) : NewState()
-    object Ignored : NewState()
 }
 
 sealed class Action : BaseAction {
     object ObservePurchaseUpdates : Action()
     object QuerySkuDetails : Action()
     object QueryPurchases : Action()
-    object QueryPurchaseHistory : Action()
     data class BuyDubLinkPro(val activity: Activity) : Action()
 }
 
