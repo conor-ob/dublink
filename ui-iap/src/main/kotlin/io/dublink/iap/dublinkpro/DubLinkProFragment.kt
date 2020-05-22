@@ -2,6 +2,7 @@ package io.dublink.iap.dublinkpro
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import android.widget.updateText
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -62,6 +63,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private fun renderState(state: State) {
         renderBuyButton(state)
+        renderMessage(state.message)
     }
 
     private fun renderBuyButton(state: State) {
@@ -70,6 +72,12 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
             dubLinkProPriceButton.visibility = View.VISIBLE
         } else {
             dubLinkProPriceButton.visibility = View.GONE
+        }
+    }
+
+    private fun renderMessage(errorMessage: String?) {
+        if (errorMessage != null) {
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         }
     }
 

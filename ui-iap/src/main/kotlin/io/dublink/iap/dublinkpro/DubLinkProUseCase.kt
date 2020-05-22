@@ -44,11 +44,12 @@ class DubLinkProUseCase @Inject constructor(
                 .setSkusList(listOf(DubLinkSku.DUBLINK_PRO.productId))
                 .setType(BillingClient.SkuType.INAPP)
                 .build()
-        ).doOnSuccess { skuDetails ->
+        ).map { skuDetails ->
             val result = skuDetails.find { it.sku == DubLinkSku.DUBLINK_PRO.productId }
             if (result != null) {
                 skuDetailsCache[DubLinkSku.DUBLINK_PRO] = result
             }
+            skuDetails
         }
     }
 

@@ -8,9 +8,9 @@ import com.ww.roxie.BaseState
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import io.dublink.domain.service.RxScheduler
+import io.dublink.iap.BillingException
 import io.dublink.iap.DubLinkSku
 import io.dublink.iap.PurchasesUpdate
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
@@ -24,24 +24,23 @@ class DubLinkProViewModel @Inject constructor(
     override val initialState = State(
         dubLinkProPrice = null,
         canPurchaseDubLinkPro = null,
-        errorMessage = null
+        message = null
     )
 
     private val reducer: Reducer<State, NewState> = { state, newState ->
         when (newState) {
             is NewState.SkuDetail -> {
-                if (newState.skuDetails.size == 1 &&
-                    DubLinkSku.DUBLINK_PRO.productId == newState.skuDetails.first().sku
-                ) {
+                val dubLinkProSkuDetails = newState.skuDetails.find { DubLinkSku.DUBLINK_PRO.productId == it.sku }
+                if (dubLinkProSkuDetails != null) {
                     State(
-                        dubLinkProPrice = newState.skuDetails.first().price,
-                        errorMessage = null,
+                        dubLinkProPrice = dubLinkProSkuDetails.price,
+                        message = null,
                         canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
                 } else {
                     State(
                         dubLinkProPrice = state.dubLinkProPrice,
-                        errorMessage = null,
+                        message = null,
                         canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
                 }
@@ -50,23 +49,33 @@ class DubLinkProViewModel @Inject constructor(
                 State(
                     canPurchaseDubLinkPro = true,
                     dubLinkProPrice = state.dubLinkProPrice,
-                    errorMessage = null
+                    message = null
                 )
             } else {
                 State(
                     canPurchaseDubLinkPro = false,
                     dubLinkProPrice = state.dubLinkProPrice,
-                    errorMessage = null
+                    message = null
                 )
             }
             is NewState.PurchaseUpdate -> {
-                Timber.d(newState.purchasesUpdate.toString())
+                val message = when (newState.purchasesUpdate) {
+                    is PurchasesUpdate.Success -> "Thank you for supporting DubLink Pro!"
+                    is PurchasesUpdate.Canceled -> "Purchase Cancelled"
+                    is PurchasesUpdate.Failed -> "Something went wrong, try refreshing"
+                }
                 State(
                     canPurchaseDubLinkPro = false,
                     dubLinkProPrice = state.dubLinkProPrice,
-                    errorMessage = null
+                    message = message
                 )
             }
+            is NewState.Error -> State(
+                canPurchaseDubLinkPro = state.canPurchaseDubLinkPro,
+                dubLinkProPrice = state.dubLinkProPrice,
+                message = newState.message
+            )
+            is NewState.Ignored -> state
         }
     }
 
@@ -80,43 +89,46 @@ class DubLinkProViewModel @Inject constructor(
                 useCase.observePurchaseUpdates()
                     .subscribeOn(rxScheduler.io)
                     .observeOn(rxScheduler.ui)
+                    .map<NewState> { purchasesUpdate -> NewState.PurchaseUpdate(purchasesUpdate) }
+                    .onErrorReturn { throwable -> newStateFromThrowable(throwable) }
                     .toObservable()
-                    .map<NewState> { NewState.PurchaseUpdate(it) }
             }
 
         val getSkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
-            .switchMapSingle {
+            .switchMap {
                 useCase.getSkuDetails()
                     .subscribeOn(rxScheduler.io)
                     .observeOn(rxScheduler.ui)
-                    .map<NewState> { response -> NewState.SkuDetail(response) }
+                    .map<NewState> { skuDetails -> NewState.SkuDetail(skuDetails) }
+                    .onErrorReturn { throwable -> newStateFromThrowable(throwable) }
+                    .toObservable()
             }
 
         val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
-            .switchMapSingle {
+            .switchMap {
                 useCase.getPurchases()
                     .subscribeOn(rxScheduler.io)
                     .observeOn(rxScheduler.ui)
-                    .map<NewState> { NewState.Purchases(it) }
+                    .map<NewState> { purchases -> NewState.Purchases(purchases) }
+                    .onErrorReturn { throwable -> newStateFromThrowable(throwable) }
+                    .toObservable()
             }
 
         val buyDubLinkProActions = actions.ofType(Action.BuyDubLinkPro::class.java)
-            .switchMapCompletable { action ->
+            .switchMap { action ->
                 useCase.buyDubLinkPro(action.activity)
                     .subscribeOn(rxScheduler.io)
                     .observeOn(rxScheduler.ui)
+                    .toSingleDefault<NewState>(NewState.Ignored)
+                    .onErrorReturn { throwable -> newStateFromThrowable(throwable) }
+                    .toObservable()
             }
 
         val allActions = Observable.merge(
             listOf(
                 observePurchaseUpdatesActions,
                 getSkuDetailsActions,
-                queryPurchasesActions
-            )
-        )
-
-        val fireAndForgetActions = Completable.merge(
-            listOf(
+                queryPurchasesActions,
                 buyDubLinkProActions
             )
         )
@@ -125,9 +137,16 @@ class DubLinkProViewModel @Inject constructor(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribe(state::postValue, Timber::e)
+    }
 
-        disposables += fireAndForgetActions
-            .subscribe({ Timber.d("done") }, { Timber.e(it) })
+    private fun newStateFromThrowable(throwable: Throwable): NewState {
+        val message = when (throwable) {
+            is BillingException.ServiceDisconnectedException,
+            is BillingException.ServiceUnavailableException -> "In App Purchases are unavailable at the moment"
+            is BillingException.UserCanceledException -> "Purchase Cancelled"
+            else -> "Something went wrong, try refreshing"
+        }
+        return NewState.Error(message)
     }
 }
 
@@ -135,6 +154,8 @@ sealed class NewState {
     data class SkuDetail(val skuDetails: List<SkuDetails>) : NewState()
     data class Purchases(val purchases: List<Purchase>) : NewState()
     data class PurchaseUpdate(val purchasesUpdate: PurchasesUpdate) : NewState()
+    data class Error(val message: String) : NewState()
+    object Ignored : NewState()
 }
 
 sealed class Action : BaseAction {
@@ -147,5 +168,5 @@ sealed class Action : BaseAction {
 data class State(
     val dubLinkProPrice: String?,
     val canPurchaseDubLinkPro: Boolean?,
-    val errorMessage: String?
+    val message: String?
 ) : BaseState
