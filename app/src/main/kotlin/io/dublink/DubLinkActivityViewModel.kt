@@ -28,9 +28,6 @@ class DubLinkActivityViewModel @Inject constructor(
             is Change.InternetStatusChange -> State(
                 internetStatusChange = change.internetStatusChange
             )
-            is Change.PreloadChange -> State(
-                internetStatusChange = null
-            )
             is Change.Ignored -> state
         }
     }
@@ -53,7 +50,7 @@ class DubLinkActivityViewModel @Inject constructor(
                 serviceLocationRepository.get()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map { Change.PreloadChange }
+                    .map { Change.Ignored }
             }
 
         val getInternetStatusChange = actions.ofType(Action.SubscribeToInternetStatusChanges::class.java)
@@ -89,7 +86,6 @@ sealed class Action : BaseAction {
 
 sealed class Change {
     object Ignored : Change()
-    object PreloadChange : Change()
     data class InternetStatusChange(val internetStatusChange: InternetStatus) : Change()
 }
 
