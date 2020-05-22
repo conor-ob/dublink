@@ -11,7 +11,11 @@ interface PreferenceStore {
 
     fun setPreferredTheme(preferredTheme: String): Boolean
 
+    fun setFavouritesSortByLocation(enabled: Boolean): Boolean
+
     fun isFavouritesSortByLocation(): Boolean
+
+    fun setFavouritesLiveDataLimit(limit: Int): Boolean
 
     fun getFavouritesLiveDataLimit(): Int
 

@@ -28,11 +28,24 @@ class DefaultPreferenceStore @Inject constructor(
             preferredTheme
         ).commit()
 
+    override fun setFavouritesSortByLocation(enabled: Boolean): Boolean {
+        return preferences.edit().putBoolean(
+            context.resources.getString(R.string.preference_key_favourites_sort_by_location),
+            enabled
+        ).commit()
+    }
+
     override fun isFavouritesSortByLocation() =
         preferences.getBoolean(
             context.resources.getString(R.string.preference_key_favourites_sort_by_location),
             context.resources.getBoolean(R.bool.preference_default_favourites_sort_location)
         )
+
+    override fun setFavouritesLiveDataLimit(limit: Int) =
+        preferences.edit().putInt(
+            context.resources.getString(R.string.preference_key_favourites_live_data_limit),
+            limit
+        ).commit()
 
     override fun getFavouritesLiveDataLimit() =
         preferences.getInt(

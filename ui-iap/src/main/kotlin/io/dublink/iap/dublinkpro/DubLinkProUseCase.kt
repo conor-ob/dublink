@@ -8,7 +8,7 @@ import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
-import io.dublink.domain.service.PreferenceStore
+import io.dublink.domain.service.DubLinkProService
 import io.dublink.iap.DubLinkSku
 import io.dublink.iap.PurchasesUpdate
 import io.dublink.iap.RxBilling
@@ -20,7 +20,7 @@ import timber.log.Timber
 
 class DubLinkProUseCase @Inject constructor(
     private val rxBilling: RxBilling,
-    private val preferenceStore: PreferenceStore
+    private val dubLinkProService: DubLinkProService
 ) {
 
     private val skuDetailsCache = mutableMapOf<DubLinkSku, SkuDetails>()
@@ -62,7 +62,7 @@ class DubLinkProUseCase @Inject constructor(
         ).flatMap { purchases ->
             if (purchases.isNullOrEmpty()) {
                 Timber.d("No purchases on record - removing DubLink Pro access")
-//                preferenceStore.setDubLinkProEnabled(false) // TODO add back in when ready for prod
+//                dubLinkProService.revokeDubLinkProPreferences() // TODO add back in when ready for prod
                 Single.just(emptyList())
             } else {
                 Single.zip(
@@ -78,10 +78,10 @@ class DubLinkProUseCase @Inject constructor(
         Timber.d("Processing purchase")
         Timber.d(purchase.toString())
         return if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && isSignatureValid(purchase)) {
-//            acknowledgePurchase(purchase)
-            consumePurchase(purchase)
+//            acknowledgePurchase(purchase) // TODO add back in when ready for prod
+            consumePurchase(purchase) // TODO remove when ready for prod
         } else {
-            retractPurchase(purchase)
+            revokePurchase(purchase)
         }
     }
 
@@ -99,7 +99,7 @@ class DubLinkProUseCase @Inject constructor(
             if (purchase.isAcknowledged) {
                 Timber.d("Found previously acknowledged DubLink Pro purchase - granting DubLink Pro access")
                 Timber.d(purchase.toString())
-                preferenceStore.setDubLinkProEnabled(true)
+                dubLinkProService.grantDubLinkProPreferences()
                 Single.just(purchase)
             } else {
                 Timber.d("Acknowledging DubLink Pro purchase")
@@ -112,7 +112,7 @@ class DubLinkProUseCase @Inject constructor(
                     .doOnComplete {
                         Timber.d("DubLink Pro purchase acknowledged - granting DubLink Pro access")
                         Timber.d(purchase.toString())
-                        preferenceStore.setDubLinkProEnabled(true)
+                        dubLinkProService.grantDubLinkProPreferences()
                     }
                     .toSingle { purchase }
             }
@@ -121,9 +121,9 @@ class DubLinkProUseCase @Inject constructor(
         }
     }
 
-    private fun retractPurchase(purchase: Purchase): Single<Purchase> {
+    private fun revokePurchase(purchase: Purchase): Single<Purchase> {
         if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
-            preferenceStore.setDubLinkProEnabled(false)
+            dubLinkProService.revokeDubLinkProPreferences()
         }
         return Single.just(purchase)
     }
@@ -135,7 +135,7 @@ class DubLinkProUseCase @Inject constructor(
                 .build()
         )
             .doOnComplete {
-                preferenceStore.setDubLinkProEnabled(true)
+                dubLinkProService.grantDubLinkProPreferences()
             }
             .toSingle { purchase }
     }

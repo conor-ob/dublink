@@ -12,12 +12,12 @@ import com.android.billingclient.api.PurchaseHistoryRecord
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
+import io.dublink.domain.service.RxScheduler
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import java.lang.ref.WeakReference
 
@@ -43,7 +43,8 @@ interface RxBilling : Connectable<BillingClient> {
 }
 
 class RxBillingImpl(
-    billingFactory: BillingClientFactory
+    billingFactory: BillingClientFactory,
+    scheduler: RxScheduler
 ) : RxBilling {
 
     private val updateSubject = PublishSubject.create<PurchasesUpdate>()
@@ -59,7 +60,7 @@ class RxBillingImpl(
 
     private val connectionFlowable =
         Completable.complete()
-            .observeOn(AndroidSchedulers.mainThread()) // just to be sure billing client is called from main thread
+            .observeOn(scheduler.ui) // just to be sure billing client is called from main thread
             .andThen(billingFactory.createBillingFlowable(updatedListener))
 
     override fun connect(): Flowable<BillingClient> {
@@ -131,13 +132,18 @@ class RxBillingImpl(
         return connectionFlowable
             .flatMapSingle { client ->
                 Single.create<Int> {
+                    val emitter = WeakReference<SingleEmitter<Int>>(it)
                     client.consumeAsync(params) { result, _ ->
-                        if (it.isDisposed) return@consumeAsync
-                        val responseCode = result.responseCode
-                        if (isSuccess(responseCode)) {
-                            it.onSuccess(responseCode)
-                        } else {
-                            it.onError(BillingException.fromResult(result))
+                        val observer = emitter.get()
+                        if (observer != null && observer.isDisposed) {
+                            return@consumeAsync
+                        } else if (observer != null && !observer.isDisposed) {
+                            val responseCode = result.responseCode
+                            if (isSuccess(responseCode)) {
+                                observer.onSuccess(responseCode)
+                            } else {
+                                observer.onError(BillingException.fromResult(result))
+                            }
                         }
                     }
                 }
@@ -150,13 +156,18 @@ class RxBillingImpl(
         return connectionFlowable
             .flatMapSingle { client ->
                 Single.create<Int> {
+                    val emitter = WeakReference<SingleEmitter<Int>>(it)
                     client.acknowledgePurchase(params) { result ->
-                        if (it.isDisposed) return@acknowledgePurchase
-                        val responseCode = result.responseCode
-                        if (isSuccess(responseCode)) {
-                            it.onSuccess(responseCode)
-                        } else {
-                            it.onError(BillingException.fromResult(result))
+                        val observer = emitter.get()
+                        if (observer != null && observer.isDisposed) {
+                            return@acknowledgePurchase
+                        } else if (observer != null && !observer.isDisposed) {
+                            val responseCode = result.responseCode
+                            if (isSuccess(responseCode)) {
+                                observer.onSuccess(responseCode)
+                            } else {
+                                observer.onError(BillingException.fromResult(result))
+                            }
                         }
                     }
                 }

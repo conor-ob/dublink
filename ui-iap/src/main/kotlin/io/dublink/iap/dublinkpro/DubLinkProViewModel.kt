@@ -70,7 +70,7 @@ class DubLinkProViewModel @Inject constructor(
                     newState.purchasesUpdate.purchases.map { it.sku }.contains(DubLinkSku.DUBLINK_PRO.productId),
                 message = when (newState.purchasesUpdate) {
                     is PurchasesUpdate.Success -> null
-                    is PurchasesUpdate.Canceled -> "Purchase Cancelled"
+                    is PurchasesUpdate.Canceled -> null // "Purchase Cancelled"
                     is PurchasesUpdate.Failed -> "Something went wrong, try refreshing"
                 }
             )
