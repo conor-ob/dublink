@@ -9,6 +9,7 @@ import io.dublink.DubLinkApplication
 import io.dublink.database.DatabaseModule
 import io.dublink.domain.internet.InternetStatusChangeListener
 import io.dublink.domain.service.AppConfig
+import io.dublink.domain.service.DubLinkProService
 import io.dublink.domain.service.EnabledServiceManager
 import io.dublink.domain.service.InternetManager
 import io.dublink.domain.service.LocationProvider
@@ -16,6 +17,7 @@ import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.service.StringProvider
+import io.dublink.iap.InAppPurchaseModule
 import io.dublink.internet.DeviceInternetManager
 import io.dublink.internet.NetworkStatusChangeListener
 import io.dublink.location.GpsLocationProvider
@@ -25,6 +27,7 @@ import io.dublink.repository.inject.RepositoryModule
 import io.dublink.resource.StringResourceProvider
 import io.dublink.settings.DefaultEnabledServiceManager
 import io.dublink.settings.DefaultPreferenceStore
+import io.dublink.settings.DubLinkProPreferencesService
 import io.dublink.settings.ThemeRepository
 import io.dublink.startup.LoggingStartupWorker
 import io.dublink.startup.PreferencesStartupWorker
@@ -43,7 +46,8 @@ import okhttp3.OkHttpClient
     includes = [
         ViewModelModule::class,
         DatabaseModule::class,
-        RepositoryModule::class
+        RepositoryModule::class,
+        InAppPurchaseModule::class
     ]
 )
 class ApplicationModule {
@@ -76,6 +80,14 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun schedulers(): RxScheduler = RxScheduler(Schedulers.io(), AndroidSchedulers.mainThread())
+
+    @Provides
+    @Singleton
+    fun dubLinkProService(
+        preferenceStore: PreferenceStore,
+        themeRepository: ThemeRepository,
+        resources: Resources
+    ): DubLinkProService = DubLinkProPreferencesService(preferenceStore, themeRepository, resources)
 
     @Provides
     @Singleton

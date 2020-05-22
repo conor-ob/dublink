@@ -7,13 +7,6 @@
     <string name="live_data_due_times">and in %s min</string>
     <string name="title_favourites">Favourites</string>
 
-    <string name="service_name_aircoach">Aircoach</string>
-    <string name="service_name_bus_eireann">Bus Éireann</string>
-    <string name="service_name_dublin_bikes">Dublin Bikes</string>
-    <string name="service_name_dublin_bus">Dublin Bus</string>
-    <string name="service_name_irish_rail">Irish Rail</string>
-    <string name="service_name_luas">Luas</string>
-
     <string name="action_save_favourite">Save Favourite</string>
     <string name="action_settings">Settings</string>
     <string name="stop_number">Stop %s</string>

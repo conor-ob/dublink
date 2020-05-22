@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/preference_category_name_customization">
+
+        <ListPreference
+            android:icon="@drawable/ic_paint"
+            android:key="@string/preference_key_preferred_theme"
+            android:title="@string/preference_name_preferred_theme"
+            android:entries="@array/theme_names"
+            android:entryValues="@array/theme_values"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_name_transport_services"
+        android:summary="@string/preference_category_summary_transport_services">
+
+        <SwitchPreference
+            android:icon="@drawable/ic_bus"
+            android:key="@string/preference_key_enabled_service_dublin_bus"
+            android:title="@string/preference_name_enabled_service_dublin_bus"
+            android:summary="@string/preference_summary_enabled_service_dublin_bus"
+            android:defaultValue="@bool/preference_default_enabled_service_dublin_bus" />
+
+        <SwitchPreference
+            android:icon="@drawable/ic_train"
+            android:key="@string/preference_key_enabled_service_irish_rail"
+            android:title="@string/preference_name_enabled_service_irish_rail"
+            android:summary="@string/preference_summary_enabled_service_irish_rail"
+            android:defaultValue="@bool/preference_default_enabled_service_irish_rail" />
+
+        <SwitchPreference
+            android:icon="@drawable/ic_tram"
+            android:key="@string/preference_key_enabled_service_luas"
+            android:title="@string/preference_name_enabled_service_luas"
+            android:defaultValue="@bool/preference_default_enabled_service_luas" />
+
+        <SwitchPreference
+            android:icon="@drawable/ic_bus"
+            android:key="@string/preference_key_enabled_service_bus_eireann"
+            android:title="@string/preference_name_enabled_service_bus_eireann"
+            android:defaultValue="@bool/preference_default_enabled_service_bus_eireann" />
+
+        <SwitchPreference
+            android:icon="@drawable/ic_bike"
+            android:key="@string/preference_key_enabled_service_dublin_bikes"
+            android:title="@string/preference_name_enabled_service_dublin_bikes"
+            android:defaultValue="@bool/preference_default_enabled_service_dublin_bikes" />
+
+        <SwitchPreference
+            android:icon="@drawable/ic_bus"
+            android:key="@string/preference_key_enabled_service_aircoach"
+            android:title="@string/preference_name_enabled_service_aircoach"
+            android:defaultValue="@bool/preference_default_enabled_service_aircoach" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_name_favourites">
+
+        <SwitchPreference
+            android:icon="@drawable/ic_sort"
+            android:key="@string/preference_key_favourites_sort_by_location"
+            android:title="@string/preference_name_favourites_sort_by_location"
+            android:summary="@string/preference_summary_favourites_sort_by_location"
+            android:defaultValue="@bool/preference_default_favourites_sort_location" />
+
+        <SeekBarPreference
+            android:icon="@drawable/ic_clock"
+            android:key="@string/preference_key_favourites_live_data_limit"
+            android:title="@string/preference_name_favourites_live_data_limit"
+            android:summary="@string/preference_summary_favourites_live_data_limit"
+            android:defaultValue="@integer/preference_default_favourites_live_data_limit"
+            android:max="10"
+            app:showSeekBarValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_live_times">
+
+        <SeekBarPreference
+            android:icon="@drawable/ic_refresh"
+            android:title="@string/preference_name_live_data_refresh_interval"
+            android:key="@string/preference_key_live_data_refresh_interval"
+            android:summary="@string/preference_summary_live_data_refresh_interval"
+            android:defaultValue="@integer/preference_default_live_data_refresh_interval"
+            android:max="60"
+            app:min="20"
+            app:seekBarIncrement="5"
+            app:showSeekBarValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_search">
+
+        <SwitchPreference
+            android:defaultValue="@bool/preference_default_search_show_recents"
+            android:key="@string/preference_key_search_show_recents"
+            android:icon="@drawable/ic_history"
+            android:title="@string/preference_name_search_show_recents"
+            android:summary="@string/preference_summary_search_show_recents" />
+
+        <SwitchPreference
+            android:defaultValue="@bool/preference_default_search_show_nearby"
+            android:key="@string/preference_key_search_show_nearby"
+            android:icon="@drawable/ic_near_me"
+            android:title="@string/preference_name_search_show_nearby"
+            android:summary="@string/preference_summary_search_show_nearby" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/preference_category_contact">
+
+        <!-- TODO remove this -->
+        <Preference
+            android:icon="@drawable/ic_check"
+            android:title="Pre-release feedback form"
+            android:summary="Complete a survey to submit your feedback">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="https://docs.google.com/forms/d/e/1FAIpQLSe2cfSl99qvvFVZD46kgzKtNbkpcr3qIyhRZGogjTD7mKGFSg/viewform?usp=sf_link" />
+
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_feedback"
+            android:key="@string/preference_key_contact_send_feedback"
+            android:summary="@string/preference_summary_contact_send_feedback"
+            android:title="@string/preference_name_contact_send_feedback" />
+
+<!--        <Preference-->
+<!--            android:icon="@drawable/ic_thumb_up"-->
+<!--            android:key="@string/preference_key_contact_rate"-->
+<!--            android:summary="@string/preference_summary_contact_rate"-->
+<!--            android:title="@string/preference_name_contact_rate" />-->
+
+<!--        <Preference-->
+<!--            android:icon="@drawable/ic_share"-->
+<!--            android:key="@string/preference_key_contact_share"-->
+<!--            android:summary="@string/preference_summary_contact_share"-->
+<!--            android:title="@string/preference_name_contact_share" />-->
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preference_category_about">
+
+        <Preference
+            android:icon="@drawable/ic_info"
+            android:key="@string/preference_key_app_version"
+            android:title="@string/preference_name_app_version" />
+
+        <Preference
+            android:icon="@drawable/ic_lock"
+            android:key="@string/preference_key_privacy_policy"
+            android:title="@string/preference_name_privacy_policy" />
+
+        <Preference
+            android:icon="@drawable/ic_bank"
+            android:key="@string/preference_key_terms_of_service"
+            android:title="@string/preference_name_terms_of_service" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -43,7 +43,7 @@ data class DubLinkStopLocation(
         )
 
     val filters = routes
-        .plus(stopLocation.directions())
+        .plus(stopLocation.directions()) // check station id for DART station since we might not have all the operators here
         .mapNotNull { type ->
             when (type) {
                 is Route -> {

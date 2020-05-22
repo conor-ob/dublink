@@ -1,6 +1,7 @@
 package io.dublink
 
 import android.os.Bundle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
@@ -10,8 +11,12 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
 import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.domain.service.PreferenceStore
+import io.dublink.iap.BillingConnectionManager
+import io.dublink.iap.RxBilling
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
+import io.rtpi.api.Service
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_root.activity_root
 
@@ -21,6 +26,10 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkActivityViewModel }
     private var snackBar: Snackbar? = null
+
+    @Inject lateinit var preferenceStore: PreferenceStore
+    @Inject lateinit var rxBilling: RxBilling
+    private lateinit var rxBillingLifecycleObserver: LifecycleObserver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +48,21 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 //                else -> navigation.visibility = View.GONE
 //            }
 //        }
+        rxBillingLifecycleObserver = BillingConnectionManager(rxBilling)
+        lifecycle.addObserver(rxBillingLifecycleObserver)
         viewModel.observableState.observe(
             this, Observer { state ->
                 state?.let { renderState(state) }
             }
         )
+        viewModel.dispatch(Action.QueryPurchases)
         viewModel.dispatch(Action.PreloadData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(rxBillingLifecycleObserver)
     }
 
     override fun getNavController() = navigationController
@@ -79,9 +96,26 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     }
 
     override fun navigateToLiveData(serviceLocation: DubLinkServiceLocation) {
+        if (serviceLocation.service == Service.DUBLIN_BUS || preferenceStore.isDubLinkProEnabled()) {
+            navigationController.navigate(
+                R.id.liveDataFragment,
+                LiveDataFragment.toBundle(serviceLocation),
+                NavOptions.Builder()
+                    .setEnterAnim(R.anim.nav_default_enter_anim)
+                    .setExitAnim(R.anim.nav_default_exit_anim)
+                    .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                    .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                    .build()
+            )
+        } else {
+            navigateToIap()
+        }
+    }
+
+    override fun navigateToEditFavourites() {
         navigationController.navigate(
-            R.id.liveDataFragment,
-            LiveDataFragment.toBundle(serviceLocation),
+            R.id.editFavouritesFragment,
+            Bundle.EMPTY,
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)
                 .setExitAnim(R.anim.nav_default_exit_anim)
@@ -91,9 +125,9 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         )
     }
 
-    override fun navigateToEditFavourites() {
+    override fun navigateToIap() {
         navigationController.navigate(
-            R.id.editFavouritesFragment,
+            R.id.dubLinkProFragment,
             Bundle.EMPTY,
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)
@@ -129,6 +163,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
                 snackBar?.setTextColor(getColor(R.color.color_on_success))
                 snackBar?.setBackgroundTint(getColor(R.color.color_success))
                 snackBar?.show()
+                viewModel.dispatch(Action.QueryPurchases)
                 viewModel.dispatch(Action.PreloadData)
             }
             InternetStatus.OFFLINE -> {
