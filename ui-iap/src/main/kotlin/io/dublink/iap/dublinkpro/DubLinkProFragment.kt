@@ -61,6 +61,13 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
         )
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.dispatch(Action.ObservePurchaseUpdates)
+        viewModel.dispatch(Action.QuerySkuDetails)
+        viewModel.dispatch(Action.QueryPurchases)
+    }
+
     private fun renderState(state: State) {
         renderBuyButton(state)
         renderMessage(state.message)
@@ -79,13 +86,6 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
         if (errorMessage != null) {
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.dispatch(Action.ObservePurchaseUpdates)
-        viewModel.dispatch(Action.QuerySkuDetails)
-        viewModel.dispatch(Action.QueryPurchases)
     }
 
     private fun renderFeaturesList() {

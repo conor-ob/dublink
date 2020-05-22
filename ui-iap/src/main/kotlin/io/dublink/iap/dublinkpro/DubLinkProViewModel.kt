@@ -60,12 +60,12 @@ class DubLinkProViewModel @Inject constructor(
             }
             is NewState.PurchaseUpdate -> {
                 val message = when (newState.purchasesUpdate) {
-                    is PurchasesUpdate.Success -> "Thank you for supporting DubLink Pro!"
+                    is PurchasesUpdate.Success -> "Thank you for supporting DubLink!" // TODO rebuild the screen with this message in focus
                     is PurchasesUpdate.Canceled -> "Purchase Cancelled"
                     is PurchasesUpdate.Failed -> "Something went wrong, try refreshing"
                 }
                 State(
-                    canPurchaseDubLinkPro = false,
+                    canPurchaseDubLinkPro = newState.purchasesUpdate is PurchasesUpdate.Canceled,
                     dubLinkProPrice = state.dubLinkProPrice,
                     message = message
                 )
