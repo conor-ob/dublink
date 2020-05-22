@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@drawable/shape_circle"
-                android:backgroundTint="@android:color/white"
+                android:backgroundTint="@color/text_on_iap_green"
                 android:tint="@color/iap_yellow"
                 android:padding="8dp"
                 android:src="@drawable/ic_flame" />
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.DubLink.Headline6"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/text_on_iap_green"
                     android:text="Exclusive Features"/>
 
                 <View
@@ -56,7 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.DubLink.ListItemBody"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/text_on_iap_green"
                     android:text="Unlocked with a one time purchase"/>
 
             </LinearLayout>

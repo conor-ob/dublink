@@ -34,6 +34,7 @@
         android:layout_gravity="center|bottom"
         android:gravity="center"
         android:backgroundTint="@color/iap_green"
+        android:textColor="@color/text_on_iap_green"
         android:visibility="gone"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlayExtended"
         style="@style/Widget.DubLink.BuyButton" />
