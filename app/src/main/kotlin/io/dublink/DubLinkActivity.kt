@@ -1,6 +1,7 @@
 package io.dublink
 
 import android.os.Bundle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
@@ -28,6 +29,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 
     @Inject lateinit var preferenceStore: PreferenceStore
     @Inject lateinit var rxBilling: RxBilling
+    private lateinit var rxBillingLifecycleObserver: LifecycleObserver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +48,8 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 //                else -> navigation.visibility = View.GONE
 //            }
 //        }
-        lifecycle.addObserver(BillingConnectionManager(rxBilling))
+        rxBillingLifecycleObserver = BillingConnectionManager(rxBilling)
+        lifecycle.addObserver(rxBillingLifecycleObserver)
         viewModel.observableState.observe(
             this, Observer { state ->
                 state?.let { renderState(state) }
@@ -55,6 +58,11 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         viewModel.dispatch(Action.QueryPurchases)
         viewModel.dispatch(Action.PreloadData)
         viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(rxBillingLifecycleObserver)
     }
 
     override fun getNavController() = navigationController

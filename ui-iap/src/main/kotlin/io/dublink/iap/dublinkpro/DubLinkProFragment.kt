@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import android.widget.updateText
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkProViewModel }
 
     @Inject lateinit var rxBilling: RxBilling
+    private lateinit var rxBillingLifecycleObserver: LifecycleObserver
 
     private var featuresAdapter: GroupAdapter<GroupieViewHolder>? = null
     private lateinit var featuresList: RecyclerView
@@ -53,7 +55,8 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        lifecycle.addObserver(BillingConnectionManager(rxBilling))
+        rxBillingLifecycleObserver = BillingConnectionManager(rxBilling)
+        lifecycle.addObserver(rxBillingLifecycleObserver)
         viewModel.observableState.observe(
             viewLifecycleOwner, Observer { state ->
                 state?.let { renderState(state) }
@@ -68,9 +71,15 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
         viewModel.dispatch(Action.QueryPurchases)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(rxBillingLifecycleObserver)
+    }
+
     private fun renderState(state: State) {
         renderBuyButton(state)
         renderMessage(state.message)
+        renderPurchase(state.dubLinkProPurchased)
     }
 
     private fun renderBuyButton(state: State) {
@@ -85,6 +94,12 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
     private fun renderMessage(errorMessage: String?) {
         if (errorMessage != null) {
             Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun renderPurchase(dubLinkProPurchased: Boolean?) {
+        if (dubLinkProPurchased == true) {
+            findNavController().navigateUp()
         }
     }
 

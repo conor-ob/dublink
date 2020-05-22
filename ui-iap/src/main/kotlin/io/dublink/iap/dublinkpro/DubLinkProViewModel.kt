@@ -24,6 +24,7 @@ class DubLinkProViewModel @Inject constructor(
     override val initialState = State(
         dubLinkProPrice = null,
         canPurchaseDubLinkPro = null,
+        dubLinkProPurchased = null,
         message = null
     )
 
@@ -35,12 +36,14 @@ class DubLinkProViewModel @Inject constructor(
                     State(
                         dubLinkProPrice = dubLinkProSkuDetails.price,
                         message = null,
+                        dubLinkProPurchased = null,
                         canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
                 } else {
                     State(
                         dubLinkProPrice = state.dubLinkProPrice,
                         message = null,
+                        dubLinkProPurchased = null,
                         canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
                 }
@@ -49,30 +52,32 @@ class DubLinkProViewModel @Inject constructor(
                 State(
                     canPurchaseDubLinkPro = true,
                     dubLinkProPrice = state.dubLinkProPrice,
+                    dubLinkProPurchased = null,
                     message = null
                 )
             } else {
                 State(
                     canPurchaseDubLinkPro = false,
                     dubLinkProPrice = state.dubLinkProPrice,
+                    dubLinkProPurchased = null,
                     message = null
                 )
             }
-            is NewState.PurchaseUpdate -> {
-                val message = when (newState.purchasesUpdate) {
-                    is PurchasesUpdate.Success -> "Thank you for supporting DubLink!" // TODO rebuild the screen with this message in focus
+            is NewState.PurchaseUpdate -> State(
+                canPurchaseDubLinkPro = newState.purchasesUpdate is PurchasesUpdate.Canceled,
+                dubLinkProPrice = state.dubLinkProPrice,
+                dubLinkProPurchased = newState.purchasesUpdate is PurchasesUpdate.Success &&
+                    newState.purchasesUpdate.purchases.map { it.sku }.contains(DubLinkSku.DUBLINK_PRO.productId),
+                message = when (newState.purchasesUpdate) {
+                    is PurchasesUpdate.Success -> null
                     is PurchasesUpdate.Canceled -> "Purchase Cancelled"
                     is PurchasesUpdate.Failed -> "Something went wrong, try refreshing"
                 }
-                State(
-                    canPurchaseDubLinkPro = newState.purchasesUpdate is PurchasesUpdate.Canceled,
-                    dubLinkProPrice = state.dubLinkProPrice,
-                    message = message
-                )
-            }
+            )
             is NewState.Error -> State(
                 canPurchaseDubLinkPro = state.canPurchaseDubLinkPro,
                 dubLinkProPrice = state.dubLinkProPrice,
+                dubLinkProPurchased = null,
                 message = newState.message
             )
             is NewState.Ignored -> state
@@ -168,5 +173,6 @@ sealed class Action : BaseAction {
 data class State(
     val dubLinkProPrice: String?,
     val canPurchaseDubLinkPro: Boolean?,
+    val dubLinkProPurchased: Boolean?,
     val message: String?
 ) : BaseState
