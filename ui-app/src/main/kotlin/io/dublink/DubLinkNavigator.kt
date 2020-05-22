@@ -12,5 +12,7 @@ interface DubLinkNavigator {
 
     fun navigateToEditFavourites()
 
+    fun navigateToIap()
+
     fun navigateToWebView(title: String, url: String)
 }

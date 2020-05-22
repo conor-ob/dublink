@@ -20,6 +20,13 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Firebase
+-keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
+
+# IAP
+-keep class com.android.vending.billing.**
+
 # SimpleXml
 -keep public class org.simpleframework.** { *; }
 -keep class org.simpleframework.xml.** { *; }

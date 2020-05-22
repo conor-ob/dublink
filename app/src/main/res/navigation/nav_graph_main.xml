@@ -24,6 +24,10 @@
         android:name="io.dublink.settings.SettingsFragment"
         android:label="SettingsFragment" />
 
+    <fragment android:id="@+id/dubLinkProFragment"
+        android:name="io.dublink.iap.dublinkpro.DubLinkProFragment"
+        android:label="DubLinkProFragment" />
+
     <fragment android:id="@+id/webViewFragment"
         android:name="io.dublink.web.WebViewFragment"
         android:label="WebViewFragment" />

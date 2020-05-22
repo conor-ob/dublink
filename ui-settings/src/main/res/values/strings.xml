@@ -1,13 +1,15 @@
 <resources>
     <string name="preference_category_name_upgrade">Upgrade</string>
 
-    <string name="preference_key_upgrade">upgrade</string>
-    <string name="preference_name_upgrade">Unlock DubLink Pro</string>
-    <string name="preference_summary_upgrade">Get access to exclusive features</string>
+    <string name="preference_key_dublink_pro">dublink_pro</string>
+    <string name="preference_key_dublink_pro_upgrade">dublink_pro_upgrade</string>
+    <string name="preference_name_dublink_pro_upgrade">Unlock DubLink Pro</string>
+    <string name="preference_summary_dublink_pro_upgrade">Get access to exclusive features</string>
 
     <string name="preference_category_name_customization">Customization</string>
 
     <string name="preference_name_preferred_theme">Theme</string>
+    <string name="preference_name_preferred_theme_pro">Theme (Pro)</string>
     <string name="preference_key_preferred_theme">preferred_theme</string>
     <string name="preference_default_preferred_theme">@string/preference_value_battery_saver_theme</string>
     <string name="preference_name_light_theme">Light</string>
@@ -17,6 +19,9 @@
     <string name="preference_value_dark_theme" translatable="false">dark</string>
     <string name="preference_value_battery_saver_theme" translatable="false">battery</string>
 
+    <string name="preference_category_name_transport_services">Transport Services</string>
+    <string name="preference_category_summary_transport_services">Choose your favourites</string>
+
     <string name="preference_key_last_known_location_latitude">last_known_location_latitude</string>
     <string name="preference_key_last_known_location_longitude">last_known_location_longitude</string>
 
@@ -25,6 +30,18 @@
 
     <string name="preference_category_services">Transport Services</string>
     <string name="preference_summary_services">Choose your favourites</string>
+
+    <string name="preference_name_enabled_service_dublin_bus">Dublin Bus</string>
+    <string name="preference_name_enabled_service_aircoach">Aircoach</string>
+    <string name="preference_name_enabled_service_aircoach_pro">Aircoach (Pro)</string>
+    <string name="preference_name_enabled_service_bus_eireann">Bus Éireann</string>
+    <string name="preference_name_enabled_service_bus_eireann_pro">Bus Éireann (Pro)</string>
+    <string name="preference_name_enabled_service_dublin_bikes">Dublin Bikes</string>
+    <string name="preference_name_enabled_service_dublin_bikes_pro">Dublin Bikes (Pro)</string>
+    <string name="preference_name_enabled_service_irish_rail">Irish Rail</string>
+    <string name="preference_name_enabled_service_irish_rail_pro">Irish Rail (Pro)</string>
+    <string name="preference_name_enabled_service_luas">Luas</string>
+    <string name="preference_name_enabled_service_luas_pro">Luas (Pro)</string>
 
     <string name="preference_key_enabled_service_aircoach">aircoach_enabled</string>
     <string name="preference_key_enabled_service_bus_eireann">bus_eireann_enabled</string>
@@ -38,10 +55,12 @@
     <string name="preference_category_name_favourites">Favourites</string>
 
     <string name="preference_name_favourites_sort_by_location">Sort by location</string>
+    <string name="preference_name_favourites_sort_by_location_pro">Sort by location (Pro)</string>
     <string name="preference_summary_favourites_sort_by_location">Nearby places will be at the top</string>
     <string name="preference_key_favourites_sort_by_location">favourites_sort_by_location</string>
 
     <string name="preference_name_favourites_live_data_limit">Real Time Information</string>
+    <string name="preference_name_favourites_live_data_limit_pro">Real Time Information (Pro)</string>
     <string name="preference_summary_favourites_live_data_limit">Number of places displaying real time info</string>
     <string name="preference_key_favourites_live_data_limit">favourites_live_data_limit</string>
 

@@ -31,6 +31,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":ui-app"))
+    implementation(project(":ui-iap"))
 
     implementation(Libraries.AndroidX.preferenceKtx)
     implementation(Libraries.Nodes.logViewer)

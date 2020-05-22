@@ -20,6 +20,7 @@ import dagger.android.support.AndroidSupportInjection
 import io.dublink.DubLinkNavigator
 import io.dublink.domain.service.AppConfig
 import io.dublink.domain.service.PermissionChecker
+import io.dublink.domain.service.PreferenceStore
 import javax.inject.Inject
 
 private const val sortByLocationRequestCode = 42069
@@ -34,6 +35,8 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     lateinit var appConfig: AppConfig
     @Inject
     lateinit var permissionChecker: PermissionChecker
+    @Inject
+    lateinit var preferenceStore: PreferenceStore
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
@@ -41,9 +44,27 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preferences, rootKey)
+        setPreferencesFromResource(
+            if (preferenceStore.isDubLinkProEnabled()) {
+                R.xml.preferences_pro
+            } else {
+                R.xml.preferences
+            },
+            rootKey
+        )
         setAppVersionPreference()
         bindListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (preferenceStore.isDubLinkProEnabled()) {
+            val upgradePreference = findPreference<Preference>(getString(R.string.preference_key_dublink_pro_upgrade))
+            if (upgradePreference != null) {
+                // user has just purchased pro so rebuild the screen
+                onCreatePreferences(null, null)
+            }
+        }
     }
 
     private fun setAppVersionPreference() {
@@ -52,6 +73,12 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     }
 
     private fun bindListeners() {
+        findPreference<Preference>(getString(R.string.preference_key_dublink_pro_upgrade))?.apply {
+            setOnPreferenceClickListener {
+                (activity as DubLinkNavigator).navigateToIap()
+                return@setOnPreferenceClickListener true
+            }
+        }
         val preferredThemePreference = findPreference<ListPreference>(getString(R.string.preference_key_preferred_theme))
         preferredThemePreference?.setOnPreferenceChangeListener { _, newValue ->
             themeRepository.setTheme(newValue as String)
@@ -77,6 +104,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
                 val selectorIntent = Intent(Intent.ACTION_SENDTO)
                 selectorIntent.data = Uri.parse("mailto:")
                 val emailBody = """
+                    Type your feedback here
                     
                     
                     -----------------------------
@@ -145,11 +173,11 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
 //                return@setOnPreferenceClickListener true
 //            }
 //        }
-        if (BuildConfig.DEBUG) {
+        if (appConfig.isDebug()) {
             findPreference<Preference>(getString(R.string.preference_key_app_version))?.apply {
                 setOnPreferenceClickListener {
                     LogViewerActivity
-                        .createIntent(activity!!.applicationContext)
+                        .createIntent(requireContext().applicationContext)
                         .let { startActivity(it) }
                     return@setOnPreferenceClickListener true
                 }
