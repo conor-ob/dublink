@@ -2,11 +2,13 @@ package io.dublink.iap.dublinkpro
 
 import android.app.Activity
 import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetails
 import com.ww.roxie.BaseAction
 import com.ww.roxie.BaseState
 import com.ww.roxie.BaseViewModel
 import com.ww.roxie.Reducer
 import io.dublink.domain.service.RxScheduler
+import io.dublink.iap.DubLinkSku
 import io.dublink.iap.PurchasesUpdate
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -27,16 +29,19 @@ class DubLinkProViewModel @Inject constructor(
 
     private val reducer: Reducer<State, NewState> = { state, newState ->
         when (newState) {
-            is NewState.SkuDetails -> {
-                when (newState.skuDetailsResponse) {
-                    is SkuDetailsResponse.Data -> State(
-                        dubLinkProPrice = newState.skuDetailsResponse.skuDetails.price,
+            is NewState.SkuDetail -> {
+                if (newState.skuDetails.size == 1 &&
+                    DubLinkSku.DUBLINK_PRO.productId == newState.skuDetails.first().sku
+                ) {
+                    State(
+                        dubLinkProPrice = newState.skuDetails.first().price,
                         errorMessage = null,
                         canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
-                    is SkuDetailsResponse.Error -> State(
+                } else {
+                    State(
                         dubLinkProPrice = state.dubLinkProPrice,
-                        errorMessage = newState.skuDetailsResponse.message,
+                        errorMessage = null,
                         canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
                     )
                 }
@@ -82,10 +87,10 @@ class DubLinkProViewModel @Inject constructor(
 
         val getSkuDetailsActions = actions.ofType(Action.QuerySkuDetails::class.java)
             .switchMapSingle {
-                useCase.getDubLinkProSkuDetails()
+                useCase.getSkuDetails()
                     .subscribeOn(rxScheduler.io)
                     .observeOn(rxScheduler.ui)
-                    .map<NewState> { response -> NewState.SkuDetails(response) }
+                    .map<NewState> { response -> NewState.SkuDetail(response) }
             }
 
         val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
@@ -137,7 +142,7 @@ class DubLinkProViewModel @Inject constructor(
 }
 
 sealed class NewState {
-    data class SkuDetails(val skuDetailsResponse: SkuDetailsResponse) : NewState()
+    data class SkuDetail(val skuDetails: List<SkuDetails>) : NewState()
     data class Purchases(val purchases: List<Purchase>) : NewState()
     data class PurchaseUpdate(val purchasesUpdate: PurchasesUpdate) : NewState()
     object Ignored : NewState()

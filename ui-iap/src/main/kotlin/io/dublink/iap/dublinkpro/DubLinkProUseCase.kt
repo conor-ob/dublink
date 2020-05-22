@@ -29,32 +29,47 @@ class DubLinkProUseCase @Inject constructor(
     fun observePurchaseUpdates(): Flowable<PurchasesUpdate> {
         return rxBilling.observeUpdates().doOnNext {
             if (it is PurchasesUpdate.Success) {
-                processPurchases(it.purchases)
+//                processPurchase(it.purchases)
             }
         }
     }
 
-    fun getDubLinkProSkuDetails(): Single<SkuDetailsResponse> {
+    fun getSkuDetails(): Single<List<SkuDetails>> {
         return rxBilling.getSkuDetails(
             SkuDetailsParams.newBuilder()
                 .setSkusList(listOf(DubLinkSku.DUBLINK_PRO.productId))
                 .setType(BillingClient.SkuType.INAPP)
                 .build()
-        ).map { skuDetails ->
+        ).doOnSuccess { skuDetails ->
             val result = skuDetails.find { it.sku == DubLinkSku.DUBLINK_PRO.productId }
             if (result != null) {
                 skuDetailsCache[DubLinkSku.DUBLINK_PRO] = result
-                return@map SkuDetailsResponse.Data(result)
             }
-            return@map SkuDetailsResponse.Error("404")
-        }.onErrorReturn {
-            SkuDetailsResponse.Error(it.message ?: it.cause?.message ?: "")
         }
     }
 
     fun getPurchases(): Single<List<Purchase>> {
-        return rxBilling.getPurchases(BillingClient.SkuType.INAPP).doOnSuccess {
-            processPurchases(it.orEmpty())
+        return rxBilling.getPurchases(
+            BillingClient.SkuType.INAPP
+        ).flatMap { purchases ->
+            if (purchases.isNullOrEmpty()) {
+                Single.just(emptyList())
+            } else {
+                Single.zip(
+                    purchases.map { purchase ->
+                        processPurchase(purchase)
+                    }
+                ) { purchase -> purchase.map { it as Purchase }.toList() }
+            }
+        }
+    }
+
+    private fun processPurchase(purchase: Purchase): Single<Purchase> {
+        return if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && isSignatureValid(purchase)) {
+//            acknowledgePurchase(purchase)
+            consumePurchase(purchase)
+        } else {
+            retractPurchase(purchase)
         }
     }
 
@@ -74,34 +89,36 @@ class DubLinkProUseCase @Inject constructor(
         )
     }
 
-    private fun processPurchases(purchases: List<Purchase>) {
-        for (purchase in purchases) {
-            if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                if (isSignatureValid(purchase)) {
-                    acknowledgePurchase(purchase)
-//                    consumePurchase(purchase)
-                }
+    private fun acknowledgePurchase(purchase: Purchase): Single<Purchase> {
+        return if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
+            if (purchase.isAcknowledged) {
+                preferenceStore.setDubLinkProEnabled(true)
+                Single.just(purchase)
+            } else {
+                rxBilling.acknowledge(
+                    AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchase.purchaseToken)
+                        .build()
+                )
+                    .doOnComplete {
+                        preferenceStore.setDubLinkProEnabled(true)
+                    }
+                    .toSingle { purchase }
             }
+        } else {
+            Single.just(purchase)
         }
     }
 
-    private fun acknowledgePurchase(purchase: Purchase) {
-        rxBilling.acknowledge(
-            AcknowledgePurchaseParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
-                .build()
-        )
-            .doOnComplete {
-                preferenceStore.setDubLinkProEnabled(true)
-            }
-            .doOnError {
-
-            }
-            .subscribe()
+    private fun retractPurchase(purchase: Purchase): Single<Purchase> {
+        if (DubLinkSku.DUBLINK_PRO.productId == purchase.sku) {
+            preferenceStore.setDubLinkProEnabled(false)
+        }
+        return Single.just(purchase)
     }
 
-    private fun consumePurchase(purchase: Purchase) {
-        rxBilling.consumeProduct(
+    private fun consumePurchase(purchase: Purchase): Single<Purchase> {
+        return rxBilling.consumeProduct(
             ConsumeParams.newBuilder()
                 .setPurchaseToken(purchase.purchaseToken)
                 .build()
@@ -109,16 +126,10 @@ class DubLinkProUseCase @Inject constructor(
             .doOnComplete {
                 preferenceStore.setDubLinkProEnabled(false)
             }
-            .subscribe()
+            .toSingle { purchase }
     }
 
     private fun isSignatureValid(purchase: Purchase): Boolean {
         return true
     }
-}
-
-sealed class SkuDetailsResponse {
-
-    data class Data(val skuDetails: SkuDetails) : SkuDetailsResponse()
-    data class Error(val message: String) : SkuDetailsResponse()
 }
