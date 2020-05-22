@@ -27,9 +27,15 @@ class DubLinkProUseCase @Inject constructor(
     private val skuDetailsCache = mutableMapOf<DubLinkSku, SkuDetails>()
 
     fun observePurchaseUpdates(): Flowable<PurchasesUpdate> {
-        return rxBilling.observeUpdates().doOnNext {
-            if (it is PurchasesUpdate.Success) {
-//                processPurchase(it.purchases)
+        return rxBilling.observeUpdates().flatMapSingle { update ->
+            if (update.purchases.isNullOrEmpty()) {
+                Single.just(update)
+            } else {
+                Single.zip(
+                    update.purchases.map { purchase ->
+                        processPurchase(purchase)
+                    }
+                ) { update }
             }
         }
     }
@@ -66,8 +72,8 @@ class DubLinkProUseCase @Inject constructor(
 
     private fun processPurchase(purchase: Purchase): Single<Purchase> {
         return if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && isSignatureValid(purchase)) {
-//            acknowledgePurchase(purchase)
-            consumePurchase(purchase)
+            acknowledgePurchase(purchase)
+//            consumePurchase(purchase)
         } else {
             retractPurchase(purchase)
         }
