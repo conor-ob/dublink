@@ -91,8 +91,12 @@ object FavouriteDialogFactory {
                 }
             }
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (serviceLocation is DubLinkStopLocation && (editedStopLocation as DubLinkStopLocation).filters
+                if (editedStopLocation is DubLinkStopLocation &&
+                    (editedStopLocation as DubLinkStopLocation).filters
                         .filterIsInstance<Filter.RouteFilter>()
+                        .none { it.isActive } &&
+                    (editedStopLocation as DubLinkStopLocation).filters
+                        .filterIsInstance<Filter.DirectionFilter>()
                         .none { it.isActive }
                 ) {
                     Toast.makeText(context, "Select at least 1 route", Toast.LENGTH_SHORT).show()
