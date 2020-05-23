@@ -23,7 +23,7 @@ DubLink is a **work-in-progress** Android app for getting real time data for Dub
 
 DubLink makes use of the latest Android libraries and best practices
 * Written in [Kotlin](https://kotlinlang.org/)
-* [Retrofit](https://square.github.io/retrofit/)/[OkHttp](https://square.github.io/okhttp/) for networking. The networking is fully contained in a separate library dublin-rtpi-service
+* [Retrofit](https://square.github.io/retrofit/)/[OkHttp](https://square.github.io/okhttp/) for networking. The networking is fully contained in a separate library [dublin-rtpi-service](https://github.com/conor-ob/dublin-rtpi-service)
 * [SQLDelight](https://github.com/cashapp/sqldelight) for local storage
 * [Dagger](https://google.github.io/dagger/) for dependency injection
 * Designed and built using Material Design [tools](https://material.io/tools/) and [components](https://material.io/develop/android/)
