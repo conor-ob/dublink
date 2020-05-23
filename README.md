@@ -2,7 +2,6 @@
 
 ![DubLink CI](https://github.com/conor-ob/dublink/workflows/DubLink%20CI/badge.svg)
 [![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=26)
-[![CodeFactor](https://www.codefactor.io/repository/github/conor-ob/dublink/badge?s=66c1e5f0fb73952065284d1cb9670c47dec63de1)](https://www.codefactor.io/repository/github/conor-ob/dublink)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 DubLink is a **work-in-progress** Android app for getting real time data for Dublin Bus :trolleybus: Irish Rail :railway_car: Luas :tram: Bus Éireann :bus: Dublin Bikes :bike: Aircoach :airplane:
