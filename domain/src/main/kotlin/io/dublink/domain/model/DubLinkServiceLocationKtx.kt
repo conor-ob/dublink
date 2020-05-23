@@ -18,6 +18,7 @@ fun DubLinkServiceLocation.setCustomName(name: String): DubLinkServiceLocation {
             favouriteMetadata = favouriteMetadata?.copy(
                 name = name
             ) ?: FavouriteMetadata(
+                isFavourite = false,
                 name = name
             )
         )
@@ -25,6 +26,7 @@ fun DubLinkServiceLocation.setCustomName(name: String): DubLinkServiceLocation {
             favouriteMetadata = favouriteMetadata?.copy(
                 name = name
             ) ?: FavouriteMetadata(
+                isFavourite = false,
                 name = name
             )
         )
@@ -38,6 +40,7 @@ fun DubLinkServiceLocation.setCustomSortIndex(sortIndex: Int): DubLinkServiceLoc
             favouriteMetadata = favouriteMetadata?.copy(
                 sortIndex = sortIndex
             ) ?: FavouriteMetadata(
+                isFavourite = false,
                 name = name,
                 sortIndex = sortIndex
             )
@@ -46,6 +49,7 @@ fun DubLinkServiceLocation.setCustomSortIndex(sortIndex: Int): DubLinkServiceLoc
             favouriteMetadata = favouriteMetadata?.copy(
                 sortIndex = sortIndex
             ) ?: FavouriteMetadata(
+                isFavourite = false,
                 name = name,
                 sortIndex = sortIndex
             )
@@ -65,6 +69,7 @@ fun DubLinkStopLocation.addFilter(filter: Filter): DubLinkServiceLocation {
                 favouriteMetadata = favouriteMetadata?.copy(
                     routes = adjustedRoutes
                 ) ?: FavouriteMetadata(
+                    isFavourite = false,
                     name = name,
                     routes = listOf(filter.route)
                 )
@@ -79,6 +84,7 @@ fun DubLinkStopLocation.addFilter(filter: Filter): DubLinkServiceLocation {
                 favouriteMetadata = favouriteMetadata?.copy(
                     directions = adjustedDirections
                 ) ?: FavouriteMetadata(
+                    isFavourite = false,
                     name = name,
                     directions = listOf(filter.direction)
                 )
@@ -97,6 +103,7 @@ fun DubLinkStopLocation.removeFilter(filter: Filter): DubLinkServiceLocation {
                     name = name,
                     routes = adjustedRoutes
                 ) ?: FavouriteMetadata(
+                    isFavourite = false,
                     name = name
                 )
             )
@@ -109,6 +116,7 @@ fun DubLinkStopLocation.removeFilter(filter: Filter): DubLinkServiceLocation {
                     name = name,
                     directions = adjustedDirections
                 ) ?: FavouriteMetadata(
+                    isFavourite = false,
                     name = name
                 )
             )
@@ -122,6 +130,7 @@ fun DubLinkStopLocation.clearFilters(): DubLinkServiceLocation {
             routes = emptyList(),
             directions = emptyList()
         ) ?: FavouriteMetadata(
+            isFavourite = false,
             name = name
         )
     )

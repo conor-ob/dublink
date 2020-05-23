@@ -1,5 +1,6 @@
 package io.dublink.location
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import com.google.android.gms.location.LocationRequest
@@ -38,6 +39,7 @@ class GpsLocationProvider @Inject constructor(
         )
     }
 
+    @SuppressLint("MissingPermission")
     private fun getLastKnownLocation(): Observable<Coordinate> {
         return locationProvider.lastKnownLocation
                 .filter { isBetterLocation(it) }
@@ -45,6 +47,7 @@ class GpsLocationProvider @Inject constructor(
                 .map { Coordinate(it.latitude, it.longitude) }
     }
 
+    @SuppressLint("MissingPermission")
     private fun getLocationUpdates(): Observable<Coordinate> {
         return locationProvider.getUpdatedLocation(newRequest())
             .filter { isBetterLocation(it) }

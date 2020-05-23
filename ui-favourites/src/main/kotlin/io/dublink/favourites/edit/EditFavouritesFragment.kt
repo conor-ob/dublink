@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.TouchCallback
+import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.DubLinkNavigator
@@ -58,30 +59,31 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                         return@setOnMenuItemClickListener true
                     }
                     R.id.action_help -> {
-                        val text = "Click an item to start editing\n\n" +
-                            "Long click an item to drag & drop and change its position\n\n" +
-                            "Turn off the Sort by location setting to use your custom sort order\n\n" +
-                            "Click Save changes when finished"
+                        val text = "Tap an item to start editing\n\n" +
+                            "Swipe right to remove it\n\n" +
+                            "Drag & drop to change its position\n\n" +
+                            "Sort by location setting must be off to use your custom sort order\n\n" +
+                            "Save changes when finished"
                         val test = SpannableString(text).apply {
                             setSpan(
                                 ForegroundColorSpan(
                                     resources.getColor(R.color.dublink_blue, null)
                                 ),
-                                text.indexOf("Click"), text.indexOf("Click") + 5,
+                                text.indexOf("Tap"), text.indexOf("Tap") + 3,
                                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE
                             )
                             setSpan(
                                 ForegroundColorSpan(
                                     resources.getColor(R.color.dublink_blue, null)
                                 ),
-                                text.indexOf("Long click"), text.indexOf("Long click") + 10,
+                                text.indexOf("Drag & drop"), text.indexOf("Drag & drop") + 11,
                                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE
                             )
                             setSpan(
                                 ForegroundColorSpan(
                                     resources.getColor(R.color.dublink_blue, null)
                                 ),
-                                text.indexOf("drag & drop"), text.indexOf("drag & drop") + 11,
+                                text.indexOf("Swipe right "), text.indexOf("Swipe right") + 11,
                                 Spannable.SPAN_EXCLUSIVE_INCLUSIVE
                             )
                             setSpan(
@@ -118,7 +120,9 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
             }
         }
 
-        adapter = EditFavouritesAdapter()
+        val itemTouchHelper = ItemTouchHelper(dragAndDropTouchCallback)
+        itemTouchHelper.attachToRecyclerView(edit_favourites_list)
+        adapter = EditFavouritesAdapter(itemTouchHelper)
         adapter?.setOnItemClickListener { item, view ->
             if (item is AbstractServiceLocationItem) {
                 val serviceLocation = item.getServiceLocation()
@@ -143,8 +147,6 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
         view.edit_favourites_list.adapter = adapter
         view.edit_favourites_list.setHasFixedSize(true)
         view.edit_favourites_list.layoutManager = LinearLayoutManager(requireContext())
-
-        ItemTouchHelper(dragAndDropTouchCallback).attachToRecyclerView(edit_favourites_list)
 
         edit_favourites_save_fab.setOnClickListener {
             adapter?.getServiceLocations()?.let {
@@ -179,6 +181,19 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
         renderErrorMessage(state)
         renderSaveButtonState(state)
         renderFavourites(state)
+        renderRemoved(state)
+    }
+
+    private fun renderRemoved(state: State) {
+        if (state.lastRemoved != null) {
+            val snackBar = Snackbar.make(edit_favourites_layout_root, "Removed from favourites", Snackbar.LENGTH_LONG)
+            snackBar.setAction("Undo") {
+                snackBar.dismiss()
+                viewModel.dispatch(Action.UndoRemoveFavourite)
+            }
+            snackBar.anchorView = edit_favourites_save_fab
+            snackBar.show()
+        }
     }
 
     private fun renderErrorMessage(state: State) {
@@ -227,6 +242,20 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                 return true
             }
             return false
+        }
+
+        override fun onSwiped(
+            viewHolder: RecyclerView.ViewHolder,
+            direction: Int
+        ) {
+            val serviceLocations = adapter?.getServiceLocations()?.toMutableList() ?: mutableListOf()
+            val index = viewHolder.adapterPosition
+            val item = adapter?.getServiceLocation(index)
+            if (item != null) {
+                serviceLocations.remove(item)
+                adapter?.update(serviceLocations)
+                viewModel.dispatch(Action.FavouriteRemoved(item, index, serviceLocations))
+            }
         }
     }
 

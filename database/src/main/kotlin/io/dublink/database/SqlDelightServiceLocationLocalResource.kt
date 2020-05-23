@@ -199,6 +199,7 @@ class SqlDelightServiceLocationLocalResource(
             if (favourite != null) {
                 serviceLocations[it.locationId] = favourite.withFavouriteMetadata(
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = true,
                         name = it.name,
                         routes = favouriteServiceEntitiesByLocation[it.locationId]?.map { entity ->
                             Route(operator = entity.operator, id = entity.route)
@@ -274,79 +275,91 @@ class SqlDelightServiceLocationLocalResource(
 
     private fun insertServices(service: Service, serviceLocation: ServiceLocation) {
         when (service) {
-            Service.AIRCOACH -> {
-                if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routeGroups) {
-                        for (route in routeGroup.routes) {
-                            database.aircoachServiceQueries.insertOrReplace(
-                                locationId = serviceLocation.id,
-                                route = route,
-                                operator = routeGroup.operator
-                            )
-                        }
-                    }
-                }
-            }
-            Service.BUS_EIREANN -> {
-                if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routeGroups) {
-                        for (route in routeGroup.routes) {
-                            database.busEireannServiceQueries.insertOrReplace(
-                                locationId = serviceLocation.id,
-                                route = route,
-                                operator = routeGroup.operator
-                            )
-                        }
-                    }
-                }
-            }
-            Service.DUBLIN_BIKES -> {
-                if (serviceLocation is DockLocation) {
-                    database.dublinBikesServiceQueries.insertOrReplace(
+            Service.AIRCOACH -> insertAircoachStops(serviceLocation)
+            Service.BUS_EIREANN -> insertBusEireannStops(serviceLocation)
+            Service.DUBLIN_BIKES -> insertDublinBikesDocks(serviceLocation)
+            Service.DUBLIN_BUS -> insertDublinBusStops(serviceLocation)
+            Service.IRISH_RAIL -> insertIrishRailStations(serviceLocation)
+            Service.LUAS -> insertLuasStops(serviceLocation)
+        }
+    }
+
+    private fun insertLuasStops(serviceLocation: ServiceLocation) {
+        if (serviceLocation is StopLocation) {
+            for (routeGroup in serviceLocation.routeGroups) {
+                for (route in routeGroup.routes) {
+                    database.luasServiceQueries.insertOrReplace(
                         locationId = serviceLocation.id,
-                        availableBikes = serviceLocation.availableBikes,
-                        availableDocks = serviceLocation.availableDocks,
-                        totalDocks = serviceLocation.totalDocks
+                        route = route,
+                        operator = routeGroup.operator
                     )
                 }
             }
-            Service.DUBLIN_BUS -> {
-                if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routeGroups) {
-                        for (route in routeGroup.routes) {
-                            database.dublinBusServiceQueries.insertOrReplace(
-                                locationId = serviceLocation.id,
-                                route = route,
-                                operator = routeGroup.operator
-                            )
-                        }
-                    }
+        }
+    }
+
+    private fun insertIrishRailStations(serviceLocation: ServiceLocation) {
+        if (serviceLocation is StopLocation) {
+            for (routeGroup in serviceLocation.routeGroups) {
+                for (route in routeGroup.routes) {
+                    database.irishRailServiceQueries.insertOrReplace(
+                        locationId = serviceLocation.id,
+                        route = route,
+                        operator = routeGroup.operator
+                    )
                 }
             }
-            Service.IRISH_RAIL -> {
-                if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routeGroups) {
-                        for (route in routeGroup.routes) {
-                            database.irishRailServiceQueries.insertOrReplace(
-                                locationId = serviceLocation.id,
-                                route = route,
-                                operator = routeGroup.operator
-                            )
-                        }
-                    }
+        }
+    }
+
+    private fun insertDublinBusStops(serviceLocation: ServiceLocation) {
+        if (serviceLocation is StopLocation) {
+            for (routeGroup in serviceLocation.routeGroups) {
+                for (route in routeGroup.routes) {
+                    database.dublinBusServiceQueries.insertOrReplace(
+                        locationId = serviceLocation.id,
+                        route = route,
+                        operator = routeGroup.operator
+                    )
                 }
             }
-            Service.LUAS -> {
-                if (serviceLocation is StopLocation) {
-                    for (routeGroup in serviceLocation.routeGroups) {
-                        for (route in routeGroup.routes) {
-                            database.luasServiceQueries.insertOrReplace(
-                                locationId = serviceLocation.id,
-                                route = route,
-                                operator = routeGroup.operator
-                            )
-                        }
-                    }
+        }
+    }
+
+    private fun insertDublinBikesDocks(serviceLocation: ServiceLocation) {
+        if (serviceLocation is DockLocation) {
+            database.dublinBikesServiceQueries.insertOrReplace(
+                locationId = serviceLocation.id,
+                availableBikes = serviceLocation.availableBikes,
+                availableDocks = serviceLocation.availableDocks,
+                totalDocks = serviceLocation.totalDocks
+            )
+        }
+    }
+
+    private fun insertBusEireannStops(serviceLocation: ServiceLocation) {
+        if (serviceLocation is StopLocation) {
+            for (routeGroup in serviceLocation.routeGroups) {
+                for (route in routeGroup.routes) {
+                    database.busEireannServiceQueries.insertOrReplace(
+                        locationId = serviceLocation.id,
+                        route = route,
+                        operator = routeGroup.operator
+                    )
+                }
+            }
+        }
+    }
+
+    private fun insertAircoachStops(serviceLocation: ServiceLocation) {
+        if (serviceLocation is StopLocation) {
+            for (routeGroup in serviceLocation.routeGroups) {
+                for (route in routeGroup.routes) {
+                    database.aircoachServiceQueries.insertOrReplace(
+                        locationId = serviceLocation.id,
+                        route = route,
+                        operator = routeGroup.operator
+                    )
                 }
             }
         }

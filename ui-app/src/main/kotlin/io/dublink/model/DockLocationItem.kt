@@ -2,22 +2,17 @@ package io.dublink.model
 
 import android.content.res.ColorStateList
 import android.widget.TextView
-import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.chip.Chip
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.ui.R
 
-class DockLocationItem(
+open class DockLocationItem(
     private val serviceLocation: DubLinkDockLocation,
     walkDistance: Double?
 ) : AbstractServiceLocationItem(serviceLocation, walkDistance) {
 
     override fun getLayout() = R.layout.list_item_dock_location
-
-    override fun getDragDirs(): Int {
-        return ItemTouchHelper.UP or ItemTouchHelper.DOWN
-    }
 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         super.bind(viewHolder, position)

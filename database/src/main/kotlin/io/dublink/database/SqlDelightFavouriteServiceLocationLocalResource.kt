@@ -84,6 +84,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                         )
                     ).withFavouriteMetadata(
                         favouriteMetadata = FavouriteMetadata(
+                            isFavourite = true,
                             name = entity.name,
                             sortIndex = entity.sortIndex.toInt(),
                             routes = routeGroups.flatMap { routeGroup ->
@@ -109,6 +110,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                     )
                 ).withFavouriteMetadata(
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = true,
                         name = entity.name,
                         sortIndex = entity.sortIndex.toInt()
                     )
@@ -117,8 +119,13 @@ class SqlDelightFavouriteServiceLocationLocalResource(
         }
     }
 
-    override fun saveFavourites(serviceLocations: List<DubLinkServiceLocation>) {
+    override fun saveFavourites(serviceLocations: List<DubLinkServiceLocation>, overwrite: Boolean) {
         database.transaction {
+            if (overwrite) {
+                database.favouriteLocationQueries.deleteAll()
+                database.favouriteServiceQueries.deleteAll()
+                database.favouriteDirectionQueries.deleteAll()
+            }
             serviceLocations.forEach { serviceLocation ->
                 database.favouriteLocationQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
                 database.favouriteServiceQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)

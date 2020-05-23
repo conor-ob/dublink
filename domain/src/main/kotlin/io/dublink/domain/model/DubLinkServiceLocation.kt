@@ -24,7 +24,7 @@ abstract class AbstractDubLinkServiceLocation(
     override val coordinate = serviceLocation.coordinate
 
     override val defaultName = serviceLocation.name
-    override val isFavourite = favouriteMetadata != null
+    override val isFavourite = favouriteMetadata?.isFavourite ?: false
     override val favouriteSortIndex = favouriteMetadata?.sortIndex ?: -1
 }
 
@@ -91,6 +91,7 @@ sealed class Filter {
 data class Route(val operator: Operator, val id: String)
 
 data class FavouriteMetadata(
+    val isFavourite: Boolean, // a location can have favourite metadata before it is saved
     val name: String,
     val routes: List<Route> = emptyList(),
     val directions: List<String> = emptyList(),

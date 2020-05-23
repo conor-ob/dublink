@@ -99,7 +99,7 @@ class DubLinkProUseCase @Inject constructor(
             if (purchase.isAcknowledged) {
                 Timber.d("Found previously acknowledged DubLink Pro purchase - granting DubLink Pro access")
                 Timber.d(purchase.toString())
-                dubLinkProService.grantDubLinkProPreferences()
+                dubLinkProService.grantDubLinkProAccess()
                 Single.just(purchase)
             } else {
                 Timber.d("Acknowledging DubLink Pro purchase")
@@ -135,7 +135,7 @@ class DubLinkProUseCase @Inject constructor(
                 .build()
         )
             .doOnComplete {
-                dubLinkProService.grantDubLinkProPreferences()
+                dubLinkProService.grantDubLinkProAccess()
             }
             .toSingle { purchase }
     }

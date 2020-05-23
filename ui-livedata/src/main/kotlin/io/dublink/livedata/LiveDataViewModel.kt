@@ -3,6 +3,7 @@ package io.dublink.livedata
 import com.ww.roxie.Reducer
 import io.dublink.LifecycleAwareViewModel
 import io.dublink.domain.model.DubLinkStopLocation
+import io.dublink.domain.model.Filter
 import io.dublink.domain.model.addFilter
 import io.dublink.domain.model.clearFilters
 import io.dublink.domain.model.removeFilter
@@ -157,7 +158,23 @@ class LiveDataViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Change> { response ->
                         when (response) {
-                            is ServiceLocationPresentationResponse.Data -> Change.GetServiceLocation(response.serviceLocation)
+                            is ServiceLocationPresentationResponse.Data -> {
+                                val serviceLocation = if (!response.serviceLocation.isFavourite && response.serviceLocation is DubLinkStopLocation) {
+                                    var copy = response.serviceLocation
+                                    val filters = response.serviceLocation.filters
+                                    for (filter in filters) {
+                                        if (filter is Filter.RouteFilter) {
+                                            copy = (copy as DubLinkStopLocation).addFilter(filter.copy(isActive = true))
+                                        } else if (filter is Filter.DirectionFilter) {
+                                            copy = (copy as DubLinkStopLocation).addFilter(filter.copy(isActive = true))
+                                        }
+                                    }
+                                    copy
+                                } else {
+                                    response.serviceLocation
+                                }
+                                Change.GetServiceLocation(serviceLocation)
+                            }
                             is ServiceLocationPresentationResponse.Error -> Change.Error(response.throwable)
                         }
                     }

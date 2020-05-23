@@ -72,7 +72,7 @@ object FavouriteDialogFactory {
                         }
                     customizeFavouriteView.favourite_edit_routes.addView(filterChip)
                 }
-                builder.setNeutralButton("Select All", null)
+                builder.setNeutralButton("Clear", null)
             }
         }
 
@@ -85,14 +85,19 @@ object FavouriteDialogFactory {
                 dialog.dismiss()
             }
             dialog.getButton(AlertDialog.BUTTON_NEUTRAL)?.setOnClickListener {
-                for (i in 0 until customizeFavouriteView.favourite_edit_routes.childCount) {
-                    val chip = customizeFavouriteView.favourite_edit_routes.getChildAt(i) as Chip
-                    chip.isChecked = true
-                }
+                customizeFavouriteView.favourite_edit_routes.clearCheck()
+//                for (i in 0 until customizeFavouriteView.favourite_edit_routes.childCount) {
+//                    val chip = customizeFavouriteView.favourite_edit_routes.getChildAt(i) as Chip
+//                    chip.isChecked = true
+//                }
             }
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (serviceLocation is DubLinkStopLocation && (editedStopLocation as DubLinkStopLocation).filters
+                if (editedStopLocation is DubLinkStopLocation &&
+                    (editedStopLocation as DubLinkStopLocation).filters
                         .filterIsInstance<Filter.RouteFilter>()
+                        .none { it.isActive } &&
+                    (editedStopLocation as DubLinkStopLocation).filters
+                        .filterIsInstance<Filter.DirectionFilter>()
                         .none { it.isActive }
                 ) {
                     Toast.makeText(context, "Select at least 1 route", Toast.LENGTH_SHORT).show()

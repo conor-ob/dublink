@@ -32,7 +32,8 @@ class EditFavouritesUseCase @Inject constructor(
             favouriteRepository.saveFavourites(
                 serviceLocations.mapIndexed { index, serviceLocation ->
                     serviceLocation.setCustomSortIndex(index)
-                }
+                },
+                overwrite = true
             )
             true
         }

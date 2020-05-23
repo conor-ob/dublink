@@ -109,10 +109,6 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
                 DubLinkProHeaderItem(),
                 DubLinkProDividerItem(),
                 DubLinkProFeatureItem(
-                    title = "Dublin at your fingertips",
-                    summary = "Full access to every service\n\n- Dublin Bus & Go Ahead\n- DART\n- Luas\n- Dublin Bikes\n- Bus Éireann\n- Aircoach\n- Commuter & InterCity Rail"
-                ),
-                DubLinkProFeatureItem(
                     title = "Join the dark side",
                     summary = "Start using a dark theme"
                 ),

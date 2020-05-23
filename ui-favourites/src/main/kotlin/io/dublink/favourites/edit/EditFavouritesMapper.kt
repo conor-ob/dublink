@@ -1,20 +1,20 @@
 package io.dublink.favourites.edit
 
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.xwray.groupie.Section
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.model.DividerItem
-import io.dublink.model.DockLocationItem
-import io.dublink.model.StopLocationItem
 
 object EditFavouritesMapper {
 
     fun map(
-        editing: List<DubLinkServiceLocation>
+        editing: List<DubLinkServiceLocation>,
+        itemTouchHelper: ItemTouchHelper
     ) = Section(
         editing.map {
-            mapServiceLocation(it)
+            mapServiceLocation(it, itemTouchHelper)
         }
     )
 
@@ -29,19 +29,22 @@ object EditFavouritesMapper {
 //    }
 
     private fun mapServiceLocation(
-        serviceLocation: DubLinkServiceLocation
+        serviceLocation: DubLinkServiceLocation,
+        itemTouchHelper: ItemTouchHelper
     ) = Section(
         when (serviceLocation) {
             is DubLinkStopLocation -> listOf(
-                StopLocationItem(
+                EditableStopLocationItem(
                     serviceLocation = serviceLocation,
-                    walkDistance = null
+                    walkDistance = null,
+                    itemTouchHelper = itemTouchHelper
                 )
             )
             is DubLinkDockLocation -> listOf(
-                DockLocationItem(
+                EditableDockLocationItem(
                     serviceLocation = serviceLocation,
-                    walkDistance = null
+                    walkDistance = null,
+                    itemTouchHelper = itemTouchHelper
                 )
             )
             else -> emptyList()

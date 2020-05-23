@@ -10,15 +10,20 @@ class DubLinkProPreferencesService(
     private val resources: Resources
 ) : DubLinkProService {
 
-    override fun grantDubLinkProPreferences() {
+    override fun grantDubLinkProAccess() {
         preferenceStore.setDubLinkProEnabled(true)
+    }
+
+    override fun grantDubLinkProPreferences() {
+        grantDubLinkProAccess()
+        preferenceStore.setFavouritesLiveDataLimit(resources.getInteger(R.integer.preference_default_favourites_live_data_limit_pro))
     }
 
     override fun revokeDubLinkProPreferences() {
         preferenceStore.setDubLinkProEnabled(false)
         preferenceStore.setFavouritesSortByLocation(resources.getBoolean(R.bool.preference_default_favourites_sort_location))
         preferenceStore.setFavouritesLiveDataLimit(resources.getInteger(R.integer.preference_default_favourites_live_data_limit))
+        preferenceStore.setPreferredTheme(resources.getString(R.string.preference_value_light_theme))
         themeRepository.setTheme(resources.getString(R.string.preference_value_light_theme))
-        themeRepository.setPreferredThemeOrDefault()
     }
 }

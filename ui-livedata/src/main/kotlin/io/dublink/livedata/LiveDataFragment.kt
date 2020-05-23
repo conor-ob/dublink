@@ -7,6 +7,7 @@ import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.appcompat.widget.updateSubtitle
 import androidx.appcompat.widget.updateTitle
+import androidx.core.view.children
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -232,24 +233,61 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
                 live_data_button_expand_route_filters.visibility = View.VISIBLE
             }
             if (0 == live_data_chip_group_route_filters.childCount) {
-                live_data_chip_group_route_filters.removeAllViewsInLayout()
-                for (filter in filters) {
-                    val filterChip = ChipFactory.newFilterChip(requireContext(), filter).apply {
-                        isChecked = filter.isActive
-                        alpha = if (filter.isActive) {
-                            1.0f
-                        } else {
-                            0.33f
-                        }
-                        setOnCheckedChangeListener(routeFilterClickedListener)
-                    }
-                    live_data_chip_group_route_filters.addView(filterChip)
-                }
-                live_data_chip_group_route_filters.visibility = View.VISIBLE
+                addFilterChips(filters)
+            } else {
+                updateFilterChips(filters)
             }
         }
         if (state.routeFilterState != null) {
             bottomSheetBehavior.state = state.routeFilterState
+        }
+    }
+
+    private fun addFilterChips(filters: List<Filter>) {
+        live_data_chip_group_route_filters.removeAllViewsInLayout()
+        for (filter in filters) {
+            val filterChip = ChipFactory.newFilterChip(requireContext(), filter).apply {
+                isChecked = filter.isActive
+                alpha = if (filter.isActive) {
+                    1.0f
+                } else {
+                    0.33f
+                }
+                setOnCheckedChangeListener(routeFilterClickedListener)
+            }
+            live_data_chip_group_route_filters.addView(filterChip)
+        }
+        live_data_chip_group_route_filters.visibility = View.VISIBLE
+    }
+
+    private fun updateFilterChips(filters: List<Filter>) {
+        val routeChips = live_data_chip_group_route_filters.children
+            .filter { it.tag is Filter.RouteFilter }
+        val directionChips = live_data_chip_group_route_filters.children
+            .filter { it.tag is Filter.DirectionFilter }
+
+        for (filter in filters) {
+            if (filter is Filter.RouteFilter) {
+                val match = routeChips.find { (it.tag as Filter.RouteFilter).route == filter.route }
+                if (match != null && match is Chip) {
+                    match.isChecked = filter.isActive
+                    match.alpha = if (filter.isActive) {
+                        1.0f
+                    } else {
+                        0.33f
+                    }
+                }
+            } else if (filter is Filter.DirectionFilter) {
+                val match = directionChips.find { (it.tag as Filter.DirectionFilter).direction == filter.direction }
+                if (match != null && match is Chip) {
+                    match.isChecked = filter.isActive
+                    match.alpha = if (filter.isActive) {
+                        1.0f
+                    } else {
+                        0.33f
+                    }
+                }
+            }
         }
     }
 
