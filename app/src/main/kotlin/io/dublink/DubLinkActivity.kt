@@ -96,20 +96,16 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     }
 
     override fun navigateToLiveData(serviceLocation: DubLinkServiceLocation) {
-        if (serviceLocation.service == Service.DUBLIN_BUS || preferenceStore.isDubLinkProEnabled()) {
-            navigationController.navigate(
-                R.id.liveDataFragment,
-                LiveDataFragment.toBundle(serviceLocation),
-                NavOptions.Builder()
-                    .setEnterAnim(R.anim.nav_default_enter_anim)
-                    .setExitAnim(R.anim.nav_default_exit_anim)
-                    .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                    .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-                    .build()
-            )
-        } else {
-            navigateToIap()
-        }
+        navigationController.navigate(
+            R.id.liveDataFragment,
+            LiveDataFragment.toBundle(serviceLocation),
+            NavOptions.Builder()
+                .setEnterAnim(R.anim.nav_default_enter_anim)
+                .setExitAnim(R.anim.nav_default_exit_anim)
+                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
+                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
+                .build()
+        )
     }
 
     override fun navigateToEditFavourites() {
