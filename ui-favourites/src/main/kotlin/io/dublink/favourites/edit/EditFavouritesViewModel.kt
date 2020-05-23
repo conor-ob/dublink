@@ -19,7 +19,8 @@ class EditFavouritesViewModel @Inject constructor(
         original = null,
         editing = null,
         toastMessage = null,
-        errorResponses = emptyList()
+        errorResponses = emptyList(),
+        lastRemoved = null
     )
 
     private val reducer: Reducer<State, Result> = { state, result ->
@@ -29,36 +30,64 @@ class EditFavouritesViewModel @Inject constructor(
                 original = if (state.original.isNullOrEmpty()) result.favourites else state.original,
                 editing = if (state.editing.isNullOrEmpty()) result.favourites else state.editing,
                 toastMessage = null,
-                errorResponses = result.errorResponses
+                errorResponses = result.errorResponses,
+                lastRemoved = null
             )
             is Result.FavouriteEdited -> State(
                 isFinished = false,
                 original = state.original,
                 editing = merge(result.serviceLocation, state.editing),
                 toastMessage = null,
-                errorResponses = emptyList()
+                errorResponses = emptyList(),
+                lastRemoved = null
             )
             is Result.FavouritesReordered -> State(
                 isFinished = false,
                 original = state.original,
                 editing = result.serviceLocations,
                 toastMessage = null,
-                errorResponses = emptyList()
+                errorResponses = emptyList(),
+                lastRemoved = null
             )
             is Result.FavouritesSaved -> State(
                 isFinished = true,
                 original = state.original,
                 editing = state.editing,
                 toastMessage = null,
-                errorResponses = emptyList()
+                errorResponses = emptyList(),
+                lastRemoved = null
             )
             is Result.Error -> State(
                 isFinished = false,
                 original = state.original,
                 editing = state.editing,
                 toastMessage = "Something went wrong, try refreshing",
-                errorResponses = emptyList()
+                errorResponses = emptyList(),
+                lastRemoved = null
             )
+            is Result.FavouriteRemoved -> State(
+                isFinished = false,
+                original = state.original,
+                editing = result.serviceLocations,
+                toastMessage = null,
+                errorResponses = emptyList(),
+                lastRemoved = result.lastRemoved
+            )
+            is Result.UndoRemoveFavourite -> {
+                val editing = state.editing?.toMutableList()
+                val lastRemoved = state.lastRemoved
+                if (editing != null && lastRemoved != null) {
+                    editing.add(lastRemoved.index, lastRemoved.serviceLocation as DubLinkServiceLocation)
+                }
+                State(
+                    isFinished = false,
+                    original = state.original,
+                    editing = editing,
+                    toastMessage = null,
+                    errorResponses = emptyList(),
+                    lastRemoved = null
+                )
+            }
         }
     }
 
@@ -141,6 +170,18 @@ class EditFavouritesViewModel @Inject constructor(
                     .map<Result> { serviceLocations -> Result.FavouritesReordered(serviceLocations) }
             }
 
+        val favouriteRemovedActions = actions.ofType(Action.FavouriteRemoved::class.java)
+            .switchMap { action ->
+                Observable.just(action.serviceLocations)
+                    .map<Result> { serviceLocations -> Result.FavouriteRemoved(serviceLocations, LastRemoved(action.index, action.serviceLocation)) }
+            }
+
+        val undoRemoveFavouriteActions = actions.ofType(Action.UndoRemoveFavourite::class.java)
+            .switchMap {
+                Observable.just(true)
+                    .map<Result> { Result.UndoRemoveFavourite }
+            }
+
         val saveChangesActions = actions.ofType(Action.SaveChanges::class.java)
             .switchMap { action ->
                 editFavouritesUseCase.saveChanges(action.serviceLocations)
@@ -154,6 +195,8 @@ class EditFavouritesViewModel @Inject constructor(
                 getFavouritesActions,
                 editServiceLocationAction,
                 favouritesReorderedActions,
+                favouriteRemovedActions,
+                undoRemoveFavouriteActions,
                 saveChangesActions
             )
         )

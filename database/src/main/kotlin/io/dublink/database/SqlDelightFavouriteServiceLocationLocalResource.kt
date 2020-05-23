@@ -119,8 +119,13 @@ class SqlDelightFavouriteServiceLocationLocalResource(
         }
     }
 
-    override fun saveFavourites(serviceLocations: List<DubLinkServiceLocation>) {
+    override fun saveFavourites(serviceLocations: List<DubLinkServiceLocation>, overwrite: Boolean) {
         database.transaction {
+            if (overwrite) {
+                database.favouriteLocationQueries.deleteAll()
+                database.favouriteServiceQueries.deleteAll()
+                database.favouriteDirectionQueries.deleteAll()
+            }
             serviceLocations.forEach { serviceLocation ->
                 database.favouriteLocationQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)
                 database.favouriteServiceQueries.delete(service = serviceLocation.service, locationId = serviceLocation.id)

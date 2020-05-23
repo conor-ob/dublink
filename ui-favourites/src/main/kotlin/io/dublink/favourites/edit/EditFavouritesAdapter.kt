@@ -1,10 +1,13 @@
 package io.dublink.favourites.edit
 
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.dublink.domain.model.DubLinkServiceLocation
 
-class EditFavouritesAdapter<VH : GroupieViewHolder> : GroupAdapter<VH>() {
+class EditFavouritesAdapter<VH : GroupieViewHolder>(
+    private val itemTouchHelper: ItemTouchHelper
+) : GroupAdapter<VH>() {
 
     private val serviceLocations = mutableListOf<DubLinkServiceLocation>()
 
@@ -12,7 +15,7 @@ class EditFavouritesAdapter<VH : GroupieViewHolder> : GroupAdapter<VH>() {
         if (serviceLocations != newServiceLocations) {
             serviceLocations.clear()
             serviceLocations.addAll(newServiceLocations)
-            update(listOf(EditFavouritesMapper.map(newServiceLocations)))
+            update(listOf(EditFavouritesMapper.map(newServiceLocations, itemTouchHelper)))
         }
     }
 
