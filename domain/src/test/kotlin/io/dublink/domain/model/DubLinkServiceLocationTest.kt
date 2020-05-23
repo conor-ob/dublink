@@ -30,6 +30,7 @@ class DubLinkServiceLocationTest {
                 )
             ),
             favouriteMetadata = FavouriteMetadata(
+                isFavourite = true,
                 name = "",
                 routes = listOf(Route(operator = Operator.DART, id = Operator.DART.fullName)),
                 directions = listOf("Southbound"),

@@ -30,7 +30,8 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
         favouritesResource.saveFavourites(
             listOf(
                 updatedIrishRailStation
-            )
+            ),
+            overwrite = false
         )
         val favourites = favouritesResource.getFavourites().blockingFirst()
 
@@ -45,6 +46,7 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                     routeGroups = emptyList()
                 ),
                 favouriteMetadata = FavouriteMetadata(
+                    isFavourite = true,
                     name = "My favourite stop",
                     sortIndex = 0
                 )
@@ -67,6 +69,7 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                         routeGroups = emptyList()
                     ),
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = false,
                         name = "favourite stop 1",
                         sortIndex = 0
                     )
@@ -80,6 +83,7 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                         routeGroups = emptyList()
                     ),
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = false,
                         name = "favourite stop 2",
                         sortIndex = 1
                     )
@@ -93,11 +97,13 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                         routeGroups = emptyList()
                     ),
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = false,
                         name = "favourite stop 3",
                         sortIndex = 2
                     )
                 )
-            )
+            ),
+            overwrite = false
         )
 
         // act
@@ -112,11 +118,13 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                         routeGroups = emptyList()
                     ),
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = false,
                         name = "updated favourite stop 2",
                         sortIndex = 1
                     )
                 )
-            )
+            ),
+            overwrite = false
         )
         val favourites = favouritesResource.getFavourites().blockingFirst()
 
@@ -131,6 +139,7 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                     routeGroups = emptyList()
                 ),
                 favouriteMetadata = FavouriteMetadata(
+                    isFavourite = true,
                     name = "favourite stop 1",
                     sortIndex = 0
                 )
@@ -144,6 +153,7 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                     routeGroups = emptyList()
                 ),
                 favouriteMetadata = FavouriteMetadata(
+                    isFavourite = true,
                     name = "updated favourite stop 2",
                     sortIndex = 1
                 )
@@ -157,6 +167,7 @@ class SqlDelightFavouriteServiceLocationLocalResourceTest {
                     routeGroups = emptyList()
                 ),
                 favouriteMetadata = FavouriteMetadata(
+                    isFavourite = true,
                     name = "favourite stop 3",
                     sortIndex = 2
                 )
