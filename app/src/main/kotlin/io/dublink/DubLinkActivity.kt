@@ -16,7 +16,6 @@ import io.dublink.iap.BillingConnectionManager
 import io.dublink.iap.RxBilling
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
-import io.rtpi.api.Service
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.activity_root.activity_root
 
