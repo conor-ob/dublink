@@ -187,7 +187,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
         privacyPolicyPreference?.setOnPreferenceClickListener {
             (activity as DubLinkNavigator).navigateToWebView(
                 title = getString(R.string.preference_name_privacy_policy),
-                url = "https://conor-ob.github.io/dublink-io/privacypolicy/"
+                url = "https://conor-ob.github.io/dublink/privacypolicy/"
             )
             return@setOnPreferenceClickListener true
         }
@@ -195,7 +195,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
         termsOfServicePreference?.setOnPreferenceClickListener {
             (activity as DubLinkNavigator).navigateToWebView(
                 title = getString(R.string.preference_name_terms_of_service),
-                url = "https://conor-ob.github.io/dublink-io/termsofservice/"
+                url = "https://conor-ob.github.io/dublink/termsofservice/"
             )
             return@setOnPreferenceClickListener true
         }
