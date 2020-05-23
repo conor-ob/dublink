@@ -72,7 +72,7 @@ object FavouriteDialogFactory {
                         }
                     customizeFavouriteView.favourite_edit_routes.addView(filterChip)
                 }
-                builder.setNeutralButton("Select All", null)
+                builder.setNeutralButton("Clear", null)
             }
         }
 
@@ -85,10 +85,11 @@ object FavouriteDialogFactory {
                 dialog.dismiss()
             }
             dialog.getButton(AlertDialog.BUTTON_NEUTRAL)?.setOnClickListener {
-                for (i in 0 until customizeFavouriteView.favourite_edit_routes.childCount) {
-                    val chip = customizeFavouriteView.favourite_edit_routes.getChildAt(i) as Chip
-                    chip.isChecked = true
-                }
+                customizeFavouriteView.favourite_edit_routes.clearCheck()
+//                for (i in 0 until customizeFavouriteView.favourite_edit_routes.childCount) {
+//                    val chip = customizeFavouriteView.favourite_edit_routes.getChildAt(i) as Chip
+//                    chip.isChecked = true
+//                }
             }
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 if (editedStopLocation is DubLinkStopLocation &&
