@@ -71,3 +71,11 @@ app/google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+# Website
+docs/.bundle
+docs/.sass-cache
+docs/_site
+docs/Gemfile.lock
+docs/.jekyll-cache/
+docs/.jekyll-metadata
