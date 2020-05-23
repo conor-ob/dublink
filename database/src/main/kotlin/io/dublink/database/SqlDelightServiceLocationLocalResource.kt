@@ -199,6 +199,7 @@ class SqlDelightServiceLocationLocalResource(
             if (favourite != null) {
                 serviceLocations[it.locationId] = favourite.withFavouriteMetadata(
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = true,
                         name = it.name,
                         routes = favouriteServiceEntitiesByLocation[it.locationId]?.map { entity ->
                             Route(operator = entity.operator, id = entity.route)

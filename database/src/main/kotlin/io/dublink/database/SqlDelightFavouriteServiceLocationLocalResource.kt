@@ -84,6 +84,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                         )
                     ).withFavouriteMetadata(
                         favouriteMetadata = FavouriteMetadata(
+                            isFavourite = true,
                             name = entity.name,
                             sortIndex = entity.sortIndex.toInt(),
                             routes = routeGroups.flatMap { routeGroup ->
@@ -109,6 +110,7 @@ class SqlDelightFavouriteServiceLocationLocalResource(
                     )
                 ).withFavouriteMetadata(
                     favouriteMetadata = FavouriteMetadata(
+                        isFavourite = true,
                         name = entity.name,
                         sortIndex = entity.sortIndex.toInt()
                     )
