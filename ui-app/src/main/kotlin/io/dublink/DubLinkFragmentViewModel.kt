@@ -8,20 +8,24 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 import timber.log.Timber
+import java.time.Instant
 
 class DubLinkFragmentViewModel @Inject constructor(
     private val internetStatusChangeListener: InternetStatusChangeListener,
     private val scheduler: RxScheduler
-) : BaseViewModel<Action, State>() {
+) : BaseViewModel<DubLinkFragmentAction, DubLinkFragmentState>() {
 
-    override val initialState = State(
-        internetStatusChange = null
+    override val initialState = DubLinkFragmentState(
+        internetStatusChangeEvent = null
     )
 
-    private val reducer: Reducer<State, Change> = { _, change ->
+    private val reducer: Reducer<DubLinkFragmentState, DubLinkFragmentChange> = { _, change ->
         when (change) {
-            is Change.InternetStatusChange -> State(
-                internetStatusChange = change.internetStatusChange
+            is DubLinkFragmentChange.InternetStatusChange -> DubLinkFragmentState(
+                internetStatusChangeEvent = InternetStatusChangeEvent(
+                    internetStatusChange = change.internetStatusChange,
+                    timestamp = Instant.now()
+                )
             )
         }
     }
@@ -31,13 +35,13 @@ class DubLinkFragmentViewModel @Inject constructor(
     }
 
     private fun bindActions() {
-        val getInternetStatusChange = actions.ofType(Action.SubscribeToInternetStatusChanges::class.java)
+        val getInternetStatusChange = actions.ofType(DubLinkFragmentAction.SubscribeToInternetStatusChanges::class.java)
             .switchMap {
                 internetStatusChangeListener.eventStream()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { type ->
-                        Change.InternetStatusChange(type)
+                    .map<DubLinkFragmentChange> { type ->
+                        DubLinkFragmentChange.InternetStatusChange(type)
                     }
             }
 

@@ -22,6 +22,12 @@ object AppConstants {
     val liveDataCacheExpiry: Duration = Duration.ofSeconds(15L)
 
     /**
+     * The duration internet status change events are considered for to avoid too many notifications when
+     * rebuilding fragments
+     */
+    val internetStatusChangeEventExpiry: Duration = Duration.ofSeconds(1L)
+
+    /**
      * The duration of time to pass before live data is considered stale. When the app returns to the foreground it
      * could potentially be displaying stale data if it has been in the background for a long time. If this happens,
      * a live data refresh is triggered.
