@@ -191,7 +191,7 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                 snackBar.dismiss()
                 viewModel.dispatch(Action.UndoRemoveFavourite)
             }
-            snackBar.anchorView = edit_favourites_save_fab
+//            snackBar.anchorView = edit_favourites_save_fab
             snackBar.show()
         }
     }
