@@ -2,7 +2,6 @@ package io.dublink.favourites
 
 import com.ww.roxie.Reducer
 import io.dublink.LifecycleAwareViewModel
-import io.dublink.domain.internet.InternetStatusChangeListener
 import io.dublink.domain.service.LocationProvider
 import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
@@ -20,7 +19,6 @@ import timber.log.Timber
 
 class FavouritesViewModel @Inject constructor(
     private val useCase: FavouritesUseCase,
-    private val internetStatusChangeListener: InternetStatusChangeListener,
     private val permissionChecker: PermissionChecker,
     private val locationProvider: LocationProvider,
     private val preferenceStore: PreferenceStore,
@@ -30,8 +28,7 @@ class FavouritesViewModel @Inject constructor(
     override val initialState = State(
         isLoading = true,
         favourites = null,
-        favouritesWithLiveData = null,
-        internetStatusChange = null
+        favouritesWithLiveData = null
     )
 
     private val reducer: Reducer<State, NewState> = { state, newState ->
@@ -39,32 +36,22 @@ class FavouritesViewModel @Inject constructor(
             is NewState.Favourites -> State(
                 isLoading = false,
                 favourites = newState.favourites,
-                favouritesWithLiveData = state.favouritesWithLiveData,
-                internetStatusChange = null
+                favouritesWithLiveData = state.favouritesWithLiveData
             )
             is NewState.FavouritesWithLiveData -> State(
                 isLoading = false,
                 favourites = state.favourites,
-                favouritesWithLiveData = mergeLiveData(state.favouritesWithLiveData, newState.favouritesWithLiveData),
-                internetStatusChange = null
-            )
-            is NewState.InternetStatusChange -> State(
-                isLoading = false,
-                favourites = state.favourites,
-                favouritesWithLiveData = state.favouritesWithLiveData,
-                internetStatusChange = newState.internetStatusChange
+                favouritesWithLiveData = mergeLiveData(state.favouritesWithLiveData, newState.favouritesWithLiveData)
             )
             is NewState.ClearLiveData -> State(
                 isLoading = true,
                 favourites = state.favourites,
-                favouritesWithLiveData = null,
-                internetStatusChange = null
+                favouritesWithLiveData = null
             )
             is NewState.RefreshIfStale -> State(
                 isLoading = state.isLoading,
                 favourites = state.favourites,
-                favouritesWithLiveData = checkForStaleData(state.favouritesWithLiveData),
-                internetStatusChange = state.internetStatusChange
+                favouritesWithLiveData = checkForStaleData(state.favouritesWithLiveData)
             )
         }
     }
@@ -159,20 +146,11 @@ class FavouritesViewModel @Inject constructor(
                     .startWith(NewState.ClearLiveData)
             }
 
-        val getInternetStatusChangeAction = actions.ofType(Action.SubscribeToInternetStatusChanges::class.java)
-            .switchMap {
-                internetStatusChangeListener.eventStream()
-                    .subscribeOn(scheduler.io)
-                    .observeOn(scheduler.ui)
-                    .map<NewState> { NewState.InternetStatusChange(it) }
-            }
-
         val allActions = Observable.merge(
             listOf(
                 getFavouritesAction,
                 getLiveDataAction,
-                refreshLiveDataAction,
-                getInternetStatusChangeAction
+                refreshLiveDataAction
             )
         )
 
