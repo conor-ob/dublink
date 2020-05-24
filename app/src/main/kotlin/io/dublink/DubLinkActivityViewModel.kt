@@ -17,13 +17,13 @@ class DubLinkActivityViewModel @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val useCase: DubLinkProUseCase,
     private val scheduler: RxScheduler
-) : BaseViewModel<Action, State>() {
+) : BaseViewModel<DubLinkActivityAction, DubLinkActivityState>() {
 
-    override val initialState = State(internetStatusChange = null)
+    override val initialState = DubLinkActivityState(internetStatusChange = null)
 
-    private val reducer: Reducer<State, Change> = { state, change ->
+    private val reducer: Reducer<DubLinkActivityState, DubLinkActivityChange> = { state, change ->
         when (change) {
-            is Change.Ignored -> state
+            is DubLinkActivityChange.Ignored -> state
         }
     }
 
@@ -32,20 +32,20 @@ class DubLinkActivityViewModel @Inject constructor(
     }
 
     private fun bindActions() {
-        val queryPurchasesActions = actions.ofType(Action.QueryPurchases::class.java)
+        val queryPurchasesActions = actions.ofType(DubLinkActivityAction.QueryPurchases::class.java)
             .switchMapSingle {
                 useCase.getPurchases()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map<Change> { Change.Ignored }
+                    .map<DubLinkActivityChange> { DubLinkActivityChange.Ignored }
             }
 
-        val preloadDataChanges = actions.ofType(Action.PreloadData::class.java)
+        val preloadDataChanges = actions.ofType(DubLinkActivityAction.PreloadData::class.java)
             .switchMap {
                 serviceLocationRepository.get()
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
-                    .map { Change.Ignored }
+                    .map { DubLinkActivityChange.Ignored }
             }
 
         val allChanges = Observable.merge(
@@ -62,15 +62,15 @@ class DubLinkActivityViewModel @Inject constructor(
     }
 }
 
-sealed class Action : BaseAction {
-    object QueryPurchases : Action()
-    object PreloadData : Action()
+sealed class DubLinkActivityAction : BaseAction {
+    object QueryPurchases : DubLinkActivityAction()
+    object PreloadData : DubLinkActivityAction()
 }
 
-sealed class Change {
-    object Ignored : Change()
+sealed class DubLinkActivityChange {
+    object Ignored : DubLinkActivityChange()
 }
 
-data class State(
+data class DubLinkActivityState(
     val internetStatusChange: InternetStatus? = null
 ) : BaseState

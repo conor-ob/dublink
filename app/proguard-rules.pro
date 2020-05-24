@@ -52,3 +52,6 @@ public *;
 -keep class javax.script.** { *; }
 -keep class com.sun.script.javascript.** { *; }
 -keep class org.mozilla.javascript.* { *; }
+
+# Custom behaviour
+-keep class com.google.android.material.behavior.** { *; }
