@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
@@ -172,6 +173,20 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
         routeFilterBottomSheetLayoutListener = ViewTreeObserver.OnGlobalLayoutListener {
             bottomSheetBehavior.setPeekHeight(live_data_bottom_sheet_view_container.measuredHeight)
         }
+    }
+
+    override fun attachSnackBarToView(text: String, length: Int): Snackbar? {
+        return Snackbar.make(live_data_layout_root, text, length)
+    }
+
+    override fun onInternetRestored() {
+        super.onInternetRestored()
+        viewModel.dispatch(
+            Action.GetLiveData(
+                serviceLocationId = args.locationId,
+                serviceLocationService = args.service
+            )
+        )
     }
 
     private fun renderState(state: State) {

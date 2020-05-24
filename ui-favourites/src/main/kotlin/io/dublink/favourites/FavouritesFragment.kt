@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.DubLinkNavigator
-import io.dublink.domain.internet.InternetStatus
 import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
 import io.dublink.viewModelProvider
@@ -87,7 +87,6 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
         viewModel.onResume()
         viewModel.dispatch(Action.GetFavourites)
         viewModel.dispatch(Action.GetLiveData)
-        viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onPause() {
@@ -98,6 +97,16 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
     override fun onDestroyView() {
         super.onDestroyView()
         adapter = null
+    }
+
+    override fun attachSnackBarToView(text: String, length: Int): Snackbar? {
+        return Snackbar.make(favourites_layout_root, text, length)
+    }
+
+    override fun onInternetRestored() {
+        super.onInternetRestored()
+        viewModel.dispatch(Action.GetFavourites)
+        viewModel.dispatch(Action.GetLiveData)
     }
 
     private fun renderState(state: State) {
@@ -112,9 +121,5 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
             isVisible = !state.favourites.isNullOrEmpty()
         }
         adapter?.update(listOf(favouritesMapper.map(state.favourites, state.favouritesWithLiveData)))
-        if (state.internetStatusChange == InternetStatus.ONLINE) {
-            viewModel.dispatch(Action.GetFavourites)
-            viewModel.dispatch(Action.GetLiveData)
-        }
     }
 }

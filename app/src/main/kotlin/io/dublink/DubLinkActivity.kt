@@ -7,9 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerAppCompatActivity
-import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.iap.BillingConnectionManager
@@ -17,14 +15,12 @@ import io.dublink.iap.RxBilling
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.activity_root.activity_root
 
 class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 
     private val navigationController by lazy { findNavController(R.id.navHostFragment) }
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkActivityViewModel }
-    private var snackBar: Snackbar? = null
 
     @Inject lateinit var preferenceStore: PreferenceStore
     @Inject lateinit var rxBilling: RxBilling
@@ -54,9 +50,8 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
                 state?.let { renderState(state) }
             }
         )
-        viewModel.dispatch(Action.QueryPurchases)
+        viewModel.dispatch(Action.QueryPurchases) // TODO this should be called when internet status restored
         viewModel.dispatch(Action.PreloadData)
-        viewModel.dispatch(Action.SubscribeToInternetStatusChanges)
     }
 
     override fun onDestroy() {
@@ -147,34 +142,6 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     }
 
     private fun renderState(state: State) {
-        when (state.internetStatusChange) {
-            InternetStatus.ONLINE -> {
-                snackBar = Snackbar.make(activity_root, "Back online!", Snackbar.LENGTH_LONG)
-//                snackBar = Snackbar.make(activity_root, "Back online! \uD83D\uDE0C", Snackbar.LENGTH_LONG)
-//                if (navigation.visibility == View.VISIBLE) {
-//                    snackBar?.anchorView = navigation
-//                }
-                snackBar?.setActionTextColor(getColor(R.color.color_on_success))
-                snackBar?.setTextColor(getColor(R.color.color_on_success))
-                snackBar?.setBackgroundTint(getColor(R.color.color_success))
-                snackBar?.show()
-                viewModel.dispatch(Action.QueryPurchases)
-                viewModel.dispatch(Action.PreloadData)
-            }
-            InternetStatus.OFFLINE -> {
-                snackBar = Snackbar.make(activity_root, "Offline", Snackbar.LENGTH_INDEFINITE)
-//                snackBar = Snackbar.make(activity_root, "Offline \uD83D\uDE14", Snackbar.LENGTH_INDEFINITE)
-                snackBar?.setAction("Dismiss") {
-                    snackBar?.dismiss()
-                }
-//                if (navigation.visibility == View.VISIBLE) {
-//                    snackBar?.anchorView = navigation
-//                }
-                snackBar?.setActionTextColor(getColor(R.color.color_on_error))
-                snackBar?.setTextColor(getColor(R.color.color_on_error))
-                snackBar?.setBackgroundTint(getColor(R.color.color_error))
-                snackBar?.show()
-            }
-        }
+        // nothing to do
     }
 }

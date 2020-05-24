@@ -7,6 +7,7 @@ import dagger.MapKey
 import dagger.Module
 import dagger.multibindings.IntoMap
 import io.dublink.DubLinkActivityViewModel
+import io.dublink.DubLinkFragmentViewModel
 import io.dublink.favourites.FavouritesViewModel
 import io.dublink.favourites.edit.EditFavouritesViewModel
 import io.dublink.iap.dublinkpro.DubLinkProViewModel
@@ -29,6 +30,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DubLinkActivityViewModel::class)
     internal abstract fun bindDubLinkActivityViewModel(dubLinkActivityViewModel: DubLinkActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DubLinkFragmentViewModel::class)
+    internal abstract fun bindDubLinkFragmentViewModel(dubLinkFragmentViewModel: DubLinkFragmentViewModel): ViewModel
 
     @Binds
     @IntoMap
