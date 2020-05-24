@@ -6,9 +6,9 @@ import io.dublink.domain.internet.InternetStatusChangeListener
 import io.dublink.domain.service.RxScheduler
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import java.time.Instant
 import javax.inject.Inject
 import timber.log.Timber
-import java.time.Instant
 
 class DubLinkFragmentViewModel @Inject constructor(
     private val internetStatusChangeListener: InternetStatusChangeListener,
