@@ -1,11 +1,10 @@
-package com.google.android.material;
+package com.google.android.material.behavior;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
 import com.google.android.material.snackbar.Snackbar.SnackbarLayout;
 
 class HideBottomViewOnScrollSnackBarAwareBehavior<V extends View> extends HideBottomViewOnScrollBehavior<V> {
