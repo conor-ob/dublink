@@ -121,10 +121,10 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun appConfig(): AppConfig = object :
-        AppConfig {
+    fun appConfig(): AppConfig = object : AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
         override fun appVersion() = BuildConfig.VERSION_NAME
+        override fun publicKey() = BuildConfig.PUBLIC_KEY
     }
 
     @Provides

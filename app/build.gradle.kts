@@ -34,6 +34,7 @@ android {
         versionName = BuildConfig.Version.name
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "JCDECAUX_API_KEY", "\"${properties.getProperty("jcDecauxApiKey")}\"")
+        buildConfigField("String", "PUBLIC_KEY", "\"${properties.getProperty("publicKey")}\"")
     }
 
     signingConfigs {
