@@ -25,7 +25,7 @@ class InAppPurchaseVerifier @Inject constructor(
         val signedData = purchase.originalJson
         val signature = purchase.signature
         if (encodedPublicKey.isEmpty() || signedData.isEmpty() || signature.isEmpty()) {
-        Timber.w("Purchase verification failed: missing data.")
+        Timber.w("Purchase verification failed: missing data")
             return false
         }
         val publicKey = generatePublicKey()
@@ -52,7 +52,7 @@ class InAppPurchaseVerifier @Inject constructor(
         try {
             signatureBytes = Base64.decode(signature, Base64.DEFAULT)
         } catch (e: IllegalArgumentException) {
-            Timber.w("Base64 decoding failed.")
+            Timber.w("Base64 decoding failed")
             return false
         }
         try {
@@ -60,7 +60,7 @@ class InAppPurchaseVerifier @Inject constructor(
             signatureAlgorithm.initVerify(publicKey)
             signatureAlgorithm.update(signedData.toByteArray())
             if (!signatureAlgorithm.verify(signatureBytes)) {
-                Timber.w("Signature verification failed...")
+                Timber.w("Signature verification failed")
                 return false
             }
             return true
@@ -68,9 +68,9 @@ class InAppPurchaseVerifier @Inject constructor(
             // "RSA" is guaranteed to be available.
             throw RuntimeException(e)
         } catch (e: InvalidKeyException) {
-            Timber.w("Invalid key specification.")
+            Timber.w("Invalid key specification")
         } catch (e: SignatureException) {
-            Timber.w("Signature exception.")
+            Timber.w("Signature exception")
         }
         return false
     }
