@@ -33,8 +33,11 @@ android {
         versionCode = BuildConfig.Version.code
         versionName = BuildConfig.Version.name
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "JCDECAUX_API_KEY", "\"${properties.getProperty("jcDecauxApiKey")}\"")
-        buildConfigField("String", "PUBLIC_KEY", "\"${properties.getProperty("publicKey")}\"")
+        buildConfigField("String", "YWZBCDLN", "\"${properties.getProperty("YWZBCDLN")}\"")
+        buildConfigField("String", "NZAYAPNK", "\"${properties.getProperty("NZAYAPNK")}\"")
+        buildConfigField("String", "RNXDCRHY", "\"${properties.getProperty("RNXDCRHY")}\"")
+        buildConfigField("String", "XVTOHYIW", "\"${properties.getProperty("XVTOHYIW")}\"")
+        buildConfigField("String", "KQVBLPMG", "\"${properties.getProperty("KQVBLPMG")}\"")
     }
 
     signingConfigs {

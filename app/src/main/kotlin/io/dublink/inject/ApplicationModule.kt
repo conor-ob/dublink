@@ -17,6 +17,7 @@ import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.service.StringProvider
+import io.dublink.domain.util.XorEncryption
 import io.dublink.iap.InAppPurchaseModule
 import io.dublink.internet.DeviceInternetManager
 import io.dublink.internet.NetworkStatusChangeListener
@@ -101,9 +102,9 @@ class ApplicationModule {
     fun rtpiClient(
         okHttpClient: OkHttpClient
     ): RtpiClient = RtpiClient(
-        RtpiClientConfiguration(
-            okHttpClient,
-            BuildConfig.JCDECAUX_API_KEY
+        rtpiClientConfiguration = RtpiClientConfiguration(
+            okHttpClient = okHttpClient,
+            dublinBikesApiKey = XorEncryption.decode(BuildConfig.NZAYAPNK, BuildConfig.XVTOHYIW) + XorEncryption.decode(BuildConfig.YWZBCDLN, BuildConfig.XVTOHYIW)
         )
     )
 
@@ -124,7 +125,7 @@ class ApplicationModule {
     fun appConfig(): AppConfig = object : AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
         override fun appVersion() = BuildConfig.VERSION_NAME
-        override fun publicKey() = BuildConfig.PUBLIC_KEY
+        override fun publicKey() = XorEncryption.decode(BuildConfig.KQVBLPMG, BuildConfig.XVTOHYIW) + XorEncryption.decode(BuildConfig.RNXDCRHY, BuildConfig.XVTOHYIW)
     }
 
     @Provides

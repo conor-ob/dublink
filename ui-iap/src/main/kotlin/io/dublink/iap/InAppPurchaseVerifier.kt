@@ -2,7 +2,6 @@ package io.dublink.iap
 
 import android.util.Base64
 import com.android.billingclient.api.Purchase
-import timber.log.Timber
 import java.io.IOException
 import java.security.InvalidKeyException
 import java.security.KeyFactory
@@ -13,6 +12,7 @@ import java.security.SignatureException
 import java.security.spec.InvalidKeySpecException
 import java.security.spec.X509EncodedKeySpec
 import javax.inject.Inject
+import timber.log.Timber
 
 private const val keyFactoryAlgorithm = "RSA"
 private const val signatureAlgorithm = "SHA1withRSA"
