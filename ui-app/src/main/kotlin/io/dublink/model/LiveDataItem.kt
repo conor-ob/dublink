@@ -12,7 +12,6 @@ import io.dublink.domain.model.minutesDelayed
 import io.dublink.domain.model.minutesLate
 import io.dublink.ui.R
 import io.dublink.util.ChipFactory
-import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -21,10 +20,6 @@ import kotlinx.android.synthetic.main.list_item_live_data.route
 import kotlinx.android.synthetic.main.list_item_live_data.scheduledTime
 import kotlinx.android.synthetic.main.list_item_live_data.status
 import kotlinx.android.synthetic.main.list_item_live_data.waitTimeMinutes
-import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.bikes
-import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.bikesCount
-import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.docks
-import kotlinx.android.synthetic.main.list_item_live_data_dublin_bikes.docksCount
 import kotlinx.android.synthetic.main.list_item_live_data_grouped.groupedDestination
 import kotlinx.android.synthetic.main.list_item_live_data_grouped.groupedRoute
 import kotlinx.android.synthetic.main.list_item_live_data_grouped.groupedWaitTimeMinutes
@@ -335,49 +330,6 @@ class GroupedLiveDataItem(
                 }
             }
             return true
-        }
-        return false
-    }
-
-    override fun hashCode(): Int {
-        return liveData.hashCode()
-    }
-}
-
-class DublinBikesLiveDataItem(
-    private val liveData: DockLiveData
-) : Item() {
-
-    override fun getLayout() = R.layout.list_item_live_data_dublin_bikes
-
-    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        val (bikesBackgroundColour, bikesTextColour) = mapColour(liveData.availableBikes)
-        viewHolder.bikesCount.text = if (liveData.availableBikes == 0) " No " else " ${liveData.availableBikes} "
-        viewHolder.bikes.text = if (liveData.availableBikes == 1) "Bike" else "Bikes" // TODO plurals
-        viewHolder.bikesCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(bikesTextColour, null)))
-        viewHolder.bikesCount.setChipBackgroundColorResource(bikesBackgroundColour)
-
-        val (docksBackgroundColour, docksTextColour) = mapColour(liveData.availableDocks)
-        viewHolder.docksCount.text = if (liveData.availableDocks == 0) " No " else " ${liveData.availableDocks} "
-        viewHolder.docks.text = if (liveData.availableDocks == 1) "Dock" else "Docks" // TODO plurals
-        viewHolder.docksCount.setTextColor(ColorStateList.valueOf(viewHolder.itemView.resources.getColor(docksTextColour, null)))
-        viewHolder.docksCount.setChipBackgroundColorResource(docksBackgroundColour)
-    }
-
-    private fun mapColour(amount: Int): Pair<Int, Int> =
-        if (amount == 0) {
-            R.color.error_red to R.color.dublin_bikes_brand_text
-        } else {
-            R.color.dublin_bikes_brand to R.color.dublin_bikes_brand_text
-        }
-
-    override fun isSameAs(other: com.xwray.groupie.Item<*>): Boolean {
-        return equals(other)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (other is DublinBikesLiveDataItem) {
-            return liveData == other.liveData
         }
         return false
     }

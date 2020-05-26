@@ -4,7 +4,7 @@ import com.xwray.groupie.Section
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.service.StringProvider
 import io.dublink.domain.util.LiveDataFilter
-import io.dublink.model.DublinBikesLiveDataItem
+import io.dublink.model.DockLiveDataItem
 import io.dublink.model.LiveDataItem
 import io.rtpi.api.DockLiveData
 import io.rtpi.api.PredictionLiveData
@@ -24,7 +24,7 @@ class LiveDataMapper @Inject constructor(
                 val items = LiveDataFilter.filterLiveData(serviceLocation, response.liveData).mapNotNull {
                     when (it) {
                         is PredictionLiveData -> LiveDataItem(it)
-                        is DockLiveData -> DublinBikesLiveDataItem(it)
+                        is DockLiveData -> DockLiveDataItem(it)
                         else -> null
                     }
                 }
