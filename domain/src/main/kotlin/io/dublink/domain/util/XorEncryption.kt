@@ -5,7 +5,19 @@ import kotlin.experimental.xor
 
 object XorEncryption {
 
-    fun decode(s: String, key: String): String {
+    fun decode(vararg s: String): String {
+        val stringBuilder = StringBuilder()
+        for (part in s) {
+            stringBuilder.append(decode(part))
+        }
+        return stringBuilder.toString()
+    }
+
+    private fun decode(s: String): String {
+        return decode(s, XorEncryption::class.java.simpleName)
+    }
+
+    private fun decode(s: String, key: String): String {
         return String(xorWithKey(base64Decode(s), key.toByteArray()))
     }
 
