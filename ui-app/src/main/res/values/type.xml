@@ -36,16 +36,16 @@
     </style>
 
     <style name="TextAppearance.DubLink.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="fontFamily">@font/barlow_light</item>
-        <item name="android:fontFamily">@font/barlow_light</item>
+        <item name="fontFamily">@font/barlow_regular</item>
+        <item name="android:fontFamily">@font/barlow_regular</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
 <!--        <item name="android:textSize">101.03sp</item>-->
         <item name="android:letterSpacing">-0.15</item>
     </style>
 
     <style name="TextAppearance.DubLink.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
-        <item name="fontFamily">@font/barlow_light</item>
-        <item name="android:fontFamily">@font/barlow_light</item>
+        <item name="fontFamily">@font/barlow_regular</item>
+        <item name="android:fontFamily">@font/barlow_regular</item>
         <item name="android:textColor">@color/color_on_surface_emphasis_high</item>
 <!--        <item name="android:textSize">63.15sp</item>-->
         <item name="android:letterSpacing">-0.005</item>
