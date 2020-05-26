@@ -5,7 +5,7 @@ import java.time.Instant
 
 interface ServiceLocationRecordStateLocalResource {
 
-    fun selectRecordState(service: Service): Instant
+    fun selectRecordState(service: Service): Instant?
 
     fun insertRecordState(service: Service, lastUpdated: Instant)
 }
