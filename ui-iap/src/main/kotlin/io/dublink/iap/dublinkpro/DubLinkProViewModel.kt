@@ -48,16 +48,10 @@ class DubLinkProViewModel @Inject constructor(
                     )
                 }
             }
-            is NewState.Purchases -> if (newState.purchases.isNullOrEmpty()) {
+            is NewState.Purchases -> {
+                val dubLinkProPurchase = newState.purchases.find { DubLinkSku.DUBLINK_PRO.productId == it.sku }
                 State(
-                    canPurchaseDubLinkPro = true,
-                    dubLinkProPrice = state.dubLinkProPrice,
-                    dubLinkProPurchased = null,
-                    message = null
-                )
-            } else {
-                State(
-                    canPurchaseDubLinkPro = false,
+                    canPurchaseDubLinkPro = dubLinkProPurchase == null,
                     dubLinkProPrice = state.dubLinkProPrice,
                     dubLinkProPurchased = null,
                     message = null

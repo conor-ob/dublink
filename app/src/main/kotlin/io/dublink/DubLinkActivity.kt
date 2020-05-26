@@ -50,8 +50,12 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
                 state?.let { renderState(state) }
             }
         )
-        viewModel.dispatch(DubLinkActivityAction.QueryPurchases) // TODO this should be called when internet status restored
         viewModel.dispatch(DubLinkActivityAction.PreloadData)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.dispatch(DubLinkActivityAction.QueryPurchases) // TODO this should be called when internet status restored
     }
 
     override fun onDestroy() {

@@ -10,6 +10,7 @@ import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
 import io.dublink.domain.service.DubLinkProService
 import io.dublink.iap.DubLinkSku
+import io.dublink.iap.InAppPurchaseVerifier
 import io.dublink.iap.PurchasesUpdate
 import io.dublink.iap.RxBilling
 import io.reactivex.Completable
@@ -20,6 +21,7 @@ import timber.log.Timber
 
 class DubLinkProUseCase @Inject constructor(
     private val rxBilling: RxBilling,
+    private val inAppPurchaseVerifier: InAppPurchaseVerifier,
     private val dubLinkProService: DubLinkProService
 ) {
 
@@ -141,6 +143,7 @@ class DubLinkProUseCase @Inject constructor(
     }
 
     private fun isSignatureValid(purchase: Purchase): Boolean {
+//        return inAppPurchaseVerifier.verifyPurchase(purchase) // TODO add back when ready for prod
         return true
     }
 }
