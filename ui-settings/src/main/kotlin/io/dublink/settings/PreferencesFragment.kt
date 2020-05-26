@@ -13,7 +13,6 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
-import com.nodesagency.logviewer.LogViewerActivity
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
@@ -173,16 +172,6 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
 //                return@setOnPreferenceClickListener true
 //            }
 //        }
-        if (appConfig.isDebug()) {
-            findPreference<Preference>(getString(R.string.preference_key_app_version))?.apply {
-                setOnPreferenceClickListener {
-                    LogViewerActivity
-                        .createIntent(requireContext().applicationContext)
-                        .let { startActivity(it) }
-                    return@setOnPreferenceClickListener true
-                }
-            }
-        }
         val privacyPolicyPreference = findPreference<Preference>(getString(R.string.preference_key_privacy_policy))
         privacyPolicyPreference?.setOnPreferenceClickListener {
             (activity as DubLinkNavigator).navigateToWebView(

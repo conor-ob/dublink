@@ -34,7 +34,6 @@ dependencies {
     implementation(project(":ui-iap"))
 
     implementation(Libraries.AndroidX.preferenceKtx)
-    implementation(Libraries.Nodes.logViewer)
 
     testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.Mockk.mockk)

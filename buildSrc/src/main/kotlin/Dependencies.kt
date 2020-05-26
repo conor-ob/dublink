@@ -100,10 +100,6 @@ object Libraries {
         const val reactiveLocation = "pl.charmas.android:android-reactive-location2:2.1@aar" // https://mvnrepository.com/artifact/pl.charmas.android/android-reactive-location2
     }
 
-    object Nodes {
-        const val logViewer = "com.github.nodes-android:lib-log-viewer:develop-SNAPSHOT"
-    }
-
     object OkHttp {
         const val okhttp = "com.squareup.okhttp3:okhttp:3.12.1" // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
         const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:3.12.1" //
