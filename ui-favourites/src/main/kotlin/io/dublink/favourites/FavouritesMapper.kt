@@ -10,7 +10,7 @@ import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.StringProvider
 import io.dublink.domain.util.AppConstants
 import io.dublink.model.DividerItem
-import io.dublink.model.DublinBikesLiveDataItem
+import io.dublink.model.DockLiveDataItem
 import io.dublink.model.GroupedLiveDataItem
 import io.dublink.model.SimpleMessageItem
 import io.dublink.model.SimpleServiceLocationItem
@@ -106,7 +106,7 @@ class FavouritesMapper @Inject constructor(
                 )
             } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DockLiveData) {
                 Section(
-                    DublinBikesLiveDataItem(
+                    DockLiveDataItem(
                         liveData.first().first() as DockLiveData
                     )
                 )

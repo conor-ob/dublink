@@ -107,7 +107,6 @@ dependencies {
     implementation(Libraries.Firebase.analytics)
     implementation(Libraries.Firebase.crashlytics)
     implementation(Libraries.Location.reactiveLocation)
-    implementation(Libraries.Nodes.logViewer)
     implementation(Libraries.OkHttp.okhttp)
     implementation(Libraries.OkHttp.loggingInterceptor)
     implementation(Libraries.Rtpi.rtpiClient)

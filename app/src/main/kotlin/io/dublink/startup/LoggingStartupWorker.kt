@@ -1,10 +1,8 @@
 package io.dublink.startup
 
 import android.app.Application
-import com.nodesagency.logviewer.Logger
 import com.ww.roxie.Roxie
 import io.dublink.BuildConfig
-import io.dublink.logging.DebugLogger
 import io.dublink.logging.FirebaseCrashlyticsTree
 import javax.inject.Inject
 import timber.log.Timber
@@ -13,7 +11,6 @@ class LoggingStartupWorker @Inject constructor() : StartupWorker {
 
     override fun startup(application: Application) {
         if (BuildConfig.DEBUG) {
-            Logger.initialize(application)
             Roxie.enableLogging(
                 object : Roxie.Logger {
                     override fun log(msg: String) {
@@ -21,7 +18,7 @@ class LoggingStartupWorker @Inject constructor() : StartupWorker {
                     }
                 }
             )
-            Timber.plant(DebugLogger)
+            Timber.plant(Timber.DebugTree())
         } else {
             Timber.plant(FirebaseCrashlyticsTree)
         }

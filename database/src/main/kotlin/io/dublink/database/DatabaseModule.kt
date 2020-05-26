@@ -21,7 +21,7 @@ class DatabaseModule {
             driver = AndroidSqliteDriver(
                 schema = Database.Schema,
                 context = context,
-                name = context.getString(R.string.database_name) // TODO change name
+                name = context.getString(R.string.database_name)
             ),
             aircoachServiceEntityAdapter = AircoachServiceEntity.Adapter(
                 operatorAdapter = EnumColumnAdapter()

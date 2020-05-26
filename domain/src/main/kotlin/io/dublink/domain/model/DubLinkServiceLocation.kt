@@ -29,7 +29,7 @@ abstract class AbstractDubLinkServiceLocation(
 }
 
 data class DubLinkStopLocation(
-    val stopLocation: StopLocation, // TODO make private
+    val stopLocation: StopLocation,
     val favouriteMetadata: FavouriteMetadata? = null
 ) : AbstractDubLinkServiceLocation(stopLocation, favouriteMetadata) {
 
