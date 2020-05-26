@@ -5,23 +5,13 @@ import kotlin.experimental.xor
 
 object XorEncryption {
 
-    fun decode(vararg s: String): String {
-        val stringBuilder = StringBuilder()
-        for (part in s) {
-            stringBuilder.append(decode(part))
-        }
-        return stringBuilder.toString()
-    }
+    val key = listOf('b','Q','x','p','N','n','x','E','A','F','z','J','p','s','B','y')
+        .map { char -> char.toByte() }
+        .toByteArray()
 
-    private fun decode(s: String): String {
-        return decode(s, XorEncryption::class.java.simpleName)
-    }
+    fun decode(s: String): String = String(xorWithKey(base64Decode(s)))
 
-    private fun decode(s: String, key: String): String {
-        return String(xorWithKey(base64Decode(s), key.toByteArray()))
-    }
-
-    private fun xorWithKey(a: ByteArray, key: ByteArray): ByteArray {
+    private fun xorWithKey(a: ByteArray): ByteArray {
         val out = ByteArray(a.size)
         for (i in a.indices) {
             out[i] = (a[i] xor key[i % key.size])
@@ -29,7 +19,5 @@ object XorEncryption {
         return out
     }
 
-    private fun base64Decode(s: String): ByteArray {
-        return Base64.getDecoder().decode(s)
-    }
+    private fun base64Decode(s: String): ByteArray = Base64.getDecoder().decode(s)
 }

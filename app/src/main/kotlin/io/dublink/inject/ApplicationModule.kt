@@ -104,11 +104,7 @@ class ApplicationModule {
     ): RtpiClient = RtpiClient(
         rtpiClientConfiguration = RtpiClientConfiguration(
             okHttpClient = okHttpClient,
-            dublinBikesApiKey = XorEncryption.decode(
-                BuildConfig.NZAYAPNK,
-                BuildConfig.YWZBCDLN,
-                BuildConfig.JACEVITB
-            )
+            dublinBikesApiKey = XorEncryption.decode(BuildConfig.NZAYAPNK)
         )
     )
 
@@ -129,13 +125,7 @@ class ApplicationModule {
     fun appConfig(): AppConfig = object : AppConfig {
         override fun isDebug() = BuildConfig.DEBUG
         override fun appVersion() = BuildConfig.VERSION_NAME
-        override fun publicKey() = XorEncryption.decode(
-            BuildConfig.KQVBLPMG,
-            BuildConfig.RNXDCRHY,
-            BuildConfig.GHTBLXHP,
-            BuildConfig.ZNWBKIWG,
-            BuildConfig.CIJNICRX
-        )
+        override fun publicKey() = XorEncryption.decode(BuildConfig.KQVBLPMG)
     }
 
     @Provides
