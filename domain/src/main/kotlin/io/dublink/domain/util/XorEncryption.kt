@@ -5,7 +5,7 @@ import kotlin.experimental.xor
 
 object XorEncryption {
 
-    val key = listOf('b','Q','x','p','N','n','x','E','A','F','z','J','p','s','B','y')
+    val key = listOf('b', 'Q', 'x', 'p', 'N', 'n', 'x', 'E', 'A', 'F', 'z', 'J', 'p', 's', 'B', 'y')
         .map { char -> char.toByte() }
         .toByteArray()
 
