@@ -10,13 +10,14 @@ android {
     defaultConfig {
         minSdkVersion(AndroidSdk.min)
         targetSdkVersion(AndroidSdk.target)
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     sourceSets.getByName("main") {
         java.srcDir("src/main/kotlin")
     }
     sourceSets.getByName("test") {
-        java.srcDirs("src/test/kotlin", project(":ui-app").file("src/test/kotlin"))
+        java.srcDirs("src/test/kotlin")
     }
 
     androidExtensions {
@@ -31,6 +32,7 @@ dependencies {
     implementation(Libraries.FuzzyWuzzy.javaWuzzy)
     implementation(Libraries.Rx.rxAndroid)
 
+    testImplementation(project(":test-ui"))
     testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)

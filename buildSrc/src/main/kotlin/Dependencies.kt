@@ -59,6 +59,7 @@ object Libraries {
         const val navigationFragmentKtx = "androidx.navigation:navigation-fragment-ktx:2.2.1" // https://mvnrepository.com/artifact/androidx.navigation/navigation-fragment-ktx
         const val navigationUiKtx = "androidx.navigation:navigation-ui-ktx:2.2.1" // https://mvnrepository.com/artifact/androidx.navigation/navigation-ui-ktx
         const val preferenceKtx = "androidx.preference:preference-ktx:1.1.0" // https://mvnrepository.com/artifact/androidx.preference/preference-ktx
+        const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0" // https://mvnrepository.com/artifact/androidx.recyclerview/recyclerview
         const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0" // https://mvnrepository.com/artifact/androidx.swiperefreshlayout/swiperefreshlayout
     }
 

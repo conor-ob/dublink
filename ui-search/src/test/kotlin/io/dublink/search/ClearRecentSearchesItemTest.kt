@@ -1,7 +1,8 @@
 package io.dublink.search
 
-import io.dublink.model.AbstractCommonItemTest
+import io.dublink.test.AbstractCommonItemTest
 import io.mockk.mockk
+import org.junit.Test
 
 class ClearRecentSearchesItemTest : AbstractCommonItemTest<ClearRecentSearchesItem>() {
 
@@ -16,4 +17,7 @@ class ClearRecentSearchesItemTest : AbstractCommonItemTest<ClearRecentSearchesIt
             id = 2L,
             clickListener = mockk()
         )
+
+    @Test
+    override fun ignored() { }
 }

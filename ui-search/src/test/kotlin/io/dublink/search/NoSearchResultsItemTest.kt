@@ -1,6 +1,7 @@
 package io.dublink.search
 
-import io.dublink.model.AbstractUniqueItemTest
+import io.dublink.test.AbstractUniqueItemTest
+import org.junit.Test
 
 class NoSearchResultsItemTest : AbstractUniqueItemTest<NoSearchResultsItem>() {
 
@@ -21,4 +22,7 @@ class NoSearchResultsItemTest : AbstractUniqueItemTest<NoSearchResultsItem>() {
             id = 1L,
             query = "query1"
         )
+
+    @Test
+    override fun ignored() { }
 }

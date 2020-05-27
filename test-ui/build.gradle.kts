@@ -13,15 +13,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
     sourceSets.getByName("main") {
         java.srcDir("src/main/kotlin")
-    }
-    sourceSets.getByName("test") {
-        java.srcDir("src/test/kotlin")
     }
 
     androidExtensions {
@@ -30,13 +23,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":ui-app"))
-    implementation(project(":ui-iap"))
+    implementation(Libraries.Kotlin.stdLib)
 
-    implementation(Libraries.AndroidX.preferenceKtx)
+    implementation(Libraries.Groupie.groupie)
+    implementation(Libraries.Groupie.groupieKtx)
+    implementation(Libraries.AndroidX.lifecycleLiveData)
+    implementation(Libraries.AndroidX.recyclerView)
 
-    testImplementation(TestLibraries.Junit.junit)
-    testImplementation(TestLibraries.Mockk.mockk)
-    testImplementation(TestLibraries.Truth.truth)
+    implementation(TestLibraries.Junit.junit)
+    implementation(TestLibraries.Truth.truth)
 }

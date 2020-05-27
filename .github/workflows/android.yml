@@ -41,5 +41,35 @@ jobs:
     - name: Android Lint
       run: ./gradlew lintDebug
 
-    - name: Unit Test
-      run: ./gradlew testDebugUnitTest
+    - name: app unit test
+      run: ./gradlew :app:testDebugUnitTest
+
+    - name: database unit test
+      run: ./gradlew :database:testDebugUnitTest
+
+    - name: domain unit test
+      run: ./gradlew :domain:test
+
+    - name: repository unit test
+      run: ./gradlew :repository:test
+
+    - name: ui-app unit test
+      run: ./gradlew :ui-app:testDebugUnitTest
+
+    - name: ui-favourites unit test
+      run: ./gradlew :ui-favourites:testDebugUnitTest
+
+    - name: ui-iap unit test
+      run: ./gradlew :ui-iap:testDebugUnitTest
+
+    - name: ui-livedata unit test
+      run: ./gradlew :ui-livedata:testDebugUnitTest
+
+    - name: ui-search unit test
+      run: ./gradlew :ui-search:testDebugUnitTest
+
+    - name: ui-settings unit test
+      run: ./gradlew :ui-settings:testDebugUnitTest
+
+    - name: ui-web unit test
+      run: ./gradlew :ui-web:testDebugUnitTest

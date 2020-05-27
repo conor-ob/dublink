@@ -1,9 +1,11 @@
 package io.dublink.model
 
 import io.dublink.domain.model.DubLinkStopLocation
+import io.dublink.test.AbstractUniqueItemTest
 import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 import io.rtpi.api.StopLocation
+import org.junit.Test
 
 class StopLocationItemTest : AbstractUniqueItemTest<StopLocationItem>() {
 
@@ -48,4 +50,7 @@ class StopLocationItemTest : AbstractUniqueItemTest<StopLocationItem>() {
             ),
             walkDistance = 386.12
         )
+
+    @Test
+    override fun ignored() { }
 }

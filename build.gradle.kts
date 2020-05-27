@@ -27,7 +27,7 @@ allprojects {
                 username = properties.getOrDefault(
                     "usr",
                     if (project.rootProject.file("github.properties").exists()) {
-                        loadProperties("github.properties").getProperty("authToken")
+                        loadProperties("github.properties").getProperty("usr")
                     } else {
                         null
                     }
@@ -35,7 +35,7 @@ allprojects {
                 password = properties.getOrDefault(
                     "key",
                     if (project.rootProject.file("github.properties").exists()) {
-                        loadProperties("github.properties").getProperty("authToken")
+                        loadProperties("github.properties").getProperty("key")
                     } else {
                         null
                     }
