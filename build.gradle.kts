@@ -45,6 +45,7 @@ allprojects {
     }
     apply(from = "$rootDir/ktlint.gradle.kts")
     apply(from = "$rootDir/test.gradle")
+    apply(from = "$rootDir/jacoco.gradle")
 }
 
 tasks.register("clean").configure {
