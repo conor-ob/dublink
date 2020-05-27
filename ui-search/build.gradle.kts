@@ -4,6 +4,8 @@ plugins {
     id(BuildPlugins.kotlinAndroidExtensions)
 }
 
+apply(from = "$rootDir/jacoco.gradle")
+
 android {
     compileSdkVersion(AndroidSdk.compile)
 

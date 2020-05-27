@@ -9,12 +9,13 @@ buildscript {
         classpath "com.squareup.sqldelight:gradle-plugin:1.2.2"
         classpath "com.google.gms:google-services:4.3.3"
         classpath "com.google.firebase:firebase-crashlytics-gradle:2.1.0"
+        classpath "org.jacoco:org.jacoco.core:0.7.9"
     }
 }
 
 allprojects {
     apply plugin: 'maven'
-    apply plugin: 'jacoco'
+//    apply plugin: 'jacoco'
 
 //    sourceCompatibility = 1.8
 //    targetCompatibility = 1.8
@@ -34,21 +35,21 @@ allprojects {
 //    delete rootProject.buildDir
 //}
 
-task codeCoverageReport(type: JacocoReport) {
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    subprojects.each {
-//        sourceSets it.sourceSets.main
-    }
-
-    reports {
-        html.enabled true
-        html.destination file("${buildDir}/reports/jacoco/test/html/index.html")
-        xml.enabled false
-        csv.enabled false
-    }
-}
-
-codeCoverageReport.dependsOn {
-    subprojects*.test
-}
+//task codeCoverageReport(type: JacocoReport) {
+//    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+//
+//    subprojects.each {
+////        sourceSets it.sourceSets.main
+//    }
+//
+//    reports {
+//        html.enabled true
+//        html.destination file("${buildDir}/reports/jacoco/test/html/index.html")
+//        xml.enabled false
+//        csv.enabled false
+//    }
+//}
+//
+//codeCoverageReport.dependsOn {
+//    subprojects*.test
+//}
