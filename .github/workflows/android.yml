@@ -35,10 +35,8 @@ jobs:
 #        restore-keys: |
 #          ${{ runner.os }}-gradle-
 
-    - name: Build Android project
-      uses: vgaidarji/android-github-actions-build@v1.0.1
-      with:
-        args: ./gradlew assembleDebug
+    - name: Build
+      run: ./gradlew assembleDebug
 
     - name: Kotlin Lint
       run: ./gradlew ktlint
