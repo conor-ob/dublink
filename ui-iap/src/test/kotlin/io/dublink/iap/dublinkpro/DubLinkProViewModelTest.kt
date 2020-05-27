@@ -1,10 +1,10 @@
 package io.dublink.iap.dublinkpro
 
-import com.google.common.truth.Truth.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
+import com.google.common.truth.Truth.assertThat
 import io.dublink.domain.service.RxScheduler
 import io.dublink.iap.DubLinkSku
 import io.dublink.iap.InAppPurchaseVerifier
