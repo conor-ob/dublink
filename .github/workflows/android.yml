@@ -35,11 +35,11 @@ jobs:
 #        restore-keys: |
 #          ${{ runner.os }}-gradle-
 
-    - name: Kotlin Lint
-      run: ./gradlew ktlint
+#    - name: Kotlin Lint
+#      run: ./gradlew ktlint
 
-    - name: Android Lint
-      run: ./gradlew lintDebug
+#    - name: Android Lint
+#      run: ./gradlew lintDebug
 
     - name: app unit test
       run: ./gradlew :app:testDebugUnitTest
