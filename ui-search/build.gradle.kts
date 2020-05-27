@@ -6,6 +6,9 @@ plugins {
 
 apply(from = "$rootDir/jacoco.gradle")
 
+// ./gradlew :ui-search:testDebugUnitTestCoverage
+// bash <(curl -s https://codecov.io/bash) -t <token> -f ui-search/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml
+
 android {
     compileSdkVersion(AndroidSdk.compile)
 
