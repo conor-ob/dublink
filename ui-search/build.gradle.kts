@@ -4,10 +4,7 @@ plugins {
     id(BuildPlugins.kotlinAndroidExtensions)
 }
 
-apply(from = "$rootDir/jacoco.gradle")
-
-// ./gradlew :ui-search:testDebugUnitTestCoverage
-// bash <(curl -s https://codecov.io/bash) -t <token> -f ui-search/build/reports/jacoco/testDebugUnitTestCoverage/testDebugUnitTestCoverage.xml
+apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
 
 android {
     compileSdkVersion(AndroidSdk.compile)

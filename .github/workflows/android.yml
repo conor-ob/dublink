@@ -44,35 +44,8 @@ jobs:
     - name: Lint Android
       run: ./gradlew lintDebug
 
-    - name: Test :app
-      run: ./gradlew :app:testDebugUnitTest
+    - name: Test and coverage report
+      run: ./gradlew testCoverage
 
-    - name: Test :database
-      run: ./gradlew :database:testDebugUnitTest
-
-    - name: Test :domain
-      run: ./gradlew :domain:test
-
-    - name: Test :repository
-      run: ./gradlew :repository:test
-
-    - name: Test :ui-app
-      run: ./gradlew :ui-app:testDebugUnitTest
-
-    - name: Test :ui-favourites
-      run: ./gradlew :ui-favourites:testDebugUnitTest
-
-    - name: Test :ui-iap
-      run: ./gradlew :ui-iap:testDebugUnitTest
-
-    - name: Test :ui-livedata
-      run: ./gradlew :ui-livedata:testDebugUnitTest
-
-    - name: Test :ui-search
-      run: ./gradlew :ui-search:testDebugUnitTest
-
-    - name: Test :ui-settings
-      run: ./gradlew :ui-settings:testDebugUnitTest
-
-    - name: Test :ui-web
-      run: ./gradlew :ui-web:testDebugUnitTest
+    - name: Upload coverage report
+      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.ORG_GRADLE_PROJECT_codecovToken }}e -f "*-report.xml"

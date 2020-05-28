@@ -3,6 +3,8 @@ plugins {
     id(BuildPlugins.kotlinAndroid)
 }
 
+apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
+
 android {
     compileSdkVersion(AndroidSdk.compile)
 

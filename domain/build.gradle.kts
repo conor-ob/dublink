@@ -2,6 +2,8 @@ plugins {
     id(BuildPlugins.kotlin)
 }
 
+apply(from = "$rootDir/quality/coverage/kotlinJacoco.gradle")
+
 dependencies {
     implementation(Libraries.Dagger.dagger)
     implementation(Libraries.Kotlin.stdLib)

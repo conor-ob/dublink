@@ -5,7 +5,7 @@ plugins {
     id(BuildPlugins.kotlinKapt)
 }
 
-apply(from = "$rootDir/jacoco.gradle")
+apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
 
 android {
     compileSdkVersion(AndroidSdk.compile)

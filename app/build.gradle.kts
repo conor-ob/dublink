@@ -14,6 +14,8 @@ plugins {
     id(BuildPlugins.firebaseCrashlytics)
 }
 
+apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
+
 val gitBranch = executeGitCommand("git rev-parse --abbrev-ref HEAD")
 val gitCommitHash = executeGitCommand("git rev-parse --short HEAD")
 val apkBuildDateTime: String = ZonedDateTime.now(ZoneId.of("UTC")).format(DateTimeFormatter.ISO_LOCAL_DATE)
