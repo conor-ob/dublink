@@ -165,8 +165,6 @@ class LiveDataViewModel @Inject constructor(
                                     for (filter in filters) {
                                         if (filter is Filter.RouteFilter) {
                                             copy = (copy as DubLinkStopLocation).addFilter(filter.copy(isActive = true))
-                                        } else if (filter is Filter.DirectionFilter) {
-                                            copy = (copy as DubLinkStopLocation).addFilter(filter.copy(isActive = true))
                                         }
                                     }
                                     copy
