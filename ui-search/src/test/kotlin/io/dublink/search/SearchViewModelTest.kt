@@ -2,7 +2,6 @@ package io.dublink.search
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.service.RxScheduler
 import io.dublink.test.getOrAwaitValue
 import io.mockk.every

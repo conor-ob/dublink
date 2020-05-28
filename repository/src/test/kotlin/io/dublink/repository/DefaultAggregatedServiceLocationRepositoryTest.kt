@@ -8,7 +8,9 @@ import io.dublink.domain.service.EnabledServiceManager
 import io.dublink.repository.location.DefaultAggregatedServiceLocationRepository
 import io.dublink.repository.location.DefaultServiceLocationRepository
 import io.reactivex.Observable
-import io.rtpi.api.*
+import io.rtpi.api.Coordinate
+import io.rtpi.api.Service
+import io.rtpi.api.StopLocation
 import org.junit.Test
 
 class DefaultAggregatedServiceLocationRepositoryTest {
@@ -98,7 +100,6 @@ class DefaultAggregatedServiceLocationRepositoryTest {
             override fun getEnabledServices(): List<Service> {
                 return listOf(Service.IRISH_RAIL, Service.DUBLIN_BUS)
             }
-
         }
     )
 
