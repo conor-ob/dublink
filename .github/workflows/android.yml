@@ -48,4 +48,4 @@ jobs:
       run: ./gradlew testCoverage
 
     - name: Upload coverage report
-      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.ORG_GRADLE_PROJECT_codecovToken }}e -f "*-report.xml"
+      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.ORG_GRADLE_PROJECT_codecovToken }} -f "*-report.xml"
