@@ -4,12 +4,15 @@ plugins {
     id(BuildPlugins.kotlinAndroidExtensions)
 }
 
+apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
+
 android {
     compileSdkVersion(AndroidSdk.compile)
 
     defaultConfig {
         minSdkVersion(AndroidSdk.min)
         targetSdkVersion(AndroidSdk.target)
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     sourceSets.getByName("main") {
@@ -37,6 +40,7 @@ dependencies {
     api(Libraries.AndroidX.fragment)
     api(Libraries.AndroidX.lifecycleLiveData)
     api(Libraries.AndroidX.lifecycleViewModel)
+    api(Libraries.AndroidX.recyclerView)
     api(Libraries.AndroidX.swipeRefreshLayout)
     api(Libraries.Dagger.dagger)
     api(Libraries.Dagger.daggerAndroid)
@@ -51,6 +55,7 @@ dependencies {
     api(Libraries.Kotlin.stdLib)
     api(Libraries.Timber.timber)
 
+    testImplementation(project(":test-ui"))
     testImplementation(TestLibraries.Junit.junit)
 //    testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)

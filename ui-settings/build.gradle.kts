@@ -4,12 +4,15 @@ plugins {
     id(BuildPlugins.kotlinAndroidExtensions)
 }
 
+apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
+
 android {
     compileSdkVersion(AndroidSdk.compile)
 
     defaultConfig {
         minSdkVersion(AndroidSdk.min)
         targetSdkVersion(AndroidSdk.target)
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     kotlinOptions {

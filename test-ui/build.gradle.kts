@@ -4,8 +4,6 @@ plugins {
     id(BuildPlugins.kotlinAndroidExtensions)
 }
 
-apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
-
 android {
     compileSdkVersion(AndroidSdk.compile)
 
@@ -25,6 +23,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":ui-app"))
+    implementation(Libraries.Kotlin.stdLib)
+
+    implementation(Libraries.Groupie.groupie)
+    implementation(Libraries.Groupie.groupieKtx)
+    implementation(Libraries.AndroidX.lifecycleLiveData)
+    implementation(Libraries.AndroidX.recyclerView)
+
+    implementation(TestLibraries.Junit.junit)
+    implementation(TestLibraries.Truth.truth)
 }

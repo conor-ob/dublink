@@ -1,6 +1,7 @@
 package io.dublink.livedata
 
-import io.dublink.model.AbstractCommonItemTest
+import io.dublink.test.AbstractCommonItemTest
+import org.junit.Test
 
 class NoLiveDataItemTest : AbstractCommonItemTest<NoLiveDataItem>() {
 
@@ -9,4 +10,7 @@ class NoLiveDataItemTest : AbstractCommonItemTest<NoLiveDataItem>() {
 
     override val item2: NoLiveDataItem
         get() = NoLiveDataItem(message = "2", id = 2L)
+
+    @Test
+    override fun ignored() { }
 }

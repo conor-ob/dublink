@@ -1,4 +1,4 @@
-package io.dublink.model
+package io.dublink.test
 
 import com.google.common.truth.Truth.assertThat
 import com.xwray.groupie.kotlinandroidextensions.Item
@@ -12,7 +12,7 @@ abstract class AbstractUniqueItemTest<T : Item> {
     protected abstract val equalItem: T
 
     @Test
-    fun `identical items should pass equality and hash code checks`() {
+    fun identicalItemsShouldPassEqualityAndHashCodeChecks() {
         // act & assert
         assertThat(controlItem).isEqualTo(equalItem)
         assertThat(controlItem == equalItem).isTrue()
@@ -20,10 +20,15 @@ abstract class AbstractUniqueItemTest<T : Item> {
     }
 
     @Test
-    fun `items can be the same but not equal`() {
+    fun itemsCanBeTheSameButNotEqual() {
         // act & assert
         assertThat(controlItem.isSameAs(sameItemNotEqual))
         assertThat(controlItem == sameItemNotEqual).isFalse()
         assertThat(controlItem.hashCode()).isNotEqualTo(sameItemNotEqual.hashCode())
     }
+
+    /**
+     * Annotate this function with @Test
+     */
+    abstract fun ignored()
 }

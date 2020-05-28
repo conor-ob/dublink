@@ -1,6 +1,7 @@
 package io.dublink.search
 
-import io.dublink.model.AbstractCommonItemTest
+import io.dublink.test.AbstractCommonItemTest
+import org.junit.Test
 
 class NoRecentSearchesItemTest : AbstractCommonItemTest<NoRecentSearchesItem>() {
 
@@ -9,4 +10,7 @@ class NoRecentSearchesItemTest : AbstractCommonItemTest<NoRecentSearchesItem>() 
 
     override val item2: NoRecentSearchesItem
         get() = NoRecentSearchesItem(id = 2L)
+
+    @Test
+    override fun ignored() { }
 }

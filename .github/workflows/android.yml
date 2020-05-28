@@ -19,7 +19,7 @@ jobs:
       ORG_GRADLE_PROJECT_key: ${{ secrets.ORG_GRADLE_PROJECT_key }}
 
     steps:
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Setup JDK
@@ -27,19 +27,25 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Cache
-      uses: actions/cache@v1
+    - name: Restore cache
+      uses: actions/cache@v2
       with:
         path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        key: ${{ runner.os }}-gradle-${{ hashFiles('buildSrc/src/main/kotlin/Dependencies.kt','**/*.gradle*') }}
         restore-keys: |
           ${{ runner.os }}-gradle-
 
-    - name: Kotlin Lint
+    - name: Build repository
+      run: ./gradlew assembleDebug
+
+    - name: Lint Kotlin
       run: ./gradlew ktlint
 
-    - name: Android Lint
+    - name: Lint Android
       run: ./gradlew lintDebug
 
-    - name: Unit Test
-      run: ./gradlew testDebugUnitTest
+    - name: Test and coverage report
+      run: ./gradlew testCoverage
+
+    - name: Upload coverage report
+      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.ORG_GRADLE_PROJECT_codecovToken }} -f "*-report.xml"

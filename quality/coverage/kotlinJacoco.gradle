@@ -1,0 +1,37 @@
+apply plugin: 'jacoco'
+
+project.afterEvaluate {
+    task "testCoverage" (type:JacocoReport, dependsOn: "test") {
+        group = "Reporting"
+
+        def fileFilter = [
+                '**/R.class',
+                '**/R$*.class',
+                '**/*$ViewInjector*.*',
+                '**/*$ViewBinder*.*',
+                '**/BuildConfig.*',
+                '**/Manifest*.*',
+                '**/*App.*',
+                '**/*Component.*',
+                '**/*Module.*',
+                '**/*Activity.*',
+                '**/*Fragment.*'
+        ]
+        def debugTree = fileTree(dir: "${buildDir}/classes/kotlin/main", excludes: fileFilter)
+        def kotlinDebugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debug", excludes: fileFilter)
+
+        classDirectories.setFrom(files([debugTree], [kotlinDebugTree]))
+        def coverageSourceDirs = [
+                "src/main/kotlin",
+                "src/debug/kotlin"
+        ]
+        additionalSourceDirs.setFrom(files(coverageSourceDirs))
+        sourceDirectories.setFrom(files(coverageSourceDirs))
+        executionData(files("${project.buildDir}/jacoco/test.exec"))
+        reports {
+            xml.enabled = true
+            xml.destination(file("$rootDir/build/reports/jacoco/$project.name-report.xml"))
+            html.enabled = true
+        }
+    }
+}

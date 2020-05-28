@@ -3,6 +3,8 @@ plugins {
     id(BuildPlugins.kotlinKapt)
 }
 
+apply(from = "$rootDir/quality/coverage/kotlinJacoco.gradle")
+
 dependencies {
     implementation(project(":domain"))
 

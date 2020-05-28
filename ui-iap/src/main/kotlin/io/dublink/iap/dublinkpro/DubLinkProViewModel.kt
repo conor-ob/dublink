@@ -34,7 +34,7 @@ class DubLinkProViewModel @Inject constructor(
                 val dubLinkProSkuDetails = newState.skuDetails.find { DubLinkSku.DUBLINK_PRO.productId == it.sku }
                 if (dubLinkProSkuDetails != null) {
                     State(
-                        dubLinkProPrice = "€0 (TEST)", // TODO add actual price
+                        dubLinkProPrice = dubLinkProSkuDetails.price,
                         message = null,
                         dubLinkProPurchased = null,
                         canPurchaseDubLinkPro = state.canPurchaseDubLinkPro
