@@ -1,6 +1,7 @@
 # DubLink
 
 ![DubLink CI](https://github.com/conor-ob/dublink/workflows/DubLink%20CI/badge.svg)
+[![codecov](https://codecov.io/gh/conor-ob/dublink/branch/master/graph/badge.svg?token=VVTOCCQJNN)](https://codecov.io/gh/conor-ob/dublink)
 [![API](https://img.shields.io/badge/API-26%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=26)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 

@@ -11,6 +11,7 @@ buildscript {
         classpath (BuildPlugins.sqlDelightGradlePlugin)
         classpath (BuildPlugins.googleServiceGradlePlugin)
         classpath (BuildPlugins.firebaseCrashlyticsGradlePlugin)
+        classpath (BuildPlugins.jacocoGradlePlugin)
     }
 }
 
@@ -19,6 +20,7 @@ allprojects {
         google()
         jcenter()
         mavenLocal()
+        mavenCentral()
         maven(url = "https://jitpack.io")
         maven(url = "http://streamreasoning.org/maven/")
         maven(url = uri("https://maven.pkg.github.com/conor-ob/dublin-rtpi-service")) {
@@ -43,8 +45,8 @@ allprojects {
             }
         }
     }
-    apply(from = "$rootDir/ktlint.gradle.kts")
-    apply(from = "$rootDir/test.gradle")
+    apply(from = "$rootDir/quality/lint/ktlint.gradle.kts")
+    apply(from = "$rootDir/quality/test/logging.gradle")
 }
 
 tasks.register("clean").configure {

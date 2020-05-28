@@ -4,6 +4,8 @@ plugins {
     id(BuildPlugins.kotlinAndroidExtensions)
 }
 
+apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
+
 android {
     compileSdkVersion(AndroidSdk.compile)
 
@@ -31,6 +33,10 @@ dependencies {
 
     implementation(Libraries.FuzzyWuzzy.javaWuzzy)
     implementation(Libraries.Rx.rxAndroid)
+
+    testImplementation("androidx.test.ext:junit-ktx:1.1.1")
+    testImplementation("androidx.test:core-ktx:1.2.0")
+    testImplementation("org.robolectric:robolectric:4.3.1")
 
     testImplementation(project(":test-ui"))
     testImplementation(TestLibraries.Junit.junit)

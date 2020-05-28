@@ -26,6 +26,7 @@ object BuildPlugins {
     const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:1.2.2" // https://mvnrepository.com/artifact/com.squareup.sqldelight/gradle-plugin
     const val googleServiceGradlePlugin = "com.google.gms:google-services:4.3.3" // https://mvnrepository.com/artifact/com.google.gms/google-services?repo=google
     const val firebaseCrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.1.0"
+    const val jacocoGradlePlugin = "org.jacoco:org.jacoco.core:0.7.9"
 
     const val androidApplication = "com.android.application"
     const val androidLibrary = "com.android.library"
