@@ -42,7 +42,7 @@ class DubLinkActivityViewModel @Inject constructor(
 
         val preloadDataChanges = actions.ofType(DubLinkActivityAction.PreloadData::class.java)
             .switchMap {
-                serviceLocationRepository.get()
+                serviceLocationRepository.get(refresh = false)
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map { DubLinkActivityChange.Ignored }

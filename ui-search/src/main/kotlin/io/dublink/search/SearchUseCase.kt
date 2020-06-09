@@ -34,7 +34,7 @@ class SearchUseCase @Inject constructor(
         if (query.isEmpty()) {
             Observable.just(SearchResultsResponse.Empty)
         } else {
-            serviceLocationRepository.get()
+            serviceLocationRepository.get(refresh = false)
                 .filter { response -> response.serviceLocations.isNotEmpty() || response.errorResponses.isNotEmpty() }
                 .flatMap { response ->
                     Observable.zip(

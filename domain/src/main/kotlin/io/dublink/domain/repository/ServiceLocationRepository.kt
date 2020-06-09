@@ -6,7 +6,7 @@ import io.rtpi.api.Coordinate
 import io.rtpi.api.Service
 
 interface ServiceLocationRepository {
-    fun get(): Observable<ServiceLocationResponse>
+    fun get(refresh: Boolean): Observable<ServiceLocationResponse>
     fun getNearest(coordinate: Coordinate, limit: Int): Observable<ServiceLocationResponse>
     fun getFavourites(): Observable<ServiceLocationResponse>
     fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse>
@@ -14,7 +14,7 @@ interface ServiceLocationRepository {
 }
 
 interface AggregatedServiceLocationRepository {
-    fun get(): Observable<AggregatedServiceLocationResponse>
+    fun get(refresh: Boolean): Observable<AggregatedServiceLocationResponse>
     fun getFavourites(): Observable<AggregatedServiceLocationResponse>
     fun stream(): Observable<AggregatedServiceLocationResponse>
     fun streamNearest(coordinate: Coordinate, limit: Int): Observable<AggregatedServiceLocationResponse>

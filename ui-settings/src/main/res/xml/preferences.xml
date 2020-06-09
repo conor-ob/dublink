@@ -70,6 +70,11 @@
             android:title="@string/preference_name_enabled_service_aircoach"
             android:defaultValue="@bool/preference_default_enabled_service_aircoach" />
 
+        <io.dublink.settings.UpdateOfflineDataPreference
+            android:title="Update offline data"
+            android:summary="Last updated 2 Jun, 15:36"
+            />
+
     </PreferenceCategory>
 
     <PreferenceCategory

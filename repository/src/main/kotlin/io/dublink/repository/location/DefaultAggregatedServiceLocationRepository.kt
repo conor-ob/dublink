@@ -15,10 +15,10 @@ class DefaultAggregatedServiceLocationRepository(
     private val enabledServiceManager: EnabledServiceManager
 ) : AggregatedServiceLocationRepository {
 
-    override fun get(): Observable<AggregatedServiceLocationResponse> {
+    override fun get(refresh: Boolean): Observable<AggregatedServiceLocationResponse> {
         return Observable.zip(
             enabledServiceManager.getEnabledServices().map { enabledService ->
-                serviceLocationRepositories.getValue(enabledService).get()
+                serviceLocationRepositories.getValue(enabledService).get(refresh = refresh)
             }
         ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }
     }
@@ -34,7 +34,7 @@ class DefaultAggregatedServiceLocationRepository(
     override fun stream(): Observable<AggregatedServiceLocationResponse> {
         return Observable.combineLatest(
             enabledServiceManager.getEnabledServices().map { enabledService ->
-                serviceLocationRepositories.getValue(enabledService).get()
+                serviceLocationRepositories.getValue(enabledService).get(refresh = false)
                     .startWith(ServiceLocationResponse.Data(enabledService, emptyList()))
             }
         ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }

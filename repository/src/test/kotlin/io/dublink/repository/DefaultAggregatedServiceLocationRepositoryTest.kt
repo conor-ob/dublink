@@ -105,7 +105,7 @@ class DefaultAggregatedServiceLocationRepositoryTest {
 
     @Test
     fun `test aggregate`() {
-        val blockingFirst = aggregatedServiceLocationRepository.get().blockingFirst()
+        val blockingFirst = aggregatedServiceLocationRepository.get(refresh = false).blockingFirst()
         val serviceLocations = blockingFirst.serviceLocations
 
         assertThat(serviceLocations.map { it.id }).containsExactly(

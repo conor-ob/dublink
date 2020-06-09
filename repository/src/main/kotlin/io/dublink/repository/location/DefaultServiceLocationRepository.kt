@@ -17,9 +17,12 @@ class DefaultServiceLocationRepository(
 
     private val kdTree = TwoDimensionalKdTree()
 
-    override fun get(): Observable<ServiceLocationResponse> {
-        return serviceLocationStore
-            .get(service)
+    override fun get(refresh: Boolean): Observable<ServiceLocationResponse> {
+        return if (refresh) {
+            serviceLocationStore.fetch(service)
+        } else {
+            serviceLocationStore.get(service)
+        }
             .map<ServiceLocationResponse> { serviceLocations ->
                 ServiceLocationResponse.Data(
                     service = service,
@@ -36,7 +39,7 @@ class DefaultServiceLocationRepository(
 
     override fun getNearest(coordinate: Coordinate, limit: Int): Observable<ServiceLocationResponse> {
         return if (kdTree.isEmpty()) {
-            get().flatMap { response ->
+            get(refresh = false).flatMap { response ->
                 when (response) {
                     is ServiceLocationResponse.Data -> {
                         kdTree.insert(serviceLocations = response.serviceLocations)
@@ -55,7 +58,7 @@ class DefaultServiceLocationRepository(
     }
 
     override fun getFavourites(): Observable<ServiceLocationResponse> {
-        return get()
+        return get(refresh = false)
             .map { response ->
                 when (response) {
                     is ServiceLocationResponse.Data -> response.copy(
@@ -67,7 +70,7 @@ class DefaultServiceLocationRepository(
     }
 
     override fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse> {
-        return get()
+        return get(refresh = false)
             .map { response ->
                 when (response) {
                     is ServiceLocationResponse.Data -> {
