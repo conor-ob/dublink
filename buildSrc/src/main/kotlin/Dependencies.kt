@@ -112,10 +112,10 @@ object Libraries {
     }
 
     object Rtpi {
-        const val rtpiApi = "io.rtpi:rtpi-api:0.2.0"
-        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.2.0"
-        const val rtpiUtil = "io.rtpi:rtpi-util:0.2.0"
-        const val rtpiStaticData = "io.rtpi:rtpi-static-data:0.2.0"
+        const val rtpiApi = "io.rtpi:rtpi-api:0.3.2"
+        const val rtpiClient = "io.rtpi:rtpi-client-standalone:0.3.2"
+        const val rtpiUtil = "io.rtpi:rtpi-util:0.3.2"
+        const val rtpiStaticData = "io.rtpi:rtpi-static-data:0.3.2"
     }
 
     object Rx {
