@@ -111,7 +111,7 @@ class DubLinkProViewModelTest {
     }
 
     @Test
-    fun `big test wha`() {
+    fun `integaration test`() {
         // arrange
         val skuDetails = SkuDetails(
             """

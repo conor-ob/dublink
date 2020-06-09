@@ -8,6 +8,70 @@ import org.junit.Test
 class DubLinkServiceLocationTest {
 
     @Test
+    fun `setting a custom sort index should populate the sort index field`() {
+        // arrange
+        val dubLinkDartStation = DubLinkStopLocation(
+            stopLocation = createIrishRailStation(
+                id = "PERSE",
+                name = "Dublin Pearse",
+                routeGroups = listOf(
+                    RouteGroup(
+                        operator = Operator.COMMUTER,
+                        routes = listOf(Operator.COMMUTER.fullName)
+                    ),
+                    RouteGroup(
+                        operator = Operator.DART,
+                        routes = listOf(Operator.DART.fullName)
+                    ),
+                    RouteGroup(
+                        operator = Operator.INTERCITY,
+                        routes = listOf(Operator.INTERCITY.fullName)
+                    )
+                )
+            )
+        )
+
+        // act
+        val favourite = dubLinkDartStation.setCustomSortIndex(7)
+
+        // assert
+        assertThat(dubLinkDartStation.favouriteSortIndex).isEqualTo(-1)
+        assertThat(favourite.favouriteSortIndex).isEqualTo(7)
+    }
+
+    @Test
+    fun `setting a custom name should populate the favourite name field`() {
+        // arrange
+        val dubLinkDartStation = DubLinkStopLocation(
+            stopLocation = createIrishRailStation(
+                id = "PERSE",
+                name = "Dublin Pearse",
+                routeGroups = listOf(
+                    RouteGroup(
+                        operator = Operator.COMMUTER,
+                        routes = listOf(Operator.COMMUTER.fullName)
+                    ),
+                    RouteGroup(
+                        operator = Operator.DART,
+                        routes = listOf(Operator.DART.fullName)
+                    ),
+                    RouteGroup(
+                        operator = Operator.INTERCITY,
+                        routes = listOf(Operator.INTERCITY.fullName)
+                    )
+                )
+            )
+        )
+
+        // act
+        val favourite = dubLinkDartStation.setCustomName("My favourite stop")
+
+        // assert
+        assertThat(dubLinkDartStation.name).isEqualTo("Dublin Pearse")
+        assertThat(favourite.name).isEqualTo("My favourite stop")
+    }
+
+    @Test
     fun `test filters`() {
         // arrange
         val dubLinkDartStation = DubLinkStopLocation(

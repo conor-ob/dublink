@@ -18,9 +18,11 @@ dependencies {
 
     kapt(Libraries.Dagger.daggerCompiler)
 
+    testImplementation(project(":test"))
     testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)
+    testImplementation(Libraries.Rtpi.rtpiStaticData)
 }
 
 sourceSets.getByName("main") {
