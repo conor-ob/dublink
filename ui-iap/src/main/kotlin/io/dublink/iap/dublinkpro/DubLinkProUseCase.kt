@@ -138,6 +138,7 @@ class DubLinkProUseCase @Inject constructor(
         )
             .doOnComplete {
                 dubLinkProService.grantDubLinkProAccess()
+                dubLinkProService.grantDubLinkProPreferences()
             }
             .toSingle { purchase }
     }
