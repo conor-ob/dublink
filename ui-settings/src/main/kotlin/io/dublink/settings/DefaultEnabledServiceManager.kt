@@ -21,7 +21,7 @@ class DefaultEnabledServiceManager @Inject constructor(
             Service.IRISH_RAIL,
             Service.DUBLIN_BIKES,
             Service.DUBLIN_BUS,
-            Service.AIRCOACH,
+//            Service.AIRCOACH,
             Service.BUS_EIREANN
         )
         return customOrder.filter { isServiceEnabled(it) }
