@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
@@ -19,6 +20,7 @@ import io.dublink.iap.R
 import io.dublink.iap.RxBilling
 import io.dublink.viewModelProvider
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_dublink_pro.*
 
 class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
@@ -84,7 +86,8 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private fun renderBuyButton(state: State) {
         if (state.dubLinkProPrice != null && state.canPurchaseDubLinkPro == true) {
-            dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, state.dubLinkProPrice))
+            dubLinkProPriceButton.updateText(newText = "Test purchase") // TODO reset this
+//            dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, state.dubLinkProPrice))
             dubLinkProPriceButton.visibility = View.VISIBLE
         } else {
             dubLinkProPriceButton.visibility = View.GONE
@@ -127,5 +130,15 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
                 DubLinkProSpacerItem()
             )
         )
+    }
+
+    override fun attachSnackBarToView(text: String, length: Int): Snackbar? {
+        return Snackbar.make(dublink_pro_layout_root, text, length)
+    }
+
+    override fun onInternetRestored() {
+        super.onInternetRestored()
+        viewModel.dispatch(Action.QuerySkuDetails)
+        viewModel.dispatch(Action.QueryPurchases)
     }
 }

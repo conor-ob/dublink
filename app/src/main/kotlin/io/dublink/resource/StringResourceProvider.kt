@@ -9,6 +9,7 @@ import io.rtpi.api.Service
 import java.io.IOException
 import java.net.ConnectException
 import java.net.UnknownHostException
+import timber.log.Timber
 
 class StringResourceProvider(
     private val resources: Resources
@@ -19,6 +20,7 @@ class StringResourceProvider(
     }
 
     override fun errorMessage(service: Service?, throwable: Throwable): String {
+        Timber.e(throwable)
         return when (throwable) {
             // service is down
             is ConnectException -> if (service != null) {
@@ -40,6 +42,9 @@ class StringResourceProvider(
     }
 
     override fun errorMessage(errorResponses: List<ServiceLocationResponse.Error>): String {
+        errorResponses.forEach {
+            Timber.e(it.throwable)
+        }
         return when {
             errorResponses.all { errorResponse ->
                 errorResponse.throwable is NetworkUnavailableException ||
