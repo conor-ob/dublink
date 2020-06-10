@@ -62,7 +62,6 @@ class GpsLocationProvider @Inject constructor(
     }
 
     private fun newRequest() = LocationRequest.create().apply {
-        Timber.d("new request")
         priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         fastestInterval = 5000L
         interval = 10000L

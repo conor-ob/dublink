@@ -21,7 +21,7 @@ object LiveDataFilter {
             val activeDirectionFilters = allDirectionFilters
                 .filter { it.isActive }
             return if (activeRouteFilters.isEmpty() && activeDirectionFilters.isEmpty()) {
-                emptyList()
+                predictionLiveData
             } else if (activeRouteFilters.isEmpty()) {
                 predictionLiveData.filter {
                     val isExpectedDirection = allDirectionFilters

@@ -6,10 +6,10 @@ import io.dublink.domain.repository.ServiceLocationResponse
 import io.dublink.domain.service.StringProvider
 import io.dublink.ui.R
 import io.rtpi.api.Service
-import timber.log.Timber
 import java.io.IOException
 import java.net.ConnectException
 import java.net.UnknownHostException
+import timber.log.Timber
 
 class StringResourceProvider(
     private val resources: Resources
