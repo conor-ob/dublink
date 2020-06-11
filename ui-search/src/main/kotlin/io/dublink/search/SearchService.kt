@@ -51,7 +51,6 @@ class SearchService {
             algorithm = algorithm,
             toStringFunction = ToStringFunction<DubLinkServiceLocation> {
                 listOfNotNull(
-                    it.name,
                     it.defaultName,
                     it.service.fullName
                 ).plus(
