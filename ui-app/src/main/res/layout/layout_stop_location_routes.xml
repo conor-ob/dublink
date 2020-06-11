@@ -9,6 +9,12 @@
         android:id="@+id/routes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingStart="@dimen/padding_xxs"
+        android:paddingTop="@dimen/padding_xxs"
+        android:paddingEnd="@dimen/padding_xxs"
+        android:paddingBottom="@dimen/padding_xxs"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:chipSpacingHorizontal="5dp"
         app:chipSpacingVertical="5dp"
         app:singleLine="false" />

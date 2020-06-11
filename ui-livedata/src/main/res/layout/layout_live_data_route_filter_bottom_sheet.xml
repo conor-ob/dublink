@@ -81,6 +81,8 @@
                 android:paddingTop="@dimen/padding_xxs"
                 android:paddingEnd="@dimen/padding_l"
                 android:paddingBottom="@dimen/padding_xxxl"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:visibility="gone"
                 app:chipSpacingHorizontal="8dp"
                 app:chipSpacingVertical="12dp"

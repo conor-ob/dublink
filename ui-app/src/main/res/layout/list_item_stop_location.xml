@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <View
-        android:layout_width="8dp"
+        android:layout_width="@dimen/padding_xxs"
         android:layout_height="0dp" />
 
     <LinearLayout
@@ -45,7 +45,7 @@
 
         <View
             android:layout_width="0dp"
-            android:layout_height="8dp" />
+            android:layout_height="@dimen/padding_xxs" />
 
         <include
             layout="@layout/layout_stop_location_routes"
