@@ -20,6 +20,7 @@ import io.dublink.DubLinkNavigator
 import io.dublink.dialog.FavouriteDialogFactory
 import io.dublink.dialog.OnFavouriteEditListener
 import io.dublink.dialog.OnFavouriteRemovedListener
+import io.dublink.dialog.OnFavouriteRouteChangedListener
 import io.dublink.dialog.OnFavouriteSavedListener
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
@@ -319,6 +320,16 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
                             override fun onSave(serviceLocation: DubLinkServiceLocation) {
                                 viewModel.dispatch(Action.SaveFavourite(serviceLocation))
                             }
+                        },
+                        onFavouriteRouteChangedListener = object : OnFavouriteRouteChangedListener {
+
+                            override fun onAdded(filter: Filter) {
+                                viewModel.dispatch(Action.FilterIntent(FilterChangeType.Add(filter)))
+                            }
+
+                            override fun onRemoved(filter: Filter) {
+                                viewModel.dispatch(Action.FilterIntent(FilterChangeType.Remove(filter)))
+                            }
                         }
                     ).show()
                 }
@@ -335,6 +346,16 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
 
                                         override fun onSave(serviceLocation: DubLinkServiceLocation) {
                                             viewModel.dispatch(Action.SaveFavourite(serviceLocation))
+                                        }
+                                    },
+                                    onFavouriteRouteChangedListener = object : OnFavouriteRouteChangedListener {
+
+                                        override fun onAdded(filter: Filter) {
+                                            viewModel.dispatch(Action.FilterIntent(FilterChangeType.Add(filter)))
+                                        }
+
+                                        override fun onRemoved(filter: Filter) {
+                                            viewModel.dispatch(Action.FilterIntent(FilterChangeType.Remove(filter)))
                                         }
                                     }
                                 ).show()

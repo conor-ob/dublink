@@ -19,8 +19,10 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.DubLinkNavigator
 import io.dublink.dialog.FavouriteDialogFactory
+import io.dublink.dialog.OnFavouriteRouteChangedListener
 import io.dublink.dialog.OnFavouriteSavedListener
 import io.dublink.domain.model.DubLinkServiceLocation
+import io.dublink.domain.model.Filter
 import io.dublink.domain.service.StringProvider
 import io.dublink.favourites.R
 import io.dublink.model.AbstractServiceLocationItem
@@ -138,6 +140,16 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                                     serviceLocation
                                 )
                             )
+                        }
+                    },
+                    onFavouriteRouteChangedListener = object : OnFavouriteRouteChangedListener {
+
+                        override fun onAdded(filter: Filter) {
+                            // nothing to do
+                        }
+
+                        override fun onRemoved(filter: Filter) {
+                            // nothing to do
                         }
                     }
                 ).show()

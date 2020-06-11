@@ -23,7 +23,8 @@ object FavouriteDialogFactory {
         context: Context,
         activity: FragmentActivity,
         serviceLocation: DubLinkServiceLocation,
-        onFavouriteSavedListener: OnFavouriteSavedListener
+        onFavouriteSavedListener: OnFavouriteSavedListener,
+        onFavouriteRouteChangedListener: OnFavouriteRouteChangedListener
     ): AlertDialog {
         var editedStopLocation = serviceLocation
 
@@ -60,13 +61,19 @@ object FavouriteDialogFactory {
                                     }
                                 }
                                 editedStopLocation = if (isChecked) {
-                                    (editedStopLocation as DubLinkStopLocation).addFilter(
-                                        filter = buttonView.tag as Filter
+                                    val filterToAdd = buttonView.tag as Filter
+                                    val newStopLocation = (editedStopLocation as DubLinkStopLocation).addFilter(
+                                        filter = filterToAdd
                                     )
+                                    onFavouriteRouteChangedListener.onAdded(filterToAdd)
+                                    newStopLocation
                                 } else {
-                                    (editedStopLocation as DubLinkStopLocation).removeFilter(
-                                        filter = buttonView.tag as Filter
+                                    val filterToRemove = buttonView.tag as Filter
+                                    val newStopLocation = (editedStopLocation as DubLinkStopLocation).removeFilter(
+                                        filter = filterToRemove
                                     )
+                                    onFavouriteRouteChangedListener.onRemoved(filterToRemove)
+                                    newStopLocation
                                 }
                             }
                         }
@@ -154,4 +161,9 @@ interface OnFavouriteRemovedListener {
 
 interface OnFavouriteEditListener {
     fun onEdit()
+}
+
+interface OnFavouriteRouteChangedListener {
+    fun onAdded(filter: Filter)
+    fun onRemoved(filter: Filter)
 }
