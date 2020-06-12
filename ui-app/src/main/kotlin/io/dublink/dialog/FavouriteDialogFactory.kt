@@ -133,12 +133,13 @@ object FavouriteDialogFactory {
 
     fun newEditDialog(
         context: Context,
+        serviceLocation: DubLinkServiceLocation,
         onFavouriteEditListener: OnFavouriteEditListener,
         onFavouriteRemovedListener: OnFavouriteRemovedListener
     ): AlertDialog {
         val dialog = MaterialAlertDialogBuilder(context)
-            .setTitle("Edit")
-            .setMessage("Would you like to edit or remove this?")
+            .setTitle(serviceLocation.name)
+            .setMessage("Edit or remove this?")
             .setPositiveButton("Remove", null)
             .setNegativeButton("Edit", null)
             .setNeutralButton("Cancel", null)

@@ -311,6 +311,7 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
         if (state.favouriteDialog != null && state.serviceLocation != null) {
             when (state.favouriteDialog) {
                 is FavouriteDialog.Add -> {
+                    viewModel.dispatch(Action.RouteFilterSheetMoved(BottomSheetBehavior.STATE_HIDDEN))
                     FavouriteDialogFactory.newCustomizationDialog(
                         context = requireContext(),
                         activity = requireActivity(),
@@ -336,8 +337,10 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
                 is FavouriteDialog.Remove -> {
                     FavouriteDialogFactory.newEditDialog(
                         context = requireContext(),
+                        serviceLocation = state.serviceLocation,
                         onFavouriteEditListener = object : OnFavouriteEditListener {
                             override fun onEdit() {
+                                viewModel.dispatch(Action.RouteFilterSheetMoved(BottomSheetBehavior.STATE_HIDDEN))
                                 FavouriteDialogFactory.newCustomizationDialog(
                                     context = requireContext(),
                                     activity = requireActivity(),

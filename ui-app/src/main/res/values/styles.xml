@@ -25,7 +25,7 @@
 
     <style name="Widget.DubLink.MaterialAlertDialog.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
         <item name="android:textAppearance">@style/TextAppearance.DubLink.Body1</item>
-        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingTop">8dp</item>
     </style>
 
     <style name="Widget.DubLink.RouteChip" parent="Widget.MaterialComponents.Chip.Action">
