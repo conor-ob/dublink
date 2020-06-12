@@ -16,6 +16,7 @@ import io.dublink.domain.model.removeFilter
 import io.dublink.domain.model.setCustomName
 import io.dublink.ui.R
 import io.dublink.util.ChipFactory
+import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.dialog_customize_favourite.view.*
 
 object FavouriteDialogFactory {
@@ -31,7 +32,13 @@ object FavouriteDialogFactory {
 
         val builder = MaterialAlertDialogBuilder(context)
         builder.setTitle(serviceLocation.defaultName)
-            .setMessage(serviceLocation.service.fullName)
+            .setMessage(
+                when (val service = serviceLocation.service) {
+                    Service.BUS_EIREANN,
+                    Service.DUBLIN_BUS -> "${service.fullName} (${serviceLocation.id})"
+                    else -> service.fullName
+                }
+            )
             .setPositiveButton("Ok", null)
             .setNegativeButton("Cancel", null)
         val customizeFavouriteView = activity.layoutInflater.inflate(R.layout.dialog_customize_favourite, null)
@@ -84,9 +91,8 @@ object FavouriteDialogFactory {
             }
         }
 
-        customizeFavouriteView.favourite_edit_name.hint = serviceLocation.defaultName
         if (editedStopLocation.isFavourite) {
-            customizeFavouriteView.favourite_edit_name.setText(serviceLocation.name)
+            customizeFavouriteView.favourite_edit_name.editText?.setText(serviceLocation.name)
         }
 
         val dialog = builder.create()
@@ -111,7 +117,7 @@ object FavouriteDialogFactory {
                 ) {
                     Toast.makeText(context, "Select at least 1 route", Toast.LENGTH_SHORT).show()
                 } else {
-                    val customName = customizeFavouriteView.favourite_edit_name.text
+                    val customName = customizeFavouriteView.favourite_edit_name?.editText?.text
                     editedStopLocation = if (customName.isNullOrBlank()) {
                         editedStopLocation.setCustomName(serviceLocation.name)
                     } else {
