@@ -23,7 +23,7 @@ object ChipFactory {
                     tag = filter
                     isAllCaps = false
                     isClickable = false
-                    elevation = 4f.dipToPx(context)
+                    elevation = 2f.dipToPx(context)
                 }
             }
             is Filter.DirectionFilter -> {
@@ -36,7 +36,7 @@ object ChipFactory {
                     tag = filter
                     isAllCaps = false
                     isClickable = false
-                    elevation = 4f.dipToPx(context)
+                    elevation = 2f.dipToPx(context)
                 }
             }
         }
