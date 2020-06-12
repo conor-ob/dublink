@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <View
-        android:layout_width="@dimen/padding_xxs"
+        android:layout_width="8dp"
         android:layout_height="0dp" />
 
     <LinearLayout

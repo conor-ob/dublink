@@ -7,12 +7,13 @@ import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.favourites.R
 import io.dublink.model.DockLocationItem
+import io.dublink.model.SimpleServiceLocationItem
 
 class EditableDockLocationItem(
     serviceLocation: DubLinkDockLocation,
     walkDistance: Double?,
     private val itemTouchHelper: ItemTouchHelper
-) : DockLocationItem(serviceLocation, walkDistance) {
+) : SimpleServiceLocationItem(serviceLocation, walkDistance) {
 
     override fun getLayout() = R.layout.list_item_editable_dock_location
 
