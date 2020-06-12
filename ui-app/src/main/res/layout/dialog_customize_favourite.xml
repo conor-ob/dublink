@@ -14,7 +14,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textAppearance="@style/TextAppearance.DubLink.Body1" />
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/favourite_edit_routes"

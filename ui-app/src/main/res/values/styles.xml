@@ -13,6 +13,21 @@
             <item name="android:layout_margin">@dimen/padding_xl</item>
     </style>
 
+    <style name="Widget.DubLink.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+<!--        <item name="android:backgroundDimAmount">0.32</item>-->
+        <item name="materialAlertDialogTitleTextStyle">@style/Widget.DubLink.MaterialAlertDialog.Title.Text</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Widget.DubLink.MaterialAlertDialog.Body.Text</item>
+    </style>
+
+    <style name="Widget.DubLink.MaterialAlertDialog.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textAppearance">@style/TextAppearance.DubLink.Headline6</item>
+    </style>
+
+    <style name="Widget.DubLink.MaterialAlertDialog.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
+        <item name="android:textAppearance">@style/TextAppearance.DubLink.Body1</item>
+        <item name="android:paddingTop">0dp</item>
+    </style>
+
     <style name="Widget.DubLink.RouteChip" parent="Widget.MaterialComponents.Chip.Action">
         <item name="chipCornerRadius">5dp</item>
         <item name="chipStartPadding">5dp</item>

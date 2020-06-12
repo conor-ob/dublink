@@ -7,13 +7,13 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.TouchCallback
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
@@ -104,14 +104,9 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
                             )
                         }
 
-                        AlertDialog.Builder(requireContext())
+                        MaterialAlertDialogBuilder(requireContext())
                             .setTitle("Info")
                             .setMessage(test)
-//                            .setMessage(
-//                                "Click an item to start editing\n\n" +
-//                                    "Long click on an item and drag and drop to change its position\n\n" +
-//                                    "Click \"Save Changes\" when finished"
-//                            )
                             .setPositiveButton("Ok", null)
                             .create()
                             .show()
@@ -275,7 +270,7 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
 
         override fun handleOnBackPressed() {
             if (edit_favourites_save_fab.visibility == View.VISIBLE) {
-                AlertDialog.Builder(requireContext())
+                MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Unsaved changes")
                     .setMessage("Are you sure you want to exit?")
                     .setPositiveButton("Yes") { _, _ -> findNavController().navigateUp() }

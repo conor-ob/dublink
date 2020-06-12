@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
@@ -28,7 +29,7 @@ object FavouriteDialogFactory {
     ): AlertDialog {
         var editedStopLocation = serviceLocation
 
-        val builder = AlertDialog.Builder(context)
+        val builder = MaterialAlertDialogBuilder(context)
         builder.setTitle(serviceLocation.defaultName)
             .setMessage(serviceLocation.service.fullName)
             .setPositiveButton("Ok", null)
@@ -84,7 +85,9 @@ object FavouriteDialogFactory {
         }
 
         customizeFavouriteView.favourite_edit_name.hint = serviceLocation.defaultName
-        customizeFavouriteView.favourite_edit_name.setText(serviceLocation.name)
+        if (editedStopLocation.isFavourite) {
+            customizeFavouriteView.favourite_edit_name.setText(serviceLocation.name)
+        }
 
         val dialog = builder.create()
         dialog.setOnShowListener {
@@ -127,7 +130,7 @@ object FavouriteDialogFactory {
         onFavouriteEditListener: OnFavouriteEditListener,
         onFavouriteRemovedListener: OnFavouriteRemovedListener
     ): AlertDialog {
-        val dialog = AlertDialog.Builder(context)
+        val dialog = MaterialAlertDialogBuilder(context)
             .setTitle("Edit")
             .setMessage("Would you like to edit or remove this?")
             .setPositiveButton("Remove", null)
