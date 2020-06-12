@@ -29,9 +29,9 @@ object ChipFactory {
             is Filter.DirectionFilter -> {
                 Chip(context).apply {
                     setChipDrawable(ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_DubLink_RouteChip))
-                    setChipBackgroundColorResource(R.color.grey_500)
+                    setChipBackgroundColorResource(R.color.direction_brand)
                     setTextAppearanceResource(R.style.TextAppearance_DubLink_Button)
-                    setTextColor(ColorStateList.valueOf(context.resources.getColor(android.R.color.black)))
+                    setTextColor(ColorStateList.valueOf(context.resources.getColor(R.color.direction_brand_text)))
                     text = " ${filter.direction} "
                     tag = filter
                     isAllCaps = false
@@ -62,9 +62,9 @@ object ChipFactory {
             is Filter.DirectionFilter -> {
                 Chip(context).apply {
                     setChipDrawable(ChipDrawable.createFromAttributes(context, null, 0, R.style.Widget_DubLink_RouteFilterChip))
-                    setChipBackgroundColorResource(R.color.grey_500)
+                    setChipBackgroundColorResource(R.color.direction_brand)
                     setTextAppearanceResource(R.style.TextAppearance_DubLink_Button_RouteFilter)
-                    setTextColor(ColorStateList.valueOf(context.resources.getColor(android.R.color.black)))
+                    setTextColor(ColorStateList.valueOf(context.resources.getColor(R.color.direction_brand_text)))
                     text = filter.direction
                     tag = filter
                     isAllCaps = false
