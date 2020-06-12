@@ -30,7 +30,7 @@
     </LinearLayout>
 
     <View
-        android:layout_width="8dp"
+        android:layout_width="@dimen/padding_xxs"
         android:layout_height="0dp" />
 
     <LinearLayout
@@ -43,15 +43,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="8dp" />
-
         <LinearLayout
             android:id="@+id/rootViewBikes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:padding="@dimen/padding_xxs"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/bikesCount"
