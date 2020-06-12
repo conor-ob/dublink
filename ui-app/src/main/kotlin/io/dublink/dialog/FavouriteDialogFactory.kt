@@ -119,7 +119,7 @@ object FavouriteDialogFactory {
                 } else {
                     val customName = customizeFavouriteView.favourite_edit_name?.editText?.text
                     editedStopLocation = if (customName.isNullOrBlank()) {
-                        editedStopLocation.setCustomName(serviceLocation.name)
+                        editedStopLocation.setCustomName(serviceLocation.defaultName)
                     } else {
                         editedStopLocation.setCustomName(customName.toString())
                     }
