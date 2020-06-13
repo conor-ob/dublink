@@ -41,8 +41,10 @@
         <item name="closeIconStartPadding">0dp</item>
         <item name="closeIconEndPadding">0dp</item>
         <item name="android:textAppearance">@style/TextAppearance.DubLink.Button</item>
-        <item name="android:elevation">4dp</item>
+        <item name="android:elevation">2dp</item>
         <item name="android:clickable">false</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">2dp</item>
     </style>
 
     <style name="Widget.DubLink.RouteFilterChip" parent="Widget.MaterialComponents.Chip.Filter">
@@ -52,6 +54,8 @@
         <item name="chipMinHeight">28dp</item>
         <item name="android:textAppearance">@style/TextAppearance.DubLink.Button.RouteFilter</item>
         <item name="android:elevation">4dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
     <style name="Widget.DubLink.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">
