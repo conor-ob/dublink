@@ -9,8 +9,8 @@
     </style>
 
     <style name="Widget.DubLink.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
-            <item name="android:layout_gravity">bottom|center</item>
-            <item name="android:layout_margin">@dimen/padding_xl</item>
+        <item name="android:layout_gravity">bottom|center</item>
+        <item name="android:layout_margin">@dimen/padding_xl</item>
     </style>
 
     <style name="Widget.DubLink.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
