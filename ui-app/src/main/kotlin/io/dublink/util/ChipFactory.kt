@@ -53,7 +53,7 @@ object ChipFactory {
                     setChipBackgroundColorResource(backgroundColour)
                     setTextAppearanceResource(R.style.TextAppearance_DubLink_Button_RouteFilter)
                     setTextColor(ColorStateList.valueOf(context.resources.getColor(textColour)))
-                    setPadding(0, 2f.dipToPx(context).toInt(), 0, 4f.dipToPx(context).toInt())
+                    setPadding(0, 1f.dipToPx(context).toInt(), 0, 2f.dipToPx(context).toInt())
                     text = filter.route.id
                     tag = filter
                     isAllCaps = false
@@ -68,7 +68,7 @@ object ChipFactory {
                     setChipBackgroundColorResource(R.color.direction_brand)
                     setTextAppearanceResource(R.style.TextAppearance_DubLink_Button_RouteFilter)
                     setTextColor(ColorStateList.valueOf(context.resources.getColor(R.color.direction_brand_text)))
-                    setPadding(0, 2f.dipToPx(context).toInt(), 0, 4f.dipToPx(context).toInt())
+                    setPadding(0, 1f.dipToPx(context).toInt(), 0, 2f.dipToPx(context).toInt())
                     text = filter.direction
                     tag = filter
                     isAllCaps = false
