@@ -14,8 +14,8 @@ import io.dublink.iap.BillingConnectionManager
 import io.dublink.iap.RxBilling
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 
