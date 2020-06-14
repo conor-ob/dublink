@@ -13,6 +13,12 @@ class ThemeRepository @Inject constructor(
     private val preferenceStore: PreferenceStore
 ) : ThemeService {
 
+    override fun setDefaultTheme() {
+        val theme = getDefaultTheme()
+        preferenceStore.setPreferredTheme(resources.getString(theme.value))
+        AppCompatDelegate.setDefaultNightMode(theme.mode)
+    }
+
     override fun setPreferredThemeOrDefault() {
         val theme = getPreferredThemeOrDefault()
         if (!preferenceStore.containsPreferredTheme()) {

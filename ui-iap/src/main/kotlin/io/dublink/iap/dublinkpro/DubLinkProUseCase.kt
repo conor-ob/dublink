@@ -64,7 +64,7 @@ class DubLinkProUseCase @Inject constructor(
         ).flatMap { purchases ->
             if (purchases.isNullOrEmpty()) {
                 Timber.d("No purchases on record - removing DubLink Pro access")
-                dubLinkProService.revokeDubLinkProPreferences() // TODO add back in when ready for prod
+//                dubLinkProService.revokeDubLinkProPreferences() // TODO add back in when ready for prod
                 Single.just(emptyList())
             } else {
                 Single.zip(

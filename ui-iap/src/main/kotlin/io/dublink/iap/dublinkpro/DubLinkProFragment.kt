@@ -16,7 +16,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.domain.service.DubLinkProService
-import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.ThemeService
 import io.dublink.iap.BillingConnectionManager
 import io.dublink.iap.R
@@ -24,13 +23,13 @@ import io.dublink.iap.RxBilling
 import io.dublink.viewModelProvider
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_dublink_pro.*
+import timber.log.Timber
 
 class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkProViewModel }
 
     @Inject lateinit var dubLinkProService: DubLinkProService
-    @Inject lateinit var preferenceStore: PreferenceStore
     @Inject lateinit var themeService: ThemeService
     @Inject lateinit var rxBilling: RxBilling
     private lateinit var rxBillingLifecycleObserver: LifecycleObserver
@@ -107,7 +106,9 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
     }
 
     private fun renderPurchase(dubLinkProPurchased: Boolean?) {
+        Timber.d("DubLinkFragment::${object{}.javaClass.enclosingMethod?.name}")
         if (dubLinkProPurchased == true) {
+            themeService.setDefaultTheme()
             findNavController().navigateUp()
         }
     }
