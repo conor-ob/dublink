@@ -28,6 +28,10 @@ class ThemeRepository @Inject constructor(
         AppCompatDelegate.setDefaultNightMode(theme.mode)
     }
 
+    override fun setLightTheme() {
+        AppCompatDelegate.setDefaultNightMode(Theme.LIGHT.mode)
+    }
+
     override fun setDarkTheme() {
         AppCompatDelegate.setDefaultNightMode(Theme.DARK.mode)
     }

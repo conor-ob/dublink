@@ -37,7 +37,7 @@ class DubLinkProPreferencesService(
             preferenceStore.setFavouritesSortByLocation(resources.getBoolean(R.bool.preference_default_favourites_sort_location))
             preferenceStore.setFavouritesLiveDataLimit(resources.getInteger(R.integer.preference_default_favourites_live_data_limit))
             preferenceStore.setPreferredTheme(resources.getString(R.string.preference_value_light_theme))
-            themeService.setTheme(resources.getString(R.string.preference_value_light_theme))
+            themeService.setLightTheme()
         }
     }
 
