@@ -17,6 +17,7 @@ import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.service.StringProvider
+import io.dublink.domain.service.ThemeService
 import io.dublink.domain.util.XorEncryption
 import io.dublink.iap.InAppPurchaseModule
 import io.dublink.internet.DeviceInternetManager
@@ -32,6 +33,7 @@ import io.dublink.settings.DubLinkProPreferencesService
 import io.dublink.settings.ThemeRepository
 import io.dublink.startup.LoggingStartupWorker
 import io.dublink.startup.PreferencesStartupWorker
+import io.dublink.startup.ProcessLifecycleStartupWorker
 import io.dublink.startup.RxStartupWorker
 import io.dublink.startup.StartupWorkers
 import io.dublink.startup.ThemeStartupWorker
@@ -86,9 +88,9 @@ class ApplicationModule {
     @Singleton
     fun dubLinkProService(
         preferenceStore: PreferenceStore,
-        themeRepository: ThemeRepository,
+        themeService: ThemeService,
         resources: Resources
-    ): DubLinkProService = DubLinkProPreferencesService(preferenceStore, themeRepository, resources)
+    ): DubLinkProService = DubLinkProPreferencesService(preferenceStore, themeService, resources)
 
     @Provides
     @Singleton
@@ -130,21 +132,24 @@ class ApplicationModule {
 
     @Provides
     @Singleton
-    fun themeRepository(
+    fun themeService(
         resources: Resources,
         preferenceStore: PreferenceStore
-    ): ThemeRepository =
-        ThemeRepository(resources, preferenceStore)
+    ): ThemeService = ThemeRepository(resources, preferenceStore)
 
     @Provides
     @Singleton
-    fun startupWorkers(themeRepository: ThemeRepository): StartupWorkers =
+    fun startupWorkers(
+        themeService: ThemeService,
+        dubLinkProService: DubLinkProService
+    ): StartupWorkers =
         StartupWorkers(
             listOf(
                 PreferencesStartupWorker(),
                 LoggingStartupWorker(),
-                ThemeStartupWorker(themeRepository),
-                RxStartupWorker()
+                ThemeStartupWorker(themeService),
+                RxStartupWorker(),
+                ProcessLifecycleStartupWorker(dubLinkProService)
             )
         )
 

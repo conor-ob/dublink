@@ -15,6 +15,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
+import io.dublink.domain.service.DubLinkProService
+import io.dublink.domain.service.PreferenceStore
+import io.dublink.domain.service.ThemeService
 import io.dublink.iap.BillingConnectionManager
 import io.dublink.iap.R
 import io.dublink.iap.RxBilling
@@ -26,6 +29,9 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkProViewModel }
 
+    @Inject lateinit var dubLinkProService: DubLinkProService
+    @Inject lateinit var preferenceStore: PreferenceStore
+    @Inject lateinit var themeService: ThemeService
     @Inject lateinit var rxBilling: RxBilling
     private lateinit var rxBillingLifecycleObserver: LifecycleObserver
 
@@ -108,7 +114,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private fun renderFeaturesList() {
         featuresAdapter?.update(
-            listOf(
+            listOfNotNull(
                 DubLinkProHeaderItem(),
                 DubLinkProDividerItem(),
                 DubLinkProFeatureItem(
@@ -127,6 +133,20 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
                     title = "VIP",
                     summary = "As DubLink grows you'll have exclusive access to all new features"
                 ),
+                if (dubLinkProService.isFreeTrialRunning()) {
+                    null
+                } else {
+                    DubLinkProFeatureItem(
+                        title = "Free Trial",
+                        summary = "Want to try before you buy? Please note that pro features will reset when you exit the app",
+                        tryItListener = object : TryItListener {
+
+                            override fun onTryItClicked() {
+                                dubLinkProService.grantDubLinkProTrial()
+                            }
+                        }
+                    )
+                },
                 DubLinkProSpacerItem()
             )
         )

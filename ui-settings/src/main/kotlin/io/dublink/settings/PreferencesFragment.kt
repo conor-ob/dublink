@@ -20,6 +20,7 @@ import io.dublink.DubLinkNavigator
 import io.dublink.domain.service.AppConfig
 import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
+import io.dublink.domain.service.ThemeService
 import javax.inject.Inject
 
 private const val sortByLocationRequestCode = 42069
@@ -29,7 +30,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @Inject
-    lateinit var themeRepository: ThemeRepository
+    lateinit var themeService: ThemeService
     @Inject
     lateinit var appConfig: AppConfig
     @Inject
@@ -80,7 +81,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
         }
         val preferredThemePreference = findPreference<ListPreference>(getString(R.string.preference_key_preferred_theme))
         preferredThemePreference?.setOnPreferenceChangeListener { _, newValue ->
-            themeRepository.setTheme(newValue as String)
+            themeService.setTheme(newValue as String)
             return@setOnPreferenceChangeListener true
         }
         val sortByLocationPreference = findPreference<SwitchPreference>(getString(R.string.preference_key_favourites_sort_by_location))

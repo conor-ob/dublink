@@ -14,6 +14,7 @@ import io.dublink.iap.BillingConnectionManager
 import io.dublink.iap.RxBilling
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
+import timber.log.Timber
 import javax.inject.Inject
 
 class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
@@ -28,6 +29,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
         setContentView(R.layout.activity_root)
 //        navigation.setupWithNavController(navigationController)
 //        navigation.setOnNavigationItemSelectedListener { item ->
@@ -55,6 +57,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
 
     override fun onResume() {
         super.onResume()
+        Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
         viewModel.dispatch(DubLinkActivityAction.QueryPurchases) // TODO this should be called when internet status restored
     }
 

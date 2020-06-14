@@ -5,14 +5,15 @@ import android.os.Build
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import io.dublink.domain.service.PreferenceStore
+import io.dublink.domain.service.ThemeService
 import javax.inject.Inject
 
 class ThemeRepository @Inject constructor(
     private val resources: Resources,
     private val preferenceStore: PreferenceStore
-) {
+) : ThemeService {
 
-    fun setPreferredThemeOrDefault() {
+    override fun setPreferredThemeOrDefault() {
         val theme = getPreferredThemeOrDefault()
         if (!preferenceStore.containsPreferredTheme()) {
             preferenceStore.setPreferredTheme(resources.getString(theme.value))
@@ -20,11 +21,15 @@ class ThemeRepository @Inject constructor(
         AppCompatDelegate.setDefaultNightMode(theme.mode)
     }
 
-    fun setTheme(name: String) {
+    override fun setTheme(name: String) {
         val defaultTheme = getDefaultTheme()
         val theme = getThemes().find { theme ->
             resources.getString(theme.value) == name } ?: defaultTheme
         AppCompatDelegate.setDefaultNightMode(theme.mode)
+    }
+
+    override fun setDarkTheme() {
+        AppCompatDelegate.setDefaultNightMode(Theme.DARK.mode)
     }
 
     private fun getPreferredThemeOrDefault(): Theme {
