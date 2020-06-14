@@ -5,6 +5,7 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.google.common.truth.Truth.assertThat
+import io.dublink.domain.service.DubLinkProService
 import io.dublink.domain.service.RxScheduler
 import io.dublink.iap.DubLinkSku
 import io.dublink.iap.InAppPurchaseVerifier
@@ -27,7 +28,27 @@ class DubLinkProViewModelTest {
             inAppPurchaseVerifier = InAppPurchaseVerifier(
                 encodedPublicKey = "XYZ"
             ),
-            dubLinkProService = mockk()
+            dubLinkProService = object : DubLinkProService {
+
+                override fun isFreeTrialRunning(): Boolean {
+                    return false
+                }
+
+                override fun grantDubLinkProAccess() {
+                }
+
+                override fun grantDubLinkProTrial() {
+                }
+
+                override fun grantDubLinkProPreferences() {
+                }
+
+                override fun revokeDubLinkProPreferences() {
+                }
+
+                override fun revokeDubLinkProTrial() {
+                }
+            }
         ),
         rxScheduler = RxScheduler(
             io = Schedulers.trampoline(),
@@ -52,14 +73,19 @@ class DubLinkProViewModelTest {
         viewModel.dispatch(Action.QuerySkuDetails)
 
         // assert
-        assertThat(viewModel.observableState.getOrAwaitValue()).isEqualTo(
-            State(
-                dubLinkProPrice = "€2.99",
-                canPurchaseDubLinkPro = null,
-                dubLinkProPurchased = null,
-                message = null
-            )
-        )
+//        assertThat(viewModel.observableState.getOrAwaitValue()).isEqualTo(
+//            State(
+//                dubLinkProPrice = "€2.99",
+//                canPurchaseDubLinkPro = null,
+//                dubLinkProPurchased = null,
+//                message = null
+//            )
+//        )
+        val state = viewModel.observableState.getOrAwaitValue()
+        assertThat(state.dubLinkProPrice).isEqualTo("€2.99")
+        assertThat(state.canPurchaseDubLinkPro).isNull()
+        assertThat(state.dubLinkProPurchased).isNull()
+        assertThat(state.message).isNull()
     }
 
     @Test
@@ -72,14 +98,19 @@ class DubLinkProViewModelTest {
         viewModel.dispatch(Action.QueryPurchases)
 
         // assert
-        assertThat(viewModel.observableState.getOrAwaitValue()).isEqualTo(
-            State(
-                dubLinkProPrice = null,
-                canPurchaseDubLinkPro = true,
-                dubLinkProPurchased = null,
-                message = null
-            )
-        )
+//        assertThat(viewModel.observableState.getOrAwaitValue()).isEqualTo(
+//            State(
+//                dubLinkProPrice = null,
+//                canPurchaseDubLinkPro = true,
+//                dubLinkProPurchased = null,
+//                message = null
+//            )
+//        )
+        val state = viewModel.observableState.getOrAwaitValue()
+        assertThat(state.dubLinkProPrice).isNull()
+        assertThat(state.canPurchaseDubLinkPro).isTrue()
+        assertThat(state.dubLinkProPurchased).isNull()
+        assertThat(state.message).isNull()
     }
 
     @Test
@@ -111,7 +142,7 @@ class DubLinkProViewModelTest {
     }
 
     @Test
-    fun `big test wha`() {
+    fun `full integration test`() {
         // arrange
         val skuDetails = SkuDetails(
             """
@@ -130,13 +161,18 @@ class DubLinkProViewModelTest {
         viewModel.dispatch(Action.QueryPurchases)
 
         // assert
-        assertThat(viewModel.observableState.getOrAwaitValue()).isEqualTo(
-            State(
-                dubLinkProPrice = "€2.99",
-                canPurchaseDubLinkPro = true,
-                dubLinkProPurchased = null,
-                message = null
-            )
-        )
+//        assertThat(viewModel.observableState.getOrAwaitValue()).isEqualTo(
+//            State(
+//                dubLinkProPrice = "€2.99",
+//                canPurchaseDubLinkPro = true,
+//                dubLinkProPurchased = null,
+//                message = null
+//            )
+//        )
+        val state = viewModel.observableState.getOrAwaitValue()
+        assertThat(state.dubLinkProPrice).isEqualTo("€2.99")
+        assertThat(state.canPurchaseDubLinkPro).isTrue()
+        assertThat(state.dubLinkProPurchased).isNull()
+        assertThat(state.message).isNull()
     }
 }

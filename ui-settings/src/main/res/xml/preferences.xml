@@ -131,33 +131,23 @@
 
     <PreferenceCategory android:title="@string/preference_category_contact">
 
-        <!-- TODO remove this -->
-        <Preference
-            android:icon="@drawable/ic_check"
-            android:title="Pre-release feedback form"
-            android:summary="Complete a survey to submit your feedback">
-            <intent android:action="android.intent.action.VIEW"
-                android:data="https://docs.google.com/forms/d/e/1FAIpQLSe2cfSl99qvvFVZD46kgzKtNbkpcr3qIyhRZGogjTD7mKGFSg/viewform?usp=sf_link" />
-
-        </Preference>
-
         <Preference
             android:icon="@drawable/ic_feedback"
             android:key="@string/preference_key_contact_send_feedback"
             android:summary="@string/preference_summary_contact_send_feedback"
             android:title="@string/preference_name_contact_send_feedback" />
 
-<!--        <Preference-->
-<!--            android:icon="@drawable/ic_thumb_up"-->
-<!--            android:key="@string/preference_key_contact_rate"-->
-<!--            android:summary="@string/preference_summary_contact_rate"-->
-<!--            android:title="@string/preference_name_contact_rate" />-->
+        <Preference
+            android:icon="@drawable/ic_thumb_up"
+            android:key="@string/preference_key_contact_rate"
+            android:summary="@string/preference_summary_contact_rate"
+            android:title="@string/preference_name_contact_rate" />
 
-<!--        <Preference-->
-<!--            android:icon="@drawable/ic_share"-->
-<!--            android:key="@string/preference_key_contact_share"-->
-<!--            android:summary="@string/preference_summary_contact_share"-->
-<!--            android:title="@string/preference_name_contact_share" />-->
+        <Preference
+            android:icon="@drawable/ic_share"
+            android:key="@string/preference_key_contact_share"
+            android:summary="@string/preference_summary_contact_share"
+            android:title="@string/preference_name_contact_share" />
 
     </PreferenceCategory>
 

@@ -58,6 +58,16 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
         }
 
         renderFeaturesList()
+
+        swipe_refresh.apply {
+            setColorSchemeResources(R.color.color_on_surface)
+            setProgressBackgroundColorSchemeResource(R.color.color_surface)
+            setOnRefreshListener {
+                viewModel.dispatch(Action.ObservePurchaseUpdates)
+                viewModel.dispatch(Action.QuerySkuDetails)
+                viewModel.dispatch(Action.QueryPurchases)
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -84,6 +94,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
     }
 
     private fun renderState(state: State) {
+        swipe_refresh.isRefreshing = false
         renderBuyButton(state)
         renderMessage(state.message)
         renderPurchase(state.dubLinkProPurchased)
@@ -91,8 +102,7 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
     private fun renderBuyButton(state: State) {
         if (state.dubLinkProPrice != null && state.canPurchaseDubLinkPro == true) {
-            dubLinkProPriceButton.updateText(newText = "Test purchase") // TODO reset this
-//            dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, state.dubLinkProPrice))
+            dubLinkProPriceButton.updateText(newText = getString(R.string.iap_buy_button, state.dubLinkProPrice))
             dubLinkProPriceButton.visibility = View.VISIBLE
         } else {
             dubLinkProPriceButton.visibility = View.GONE
