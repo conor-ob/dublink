@@ -5,5 +5,4 @@ interface ThemeService {
     fun setPreferredThemeOrDefault()
     fun setTheme(name: String)
     fun setLightTheme()
-    fun setDarkTheme()
 }

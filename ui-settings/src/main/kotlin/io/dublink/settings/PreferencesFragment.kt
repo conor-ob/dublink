@@ -11,13 +11,16 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SeekBarPreference
 import androidx.preference.SwitchPreference
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import io.dublink.DubLinkNavigator
 import io.dublink.domain.service.AppConfig
+import io.dublink.domain.service.DubLinkProService
 import io.dublink.domain.service.PermissionChecker
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.ThemeService
@@ -32,6 +35,8 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     @Inject
     lateinit var themeService: ThemeService
     @Inject
+    lateinit var dubLinkProService: DubLinkProService
+    @Inject
     lateinit var appConfig: AppConfig
     @Inject
     lateinit var permissionChecker: PermissionChecker
@@ -44,25 +49,50 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
     }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(
-            if (preferenceStore.isDubLinkProEnabled()) {
-                R.xml.preferences_pro
-            } else {
-                R.xml.preferences
-            },
-            rootKey
-        )
+        setPreferencesFromResource(R.xml.preferences, rootKey)
+        setDubLinkProPreferences()
         setAppVersionPreference()
         bindListeners()
     }
 
     override fun onResume() {
         super.onResume()
-        if (preferenceStore.isDubLinkProEnabled()) {
-            val upgradePreference = findPreference<Preference>(getString(R.string.preference_key_dublink_pro_upgrade))
-            if (upgradePreference != null) {
-                // user has just purchased pro so rebuild the screen
-                onCreatePreferences(null, null)
+        setDubLinkProPreferences()
+    }
+
+    private fun setDubLinkProPreferences() {
+        val upgradeCategory = findPreference<PreferenceCategory?>(getString(R.string.preference_category_key_upgrade))
+        upgradeCategory?.apply {
+            isVisible = !preferenceStore.isDubLinkProEnabled() || dubLinkProService.isFreeTrialRunning()
+        }
+
+        val preferredThemePreference = findPreference<ListPreference?>(getString(R.string.preference_key_preferred_theme))
+        preferredThemePreference?.apply {
+            isEnabled = preferenceStore.isDubLinkProEnabled()
+            title = if (preferenceStore.isDubLinkProEnabled()) {
+                getString(R.string.preference_name_preferred_theme)
+            } else {
+                getString(R.string.preference_name_preferred_theme_pro)
+            }
+        }
+
+        val sortByLocationPreference = findPreference<SwitchPreference?>(getString(R.string.preference_key_favourites_sort_by_location))
+        sortByLocationPreference?.apply {
+            isEnabled = preferenceStore.isDubLinkProEnabled()
+            title = if (preferenceStore.isDubLinkProEnabled()) {
+                getString(R.string.preference_name_favourites_sort_by_location)
+            } else {
+                getString(R.string.preference_name_favourites_sort_by_location_pro)
+            }
+        }
+
+        val liveDataLimitPreference = findPreference<SeekBarPreference?>(getString(R.string.preference_key_favourites_live_data_limit))
+        liveDataLimitPreference?.apply {
+            isEnabled = preferenceStore.isDubLinkProEnabled()
+            title = if (preferenceStore.isDubLinkProEnabled()) {
+                getString(R.string.preference_name_favourites_live_data_limit)
+            } else {
+                getString(R.string.preference_name_favourites_live_data_limit_pro)
             }
         }
     }
@@ -79,12 +109,12 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
                 return@setOnPreferenceClickListener true
             }
         }
-        val preferredThemePreference = findPreference<ListPreference>(getString(R.string.preference_key_preferred_theme))
+        val preferredThemePreference = findPreference<ListPreference?>(getString(R.string.preference_key_preferred_theme))
         preferredThemePreference?.setOnPreferenceChangeListener { _, newValue ->
             themeService.setTheme(newValue as String)
             return@setOnPreferenceChangeListener true
         }
-        val sortByLocationPreference = findPreference<SwitchPreference>(getString(R.string.preference_key_favourites_sort_by_location))
+        val sortByLocationPreference = findPreference<SwitchPreference?>(getString(R.string.preference_key_favourites_sort_by_location))
         sortByLocationPreference?.setOnPreferenceChangeListener { _, newValue ->
             if (newValue is Boolean) {
                 if (newValue) {
@@ -99,7 +129,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
             }
             return@setOnPreferenceChangeListener false
         }
-        findPreference<Preference>(getString(R.string.preference_key_contact_send_feedback))?.apply {
+        findPreference<Preference?>(getString(R.string.preference_key_contact_send_feedback))?.apply {
             setOnPreferenceClickListener {
                 val selectorIntent = Intent(Intent.ACTION_SENDTO)
                 selectorIntent.data = Uri.parse("mailto:")
@@ -130,7 +160,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
                 return@setOnPreferenceClickListener true
             }
         }
-//        findPreference<Preference>(getString(R.string.preference_key_contact_rate))?.apply {
+//        findPreference<Preference?>(getString(R.string.preference_key_contact_rate))?.apply {
 //            setOnPreferenceClickListener {
 //                val uri = Uri.parse("market://details?id=" + context.packageName)
 //                val playStoreIntent = Intent(Intent.ACTION_VIEW, uri)
@@ -155,7 +185,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
 //                return@setOnPreferenceClickListener true
 //            }
 //        }
-//        findPreference<Preference>(getString(R.string.preference_key_contact_share))?.apply {
+//        findPreference<Preference?>(getString(R.string.preference_key_contact_share))?.apply {
 //            setOnPreferenceClickListener {
 //                val shareIntent = Intent()
 //                shareIntent.action = Intent.ACTION_SEND
@@ -173,7 +203,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
 //                return@setOnPreferenceClickListener true
 //            }
 //        }
-        val privacyPolicyPreference = findPreference<Preference>(getString(R.string.preference_key_privacy_policy))
+        val privacyPolicyPreference = findPreference<Preference?>(getString(R.string.preference_key_privacy_policy))
         privacyPolicyPreference?.setOnPreferenceClickListener {
             (activity as DubLinkNavigator).navigateToWebView(
                 title = getString(R.string.preference_name_privacy_policy),
@@ -181,7 +211,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
             )
             return@setOnPreferenceClickListener true
         }
-        val termsOfServicePreference = findPreference<Preference>(getString(R.string.preference_key_terms_of_service))
+        val termsOfServicePreference = findPreference<Preference?>(getString(R.string.preference_key_terms_of_service))
         termsOfServicePreference?.setOnPreferenceClickListener {
             (activity as DubLinkNavigator).navigateToWebView(
                 title = getString(R.string.preference_name_terms_of_service),

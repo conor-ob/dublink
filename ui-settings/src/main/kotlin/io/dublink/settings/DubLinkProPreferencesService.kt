@@ -22,8 +22,6 @@ class DubLinkProPreferencesService(
     override fun grantDubLinkProTrial() {
         trial = true
         grantDubLinkProPreferences()
-        preferenceStore.setPreferredTheme(resources.getString(R.string.preference_value_dark_theme))
-        themeService.setDarkTheme()
     }
 
     override fun grantDubLinkProPreferences() {

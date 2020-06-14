@@ -1,4 +1,5 @@
 <resources>
+    <string name="preference_category_key_upgrade">upgrade_category</string>
     <string name="preference_category_name_upgrade">Upgrade</string>
 
     <string name="preference_key_dublink_pro">dublink_pro</string>
@@ -33,15 +34,10 @@
 
     <string name="preference_name_enabled_service_dublin_bus">Dublin Bus</string>
     <string name="preference_name_enabled_service_aircoach">Aircoach</string>
-    <string name="preference_name_enabled_service_aircoach_pro">Aircoach (Pro)</string>
     <string name="preference_name_enabled_service_bus_eireann">Bus Éireann</string>
-    <string name="preference_name_enabled_service_bus_eireann_pro">Bus Éireann (Pro)</string>
     <string name="preference_name_enabled_service_dublin_bikes">Dublin Bikes</string>
-    <string name="preference_name_enabled_service_dublin_bikes_pro">Dublin Bikes (Pro)</string>
     <string name="preference_name_enabled_service_irish_rail">Irish Rail</string>
-    <string name="preference_name_enabled_service_irish_rail_pro">Irish Rail (Pro)</string>
     <string name="preference_name_enabled_service_luas">Luas</string>
-    <string name="preference_name_enabled_service_luas_pro">Luas (Pro)</string>
 
     <string name="preference_key_enabled_service_aircoach">aircoach_enabled</string>
     <string name="preference_key_enabled_service_bus_eireann">bus_eireann_enabled</string>

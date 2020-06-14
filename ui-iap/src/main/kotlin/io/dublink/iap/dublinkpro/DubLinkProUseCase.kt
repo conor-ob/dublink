@@ -115,6 +115,7 @@ class DubLinkProUseCase @Inject constructor(
                         Timber.d("DubLink Pro purchase acknowledged - granting DubLink Pro access")
                         Timber.d(purchase.toString())
                         dubLinkProService.grantDubLinkProPreferences()
+                        dubLinkProService.revokeDubLinkProTrial()
                     }
                     .toSingle { purchase }
             }
@@ -139,6 +140,7 @@ class DubLinkProUseCase @Inject constructor(
             .doOnComplete {
                 dubLinkProService.grantDubLinkProAccess()
                 dubLinkProService.grantDubLinkProPreferences()
+                dubLinkProService.revokeDubLinkProTrial()
             }
             .toSingle { purchase }
     }

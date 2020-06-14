@@ -144,6 +144,8 @@ class DubLinkProFragment : DubLinkFragment(R.layout.fragment_dublink_pro) {
 
                             override fun onTryItClicked() {
                                 dubLinkProService.grantDubLinkProTrial()
+                                themeService.setDefaultTheme()
+                                findNavController().navigateUp()
                             }
                         }
                     )

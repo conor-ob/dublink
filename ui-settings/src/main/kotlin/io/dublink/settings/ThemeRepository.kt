@@ -38,10 +38,6 @@ class ThemeRepository @Inject constructor(
         AppCompatDelegate.setDefaultNightMode(Theme.LIGHT.mode)
     }
 
-    override fun setDarkTheme() {
-        AppCompatDelegate.setDefaultNightMode(Theme.DARK.mode)
-    }
-
     private fun getPreferredThemeOrDefault(): Theme {
         val defaultTheme = getDefaultTheme()
         val preferredThemeOrDefault = getPreferredTheme()
