@@ -48,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="Try It"
-                android:visibility="gone" />
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.Button.TextButton" />
 
         </LinearLayout>
 
