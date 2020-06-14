@@ -3,10 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
+    android:minHeight="48dp"
     android:paddingStart="@dimen/padding_l"
-    android:paddingTop="@dimen/padding_s"
+    android:paddingTop="10dp"
     android:paddingEnd="@dimen/padding_l"
-    android:paddingBottom="@dimen/padding_s">
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/message"
