@@ -26,4 +26,7 @@
     <color name="luas_red_brand">#DD6161</color>
     <color name="luas_red_brand_text">@color/grey_950</color>
 
+    <color name="direction_brand">@color/grey_500</color>
+    <color name="direction_brand_text">@color/grey_950</color>
+
 </resources>

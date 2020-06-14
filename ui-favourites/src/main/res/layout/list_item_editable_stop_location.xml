@@ -50,7 +50,7 @@
 
         <View
             android:layout_width="0dp"
-            android:layout_height="8dp" />
+            android:layout_height="4dp" />
 
         <include
             layout="@layout/layout_stop_location_routes"

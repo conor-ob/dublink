@@ -32,15 +32,26 @@
                         android:layout_width="8dp"
                         android:layout_height="0dp"/>
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/dublink_pro_badge"
+                    <com.google.android.material.chip.ChipGroup
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="PRO"
-                        android:backgroundTint="?attr/colorPrimary"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:visibility="gone"
-                        style="@style/Widget.DubLink.RouteChip" />
+                        android:padding="1dp"
+                        android:layout_marginTop="4dp"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        app:singleLine="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/dublink_pro_badge"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PRO"
+                            android:backgroundTint="?attr/colorPrimary"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:visibility="gone"
+                            style="@style/Widget.DubLink.RouteChip" />
+
+                    </com.google.android.material.chip.ChipGroup>
 
                 </LinearLayout>
 

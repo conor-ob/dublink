@@ -1,48 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/padding_l"
+    android:paddingStart="18dp"
     android:paddingTop="@dimen/padding_s"
     android:paddingEnd="@dimen/padding_l"
-    android:paddingBottom="@dimen/padding_s">
+    android:paddingBottom="@dimen/padding_s"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/bikesCount"
+    <com.google.android.material.chip.ChipGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.DubLink.RouteChip" />
+        android:padding="@dimen/padding_xxs"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:singleLine="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/bikesCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.DubLink.RouteChip" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <View
-        android:layout_width="8dp"
+        android:layout_width="2dp"
         android:layout_height="0dp" />
 
     <TextView
         android:id="@+id/bikes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="2dp"
         android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
     <View
         android:layout_width="12dp"
         android:layout_height="0dp" />
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/docksCount"
+    <com.google.android.material.chip.ChipGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.DubLink.RouteChip" />
+        android:padding="@dimen/padding_xxs"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:singleLine="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/docksCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.DubLink.RouteChip" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <View
-        android:layout_width="8dp"
+        android:layout_width="2dp"
         android:layout_height="0dp" />
 
     <TextView
         android:id="@+id/docks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="2dp"
         android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
 </LinearLayout>

@@ -28,6 +28,9 @@
     <color name="luas_red_brand">#e53935</color>
     <color name="luas_red_brand_text">@android:color/white</color>
 
+    <color name="direction_brand">@color/grey_500</color>
+    <color name="direction_brand_text">@android:color/white</color>
+
     <!-- Material Colors -->
     <color name="grey_50">#fafafa</color>
     <color name="grey_100">#f5f5f5</color>

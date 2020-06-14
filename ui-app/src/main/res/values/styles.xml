@@ -9,8 +9,23 @@
     </style>
 
     <style name="Widget.DubLink.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton.Icon">
-            <item name="android:layout_gravity">bottom|center</item>
-            <item name="android:layout_margin">@dimen/padding_xl</item>
+        <item name="android:layout_gravity">bottom|center</item>
+        <item name="android:layout_margin">@dimen/padding_xl</item>
+    </style>
+
+    <style name="Widget.DubLink.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+<!--        <item name="android:backgroundDimAmount">0.32</item>-->
+        <item name="materialAlertDialogTitleTextStyle">@style/Widget.DubLink.MaterialAlertDialog.Title.Text</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Widget.DubLink.MaterialAlertDialog.Body.Text</item>
+    </style>
+
+    <style name="Widget.DubLink.MaterialAlertDialog.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textAppearance">@style/TextAppearance.DubLink.Headline6</item>
+    </style>
+
+    <style name="Widget.DubLink.MaterialAlertDialog.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Panel">
+        <item name="android:textAppearance">@style/TextAppearance.DubLink.Body1</item>
+        <item name="android:paddingTop">8dp</item>
     </style>
 
     <style name="Widget.DubLink.RouteChip" parent="Widget.MaterialComponents.Chip.Action">
@@ -26,8 +41,10 @@
         <item name="closeIconStartPadding">0dp</item>
         <item name="closeIconEndPadding">0dp</item>
         <item name="android:textAppearance">@style/TextAppearance.DubLink.Button</item>
-        <item name="android:elevation">4dp</item>
+        <item name="android:elevation">2dp</item>
         <item name="android:clickable">false</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">2dp</item>
     </style>
 
     <style name="Widget.DubLink.RouteFilterChip" parent="Widget.MaterialComponents.Chip.Filter">
@@ -37,6 +54,8 @@
         <item name="chipMinHeight">28dp</item>
         <item name="android:textAppearance">@style/TextAppearance.DubLink.Button.RouteFilter</item>
         <item name="android:elevation">4dp</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">2dp</item>
     </style>
 
     <style name="Widget.DubLink.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">

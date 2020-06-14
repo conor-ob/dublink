@@ -43,6 +43,7 @@
         <item name="toolbarStyle">@style/Widget.DubLink.Toolbar</item>
         <item name="extendedFloatingActionButtonStyle">@style/Widget.DubLink.ExtendedFloatingActionButton</item>
         <item name="snackbarTextViewStyle">@style/Widget.DubLink.Snackbar.TextView</item>
+        <item name="materialAlertDialogTheme">@style/Widget.DubLink.MaterialAlertDialog</item>
 
         <item name="badgeStyle">@style/Widget.MaterialComponents.Badge</item>
         <item name="bottomAppBarStyle">@style/Widget.MaterialComponents.BottomAppBar</item>

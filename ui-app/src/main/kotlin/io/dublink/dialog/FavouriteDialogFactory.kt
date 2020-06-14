@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
@@ -15,6 +16,7 @@ import io.dublink.domain.model.removeFilter
 import io.dublink.domain.model.setCustomName
 import io.dublink.ui.R
 import io.dublink.util.ChipFactory
+import io.rtpi.api.Service
 import kotlinx.android.synthetic.main.dialog_customize_favourite.view.*
 
 object FavouriteDialogFactory {
@@ -23,13 +25,20 @@ object FavouriteDialogFactory {
         context: Context,
         activity: FragmentActivity,
         serviceLocation: DubLinkServiceLocation,
-        onFavouriteSavedListener: OnFavouriteSavedListener
+        onFavouriteSavedListener: OnFavouriteSavedListener,
+        onFavouriteRouteChangedListener: OnFavouriteRouteChangedListener
     ): AlertDialog {
         var editedStopLocation = serviceLocation
 
-        val builder = AlertDialog.Builder(context)
+        val builder = MaterialAlertDialogBuilder(context)
         builder.setTitle(serviceLocation.defaultName)
-            .setMessage(serviceLocation.service.fullName)
+            .setMessage(
+                when (val service = serviceLocation.service) {
+                    Service.BUS_EIREANN,
+                    Service.DUBLIN_BUS -> "${service.fullName} (${serviceLocation.id})"
+                    else -> service.fullName
+                }
+            )
             .setPositiveButton("Ok", null)
             .setNegativeButton("Cancel", null)
         val customizeFavouriteView = activity.layoutInflater.inflate(R.layout.dialog_customize_favourite, null)
@@ -60,13 +69,19 @@ object FavouriteDialogFactory {
                                     }
                                 }
                                 editedStopLocation = if (isChecked) {
-                                    (editedStopLocation as DubLinkStopLocation).addFilter(
-                                        filter = buttonView.tag as Filter
+                                    val filterToAdd = buttonView.tag as Filter
+                                    val newStopLocation = (editedStopLocation as DubLinkStopLocation).addFilter(
+                                        filter = filterToAdd
                                     )
+                                    onFavouriteRouteChangedListener.onAdded(filterToAdd)
+                                    newStopLocation
                                 } else {
-                                    (editedStopLocation as DubLinkStopLocation).removeFilter(
-                                        filter = buttonView.tag as Filter
+                                    val filterToRemove = buttonView.tag as Filter
+                                    val newStopLocation = (editedStopLocation as DubLinkStopLocation).removeFilter(
+                                        filter = filterToRemove
                                     )
+                                    onFavouriteRouteChangedListener.onRemoved(filterToRemove)
+                                    newStopLocation
                                 }
                             }
                         }
@@ -76,8 +91,9 @@ object FavouriteDialogFactory {
             }
         }
 
-        customizeFavouriteView.favourite_edit_name.hint = serviceLocation.defaultName
-        customizeFavouriteView.favourite_edit_name.setText(serviceLocation.name)
+        if (editedStopLocation.isFavourite) {
+            customizeFavouriteView.favourite_edit_name.editText?.setText(serviceLocation.name)
+        }
 
         val dialog = builder.create()
         dialog.setOnShowListener {
@@ -101,9 +117,9 @@ object FavouriteDialogFactory {
                 ) {
                     Toast.makeText(context, "Select at least 1 route", Toast.LENGTH_SHORT).show()
                 } else {
-                    val customName = customizeFavouriteView.favourite_edit_name.text
+                    val customName = customizeFavouriteView.favourite_edit_name?.editText?.text
                     editedStopLocation = if (customName.isNullOrBlank()) {
-                        editedStopLocation.setCustomName(serviceLocation.name)
+                        editedStopLocation.setCustomName(serviceLocation.defaultName)
                     } else {
                         editedStopLocation.setCustomName(customName.toString())
                     }
@@ -117,12 +133,13 @@ object FavouriteDialogFactory {
 
     fun newEditDialog(
         context: Context,
+        serviceLocation: DubLinkServiceLocation,
         onFavouriteEditListener: OnFavouriteEditListener,
         onFavouriteRemovedListener: OnFavouriteRemovedListener
     ): AlertDialog {
-        val dialog = AlertDialog.Builder(context)
-            .setTitle("Edit")
-            .setMessage("Would you like to edit or remove this?")
+        val dialog = MaterialAlertDialogBuilder(context)
+            .setTitle(serviceLocation.name)
+            .setMessage("Edit or remove this?")
             .setPositiveButton("Remove", null)
             .setNegativeButton("Edit", null)
             .setNeutralButton("Cancel", null)
@@ -154,4 +171,9 @@ interface OnFavouriteRemovedListener {
 
 interface OnFavouriteEditListener {
     fun onEdit()
+}
+
+interface OnFavouriteRouteChangedListener {
+    fun onAdded(filter: Filter)
+    fun onRemoved(filter: Filter)
 }

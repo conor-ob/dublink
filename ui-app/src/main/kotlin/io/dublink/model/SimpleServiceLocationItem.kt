@@ -3,7 +3,7 @@ package io.dublink.model
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.ui.R
 
-class SimpleServiceLocationItem(
+open class SimpleServiceLocationItem(
     serviceLocation: DubLinkServiceLocation,
     walkDistance: Double?
 ) : AbstractServiceLocationItem(serviceLocation, walkDistance) {

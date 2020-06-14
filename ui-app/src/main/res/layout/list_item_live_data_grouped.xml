@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
+    android:foreground="?android:attr/selectableItemBackground"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingStart="@dimen/padding_l"
-    android:paddingTop="@dimen/padding_s"
+    android:paddingStart="18dp"
+    android:paddingTop="8dp"
     android:paddingEnd="@dimen/padding_l"
-    android:paddingBottom="@dimen/padding_s">
+    android:paddingBottom="8dp">
 
-    <com.google.android.material.chip.Chip
-        android:id="@+id/groupedRoute"
+    <com.google.android.material.chip.ChipGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.DubLink.RouteChip" />
+        android:padding="2dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:singleLine="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/groupedRoute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.DubLink.RouteChip" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <View
         android:layout_width="8dp"
@@ -25,6 +37,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="60"
+        android:paddingBottom="2dp"
         android:singleLine="true"
         android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
 
@@ -33,6 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="35"
+        android:paddingBottom="2dp"
         android:singleLine="true"
         android:gravity="end"
         android:textAppearance="@style/TextAppearance.DubLink.ListItemTitle" />
