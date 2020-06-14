@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
-    android:foreground="?android:attr/selectableItemBackground"
     android:layout_height="wrap_content"
+    android:minHeight="48dp"
     android:orientation="horizontal"
     android:paddingStart="18dp"
-    android:paddingTop="8dp"
+    android:paddingTop="10dp"
     android:paddingEnd="@dimen/padding_l"
-    android:paddingBottom="8dp">
+    android:paddingBottom="10dp">
 
     <com.google.android.material.chip.ChipGroup
         android:layout_width="wrap_content"

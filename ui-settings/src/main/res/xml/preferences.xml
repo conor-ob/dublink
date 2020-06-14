@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        android:title="@string/preference_category_name_upgrade">
+        android:key="@@string/preference_category_key_upgrade"
+        android:title="@string/preference_category_name_upgrade"
+        app:isPreferenceVisible="false">
 
         <Preference
             android:icon="@drawable/ic_flame"
@@ -20,10 +22,9 @@
         <ListPreference
             android:icon="@drawable/ic_paint"
             android:key="@string/preference_key_preferred_theme"
-            android:title="@string/preference_name_preferred_theme_pro"
+            android:title="@string/preference_name_preferred_theme"
             android:entries="@array/theme_names"
             android:entryValues="@array/theme_values"
-            android:enabled="false"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
@@ -78,19 +79,17 @@
         <SwitchPreference
             android:icon="@drawable/ic_sort"
             android:key="@string/preference_key_favourites_sort_by_location"
-            android:title="@string/preference_name_favourites_sort_by_location_pro"
+            android:title="@string/preference_name_favourites_sort_by_location"
             android:summary="@string/preference_summary_favourites_sort_by_location"
-            android:defaultValue="@bool/preference_default_favourites_sort_location"
-            android:enabled="false" />
+            android:defaultValue="@bool/preference_default_favourites_sort_location" />
 
         <SeekBarPreference
             android:icon="@drawable/ic_clock"
             android:key="@string/preference_key_favourites_live_data_limit"
-            android:title="@string/preference_name_favourites_live_data_limit_pro"
+            android:title="@string/preference_name_favourites_live_data_limit"
             android:summary="@string/preference_summary_favourites_live_data_limit"
             android:defaultValue="@integer/preference_default_favourites_live_data_limit"
             android:max="10"
-            android:enabled="false"
             app:showSeekBarValue="true" />
 
     </PreferenceCategory>

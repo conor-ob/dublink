@@ -38,6 +38,19 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.DubLink.ListItemBody" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/try_it_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Try It"
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.Button.TextButton" />
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
