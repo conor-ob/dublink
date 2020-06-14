@@ -15,6 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
 import timber.log.Timber
+import java.time.Instant
 
 class DubLinkProViewModel @Inject constructor(
     private val useCase: DubLinkProUseCase,
@@ -54,7 +55,11 @@ class DubLinkProViewModel @Inject constructor(
                     canPurchaseDubLinkPro = dubLinkProPurchase == null,
                     dubLinkProPrice = state.dubLinkProPrice,
                     dubLinkProPurchased = null,
-                    message = null
+                    message = if (dubLinkProPurchase != null && dubLinkProPurchase.purchaseState == Purchase.PurchaseState.PENDING) {
+                        "Your payment is still pending"
+                    } else {
+                        null
+                    }
                 )
             }
             is NewState.PurchaseUpdate -> State(
@@ -168,5 +173,6 @@ data class State(
     val dubLinkProPrice: String?,
     val canPurchaseDubLinkPro: Boolean?,
     val dubLinkProPurchased: Boolean?,
-    val message: String?
+    val message: String?,
+    val timestamp: Instant = Instant.now()
 ) : BaseState

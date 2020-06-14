@@ -286,6 +286,7 @@ class LiveDataViewModel @Inject constructor(
                     return if (discrepancies.isNotEmpty()) {
                         // TODO log analytics
                         Timber.w(
+                            IllegalStateException("Unknown route(s)"),
                             "Unknown route(s) %s found at %s(service=%s, id=%s, name=%s)",
                             discrepancies, serviceLocation.javaClass.simpleName,
                             serviceLocation.service, serviceLocation.id,

@@ -160,49 +160,49 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
                 return@setOnPreferenceClickListener true
             }
         }
-//        findPreference<Preference?>(getString(R.string.preference_key_contact_rate))?.apply {
-//            setOnPreferenceClickListener {
-//                val uri = Uri.parse("market://details?id=" + context.packageName)
-//                val playStoreIntent = Intent(Intent.ACTION_VIEW, uri)
-//                playStoreIntent.addFlags(
-//                    Intent.FLAG_ACTIVITY_NO_HISTORY or
-//                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
-//                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
-//                )
-//                try {
-//                    context.startActivity(playStoreIntent)
-//                } catch (e: ActivityNotFoundException) {
-//                    context.startActivity(
-//                        Intent(
-//                            Intent.ACTION_VIEW,
-//                            Uri.parse(
-//                                "http://play.google.com/store/apps/details?id="
-//                                    + context.packageName
-//                            )
-//                        )
-//                    )
-//                }
-//                return@setOnPreferenceClickListener true
-//            }
-//        }
-//        findPreference<Preference?>(getString(R.string.preference_key_contact_share))?.apply {
-//            setOnPreferenceClickListener {
-//                val shareIntent = Intent()
-//                shareIntent.action = Intent.ACTION_SEND
-//                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "DubLink")
-//                shareIntent.putExtra(
-//                    Intent.EXTRA_TEXT,
-//                    """
-//                    The best app for getting around Dublin!
-//
-//                    https://play.google.com/store/apps/details?id=${context.packageName}
-//                    """.trimIndent()
-//                )
-//                shareIntent.type = "text/plain"
-//                context.startActivity(shareIntent)
-//                return@setOnPreferenceClickListener true
-//            }
-//        }
+        findPreference<Preference?>(getString(R.string.preference_key_contact_rate))?.apply {
+            setOnPreferenceClickListener {
+                val uri = Uri.parse("market://details?id=" + context.packageName)
+                val playStoreIntent = Intent(Intent.ACTION_VIEW, uri)
+                playStoreIntent.addFlags(
+                    Intent.FLAG_ACTIVITY_NO_HISTORY or
+                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                )
+                try {
+                    context.startActivity(playStoreIntent)
+                } catch (e: ActivityNotFoundException) {
+                    context.startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(
+                                "http://play.google.com/store/apps/details?id="
+                                    + context.packageName
+                            )
+                        )
+                    )
+                }
+                return@setOnPreferenceClickListener true
+            }
+        }
+        findPreference<Preference?>(getString(R.string.preference_key_contact_share))?.apply {
+            setOnPreferenceClickListener {
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "DubLink")
+                shareIntent.putExtra(
+                    Intent.EXTRA_TEXT,
+                    """
+                    The best app for getting around Dublin!
+
+                    https://play.google.com/store/apps/details?id=${context.packageName}
+                    """.trimIndent()
+                )
+                shareIntent.type = "text/plain"
+                context.startActivity(shareIntent)
+                return@setOnPreferenceClickListener true
+            }
+        }
         val privacyPolicyPreference = findPreference<Preference?>(getString(R.string.preference_key_privacy_policy))
         privacyPolicyPreference?.setOnPreferenceClickListener {
             (activity as DubLinkNavigator).navigateToWebView(

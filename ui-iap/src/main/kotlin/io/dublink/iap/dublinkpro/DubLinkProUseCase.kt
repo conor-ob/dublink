@@ -4,7 +4,6 @@ import android.app.Activity
 import com.android.billingclient.api.AcknowledgePurchaseParams
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.ConsumeParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.SkuDetails
 import com.android.billingclient.api.SkuDetailsParams
@@ -64,7 +63,7 @@ class DubLinkProUseCase @Inject constructor(
         ).flatMap { purchases ->
             if (purchases.isNullOrEmpty()) {
                 Timber.d("No purchases on record - removing DubLink Pro access")
-//                dubLinkProService.revokeDubLinkProPreferences() // TODO add back in when ready for prod
+                dubLinkProService.revokeDubLinkProPreferences()
                 Single.just(emptyList())
             } else {
                 Single.zip(
@@ -80,8 +79,9 @@ class DubLinkProUseCase @Inject constructor(
         Timber.d("Processing purchase")
         Timber.d(purchase.toString())
         return if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED && isSignatureValid(purchase)) {
-//            acknowledgePurchase(purchase) // TODO add back in when ready for prod
-            consumePurchase(purchase) // TODO remove when ready for prod
+            acknowledgePurchase(purchase)
+        } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING && isSignatureValid(purchase)) {
+            Single.just(purchase)
         } else {
             revokePurchase(purchase)
         }
@@ -131,22 +131,7 @@ class DubLinkProUseCase @Inject constructor(
         return Single.just(purchase)
     }
 
-    private fun consumePurchase(purchase: Purchase): Single<Purchase> {
-        return rxBilling.consumeProduct(
-            ConsumeParams.newBuilder()
-                .setPurchaseToken(purchase.purchaseToken)
-                .build()
-        )
-            .doOnComplete {
-                dubLinkProService.grantDubLinkProAccess()
-                dubLinkProService.grantDubLinkProPreferences()
-                dubLinkProService.revokeDubLinkProTrial()
-            }
-            .toSingle { purchase }
-    }
-
     private fun isSignatureValid(purchase: Purchase): Boolean {
-//        return inAppPurchaseVerifier.verifyPurchase(purchase) // TODO add back when ready for prod
-        return true
+        return inAppPurchaseVerifier.verifyPurchase(purchase)
     }
 }
