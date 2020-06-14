@@ -13,9 +13,9 @@ import io.dublink.iap.DubLinkSku
 import io.dublink.iap.PurchasesUpdate
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
+import java.time.Instant
 import javax.inject.Inject
 import timber.log.Timber
-import java.time.Instant
 
 class DubLinkProViewModel @Inject constructor(
     private val useCase: DubLinkProUseCase,

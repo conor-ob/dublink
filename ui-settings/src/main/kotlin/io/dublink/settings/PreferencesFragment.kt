@@ -176,8 +176,7 @@ class PreferencesFragment : PreferenceFragmentCompat(), HasAndroidInjector {
                         Intent(
                             Intent.ACTION_VIEW,
                             Uri.parse(
-                                "http://play.google.com/store/apps/details?id="
-                                    + context.packageName
+                                "http://play.google.com/store/apps/details?id=${context.packageName}"
                             )
                         )
                     )
