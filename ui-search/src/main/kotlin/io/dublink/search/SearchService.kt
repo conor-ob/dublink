@@ -6,6 +6,7 @@ import io.dublink.domain.repository.ServiceLocationKey
 import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function5
 import io.rtpi.api.Service
 import me.xdrop.fuzzywuzzy.Applicable
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -48,7 +49,7 @@ class SearchService {
     private val singleSpace = " "
 
     private val ramDir = RAMDirectory()
-    private val analyzer: Analyzer = StandardAnalyzer(Version.LUCENE_47)
+    private val analyzer: Analyzer = StandardAnalyzer(Version.LUCENE_48)
     private var indexLoaded = false
     private var cache = emptyMap<ServiceLocationKey, DubLinkServiceLocation>()
 
@@ -62,13 +63,20 @@ class SearchService {
             indexLoaded = true
         }
         //Search indexed docs in RAMDirectory
-        return searchIndex(query)
+        return Observable.zip(
+            searchIndex(query, "id"),
+            searchIndex(query, "name"),
+            searchIndex(query, "service"),
+            searchIndex(query, "routes"),
+            searchIndex(query, "operators"),
+            Function5 { t1, t2, t3, t4, t5 -> t1.plus(t2).plus(t3).plus(t4).plus(t5) }
+        )
     }
 
     fun writeIndex(serviceLocations: List<DubLinkServiceLocation>) {
         try {
             // IndexWriter Configuration
-            val iwc = IndexWriterConfig(Version.LUCENE_47, analyzer)
+            val iwc = IndexWriterConfig(Version.LUCENE_48, analyzer)
             iwc.openMode = OpenMode.CREATE
 
             //IndexWriter writes new index files to the directory
@@ -89,34 +97,22 @@ class SearchService {
 
     @Throws(IOException::class)
     fun indexDoc(writer: IndexWriter, serviceLocation: DubLinkServiceLocation) {
-        val searchable = listOfNotNull(
-            serviceLocation.id,
-            serviceLocation.defaultName,
-            serviceLocation.service.fullName
-        ).plus(
-            if (serviceLocation is DubLinkStopLocation) {
-                serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }
-            } else {
-                emptyList()
-            }
-        ).plus(
-            if (serviceLocation is DubLinkStopLocation) {
-                serviceLocation.stopLocation.routeGroups.map { routeGroup -> routeGroup.operator.fullName }
-            } else {
-                emptyList()
-            }
-        )
-            .toSet()
-            .joinToString(separator = singleSpace) { value -> value.normalize() }
-
         val doc = Document()
         doc.add(TextField("service", serviceLocation.service.name, Field.Store.YES))
         doc.add(TextField("locationId", serviceLocation.id, Field.Store.YES))
-        doc.add(TextField("content", searchable, Field.Store.YES))
+        if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN) {
+            doc.add(TextField("id", serviceLocation.id, Field.Store.YES))
+        }
+        doc.add(TextField("service", serviceLocation.service.fullName, Field.Store.YES))
+        doc.add(TextField("name", serviceLocation.defaultName, Field.Store.YES))
+        if (serviceLocation is DubLinkStopLocation) {
+            doc.add(TextField("routes", serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }.joinToString(separator = singleSpace), Field.Store.YES))
+            doc.add(TextField("operators", serviceLocation.stopLocation.routeGroups.map { routeGroup -> routeGroup.operator }.joinToString(separator = singleSpace), Field.Store.YES))
+        }
         writer.addDocument(doc)
     }
 
-    fun searchIndex(phrase: String): Observable<List<DubLinkServiceLocation>> {
+    fun searchIndex(phrase: String, field: String): Observable<List<DubLinkServiceLocation>> {
         var reader: IndexReader? = null
         try {
             //Create Reader
@@ -130,9 +126,10 @@ class SearchService {
 //            val query: Query = qp.parse("Blackrock")
 
             val query = if (phrase.split(whiteSpace).size > 1) {
-                ComplexPhraseQueryParser(Version.LUCENE_47, "content", analyzer).parse(phrase)
+                ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase)
             } else {
-                FuzzyQuery(Term("content", phrase))
+//                FuzzyQuery(Term(field, phrase))
+                ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase)
             }
 
             //Search the index
@@ -152,7 +149,7 @@ class SearchService {
                 cache[key]
             }
 
-            val (l1, l2) = poop.partition { it.service == Service.BUS_EIREANN }
+//            val (l1, l2) = poop.partition { it.service == Service.BUS_EIREANN }
 
             //Let's print found doc names and their content along with score
 //            for (sd in foundDocs.scoreDocs) {
@@ -166,7 +163,7 @@ class SearchService {
             //don't forget to close the reader
             reader.close()
 
-            return Observable.just(l2.plus(l1))
+            return Observable.just(poop)
         } catch (e: IOException) {
             //Any error goes here
             e.printStackTrace()

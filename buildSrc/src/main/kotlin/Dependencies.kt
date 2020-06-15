@@ -68,11 +68,22 @@ object Libraries {
         const val location = "com.google.android.gms:play-services-location:17.0.0"
     }
 
+    // https://dev.to/node/implementation-of-full-text-search-on-android--1n
+    // 4.7.2 ok
+    // 4.8.0 ok
+    // 4.8.1 ok
+    // 4.9.0 no
+    // 4.10.0 no
+    // 4.10.4 no
+    // 5.0.0 no
+    // 5.5.5 no
+    // 6.6.6 no
+    // 8.5.2 no
     object Apache {
-        const val luceneAnalyzersCommon = "org.apache.lucene:lucene-analyzers-common:4.7.0"
-        const val luceneCore = "org.apache.lucene:lucene-core:4.7.0"
-        const val luceneMemory = "org.apache.lucene:lucene-memory:4.7.0"
-        const val luceneQueryParser = "org.apache.lucene:lucene-queryparser:4.7.0"
+        const val luceneAnalyzersCommon = "org.apache.lucene:lucene-analyzers-common:4.8.1"
+        const val luceneCore = "org.apache.lucene:lucene-core:4.8.1"
+        const val luceneMemory = "org.apache.lucene:lucene-memory:4.8.1"
+        const val luceneQueryParser = "org.apache.lucene:lucene-queryparser:4.8.1"
     }
 
     object Dagger {
