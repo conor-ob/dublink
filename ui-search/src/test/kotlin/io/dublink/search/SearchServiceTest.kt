@@ -14,6 +14,12 @@ import org.junit.Test
 
 class SearchServiceTest {
 
+    /**
+     * Tests to add
+     * RDS
+     * RTE
+     */
+
     private val searchService = SearchService()
     private val rtpiStaticDataClient = RtpiStaticDataClient()
     private val services = listOf(
