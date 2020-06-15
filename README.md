@@ -9,7 +9,7 @@ DubLink is a **work-in-progress** Android app for getting real time data for Dub
 
 | Favourites | Dark Theme Support |
 | ------ | ------ |
-| ![Favourites](/assets/listing/sc_01_favourites.png) | ![Dark Theme](/assets/listing/sc_02_favourites_dark.png) |
+| ![Favourites](/assets/listing/sc_01_favourites_light.png) | ![Dark Theme](/assets/listing/sc_02_favourites_dark.png) |
 
 | Search | Live Data |
 | ------ | ------ |
