@@ -2,7 +2,9 @@ package io.dublink.search
 
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
+import io.dublink.domain.repository.AggregatedServiceLocationResponse
 import io.dublink.domain.repository.ServiceLocationKey
+import io.dublink.domain.repository.ServiceLocationResponse
 import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -29,6 +31,7 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.ParseException
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser
+import org.apache.lucene.search.FieldDoc
 import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.Query
@@ -64,13 +67,26 @@ class SearchService {
         }
         //Search indexed docs in RAMDirectory
         return Observable.zip(
-            searchIndex(query, "id"),
-            searchIndex(query, "name"),
-            searchIndex(query, "service"),
-            searchIndex(query, "routes"),
-            searchIndex(query, "operators"),
-            Function5 { t1, t2, t3, t4, t5 -> t1.plus(t2).plus(t3).plus(t4).plus(t5) }
-        )
+            listOf(
+                searchIndex(query, "id", true),
+                searchIndex(query, "id", false),
+                searchIndex(query, "name", true),
+                searchIndex(query, "name", false),
+                searchIndex(query, "service", true),
+                searchIndex(query, "service", false),
+                searchIndex(query, "routes", true),
+                searchIndex(query, "routes", false),
+                searchIndex(query, "operators", true),
+                searchIndex(query, "operators", false)
+            )
+        ) { res -> aggregate(res) }
+    }
+
+    private fun aggregate(serviceLocationStreams: Array<out Any>): List<DubLinkServiceLocation> {
+        return serviceLocationStreams
+            .flatMap { it as List<SearchResult> }
+            .sortedByDescending { it.score }
+            .map { it.serviceLocation }
     }
 
     fun writeIndex(serviceLocations: List<DubLinkServiceLocation>) {
@@ -112,7 +128,12 @@ class SearchService {
         writer.addDocument(doc)
     }
 
-    fun searchIndex(phrase: String, field: String): Observable<List<DubLinkServiceLocation>> {
+    data class SearchResult(
+        val serviceLocation: DubLinkServiceLocation,
+        val score: Float
+    )
+
+    fun searchIndex(phrase: String, field: String, flag: Boolean): Observable<List<SearchResult>> {
         var reader: IndexReader? = null
         try {
             //Create Reader
@@ -125,11 +146,10 @@ class SearchService {
 //            val qp = QueryParser("content", analyzer)
 //            val query: Query = qp.parse("Blackrock")
 
-            val query = if (phrase.split(whiteSpace).size > 1) {
+            val query = if (flag) {
                 ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase)
             } else {
-//                FuzzyQuery(Term(field, phrase))
-                ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase)
+                FuzzyQuery(Term(field, phrase))
             }
 
             //Search the index
@@ -138,15 +158,18 @@ class SearchService {
             // Total found documents
             println("Total Results :: " + foundDocs.totalHits)
 
-            val results = foundDocs.scoreDocs.map {
-                searcher.doc(it.doc)
-            }
-
-            val poop = results.mapNotNull {
-                val service = Service.valueOf(it.get("service"))
-                val locationId = it.get("locationId")
+            val results = foundDocs.scoreDocs.mapNotNull {
+                val score = (it as FieldDoc).fields.first() as Float
+                val doc = searcher.doc(it.doc)
+                val service = Service.valueOf(doc.get("service"))
+                val locationId = doc.get("locationId")
                 val key = ServiceLocationKey(service, locationId)
-                cache[key]
+                val match = cache[key]
+                if (match != null) {
+                    SearchResult(match, score)
+                } else {
+                    null
+                }
             }
 
 //            val (l1, l2) = poop.partition { it.service == Service.BUS_EIREANN }
@@ -163,7 +186,7 @@ class SearchService {
             //don't forget to close the reader
             reader.close()
 
-            return Observable.just(poop)
+            return Observable.just(results)
         } catch (e: IOException) {
             //Any error goes here
             e.printStackTrace()
