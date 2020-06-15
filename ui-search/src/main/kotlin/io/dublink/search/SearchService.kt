@@ -48,7 +48,7 @@ class SearchService {
     private val singleSpace = " "
 
     private val ramDir = RAMDirectory()
-    private val analyzer: Analyzer = SimpleAnalyzer(Version.LUCENE_47)
+    private val analyzer: Analyzer = StandardAnalyzer(Version.LUCENE_47)
     private var indexLoaded = false
     private var cache = emptyMap<ServiceLocationKey, DubLinkServiceLocation>()
 
