@@ -31,6 +31,8 @@ import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser
 import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.Query
+import org.apache.lucene.search.Sort
+import org.apache.lucene.search.SortField
 import org.apache.lucene.store.RAMDirectory
 import org.apache.lucene.util.Version
 import java.io.IOException
@@ -89,10 +91,17 @@ class SearchService {
     fun indexDoc(writer: IndexWriter, serviceLocation: DubLinkServiceLocation) {
         val searchable = listOfNotNull(
             serviceLocation.id,
-            serviceLocation.defaultName
+            serviceLocation.defaultName,
+            serviceLocation.service.fullName
         ).plus(
             if (serviceLocation is DubLinkStopLocation) {
                 serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }
+            } else {
+                emptyList()
+            }
+        ).plus(
+            if (serviceLocation is DubLinkStopLocation) {
+                serviceLocation.stopLocation.routeGroups.map { routeGroup -> routeGroup.operator.fullName }
             } else {
                 emptyList()
             }
@@ -120,14 +129,14 @@ class SearchService {
 //            val qp = QueryParser("content", analyzer)
 //            val query: Query = qp.parse("Blackrock")
 
-            val query: Query = ComplexPhraseQueryParser(Version.LUCENE_47, "content", analyzer)
-                .parse(phrase)
-
-            val fuzzyQuery = FuzzyQuery(Term("content", phrase))
-//            val foundDocs = searcher.search(fuzzyQuery, 100)
+            val query = if (phrase.split(whiteSpace).size > 1) {
+                ComplexPhraseQueryParser(Version.LUCENE_47, "content", analyzer).parse(phrase)
+            } else {
+                FuzzyQuery(Term("content", phrase))
+            }
 
             //Search the index
-            val foundDocs = searcher.search(query, 100)
+            val foundDocs = searcher.search(query, 100, Sort(SortField.FIELD_SCORE))
 
             // Total found documents
             println("Total Results :: " + foundDocs.totalHits)
@@ -143,6 +152,8 @@ class SearchService {
                 cache[key]
             }
 
+            val (l1, l2) = poop.partition { it.service == Service.BUS_EIREANN }
+
             //Let's print found doc names and their content along with score
 //            for (sd in foundDocs.scoreDocs) {
 //                val d = searcher.doc(sd.doc)
@@ -155,7 +166,7 @@ class SearchService {
             //don't forget to close the reader
             reader.close()
 
-            return Observable.just(poop)
+            return Observable.just(l2.plus(l1))
         } catch (e: IOException) {
             //Any error goes here
             e.printStackTrace()
