@@ -69,10 +69,10 @@ object Libraries {
     }
 
     object Apache {
-        const val luceneAnalyzersCommon = "org.apache.lucene:lucene-analyzers-common:8.5.2"
-        const val luceneCore = "org.apache.lucene:lucene-core:8.5.2"
-        const val luceneMemory = "org.apache.lucene:lucene-memory:8.5.2"
-        const val luceneQueryParser = "org.apache.lucene:lucene-queryparser:8.5.2"
+        const val luceneAnalyzersCommon = "org.apache.lucene:lucene-analyzers-common:4.7.0"
+        const val luceneCore = "org.apache.lucene:lucene-core:4.7.0"
+        const val luceneMemory = "org.apache.lucene:lucene-memory:4.7.0"
+        const val luceneQueryParser = "org.apache.lucene:lucene-queryparser:4.7.0"
     }
 
     object Dagger {

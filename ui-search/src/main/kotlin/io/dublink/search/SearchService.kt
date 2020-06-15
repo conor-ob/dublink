@@ -2,6 +2,7 @@ package io.dublink.search
 
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
+import io.dublink.domain.repository.ServiceLocationKey
 import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -13,6 +14,7 @@ import me.xdrop.fuzzywuzzy.algorithms.TokenSet
 import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
 import me.xdrop.fuzzywuzzy.model.BoundExtractedResult
 import org.apache.lucene.analysis.Analyzer
+import org.apache.lucene.analysis.core.SimpleAnalyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
@@ -30,6 +32,7 @@ import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.Query
 import org.apache.lucene.store.RAMDirectory
+import org.apache.lucene.util.Version
 import java.io.IOException
 import java.text.Normalizer
 import java.util.Locale
@@ -42,37 +45,28 @@ class SearchService {
     private val whiteSpace = "\\s+".toRegex()
     private val singleSpace = " "
 
+    private val ramDir = RAMDirectory()
+    private val analyzer: Analyzer = SimpleAnalyzer(Version.LUCENE_47)
+    private var indexLoaded = false
+    private var cache = emptyMap<ServiceLocationKey, DubLinkServiceLocation>()
+
     fun search(
         query: String,
         serviceLocations: List<DubLinkServiceLocation>
     ): Observable<List<DubLinkServiceLocation>> {
-
-        //Create RAMDirectory instance
-        //Create RAMDirectory instance
-        val ramDir = RAMDirectory()
-
-        //Builds an analyzer with the default stop words
-
-        //Builds an analyzer with the default stop words
-        val analyzer: Analyzer = StandardAnalyzer()
-
-        //Write some docs to RAMDirectory
-
-        //Write some docs to RAMDirectory
-        writeIndex(ramDir, analyzer, serviceLocations)
-
+        if (!indexLoaded) {
+            writeIndex(serviceLocations)
+            cache = serviceLocations.associateBy { ServiceLocationKey(it.service, it.id) }
+            indexLoaded = true
+        }
         //Search indexed docs in RAMDirectory
-
-        //Search indexed docs in RAMDirectory
-        searchIndex(ramDir, analyzer)
-
-        return Observable.just(emptyList())
+        return searchIndex(query)
     }
 
-    fun writeIndex(ramDir: RAMDirectory?, analyzer: Analyzer?, serviceLocations: List<DubLinkServiceLocation>) {
+    fun writeIndex(serviceLocations: List<DubLinkServiceLocation>) {
         try {
             // IndexWriter Configuration
-            val iwc = IndexWriterConfig(analyzer)
+            val iwc = IndexWriterConfig(Version.LUCENE_47, analyzer)
             iwc.openMode = OpenMode.CREATE
 
             //IndexWriter writes new index files to the directory
@@ -113,7 +107,7 @@ class SearchService {
         writer.addDocument(doc)
     }
 
-    fun searchIndex(ramDir: RAMDirectory?, analyzer: Analyzer?) {
+    fun searchIndex(phrase: String): Observable<List<DubLinkServiceLocation>> {
         var reader: IndexReader? = null
         try {
             //Create Reader
@@ -123,12 +117,10 @@ class SearchService {
             val searcher = IndexSearcher(reader)
 
             //Build query
-            val qp = QueryParser("content", analyzer)
+//            val qp = QueryParser("content", analyzer)
 //            val query: Query = qp.parse("Blackrock")
 
-            val phrase = "299"
-
-            val query: Query = ComplexPhraseQueryParser("content", analyzer)
+            val query: Query = ComplexPhraseQueryParser(Version.LUCENE_47, "content", analyzer)
                 .parse(phrase)
 
             val fuzzyQuery = FuzzyQuery(Term("content", phrase))
@@ -140,8 +132,15 @@ class SearchService {
             // Total found documents
             println("Total Results :: " + foundDocs.totalHits)
 
-            val result = foundDocs.scoreDocs.map {
+            val results = foundDocs.scoreDocs.map {
                 searcher.doc(it.doc)
+            }
+
+            val poop = results.mapNotNull {
+                val service = Service.valueOf(it.get("service"))
+                val locationId = it.get("locationId")
+                val key = ServiceLocationKey(service, locationId)
+                cache[key]
             }
 
             //Let's print found doc names and their content along with score
@@ -155,11 +154,15 @@ class SearchService {
 //            }
             //don't forget to close the reader
             reader.close()
+
+            return Observable.just(poop)
         } catch (e: IOException) {
             //Any error goes here
             e.printStackTrace()
+            throw e
         } catch (e: ParseException) {
             e.printStackTrace()
+            throw e
         }
     }
 
