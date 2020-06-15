@@ -2,22 +2,10 @@ package io.dublink.search
 
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
-import io.dublink.domain.repository.AggregatedServiceLocationResponse
 import io.dublink.domain.repository.ServiceLocationKey
-import io.dublink.domain.repository.ServiceLocationResponse
-import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function5
 import io.rtpi.api.Service
-import me.xdrop.fuzzywuzzy.Applicable
-import me.xdrop.fuzzywuzzy.FuzzySearch
-import me.xdrop.fuzzywuzzy.ToStringFunction
-import me.xdrop.fuzzywuzzy.algorithms.TokenSet
-import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio
-import me.xdrop.fuzzywuzzy.model.BoundExtractedResult
 import org.apache.lucene.analysis.Analyzer
-import org.apache.lucene.analysis.core.SimpleAnalyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
@@ -29,26 +17,18 @@ import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
 import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.ParseException
-import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser
 import org.apache.lucene.search.FieldDoc
 import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
-import org.apache.lucene.search.Query
 import org.apache.lucene.search.Sort
 import org.apache.lucene.search.SortField
 import org.apache.lucene.store.RAMDirectory
 import org.apache.lucene.util.Version
 import java.io.IOException
-import java.text.Normalizer
-import java.util.Locale
 
 class SearchService {
 
-    private val normalizingRegex = "\\p{InCombiningDiacriticalMarks}+".toRegex()
-    private val identifierRegex1 = "^\\d{0,4}[a-zA-Z]?\\z".toRegex()
-    private val identifierRegex2 = "^[a-zA-Z]\\d{0,4}\\z".toRegex()
-    private val whiteSpace = "\\s+".toRegex()
     private val singleSpace = " "
 
     private val ramDir = RAMDirectory()
@@ -85,6 +65,15 @@ class SearchService {
     private fun aggregate(serviceLocationStreams: Array<out Any>): List<DubLinkServiceLocation> {
         return serviceLocationStreams
             .flatMap { it as List<SearchResult> }
+            .groupBy { it.serviceLocation }
+            .mapValues {
+                if (it.value.size > 1) {
+                    it.value.maxBy { thing -> thing.score }!!
+                } else {
+                    it.value.first()
+                }
+            }
+            .map { it.value }
             .sortedByDescending { it.score }
             .map { it.serviceLocation }
     }
@@ -116,7 +105,7 @@ class SearchService {
         val doc = Document()
         doc.add(TextField("service", serviceLocation.service.name, Field.Store.YES))
         doc.add(TextField("locationId", serviceLocation.id, Field.Store.YES))
-        if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN) {
+        if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN || serviceLocation.service == Service.IRISH_RAIL) {
             doc.add(TextField("id", serviceLocation.id, Field.Store.YES))
         }
         doc.add(TextField("service", serviceLocation.service.fullName, Field.Store.YES))
@@ -195,113 +184,5 @@ class SearchService {
             e.printStackTrace()
             throw e
         }
-    }
-
-//    fun search(
-//        query: String,
-//        serviceLocations: List<DubLinkServiceLocation>
-//    ): Observable<List<DubLinkServiceLocation>> =
-//        if (isIdentifier(query)) {
-//            identifierFieldSearch(query, getAlgorithm(query), serviceLocations)
-//        } else {
-//            stringFieldSearch(query, getAlgorithm(query), serviceLocations)
-//        }
-
-    private fun getAlgorithm(query: String): Applicable =
-        if (query.split(whiteSpace).size > 1) {
-            TokenSet()
-        } else {
-            WeightedRatio()
-        }
-
-    private fun stringFieldSearch(
-        query: String,
-        algorithm: Applicable,
-        serviceLocations: List<DubLinkServiceLocation>
-    ): Observable<List<DubLinkServiceLocation>> =
-        search(
-            query = query,
-            serviceLocations = serviceLocations,
-            algorithm = algorithm,
-            toStringFunction = ToStringFunction<DubLinkServiceLocation> {
-                listOfNotNull(
-                    it.defaultName
-                )
-                    .toSet()
-                    .joinToString(separator = singleSpace) { value -> value.normalize() }
-            }
-        ).map { results ->
-            results.sortedByDescending { it.score }
-                .map { it.referent }
-        }
-
-    private fun identifierFieldSearch(
-        query: String,
-        algorithm: Applicable,
-        serviceLocations: List<DubLinkServiceLocation>
-    ): Observable<List<DubLinkServiceLocation>> =
-        Observable.zip(
-            search(
-                query = query,
-                algorithm = algorithm,
-                serviceLocations = serviceLocations.filter {
-                    it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN
-                },
-                toStringFunction = ToStringFunction<DubLinkServiceLocation> { it.id }
-            ),
-            search(
-                query = query,
-                algorithm = algorithm,
-                serviceLocations = serviceLocations.filter {
-                    it.service == Service.DUBLIN_BUS || it.service == Service.BUS_EIREANN
-                },
-                toStringFunction = ToStringFunction<DubLinkServiceLocation> {
-                    if (it is DubLinkStopLocation) {
-                        it.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }
-                    } else {
-                        emptyList()
-                    }
-                        .toSet()
-                        .joinToString(separator = singleSpace) { value -> value.normalize() }
-                }
-            ),
-            BiFunction { t1, t2 ->
-                t1.plus(t2).sortedByDescending { it.score }
-                    .map { it.referent } // TODO remove duplicates?
-            }
-        )
-
-    private fun search(
-        query: String,
-        algorithm: Applicable,
-        serviceLocations: List<DubLinkServiceLocation>,
-        toStringFunction: ToStringFunction<DubLinkServiceLocation>
-    ): Observable<List<BoundExtractedResult<DubLinkServiceLocation>>> =
-        Observable.just(
-            FuzzySearch.extractSorted(
-                query,
-                serviceLocations,
-                toStringFunction,
-                algorithm,
-                AppConstants.searchAccuracyScoreCutoff
-            )
-        )
-
-    private fun isIdentifier(value: String): Boolean {
-        try {
-            value.toInt()
-            return true
-        } catch (e: NumberFormatException) {
-            // ignore
-        } catch (e: Exception) {
-            // ignore
-        }
-        val sanitizedQuery = value.toLowerCase(Locale.getDefault()).trim()
-        return identifierRegex1.matches(value) ||
-            identifierRegex2.matches(value)
-    }
-
-    private fun CharSequence.normalize(): String {
-        return normalizingRegex.replace(Normalizer.normalize(this, Normalizer.Form.NFD), "")
     }
 }
