@@ -68,6 +68,13 @@ object Libraries {
         const val location = "com.google.android.gms:play-services-location:17.0.0"
     }
 
+    object Apache {
+        const val luceneAnalyzersCommon = "org.apache.lucene:lucene-analyzers-common:8.5.2"
+        const val luceneCore = "org.apache.lucene:lucene-core:8.5.2"
+        const val luceneMemory = "org.apache.lucene:lucene-memory:8.5.2"
+        const val luceneQueryParser = "org.apache.lucene:lucene-queryparser:8.5.2"
+    }
+
     object Dagger {
         const val dagger = "com.google.dagger:dagger:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger
         const val daggerAndroid = "com.google.dagger:dagger-android:2.27" // https://mvnrepository.com/artifact/com.google.dagger/dagger-android
