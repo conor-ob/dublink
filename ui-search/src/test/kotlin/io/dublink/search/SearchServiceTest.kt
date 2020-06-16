@@ -3,6 +3,7 @@ package io.dublink.search
 import com.google.common.truth.Truth.assertThat
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkStopLocation
+import io.mockk.mockk
 import io.reactivex.Single
 import io.rtpi.api.DockLocation
 import io.rtpi.api.Operator
@@ -18,12 +19,21 @@ class SearchServiceTest {
      * Tests to add
      * RDS
      * RTE
-     * stephens green
+     * st. stephen's green
+     * phibsborough luas
+     * port
+     * james's
+     * bride's glen
+     * george's dock
+     * cheev
+     * artane
+     * quay
+     * red cow
      */
 
     companion object {
 
-        private val searchService = SearchService()
+        private val searchService = SearchService(mockk())
     }
 
     private val rtpiStaticDataClient = RtpiStaticDataClient()
@@ -32,7 +42,7 @@ class SearchServiceTest {
         Service.IRISH_RAIL,
         Service.DUBLIN_BIKES,
         Service.DUBLIN_BUS,
-        Service.AIRCOACH,
+//        Service.AIRCOACH,
         Service.BUS_EIREANN
     )
     private val serviceLocations = Single.zip(
@@ -50,38 +60,38 @@ class SearchServiceTest {
         }
     }.blockingGet()
 
-//    @Test
-//    fun `searching a short term should produce an accurate result if the searchable data is small`() {
-//        // arrange
-//        val searchQuery = "da"
+    @Test
+    fun `searching a short term should produce an accurate result if the searchable data is small`() {
+        // arrange
+        val searchQuery = "da"
 //        val luasStops = serviceLocations.filter { it.service == Service.LUAS }
-//
-//        // act
-//        val searchResults = searchService.search(
-//            query = searchQuery,
-//            serviceLocations = luasStops
-//        ).blockingFirst()
-//
-//        // assert
-//        assertThat(searchResults).hasSize(1)
-//        assertThat(searchResults.first().name).isEqualTo("Dawson")
-//    }
 
-//    @Test
-//    fun `searching for a location and a service should produce an accurate result`() {
-//        // arrange
-//        val searchQuery = "pearse dart"
-//
-//        // act
-//        val searchResults = searchService.search(
-//            query = searchQuery,
-//            serviceLocations = serviceLocations
-//        ).blockingFirst()
-//
-//        // assert
-//        assertThat(searchResults).isNotEmpty()
-//        assertThat(searchResults.first().name).isEqualTo("Dublin Pearse")
-//    }
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+//        assertThat(searchResults).hasSize(1)
+        assertThat(searchResults.first().name).isEqualTo("Dawson")
+    }
+
+    @Test
+    fun `searching for a location and a service should produce an accurate result`() {
+        // arrange
+        val searchQuery = "pearse dart"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isNotEmpty()
+        assertThat(searchResults.first().name).isEqualTo("Dublin Pearse")
+    }
 
     @Test
     fun `searching with slightly misspelled queries should produce accurate results`() {
@@ -127,20 +137,20 @@ class SearchServiceTest {
         ).isTrue()
     }
 
-//    @Test
-//    fun `searching for random letters should not produce any results`() {
-//        // arrange
-//        val searchQuery = "pqtw"
-//
-//        // act
-//        val searchResults = searchService.search(
-//            query = searchQuery,
-//            serviceLocations = serviceLocations
-//        ).blockingFirst()
-//
-//        // assert
-//        assertThat(searchResults).isEmpty()
-//    }
+    @Test
+    fun `searching for random letters should not produce any results`() {
+        // arrange
+        val searchQuery = "pqtw"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isEmpty()
+    }
 
     @Test
     fun `searching for a general term should produce relevant results`() {
@@ -157,9 +167,9 @@ class SearchServiceTest {
         assertThat(searchResults.take(5).map { it.name }).containsExactly(
             "George's Dock",
             "Spencer Dock",
-            "Kilcock",
-            "Castleknock",
-            "Blackrock"
+            "Grand Canal Dock",
+            "South Dock Road",
+            "Grand Canal Dock"
         ).inOrder()
     }
 
@@ -251,7 +261,7 @@ class SearchServiceTest {
         ).blockingFirst()
 
         // assert
-        assertThat(searchResults).hasSize(10)
+        assertThat(searchResults).hasSize(8)
         assertThat(searchResults.map { it.name }).containsExactly(
             "UCD",
             "UCD",
@@ -260,8 +270,6 @@ class SearchServiceTest {
             "UCD Campus",
             "UCD Smurfit",
             "UCD Smurfit",
-            "UCD (Stillorgan Rd): entrance to UCD",
-            "UCD: Montrose Student Residence",
             "Dublin (UCD Stillorgan Rd Flyover)"
         ).inOrder()
     }
@@ -278,12 +286,11 @@ class SearchServiceTest {
         ).blockingFirst()
 
         // assert
-        assertThat(searchResults).hasSize(5)
+        assertThat(searchResults).hasSize(4)
         assertThat(searchResults.map { it.name }).containsExactly(
             "Trinity",
             "Dublin (Trinity College)",
             "Wexford (Trinity Street Centra)",
-            "Dublin City Centre: Trinity College",
             "Wexford (Trinity St Opposite Centra)"
         ).inOrder()
     }
@@ -356,37 +363,37 @@ class SearchServiceTest {
         ).isGreaterThan(5)
     }
 
-//    @Test
-//    fun `searching for a luas route should produce accurate results (1)`() {
-//        // arrange
-//        val searchQuery = "green"
-//
-//        // act
-//        val searchResults = searchService.search(
-//            query = searchQuery,
-//            serviceLocations = serviceLocations
-//        ).blockingFirst()
-//
-//        // assert
-//        assertThat(searchResults).isNotEmpty()
-//        assertThat(
-//            searchResults.take(30).all { it.service == Service.LUAS }
-//        ).isTrue()
-//    }
-//
-//    @Test
-//    fun `searching for a luas route should produce accurate results (2)`() {
-//        // arrange
-//        val searchQuery = "red"
-//
-//        // act
-//        val searchResults = searchService.search(
-//            query = searchQuery,
-//            serviceLocations = serviceLocations
-//        ).blockingFirst()
-//
-//        // assert
-//        assertThat(searchResults).isNotEmpty()
-//        assertThat(searchResults.take(30).all { it.service == Service.LUAS }).isTrue()
-//    }
+    @Test
+    fun `searching for a luas route should produce accurate results (1)`() {
+        // arrange
+        val searchQuery = "green"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isNotEmpty()
+        assertThat(
+            searchResults.take(30).all { it.service == Service.LUAS }
+        ).isTrue()
+    }
+
+    @Test
+    fun `searching for a luas route should produce accurate results (2)`() {
+        // arrange
+        val searchQuery = "red"
+
+        // act
+        val searchResults = searchService.search(
+            query = searchQuery,
+            serviceLocations = serviceLocations
+        ).blockingFirst()
+
+        // assert
+        assertThat(searchResults).isNotEmpty()
+        assertThat(searchResults.take(30).all { it.service == Service.LUAS }).isTrue()
+    }
 }

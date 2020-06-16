@@ -10,6 +10,7 @@ import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import org.apache.lucene.queryparser.classic.ParseException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import timber.log.Timber
@@ -31,11 +32,23 @@ class SearchViewModel @Inject constructor(
                 scrollToTop = false,
                 throwable = null
             )
-            is Change.Error -> state.copy(
-                loading = false,
-                scrollToTop = false,
-                throwable = change.throwable
-            )
+            is Change.Error -> {
+                Timber.w(change.throwable)
+                if (change.throwable is ParseException) {
+                    state.copy(
+                        searchResults = SearchResultsResponse.NoResults(change.query, emptyList()),
+                        scrollToTop = false,
+                        loading = false,
+                        throwable = null
+                    )
+                } else {
+                    state.copy(
+                        loading = false,
+                        scrollToTop = false,
+                        throwable = change.throwable
+                    )
+                }
+            }
             is Change.NearbyLocations -> state.copy(
                 nearbyLocations = change.nearbyLocations,
                 scrollToTop = false,
@@ -101,7 +114,7 @@ class SearchViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.SearchResults(it) }
                     .throttleLatest(250L, TimeUnit.MILLISECONDS)
-                    .onErrorReturn { Change.Error(it) }
+                    .onErrorReturn { Change.Error(action.query, it) }
                     .startWith(Change.Loading)
             }
 
@@ -112,7 +125,7 @@ class SearchViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.NearbyLocations(it) }
 //                    .throttleLatest(500L, TimeUnit.MILLISECONDS)
-                    .onErrorReturn { Change.Error(it) }
+                    .onErrorReturn { Change.Error("", it) }
             }
 
         val getRecentSearchesChange = actions.ofType(Action.GetRecentSearches::class.java)
@@ -121,7 +134,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.RecentSearches(it) }
-                    .onErrorReturn { Change.Error(it) }
+                    .onErrorReturn { Change.Error("", it) }
             }
 
         val addRecentSearchChange = actions.ofType(Action.AddRecentSearch::class.java)
@@ -130,7 +143,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.AddRecentSearch }
-                    .onErrorReturn { Change.Error(it) }
+                    .onErrorReturn { Change.Error("", it) }
             }
 
         val clearRecentSearchesChange = actions.ofType(Action.ClearRecentSearches::class.java)
@@ -139,7 +152,7 @@ class SearchViewModel @Inject constructor(
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.ClearRecentSearches }
-                    .onErrorReturn { Change.Error(it) }
+                    .onErrorReturn { Change.Error("", it) }
             }
 
         val allChanges = Observable.merge(

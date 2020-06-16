@@ -25,13 +25,12 @@ class SearchUseCase @Inject constructor(
     private val recentSearchRepository: RecentServiceLocationSearchRepository,
     private val permissionChecker: PermissionChecker,
     private val locationProvider: LocationProvider,
-    private val preferenceStore: PreferenceStore
+    private val preferenceStore: PreferenceStore,
+    private val searchService: SearchService
 ) {
 
-    private val searchService = SearchService()
-
     fun search(query: String): Observable<SearchResultsResponse> =
-        if (query.isEmpty()) {
+        if (query.isBlank()) {
             Observable.just(SearchResultsResponse.Empty)
         } else {
             serviceLocationRepository.get()

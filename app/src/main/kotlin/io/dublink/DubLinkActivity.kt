@@ -53,6 +53,7 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
             }
         )
         viewModel.dispatch(DubLinkActivityAction.PreloadData)
+        viewModel.dispatch(DubLinkActivityAction.BuildSearchIndex)
     }
 
     override fun onResume() {

@@ -3,12 +3,14 @@ package io.dublink.search
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.repository.ServiceLocationKey
+import io.dublink.domain.service.PreferenceStore
 import io.reactivex.Observable
 import io.rtpi.api.Service
 import java.io.IOException
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
+import org.apache.lucene.document.StringField
 import org.apache.lucene.document.TextField
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexReader
@@ -26,34 +28,100 @@ import org.apache.lucene.search.Query
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.store.RAMDirectory
 import org.apache.lucene.util.Version
+import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class SearchService {
+@Singleton
+class SearchService @Inject constructor(
+    private val preferenceStore: PreferenceStore
+) {
+
+    private enum class KeyField(val fieldName: String) {
+        ID(fieldName = "key_id"),
+        SERVICE(fieldName = "key_service");
+    }
+
+    private enum class SearchField(val fieldName: String) {
+        ID(fieldName = "id") {
+            override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
+                return if (serviceLocation.service == Service.DUBLIN_BUS ||
+                    serviceLocation.service == Service.BUS_EIREANN ||
+                    serviceLocation.service == Service.IRISH_RAIL
+                ) {
+                    serviceLocation.id
+                } else {
+                    null
+                }
+            }
+        },
+        NAME(fieldName = "name") {
+            override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
+                return serviceLocation.name
+            }
+        },
+        SERVICE(fieldName = "service") {
+            override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
+                return serviceLocation.service.fullName
+            }
+        },
+        ROUTES(fieldName = "routes") {
+            override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
+                return if (serviceLocation is DubLinkStopLocation) {
+                    if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN || serviceLocation.service == Service.LUAS) {
+                        serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }.joinToString(separator = " ")
+                    } else {
+                        null
+                    }
+                } else {
+                    null
+                }
+            }
+        },
+        OPERATORS(fieldName = "operators") {
+            override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
+                return if (serviceLocation is DubLinkStopLocation) {
+                    serviceLocation.stopLocation.routeGroups.joinToString(separator = " ") { routeGroup -> routeGroup.operator.fullName }
+                } else {
+                    null
+                }
+            }
+        },
+        CONTENT(fieldName = "content") {
+            override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
+                return values()
+                    .filter { it != this }
+                    .map { it.toSearchField(serviceLocation) }
+                    .toSet()
+                    .joinToString(separator = " ")
+            }
+        };
+
+        abstract fun toSearchField(serviceLocation: DubLinkServiceLocation): String?
+    }
 
     private val singleSpace = " "
 
-    private val memoryIndex = RAMDirectory()
+    private var memoryIndex = RAMDirectory()
     private val analyzer = StandardAnalyzer(Version.LUCENE_48)
-    private var indexLoaded = false
     private var cache = emptyMap<ServiceLocationKey, DubLinkServiceLocation>()
 
     fun search(
         query: String,
         serviceLocations: List<DubLinkServiceLocation>
     ): Observable<List<DubLinkServiceLocation>> {
-        if (!indexLoaded) {
+        Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name} $query")
+        if (serviceLocations.size != cache.size) {
+            Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name} rebuilding index")
+            memoryIndex.close()
+            memoryIndex = RAMDirectory()
             writeIndex(serviceLocations)
             cache = serviceLocations.associateBy { ServiceLocationKey(it.service, it.id) }
-            indexLoaded = true
+            Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name} finished building index")
         }
         // Search indexed docs in RAMDirectory
         return Observable.zip(
-            listOf(
-                searchIndex(query, "id"),
-                searchIndex(query, "name"),
-                searchIndex(query, "service"),
-                searchIndex(query, "routes"),
-                searchIndex(query, "operators")
-            )
+            SearchField.values().map { searchIndex(query, it.fieldName) }
         ) { res -> aggregate(res) }
     }
 
@@ -98,19 +166,20 @@ class SearchService {
     @Throws(IOException::class)
     fun indexDoc(writer: IndexWriter, serviceLocation: DubLinkServiceLocation) {
         val doc = Document()
-        doc.add(TextField("service", serviceLocation.service.name, Field.Store.YES))
-        doc.add(TextField("locationId", serviceLocation.id, Field.Store.YES))
-        if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN || serviceLocation.service == Service.IRISH_RAIL) {
-            doc.add(TextField("id", serviceLocation.id, Field.Store.YES))
-        }
-        doc.add(TextField("service", serviceLocation.service.fullName, Field.Store.YES))
-        doc.add(TextField("name", serviceLocation.defaultName, Field.Store.YES))
-        if (serviceLocation is DubLinkStopLocation) {
-            if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN) {
-                doc.add(TextField("routes", serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }.joinToString(separator = singleSpace), Field.Store.YES))
+        doc.add(StringField(KeyField.SERVICE.fieldName, serviceLocation.service.name, Field.Store.YES))
+        doc.add(StringField(KeyField.ID.fieldName, serviceLocation.id, Field.Store.YES))
+
+        SearchField.values().mapNotNull {
+            val searchField = it.toSearchField(serviceLocation)
+            if (searchField != null) {
+                return@mapNotNull it to searchField
+            } else {
+                return@mapNotNull null
             }
-            doc.add(TextField("operators", serviceLocation.stopLocation.routeGroups.map { routeGroup -> routeGroup.operator }.joinToString(separator = singleSpace), Field.Store.YES))
         }
+            .forEach {
+                doc.add(TextField(it.first.fieldName, it.second, Field.Store.YES))
+            }
         writer.addDocument(doc)
     }
 
@@ -124,7 +193,11 @@ class SearchService {
             listOf(
                 searchIndexInternal(QueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
                 searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
-                searchIndexInternal(FuzzyQuery(Term(field, phrase)), field),
+                when {
+                    phrase.length > 5 -> searchIndexInternal(FuzzyQuery(Term(field, phrase), FuzzyQuery.defaultMaxEdits), field)
+                    phrase.length > 3 -> searchIndexInternal(FuzzyQuery(Term(field, phrase), 1), field)
+                    else -> searchIndexInternal(FuzzyQuery(Term(field, phrase), 0), field)
+                },
                 searchIndexInternal(TermQuery(Term(field, phrase)), field),
                 searchIndexInternal(PrefixQuery(Term(field, phrase)), field)
             )
@@ -162,8 +235,8 @@ class SearchService {
 
             val results = foundDocs.scoreDocs.mapNotNull {
                 val doc = searcher.doc(it.doc)
-                val service = Service.valueOf(doc.get("service"))
-                val locationId = doc.get("locationId")
+                val service = Service.valueOf(doc.get(KeyField.SERVICE.fieldName))
+                val locationId = doc.get(KeyField.ID.fieldName)
                 val key = ServiceLocationKey(service, locationId)
                 val match = cache[key]
                 if (match != null) {

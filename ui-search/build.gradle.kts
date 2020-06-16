@@ -33,7 +33,7 @@ dependencies {
 
     implementation(Libraries.Apache.luceneAnalyzersCommon)
     implementation(Libraries.Apache.luceneCore)
-    implementation(Libraries.Apache.luceneMemory)
+//    implementation(Libraries.Apache.luceneMemory)
     implementation(Libraries.Apache.luceneQueryParser)
     implementation(Libraries.Rx.rxAndroid)
 
