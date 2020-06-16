@@ -5,6 +5,7 @@ import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.repository.ServiceLocationKey
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
+import io.reactivex.functions.Function4
 import io.rtpi.api.Service
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
@@ -23,9 +24,11 @@ import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser
 import org.apache.lucene.search.FieldDoc
 import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
+import org.apache.lucene.search.PrefixQuery
 import org.apache.lucene.search.Query
 import org.apache.lucene.search.Sort
 import org.apache.lucene.search.SortField
+import org.apache.lucene.search.TermQuery
 import org.apache.lucene.store.RAMDirectory
 import org.apache.lucene.util.Version
 import java.io.IOException
@@ -124,11 +127,18 @@ class SearchService {
 
     fun searchIndex(phrase: String, field: String): Observable<List<SearchResult>> {
         return Observable.zip(
-            searchIndexInternal(QueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
-            searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
-            searchIndexInternal(FuzzyQuery(Term(field, phrase)), field),
-            Function3 { t1, t2, t3 -> t1.plus(t2).plus(t3) }
-        )
+            listOf(
+                searchIndexInternal(QueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
+                searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
+                searchIndexInternal(FuzzyQuery(Term(field, phrase)), field),
+                searchIndexInternal(TermQuery(Term(field, phrase)), field),
+                searchIndexInternal(PrefixQuery(Term(field, phrase)), field)
+            )
+        ) { res -> aggregateAgain(res) }
+    }
+
+    private fun aggregateAgain(serviceLocationStreams: Array<out Any>): List<SearchResult> {
+        return serviceLocationStreams.flatMap { it as List<SearchResult> }
     }
 
     fun searchIndexInternal(query: Query, field: String): Observable<List<SearchResult>> {
