@@ -10,7 +10,6 @@ import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
 import io.rtpi.test.client.RtpiStaticDataClient
-import org.junit.BeforeClass
 import org.junit.Test
 
 class SearchServiceTest {

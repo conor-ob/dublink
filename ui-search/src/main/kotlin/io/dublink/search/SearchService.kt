@@ -4,10 +4,8 @@ import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.repository.ServiceLocationKey
 import io.reactivex.Observable
-import io.reactivex.functions.Function3
-import io.reactivex.functions.Function4
 import io.rtpi.api.Service
-import org.apache.lucene.analysis.Analyzer
+import java.io.IOException
 import org.apache.lucene.analysis.standard.StandardAnalyzer
 import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field
@@ -21,17 +19,13 @@ import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.ParseException
 import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser
-import org.apache.lucene.search.FieldDoc
 import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.search.PrefixQuery
 import org.apache.lucene.search.Query
-import org.apache.lucene.search.Sort
-import org.apache.lucene.search.SortField
 import org.apache.lucene.search.TermQuery
 import org.apache.lucene.store.RAMDirectory
 import org.apache.lucene.util.Version
-import java.io.IOException
 
 class SearchService {
 
@@ -51,7 +45,7 @@ class SearchService {
             cache = serviceLocations.associateBy { ServiceLocationKey(it.service, it.id) }
             indexLoaded = true
         }
-        //Search indexed docs in RAMDirectory
+        // Search indexed docs in RAMDirectory
         return Observable.zip(
             listOf(
                 searchIndex(query, "id"),
@@ -85,18 +79,18 @@ class SearchService {
             val iwc = IndexWriterConfig(Version.LUCENE_48, analyzer)
             iwc.openMode = OpenMode.CREATE
 
-            //IndexWriter writes new index files to the directory
+            // IndexWriter writes new index files to the directory
             val writer = IndexWriter(memoryIndex, iwc)
 
-            //Create some docs with name and content
+            // Create some docs with name and content
             serviceLocations.forEach {
                 indexDoc(writer, it)
             }
 
-            //don't forget to close the writer
+            // don't forget to close the writer
             writer.close()
         } catch (e: IOException) {
-            //Any error goes here
+            // Any error goes here
             e.printStackTrace()
         }
     }
@@ -144,13 +138,13 @@ class SearchService {
     fun searchIndexInternal(query: Query, field: String): Observable<List<SearchResult>> {
         var reader: IndexReader? = null
         try {
-            //Create Reader
+            // Create Reader
             reader = DirectoryReader.open(memoryIndex)
 
-            //Create index searcher
+            // Create index searcher
             val searcher = IndexSearcher(reader)
 
-            //Build query
+            // Build query
 //            val qp = QueryParser(Version.LUCENE_48, field, analyzer)
 //            val query: Query = qp.parse(phrase)
 
@@ -160,7 +154,7 @@ class SearchService {
 //                FuzzyQuery(Term(field, phrase))
 //            }
 
-            //Search the index
+            // Search the index
             val foundDocs = searcher.search(query, 100)
 
             // Total found documents
@@ -181,7 +175,7 @@ class SearchService {
 
 //            val (l1, l2) = poop.partition { it.service == Service.BUS_EIREANN }
 
-            //Let's print found doc names and their content along with score
+            // Let's print found doc names and their content along with score
 //            for (sd in foundDocs.scoreDocs) {
 //                val d = searcher.doc(sd.doc)
 //                println(
@@ -190,12 +184,12 @@ class SearchService {
 //                        + "  :: Score : " + sd.score
 //                )
 //            }
-            //don't forget to close the reader
+            // don't forget to close the reader
             reader.close()
 
             return Observable.just(results)
         } catch (e: IOException) {
-            //Any error goes here
+            // Any error goes here
             e.printStackTrace()
             throw e
         } catch (e: ParseException) {

@@ -35,7 +35,6 @@ dependencies {
     implementation(Libraries.Apache.luceneCore)
     implementation(Libraries.Apache.luceneMemory)
     implementation(Libraries.Apache.luceneQueryParser)
-    implementation(Libraries.FuzzyWuzzy.javaWuzzy)
     implementation(Libraries.Rx.rxAndroid)
 
     testImplementation("androidx.test.ext:junit-ktx:1.1.1")
