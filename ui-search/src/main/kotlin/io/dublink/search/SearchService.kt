@@ -4,6 +4,7 @@ import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.domain.repository.ServiceLocationKey
 import io.reactivex.Observable
+import io.reactivex.functions.Function3
 import io.rtpi.api.Service
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.analysis.standard.StandardAnalyzer
@@ -17,10 +18,12 @@ import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.index.IndexWriterConfig.OpenMode
 import org.apache.lucene.index.Term
 import org.apache.lucene.queryparser.classic.ParseException
+import org.apache.lucene.queryparser.classic.QueryParser
 import org.apache.lucene.queryparser.complexPhrase.ComplexPhraseQueryParser
 import org.apache.lucene.search.FieldDoc
 import org.apache.lucene.search.FuzzyQuery
 import org.apache.lucene.search.IndexSearcher
+import org.apache.lucene.search.Query
 import org.apache.lucene.search.Sort
 import org.apache.lucene.search.SortField
 import org.apache.lucene.store.RAMDirectory
@@ -48,16 +51,11 @@ class SearchService {
         //Search indexed docs in RAMDirectory
         return Observable.zip(
             listOf(
-                searchIndex(query, "id", true),
-                searchIndex(query, "id", false),
-                searchIndex(query, "name", true),
-                searchIndex(query, "name", false),
-                searchIndex(query, "service", true),
-                searchIndex(query, "service", false),
-                searchIndex(query, "routes", true),
-                searchIndex(query, "routes", false),
-                searchIndex(query, "operators", true),
-                searchIndex(query, "operators", false)
+                searchIndex(query, "id"),
+                searchIndex(query, "name"),
+                searchIndex(query, "service"),
+                searchIndex(query, "routes"),
+                searchIndex(query, "operators")
             )
         ) { res -> aggregate(res) }
     }
@@ -111,7 +109,9 @@ class SearchService {
         doc.add(TextField("service", serviceLocation.service.fullName, Field.Store.YES))
         doc.add(TextField("name", serviceLocation.defaultName, Field.Store.YES))
         if (serviceLocation is DubLinkStopLocation) {
-            doc.add(TextField("routes", serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }.joinToString(separator = singleSpace), Field.Store.YES))
+            if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN) {
+                doc.add(TextField("routes", serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }.joinToString(separator = singleSpace), Field.Store.YES))
+            }
             doc.add(TextField("operators", serviceLocation.stopLocation.routeGroups.map { routeGroup -> routeGroup.operator }.joinToString(separator = singleSpace), Field.Store.YES))
         }
         writer.addDocument(doc)
@@ -122,7 +122,16 @@ class SearchService {
         val score: Float
     )
 
-    fun searchIndex(phrase: String, field: String, flag: Boolean): Observable<List<SearchResult>> {
+    fun searchIndex(phrase: String, field: String): Observable<List<SearchResult>> {
+        return Observable.zip(
+            searchIndexInternal(QueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
+            searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase), field),
+            searchIndexInternal(FuzzyQuery(Term(field, phrase)), field),
+            Function3 { t1, t2, t3 -> t1.plus(t2).plus(t3) }
+        )
+    }
+
+    fun searchIndexInternal(query: Query, field: String): Observable<List<SearchResult>> {
         var reader: IndexReader? = null
         try {
             //Create Reader
@@ -132,14 +141,14 @@ class SearchService {
             val searcher = IndexSearcher(reader)
 
             //Build query
-//            val qp = QueryParser("content", analyzer)
-//            val query: Query = qp.parse("Blackrock")
+//            val qp = QueryParser(Version.LUCENE_48, field, analyzer)
+//            val query: Query = qp.parse(phrase)
 
-            val query = if (flag) {
-                ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase)
-            } else {
-                FuzzyQuery(Term(field, phrase))
-            }
+//            val query = if (flag) {
+//                ComplexPhraseQueryParser(Version.LUCENE_48, field, analyzer).parse(phrase)
+//            } else {
+//                FuzzyQuery(Term(field, phrase))
+//            }
 
             //Search the index
             val foundDocs = searcher.search(query, 100, Sort(SortField.FIELD_SCORE))
