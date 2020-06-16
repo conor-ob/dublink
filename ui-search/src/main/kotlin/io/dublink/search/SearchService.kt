@@ -34,8 +34,8 @@ class SearchService {
 
     private val singleSpace = " "
 
-    private val ramDir = RAMDirectory()
-    private val analyzer: Analyzer = StandardAnalyzer(Version.LUCENE_48)
+    private val memoryIndex = RAMDirectory()
+    private val analyzer = StandardAnalyzer(Version.LUCENE_48)
     private var indexLoaded = false
     private var cache = emptyMap<ServiceLocationKey, DubLinkServiceLocation>()
 
@@ -83,7 +83,7 @@ class SearchService {
             iwc.openMode = OpenMode.CREATE
 
             //IndexWriter writes new index files to the directory
-            val writer = IndexWriter(ramDir, iwc)
+            val writer = IndexWriter(memoryIndex, iwc)
 
             //Create some docs with name and content
             serviceLocations.forEach {
@@ -135,7 +135,7 @@ class SearchService {
         var reader: IndexReader? = null
         try {
             //Create Reader
-            reader = DirectoryReader.open(ramDir)
+            reader = DirectoryReader.open(memoryIndex)
 
             //Create index searcher
             val searcher = IndexSearcher(reader)
@@ -151,20 +151,19 @@ class SearchService {
 //            }
 
             //Search the index
-            val foundDocs = searcher.search(query, 100, Sort(SortField.FIELD_SCORE))
+            val foundDocs = searcher.search(query, 100)
 
             // Total found documents
             println("Total Results :: " + foundDocs.totalHits)
 
             val results = foundDocs.scoreDocs.mapNotNull {
-                val score = (it as FieldDoc).fields.first() as Float
                 val doc = searcher.doc(it.doc)
                 val service = Service.valueOf(doc.get("service"))
                 val locationId = doc.get("locationId")
                 val key = ServiceLocationKey(service, locationId)
                 val match = cache[key]
                 if (match != null) {
-                    SearchResult(match, score)
+                    SearchResult(match, it.score)
                 } else {
                     null
                 }
