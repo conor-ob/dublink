@@ -2,6 +2,7 @@ plugins {
     id(BuildPlugins.androidLibrary)
     id(BuildPlugins.kotlinAndroid)
     id(BuildPlugins.kotlinAndroidExtensions)
+    id(BuildPlugins.kotlinKapt)
 }
 
 apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
@@ -40,6 +41,8 @@ dependencies {
     testImplementation("androidx.test.ext:junit-ktx:1.1.1")
     testImplementation("androidx.test:core-ktx:1.2.0")
     testImplementation("org.robolectric:robolectric:4.3.1")
+
+    kapt(Libraries.Dagger.daggerCompiler)
 
     testImplementation(project(":test-ui"))
     testImplementation(TestLibraries.Junit.junit)
