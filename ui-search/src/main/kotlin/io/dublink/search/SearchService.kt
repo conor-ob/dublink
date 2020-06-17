@@ -51,15 +51,6 @@ class SearchService {
         ) { searchStreams -> aggregate(searchStreams) }
     }
 
-    private fun buildSearchIndex(serviceLocations: List<DubLinkServiceLocation>) {
-        Timber.d("Building search index")
-        memoryIndex.close()
-        memoryIndex = RAMDirectory()
-        writeIndex(serviceLocations)
-        cache = serviceLocations.associateBy { ServiceLocationKey(it.service, it.id) }
-        Timber.d("Finished building search index")
-    }
-
     private fun aggregate(searchStreams: Array<out Any>): List<DubLinkServiceLocation> {
         return searchStreams
             .flatMap { it as List<SearchResult> }
@@ -76,30 +67,36 @@ class SearchService {
             .map { it.serviceLocation }
     }
 
-    private fun writeIndex(serviceLocations: List<DubLinkServiceLocation>) {
-        val indexWriterConfig = IndexWriterConfig(Version.LUCENE_48, indexAnalyzer).apply {
-            openMode = OpenMode.CREATE
-        }
+    private fun buildSearchIndex(serviceLocations: List<DubLinkServiceLocation>) {
+        Timber.d("Building search index")
+        memoryIndex.close()
+        memoryIndex = RAMDirectory()
+        val indexWriterConfig = IndexWriterConfig(Version.LUCENE_48, indexAnalyzer)
+        indexWriterConfig.openMode = OpenMode.CREATE
         val writer = IndexWriter(memoryIndex, indexWriterConfig)
-        for (serviceLocation in serviceLocations) {
-            val document = Document()
-            document.add(StringField(KeyField.SERVICE.fieldName, serviceLocation.service.name, Field.Store.YES))
-            document.add(StringField(KeyField.ID.fieldName, serviceLocation.id, Field.Store.YES))
+        writer.addDocuments(
+            serviceLocations.map { serviceLocation ->
+                Document().apply {
+                    add(StringField(KeyField.SERVICE.fieldName, serviceLocation.service.name, Field.Store.YES))
+                    add(StringField(KeyField.ID.fieldName, serviceLocation.id, Field.Store.YES))
 
-            SearchField.values().mapNotNull {
-                val searchField = it.toSearchField(serviceLocation)
-                if (searchField != null) {
-                    return@mapNotNull it to searchField
-                } else {
-                    return@mapNotNull null
+                    SearchField.values().mapNotNull {
+                        val searchField = it.toSearchField(serviceLocation)
+                        if (searchField != null) {
+                            return@mapNotNull it to searchField
+                        } else {
+                            return@mapNotNull null
+                        }
+                    }
+                        .forEach {
+                            add(TextField(it.first.fieldName, it.second, Field.Store.YES))
+                        }
                 }
             }
-                .forEach {
-                    document.add(TextField(it.first.fieldName, it.second, Field.Store.YES))
-                }
-            writer.addDocument(document)
-        }
+        )
         writer.close()
+        cache = serviceLocations.associateBy { ServiceLocationKey(it.service, it.id) }
+        Timber.d("Finished building search index")
     }
 
     private fun searchIndex(phrase: String, field: String): Observable<List<SearchResult>> {
@@ -107,13 +104,13 @@ class SearchService {
             listOf(
                 searchIndexInternal(QueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(phrase)),
                 searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(phrase)),
+                searchIndexInternal(TermQuery(Term(field, phrase))),
+                searchIndexInternal(PrefixQuery(Term(field, phrase))),
                 when {
                     phrase.length > 5 -> searchIndexInternal(FuzzyQuery(Term(field, phrase), FuzzyQuery.defaultMaxEdits))
                     phrase.length > 3 -> searchIndexInternal(FuzzyQuery(Term(field, phrase), 1))
                     else -> searchIndexInternal(FuzzyQuery(Term(field, phrase), 0))
-                },
-                searchIndexInternal(TermQuery(Term(field, phrase))),
-                searchIndexInternal(PrefixQuery(Term(field, phrase)))
+                }
             )
         ) { searchStreams -> aggregateSearchQueries(searchStreams) }
     }
