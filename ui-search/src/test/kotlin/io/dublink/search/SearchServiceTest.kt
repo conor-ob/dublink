@@ -36,6 +36,7 @@ class SearchServiceTest(
         }
         expectedResults.forEachIndexed { index, expected ->
             val actual = searchResults[index]
+            assertThat(actual::class.java).isEqualTo(expected::class.java)
             assertThat(actual.id).isEqualTo(expected.id)
             assertThat(actual.name).isEqualTo(expected.name)
             assertThat(actual.service).isEqualTo(expected.service)
@@ -113,7 +114,7 @@ class SearchServiceTest(
                     "jervis",
                     listOf(
                         createDubLinkStopLocation(id = "LUAS20", name = "Jervis", service = Service.LUAS),
-                        createDubLinkStopLocation(id = "40", name = "Jervis Street", service = Service.DUBLIN_BIKES)
+                        createDubLinkDockLocation(id = "40", name = "Jervis Street", service = Service.DUBLIN_BIKES)
                     )
                 ),
                 arrayOf(
@@ -147,9 +148,9 @@ class SearchServiceTest(
                     "quay",
                     listOf(
                         createDubLinkStopLocation(id = "139481", name = "Newry (Quays Shopping Centre)", service = Service.BUS_EIREANN),
-                        createDubLinkStopLocation(id = "68", name = "Hanover Quay", service = Service.DUBLIN_BIKES),
-                        createDubLinkStopLocation(id = "99", name = "City Quay", service = Service.DUBLIN_BIKES),
-                        createDubLinkStopLocation(id = "16", name = "Georges Quay", service = Service.DUBLIN_BIKES),
+                        createDubLinkDockLocation(id = "68", name = "Hanover Quay", service = Service.DUBLIN_BIKES),
+                        createDubLinkDockLocation(id = "99", name = "City Quay", service = Service.DUBLIN_BIKES),
+                        createDubLinkDockLocation(id = "16", name = "Georges Quay", service = Service.DUBLIN_BIKES),
                         createDubLinkStopLocation(id = "297", name = "Eden Quay", service = Service.DUBLIN_BUS),
                         createDubLinkStopLocation(id = "298", name = "Eden Quay", service = Service.DUBLIN_BUS),
                         createDubLinkStopLocation(id = "299", name = "Eden Quay", service = Service.DUBLIN_BUS)
@@ -222,8 +223,8 @@ class SearchServiceTest(
                         createDubLinkStopLocation(id = "LUAS54", name = "George's Dock", service = Service.LUAS),
                         createDubLinkStopLocation(id = "LUAS56", name = "Spencer Dock", service = Service.LUAS),
                         createDubLinkStopLocation(id = "GCDK", name = "Grand Canal Dock", service = Service.IRISH_RAIL),
-                        createDubLinkStopLocation(id = "91", name = "South Dock Road", service = Service.DUBLIN_BIKES),
-                        createDubLinkStopLocation(id = "69", name = "Grand Canal Dock", service = Service.DUBLIN_BIKES),
+                        createDubLinkDockLocation(id = "91", name = "South Dock Road", service = Service.DUBLIN_BIKES),
+                        createDubLinkDockLocation(id = "69", name = "Grand Canal Dock", service = Service.DUBLIN_BIKES),
                         createDubLinkStopLocation(id = "245411", name = "Passage (Main St Victoria Dock)", service = Service.BUS_EIREANN)
                     )
                 ),
