@@ -1,0 +1,350 @@
+{
+  "groups": [
+    {
+      "group": "Specific query",
+      "tests": [
+        {
+          "queries": [
+            "pearse dart"
+          ],
+          "expected": [
+            { "id": "PERSE", "name": "Dublin Pearse", "service": "IRISH_RAIL" }
+          ]
+        },
+        {
+          "queries": [
+            "rds"
+          ],
+          "expected": [
+            { "id": "486", "name": "RDS Ballsbridge", "service": "DUBLIN_BUS" },
+            { "id": "136891", "name": "Five Rds Of Skreen (Green Rd Nbound)", "service": "BUS_EIREANN" },
+            { "id": "137641", "name": "Five Rds Of Skreen (Green Rd Sbound)", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "rte"
+          ],
+          "expected": [
+            { "id": "762", "name": "RTE", "service": "DUBLIN_BUS" },
+            { "id": "102191", "name": "Dublin (RTE)", "service": "BUS_EIREANN" },
+            { "id": "106381", "name": "Dublin (Opposite RTE)", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "red cow"
+          ],
+          "expected": [
+            { "id": "LUAS6", "name": "Red Cow", "service": "LUAS" },
+            { "id": "134491", "name": "Red Cow LUAS", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "busaras"
+          ],
+          "expected": [
+            { "id": "LUAS22", "name": "Busáras", "service": "LUAS" },
+            { "id": "135001", "name": "Dublin (Busaras)", "service": "BUS_EIREANN" },
+            { "id": "134961", "name": "Dublin Busaras (Gate 15)", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "jervis"
+          ],
+          "expected": [
+            { "id": "LUAS20", "name": "Jervis", "service": "LUAS" },
+            { "id": "40", "name": "Jervis Street", "service": "DUBLIN_BIKES" }
+          ]
+        },
+        {
+          "queries": [
+            "gpo"
+          ],
+          "expected": [
+            { "id": "LUAS63", "name": "O'Connell - GPO", "service": "LUAS" }
+          ]
+        },
+        {
+          "queries": [
+            "ucd"
+          ],
+          "expected": [
+            { "id": "877", "name": "UCD", "service": "DUBLIN_BUS" },
+            { "id": "4952", "name": "UCD", "service": "DUBLIN_BUS" },
+            { "id": "4953", "name": "UCD", "service": "DUBLIN_BUS" },
+            { "id": "765", "name": "UCD", "service": "DUBLIN_BUS" },
+            { "id": "767", "name": "UCD Campus", "service": "DUBLIN_BUS" },
+            { "id": "3166", "name": "UCD Smurfit", "service": "DUBLIN_BUS" },
+            { "id": "3200", "name": "UCD Smurfit", "service": "DUBLIN_BUS" }
+          ]
+        },
+        {
+          "queries": [
+            "trinity"
+          ],
+          "expected": [
+            { "id": "LUAS60", "name": "Trinity", "service": "LUAS" },
+            { "id": "105001", "name": "Dublin (Trinity College)", "service": "BUS_EIREANN" },
+            { "id": "331621", "name": "Wexford (Trinity Street Centra)", "service": "BUS_EIREANN" },
+            { "id": "300401", "name": "Wexford (Trinity St Opposite Centra)", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "phibsborough luas"
+          ],
+          "expected": [
+            { "id": "LUAS69", "name": "Phibsborough", "service": "LUAS" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Stop IDs",
+      "tests": [
+        {
+          "queries": [
+            "769"
+          ],
+          "expected": [
+            { "id": "769", "name": "Stillorgan Road", "service": "DUBLIN_BUS" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Routes",
+      "tests": [
+        {
+          "queries": [
+            "46a"
+          ],
+          "expected": [
+            { "id": "81", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "797", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "798", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "799", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "800", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "801", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "803", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "804", "name": "North Circular Road", "service": "DUBLIN_BUS" },
+            { "id": "807", "name": "Infirmary Rd", "service": "DUBLIN_BUS" },
+            { "id": "808", "name": "North Circular Road", "service": "DUBLIN_BUS" }
+          ]
+        },
+        {
+          "queries": [
+            "100x"
+          ],
+          "expected": [
+            { "id": "123531", "name": "Dublin (Opp IFSC)", "service": "BUS_EIREANN" },
+            { "id": "111951", "name": "Dublin Airport(Atrium Rd Zone14 Stop14)", "service": "BUS_EIREANN" },
+            { "id": "131631", "name": "Dunleer (The Corner Shop)", "service": "BUS_EIREANN" },
+            { "id": "134861", "name": "Millfield Shopping Centre", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "x2"
+          ],
+          "expected": [
+            { "id": "100041", "name": "Dublin (Clare St Cafe Sol)", "service": "BUS_EIREANN" },
+            { "id": "100061", "name": "Donnybrook (Opp Stadium)", "service": "BUS_EIREANN" },
+            { "id": "100071", "name": "Donnybrook (Stadium)", "service": "BUS_EIREANN" },
+            { "id": "100351", "name": "Merrion Square North (Jct Clare St)", "service": "BUS_EIREANN" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Autocomplete",
+      "tests": [
+        {
+          "queries": [
+            "phibs"
+          ],
+          "expected": [
+            { "id": "LUAS69", "name": "Phibsborough", "service": "LUAS" },
+            { "id": "110", "name": "Phibsborough Road", "service": "DUBLIN_BIKES" },
+            { "id": "187", "name": "Phibsboro Road", "service": "DUBLIN_BUS" },
+            { "id": "188", "name": "Phibsboro Road", "service": "DUBLIN_BUS" },
+            { "id": "189", "name": "Phibsboro Road", "service": "DUBLIN_BUS" },
+            { "id": "190", "name": "Phibsboro Road", "service": "DUBLIN_BUS" },
+            { "id": "195", "name": "Phibsboro Road", "service": "DUBLIN_BUS" }
+          ]
+        },
+        {
+          "queries": [
+            "da"
+          ],
+          "expected": [
+            { "id": "LUAS59", "name": "Dawson", "service": "LUAS" },
+            { "id": "DLKEY", "name": "Dalkey", "service": "IRISH_RAIL" },
+            { "id": "10", "name": "Dame Street", "service": "DUBLIN_BIKES" },
+            { "id": "792", "name": "Dawson Street", "service": "DUBLIN_BUS" },
+            { "id": "793", "name": "Dawson Street", "service": "DUBLIN_BUS" },
+            { "id": "1025", "name": "Dartry Road", "service": "DUBLIN_BUS" }
+          ]
+        },
+        {
+          "queries": [
+            "che"
+          ],
+          "expected": [
+            { "id": "LUAS47", "name": "Cherrywood", "service": "LUAS" },
+            { "id": "LUAS50", "name": "Cheeverstown", "service": "LUAS" },
+            { "id": "CHORC", "name": "Park West and Cherry Orchard", "service": "IRISH_RAIL" },
+            { "id": "850", "name": "Chelmsford Road", "service": "DUBLIN_BUS" },
+            { "id": "851", "name": "Chelmsford Road", "service": "DUBLIN_BUS" },
+            { "id": "903", "name": "Chelmsford Road", "service": "DUBLIN_BUS" },
+            { "id": "2623", "name": "Cheeverstown Rd", "service": "DUBLIN_BUS" }
+          ]
+        },
+        {
+          "queries": [
+            "chee"
+          ],
+          "expected": [
+            { "id": "LUAS50", "name": "Cheeverstown", "service": "LUAS" },
+            { "id": "2623", "name": "Cheeverstown Rd", "service": "DUBLIN_BUS" },
+            { "id": "2624", "name": "Cheeverstown Rd", "service": "DUBLIN_BUS" },
+            { "id": "2629", "name": "Cheeverstown Rd", "service": "DUBLIN_BUS" },
+            { "id": "2631", "name": "Cheeverstown Rd", "service": "DUBLIN_BUS" },
+            { "id": "6095", "name": "Cheeverstown Rd", "service": "DUBLIN_BUS" },
+            { "id": "7062", "name": "Cheeverstown Rd", "service": "DUBLIN_BUS" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Punctuation",
+      "tests": [
+        {
+          "queries": [
+            "vlacktock"
+          ],
+          "expected": [
+            { "id": "BROCK", "name": "Blackrock", "service": "IRISH_RAIL" },
+            { "id": "3033", "name": "Blackrock", "service": "DUBLIN_BUS" },
+            { "id": "3085", "name": "Blackrock", "service": "DUBLIN_BUS" },
+            { "id": "210431", "name": "Blackrock Village", "service": "BUS_EIREANN" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Punctuation",
+      "tests": [
+        {
+          "queries": [
+            "stephens",
+            "stephen's",
+            "st stephens",
+            "st stephen's",
+            "st. stephens",
+            "st. stephen's"
+          ],
+          "expected": [
+            { "id": "LUAS24", "name": "St. Stephen's Green", "service": "LUAS" },
+            { "id": "37", "name": "St. Stephen's Green South", "service": "DUBLIN_BIKES" },
+            { "id": "36", "name": "St. Stephen's Green East", "service": "DUBLIN_BIKES" },
+            { "id": "790", "name": "St. Stephen's Green", "service": "DUBLIN_BUS" },
+            { "id": "791", "name": "St. Stephen's Green", "service": "DUBLIN_BUS" },
+            { "id": "842", "name": "St. Stephen's Green", "service": "DUBLIN_BUS" },
+            { "id": "843", "name": "St. Stephen's Green", "service": "DUBLIN_BUS" },
+            { "id": "844", "name": "St. Stephen's Green", "service": "DUBLIN_BUS" },
+            { "id": "233901", "name": "Sarsfields Court (St Stephens Hospital)", "service": "BUS_EIREANN" },
+            { "id": "135041", "name": "Dublin (St Stephens Grn (Loreto Conv)", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "georges dock",
+            "george's dock"
+          ],
+          "expected": [
+            { "id": "LUAS54", "name": "George's Dock", "service": "LUAS" },
+            { "id": "16", "name": "Georges Quay", "service": "DUBLIN_BIKES" },
+            { "id": "LUAS56", "name": "Spencer Dock", "service": "LUAS" },
+            { "id": "135141", "name": "Dublin (Georges Quay)", "service": "BUS_EIREANN" },
+            { "id": "50", "name": "George's Lane", "service": "DUBLIN_BIKES" },
+            { "id": "1282", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "1283", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "1357", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "2041", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "3047", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "3068", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "3069", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "3070", "name": "George's St", "service": "DUBLIN_BUS" },
+            { "id": "7578", "name": "George's Street", "service": "DUBLIN_BUS" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "General Term",
+      "tests": [
+        {
+          "queries": [
+            "dock"
+          ],
+          "expected": [
+            { "id": "LUAS54", "name": "George's Dock", "service": "LUAS" },
+            { "id": "LUAS56", "name": "Spencer Dock", "service": "LUAS" },
+            { "id": "GCDK", "name": "Grand Canal Dock", "service": "IRISH_RAIL" },
+            { "id": "91", "name": "South Dock Road", "service": "DUBLIN_BIKES" },
+            { "id": "69", "name": "Grand Canal Dock", "service": "DUBLIN_BIKES" },
+            { "id": "245411", "name": "Passage (Main St Victoria Dock)", "service": "BUS_EIREANN" }
+          ]
+        },
+        {
+          "queries": [
+            "quay"
+          ],
+          "expected": [
+            { "id": "139481", "name": "Newry (Quays Shopping Centre)", "service": "BUS_EIREANN" },
+            { "id": "68", "name": "Hanover Quay", "service": "DUBLIN_BIKES" },
+            { "id": "99", "name": "City Quay", "service": "DUBLIN_BIKES" },
+            { "id": "16", "name": "Georges Quay", "service": "DUBLIN_BIKES" },
+            { "id": "297", "name": "Eden Quay", "service": "DUBLIN_BUS" },
+            { "id": "298", "name": "Eden Quay", "service": "DUBLIN_BUS" },
+            { "id": "299", "name": "Eden Quay", "service": "DUBLIN_BUS" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Service",
+      "tests": [
+        {
+          "queries": [
+            "go ahead"
+          ],
+          "expected": [
+            { "id": "124", "name": "Virgin Mary Church", "service": "DUBLIN_BUS" },
+            { "id": "128", "name": "Glasnevin Avenue", "service": "DUBLIN_BUS" },
+            { "id": "132", "name": "Beneavin Park", "service": "DUBLIN_BUS" },
+            { "id": "139", "name": "Grove Park Road", "service": "DUBLIN_BUS" },
+            { "id": "140", "name": "Beneavin Park", "service": "DUBLIN_BUS" },
+            { "id": "430", "name": "Sydney Avenue", "service": "DUBLIN_BUS" },
+            { "id": "431", "name": "Cross Avenue", "service": "DUBLIN_BUS" }
+          ]
+        }
+      ]
+    },
+    {
+      "group": "Jibberish",
+      "tests": [
+        {
+          "queries": [
+            "emptyList"
+          ],
+          "expected": []
+        }
+      ]
+    }
+  ]
+}

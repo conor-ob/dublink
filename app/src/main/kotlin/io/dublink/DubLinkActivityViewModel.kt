@@ -8,6 +8,7 @@ import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.repository.AggregatedServiceLocationRepository
 import io.dublink.domain.service.RxScheduler
 import io.dublink.iap.dublinkpro.DubLinkProUseCase
+import io.dublink.search.SearchUseCase
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
@@ -16,6 +17,7 @@ import timber.log.Timber
 class DubLinkActivityViewModel @Inject constructor(
     private val serviceLocationRepository: AggregatedServiceLocationRepository,
     private val useCase: DubLinkProUseCase,
+    private val searchUseCase: SearchUseCase,
     private val scheduler: RxScheduler
 ) : BaseViewModel<DubLinkActivityAction, DubLinkActivityState>() {
 
@@ -48,10 +50,19 @@ class DubLinkActivityViewModel @Inject constructor(
                     .map { DubLinkActivityChange.Ignored }
             }
 
+        val buildSearchIndexChanges = actions.ofType(DubLinkActivityAction.BuildSearchIndex::class.java)
+            .switchMap {
+                searchUseCase.search("dublin") // triggers a search index build on app startup
+                    .subscribeOn(scheduler.io)
+                    .observeOn(scheduler.ui)
+                    .map { DubLinkActivityChange.Ignored }
+            }
+
         val allChanges = Observable.merge(
             listOf(
                 queryPurchasesActions,
-                preloadDataChanges
+                preloadDataChanges,
+                buildSearchIndexChanges
             )
         )
 
@@ -65,6 +76,7 @@ class DubLinkActivityViewModel @Inject constructor(
 sealed class DubLinkActivityAction : BaseAction {
     object QueryPurchases : DubLinkActivityAction()
     object PreloadData : DubLinkActivityAction()
+    object BuildSearchIndex : DubLinkActivityAction()
 }
 
 sealed class DubLinkActivityChange {

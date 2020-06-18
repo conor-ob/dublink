@@ -27,6 +27,7 @@ import io.dublink.logging.NetworkLoggingInterceptor
 import io.dublink.permission.UserPermissionsChecker
 import io.dublink.repository.inject.RepositoryModule
 import io.dublink.resource.StringResourceProvider
+import io.dublink.search.SearchModule
 import io.dublink.settings.DefaultEnabledServiceManager
 import io.dublink.settings.DefaultPreferenceStore
 import io.dublink.settings.DubLinkProPreferencesService
@@ -50,6 +51,7 @@ import okhttp3.OkHttpClient
         ViewModelModule::class,
         DatabaseModule::class,
         RepositoryModule::class,
+        SearchModule::class,
         InAppPurchaseModule::class
     ]
 )

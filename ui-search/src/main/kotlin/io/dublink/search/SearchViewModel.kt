@@ -12,6 +12,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import org.apache.lucene.queryparser.classic.ParseException
 import timber.log.Timber
 
 class SearchViewModel @Inject constructor(
@@ -31,11 +32,31 @@ class SearchViewModel @Inject constructor(
                 scrollToTop = false,
                 throwable = null
             )
-            is Change.Error -> state.copy(
-                loading = false,
-                scrollToTop = false,
-                throwable = change.throwable
-            )
+            is Change.Error -> {
+                Timber.w(change.throwable)
+                state.copy(
+                    loading = false,
+                    scrollToTop = false,
+                    throwable = change.throwable
+                )
+            }
+            is Change.SearchError -> {
+                Timber.w(change.throwable)
+                if (change.throwable is ParseException) {
+                    state.copy(
+                        searchResults = SearchResultsResponse.NoResults(change.query, emptyList()),
+                        scrollToTop = false,
+                        loading = false,
+                        throwable = null
+                    )
+                } else {
+                    state.copy(
+                        loading = false,
+                        scrollToTop = false,
+                        throwable = change.throwable
+                    )
+                }
+            }
             is Change.NearbyLocations -> state.copy(
                 nearbyLocations = change.nearbyLocations,
                 scrollToTop = false,
@@ -101,7 +122,7 @@ class SearchViewModel @Inject constructor(
                     .observeOn(scheduler.ui)
                     .map<Change> { Change.SearchResults(it) }
                     .throttleLatest(250L, TimeUnit.MILLISECONDS)
-                    .onErrorReturn { Change.Error(it) }
+                    .onErrorReturn { Change.SearchError(action.query, it) }
                     .startWith(Change.Loading)
             }
 

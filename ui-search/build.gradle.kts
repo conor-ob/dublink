@@ -2,6 +2,7 @@ plugins {
     id(BuildPlugins.androidLibrary)
     id(BuildPlugins.kotlinAndroid)
     id(BuildPlugins.kotlinAndroidExtensions)
+    id(BuildPlugins.kotlinKapt)
 }
 
 apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
@@ -31,16 +32,22 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":ui-app"))
 
-    implementation(Libraries.FuzzyWuzzy.javaWuzzy)
+    implementation(Libraries.Apache.luceneAnalyzersCommon)
+    implementation(Libraries.Apache.luceneCore)
+    implementation(Libraries.Apache.luceneQueryParser)
     implementation(Libraries.Rx.rxAndroid)
 
+    kapt(Libraries.Dagger.daggerCompiler)
+
+    testImplementation(project(":test"))
+    testImplementation(project(":test-ui"))
     testImplementation("androidx.test.ext:junit-ktx:1.1.1")
     testImplementation("androidx.test:core-ktx:1.2.0")
     testImplementation("org.robolectric:robolectric:4.3.1")
-
-    testImplementation(project(":test-ui"))
     testImplementation(TestLibraries.Junit.junit)
+    testImplementation(TestLibraries.Junit.params)
     testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)
+    testImplementation(Libraries.Google.gson)
     testImplementation(Libraries.Rtpi.rtpiStaticData)
 }

@@ -26,5 +26,6 @@ DubLink makes use of the latest Android libraries and best practices
 * [Retrofit](https://square.github.io/retrofit/)/[OkHttp](https://square.github.io/okhttp/) for networking. The networking is fully contained in a separate library [dublin-rtpi-service](https://github.com/conor-ob/dublin-rtpi-service)
 * [SQLDelight](https://github.com/cashapp/sqldelight) for local storage
 * [Dagger](https://google.github.io/dagger/) for dependency injection
+* [Apache Lucene](https://lucene.apache.org/) for indexed search
 * Designed and built using Material Design [tools](https://material.io/tools/) and [components](https://material.io/develop/android/)
 * Full dark theme support
