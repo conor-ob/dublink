@@ -261,6 +261,7 @@ class SearchServiceTest(
      * bride's glen
      * george's dock
      * artane
+     * st. john's
      */
 
 //    @Test

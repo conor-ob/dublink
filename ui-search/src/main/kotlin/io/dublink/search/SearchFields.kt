@@ -58,7 +58,7 @@ enum class SearchField(val fieldName: String) {
         override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
             return values()
                 .filter { it != this }
-                .map { it.toSearchField(serviceLocation) }
+                .mapNotNull { it.toSearchField(serviceLocation) }
                 .toSet()
                 .joinToString(separator = " ")
         }
