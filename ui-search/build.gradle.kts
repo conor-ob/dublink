@@ -44,9 +44,12 @@ dependencies {
 
     kapt(Libraries.Dagger.daggerCompiler)
 
+    testImplementation("com.google.code.gson:gson:2.8.6")
+
     testImplementation(project(":test"))
     testImplementation(project(":test-ui"))
     testImplementation(TestLibraries.Junit.junit)
+    testImplementation("pl.pragmatists:JUnitParams:1.1.1")
     testImplementation(TestLibraries.Mockk.mockk)
     testImplementation(TestLibraries.Truth.truth)
     testImplementation(Libraries.Rtpi.rtpiStaticData)

@@ -9,5 +9,5 @@ class SearchModule {
 
     @Provides
     @Singleton
-    fun searchService(): SearchService = SearchService()
+    fun searchService(): SearchService = LuceneSearchService()
 }

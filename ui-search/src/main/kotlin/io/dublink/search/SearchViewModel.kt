@@ -10,9 +10,9 @@ import io.dublink.domain.util.AppConstants
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
-import org.apache.lucene.queryparser.classic.ParseException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import org.apache.lucene.queryparser.classic.ParseException
 import timber.log.Timber
 
 class SearchViewModel @Inject constructor(

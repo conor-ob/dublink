@@ -8,7 +8,6 @@ import io.dublink.domain.internet.InternetStatus
 import io.dublink.domain.repository.AggregatedServiceLocationRepository
 import io.dublink.domain.service.RxScheduler
 import io.dublink.iap.dublinkpro.DubLinkProUseCase
-import io.dublink.search.SearchService
 import io.dublink.search.SearchUseCase
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.plusAssign
