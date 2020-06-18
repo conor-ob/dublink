@@ -19,7 +19,10 @@ import io.dublink.domain.service.RxScheduler
 import io.dublink.domain.service.StringProvider
 import io.dublink.domain.service.ThemeService
 import io.dublink.domain.util.XorEncryption
-import io.dublink.iap.InAppPurchaseModule
+import io.dublink.iap.BillingClientFactory
+import io.dublink.iap.InAppPurchaseVerifier
+import io.dublink.iap.RxBilling
+import io.dublink.iap.RxBillingImpl
 import io.dublink.internet.DeviceInternetManager
 import io.dublink.internet.NetworkStatusChangeListener
 import io.dublink.location.GpsLocationProvider
@@ -27,7 +30,8 @@ import io.dublink.logging.NetworkLoggingInterceptor
 import io.dublink.permission.UserPermissionsChecker
 import io.dublink.repository.inject.RepositoryModule
 import io.dublink.resource.StringResourceProvider
-import io.dublink.search.SearchModule
+import io.dublink.search.LuceneSearchService
+import io.dublink.search.SearchService
 import io.dublink.settings.DefaultEnabledServiceManager
 import io.dublink.settings.DefaultPreferenceStore
 import io.dublink.settings.DubLinkProPreferencesService
@@ -50,9 +54,7 @@ import okhttp3.OkHttpClient
     includes = [
         ViewModelModule::class,
         DatabaseModule::class,
-        RepositoryModule::class,
-        SearchModule::class,
-        InAppPurchaseModule::class
+        RepositoryModule::class
     ]
 )
 class ApplicationModule {
@@ -168,4 +170,21 @@ class ApplicationModule {
 //            .writeTimeout(Duration.ofSeconds(30L))
             .readTimeout(Duration.ofSeconds(30L))
             .build()
+
+    @Provides
+    @Singleton
+    fun searchService(): SearchService = LuceneSearchService()
+
+    @Provides
+    @Singleton
+    fun rxBilling(
+        context: Context,
+        scheduler: RxScheduler
+    ): RxBilling = RxBillingImpl(BillingClientFactory(context), scheduler)
+
+    @Provides
+    @Singleton
+    fun inAppPurchaseVerifier(
+        appConfig: AppConfig
+    ): InAppPurchaseVerifier = InAppPurchaseVerifier(appConfig.publicKey())
 }
