@@ -89,7 +89,7 @@ class SearchService {
                         }
                     }
                         .forEach {
-                            add(TextField(it.first.fieldName, it.second, Field.Store.YES))
+                            add(TextField(it.first.fieldName, it.second, Field.Store.NO))
                         }
                 }
             }
