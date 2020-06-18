@@ -36,8 +36,6 @@ dependencies {
     implementation(Libraries.Apache.luceneQueryParser)
     implementation(Libraries.Rx.rxAndroid)
 
-//    kapt(Libraries.Dagger.daggerCompiler)
-
     testImplementation(project(":test"))
     testImplementation(project(":test-ui"))
     testImplementation("androidx.test.ext:junit-ktx:1.1.1")
