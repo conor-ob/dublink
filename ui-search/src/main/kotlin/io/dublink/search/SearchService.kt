@@ -103,8 +103,8 @@ class SearchService {
         return Observable.zip(
             listOf(
                 searchIndexInternal(QueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(phrase)),
-                searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(phrase)),
-                searchIndexInternal(TermQuery(Term(field, phrase))),
+//                searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(phrase)),
+//                searchIndexInternal(TermQuery(Term(field, phrase))),
                 searchIndexInternal(PrefixQuery(Term(field, phrase))),
                 when {
                     phrase.length > 5 -> searchIndexInternal(FuzzyQuery(Term(field, phrase), FuzzyQuery.defaultMaxEdits))

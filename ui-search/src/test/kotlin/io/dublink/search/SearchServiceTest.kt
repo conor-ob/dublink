@@ -255,6 +255,7 @@ class SearchServiceTest(
     /**
      * Tests to add
      * st. stephen's green
+     * stephens green
      * phibsborough luas
      * port
      * james's
