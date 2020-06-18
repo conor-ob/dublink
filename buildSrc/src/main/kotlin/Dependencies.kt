@@ -68,21 +68,9 @@ object Libraries {
         const val location = "com.google.android.gms:play-services-location:17.0.0"
     }
 
-    // https://dev.to/node/implementation-of-full-text-search-on-android--1n
-    // 4.7.2 ok
-    // 4.8.0 ok
-    // 4.8.1 ok
-    // 4.9.0 no
-    // 4.10.0 no
-    // 4.10.4 no
-    // 5.0.0 no
-    // 5.5.5 no
-    // 6.6.6 no
-    // 8.5.2 no
     object Apache {
         const val luceneAnalyzersCommon = "org.apache.lucene:lucene-analyzers-common:4.8.1"
         const val luceneCore = "org.apache.lucene:lucene-core:4.8.1"
-        const val luceneMemory = "org.apache.lucene:lucene-memory:4.8.1"
         const val luceneQueryParser = "org.apache.lucene:lucene-queryparser:4.8.1"
     }
 
@@ -99,8 +87,8 @@ object Libraries {
         const val crashlytics = "com.google.firebase:firebase-crashlytics:17.0.0" // https://mvnrepository.com/artifact/com.google.firebase/firebase-crashlytics
     }
 
-    object FuzzyWuzzy {
-        const val javaWuzzy = "me.xdrop:fuzzywuzzy:1.2.0" // https://mvnrepository.com/artifact/me.xdrop/fuzzywuzzy
+    object Google {
+        const val gson = "com.google.code.gson:gson:2.8.6"
     }
 
     object Groupie {
@@ -130,10 +118,10 @@ object Libraries {
     }
 
     object Rtpi {
-        const val rtpiApi = "io.rtpi:rtpi-api:1.0.0"
-        const val rtpiClient = "io.rtpi:rtpi-client-standalone:1.0.0"
-        const val rtpiUtil = "io.rtpi:rtpi-util:1.0.0"
-        const val rtpiStaticData = "io.rtpi:rtpi-static-data:1.0.0"
+        const val rtpiApi = "io.rtpi:rtpi-api:1.1.0"
+        const val rtpiClient = "io.rtpi:rtpi-client-standalone:1.1.0"
+        const val rtpiUtil = "io.rtpi:rtpi-util:1.1.0"
+        const val rtpiStaticData = "io.rtpi:rtpi-static-data:1.1.0"
     }
 
     object Rx {
@@ -169,6 +157,7 @@ object TestLibraries {
 
     object Junit {
         const val junit = "junit:junit:4.12" // https://mvnrepository.com/artifact/junit/junit
+        const val params = "pl.pragmatists:JUnitParams:1.1.1"
     }
 
     object Mockk {

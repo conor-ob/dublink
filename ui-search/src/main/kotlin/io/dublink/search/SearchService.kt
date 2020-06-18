@@ -172,17 +172,17 @@ class LuceneSearchService : SearchService {
         Timber.d("Finished building search index")
     }
 
-    private fun searchIndex(phrase: String, field: String): Observable<List<SearchResult>> {
+    private fun searchIndex(query: String, field: String): Observable<List<SearchResult>> {
         return Observable.zip(
             listOf(
-                searchIndexInternal(QueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(phrase)),
-//                searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(phrase)),
-//                searchIndexInternal(TermQuery(Term(field, phrase))),
-                searchIndexInternal(PrefixQuery(Term(field, phrase))),
+                searchIndexInternal(QueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(query)),
+//                searchIndexInternal(ComplexPhraseQueryParser(Version.LUCENE_48, field, indexAnalyzer).parse(query)),
+//                searchIndexInternal(TermQuery(Term(field, query))),
+                searchIndexInternal(PrefixQuery(Term(field, query))),
                 when {
-                    phrase.length > 5 -> searchIndexInternal(FuzzyQuery(Term(field, phrase), FuzzyQuery.defaultMaxEdits))
-                    phrase.length > 3 -> searchIndexInternal(FuzzyQuery(Term(field, phrase), 1))
-                    else -> searchIndexInternal(FuzzyQuery(Term(field, phrase), 0))
+                    query.length > 5 -> searchIndexInternal(FuzzyQuery(Term(field, query), FuzzyQuery.defaultMaxEdits))
+                    query.length > 3 -> searchIndexInternal(FuzzyQuery(Term(field, query), 1))
+                    else -> searchIndexInternal(FuzzyQuery(Term(field, query), 0))
                 }
             )
         ) { searchStreams -> aggregateSearchQueries(searchStreams) }

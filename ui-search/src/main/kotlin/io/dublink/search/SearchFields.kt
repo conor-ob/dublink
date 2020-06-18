@@ -24,7 +24,7 @@ enum class SearchField(val fieldName: String) {
     },
     NAME(fieldName = "name") {
         override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
-            return serviceLocation.name
+            return serviceLocation.defaultName
         }
     },
     SERVICE(fieldName = "service") {
@@ -56,10 +56,29 @@ enum class SearchField(val fieldName: String) {
     },
     CONTENT(fieldName = "content") {
         override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
-            return values()
-                .filter { it != this }
-                .mapNotNull { it.toSearchField(serviceLocation) }
+            return listOfNotNull(
+                ID.toSearchField(serviceLocation),
+                NAME.toSearchField(serviceLocation),
+                SERVICE.toSearchField(serviceLocation)
+            ).asSequence().plus(
+                if (serviceLocation is DubLinkStopLocation) {
+                    if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN) {
+                        serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }
+                    } else {
+                        emptyList()
+                    }
+                } else {
+                    emptyList()
+                }
+            ).plus(
+                if (serviceLocation is DubLinkStopLocation) {
+                    serviceLocation.stopLocation.routeGroups.map{ routeGroup -> routeGroup.operator.fullName }
+                } else {
+                    emptyList()
+                }
+            )
                 .toSet()
+                .sorted()
                 .joinToString(separator = " ")
         }
     };

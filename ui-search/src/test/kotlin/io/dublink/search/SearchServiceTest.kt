@@ -9,6 +9,8 @@ import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.test.createDubLinkStopLocation
 import io.reactivex.Single
 import io.rtpi.api.DockLocation
+import io.rtpi.api.Operator
+import io.rtpi.api.RouteGroup
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
@@ -18,13 +20,13 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(value = Parameterized::class)
-class SearchServiceJsonTest(
+class SearchServiceTest(
     private val queries: List<String>,
     private val expectedResults: List<DubLinkServiceLocation>
 ) {
 
     companion object {
-        private val searchService = SearchService()
+        private val searchService = LuceneSearchService()
         private val serviceLocations = Single.zip(
             listOf(
                 Service.LUAS,
@@ -52,7 +54,7 @@ class SearchServiceJsonTest(
         @Parameterized.Parameters(name = "{index}: queries=\"{0}\"")
         fun data(): Iterable<Array<List<Any>>> {
             val testCaseInputJson = Gson().fromJson(
-                SearchServiceJsonTest::class.java.getResource("/search_data.json")!!.readText(),
+                SearchServiceTest::class.java.getResource("/search_data.json")!!.readText(),
                 SearchJson::class.java
             )
             return testCaseInputJson.groups.flatMap { it.tests }.map { testCaseInput ->

@@ -14,7 +14,8 @@ sealed class Action : BaseAction {
 
 sealed class Change {
     object Loading : Change()
-    data class Error(val query: String, val throwable: Throwable) : Change()
+    data class Error(val throwable: Throwable) : Change()
+    data class SearchError(val query: String, val throwable: Throwable) : Change()
     data class NearbyLocations(val nearbyLocations: NearbyLocationsResponse) : Change()
     data class SearchResults(val searchResults: SearchResultsResponse) : Change()
     data class RecentSearches(val recentSearches: RecentSearchesResponse) : Change()

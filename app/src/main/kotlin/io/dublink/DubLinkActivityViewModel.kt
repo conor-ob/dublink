@@ -52,7 +52,7 @@ class DubLinkActivityViewModel @Inject constructor(
 
         val buildSearchIndexChanges = actions.ofType(DubLinkActivityAction.BuildSearchIndex::class.java)
             .switchMap {
-                searchUseCase.search("load")
+                searchUseCase.search("dublin") // triggers a search index build on app startup
                     .subscribeOn(scheduler.io)
                     .observeOn(scheduler.ui)
                     .map { DubLinkActivityChange.Ignored }
