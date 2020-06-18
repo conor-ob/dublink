@@ -27,6 +27,9 @@
 # IAP
 -keep class com.android.vending.billing.**
 
+# Lucene
+-keep class org.apache.lucene.** { *; }
+
 # SimpleXml
 -keep public class org.simpleframework.** { *; }
 -keep class org.simpleframework.xml.** { *; }
