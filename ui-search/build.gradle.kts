@@ -44,6 +44,7 @@ dependencies {
 
     kapt(Libraries.Dagger.daggerCompiler)
 
+    testImplementation(project(":test"))
     testImplementation(project(":test-ui"))
     testImplementation(TestLibraries.Junit.junit)
     testImplementation(TestLibraries.Mockk.mockk)

@@ -35,7 +35,7 @@ enum class SearchField(val fieldName: String) {
     ROUTES(fieldName = "routes") {
         override fun toSearchField(serviceLocation: DubLinkServiceLocation): String? {
             return if (serviceLocation is DubLinkStopLocation) {
-                if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN || serviceLocation.service == Service.LUAS) {
+                if (serviceLocation.service == Service.DUBLIN_BUS || serviceLocation.service == Service.BUS_EIREANN) {
                     serviceLocation.stopLocation.routeGroups.flatMap { routeGroup -> routeGroup.routes }.joinToString(separator = " ")
                 } else {
                     null
