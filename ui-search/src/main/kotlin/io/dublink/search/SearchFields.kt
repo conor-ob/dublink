@@ -72,7 +72,7 @@ enum class SearchField(val fieldName: String) {
                 }
             ).plus(
                 if (serviceLocation is DubLinkStopLocation) {
-                    serviceLocation.stopLocation.routeGroups.map{ routeGroup -> routeGroup.operator.fullName }
+                    serviceLocation.stopLocation.routeGroups.map { routeGroup -> routeGroup.operator.fullName }
                 } else {
                     emptyList()
                 }

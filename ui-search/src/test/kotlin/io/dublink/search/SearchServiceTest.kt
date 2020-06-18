@@ -9,8 +9,6 @@ import io.dublink.domain.model.DubLinkStopLocation
 import io.dublink.test.createDubLinkStopLocation
 import io.reactivex.Single
 import io.rtpi.api.DockLocation
-import io.rtpi.api.Operator
-import io.rtpi.api.RouteGroup
 import io.rtpi.api.Service
 import io.rtpi.api.ServiceLocation
 import io.rtpi.api.StopLocation
