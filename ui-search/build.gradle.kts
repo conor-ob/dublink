@@ -2,7 +2,6 @@ plugins {
     id(BuildPlugins.androidLibrary)
     id(BuildPlugins.kotlinAndroid)
     id(BuildPlugins.kotlinAndroidExtensions)
-    id(BuildPlugins.kotlinKapt)
 }
 
 apply(from = "$rootDir/quality/coverage/androidJacoco.gradle")
@@ -37,7 +36,7 @@ dependencies {
     implementation(Libraries.Apache.luceneQueryParser)
     implementation(Libraries.Rx.rxAndroid)
 
-    kapt(Libraries.Dagger.daggerCompiler)
+//    kapt(Libraries.Dagger.daggerCompiler)
 
     testImplementation(project(":test"))
     testImplementation(project(":test-ui"))
