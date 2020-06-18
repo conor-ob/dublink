@@ -41,8 +41,6 @@ dependencies {
     implementation(Libraries.Android.googlePlayBilling)
     implementation(Libraries.Android.googlePlayBillingKtx)
 
-//    kapt(Libraries.Dagger.daggerCompiler)
-
     testImplementation(project(":test-ui"))
     testImplementation("androidx.test.ext:junit-ktx:1.1.1")
     testImplementation("androidx.test:core-ktx:1.2.0")
