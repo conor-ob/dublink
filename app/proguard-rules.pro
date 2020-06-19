@@ -28,7 +28,15 @@
 -keep class com.android.vending.billing.**
 
 # Lucene
--keep class org.apache.lucene.** { *; }
+-keep class org.apache.lucene.codecs.Codec
+-keep class * extends org.apache.lucene.codecs.Codec
+-keep class org.apache.lucene.codecs.PostingsFormat
+-keep class * extends org.apache.lucene.codecs.PostingsFormat
+-keep class org.apache.lucene.codecs.DocValuesFormat
+-keep class * extends org.apache.lucene.codecs.DocValuesFormat
+-keep class org.apache.lucene.analysis.tokenattributes.**
+-keep class org.apache.lucene.**Attribute
+-keep class * implements org.apache.lucene.**Attribute
 
 # SimpleXml
 -keep public class org.simpleframework.** { *; }
@@ -42,19 +50,21 @@
     @org.simpleframework.xml.* *;
 }
 
-# Jsoup
--keep public class org.jsoup.** {
-public *;
-}
--keeppackagenames org.jsoup.nodes
-
-# Mozila Rhino
--dontwarn sun.**
--dontwarn org.mozilla.javascript.**
--keep class org.mozilla.javascript.** { *; }
--keep class javax.script.** { *; }
--keep class com.sun.script.javascript.** { *; }
--keep class org.mozilla.javascript.* { *; }
-
 # Custom behaviour
 -keep class com.google.android.material.behavior.** { *; }
+
+# TODO add back in for Aircoach
+# Jsoup
+#-keep public class org.jsoup.** {
+#public *;
+#}
+#-keeppackagenames org.jsoup.nodes
+
+# TODO add back in for Aircoach
+# Mozila Rhino
+#-dontwarn sun.**
+#-dontwarn org.mozilla.javascript.**
+#-keep class org.mozilla.javascript.** { *; }
+#-keep class javax.script.** { *; }
+#-keep class com.sun.script.javascript.** { *; }
+#-keep class org.mozilla.javascript.* { *; }

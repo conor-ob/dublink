@@ -47,8 +47,10 @@ object FavouriteDialogFactory {
         when (serviceLocation) {
             is DubLinkDockLocation -> {
                 customizeFavouriteView.favourite_edit_routes.visibility = View.GONE
+                customizeFavouriteView.favourite_edit_spacer.visibility = View.VISIBLE
             }
             is DubLinkStopLocation -> {
+                customizeFavouriteView.favourite_edit_spacer.visibility = View.GONE
                 customizeFavouriteView.favourite_edit_routes.visibility = View.VISIBLE
                 for (filter in serviceLocation.filters) {
                     val filterChip = ChipFactory
