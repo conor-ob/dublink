@@ -25,7 +25,7 @@ object BuildPlugins {
     const val ktLint = "com.pinterest:ktlint:0.36.0"
     const val sqlDelightGradlePlugin = "com.squareup.sqldelight:gradle-plugin:1.2.2" // https://mvnrepository.com/artifact/com.squareup.sqldelight/gradle-plugin
     const val googleServiceGradlePlugin = "com.google.gms:google-services:4.3.3" // https://mvnrepository.com/artifact/com.google.gms/google-services?repo=google
-    const val firebaseCrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.1.0"
+    const val firebaseCrashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.1.1"
     const val jacocoGradlePlugin = "org.jacoco:org.jacoco.core:0.7.9"
 
     const val androidApplication = "com.android.application"
@@ -83,8 +83,8 @@ object Libraries {
     }
 
     object Firebase {
-        const val analytics = "com.google.firebase:firebase-analytics:17.4.1" // https://mvnrepository.com/artifact/com.google.firebase/firebase-analytics
-        const val crashlytics = "com.google.firebase:firebase-crashlytics:17.0.0" // https://mvnrepository.com/artifact/com.google.firebase/firebase-crashlytics
+        const val analytics = "com.google.firebase:firebase-analytics:17.4.3" // https://mvnrepository.com/artifact/com.google.firebase/firebase-analytics
+        const val crashlytics = "com.google.firebase:firebase-crashlytics:17.0.1" // https://mvnrepository.com/artifact/com.google.firebase/firebase-crashlytics
     }
 
     object Google {
