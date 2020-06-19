@@ -24,6 +24,12 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <View
+            android:id="@+id/favourite_edit_spacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:visibility="gone" />
+
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/favourite_edit_routes"
             android:layout_width="match_parent"
