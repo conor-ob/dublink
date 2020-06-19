@@ -6,7 +6,7 @@ object BuildConfig {
     object Version {
         private const val major = 1
         private const val minor = 1
-        private const val patch = 2
+        private const val patch = 3
 
         const val name = "$major.$minor.$patch"
         const val code = major * 100000 + minor * 1000 + patch * 10
