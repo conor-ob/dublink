@@ -13,14 +13,18 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import io.dublink.DubLinkFragment
 import io.dublink.DubLinkNavigator
+import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.service.PreferenceStore
 import io.dublink.model.AbstractServiceLocationItem
 import io.dublink.model.getServiceLocation
+import io.dublink.nearby.util.AnimationUtils
 import io.dublink.viewModelProvider
 import io.rtpi.api.Coordinate
 import timber.log.Timber
@@ -73,6 +77,32 @@ class NearbyFragment : DubLinkFragment(R.layout.fragment_nearby) {
                     googleMap.cameraPosition.target?.apply {
                         viewModel.dispatch(Action.OnMapMoveFinished(Coordinate(latitude = latitude, longitude = longitude)))
                     }
+                }
+                googleMap.setOnMarkerClickListener { marker ->
+                    for (entry in mapMarkers.entries) {
+                        if (entry.value == marker) {
+                            val serviceLocation = entry.key
+                            viewModel.dispatch(Action.GetLiveData(serviceLocation))
+                            googleMap.animateCamera(
+                                CameraUpdateFactory.newCameraPosition(
+                                    CameraPosition.fromLatLngZoom(
+                                        LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude), googleMap.cameraPosition.zoom
+                                    )
+                                ),
+                                300,
+                                object : GoogleMap.CancelableCallback {
+
+                                    override fun onCancel() {
+                                    }
+
+                                    override fun onFinish() {
+                                    }
+                                }
+                            )
+                            return@setOnMarkerClickListener true
+                        }
+                    }
+                    return@setOnMarkerClickListener false
                 }
                 this@NearbyFragment.googleMap = googleMap
             }
@@ -160,9 +190,64 @@ class NearbyFragment : DubLinkFragment(R.layout.fragment_nearby) {
         mapView?.onDestroy()
     }
 
+    // TODO synchronized map ?
+    private val mapMarkers = mutableMapOf<DubLinkServiceLocation, Marker>()
+
     private fun renderState(state: State) {
+        renderMapMarkers(state)
+        renderLiveData(state)
+    }
+
+    private fun renderMapMarkers(state: State) {
+        addNewMarkers(state.nearbyServiceLocations)
+        removeOldMarkers(state.nearbyServiceLocations)
+    }
+
+    private fun addNewMarkers(serviceLocations: Collection<DubLinkServiceLocation>) {
+        for (serviceLocation in serviceLocations) {
+            if (mapMarkers[serviceLocation] == null) {
+                newMarker(serviceLocation)?.apply {
+                    this.tag = serviceLocation
+                    mapMarkers[serviceLocation] = this
+                    AnimationUtils.fadeInMarker(this)
+                }
+            }
+        }
+    }
+
+    private fun newMarker(serviceLocation: DubLinkServiceLocation): Marker? {
+        return googleMap?.addMarker(
+            MarkerOptions()
+                .position(LatLng(serviceLocation.coordinate.latitude, serviceLocation.coordinate.longitude))
+                .title(serviceLocation.defaultName)
+                .snippet(serviceLocation.service.fullName)
+        )
+    }
+
+    private fun removeOldMarkers(serviceLocations: Collection<DubLinkServiceLocation>) {
+        val iterator = mapMarkers.entries.iterator()
+        while (iterator.hasNext()) {
+            val entry = iterator.next()
+            if (!serviceLocations.contains(entry.key)) {
+                AnimationUtils.fadeOutMarker(entry.value)
+                iterator.remove()
+            }
+        }
+    }
+
+    private fun renderLiveData(state: State) {
         if (state.focusedServiceLocation != null) {
-            liveDataAdapter?.update(listOf(nearbyMapper.map(state.focusedServiceLocation, state.focusedServiceLocationLiveData)))
+            liveDataAdapter?.update(
+                listOf(
+                    nearbyMapper.map(
+                        state.focusedServiceLocation,
+                        state.focusedServiceLocationLiveData
+                    )
+                )
+            )
+            if (bottomSheetBehavior?.state != BottomSheetBehavior.STATE_COLLAPSED) {
+                bottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
         }
     }
 
