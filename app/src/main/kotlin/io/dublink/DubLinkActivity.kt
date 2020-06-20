@@ -42,11 +42,9 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         navigationController.addOnDestinationChangedListener { _, destination, _ ->
 //            snackBar?.dismiss()
             when (destination.id) {
-//                R.id.newsFragment,
                 R.id.nearbyFragment,
                 R.id.favouritesFragment,
-                R.id.searchFragment,
-                R.id.settingsFragment -> navigation.visibility = View.VISIBLE
+                R.id.searchFragment -> navigation.visibility = View.VISIBLE
                 else -> navigation.visibility = View.GONE
             }
         }

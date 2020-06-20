@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/newsFragment"
-        android:icon="@drawable/ic_reorder"
-        android:title="News" />
+<!--    <item-->
+<!--        android:id="@+id/newsFragment"-->
+<!--        android:icon="@drawable/ic_reorder"-->
+<!--        android:title="News" />-->
 
     <item
         android:id="@+id/nearbyFragment"
@@ -21,9 +21,9 @@
         android:icon="@drawable/ic_search"
         android:title="Search" />
 
-    <item
-        android:id="@+id/settingsFragment"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+<!--    <item-->
+<!--        android:id="@+id/settingsFragment"-->
+<!--        android:icon="@drawable/ic_settings"-->
+<!--        android:title="Settings" />-->
 
 </menu>
