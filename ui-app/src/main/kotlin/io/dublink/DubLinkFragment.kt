@@ -14,7 +14,6 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import dagger.android.support.AndroidSupportInjection
 import io.dublink.domain.internet.InternetStatus
-import io.dublink.domain.service.EnabledServiceManager
 import io.dublink.ui.R
 import javax.inject.Inject
 import timber.log.Timber
@@ -27,9 +26,6 @@ abstract class DubLinkFragment(
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    @Inject
-
-    lateinit var enabledServiceManager: EnabledServiceManager
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as DubLinkFragmentViewModel }
 

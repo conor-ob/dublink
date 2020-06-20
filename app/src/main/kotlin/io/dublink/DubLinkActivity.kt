@@ -1,12 +1,15 @@
 package io.dublink
 
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHost
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI.onNavDestinationSelected
+import androidx.navigation.ui.setupWithNavController
 import dagger.android.support.DaggerAppCompatActivity
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.service.PreferenceStore
@@ -15,6 +18,7 @@ import io.dublink.iap.RxBilling
 import io.dublink.livedata.LiveDataFragment
 import io.dublink.web.WebViewFragment
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.activity_root.*
 import timber.log.Timber
 
 class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
@@ -31,20 +35,21 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
         super.onCreate(savedInstanceState)
         Timber.d("${javaClass.simpleName}::${object{}.javaClass.enclosingMethod?.name}")
         setContentView(R.layout.activity_root)
-//        navigation.setupWithNavController(navigationController)
-//        navigation.setOnNavigationItemSelectedListener { item ->
-//            onNavDestinationSelected(item, navigationController)
-//        }
-//        navigationController.addOnDestinationChangedListener { _, destination, _ ->
+        navigation.setupWithNavController(navigationController)
+        navigation.setOnNavigationItemSelectedListener { item ->
+            onNavDestinationSelected(item, navigationController)
+        }
+        navigationController.addOnDestinationChangedListener { _, destination, _ ->
 //            snackBar?.dismiss()
-//            when (destination.id) {
+            when (destination.id) {
 //                R.id.newsFragment,
-//                R.id.nearbyFragment,
-//                R.id.favouritesFragment,
-//                R.id.searchFragment -> navigation.visibility = View.VISIBLE
-//                else -> navigation.visibility = View.GONE
-//            }
-//        }
+                R.id.nearbyFragment,
+                R.id.favouritesFragment,
+                R.id.searchFragment,
+                R.id.settingsFragment -> navigation.visibility = View.VISIBLE
+                else -> navigation.visibility = View.GONE
+            }
+        }
         rxBillingLifecycleObserver = BillingConnectionManager(rxBilling)
         lifecycle.addObserver(rxBillingLifecycleObserver)
         viewModel.observableState.observe(
@@ -74,19 +79,6 @@ class DubLinkActivity : DaggerAppCompatActivity(), NavHost, DubLinkNavigator {
     override fun navigateToSettings() {
         navigationController.navigate(
             R.id.settingsFragment,
-            Bundle.EMPTY,
-            NavOptions.Builder()
-                .setEnterAnim(R.anim.nav_default_enter_anim)
-                .setExitAnim(R.anim.nav_default_exit_anim)
-                .setPopEnterAnim(R.anim.nav_default_pop_enter_anim)
-                .setPopExitAnim(R.anim.nav_default_pop_exit_anim)
-                .build()
-        )
-    }
-
-    override fun navigateToSearch() {
-        navigationController.navigate(
-            R.id.searchFragment,
             Bundle.EMPTY,
             NavOptions.Builder()
                 .setEnterAnim(R.anim.nav_default_enter_anim)

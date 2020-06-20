@@ -31,6 +31,15 @@ class DefaultAggregatedServiceLocationRepository(
         ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }
     }
 
+    override fun getNearest(coordinate: Coordinate, limit: Int): Observable<AggregatedServiceLocationResponse> {
+        return Observable.zip(
+            enabledServiceManager.getEnabledServices().map { enabledService ->
+                serviceLocationRepositories.getValue(enabledService).getNearest(coordinate, limit)
+                    .startWith(ServiceLocationResponse.Data(enabledService, emptyList()))
+            }
+        ) { serviceLocationStreams -> aggregate(serviceLocationStreams) }
+    }
+
     override fun stream(): Observable<AggregatedServiceLocationResponse> {
         return Observable.combineLatest(
             enabledServiceManager.getEnabledServices().map { enabledService ->

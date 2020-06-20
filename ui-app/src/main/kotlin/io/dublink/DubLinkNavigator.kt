@@ -6,8 +6,6 @@ interface DubLinkNavigator {
 
     fun navigateToLiveData(serviceLocation: DubLinkServiceLocation)
 
-    fun navigateToSearch()
-
     fun navigateToSettings()
 
     fun navigateToEditFavourites()

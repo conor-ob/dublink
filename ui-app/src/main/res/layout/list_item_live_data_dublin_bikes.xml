@@ -4,11 +4,12 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="48dp"
     android:orientation="horizontal"
     android:paddingStart="18dp"
-    android:paddingTop="@dimen/padding_s"
+    android:paddingTop="@dimen/padding_xs"
     android:paddingEnd="@dimen/padding_l"
-    android:paddingBottom="@dimen/padding_s"
+    android:paddingBottom="@dimen/padding_xs"
     android:clipChildren="false"
     android:clipToPadding="false">
 

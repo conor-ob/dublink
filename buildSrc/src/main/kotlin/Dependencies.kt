@@ -66,6 +66,8 @@ object Libraries {
 
     object PlayServices {
         const val location = "com.google.android.gms:play-services-location:17.0.0"
+        const val maps = "com.google.android.gms:play-services-maps:17.0.0" // https://mvnrepository.com/artifact/com.google.android.gms/play-services-maps
+        const val mapsUtils = "com.google.maps.android:android-maps-utils:1.3.3"
     }
 
     object Apache {

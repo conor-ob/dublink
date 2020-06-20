@@ -12,6 +12,7 @@ import io.dublink.favourites.FavouritesViewModel
 import io.dublink.favourites.edit.EditFavouritesViewModel
 import io.dublink.iap.dublinkpro.DubLinkProViewModel
 import io.dublink.livedata.LiveDataViewModel
+import io.dublink.nearby.NearbyViewModel
 import io.dublink.search.SearchViewModel
 import java.lang.annotation.Documented
 import java.lang.annotation.ElementType
@@ -35,6 +36,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DubLinkFragmentViewModel::class)
     internal abstract fun bindDubLinkFragmentViewModel(dubLinkFragmentViewModel: DubLinkFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NearbyViewModel::class)
+    internal abstract fun bindNearbyViewModel(nearbyViewModel: NearbyViewModel): ViewModel
 
     @Binds
     @IntoMap

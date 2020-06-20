@@ -35,13 +35,4 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/favourites_fab_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/favourites_fab_search_label"
-        app:icon="@drawable/ic_search"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollSnackBarAwareBehavior"
-        style="@style/Widget.DubLink.ExtendedFloatingActionButton" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

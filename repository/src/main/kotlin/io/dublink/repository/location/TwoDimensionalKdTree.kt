@@ -24,6 +24,7 @@ class TwoDimensionalKdTree {
     }
 
     fun getNearest(coordinate: Coordinate, limit: Int): Observable<List<DubLinkServiceLocation>> {
+        // TODO check limit here against size
         return Observable.just(
             requireNotNull(delegate).nearest(
                 doubleArrayOf(

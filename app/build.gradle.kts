@@ -37,6 +37,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "NZAYAPNK", "\"${properties.getProperty("NZAYAPNK")}\"")
         buildConfigField("String", "KQVBLPMG", "\"${properties.getProperty("KQVBLPMG")}\"")
+        manifestPlaceholders = mutableMapOf("AXNIVIYO" to properties.getProperty("AXNIVIYO"))
     }
 
     signingConfigs {
@@ -94,6 +95,7 @@ dependencies {
     implementation(project(":ui-favourites"))
     implementation(project(":ui-iap"))
     implementation(project(":ui-livedata"))
+    implementation(project(":ui-nearby"))
     implementation(project(":ui-search"))
     implementation(project(":ui-settings"))
     implementation(project(":ui-web"))

@@ -16,6 +16,7 @@ interface ServiceLocationRepository {
 interface AggregatedServiceLocationRepository {
     fun get(): Observable<AggregatedServiceLocationResponse>
     fun getFavourites(): Observable<AggregatedServiceLocationResponse>
+    fun getNearest(coordinate: Coordinate, limit: Int): Observable<AggregatedServiceLocationResponse>
     fun stream(): Observable<AggregatedServiceLocationResponse>
     fun streamNearest(coordinate: Coordinate, limit: Int): Observable<AggregatedServiceLocationResponse>
     fun get(key: ServiceLocationKey): Observable<ServiceLocationResponse>

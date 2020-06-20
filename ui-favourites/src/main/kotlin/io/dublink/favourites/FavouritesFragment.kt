@@ -47,10 +47,6 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
             return@setOnMenuItemClickListener super.onOptionsItemSelected(menuItem)
         }
 
-        favourites_fab_search.setOnClickListener {
-            (activity as DubLinkNavigator).navigateToSearch()
-        }
-
         adapter = GroupAdapter()
         adapter?.setOnItemClickListener { item, _ ->
             if (item is AbstractServiceLocationItem) {

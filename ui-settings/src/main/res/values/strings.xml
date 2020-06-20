@@ -26,6 +26,10 @@
     <string name="preference_key_last_known_location_latitude">last_known_location_latitude</string>
     <string name="preference_key_last_known_location_longitude">last_known_location_longitude</string>
 
+    <string name="preference_key_last_nearby_map_location_latitude">last_nearby_map_location_latitude</string>
+    <string name="preference_key_last_nearby_map_location_longitude">last_nearby_map_location_longitude</string>
+    <string name="preference_key_last_nearby_map_zoom">last_nearby_map_zoom</string>
+
     <string name="preference_name_preferred_home_screen">Home Screen</string>
     <string name="preference_key_preferred_home_screen">preferred_home_screen</string>
 

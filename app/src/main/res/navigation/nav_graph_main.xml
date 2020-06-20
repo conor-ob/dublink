@@ -2,7 +2,11 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_main.xml"
-    app:startDestination="@id/favouritesFragment">
+    app:startDestination="@id/nearbyFragment">
+
+    <fragment android:id="@+id/nearbyFragment"
+        android:name="io.dublink.nearby.NearbyFragment"
+        android:label="NearbyFragment" />
 
     <fragment android:id="@+id/favouritesFragment"
         android:name="io.dublink.favourites.FavouritesFragment"

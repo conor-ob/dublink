@@ -9,6 +9,7 @@ include(
     ":ui-favourites",
     ":ui-iap",
     ":ui-livedata",
+    ":ui-nearby",
     ":ui-search",
     ":ui-settings",
     ":ui-web"

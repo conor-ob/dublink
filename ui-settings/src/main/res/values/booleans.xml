@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="preference_default_dublink_pro">false</bool>
+    <!-- TODO -->
+    <bool name="preference_default_dublink_pro">true</bool>
 
     <bool name="preference_default_favourites_sort_location">false</bool>
 

@@ -29,6 +29,10 @@ interface PreferenceStore {
 
     fun setLastKnownLocation(coordinate: Coordinate)
 
+    fun getLastNearbyMapLocation(): Pair<Coordinate, Float>
+
+    fun setLastNearbyMapLocation(coordinate: Coordinate, zoom: Float)
+
     fun isShowNearbyPlacesEnabled(): Boolean
 
     fun isShowRecentSearchesEnabled(): Boolean

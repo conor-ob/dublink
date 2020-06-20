@@ -6,6 +6,7 @@ import io.dublink.favourites.FavouritesFragment
 import io.dublink.favourites.edit.EditFavouritesFragment
 import io.dublink.iap.dublinkpro.DubLinkProFragment
 import io.dublink.livedata.LiveDataFragment
+import io.dublink.nearby.NearbyFragment
 import io.dublink.search.SearchFragment
 import io.dublink.settings.PreferencesFragment
 import io.dublink.settings.SettingsFragment
@@ -13,6 +14,9 @@ import io.dublink.web.WebViewFragment
 
 @Module
 abstract class FragmentBuilderModule {
+
+    @ContributesAndroidInjector
+    abstract fun contributeNearbyFragmentInjector(): NearbyFragment
 
     @ContributesAndroidInjector
     abstract fun contributeFavouritesFragmentInjector(): FavouritesFragment

@@ -83,6 +83,40 @@ class DefaultPreferenceStore @Inject constructor(
         ).apply()
     }
 
+    override fun getLastNearbyMapLocation(): Pair<Coordinate, Float> {
+        return Pair(
+            first = Coordinate(
+                latitude = preferences.getFloat(
+                    context.resources.getString(R.string.preference_key_last_nearby_map_location_latitude),
+                    53.347274f // Dublin latitude
+                ).toDouble(),
+                longitude = preferences.getFloat(
+                    context.resources.getString(R.string.preference_key_last_nearby_map_location_longitude),
+                    -6.259159f // Dublin longitude
+                ).toDouble()
+            ),
+            second = preferences.getFloat(
+                context.resources.getString(R.string.preference_key_last_nearby_map_zoom),
+                16f
+            )
+        )
+    }
+
+    override fun setLastNearbyMapLocation(coordinate: Coordinate, zoom: Float) {
+        preferences.edit().putFloat(
+            context.resources.getString(R.string.preference_key_last_nearby_map_location_latitude),
+            coordinate.latitude.toFloat()
+        ).apply()
+        preferences.edit().putFloat(
+            context.resources.getString(R.string.preference_key_last_nearby_map_location_longitude),
+            coordinate.longitude.toFloat()
+        ).apply()
+        preferences.edit().putFloat(
+            context.resources.getString(R.string.preference_key_last_nearby_map_zoom),
+            zoom
+        ).apply()
+    }
+
     override fun isServiceEnabled(service: Service): Boolean {
         val key = when (service) {
             Service.AIRCOACH ->
