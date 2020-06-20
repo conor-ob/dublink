@@ -5,6 +5,7 @@ import com.xwray.groupie.Section
 import io.dublink.domain.model.DubLinkDockLocation
 import io.dublink.domain.model.DubLinkServiceLocation
 import io.dublink.domain.model.DubLinkStopLocation
+import io.dublink.domain.service.StringProvider
 import io.dublink.domain.util.AppConstants
 import io.dublink.domain.util.LiveDataFilter
 import io.dublink.model.DockLiveDataItem
@@ -16,8 +17,11 @@ import io.rtpi.api.DockLiveData
 import io.rtpi.api.LiveData
 import io.rtpi.api.PredictionLiveData
 import io.rtpi.util.LiveDataGrouper
+import javax.inject.Inject
 
-object NearbyMapper {
+class NearbyMapper @Inject constructor(
+    private val stringProvider: StringProvider
+) {
 
     fun map(serviceLocation: DubLinkServiceLocation, liveData1: List<LiveData>?): Group {
         return Section(
@@ -27,7 +31,11 @@ object NearbyMapper {
                     SimpleMessageItem("Loading...", 1L)
                 } else {
                     val liveData = LiveDataGrouper.groupLiveData(LiveDataFilter.filterLiveData(serviceLocation, liveData1))
-                    if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DockLiveData) {
+                    if (liveData.isEmpty()) {
+                        Section(
+                            SimpleMessageItem(stringProvider.noArrivalsMessage(serviceLocation.service), 2L)
+                        )
+                    } else if (liveData.size == 1 && liveData.first().size == 1 && liveData.first().first() is DockLiveData) {
                         Section(
                             DockLiveDataItem(
                                 liveData.first().first() as DockLiveData

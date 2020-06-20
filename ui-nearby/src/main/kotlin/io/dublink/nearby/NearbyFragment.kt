@@ -1,5 +1,6 @@
 package io.dublink.nearby
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -21,18 +22,21 @@ import io.dublink.domain.service.PreferenceStore
 import io.dublink.domain.service.RxScheduler
 import io.dublink.viewModelProvider
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.rtpi.api.Coordinate
 import kotlinx.android.synthetic.main.fragment_nearby.view.*
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.abs
 
 class NearbyFragment : DubLinkFragment(R.layout.fragment_nearby) {
 
     private val viewModel by lazy { viewModelProvider(viewModelFactory) as NearbyViewModel }
     @Inject lateinit var preferenceStore: PreferenceStore
     @Inject lateinit var rxScheduler: RxScheduler
+    @Inject lateinit var nearbyMapper: NearbyMapper
     private lateinit var googleMapController: GoogleMapController
     private var adapter: GroupAdapter<GroupieViewHolder>? = null
 
@@ -139,70 +143,44 @@ class NearbyFragment : DubLinkFragment(R.layout.fragment_nearby) {
         getGoogleMapView()?.onDestroy()
     }
 
+    private var lastHeight = 0
+
     private fun renderState(state: State) {
         googleMapController.drawServiceLocations(state.nearbyServiceLocations)
         if (state.focusedServiceLocation != null) {
-            adapter?.update(listOf(NearbyMapper.map(state.focusedServiceLocation, state.focusedServiceLocationLiveData)))
+            adapter?.update(listOf(nearbyMapper.map(state.focusedServiceLocation, state.focusedServiceLocationLiveData)))
         }
         rootView?.findViewById<RecyclerView>(R.id.nearby_live_data)?.let {
             if (it.viewTreeObserver != null && it.viewTreeObserver.isAlive) {
                 it.viewTreeObserver.addOnGlobalLayoutListener {
-                    Timber.d("MEASURE height: ${it.height} px")
-                    onLiveDataResized(it.height)
+                    if (lastHeight != it.height) {
+                        Timber.d("MEASURE height: ${it.height} px")
+//                        if (state.focusedServiceLocationLiveData != null) {
+                            onLiveDataResized(it.height)
+//                        }
+                    }
+                    lastHeight = it.height
                 }
             }
         }
     }
 
+    var lastAnimator: ObjectAnimator? = null
+
     fun onLiveDataResized(measuredHeight: Int) {
         if (measuredHeight == 0) {
             return
         }
-        Timber.d("MEASURE measuredHeight = ${measuredHeight}px")
-        val interpolator = AccelerateDecelerateInterpolator()
-        val refreshInterval = 20L
-        val refreshCount = 15L
-        val totalRefreshTime = (refreshInterval * refreshCount).toFloat()
         val startingHeight = bottomSheetBehavior?.peekHeight ?: 0
-        Timber.d("MEASURE startingHeight = ${startingHeight}px")
-
         if (measuredHeight == startingHeight) {
             return
         }
 
-        bottomSheetBehavior?.peekHeight = measuredHeight
-
-//        val goUp = measuredHeight > startingHeight
-//
-//        //https://stackoverflow.com/questions/47080589/dynamically-animate-bottomsheet-peekheight
-//
-//        val animationDisposable = Observable.interval(refreshInterval, TimeUnit.MILLISECONDS)
-//            .take(refreshCount)
-//            .subscribeOn(rxScheduler.io)
-//            .observeOn(rxScheduler.ui)
-//            .subscribe({ count: Long ->
-//                if (goUp) {
-//                    val height = (startingHeight - (startingHeight - measuredHeight) *
-//                            interpolator.getInterpolation((count * refreshInterval) / totalRefreshTime)).toInt()
-//                    Timber.d("MEASURE going up $height px (${startingHeight + (startingHeight - measuredHeight)})")
-//                    if (height > measuredHeight) {
-//                        bottomSheetBehavior?.peekHeight = startingHeight ?: 0
-//                    } else {
-//                        bottomSheetBehavior?.peekHeight = height
-//                    }
-//
-//                } else {
-//                    val height = (startingHeight - (startingHeight - measuredHeight) *
-//                            interpolator.getInterpolation((count * refreshInterval) / totalRefreshTime)).toInt()
-//                    Timber.d("MEASURE going down $height px (${startingHeight - (startingHeight - measuredHeight)})")
-//                    if (height < measuredHeight) {
-//                        bottomSheetBehavior?.peekHeight = measuredHeight
-//                    } else {
-//                        bottomSheetBehavior?.peekHeight = height
-//                    }
-//                }
-//            }, { _: Throwable ->
-//                //do something here to reset peek height to original
-//            })
+        lastAnimator?.cancel()
+        lastAnimator = ObjectAnimator.ofInt(bottomSheetBehavior, "peekHeight", measuredHeight)
+            .apply {
+                duration = 300
+                start()
+            }
     }
 }
