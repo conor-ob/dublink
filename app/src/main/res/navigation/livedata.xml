@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/livedata"
+    app:startDestination="@id/liveDataFragment">
+
+    <fragment android:id="@+id/liveDataFragment"
+        android:name="io.dublink.livedata.LiveDataFragment"
+        android:label="LiveDataFragment">
+        <action
+            android:id="@id/liveDataFragment_to_settings"
+            app:destination="@id/livedata" />
+    </fragment>
+
+    <include app:graph="@navigation/settings" />
+
+</navigation>

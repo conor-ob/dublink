@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="aircoach_brand1">#ef7b0a</color>
+    <color name="aircoach_brand_text1">@android:color/white</color>
+    <color name="bus_eireann_brand1">#a51922</color>
+    <color name="bus_eireann_brand_text1">@android:color/white</color>
+    <color name="commuter_brand1">#1565c0</color>
+    <color name="commuter_brand_text1">@android:color/white</color>
+    <color name="dart_brand1">#359245</color>
+    <color name="dart_brand_text1">@android:color/white</color>
+    <color name="dublin_bikes_brand1">#004d40</color>
+    <color name="dublin_bikes_brand_text1">@android:color/white</color>
+    <color name="dublin_bus_brand1">#fbbf01</color>
+    <color name="dublin_bus_brand_text1">@android:color/white</color>
+    <color name="go_ahead_brand1">#4286f5</color>
+    <color name="go_ahead_brand_text1">@android:color/white</color>
+    <color name="intercity_brand1">#fbbf01</color>
+    <color name="intercity_brand_text1">@android:color/white</color>
+    <color name="luas_green_brand1">#689f38</color>
+    <color name="luas_green_brand_text1">@android:color/white</color>
+    <color name="luas_red_brand1">#e53935</color>
+    <color name="luas_red_brand_text1">@android:color/white</color>
+
+    <color name="luas_icon_background">#ffffff</color>
+    <color name="luas_icon_border">#d0d0d0</color>
+    <color name="luas_icon_text">#5616a0</color>
+</resources>

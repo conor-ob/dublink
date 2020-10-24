@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/favourites"
+    app:startDestination="@id/favouritesFragment">
+
+    <fragment android:id="@+id/favouritesFragment"
+        android:name="io.dublink.favourites.FavouritesFragment"
+        android:label="FavouritesFragment">
+        <action
+            android:id="@id/favouritesFragment_to_editFavouritesFragment"
+            app:destination="@id/editFavouritesFragment" />
+        <action
+            android:id="@id/favouritesFragment_to_settings"
+            app:destination="@id/settings" />
+    </fragment>
+
+    <fragment android:id="@+id/editFavouritesFragment"
+        android:name="io.dublink.favourites.edit.EditFavouritesFragment"
+        android:label="EditFavouritesFragment">
+        <action
+            android:id="@id/editFavouritesFragment_to_settings"
+            app:destination="@id/settings" />
+    </fragment>
+
+    <include app:graph="@navigation/settings" />
+
+</navigation>

@@ -49,7 +49,7 @@ class SearchFragment : DubLinkFragment(R.layout.fragment_search) {
         search_toolbar.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.action_settings -> {
-                    (activity as DubLinkNavigator).navigateToSettings()
+                    findNavController().navigate(R.id.searchFragment_to_settings)
                     return@setOnMenuItemClickListener true
                 }
             }

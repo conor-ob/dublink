@@ -57,7 +57,7 @@ class EditFavouritesFragment : DubLinkFragment(R.layout.fragment_edit_favourites
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.action_settings -> {
-                        (activity as DubLinkNavigator).navigateToSettings()
+                        findNavController().navigate(R.id.editFavouritesFragment_to_settings)
                         return@setOnMenuItemClickListener true
                     }
                     R.id.action_help -> {

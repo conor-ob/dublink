@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/newsFragment"
-        android:icon="@drawable/ic_news"
-        android:title="News" />
+<!--    <item-->
+<!--        android:id="@+id/news"-->
+<!--        android:icon="@drawable/ic_news"-->
+<!--        android:title="News" />-->
 
     <item
-        android:id="@+id/nearbyFragment"
+        android:id="@+id/nearby"
         android:icon="@drawable/ic_near_me"
         android:title="Nearby" />
 
     <item
-        android:id="@+id/favouritesFragment"
-        android:icon="@drawable/ic_favourite_selected"
+        android:id="@+id/favourites"
+        android:icon="@drawable/ic_favourite_unselected"
         android:title="Favourites" />
 
     <item
-        android:id="@+id/searchFragment"
+        android:id="@+id/search"
         android:icon="@drawable/ic_search"
         android:title="Search" />
 

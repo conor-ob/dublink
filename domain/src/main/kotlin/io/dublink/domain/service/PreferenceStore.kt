@@ -27,7 +27,7 @@ interface PreferenceStore {
 
     fun getLastKnownLocation(): Coordinate
 
-    fun setLastKnownLocation(coordinate: Coordinate)
+    fun setLastKnownLocation(coordinate: Coordinate): Boolean
 
     fun getLastNearbyMapLocation(): Pair<Coordinate, Float>
 
@@ -40,4 +40,8 @@ interface PreferenceStore {
     fun setDubLinkProEnabled(enabled: Boolean): Boolean
 
     fun isDubLinkProEnabled(): Boolean
+
+    fun setPeekHeight(peekHeight: Int): Boolean
+
+    fun getPeekHeight(): Int
 }

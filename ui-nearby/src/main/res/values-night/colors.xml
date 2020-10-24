@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="aircoach_brand1">#E8984A</color>
+    <color name="aircoach_brand_text1">@color/grey_850</color>
+    <color name="bus_eireann_brand1">#AE4148</color>
+    <color name="bus_eireann_brand_text1">@color/grey_850</color>
+    <color name="commuter_brand1">#407DC3</color>
+    <color name="commuter_brand_text1">@color/grey_850</color>
+    <color name="dart_brand1">#499556</color>
+    <color name="dart_brand_text1">@color/grey_850</color>
+    <color name="dublin_bikes_brand1">#337A6E</color>
+    <color name="dublin_bikes_brand_text1">@color/grey_850</color>
+    <color name="dublin_bus_brand1">#DCB333</color>
+    <color name="dublin_bus_brand_text1">@color/grey_850</color>
+    <color name="go_ahead_brand1">#5083D6</color>
+    <color name="go_ahead_brand_text1">@color/grey_850</color>
+    <color name="intercity_brand1">#DFB737</color>
+    <color name="intercity_brand_text1">@color/grey_850</color>
+    <color name="luas_green_brand1">#75A54C</color>
+    <color name="luas_green_brand_text1">@color/grey_850</color>
+    <color name="luas_red_brand1">#DD6161</color>
+    <color name="luas_red_brand_text1">@color/grey_850</color>
+
+    <color name="luas_icon_background">@color/grey_750</color>
+    <color name="luas_icon_border">@color/grey_850</color>
+    <color name="luas_icon_text">#AA76E6</color>
+</resources>

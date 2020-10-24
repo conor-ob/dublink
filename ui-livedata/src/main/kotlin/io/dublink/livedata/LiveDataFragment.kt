@@ -9,6 +9,7 @@ import androidx.appcompat.widget.updateSubtitle
 import androidx.appcompat.widget.updateTitle
 import androidx.core.view.children
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
@@ -121,7 +122,7 @@ class LiveDataFragment : DubLinkFragment(R.layout.fragment_livedata) {
                         return@setOnMenuItemClickListener true
                     }
                     R.id.action_settings -> {
-                        (activity as DubLinkNavigator).navigateToSettings()
+                        findNavController().navigate(R.id.liveDataFragment_to_settings)
                         return@setOnMenuItemClickListener true
                     }
                 }

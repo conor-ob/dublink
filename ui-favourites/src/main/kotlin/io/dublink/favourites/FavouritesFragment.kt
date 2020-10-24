@@ -3,6 +3,7 @@ package io.dublink.favourites
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.xwray.groupie.GroupAdapter
@@ -35,12 +36,13 @@ class FavouritesFragment : DubLinkFragment(R.layout.fragment_favourites) {
             when (menuItem.itemId) {
                 R.id.action_edit -> {
                     // TODO analytics
-                    (activity as DubLinkNavigator).navigateToEditFavourites()
+                    findNavController().navigate(R.id.favouritesFragment_to_editFavouritesFragment)
                     return@setOnMenuItemClickListener true
                 }
                 R.id.action_settings -> {
                     // TODO analytics
-                    (activity as DubLinkNavigator).navigateToSettings()
+                    findNavController().navigate(R.id.favouritesFragment_to_settings)
+//                    (activity as DubLinkNavigator).navigateToSettings()
                     return@setOnMenuItemClickListener true
                 }
             }

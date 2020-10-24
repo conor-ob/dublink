@@ -12,11 +12,11 @@ object ImageUtils {
     private val bitmapCache = HashMap<Int, BitmapDescriptor>()
 
     fun drawableToBitmap(context: Context, drawableId: Int) : BitmapDescriptor {
-        val cachedValue = bitmapCache[drawableId]
-        if (cachedValue != null) {
-            Timber.d("Fetching cached Bitmap for drawable[$drawableId]")
-            return cachedValue
-        }
+//        val cachedValue = bitmapCache[drawableId]
+//        if (cachedValue != null) {
+//            Timber.d("Fetching cached Bitmap for drawable[$drawableId]")
+//            return cachedValue
+//        }
         Timber.d("Creating new Bitmap for drawable[$drawableId]")
         val vectorDrawable = context.getDrawable(drawableId)
         vectorDrawable!!.setBounds(0, 0, vectorDrawable.intrinsicWidth, vectorDrawable.intrinsicHeight)

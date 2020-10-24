@@ -72,15 +72,15 @@ class DefaultPreferenceStore @Inject constructor(
         )
     }
 
-    override fun setLastKnownLocation(coordinate: Coordinate) {
-        preferences.edit().putFloat(
+    override fun setLastKnownLocation(coordinate: Coordinate): Boolean {
+        return preferences.edit().putFloat(
             context.resources.getString(R.string.preference_key_last_known_location_latitude),
             coordinate.latitude.toFloat()
-        ).apply()
+        ).commit() &&
         preferences.edit().putFloat(
             context.resources.getString(R.string.preference_key_last_known_location_longitude),
             coordinate.longitude.toFloat()
-        ).apply()
+        ).commit()
     }
 
     override fun getLastNearbyMapLocation(): Pair<Coordinate, Float> {
@@ -196,5 +196,16 @@ class DefaultPreferenceStore @Inject constructor(
             context.resources.getString(R.string.preference_key_dublink_pro),
             context.resources.getBoolean(R.bool.preference_default_dublink_pro)
         )
+    }
+
+    private var peek = 0
+
+    override fun setPeekHeight(peekHeight: Int): Boolean {
+        peek = peekHeight
+        return true
+    }
+
+    override fun getPeekHeight(): Int {
+        return peek
     }
 }

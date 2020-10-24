@@ -85,6 +85,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 }
 
 dependencies {
@@ -119,7 +123,7 @@ dependencies {
     implementation(Libraries.Rx.rxAndroid)
     implementation(Libraries.Store.store3)
 
-    debugImplementation(Libraries.LeakCanary.leakCanary)
+//    debugImplementation(Libraries.LeakCanary.leakCanary)
 
     kapt(Libraries.Dagger.daggerCompiler)
     kapt(Libraries.Dagger.daggerAndroidProcessor)
